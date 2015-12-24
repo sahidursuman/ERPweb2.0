@@ -154,7 +154,12 @@ define(function(require, exports) {
 		if($(".T-user-status").is(":checked") == true){
 			status = 1;
 		}
+		var isOpenOP = 0;
+		if($(".T-addUser-form .T-open-meter").is(":checked") == true){
+			isOpenOP = 1;
+		}
 		var form = $form.serialize()+"&status="+status;
+		
 		$.ajax({
 			url:KingServices.build_url("user","addUser"),
 			type:"POST",
@@ -162,14 +167,28 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					if(isOpenOP){
+						user.openOP(data.userId, 10);
+					}
 					layer.close(user.$addUserLayer);
 					user.listUser(0, "", 1);
-					user.updateAuth(data.userId,true);
+					user.updateAuth(userId,true);
 				}
 			}
 		});
 	};
 
+	user.openOP = function(userId, type){
+		$.ajax({
+			url: KingServices.build_url("user","openApp"),
+			type: 'POST',
+			data: {id: userId, type : type},
+		})
+		.done(function() {
+			var result = showDialog(data);
+		});
+	};
+	
 	user.viewUser = function(id){
 		$.ajax({
 			url:KingServices.build_url("user","getUserById"),
@@ -444,6 +463,10 @@ define(function(require, exports) {
 								if($form.find(".T-user-status").is(":checked") == true){
 									status = 1;
 								}
+								var isOpenOP = 0;
+								if($(".T-updateUser-form .T-open-meter").is(":checked") == true){
+									isOpenOP = 1;
+								}
 								var form = "id="+id+"&"+$form.serialize()+"&status="+status;
 								$.ajax({
 									url:KingServices.build_url("user","updateUser"),
@@ -452,6 +475,9 @@ define(function(require, exports) {
 									success:function(data){
 										var result = showDialog(data);
 										if(result){
+											if(isOpenOP){
+												user.openOP(id, 10);
+											}
 											layer.close(updateUserLayer);
 											showMessageDialog($("#confirm-dialog-message"),data.message);
 											user.listUser(0, "", 1);

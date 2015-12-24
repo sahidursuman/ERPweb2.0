@@ -7,21 +7,23 @@
 			<div class="widget-body">
 				<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 20px">
 					<tr>
+						<td class="style-myself">报价单号</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.quote != null}}{{touristGroupDetail.quote.quoteNumber}}{{/if}}</td>
 						<td class="style-myself">线路产品</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}</td>
 						<td class="style-myself">出游日期</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td class="style-myself">是否购买保险</td>
+						<td width="80px">是否购买保险</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.buyInsurance == 0}}
 							否
 							{{else touristGroupDetail.buyInsurance == 1}}
 							是
-							{{/if}}</td>
-						<td>收款方式</td>
-							<td style="text-align: left;padding: 0px 0px 0px 10px">
-							{{touristGroupDetail.incomeType | getPayTypeText}}
-									
-							</td>
+							{{/if}}
+						</td>
+						<td class="style-myself">收款方式</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">
+						{{touristGroupDetail.incomeType | getPayTypeText}}	
+						</td>
 
 					</tr>
 					<tr>
@@ -43,6 +45,8 @@
 							{{/if}}</td>
 					    <td class="style-myself">组团单号:</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.otaOrderNumber}}</td>
+						<td></td>
+						<td></td>
 					</tr>
 
 					<tr>
@@ -54,6 +58,8 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.currentNeedPayMoney}}</td>
 						<td class="style-myself">未收</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.unIncomeMoney}}</td>
+						<td></td>
+						<td></td>
 						</tr>
 				</table>
 				<div class="form-group">

@@ -12,11 +12,11 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">线路名称：</label>
-            <input type="text" class="form-control T-search-line" value="{{searchParam.lineProductName}}">
+            <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">录入人：</label>
-            <input type="text" class="form-control T-search-enter" value="{{searchParam.creatorName}}">
+            <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
         </div>
         <div class="form-group marginLeft-30">
             <button class="btn-sm search-btn T-btn-search">
@@ -123,7 +123,7 @@
                 <td>{{rs.contractMoney}}</td>
                 <td>
                 {{each rs.detailList as rsl j}}
-                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}{{/if}}<br>
                 {{/each}}
                 </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>

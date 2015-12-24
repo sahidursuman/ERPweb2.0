@@ -85,13 +85,13 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
                     </li>
                     <li class="col-sm-1 no-padding align-center">
-                        <a data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a>
+                        <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a>
                     </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="false">餐饮</a>
                     </li>
                     <li class="col-sm-1 no-padding align-center">
-                        <a data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
+                        <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
                     </li>
                     <li class="col-sm-1 no-padding align-center">
                         <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="false">景区</a>
@@ -109,11 +109,6 @@
                         <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其他</a>
                     </li>  
                     <li style="border:none; margin-left:12px;">
-                        {{if !!tripPlan.qouteId}}
-                           <button class="T-singleClick-Order R-right" data-right="1450001">一键下单</button>
-
-                           <button class="T-update-Quote R-right" data-right="1440002" data-qouteId={{tripPlan.qouteId}}>修改报价</button>
-                        {{/if}}
                    </li>
                 </ul>
                 <div class="tab-content" style="position:relative;top: -2px">
@@ -150,7 +145,7 @@
                                                     <tbody>
                                                     	{{each insuranceList as insurance index}}
                                                         {{if insurance != "[]" || insurance != null}}
-                                                    	<tr>
+                                                    	<tr data-entity-arrangeid="{{insurance.id}}">
                                                     		<td>
                                                                 <div class="col-sm-12">
                                                                     <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 T-chooseInsurance bind-change"/>
@@ -178,7 +173,7 @@
                                                     			</select>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
-                                                            <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{insurance.id}}" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                                            <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
                                                         </tr>
                                                     	{{/if}}
                                                     	{{/each}}
@@ -193,7 +188,10 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                    		<td><input type="text" name="type" value="" class="col-sm-12" maxlength="32"/></td>
+                                                    		<td>
+                                                                <input type="text" name="type" value="" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
+                                                                <input type="hidden" name="typeId" value="">
+                                                            </td>
                                                     		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
                                                     		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="needPayMoney" value="" readonly="readonly" class="col-sm-12" maxlength="9"/></td>
@@ -308,13 +306,13 @@
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">状态</th>
-                                                        <th class="th-border" width="110px;">操作</th>
+                                                        <th class="th-border" width="130px;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                         {{each busCompanyList as busCompany}}
                                                         {{if busCompany != "[]" || busCompany != null}}
-                                                            <tr data-entity-arrangeId={{busCompany.id}} data-entity-busCompanyId={{busCompany.busCompany.id}} data-entity-busId={{busCompany.bus.id}} data-entity-offerId={{busCompany.offerId}}>
+                                                            <tr data-entity-arrangeid={{busCompany.id}} data-entity-busCompanyId={{busCompany.busCompany.id}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
                                                                 <td><input type="text" name="needSeatCount" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="companyName" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="col-sm-12 chooseBusCompany"/><input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/></td>
                                                                 <td><input type="text" name="licenseNumber" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-sm-12"/><input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="licenseNumberId"/></td>
@@ -338,22 +336,24 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td>
-                                                                    <select>
-                                                                        <option value="0">未预定</option>
-                                                                        <option value="1">预定中</option>
-                                                                        <option value="2">已预订</option>
-                                                                        <option value="3">无需预定</option>
+                                                                    <select name="busOrder">
+                                                                        <option value="1" {{if busCompany.orderStatus == 1}}selected="selected"{{/if}}>未预定</option>
+                                                                        <option value="2" {{if busCompany.orderStatus == 2}}selected="selected"{{/if}}>预定中</option>
+                                                                        <option value="3" {{if busCompany.orderStatus == 3}}selected="selected"{{/if}}>已预订</option>
+                                                                        <option value="0" {{if busCompany.orderStatus == 0}}selected="selected"{{/if}}>无需预定</option>
                                                                     </select>
                                                                 </td>
-                                                               
                                                                 <td>
-                                                                 {{if !!busCompany.offerId}}
-                                                                        <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
-                                                                        发送订单
-                                                                       </a>
-                                                                   {{/if}}
+                                                                    <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
+                                                                    <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1 && busCompany.orderStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus != 1 || busCompany.orderStatus == 2 || busCompany.orderStatus == 3 || busCompany.orderStatus == 0}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
                                                                 </td>
-                                                                
+                                                                {{if busCompany.offerId!=null}}
+                                                                <!-- <td>
+                                                                    <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
+                                                                    发送订单
+                                                                   </a>
+                                                                </td> -->
+                                                                {{/if}}
                                                             </tr>
                                                             {{/if}}
                                                         {{/each}}
@@ -404,7 +404,7 @@
                                                     <tbody>
                                                         {{each restaurantList as restaurant}}
                                                             {{if restaurant != "[]" || restaurant != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{restaurant.id}}">
                                                                 <td class="T-whichDaysContainer" value="{{restaurant.whichDay}}"></td>
                                                                 <td>
                                                                     <div class="col-sm-12">
@@ -448,7 +448,7 @@
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12"/></td>
                                                                 <td>
-                                                                	<a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{restaurant.id}}" data-entity-name="restaurant" title="删除">
+                                                                	<a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>
@@ -472,12 +472,22 @@
                                            <h5 class="title-size">
                                                 <i class="ace-icon fa fa-hotel"></i>
                                                 房安排
-                                                    <a href="javascript:void(0)" class="T-addResource T-addHotel">
-                                                        <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
-                                                        <i class="ace-icon fa fa-plus"></i>
-                                                        新增
-                                                        </button>
-                                                    </a>
+                                                <a href="javascript:void(0)" class="T-addResource T-addHotel">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                    <i class="ace-icon fa fa-plus"></i>
+                                                    新增
+                                                    </button>
+                                                </a>
+                                                <a href="javascript:void(0)" style="float:right" class="T-oneClick T-booking"> 
+                                                    <button class="btn btn-sm btn-success" style="margin-left: 20px"> 
+                                                        一键预订
+                                                    </button> 
+                                                </a>
+                                                <a href="javascript:void(0)" style="float:right" class="T-oneClick T-asking"> 
+                                                    <button class="btn btn-sm btn-success" style="margin-left: 20px"> 
+                                                        一键询价
+                                                    </button> 
+                                                </a>
                                             </h5>
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
@@ -498,13 +508,14 @@
                                                         <th class="th-border">付款方式</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border" style="width: 110px;">操作</th>
+                                                        <th class="th-border">状态</th>
+                                                        <th class="th-border" style="width: 170px;">操作</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     	{{each hotelList as hotel}}
                                                         {{if hotel != "[]" || hotel != null}}
-                                                    		<tr data-entity-arrangeId={{hotel.id}} data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
+                                                    		<tr data-entity-arrangeid={{hotel.id}} data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
                                                     			<td class="T-whichDaysContainer T-whichDays"  value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
                                                                 <td>
                                                                     <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled"{{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
@@ -523,22 +534,20 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="col-sm-12">
-                                                                        <input type="text" class="col-sm-12 {{if hotel.qouteId==null}}T-chooseHotel{{/if}}" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}}  name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
+                                                                        <input type="text" class="col-sm-12 T-chooseHotel"  name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
                                                                         <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
-                                                                        {{{{if hotel.qouteId!=null}}}}
                                                                         <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
-                                                                        {{/if}}
                                                                     </div>
                                                                 </td>
                                                                 <td><input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" /></td>
-                                                                <td><input type="text" class="col-sm-12 {{if hotel.qouteId==null}}T-chooseHotelRoom{{/if}}" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
-                                                                <td><input type="text" class="col-sm-12 price" name="fee" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}}  maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
-                                                                <td><input type="text" class="col-sm-12" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" class="col-sm-12 T-chooseHotelRoom"  name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
+                                                                <td><input type="text" class="col-sm-12 price" name="fee"  maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
+                                                                <td><input type="text" class="col-sm-12" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" class="col-sm-12 price" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" class="col-sm-12" name="needPayMoney" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
+                                                                <td><input type="text" class="col-sm-12" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
                                                                 <td><input type="text" class="col-sm-12 price" name="payedMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td>
                                                                 	<select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
@@ -551,14 +560,22 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    {{if hotel.qouteId==null || hotel.qouteId==""}}
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{hotel.id}}" data-entity-name="hotel" title="删除">删除</a>
-                                                                    {{/if}}
-
-                                                                    {{if !!hotel.offerId}}
+                                                                    <select name="hotelOrder">
+                                                                        <option {{if hotel.orderStatus == 1}}selected="selected"{{/if}} value="1">未预定</option>
+                                                                        <option {{if hotel.orderStatus == 2}}selected="selected"{{/if}} value="2">预定中</option>
+                                                                        <option {{if hotel.orderStatus == 3}}selected="selected"{{/if}} value="3">已预订</option>
+                                                                        <option {{if hotel.orderStatus == 0}}selected="selected"{{/if}} value="0">无需预订</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
+                                                                    <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1 && hotel.orderStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1 || hotel.orderStatus == 2 || hotel.orderStatus == 3 || hotel.orderStatus == 0}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                                                </td>
+                                                                <!-- <td>
+                                                                    {{if hotel.offerId!=null}}
                                                                     <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}" data-right="1450001" data-entity-offerId={{hotel.offerId}}>发送订单</a>
                                                                     {{/if}}
-                                                                </td>
+                                                                </td> -->
                                                     		</tr>
                                                     		{{/if}}
                                                     	{{/each}}
@@ -610,7 +627,7 @@
                                                     <tbody>
                                                         {{each scenicList as scenic}}
                                                         {{if scenic != "[]" || scenic != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{scenic.id}}">
                                                                 <td class="T-whichDaysContainer" value="{{scenic.whichDay}}"></td>
                                                                 <td>   
                                                                     <div class="col-sm-12">
@@ -650,7 +667,7 @@
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                                 <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{scenic.id}}" data-entity-name="scenic" title="删除">
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>
@@ -697,7 +714,7 @@
                                                     <tbody>
                                                         {{each shopList as shop}}
                                                         {{if shop != "[]" || shop != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{shop.id}}">
                                                                 <td class="T-whichDaysContainer" value="{{shop.whichDay}}"></td>
                                                                 <td>
                                                                     <div class="col-sm-12">
@@ -714,7 +731,7 @@
                                                                 <td><input type="text" name="goodsPolicy" class="col-sm-12 T-chooseGoodsPolicy" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{shop.id}}" data-entity-name="shop" title="删除">
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>
@@ -769,7 +786,7 @@
                                                     <tbody>
                                                         {{each selfPayList as selfPay}}
                                                         {{if selfPay != "[]" || selfPay != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{selfPay.id}}">
                                                                 <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}"></td>
                                                                 <td>
                                                                     <div class="col-sm-12">
@@ -801,7 +818,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{selfPay.id}}" data-entity-name="selfpay" title="删除">
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>
@@ -857,7 +874,7 @@
                                                     <tbody>
                                                         {{each ticketList as ticket}}
                                                         {{if ticket != "[]" || ticket != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{ticket.id}}">
                                                                 <td>
                                                                     <div class="col-sm-12">
                                                                         <input type="hidden" name="id" value="{{ticket.id}}" />
@@ -897,7 +914,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{ticket.id}}" data-entity-name="ticket" title="删除">
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>
@@ -950,9 +967,9 @@
                                                     <tbody>
                                                         {{each otherList as other}}
                                                         {{if other != "[]" || other != null}}
-                                                            <tr>
+                                                            <tr data-entity-arrangeid="{{other.id}}">
                                                                 <td class="T-whichDaysContainer" value="{{other.whichDay}}"></td>
-                                                                <td><input type="hidden" name="id" value="{{other.id}}" /><input type="text" maxlength="32" name="name" class="col-sm-12 T-other-name" value="{{other.name}}" /></td>
+                                                                <td><input type="hidden" name="id" value="{{other.id}}" /><input type="text" maxlength="32" name="name" class="col-sm-12  T-other-name" value="{{other.name}}" /></td>
                                                                 <td><input type="text" name="managerName" maxlength="332" class="col-sm-12" value="{{other.managerName}}" /></td>
                                                                 <td><input type="text" name="mobileNumber" class="col-sm-12" value="{{other.mobileNumber}}" maxlength="11"/></td>
                                                                 <td><input type="text" name="fee" class="col-sm-12 price" value="{{other.price}}" maxlength="6"/></td>
@@ -971,7 +988,7 @@
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500"/></td>
                                                                 <td>
-                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-id="{{other.id}}" data-entity-name="other" title="删除">
+                                                                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">
                                                                         删除
                                                                     </a>
                                                                 </td>

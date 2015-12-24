@@ -48,11 +48,19 @@
 
 		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right">启用标志:</label>
-			<div class="col-sm-2 checkbox" style="margin-left:-10px">
+			<div class="col-sm-2 checkbox" style="padding-left:2px; padding-top:1px; padding-right:0;">
 				<label>
 					<input {{if user.status == 1}}checked="checked"{{/if}} type="checkbox" name="" class="ace T-user-status" />
 					<span class="lbl">
 						启用
+					</span>
+				</label>
+			</div>
+			<div class="col-sm-3 checkbox" style="padding-left:0;padding-top:1px; padding-right:0;">
+				<label>
+					<input {{if isOpenOPApp == 1}}checked="checked" disabled{{/if}} type="checkbox" class="ace T-open-meter" />
+					<span class="lbl">
+						开通计调APP
 					</span>
 				</label>
 			</div>
