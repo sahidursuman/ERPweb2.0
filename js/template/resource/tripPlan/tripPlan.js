@@ -405,6 +405,7 @@ define(function(require, exports) {
 				tripPlan.addOther($this, validator, $tab);
 			}
 		});
+		tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 		//修改预订状态
 		$tab.find('.tabbable').on('change', '[name=busOrder],[name=hotelOrder]', function() {
 			var $this = $(this), $parents = $this.closest('tr'), value = $this.val(), cateName = $parents.find('.T-btn-deleteTripPlanList').data('entity-name');
@@ -890,6 +891,20 @@ define(function(require, exports) {
 		})
 	};
 
+	/**
+	 * 一键预订 一键询价 显示和关闭
+	 * @param  {[type]} $tab [description]
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.viewCloseOneClick = function($tab) {
+		var $tr = $tab.find('tbody tr');
+		if ($tr.length > 0) {
+			$tab.find('.T-oneClick').show();
+		}else{
+			$tab.find('.T-oneClick').hide();
+		}
+	}
+
 	//添加资源 
 	tripPlan.addResource = function(){
 		$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
@@ -986,6 +1001,7 @@ define(function(require, exports) {
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
 		tripPlan.bindHotelChoose($tab);
+		tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 	};
 	// 添加景区安排
 	tripPlan.addScenic = function($this, validator, $tab){
@@ -1170,6 +1186,7 @@ define(function(require, exports) {
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
 									$this.closest('tr').remove();
 									tripPlan.moneyTripPlan($tab);
+									tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 								})
 							}
 	                    }
@@ -1178,10 +1195,12 @@ define(function(require, exports) {
 			} else {
 				$this.closest('tr').remove();
 				tripPlan.moneyTripPlan($tab);
+				tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 			}
 		}else{
 			$this.closest('tr').remove();
 			tripPlan.moneyTripPlan($tab);
+			tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 		}
 	};
 
