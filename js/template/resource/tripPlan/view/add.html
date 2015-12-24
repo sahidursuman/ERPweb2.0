@@ -534,22 +534,20 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="col-sm-12">
-                                                                        <input type="text" class="col-sm-12 {{if hotel.qouteId==null}}T-chooseHotel{{/if}}" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}}  name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
+                                                                        <input type="text" class="col-sm-12 T-chooseHotel"  name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
                                                                         <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
-                                                                        {{{{if hotel.qouteId!=null}}}}
                                                                         <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
                                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                         </span>
-                                                                        {{/if}}
                                                                     </div>
                                                                 </td>
                                                                 <td><input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" /></td>
-                                                                <td><input type="text" class="col-sm-12 {{if hotel.qouteId==null}}T-chooseHotelRoom{{/if}}" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
-                                                                <td><input type="text" class="col-sm-12 price" name="fee" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}}  maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
-                                                                <td><input type="text" class="col-sm-12" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
+                                                                <td><input type="text" class="col-sm-12 T-chooseHotelRoom"  name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" /><input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}"></td>
+                                                                <td><input type="text" class="col-sm-12 price" name="fee"  maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
+                                                                <td><input type="text" class="col-sm-12" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" class="col-sm-12 price" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" class="col-sm-12" name="needPayMoney" {{if hotel.qouteId!=null}}readonly="readonly"{{/if}} value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
+                                                                <td><input type="text" class="col-sm-12" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
                                                                 <td><input type="text" class="col-sm-12 price" name="payedMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td>
                                                                 	<select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
