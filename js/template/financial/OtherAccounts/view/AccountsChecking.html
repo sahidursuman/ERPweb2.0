@@ -72,7 +72,7 @@
                 <td>{{Checking.reduceMoney}}</td>
                 <td>{{Checking.needPayMoney}}</td>
                 <td><a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
-                <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-option T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+                <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
                     <input type="text" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
                 </td>

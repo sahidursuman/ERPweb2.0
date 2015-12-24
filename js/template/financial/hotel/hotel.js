@@ -1,6 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule"),
-        menuKey = "financial_rummery",
+	var menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
         hotelChecking = require("./view/hotelChecking"),
         hotelClearing = require("./view/hotelClearing"),
@@ -293,7 +292,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(isAutoPay== 2?3: 1));
                                 hotel.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
@@ -322,7 +321,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         hotel.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
-        var $tab = hotel.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1);
+        var $tab = hotel.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1), autoPayRule = (new FinRule(2)).check(hotel.$clearTab);
         args.saveRule = saveRule;
 
         if(isAutoPay == 0){
@@ -348,7 +347,11 @@ define(function(require, exports) {
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
             hotel.$clearTab.data('isEdited',false);
-            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
+            isAutoPay = hotel.$clearTab.data('next')[0];
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            hotel.hotelClear(isAutoPay,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
             hotel.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -380,7 +383,7 @@ define(function(require, exports) {
         });
         //保存结算事件
         hotel.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(hotel.$clearTab).form()) { return; }
+            if (!(new FinRule(isAutoPay== 2?3: 1)).check(hotel.$clearTab).form()) { return; }
             hotel.saveClear(args);
         });
 
@@ -551,7 +554,7 @@ define(function(require, exports) {
     };
 
     hotel.saveClear = function(args,tab_id, title, html){
-        if(!FinancialService.isClearSave(hotel.$clearTab,rule)){
+        if(!FinancialService.isClearSave(hotel.$clearTab,new FinRule(args[0] == 2 ? 3:1))){
             return false;
         }
 
@@ -590,9 +593,12 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            hotel.hotelClear(0,page,id,name);
+                            if(isAutoPay == 1){
+                                isAutoPay = 0;
+                            }
+                            hotel.hotelClear(isAutoPay,page,id,name);
                         } else {
-                            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
+                            hotel.hotelClear(hotel.$clearTab.data('next')[0],0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
                         }
                     }); 
                 }
@@ -602,7 +608,7 @@ define(function(require, exports) {
 
     hotel.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
+            var validator = (new FinRule(0)).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
@@ -625,7 +631,7 @@ define(function(require, exports) {
                 if(option == "check"){
                     hotel.saveChecking(id,name,0,tab_id,title,html);
                 } else if(option == "clear"){
-                    hotel.saveClear(id,name,0,tab_id,title,html);
+                    hotel.saveClear(id,name, tab_id,title,html);
                 }
             })
             // 保存后关闭

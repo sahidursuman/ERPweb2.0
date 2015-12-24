@@ -23,28 +23,6 @@
 						<div class="col-sm-2">
 							<input value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price"  maxlength="10" />
 						</div>
-						
-
-					  	<div class="col-sm-2">
-						    <label class="no-padding-right pull-left">付款方式：</label>
-						    {{if touristGroup.transferFeeStatus == 0}}
-							<select name="transPayType" class="pull-left">
-								<option selected="selected" value="0">现金</option>
-								<option value="1">银行转账</option>
-								<option value="2">网上支付</option>
-								<option value="3">支票</option>
-								<option value="4">其它</option>
-							</select>
-							{{else}}
-							<select name="transPayType" class="pull-left">
-								<option{{if touristGroup.transPayType == 0}} selected="selected"{{/if}} value="0">现金</option>
-								<option{{if touristGroup.transPayType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
-								<option{{if touristGroup.transPayType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
-								<option{{if touristGroup.transPayType == 3}} selected="selected"{{/if}} value="3">支票</option>
-								<option{{if touristGroup.transPayType == 4}} selected="selected"{{/if}} value="4">其它</option>
-							</select>
-							{{/if}}
-						</div>
 
 					    <div class="col-sm-2">
 						    <label class="no-padding-right pull-left">付款方式：</label>
@@ -103,7 +81,7 @@
 									<td>内转价</td>
 									<td>大人</td>
 									<td>
-										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
+										<input name="adultCount" value="{{if touristGroup != null}}{{touristGroup.adultCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count T-count" />
 									</td>
 									<td>
 										<input name="transAdultPrice" value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transAdultPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right  price T-price"  maxlength="10" />
@@ -118,7 +96,7 @@
 										小孩
 									</td>
 									<td>
-										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count" />
+										<input name="childCount" value="{{if touristGroup != null}}{{touristGroup.childCount}}{{/if}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right count T-count" />
 									</td>
 									<td>
 										<input name="transChildPrice" value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transChildPrice}}{{/if}}" type="text" class="col-sm-12  no-padding-right price T-price"  maxlength="10" />
@@ -137,7 +115,7 @@
 												<input name="describe" value="{{transferList.describeInfo}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 											</td>
 											<td>
-												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
+												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count T-count"  maxlength="10" />
 											</td>
 											<td>
 												<input name="otherPrice" value="" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />
@@ -157,7 +135,7 @@
 											<input name="describe" value="{{innerFee.discribe}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 										</td>
 										<td>
-											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count"  maxlength="10" />
+											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count"  maxlength="10" />
 										</td>
 										<td>
 											<input name="otherPrice" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price"  maxlength="10" />

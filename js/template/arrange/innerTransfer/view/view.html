@@ -93,9 +93,7 @@
 										<td>大人</td>
 										<td>{{innerTransfer.transAdultCount}}</td>
 										<td>{{innerTransfer.transAdultPrice}}</td>
-
 									</tr>
-
 									<tr>
 										<td>内转价</td>
 										<td>小孩</td>
@@ -169,8 +167,8 @@
 
 					<div class="search-area col-sm-12">
 						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
-						<div class="col-sm-5">
-							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
+						<div class="col-sm-10">
+							<p>{{innerTransfer.touristGroup.remark}}</p>
 						</div>
 					</div>
 					<div class="widget-body TransferTable">
@@ -185,21 +183,37 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>结算价</td>
-										<td>大人</td>
-										<td>{{innerTransfer.touristGroup.adultCount}}</td>
-										<td>{{innerTransfer.touristGroup.adultPrice}}</td>
-									</tr>
-									<tr>
-										<td>结算价</td>
-										<td>小孩</td>
-										<td>{{innerTransfer.touristGroup.childCount}}</td>
-										<td>{{innerTransfer.touristGroup.childPrice}}</td>
-									</tr>
+									{{if isParent==0}}
+										<tr>
+											<td>结算价</td>
+											<td>大人</td>
+											<td>{{innerTransfer.touristGroup.adultCount}}</td>
+											<td>{{innerTransfer.touristGroup.adultPrice}}</td>
+										</tr>
+										<tr>
+											<td>结算价</td>
+											<td>小孩</td>
+											<td>{{innerTransfer.touristGroup.childCount}}</td>
+											<td>{{innerTransfer.touristGroup.childPrice}}</td>
+										</tr>
+										{{else}}
+										<tr>
+											<td>结算价</td>
+											<td>大人</td>
+											<td>{{parentTouristGroup.adultCount}}</td>
+											<td>{{parentTouristGroup.adultPrice}}</td>
+										</tr>
+										<tr>
+											<td>结算价</td>
+											<td>小孩</td>
+											<td>{{parentTouristGroup.childCount}}</td>
+											<td>{{parentTouristGroup.childPrice}}</td>
+										</tr>
+									{{/if}}
+
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
-										<td>{{if rs.type==0}}增加{{else}}减少{{/if}}</td>
+										<td>其他费用</td>
 										<td>{{rs.describeInfo}}</td>
 										<td>{{rs.count}}</td>
 										<td>{{rs.price}}</td>

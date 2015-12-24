@@ -214,6 +214,7 @@ define(function(require, exports) {
 				    pages: data.searchParam.totalPage, //总页数
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
+				    	Replace.$checkingTab.data('isEdited', false);
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.checkingList(obj.curr -1);
 				    	}
@@ -442,6 +443,14 @@ define(function(require, exports) {
 				data : args
 			}).done(function(data){
 				if (showDialog(data)) {
+					for(var j=0; j<data.bookinAccountList.length; j++){
+						var detailList = data.bookinAccountList[j].detailList;
+						data.bookinAccountList[j].newDetail = '';
+						for(var i=0; i<detailList.length; i++){
+							data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+						}
+						data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+					}
 					var html;
 					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
 					html = payingTableTemplate(data);
@@ -610,7 +619,7 @@ define(function(require, exports) {
 		Replace.balanceId = id;
 		Replace.balanceName = name;
 		Replace.isBalanceSource = false;
-		Replace.balanceList(0, id);
+		Replace.balanceList(0, id, Replace.$tab.find('.T-search-end-date').val(), Replace.$tab.find('.T-search-start-date').val());
 	};
 	Replace.initIncome = function(args){
 		Replace.$balanceTab = null;
@@ -625,8 +634,8 @@ define(function(require, exports) {
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.balanceId,
-			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
-			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
+			endDate : endDate,
+			startDate : startDate
 		};
 
 		if(!!Replace.$balanceTab){

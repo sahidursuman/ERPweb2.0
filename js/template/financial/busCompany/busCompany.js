@@ -1,6 +1,5 @@
 define(function(require, exports) {
-	var rule = require("./rule"),
-        menuKey = "financial_busCompany",
+	var menuKey = "financial_busCompany",
 		listTemplate = require("./view/list"),
 		checkBill = require("./view/checkBill"),
 		Clearing = require("./view/Clearing"),
@@ -303,7 +302,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,rule);
+                                var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,new FinRule(isAutoPay== 2?3: 1));
                                 busCompany.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
                                     sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
@@ -332,7 +331,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         busCompany.$clearTab = $("#tab-" + menuKey + "-clearing-content");
         busCompany.$clearSearchArea = busCompany.$clearTab.find('.T-search-area');
-        var $tab = busCompany.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1);
+        var $tab = busCompany.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1), autoPayRule = (new FinRule(2)).check(busCompany.$clearTab);
         args.saveRule = saveRule;
 
         if(isAutoPay == 0){
@@ -358,7 +357,11 @@ define(function(require, exports) {
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
             busCompany.$clearTab.data('isEdited',false);
-            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
+            isAutoPay = busCompany.$clearTab.data('next')[0];
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            busCompany.busCompanyClear(isAutoPay,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
             busCompany.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -388,7 +391,7 @@ define(function(require, exports) {
 
         //保存结算事件
         busCompany.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(busCompany.$clearTab).form()) { return; }
+            if (!saveRule.check(busCompany.$clearTab).form()) { return; }
             busCompany.saveClear(args);
         });
         
@@ -457,7 +460,7 @@ define(function(require, exports) {
     };
 
     busCompany.saveClear = function(args,tab_id, title, html){
-        if(!FinancialService.isClearSave(busCompany.$clearTab,rule)){
+        if(!FinancialService.isClearSave(busCompany.$clearTab,new FinRule(args[0]== 2?3: 1))){
             return false;
         }
 
@@ -496,9 +499,12 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            busCompany.busCompanyClear(0,page,id,name);
+                            if(isAutoPay == 1){
+                                isAutoPay = 0;
+                            }
+                            busCompany.busCompanyClear(isAutoPay,page,id,name);
                         } else {
-                            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
+                            busCompany.busCompanyClear(busCompany.$clearTab.data('next')[0],0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
                         }
                     });
                     
@@ -615,7 +621,7 @@ define(function(require, exports) {
 
 	busCompany.init_event = function(page,id,name,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-            var validator = rule.check($tab);
+            var validator = (new FinRule(0)).check($tab);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

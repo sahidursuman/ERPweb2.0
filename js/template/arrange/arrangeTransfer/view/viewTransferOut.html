@@ -204,7 +204,7 @@
 					</div>
 					<div class="search-area col-sm-12">
 						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
-						<div class="col-sm-5">
+						<div class="col-sm-10">
 							<input name="remark" value="{{touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
 						</div>
 					</div>
@@ -280,7 +280,12 @@
 											<td>{{i+1}}</td>
 											<td>{{result.name}}</td>
 											<td>{{result.mobileNumber}}</td>
-											<td>身份证</td>	
+											<td>
+											  {{if result.idCardType==0}}身份证
+											    {{else if result.idCardType==1}}护照
+											    {{else if result.idCardType==2}}其他
+											   {{/if}}
+										    </td>	
 											<td>{{result.idCardNumber}}</td>
 											<td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>	
 										</tr>

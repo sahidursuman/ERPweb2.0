@@ -129,7 +129,7 @@ define(function(require, exports) {
 			success:function(data){
 				data.tripPlanList = JSON.parse(data.tripPlanList);
 				if(showDialog(data)){
-					tripPlan.$tab.find('.T-tripPlanList').html(listTemplate(data));
+					tripPlan.$tab.find('.T-tripPlanList').html(filterUnAuth(listTemplate(data)));
 					
 					tripPlan.$tab.off('click').on('click', '.T-action', function(event) {
 						event.preventDefault();

@@ -2873,7 +2873,8 @@ define(function(require, exports){
 		var newVal = Math.round($val*100)/100;
 		if(newVal<0){
 			newVal = 0;
-		}
+		};
+		newVal = Tools.toFixed(newVal,2);
 		return newVal;
 	};
 	Count.changeForInstall = function($val){

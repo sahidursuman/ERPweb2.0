@@ -248,16 +248,13 @@ define(function(require, exports) {
 		tripPlan.setTripPlanPicker($tab);
 
 		//游客短信及时发送显示隐藏
-		$tab.find('.T-timeArea .T-timeArea-input').hide();
-		$tab.find('.T-timeArea .T-timeArea-input').val("");
 		$tab.find('.T-ImmSend').on('click', function(event) {
 			/* Act on the event */
-			$tab.find('.T-timeArea .T-timeArea-input').hide();
-			$tab.find('.T-timeArea .T-timeArea-input').val("");
+			$tab.find('.T-timeArea').find('.T-timeArea-input').val('').parent().hide();
 		});
 		$tab.find('.T-execTime').on('click', function(event) {
 			/* Act on the event */
-			$tab.find('.T-timeArea .T-timeArea-input').show();
+			$tab.find('.T-timeArea').find('.T-timeArea-input').parent().show();
 		});
 		/*$tab.find('.T-timeArea input[type=radio]').click(function(){
 			$tab.find('.T-timeArea .T-timeArea-input').toggle();
