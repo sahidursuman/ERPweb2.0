@@ -123,7 +123,7 @@
                 <td>{{rs.contractMoney}}</td>
                 <td>
                 {{each rs.detailList as rsl j}}
-                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}，{{/if}}
+                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}{{/if}}<br>
                 {{/each}}
                 </td>
                 <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
