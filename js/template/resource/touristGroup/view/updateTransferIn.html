@@ -1,180 +1,163 @@
-<div class="col-xs-12 updateTouristGroup globalAdd">
-	<form class="form-horizontal touristGroupMainForm T-touristGroupMainForm T-update" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-			<h5 class="">
-				<span class="badge badge-primary">1</span>
-				<label class="middle title-size">修改小组信息</label>
-			</h5>
-			<div class="widget-body">
-				<div class="widget-main formOneList updateTouristInput">
-					<div class="form-group guideInterval">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input type="text" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" name="lineProductIdName" class="col-sm-12" readonly="readonly" />
-							<input type="hidden" value="{{touristGroupDetail.lineProductId}}" name="lineProductId" />
-							<input type="hidden" value="{{touristGroupDetail.quoteId}}" name="quoteId" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出游日期:</label>
-						<div class="col-sm-2 update-divWidth">
-							{{if touristGroupDetail.status == 1}}
-							<div class="input-group">
-								<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 date-picker" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if !!type}}readonly="readonly"{{/if}}  />
-									<span class="input-group-addon icon-tourist {{if !!touristGroupDetail.quoteId}} hidden {{/if}}"  >
-										<i class="fa fa-calendar" style="position: relative;left: -20px"></i>
-									</span>
-							</div>
-							{{else}}
-							<input type="text" name="startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12" readonly="readonly" />
-							{{/if}}
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">是否购买保险:</label>
-						<div class="col-sm-2 checkbox buyInsurance">
-							<label>
-								<input readonly="readonly" {{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}} value="1" disabled="disabled" type="checkbox" class="ace buyInsurance-status" name="buyInsurance">
-								<span class="lbl"></span>
-							</label>
-						</div>
-					</div>
-					<div class="form-group choosePartnerAgencyDiv guideInterval">
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>客户来源:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input type="text" name="fromPartnerAgency" class="col-sm-12" placeholder="请输入客户来源" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}  >
-							<input type="hidden" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}" name="fromPartnerAgencyId">
-							<span class="input-group-addon {{if type==null}}T-addPartner{{/if}} R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
-								<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
-							</span>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行联系人:</label>
-						<div class="col-sm-2 update-divWidth">
-							<div class="input-group">
-								<input class="{{if !!type}}choosePartnerManager{{/if}} col-sm-12 bind-change" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
-								<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon  {{if type==null}}T-addPartnerManager{{/if}} {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
-									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-								</span>
-							</div>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
-						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12 getPay-type" {{if !!type}}disabled="disabled"{{/if}}>
-								<option{{if touristGroupDetail.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
-								<option{{if touristGroupDetail.getType == 2}} selected="selected"{{/if}} value="2">传真</option>
-								<option{{if touristGroupDetail.getType == 3}} selected="selected"{{/if}} value="3">短信</option>
-								<option{{if touristGroupDetail.getType == 4}} selected="selected"{{/if}} value="4">电话</option>
-								<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
-							</select>
-						</div>
+<div class="group-info-area">
+	<h5>
+		<span class="badge badge-primary">1</span>
+		<label class="middle title-size">小组信息</label>
+	</h5>
+</div>
+<form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
+	<div class="form-inline">
+		<!--<div class="form-group fixed-width">
+		    <label for="qouteNumber">报价单号：</label>
+            <input type="text" id="qouteNumber" name="quoteNumber" class="form-control bind-change T-quoteNumber" readonly="readonly" />
+            <input type="hidden" name="quoteNumberId" class="T-quoteNumberId" />
+	        <button class="search-btn btn-sm T-ChosenQuoteNumber" onsubmit="return false">
+	                <i class="ace-icon fa fa-search "></i>搜索
+	        </button>
+		</div>-->
 
-						<label class=" control-label no-padding-right margin-leftGroup">组团单号：
-							<input  type="text" name="otaOrderNumber" value="{{touristGroupDetail.otaOrderNumber}}" readonly="readonly"  maxlength="100" />
-						</label>
-
-					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-1 control-label no-padding-right">应收:</label>
-						<div class="col-sm-2 update-divWidth">
-							{{if !!type}} 
-							<input value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly" type="text" name="needPayAllMoney" class="col-sm-12" />
-							{{else}}
-							<input value="{{touristGroupDetail.needPayAllMoney}}"  type="text" name="needPayAllMoney" class="col-sm-12" />
-						    {{/if}}
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">已收:</label>
-						<div class="col-sm-2 update-divWidth">
-							<input value="{{touristGroupDetail.payedMoney}}" type="text" name="payedMoney" {{if !!type}} readonly="readonly"{{/if}} class="col-sm-12" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">现收:</label>
-						<div class="col-sm-2">
-							<input value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 || !!type }}readonly="readonly"{{/if}} type="text" name="currentNeedPayMoney" class="col-sm-12" />
-						</div>
-					</div>
-					<div class="form-group guideInterval">
-						<label class="col-sm-1 control-label no-padding-right">未收:</label>
-						<div class="col-sm-2">
-						{{if !!type}}
-							<input value="{{touristGroupDetail.unIncomeMoney}}" readonly="readonly" type="text" name="unIncomeMoney" class="col-sm-12" />
-							{{else}}
-							<input value="{{touristGroupDetail.unIncomeMoney}}" readonly="readonly" type="text" name="unIncomeMoney" class="col-sm-12" />
-
-						{{/if}}
-						</div> 
-		
-					  </div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-8">
-						<button class="btn btn-sm btn-success  T-touristGroup-addOtherCost" style="position: absolute;" disabled="disabled">
-							<i class="ace-icon fa fa-plus"></i>
-							新增费用项
-						</button>
-					</div>
-				</div>
-				<div class="form-group margin-top30">
-					<div class="col-sm-8  tourist-contenWidth">
-						<table class="table table-striped table-bordered table-hover addCostList margin-top" style="margin-left: -20px;">
-							<thead>
-							<tr>
-								<th class="th-border">类型</th>
-								<th class="th-border">说明</th>
-								<th class="th-border">数量</th>
-								<th class="th-border">单价</th>
-								<th class="th-border">操作</th>
-							</tr>
-							</thead>
-							<tbody class="T-addCostTbody">
-							<tr>
-								<td>
-									结算价
-								</td>
-								<td>
-									大人
-								</td>
-								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultCount" value="{{touristGroupDetail.adultCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" maxlength="3" {{if !!type}} readonly {{/if}}/>
-								</td>
-								<td>
-									<span class="necessary col-sm-1">*</span><input name="adultPrice" value="{{touristGroupDetail.adultPrice}}" type="text" class="col-sm-11  no-padding-right  T-costPrice" maxlength="6" {{if !!type}} readonly {{/if}}/>
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>
-									结算价
-								</td>
-								<td>
-									小孩
-								</td>
-								<td>
-									<input name="childCount" value="{{touristGroupDetail.childCount}}" type="text" class="col-sm-11  no-padding-right T-costCount" style="float:right;" maxlength="3" {{if !!type}} readonly {{/if}}/>
-								</td>
-								<td>
-									<input name="childPrice" value="{{touristGroupDetail.childPrice}}" type="text" class="col-sm-11  no-padding-right T-costPrice" style="float:right;" maxlength="6" {{if !!type}} readonly {{/if}}/>
-								</td>
-								<td></td>
-							</tr>{{each touristGroupDetail.touristGroupFeeList as feeList}}
-							<tr data-entity-id="{{feeList.id}}">
-								<td>
-									<span name="addOrReduceSelect" value="0">其他费用</span>
-								</td>
-								<td>
-									<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-12  no-padding-right" readonly="readonly" />
-								</td>
-								<td>
-									<input name="count" value="{{feeList.count}}" type="text" class="col-sm-12  no-padding-right T-costCount" readonly="readonly" />
-								</td>
-								<td>
-									<input name="price" value="{{feeList.price}}" type="text" class="col-sm-12  no-padding-right T-costPrice" readonly="readonly" />
-								</td>
-								<td><a class="cursor oldaddCost-delete" readonly="readonly">删除</a></td>
-							</tr>{{/each}}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+		<div class="form-group fixed-width">
+		    <label for="qouteNumber"><span class="necessary">*</span> 线路产品：</label>
+	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" readonly="readonly"/>
+	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProductId}}" />
+	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
 		</div>
-	</form>
+
+		<div class="form-group fixed-width-1">
+			<label><span class="necessary">*</span>出游日期：</label>
+			<input type="text" name="startTime" class="form-control" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" readonly="readonly" />
+		</div>
+
+		<div class="form-group">
+			<label class="control-label no-padding-right">是否购买保险：
+			    <input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" disabled="disabled" name="buyInsurance" {{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}}/>
+			    <span class="lbl"></span>
+			</label>
+		</div>
+	</div>
+
+	<div class="form-inline">
+    	<div class="form-group fixed-width">
+    		<label><span class="necessary">*</span>客户来源：</label>
+            <input type="text" name="fromPartnerAgency" class="form-control bind-change T-fromPartnerAgencyName" placeholder="请输入客户来源"
+             style="width:204px;" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" readonly="readonly">
+			<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
+			</label>
+    	</div>
+    	<div class="form-group fixed-width">
+    		<label><span class="necessary">*</span>同行联系人：</label>
+            <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" readonly="readonly" type="text"  style="width:204px;" 
+            value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" readonly="readonly" />
+			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+    	</div>
+    	<div class="form-group fixed-width-1">
+    		<label>获得方式： </label>
+    		<select name="getType" style="width:133px;" disabled="disabled">
+    			<option{{if touristGroupDetail.getType == 1}} selected="selected"{{/if}} value="1">旅行社系统</option>
+    			<option{{if touristGroupDetail.getType == 2}} selected="selected"{{/if}} value="2">传真</option>
+    			<option{{if touristGroupDetail.getType == 3}} selected="selected"{{/if}} value="3">短信</option>
+    			<option{{if touristGroupDetail.getType == 4}} selected="selected"{{/if}} value="4">电话</option>
+    			<option{{if touristGroupDetail.getType == 5}} selected="selected"{{/if}} value="5">QQ</option>
+    		</select>
+    	</div>
+    	<div class="form-group">
+    		<label>组团单号：
+    		    <input type="text" name="otaOrderNumber" class="form-control" maxlength="100" value="{{touristGroupDetail.otaOrderNumber}}" readonly="readonly" />
+    		</label>
+    	</div>
+	</div>
+
+    <div class="form-inline">
+    	<div class="form-group">
+    		<label style="margin-left:42px;">应收：
+    		    <input type="text" name="needPayAllMoney" maxlength="9" value="{{touristGroupDetail.needPayAllMoney}}" readonly="readonly"> 
+		    </label>
+    	</div>
+    	<div class="form-group">
+    		<label class="control-label no-padding-right" style="margin-left: 28px;">已收：
+    			<input type="text" name="payedMoney" value="0" maxlength="9" value="{{touristGroupDetail.payedMoney}}" readonly="readonly">
+    		</label>
+    	</div>
+    	<div class="form-group">
+    		<label>收款方式：</label>
+    		<select name="incomeType" style="width: 87px;" disabled="disabled">
+    		    <option{{if touristGroupDetail.incomeType == 0}} selected="selected"{{/if}} value="0">现金</option>
+				<option{{if touristGroupDetail.incomeType == 1}} selected="selected"{{/if}} value="1">银行转账</option>
+				<option{{if touristGroupDetail.incomeType == 2}} selected="selected"{{/if}} value="2">网上支付</option>
+				<option{{if touristGroupDetail.incomeType == 3}} selected="selected"{{/if}} value="3">支票</option>
+				<option{{if touristGroupDetail.incomeType == 4}} selected="selected"{{/if}} value="4">其它</option>
+    		</select>
+    	</div>
+    	<div class="form-group">
+    		<label style="margin-left: 46px;">现收：
+    		    <input type="text" name="currentNeedPayMoney" value="0" maxlength="9" style="width: 87px;" value="{{touristGroupDetail.currentNeedPayMoney}}"  readonly="readonly">
+    		</label>
+    	</div>
+    	<div class="form-group">
+    		<label style="margin-left: 44px;">未收：
+    		    <input readonly="readonly" type="text" name="unIncomeMoney" maxlength="9"  value="{{touristGroupDetail.unIncomeMoney}}" />
+		    </label>
+    	</div>
+    </div>
+
+  
+    <div class="form-inline">
+        <div class="col-sm-10 tourist-contenWidth" style="margin: auto;">
+            <table class="table table-striped table-bordered table-hover addCostList">
+                <thead>
+                    <tr>
+                        <th class="th-border">类型</th>
+                        <th class="th-border">说明</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">单价</th>
+                    </tr>
+                </thead>
+                <tbody class="T-addCostTbody">
+                    <tr>
+                        <td>结算价</td>
+                        <td><span class="col-sm-12 no-padding-right">大人</span></td>
+                        <td>
+                            <span class="necessary col-sm-1">*</span>
+                            <input name="adultCount" type="text" class="col-sm-10 no-padding-right T-costCount T-adultCount" maxlength="3" value="{{touristGroupDetail.adultCount}}" readonly="readonly"/>
+                        </td>
+                        <td>
+                            <span class="necessary col-sm-1">*</span>
+                            <input name="adultPrice" type="text" class="col-sm-10 no-padding-right  T-costPrice T-adultPrice" maxlength="6"  
+                             value="{{touristGroupDetail.adultPrice}}" readonly="readonly"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>结算价</td>                                                                               
+                        <td><span class="col-sm-12 no-padding-right">小孩</span></td>
+                        <td>
+                            <input name="childCount" type="text" value="0" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount" maxlength="3"  value="{{touristGroupDetail.childCount}}" readonly="readonly"/>
+                        </td>
+                        <td>
+                            <input name="childPrice" type="text" value="0" class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice" maxlength="6" value="{{touristGroupDetail.childPrice}}" readonly="readonly" />
+                        </td>
+                    </tr>
+                    {{each touristGroupDetail.touristGroupFeeList as feeList}}
+						<tr data-entity-id="{{feeList.id}}">
+							<td>
+								<span name="addOrReduceSelect" value="0">其他费用</span>
+							</td>
+							<td>
+								<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-12  no-padding-right" readonly="readonly" />
+							</td>
+							<td>
+								<input name="count" value="{{feeList.count}}" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount" readonly="readonly" />
+							</td>
+							<td>
+								<input name="price" value="{{feeList.price}}" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice"  readonly="readonly"/>
+							</td>
+						</tr>
+					{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+<div class="col-xs-12 updateTouristGroup globalAdd">
 	<form class="form-horizontal touristGroupMainFormMember T-touristGroupMainFormMember" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-sm-8 col-sm-12 widget-container-col">
@@ -188,7 +171,7 @@
 							<div class="form-group"> 
 								<label class="col-sm-1 control-label no-padding-right">住宿标准：</label>
 								<div class="col-sm-2">
-									<select name="level" class="col-sm-12"  {{if !!type}}disabled="disabled"{{/if}}>
+									<select name="level" class="col-sm-12" disabled="disabled">
 										<option{{if touristGroupDetail.hotelLevel == 0}} selected="selected"{{/if}} value="0">未选择</option>
 										<option{{if touristGroupDetail.hotelLevel == 1}} selected="selected"{{/if}} value="1">三星以下</option>
 										<option{{if touristGroupDetail.hotelLevel == 2}} selected="selected"{{/if}} value="2">三星</option>
@@ -201,75 +184,60 @@
 								</div>
 								<label class="col-sm-2 control-label no-padding-right">包含自费：</label>
 								<div class="col-sm-7">
-									<input name="includeOwnExpense" value="{{touristGroupDetail.includeSelfPay}}" type="text" {{if !!type}}readonly="readonly"{{/if}} class="col-sm-12" maxlength="1000" />
+									<input name="includeOwnExpense" value="{{touristGroupDetail.includeSelfPay}}" type="text" class="col-sm-12" maxlength="1000" readonly="readonly" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
-									<input name="touristRemarks" value="{{touristGroupDetail.remark}}"  {{if !!type}}readonly="readonly"{{/if}}  maxlength="1000" class="col-sm-12  no-padding-right" type="text">
+									<input name="touristRemarks" value="{{touristGroupDetail.remark}}" maxlength="1000"  class="col-sm-12  no-padding-right" type="text" readonly="readonly">
 								</div>
 							</div>
 							<div class="form-group margin-top15">
-								<div class="col-sm-8">
-									<button class="btn btn-sm btn-success T-add-tourist" style="float:left;" disabled="disabled">
-										<i class="ace-icon fa fa-plus"></i>
-										添加成员
-									</button>
-									<div style="height:5px;width:25px;float:left;"></div>
-									<button class="btn btn-sm btn-success T-add-tourist-more" style="float:left;" disabled="disabled">
-										<i class="ace-icon fa fa-plus"></i>
-										批量添加
-									</button>
-								</div>
 								<div class="form-group">
 									<div class="col-sm-12  tourist-contenWidth">
 										<table class="table table-striped table-bordered table-hover T-addTouristList margin-top">
 											<thead>
-											<tr>
-												<th class="th-border">序号</th>
-												<th class="th-border"> <span class="necessary">*</span>姓名</th>
-												<th class="th-border"> <span class="necessary">*</span>手机号码</th>
-												<th class="th-border">证件类型</th>
-												<th class="th-border">证件号</th>
-												<th class="th-border">设为联系人</th>
-												<th class="th-border">操作</th>
-											</tr>
+												<tr>
+													<th class="th-border">序号</th>
+													<th class="th-border"> <span class="necessary">*</span>姓名</th>
+													<th class="th-border"> <span class="necessary">*</span>手机号码</th>
+													<th class="th-border">证件类型</th>
+													<th class="th-border">证件号</th>
+													<th class="th-border">设为联系人</th>
+												</tr>
 											</thead>
-											<tbody class="T-addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as memberList}}
-											<tr data-entity-id="{{memberList.id}}">
-												<td></td>
-												<td>
-													<input name="name" value="{{memberList.name}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" />
-												</td>
-												<td>
-													<input name="mobileNumber" value="{{memberList.mobileNumber}}" readonly="readonly" type="text" class="col-sm-12 T-mobileNumber no-padding-right" maxlength="11" />
-												</td>
-												<td>
-													<select name="idCardType" disabled="disabled">
-														<option value="0" {{if memberList.idCardType == 0}}selected="selected"{{/if}}>身份证</option>
-														<option value="1" {{if memberList.idCardType == 1}}selected="selected"{{/if}}>护照</option>
-														<option value="2" {{if memberList.idCardType == 2}}selected="selected"{{/if}}>其它</option>
-													</select>
-												</td>
-												<td>
-													<input name="idCardNumber" value="{{memberList.idCardNumber}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right" />
-												</td>
-												<td>
-													<div class="checkbox">
-														<label>
-															<input type="checkbox" disabled="disabled" {{if  memberList.isContactUser==1}}checked="checked"{{/if}} class="ace " value="1" name="isContactUser">
-															<span class="lbl">
-															</span>
-														</label>
-													</div>
-												</td>
-												<td>
-													<a class="cursor" disabled='disabled'>
-														删除
-													</a>
-												</td>
-											</tr>{{/each}}
+											<tbody class="T-addTouristTbody">
+												{{each touristGroupDetail.touristGroupMemberList as memberList}}
+														<tr data-entity-id="{{memberList.id}}">
+															<td></td>
+															<td>
+																<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" readonly="readonly"/>
+															</td>
+															<td>
+																<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right T-mobileNumber" maxlength="11" readonly="readonly"/>
+															</td>
+															<td>
+																<select name="idCardType" disabled="disabled">
+																	<option value="0" {{if memberList.idCardType == 0}}selected="selected"{{/if}}>身份证</option>
+																	<option value="1" {{if memberList.idCardType == 1}}selected="selected"{{/if}}>护照</option>
+																	<option value="2" {{if memberList.idCardType == 2}}selected="selected"{{/if}}>其它</option>
+																</select>
+															</td>
+															<td>
+																<input name="idCardNumber" value="{{memberList.idCardNumber}}" type="text" class="col-sm-12  no-padding-right" readonly="readonly" />
+															</td>
+															<td>
+																<div class="checkbox">
+																	<label>
+																		<input type="checkbox" {{if  memberList.isContactUser==1}}checked="checked"{{/if}} class="ace " value="1" name="isContactUser" disabled="disabled">
+																		<span class="lbl">
+																		</span>
+																	</label>
+																</div>
+															</td>
+														</tr>
+												{{/each}}
 											</tbody>
 										</table>
 									</div>
