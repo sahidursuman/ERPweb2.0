@@ -1316,11 +1316,11 @@ define(function(require, exports) {
 							})
 
 							var selectedHotelArray = [];
+							quote.hotelSelectedArray = [];
 							//酒店查询分页
 							var startTime = lineProductInfo.startTime;
 							//quote.hotelInquiryList(0,$hotelLayerContent,whichDay,startTime,quoteId);
 							$hotelLayerContent.find('.T-btn-hotelInquiry-search').off('click').on('click',function(){
-								quote.hotelSelectedArray = [];
 								quote.hotelInquiryList(0,$hotelLayerContent,quoteId);
 							})
 							//保存接口
@@ -1358,6 +1358,9 @@ define(function(require, exports) {
 									}
 									saveJson.params.push(json);
 								})
+								console.log(quote.hotelSelectedArray);
+								console.log(quote.hotelSelectedArray.length);
+
 			    				for (var i = 0; i < quote.hotelSelectedArray.length; i++) {
 			    					var json = {
 			    						hotelId: quote.hotelSelectedArray[i]
@@ -3288,9 +3291,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!restaurantJson.marketPrice == flase) {
-							restaurantJson.marketPrice = restaurantJson.price
-						}
 						saveJson.lineDayList[index].restaurant.push(restaurantJson);
 					}
 				}
@@ -3318,9 +3318,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!hotelJson.marketPrice == flase) {
-							hotelJson.marketPrice = hotelJson.price
-						}
 						saveJson.lineDayList[index].hotel.push(hotelJson)
 					}
 				}
@@ -3345,9 +3342,6 @@ define(function(require, exports) {
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
-						}
-						if (!!scenicJson.marketPrice == false) {
-							scenicJson.marketPrice = scenicJson.price
 						}
 						saveJson.lineDayList[index].scenic.push(scenicJson);
 					}
@@ -3394,9 +3388,6 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						if (!!selfPayJson.marketPrice == false) {
-							selfPayJson.marketPrice = selfPayJson.price
-						}
 						saveJson.lineDayList[index].selfPay.push(selfPayJson);
 					}
 					
@@ -3421,9 +3412,6 @@ define(function(require, exports) {
 							count: $item.find("[name=count]").val(),
 							seatLevel: $item.find("[name=seatLevel]").val()
 						}
-						if (!!ticketJson.marketPrice == false) {
-							ticketJson.marketPrice = ticketJson.price
-						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
 				}
@@ -3444,9 +3432,6 @@ define(function(require, exports) {
 							price: $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
-						}
-						if (!!otherJson.marketPrice == flase) {
-							otherJson.marketPrice = otherJson.price
 						}
 						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
 					}
