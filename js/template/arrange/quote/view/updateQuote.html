@@ -51,7 +51,7 @@
 					<div class="form-group">
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
-							<input type="text" name="startTime" class="col-sm-4 datepicker T-startTime T-datePicker" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
@@ -83,6 +83,11 @@
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系电话：</label>
 							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}">
+						</div>
+
+						<div class="col-sm-2 addQuoteInformation" style="padding-top: 10px;">
+						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>报价单号：</label>
+							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" value="{{if isCopy != '1'}}{{quoteDetailJson.quoteNumber}}{{/if}}" placeholder="系统自动生成">
 						</div>
 					</div>
 					<div class="form-group T-isChooseService">
@@ -277,17 +282,17 @@
 													</thead>
 													<tbody>{{if busCompanyArrange != null}}
 														<tr data-entity-id="{{busCompanyArrange.id}}">
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{busCompanyArrange.bus.seatCount}}" /></td>  
-															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{busCompanyArrange.brand}}" /></td>
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{busCompanyArrange.bus.seatCount}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
+															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{busCompanyArrange.brand}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td>
-																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{busCompanyArrange.busCompany.companyName}}" />
+																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{busCompanyArrange.busCompany.companyName}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
 																<input type="hidden" name="busCompanyId" value="{{busCompanyArrange.busCompany.id}}">
 																<input type="hidden" name="arrangeId" value="{{busCompanyArrange.id}}">
 																<input type="hidden" name="offerId" value="{{busCompanyArrange.offerId}}">
 															</td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.managerName}}" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.mobileNumber}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{busCompanyArrange.price}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{busCompanyArrange.price}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="{{busCompanyArrange.quotePrice}}"></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{busCompanyArrange.remark}}" /></td>
 														</tr>{{else}}
@@ -326,10 +331,10 @@
 					<div class="widget-body">
                         <div class="widget-main">
                             <div class="tabbable">
-                                <ul class="nav nav-tabs" id="myTab">
+                                <ul class="nav nav-tabs" id="myTab-{{tag}}">
                                     {{each daysList as lineProductDaysList i}}
                                     <li {{if i==0 }}class="active" {{/if}}>
-                                        <a aria-expanded="true" data-toggle="tab" href="#dayListUpdate-{{i}}" style="text-align:center;width:140px;">
+                                        <a aria-expanded="true" data-toggle="tab" href="#dayList{{tag}}-{{i}}" style="text-align:center;width:140px;">
 											第{{i+1}}天
 										</a>
                                     </li>
@@ -337,7 +342,7 @@
                                 </ul>
                                 <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
                                     {{each daysList as lineProductDaysList i}}
-                                    <div id="dayListUpdate-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
+                                    <div id="dayList{{tag}}-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-entity-whichday="{{i+1}}">
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="globalAdd">
@@ -371,7 +376,7 @@
                                                         </div>
 
                                                         
-                                                        <div id="timeline-1">
+                                                        <div id="timeline-1-{{tag}}">
                                                             <div class="row">
                                                                 <div class="col-xs-12 col-sm-12">
                                                                     <div class="timeline-container T-timeline-container">
@@ -466,7 +471,7 @@
                                                                                                 <tbody>
                                                                                                     <tr>
                                                                                                         <td>{{if hotelList.offerId != null}}<input type='hidden' name='offerId' value='{{hotelList.offerId}}' />{{/if}}
-                                                                                                            <select class="col-xs-12 T-choose-hotelStarLevel" {{if hotelList.offerId != null}}disabled='disabled'{{/if}}>
+                                                                                                            <select class="col-xs-12 T-choose-hotelStarLevel" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}}>
                                                                                                             <option {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>
                                                                                                                 <option {{if hotelList.hotel.level==1 }}selected="selected" {{/if}} value="1">三星以下</option>
                                                                                                                 <option {{if hotelList.hotel.level==2 }}selected="selected" {{/if}} value="2">三星</option>
@@ -478,17 +483,17 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="T-choose-hotelName col-xs-12 bind-change" name="hotelNmae" value="{{hotelList.hotel.name}}" {{if hotelList.offerId != null}}disabled='disabled'{{/if}} />
+                                                                                                            <input type="text" class="T-choose-hotelName col-xs-12 bind-change" name="hotelNmae" value="{{hotelList.hotel.name}}" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
                                                                                                             <input type="hidden" name="hotelId" value="{{hotelList.hotel.id}}" />
 																											<input type="hidden" name="arrangeId" value="{{hotelList.id}}">
 																											<input type="hidden" name="offerId" value="{{hotelList.offerId}}">
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="T-choose-hotelRoom col-xs-12 bind-change" name="hotelRoom" value="{{hotelList.hotelRoom.type}}" {{if hotelList.offerId != null}}disabled='disabled'{{/if}} />
+                                                                                                            <input type="text" class="T-choose-hotelRoom col-xs-12 bind-change" name="hotelRoom" value="{{hotelList.hotelRoom.type}}" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if hotelList.offerId != null}}disabled='disabled'{{/if}} />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{hotelList.quotePrice}}" style="width:70px;" maxlength="9" />
