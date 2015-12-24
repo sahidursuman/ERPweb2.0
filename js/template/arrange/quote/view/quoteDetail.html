@@ -170,11 +170,11 @@
                     </tr>
                     {{/each}}
                     <!-- 其他 -->
-                    {{each viewQuoteDaysList.otherArrange as ticketList}}
+                    {{each viewQuoteDaysList.otherArrange as otherList}}
                     <tr>
                         <td>其他</td>
-                        <td>{{ticketList.startingCity}}-{{ticketList.arriveCity}}</td>
-                        <td>￥{{ticketList.price}}</td>
+                        <td>{{otherList.name}}</td>
+                        <td>￥{{otherList.price}}</td>
                     </tr>
                     {{/each}}
                 </table>
