@@ -2203,10 +2203,10 @@ define(function(require, exports) {
 			});
 
 			//加载时自动计算
-			//tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab);
+			tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab ,true);
 		});
 	},
-	tripPlan.plusPrice = function($this, $tab){
+	tripPlan.plusPrice = function($this, $tab , isCalc){
 		var $parents = $this.closest('tr');
 		var payType = $parents.find("select[name=payType]").val(),
 			payedMoney = $parents.find("input[name=payedMoney]").val(),
@@ -2221,7 +2221,9 @@ define(function(require, exports) {
 		$parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
 		
 		if(payType == 0){
-			$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+			if (!!isCalc == false) {
+				$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
+			}
 		}
 		tripPlan.moneyTripPlan($tab);
 	};
