@@ -584,7 +584,8 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
 
             var $form = $tab.find('.T-touristGroupMainForm');  
-            if (typeInner!='out' || typeInner=="" ) {
+            if (!!$form.find('.T-quoteNumber').val()) {
+                // 有报价产品切换到普通线路产品，则清空报价的数据
                 touristGroup.clearQuoteData($form);
             };
             
@@ -835,13 +836,15 @@ define(function(require, exports) {
                     ids.push(id);
                 }
             });
+
+            touristGroup.clearQuoteData($addTabId.find('.T-touristGroupMainForm'));
             //带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
             if (!!ids && ids.length > 0) {
                 $addTabId.find('.T-quoteNumber').val(chooseQuotObj.quoteNumber);
                 $addTabId.find('.T-quoteId').val(chooseQuotObj.quoteId);
                 $addTabId.find('.T-lineProductId').val(chooseQuotObj.lineProducId);
                 $addTabId.find('.T-lineProductIdName').val(chooseQuotObj.lineProductName);
-                $addTabId.find('.T-startTime').val(chooseQuotObj.startTime);
+                $addTabId.find('.T-startTime').val(chooseQuotObj.startTime.split(' ')[0]);
                 $addTabId.find('.T-fromPartnerAgencyName').val(chooseQuotObj.fromPartnerAgencyName);
                 $addTabId.find('.T-fromPartnerAgencyId').val(chooseQuotObj.fromPartnerAgencyId);
                 $addTabId.find('.T-partnerAgencyNameList').val(chooseQuotObj.partnerAgencyContactName);
