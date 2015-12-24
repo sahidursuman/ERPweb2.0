@@ -8,7 +8,7 @@
 	<div class="form-inline">
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber">报价单号：</label>
-            <input type="text" id="qouteNumber" name="quoteNumber" class="form-control bind-change T-quoteNumber" readonly="readonly" />
+            <input type="text" id="qouteNumber" name="quoteNumber" value="{{if !!touristGroupDetail.quote}}{{touristGroupDetail.quote.quoteNumber}}{{/if}}" class="form-control bind-change T-quoteNumber" readonly="readonly" />
             <input type="hidden" name="quoteNumberId" class="T-quoteNumberId" />
 	        <button class="search-btn btn-sm T-ChosenQuoteNumber" onsubmit="return false">
 	                <i class="ace-icon fa fa-search "></i>搜索
