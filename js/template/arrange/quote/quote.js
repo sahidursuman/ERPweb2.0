@@ -3598,27 +3598,7 @@ define(function(require, exports) {
 		});
 	}
 	quote.updateQuoteToOffer = function(id,target) {
-		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content,#tab-arrange_quote-copy-content'), isThere = 0;
-		quoteContent.each(function(i){
-			var menukeyId = quoteContent.eq(i).attr("id");
-			var quoteId = quoteContent.eq(i).find('[name=quoteId]').val();
-			if (quoteId == id) {
-				isThere = 1;
-				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
-				var $container = $("#"+menukeyId);
-				if (!!target) {
-					$container.find('.inquiryContent').trigger('click');
-					if (target == "T-hotel") {
-						$container.find('.hotelInquiryContent').trigger('click');
-					}else if (target == "T-bus") {
-						$container.find('.busInquiryResult').trigger('click');
-					}
-				}
-			}
-		})
-		if (isThere == 0) {
-			quote.updateQuote(id,target);
-		}
+		quote.updateQuote(id,target,'','update');
 	};
 
 	/**

@@ -289,10 +289,10 @@ define(function(require, exports) {
 	 * @param  {[type]} $billStatus [description]
 	 * @return {[type]}             [description]
 	 */
-	tripPlan.updateTripPlanArrange = function($id, $billStatus) {
-		if($billStatus == 1 || $billStatus == 2){
+	tripPlan.updateTripPlanArrange = function($id, $billStatus, target) {
+		if($billStatus == '1' || $billStatus == '2'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团已审核，无法编辑')
-		}else if($billStatus == 0){
+		}else if($billStatus == '0'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团导游已报账，无法编辑')
 		}else{
 			$.ajax({
@@ -342,7 +342,7 @@ define(function(require, exports) {
 						};
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', addTemplate(data))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
-							tripPlan.init_event($tab,$id);
+							tripPlan.init_event($tab,$id,target);
 						}
 					}
 				}
@@ -354,7 +354,7 @@ define(function(require, exports) {
 	 * 编辑发团安排事件处理
 	 * @return {[type]} [description]
 	 */
-	tripPlan.init_event = function($tab,$id) {
+	tripPlan.init_event = function($tab,$id,target) {
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
@@ -519,6 +519,12 @@ define(function(require, exports) {
 				tripPlan.oneClickBooking($this, $tab, saveJson);
 			}
 		})
+
+		if (target == 'T-bus') {
+			$tab.find('.T-busTarget').trigger('click');
+		}else if (target == 'T-hotel') {
+			$tab.find('.T-hotelTarget').trigger('click');
+		}
 
 		//精度控件 
 		var $price = $tab.find('.price');
@@ -2606,5 +2612,16 @@ define(function(require, exports) {
 		return obj.find("[name="+name+"]").val();
 	}
 
+	/**
+	 * 消息接口
+	 * @param  {[type]} tripPlanId [发团安排Id]
+	 * @param  {[type]} target     [bus hotel]
+	 * @return {[type]}            [description]
+	 */
+	tripPlan.updatePlanInfo = function(tripPlanId,target) {
+		tripPlan.updateTripPlanArrange(tripPlanId, '', target)
+	}
+
 	exports.init = tripPlan.initModule;
+	exports.updatePlanInfo = tripPlan.updatePlanInfo;
 });
