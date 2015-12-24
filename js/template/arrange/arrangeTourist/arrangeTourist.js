@@ -171,6 +171,7 @@ define(function(require, exports) {
                     data.touristGroupList = JSON.parse(data.touristGroupList);
                     if (customerType == 0) { //散拼
                         var html = listTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-touristVisitor-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_visitorEvent();
@@ -178,12 +179,14 @@ define(function(require, exports) {
                         arrangeTourist.pagerChecked(customerType, divId);
                     } else if (customerType == 1) { //团体
                         var html = listGroupTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-touristGroup-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_groupEvent();
 
                     } else { //转客
                         var html = listTransferTemplate(data);
+                            html = filterUnAuth(html);
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();

@@ -347,7 +347,11 @@ define(function(require, exports) {
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
             hotel.$clearTab.data('isEdited',false);
-            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
+            isAutoPay = hotel.$clearTab.data('next')[0];
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            hotel.hotelClear(isAutoPay,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
             hotel.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -589,9 +593,12 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            hotel.hotelClear(0,page,id,name);
+                            if(isAutoPay == 1){
+                                isAutoPay = 0;
+                            }
+                            hotel.hotelClear(isAutoPay,page,id,name);
                         } else {
-                            hotel.hotelClear(0,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
+                            hotel.hotelClear(hotel.$clearTab.data('next')[0],0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
                         }
                     }); 
                 }
