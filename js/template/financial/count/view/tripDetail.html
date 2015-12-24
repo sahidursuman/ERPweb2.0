@@ -730,7 +730,7 @@
                         <th class="th-border">日期</th>
                         <th class="th-border">出发地</th>
                         <th class="th-border">目的地</th>
-                        <th class="th-border">座席</th>
+                        <th class="th-border">座位级别</th>
                         <th class="th-border">班次</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
@@ -753,8 +753,8 @@
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startTime}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startingCity}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.arriveCity}}</td>{{/if}}
-                    <td>{{arrange.shift}}</td>
                     <td>{{arrange.seatLevel}}</td>
+                    <td>{{arrange.shift}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>-</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
