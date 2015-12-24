@@ -32,7 +32,7 @@
 
 		<div class="form-group">
 			<label class="control-label no-padding-right">是否购买保险：
-			    <input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance" {{if touristGroupDetail.buyInsurance==1}} checked="checked"{{/if}}/>
+			    <input type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance"  {{if touristGroupDetail.buyInsurance==1}}checked="checked"{{/if}}/>
 			    <span class="lbl"></span>
 			</label>
 		</div>
@@ -150,13 +150,13 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>结算价</td>                                                                               
+                        <td>结算价</td>                                                                              
                         <td><span class="col-sm-12 no-padding-right">小孩</span></td>
                         <td>
-                            <input name="childCount" type="text" value="0" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childCount}}"/>
+                            <input name="childCount" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childCount}}"/>
                         </td>
                         <td>
-                            <input name="childPrice" type="text" value="0" class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childPrice}}"/>
+                            <input name="childPrice" type="text"  class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childPrice}}"/>
                         </td>
                         <td></td>
                     </tr>

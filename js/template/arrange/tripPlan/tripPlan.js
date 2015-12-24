@@ -251,7 +251,7 @@ define(function(require, exports) {
 		$tab.find('.T-ImmSend').on('click', function(event) {
 			/* Act on the event */
 			$tab.find('.T-timeArea').find('.T-timeArea-input').val('').parent().hide();
-		}).trigger('click');
+		});
 		$tab.find('.T-execTime').on('click', function(event) {
 			/* Act on the event */
 			$tab.find('.T-timeArea').find('.T-timeArea-input').parent().show();
