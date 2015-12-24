@@ -150,7 +150,7 @@ define(function(require, exports) {
 				quote.shareQuote($(this),id);
 			} else if ($this.hasClass('T-status'))  {
 				// 查看询价状态
-				quote.updateQuote(id, 'T-bus');
+				quote.updateQuote(id, 'T-bus','','update');
 			}
 		});
 
