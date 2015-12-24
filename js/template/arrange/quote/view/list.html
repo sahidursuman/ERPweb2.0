@@ -1,7 +1,8 @@
 <div class="col-xs-12">
 	<table class="table table-striped table-bordered table-hover T-showHighLight">
 		<thead>
-			<tr class="bg-blur">  
+			<tr class="bg-blur">
+			    <th>报价单号</th>  
 				<th>产品名称</th>
 				<th>出游日期</th>
 				<th>天数</th>
@@ -15,12 +16,13 @@
 				<th>总报价</th>
 				<th>报价人</th>
 				<th class="col-sm-1">报价时间</th>
-				<th width="251">操作</th>
+				<th width="300">操作</th>
 			</tr>
 		</thead>
 	
 		<tbody>{{each quoteList as quote}}
 			<tr data-entity-id="{{quote.id}}">
+			     <td>{{quote.quoteNumber}}</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</td>
 				<td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</td>
@@ -36,21 +38,23 @@
 				<td>{{quote.createTime}}</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
-						<a class="cursor R-right T-action T-status">
+						<a class="cursor R-right T-action T-status" data-right="1440002">
 							询价状态 <span style='margin-left:5px;'>|</span>
 						</a>
 						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-update {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
 							修改  <span style='margin-left:5px;'>|</span>
 						</a>
-						
-						<a class="cursor R-right T-action T-view">
+						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-copy {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
+							复制  <span style='margin-left:5px;'>|</span>
+						</a>
+						<a class="cursor T-action T-view">
 							查看  <span style='margin-left:5px;'>|</span>
 						</a>
 						
 						<a class="cursor R-right T-action {{if !quote.touristGroupId}} T-delete {{/if}}" data-right="1440003" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
 							删除  <span style='margin-left:5px;'>|</span>
 						</a>
-						<a class="cursor R-right T-action T-share">
+						<a class="cursor T-action T-share">
 							分享
 						</a>
 					</div>

@@ -92,3 +92,16 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 .money {
 	width: 60px;
 }
+
+/*财务样式兼容*/
+.financial-search-planProfit{
+	display: inline-block;
+    padding-left: 15px;
+}
+@media (max-width: 1485px) {
+	.financial-search-planProfit{
+		display: inline-block;
+	    padding-left: 0px;
+	    padding-top: 8px;
+	}
+}

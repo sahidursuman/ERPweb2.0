@@ -349,7 +349,11 @@ define(function(require, exports) {
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
             restaurant.$clearTab.data('isEdited',false);
-            restaurant.restaurantClear(0,0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
+            isAutoPay = restaurant.$clearTab.data('next')[0];
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            restaurant.restaurantClear(isAutoPay,0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
             restaurant.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -594,9 +598,12 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             restaurant.listRestaurant(restaurant.searchData.pageNo,restaurant.searchData.restaurantName,restaurant.searchData.restaurantId,restaurant.searchData.startDate,restaurant.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            restaurant.restaurantClear(0,page,id,name);
+                            if(isAutoPay == 1){
+                                isAutoPay = 0;
+                            }
+                            restaurant.restaurantClear(isAutoPay,page,id,name);
                         } else {
-                            restaurant.restaurantClear(0,0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
+                            restaurant.restaurantClear(restaurant.$clearTab.data('next')[0],0,restaurant.$clearTab.data('next')[2],restaurant.$clearTab.data('next')[3]);
                         }
                     });
                     

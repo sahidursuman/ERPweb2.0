@@ -1,6 +1,6 @@
 /**
  * 财务管理--导游账务
- * 未完全重构
+ * 
  * by David Bear 2015-11-24
  */
 define(function(require, exports) {
@@ -167,8 +167,7 @@ define(function(require, exports) {
         }
 
         Client.checkPageNo = args.pageNo = pageNo || 0;
-        args.sortType = 'startTime';
-        args.order='asc';
+
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
             type : "POST",
@@ -243,6 +242,23 @@ define(function(require, exports) {
             $tab.data('isEdited', false);
             Client.ClientCheck(0, false, $tab);
         });
+
+        //导出报表事件
+        Client.$checkSearchArea.find('.T-btn-export').on('click', function(event){
+            event.preventDefault();
+                var $btn = $tab.find('.T-btn-save'),
+                $datePicker = Client.$checkSearchArea.find('.date-picker'),
+                args = {
+                    fromPartnerAgencyId: $tab.data("id"), 
+                    startDate: $datePicker.eq(0).val(),
+                    endDate: $datePicker.eq(1).val(),
+                    lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
+                    lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
+                    creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                };
+                Client.exportReport(args);
+            });
 
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-check'));
@@ -699,26 +715,41 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var dataList = [], argLen = arguments.length;
-
-        // 获取对账数据
-        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function(index, el) {
-            var $tr = $(this);
-            if ($tr.data('change')) {
-                dataList.push({
-                    backMoney: $tr.find('.T-refund').val(),
-                    checkRemark: $tr.find('.T-remark').val(),
-                    isConfirmAccount: ($tr.find('.T-check').prop('checked')? 1 : 0),
-                    id: $tr.data('id')
-                })
-            }
+        var JsonStr = [],
+            selectFlag = 0,
+            argLen = arguments.length,
+            checkList = $tab.find('.T-list'),
+            $tr = checkList.find('.T-check');
+        $tr.each(function(i){
+           var flag = $(this).is(":checked");
+           var tr = $(this).closest('tr');
+           if(flag){
+                if(tr.attr("data-confirm") == 0 ){
+                    var checkData = {
+                        backMoney: tr.find('.T-refund').val(),
+                        checkRemark: tr.find('.T-remark').val(),
+                        isConfirmAccount: 1,
+                        id: tr.data('id')
+                    };
+                    JsonStr.push(checkData);
+                }
+           }else{
+                if(tr.attr("data-confirm") == 1){
+                    var checkData = {
+                        backMoney: tr.find('.T-refund').val(),
+                        checkRemark: tr.find('.T-remark').val(),
+                        isConfirmAccount: 0,
+                        id: tr.data('id')
+                    };  
+                    JsonStr.push(checkData);
+                }
+           }
         });
-
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
             data:{
-                checkAccountList : JSON.stringify(dataList)
+                checkAccountList : JSON.stringify(JsonStr)
             },
             success:function(data){
                 if(showDialog(data)){
@@ -943,6 +974,16 @@ define(function(require, exports) {
         });        
     };
 
+    Client.exportReport = function(args){
+        args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+        args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
+        var str = '';
+        for(var i in args){
+            str += "&" + i + "=" + args[i];
+        }
+        exportXLS(KingServices.build_url('export', 'exportPartnerAgencyFinancial') + str);
+    };
+
     function getBaseArgs($tab, isAuto) {
         var id = $tab.find('.T-search-enter').data('id'),
             args = {};
@@ -958,7 +999,7 @@ define(function(require, exports) {
             startDate : $tab.find('.T-search-start-date').val(),
             endDate : $tab.find('.T-search-end-date').val()
         }
-
+        console.log(args.lineProductId);
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
         }

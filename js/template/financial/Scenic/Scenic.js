@@ -367,6 +367,8 @@ define(function(require, exports) {
             scenic.saveClear(id,name,page);
         });
 
+        var payingCheck = new FinRule(2).check(scenic.$clearTab);
+
         //自动下账
         scenic.$clearTab.find(".T-clear-auto").click(function(){
             var autoPayJson = FinancialService.autoPayJson(id,scenic.$clearTab,new FinRule(scenic.isOuter ? 3 : 1));
