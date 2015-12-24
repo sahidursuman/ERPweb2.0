@@ -610,6 +610,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
 					$this.closest('tr').find('[name=busOrder]').val(2);
 					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
+					$this.closest('tr').find('[name=id]').val(data.arrangeId);
 				}
 			}
 		})
@@ -885,7 +886,25 @@ define(function(require, exports) {
 			data: {saveJson : JSON.stringify(saveJson)},
 			success: function(data) {
 				if (showDialog(data)) {
-					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+					var hotelList = JSON.parse(data.hotelOrderJson);
+					showMessageDialog($( "#confirm-dialog-message" ), data.message,function() {
+						for (var i = 0, len = hotelList.length; i < len; i++) {
+							var arrangeId = hotelList[i].arrangeId,
+								hotelId = hotelList[i].hotelId,
+								hotelRoomId = hotelList[i].hotelRoomId,
+								whichDay = hotelList[i].whichDay,
+								$tr = $tab.find('#tripPlan_addPlan_hotel tbody tr');
+							$tr.each(function(j) {
+								var $this = $tr.eq(j);
+								var trHotelId = $this.find('[name=hotelId]').val(),
+									trHotelRoomId = $this.find('[name=hotelRoomId]').val(),
+									trWhichDay = $this.find('[name=whichDay]').val()
+								if (hotelId == trHotelId && hotelRoomId == trHotelRoomId && whichDay == trWhichDay) {
+									$this.find('[name=id]').val(arrangeId);
+								}
+							});
+						}
+					});
 				}
 			}
 		})
@@ -974,7 +993,7 @@ define(function(require, exports) {
 		var tableContainer = $this.closest(".ui-sortable-handle").find(".table tbody"),
 			html = '<tr><td class="T-whichDaysContainer"></td>' +
 		'<td><select class="col-sm-12 no-padding T-tripPlanHotelStar" style="width: 80px;"><option selected="selected" {{if hotel.hotel.level == 0}}selected="selected"{{/if}} value="">--全部--</option>'+
-		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>' +
+		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select><input type="hidden" name="id" value="" /></td>' +
 		'<td><div class="col-sm-12"><input type="text" class="col-sm-12 T-chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
 		'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +

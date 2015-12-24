@@ -165,7 +165,12 @@
                     {{each viewQuoteDaysList.ticketArrange as ticketList}}
                     <tr>
                         <td>交通</td>
-                        <td>{{ticketList.startingCity}}-{{ticketList.arriveCity}}</td>
+                        <td>
+                            {{if ticketList.type == 1}}机票
+                            {{else if ticketList.type == 2}}汽车票
+                            {{else if ticketList.type == 3}}火车票
+                            {{else if ticketList.type == 4}}轮船票{{/if}}
+                        </td>
                         <td>￥{{ticketList.price}}</td>
                     </tr>
                     {{/each}}
