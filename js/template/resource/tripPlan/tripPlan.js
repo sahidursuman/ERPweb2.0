@@ -419,7 +419,11 @@ define(function(require, exports) {
 				}
 			if ($this.hasClass('T-bus-askPrice')) {
 				//询价
-				tripPlan.busAskPrice($this, $tab, saveJson);
+				if (!!saveJson.brand == false || !!saveJson.busCompanyId == false || !!saveJson.needSeatCount == false) {
+					showMessageDialog($( "#confirm-dialog-message" ), '请完善车队信息');
+				}else {
+					tripPlan.busAskPrice($this, $tab, saveJson);
+				}
 			}else if ($this.hasClass('T-bus-booking')) {
 				//预订
 				tripPlan.busBooking($this, $tab, saveJson);
@@ -448,7 +452,11 @@ define(function(require, exports) {
 			}
 			if ($this.hasClass('T-hotel-askPrice')) {
 				//询价
-				tripPlan.hotelOfferStatus($this, $tab, saveJson, 'ask');
+				if (!!saveJson.count == false || !!saveJson.hotelId == false || !!saveJson.type == false) {
+					showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+				}else {
+					tripPlan.hotelOfferStatus($this, $tab, saveJson, 'ask');
+				}
 			}else if ($this.hasClass('T-hotel-booking')) {
 				//预订
 				tripPlan.hotelBooking($this, $tab, saveJson)
