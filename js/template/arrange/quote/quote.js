@@ -137,11 +137,11 @@ define(function(require, exports) {
 				quote.viewQuote(id);
 			} else if ($this.hasClass('T-update')){
 				// 编辑报价信息
-				quote.updateQuote(id);
+				quote.updateQuote(id, '', '', 'update');
 				//quote.updateQuoteToOffer(id,'1');
 			} else if ($this.hasClass('T-copy')){
 				// 复制报价信息
-				quote.updateQuote(id, '', 'copy');
+				quote.updateQuote(id, '', 'copy', 'copy');
 			} else if ($this.hasClass('T-delete')){
 				// 删除报价
 				quote.deleteItem(id);
@@ -150,7 +150,7 @@ define(function(require, exports) {
 				quote.shareQuote($(this),id);
 			} else if ($this.hasClass('T-status'))  {
 				// 查看询价状态
-				quote.updateQuote(id, 'T-bus');
+				quote.updateQuote(id, 'T-bus','','update');
 			}
 		});
 
@@ -264,7 +264,8 @@ define(function(require, exports) {
 	quote.addQuote = function(id) {
 		$("#tab-arrange_quote-add-content").find(".T-newData").data("id",id);
 		var $a = {
-			a: 'add'
+			a: 'add',
+			tag: 'add'
 		};
 		if (!!id) {
 			$.ajax({
@@ -302,7 +303,7 @@ define(function(require, exports) {
 			var $container = $("#tab-arrange_quote-add-content");
 
 			var addHtml = addQuoteTemplate(htmlT);
-			$container.find('#quoteContent-'+$a.a).html(addHtml)
+			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(addHtml)
 
 			$container.find('.inquiryContent').on("click",function(){
 				var quoteId = $container.find('[name=quoteId]').val();
@@ -310,7 +311,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 					return false;
 				} 
-				quote.quoteStatus(quoteId,$container,'add');
+				quote.quoteStatus(quoteId,$container,'add','add');
 			});	
 
 			quote.init_event($container,id);
@@ -318,13 +319,13 @@ define(function(require, exports) {
 	};
 
 	//询价状态
-	quote.quoteStatus = function(quoteId,$container,type){
+	quote.quoteStatus = function(quoteId,$container,type,tag){
 		var $a = {
-			a: type
+			a: type,
+			tag: tag
 		}
 		var inquiryHtml = inquiryResultTemplate($a);
-		$container.find('#inquiryContent-'+$a.a).html(inquiryHtml);
-		
+		$container.find('#inquiryContent-'+$a.a+'-'+$a.tag).html(inquiryHtml);
 		quote.busStatusList(quoteId,$container,$a);
 
 		$container.find('.busInquiryResult').on("click",function(){
@@ -365,7 +366,7 @@ define(function(require, exports) {
 					}
 
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
-					$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
+					$container.find('#busInquiryResult-'+$a.a+'-'+$a.tag).html(busInquiryResultHtml);
 					//操作
 					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
@@ -426,11 +427,11 @@ define(function(require, exports) {
 						}
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
-					$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
+					$container.find('#hotelInquiryContent-'+$a.a+'-'+$a.tag).html(hotelInquiryResultHtml);
 
 					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
-						quote.hotelAdd(offerId,$container);
+						quote.hotelAdd(offerId,$container,$a);
 					});
 
 					$container.find('.T-hotel-delete').on("click",function(){
@@ -491,7 +492,7 @@ define(function(require, exports) {
 	};
 
 	//询价状态-房-加入
-	quote.hotelAdd = function(offerId,$container){
+	quote.hotelAdd = function(offerId,$container,$a){
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
 			type: 'POST',
@@ -508,7 +509,13 @@ define(function(require, exports) {
 
 						for (var i = 0, len = whichDays.length; i < len; i++) {
 							var whichDay = whichDays[i].whichDay-1;
-							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
+							if ($a.tag == 'add') {
+								$container.find("#dayListAdd-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}else if($a.tag == 'update') {
+								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}else if($a.tag == 'copy') {
+								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}
 						}
 						$container.find('.quoteContent').trigger('click');
 						//删除现有
@@ -605,14 +612,12 @@ define(function(require, exports) {
 	};
 
 	//修改报价
-	quote.updateQuote = function(id, target, isCopy) {
-		var tab_id = menukey + '-update';
+	quote.updateQuote = function(id, target, isCopy, tag) {
+		var tab_id = menukey + '-' + tag;
 		var $tab = $('#tab-'+ tab_id + '-content');
-		if (!!isCopy == false) {
-			if ($tab.length && $tab.find('input[name=quoteId]').val() == id) {	// 如果打开的是相同报价，则不替换
-				$('.tab-' + tab_id).children('a').trigger('click');
-				return;
-			}
+		if ($tab.length && $tab.find('input[name=quoteId]').val() == id) {	// 如果打开的是相同报价，则不替换
+			$('.tab-' + tab_id).children('a').trigger('click');
+			return;
 		}
 		$tab.find(".T-newData").data("id",id);
 
@@ -628,28 +633,29 @@ define(function(require, exports) {
 					data.guideArrange = JSON.parse(data.guideArrange);
 					data.insuranceArrange = JSON.parse(data.insuranceArrange);
 					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
-					data.editorName = menukey +'-update' + '-ueditor'
+					data.editorName = menukey +'-' + tag + '-ueditor'
 					var $a = {
-						a: 'update'
+						a: 'update',
+						tag: tag
 					}
 					var html = mainQuoteTemplate($a);
 					var title = (!!isCopy)? '复制报价' : '修改报价';
-					var menuName = (!!isCopy)? 'copy' : 'update';
 					data.isCopy = (!!isCopy)? '1' : '';
-					if(Tools.addTab(menukey+'-'+menuName,title,html)){
-						var $container = $("#tab-arrange_quote-"+menuName+"-content");
+					data.tag = tag;
+					if(Tools.addTab(menukey+'-'+tag,title,html)){
+						var $container = $("#tab-arrange_quote-"+$a.tag+"-content");
 
 						var updateHtml = updateQuoteTemplate(data);
 						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
-						$container.find('#quoteContent-'+$a.a).html(updateHtml)
+						$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
 
 						//精度控制
-						var $guideFee=$container.find('#quoteContent-'+$a.a).find('input[name=guideFee]'),
-						    $price=$container.find('#quoteContent-'+$a.a).find('input[name=price]'),
-						    $seatCount=$container.find('#quoteContent-'+$a.a).find('input[name=seatcountPrice]'),
-						    $contractPrice=$container.find('#quoteContent-'+$a.a).find('input[name=contractPrice]'),
-						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a).find('input[name=parkingRebateMoney]'),
-						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a).find('input[name=customerRebateMoney]');
+						var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
+						    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
+						    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
+						    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
+						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
+						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
 						Tools.inputCtrolFloat($guideFee);
 				        Tools.inputCtrolFloat($price);
 				        Tools.inputCtrolFloat($seatCount);
@@ -663,7 +669,7 @@ define(function(require, exports) {
 								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 								return false;
 							} 
-							quote.quoteStatus(quoteId,$container,'update');
+							quote.quoteStatus(quoteId,$container,'update',tag);
 						});	
 
 						quote.init_event($container,id);
@@ -1137,8 +1143,6 @@ define(function(require, exports) {
 													showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 													$container.find('[name=quoteId]').val(data.quoteId);
 													$container.find('[name=startTime]').attr('disabled','disabled');
-													$container.find('[name=adultCount]').attr('readonly','readonly');
-													$container.find('[name=childCount]').attr('readonly','readonly');
 													layer.close(busInquiryLayer);
 					    						}
 					    					}
@@ -1371,10 +1375,7 @@ define(function(require, exports) {
 											if (result) {
 												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
-												$container.find('[name=startTime]').attr('disabled','disabled');
-												$container.find('[name=adultCount]').attr('readonly','readonly');
-												$container.find('[name=childCount]').attr('readonly','readonly');
-												layer.close(hotelInquiryLayer);
+												$container.find('[name=startTime]').attr('disabled','disabled');												layer.close(hotelInquiryLayer);
 											}
 										}
 									})
@@ -1656,7 +1657,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		quote.hotelInquiryList(obj.curr -1,$container,whichDay,startTime,quoteId);
+						    		quote.hotelInquiryList(obj.curr -1,$container,quoteId);
 						        }
 						    }
 		                });
@@ -3234,13 +3235,13 @@ define(function(require, exports) {
 				busCompanyId: quote.getValue(busList,'busCompanyId'),
 				needSeatCount: quote.getValue(busList,'needSeatCount'),
 				price: quote.getValue(busList,'seatcountPrice'),
-				marketPrice: quote.getValue(busList,'marketPrice'),
+				marketPrice: quote.getValue(busList,'marketPrice') || quote.getValue(busList,'seatcountPrice'),
 				remark: quote.getValue(busList,'remark')
 			},
 			guide: {
 				arrangeId: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice'),
+				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
 				remark: quote.getValue(guideList,'remark')
 			},
 			insurance: {
@@ -3248,7 +3249,7 @@ define(function(require, exports) {
 				insuranceId: quote.getValue(insuranceList,'insuranceId'),
 				insuranceItemId: quote.getValue(insuranceList,'insuranceItemId'),
 				price: quote.getValue(insuranceList,'price'),
-				marketPrice: quote.getValue(insuranceList,'marketPrice'),
+				marketPrice: quote.getValue(insuranceList,'marketPrice') || quote.getValue(insuranceList,'price'),
 				remark: quote.getValue(insuranceList,'remark'),
 				type: quote.getValue(insuranceList,'type')
 			},
@@ -3283,9 +3284,12 @@ define(function(require, exports) {
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!restaurantJson.marketPrice == flase) {
+							restaurantJson.marketPrice = restaurantJson.price
 						}
 						saveJson.lineDayList[index].restaurant.push(restaurantJson);
 					}
@@ -3310,9 +3314,12 @@ define(function(require, exports) {
 							hotelRoomId : hotelRoomId,
 							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!hotelJson.marketPrice == flase) {
+							hotelJson.marketPrice = hotelJson.price
 						}
 						saveJson.lineDayList[index].hotel.push(hotelJson)
 					}
@@ -3335,9 +3342,12 @@ define(function(require, exports) {
 							scenicId : scenicId,
 							itemId : itemId,
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!scenicJson.marketPrice == false) {
+							scenicJson.marketPrice = scenicJson.price
 						}
 						saveJson.lineDayList[index].scenic.push(scenicJson);
 					}
@@ -3380,9 +3390,12 @@ define(function(require, exports) {
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
 							selfPayId : selfPayId,
 							price : $item.find("[name=contractPrice]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!selfPayJson.marketPrice == false) {
+							selfPayJson.marketPrice = selfPayJson.price
 						}
 						saveJson.lineDayList[index].selfPay.push(selfPayJson);
 					}
@@ -3401,12 +3414,15 @@ define(function(require, exports) {
 							ticketId : ticketId,
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index"),
 							startTime: $item.find("[name=time]").val(),
 							count: $item.find("[name=count]").val(),
 							seatLevel: $item.find("[name=seatLevel]").val()
+						}
+						if (!!ticketJson.marketPrice == false) {
+							ticketJson.marketPrice = ticketJson.price
 						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
@@ -3426,8 +3442,11 @@ define(function(require, exports) {
 							mobileNumber : $item.find("[name=mobileNumber]").val(),
 							memberCount: $item.find("[name=count]").val(),
 							price: $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
+						}
+						if (!!otherJson.marketPrice == flase) {
+							otherJson.marketPrice = otherJson.price
 						}
 						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
 					}
