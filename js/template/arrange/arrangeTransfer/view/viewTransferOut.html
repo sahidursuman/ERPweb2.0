@@ -280,7 +280,12 @@
 											<td>{{i+1}}</td>
 											<td>{{result.name}}</td>
 											<td>{{result.mobileNumber}}</td>
-											<td>身份证</td>	
+											<td>
+											  {{if result.idCardType==0}}身份证
+											    {{else if result.idCardType==1}}护照
+											    {{else if result.idCardType==2}}其他
+											   {{/if}}
+										    </td>	
 											<td>{{result.idCardNumber}}</td>
 											<td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>	
 										</tr>
