@@ -1137,8 +1137,6 @@ define(function(require, exports) {
 													showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 													$container.find('[name=quoteId]').val(data.quoteId);
 													$container.find('[name=startTime]').attr('disabled','disabled');
-													$container.find('[name=adultCount]').attr('readonly','readonly');
-													$container.find('[name=childCount]').attr('readonly','readonly');
 													layer.close(busInquiryLayer);
 					    						}
 					    					}
@@ -1371,10 +1369,7 @@ define(function(require, exports) {
 											if (result) {
 												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
-												$container.find('[name=startTime]').attr('disabled','disabled');
-												$container.find('[name=adultCount]').attr('readonly','readonly');
-												$container.find('[name=childCount]').attr('readonly','readonly');
-												layer.close(hotelInquiryLayer);
+												$container.find('[name=startTime]').attr('disabled','disabled');												layer.close(hotelInquiryLayer);
 											}
 										}
 									})
