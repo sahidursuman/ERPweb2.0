@@ -2292,8 +2292,10 @@ define(function(require, exports) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
 
             //精度限制
-            $price = $editFeeObj.find('.price');
+            $price = $editFeeObj.find('.T-price'),
+            $count = $editFeeObj.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -2339,8 +2341,10 @@ define(function(require, exports) {
 
         var $outFeeObj = $("#T-outEditFeeMain"),
 
-            //精度限制
-            $price = $outFeeObj.find('.price');
+        //精度限制
+         $price = $outFeeObj.find('.T-price'),
+         $count = $outFeeObj.find('.T-count');
+        Tools.inputCtrolFloat($count);
         Tools.inputCtrolFloat($price);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
@@ -2391,15 +2395,17 @@ define(function(require, exports) {
     arrangeTourist.newAddFee = function($tab, type) {
         var html = "<tr><td><span name=\"type\" value=\"0\">其他费用</span></td>" +
             "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
-            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>" +
+            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count\" /></td>" +
             "<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>" +
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
         $tbody.append(html);
 
         //精度限制
-        var $price = $tbody.find('.T-price');
+        var $price = $tbody.find('.T-price'),
+            $count = $tbody.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         // 更新表单验证的事件绑定
         //rule.update(validator);   
