@@ -128,7 +128,7 @@ define(function(require, exports) {
 					data.outRemarkArrangeList = JSON.parse(data.outRemarkArrangeList);
 					var html = listTemplate(data);
 
-					transit.$tab.find('.T-arrangeTransitList').html(html);
+					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
 					transit.$tab.on('click', '.T-action', function() {
 						var $this = $(this),id = $this.closest('tr').data('entity-id');
