@@ -388,7 +388,7 @@ define(function(require, exports) {
 
         //保存结算事件
         busCompany.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(busCompany.$clearTab).form()) { return; }
+            if (!saveRule.check(busCompany.$clearTab).form()) { return; }
             busCompany.saveClear(args);
         });
         
