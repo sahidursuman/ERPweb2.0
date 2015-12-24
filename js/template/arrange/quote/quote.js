@@ -3241,13 +3241,13 @@ define(function(require, exports) {
 				busCompanyId: quote.getValue(busList,'busCompanyId'),
 				needSeatCount: quote.getValue(busList,'needSeatCount'),
 				price: quote.getValue(busList,'seatcountPrice'),
-				marketPrice: quote.getValue(busList,'marketPrice'),
+				marketPrice: quote.getValue(busList,'marketPrice') || quote.getValue(busList,'seatcountPrice'),
 				remark: quote.getValue(busList,'remark')
 			},
 			guide: {
 				arrangeId: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice'),
+				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
 				remark: quote.getValue(guideList,'remark')
 			},
 			insurance: {
@@ -3255,7 +3255,7 @@ define(function(require, exports) {
 				insuranceId: quote.getValue(insuranceList,'insuranceId'),
 				insuranceItemId: quote.getValue(insuranceList,'insuranceItemId'),
 				price: quote.getValue(insuranceList,'price'),
-				marketPrice: quote.getValue(insuranceList,'marketPrice'),
+				marketPrice: quote.getValue(insuranceList,'marketPrice') || quote.getValue(insuranceList,'price'),
 				remark: quote.getValue(insuranceList,'remark'),
 				type: quote.getValue(insuranceList,'type')
 			},
@@ -3290,9 +3290,12 @@ define(function(require, exports) {
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!restaurantJson.marketPrice == flase) {
+							restaurantJson.marketPrice = restaurantJson.price
 						}
 						saveJson.lineDayList[index].restaurant.push(restaurantJson);
 					}
@@ -3317,9 +3320,12 @@ define(function(require, exports) {
 							hotelRoomId : hotelRoomId,
 							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!hotelJson.marketPrice == flase) {
+							hotelJson.marketPrice = hotelJson.price
 						}
 						saveJson.lineDayList[index].hotel.push(hotelJson)
 					}
@@ -3342,9 +3348,12 @@ define(function(require, exports) {
 							scenicId : scenicId,
 							itemId : itemId,
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!scenicJson.marketPrice == false) {
+							scenicJson.marketPrice = scenicJson.price
 						}
 						saveJson.lineDayList[index].scenic.push(scenicJson);
 					}
@@ -3387,9 +3396,12 @@ define(function(require, exports) {
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
 							selfPayId : selfPayId,
 							price : $item.find("[name=contractPrice]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
+						}
+						if (!!selfPayJson.marketPrice == false) {
+							selfPayJson.marketPrice = selfPayJson.price
 						}
 						saveJson.lineDayList[index].selfPay.push(selfPayJson);
 					}
@@ -3408,12 +3420,15 @@ define(function(require, exports) {
 							ticketId : ticketId,
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index"),
 							startTime: $item.find("[name=time]").val(),
 							count: $item.find("[name=count]").val(),
 							seatLevel: $item.find("[name=seatLevel]").val()
+						}
+						if (!!ticketJson.marketPrice == false) {
+							ticketJson.marketPrice = ticketJson.price
 						}
 						saveJson.lineDayList[index].ticket.push(ticketJson);
 					}
@@ -3433,8 +3448,11 @@ define(function(require, exports) {
 							mobileNumber : $item.find("[name=mobileNumber]").val(),
 							memberCount: $item.find("[name=count]").val(),
 							price: $item.find("[name=price]").val(),
-							marketPrice: $item.find('[name=marketPrice]').val(),
+							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
+						}
+						if (!!otherJson.marketPrice == flase) {
+							otherJson.marketPrice = otherJson.price
 						}
 						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
 					}
