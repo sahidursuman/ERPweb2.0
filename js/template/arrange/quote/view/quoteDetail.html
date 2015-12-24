@@ -143,7 +143,8 @@
                     {{if viewQuoteDaysList.scenicArrange != null}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.scenicArrange.length}}">景点</td>
-                        <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">{{scenicList.tourDuration}}</span> <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
+                        <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">{{if !!scenicList.tourDuration}}{{scenicList.tourDuration}}{{/if}}</span>
+                        <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
                         <td>￥{{scenicList.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index > 0}}
