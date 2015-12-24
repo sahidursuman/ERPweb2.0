@@ -358,7 +358,11 @@ define(function(require, exports) {
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
             busCompany.$clearTab.data('isEdited',false);
-            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
+            isAutoPay = busCompany.$clearTab.data('next')[0];
+            if(isAutoPay == 1){
+                isAutoPay = 0;
+            }
+            busCompany.busCompanyClear(isAutoPay,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
             busCompany.$clearTab.find(".T-cancel-auto").hide();
         })
         // 监听保存，并切换tab
@@ -496,9 +500,12 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.searchData.pageNo,busCompany.searchData.busCompanyName,busCompany.searchData.busCompanyId,busCompany.searchData.startDate,busCompany.searchData.endDate);
                         }else if(argumentsLen === 1){
-                            busCompany.busCompanyClear(0,page,id,name);
+                            if(isAutoPay == 1){
+                                isAutoPay = 0;
+                            }
+                            busCompany.busCompanyClear(isAutoPay,page,id,name);
                         } else {
-                            busCompany.busCompanyClear(0,0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
+                            busCompany.busCompanyClear(busCompany.$clearTab.data('next')[0],0,busCompany.$clearTab.data('next')[2],busCompany.$clearTab.data('next')[3]);
                         }
                     });
                     
