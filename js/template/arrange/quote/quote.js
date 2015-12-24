@@ -1651,7 +1651,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		quote.hotelInquiryList(obj.curr -1,$container,whichDay,startTime,quoteId);
+						    		quote.hotelInquiryList(obj.curr -1,$container,quoteId);
 						        }
 						    }
 		                });
