@@ -727,7 +727,7 @@ define(function(require, exports) {
 			init_editor($(this).find('.T-editor').prop('id'), {readonly: true});
 		});
 		//添加具体行程安排相应事件
-		$container.find('.T-daylist').on('click', '.T-add', function(event) {
+		$container.find('.T-daylist').off('click.dayList').on('click.dayList', '.T-add', function(event) {
 			event.preventDefault();
 			var $that = $(this);
 			if ($that.hasClass('T-addRestaurant')) {
