@@ -66,8 +66,8 @@
 input {
     vertical-align: middle !important;
     font-size: 12px !important;
-    border: 1px solid #e2e2e2 !important;
-    text-indent: 0.5em
+    border: 1px solid #ccc  !important;
+    text-indent:0.5em
 }
 
 .btn-success {
@@ -1534,14 +1534,14 @@ select {
     width: 17px;
     height: 20px;
 }
-.share-anchor-ul li:focus{
+.share-anchor-ul li:hover{
    color: #48A2D2; 
 }
 
 p#back-top {
     position: fixed;
     bottom: 100px;
-    right: 280px;
+    margin-left: 1030px;
 }
 
 p#back-top a {
