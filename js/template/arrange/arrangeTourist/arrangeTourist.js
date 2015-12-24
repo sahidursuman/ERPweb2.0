@@ -825,29 +825,31 @@ define(function(require, exports) {
             type: "POST",
             data: "touristGroupId=" + encodeURIComponent(idJson) + "",
             success: function(data) {
-                data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
-                data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
-                data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
-                data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
-                data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
-                data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
-                if (data.addTripPlan.quoteId != null) {
-                    data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
-                };
-                data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
-                var result = showDialog(data);
-                var html = addTripPlanTemplate(data);
+                    if (showDialog(data)) {
+                        data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
+                        data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
+                        data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
+                        data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
+                        data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
+                        data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
+                        if (data.addTripPlan.quoteId != null) {
+                            data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
+                        };
+                        data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
+                        var result = showDialog(data);
+                        var html = addTripPlanTemplate(data);
 
-                var tab_id = menuKey + "-addTripPlan",
-                    title = '新增计划';
-                // 初始化页面
-                if (Tools.addTab(tab_id, title, html)) {
-                    var tab = addTripPlanTabId,
-                        $tab = $("#" + tab),
-                        type = '0',
-                        tbody = 'T-addTripPlanTouristTbody-list';
-                    //Tab切换    
-                    arrangeTourist.init_CRU_event($tab, type, tbody);
+                        var tab_id = menuKey + "-addTripPlan",
+                            title = '新增计划';
+                        // 初始化页面
+                        if (Tools.addTab(tab_id, title, html)) {
+                            var tab = addTripPlanTabId,
+                                $tab = $("#" + tab),
+                                type = '0',
+                                tbody = 'T-addTripPlanTouristTbody-list';
+                            //Tab切换    
+                            arrangeTourist.init_CRU_event($tab, type, tbody);
+                    }
                 }
 
             }
