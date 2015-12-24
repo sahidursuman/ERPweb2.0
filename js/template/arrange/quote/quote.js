@@ -1420,7 +1420,7 @@ define(function(require, exports) {
 
 			for (var i = 1,len = lineProductInfo.days; i <= len; i++) {
 				var time = quote.checkInTime(i,lineProductInfo.startTime);
-				html += '<option value="'+quote.checkInTime(2,time)+'">'+quote.checkInTime(2,time)+'</option>'
+				html += '<option value="'+time+'">'+time+'</option>'
 				htmlOut += '<option value="'+quote.checkInTime(2,time)+'">'+quote.checkInTime(2,time)+'</option>'
 			}
 			$layerContainer.find('[name=checkInTime]').html(html);//[name=checkOutTime]
