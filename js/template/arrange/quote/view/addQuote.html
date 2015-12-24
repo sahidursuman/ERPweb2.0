@@ -333,7 +333,7 @@
                                 <ul class="nav nav-tabs" id="myTab">
                                     {{each daysList as lineProductDaysList i}}
                                     <li {{if i==0 }}class="active" {{/if}}>
-                                        <a aria-expanded="true" data-toggle="tab" href="#dayListUpdate-{{i}}" style="text-align:center;width:140px;">
+                                        <a aria-expanded="true" data-toggle="tab" href="#dayListAdd-{{i}}" style="text-align:center;width:140px;">
 											第{{i+1}}天
 										</a>
                                     </li>
@@ -341,7 +341,7 @@
                                 </ul>
                                 <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
                                     {{each daysList as lineProductDaysList i}}
-                                    <div id="dayListUpdate-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
+                                    <div id="dayListAdd-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-entity-whichday="{{i+1}}">
                                             <div class="ui-sortable-handle">
                                                 <h5 class="globalAdd">
