@@ -510,7 +510,7 @@ define(function(require, exports) {
 							var whichDay = whichDays[i].whichDay-1;
 							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
 						}
-						//$container.find('.quoteContent').trigger('click');
+						$container.find('.quoteContent').trigger('click');
 						//删除现有
 						//$container.find("#dayListUpdate-"+whichDay+"  .T-resourceHotelList").remove();
 						//报价计算器
@@ -801,7 +801,7 @@ define(function(require, exports) {
 		quote.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'), validator, $container);
 		quote.bindTicketEvent($dayListArea.find('.chooseTicketName'), validator, $container);
 		//车辆询价
-		$container.find('.T-car').on('click', function(event) {
+		$container.find('.T-car').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var lineProductInfo = {
@@ -832,7 +832,7 @@ define(function(require, exports) {
 			}
 		});
 		//酒店询价
-		$container.find('.T-hotel').on('click', function(event) {
+		$container.find('.T-hotel').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			var $this = $(this), $whichDiv = $this.closest('.T-dailyArrangeList');
