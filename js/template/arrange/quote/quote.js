@@ -3209,7 +3209,11 @@ define(function(require, exports) {
 			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
 			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
 			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
-			remark: quote.getValue($container,'quoteRemark')
+			remark: quote.getValue($container,'quoteRemark'),
+			includeFee: quote.getValue($container,'includeFee'),
+			excludeFee: quote.getValue($container,'excludeFee'),
+			lineFeature: quote.getValue($container,'lineFeature'),
+			lineNotice: quote.getValue($container,'lineNotice')
 		}
 
 		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {
