@@ -405,6 +405,21 @@ define(function(require, exports) {
 				tripPlan.addOther($this, validator, $tab);
 			}
 		});
+		//修改预订状态
+		$tab.find('.tabbable').on('change', '[name=busOrder],[name=hotelOrder]', function() {
+			var $this = $(this), $parents = $this.closest('tr'), value = $this.val(), cateName = $parents.find('.T-btn-deleteTripPlanList').data('entity-name');
+			if (value == 2 || value == 3 || value == 0) {
+				if (cateName == 'hotel') {
+					$parents.find('.T-hotel-bookingStatus').removeClass('T-hotel-booking').css('color','#bbb');
+				}else {
+					$parents.find('.T-bus-bookingStatus').removeClass('T-bus-booking').css('color','#bbb');
+				}
+			}else {
+				$parents.find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
+				$parents.find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
+			}
+		})
+
 		//车队询价、预订操作
 		$tab.find('#tripPlan_addPlan_bus').off('click.busAction').on('click.busAction', '.T-bus-action', function(event) {
 			event.preventDefault();
@@ -593,6 +608,7 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
 					$this.closest('tr').find('[name=busOrder]').val(2);
+					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
 				}
 			}
 		})
@@ -655,6 +671,8 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+					$this.closest('tr').find('[name=hotelOrder]').val(2);
+					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
 				}
 			}
 		})
@@ -954,9 +972,9 @@ define(function(require, exports) {
 		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
 		'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
-		'<td><select><option value="0">未预定</option><option value="1">预定中</option><option value="2">已预订</option><option value="3">无需预订</option></select></td>'+
+		'<td><select name="hotelOrder"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
-		'<a class="cursor T-hotel-action T-hotel-bookingStatus" style="color: #bbb">预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<a class="cursor T-hotel-action T-hotel-bookingStatus" style="color: #bbb">预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="hotel">删除</a></td></tr>';
 
 		tableContainer.append(filterUnAuth(html));
 		//精度控件

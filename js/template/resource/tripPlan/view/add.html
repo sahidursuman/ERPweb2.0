@@ -345,7 +345,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                                                    <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus != 1}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
+                                                                    <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus != 1}}{{if busCompany.orderStatus == 1}}T-bus-booking{{/if}}{{/if}}" {{if busCompany.inquiryStatus == 1}}{{if busCompany.orderStatus == 2 || busCompany.orderStatus == 3 || busCompany.orderStatus == 0}}style="color: #bbb"{{/if}}{{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
                                                                 </td>
                                                                 {{if busCompany.offerId!=null}}
                                                                 <!-- <td>
@@ -568,7 +568,8 @@
                                                                     </select>
                                                                 </td>
                                                                 <td>
-                                                                    <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                                                    <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
+                                                                    <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus != 1}}{{if hotel.orderStatus == 1}}T-hotel-booking{{/if}}{{/if}}" {{if hotel.inquiryStatus == 1}}{{if hotel.orderStatus == 2 || hotel.orderStatus == 3 || hotel.orderStatus == 0}}style="color: #bbb"{{/if}}{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
                                                                 </td>
                                                                 <!-- <td>
                                                                     {{if hotel.offerId!=null}}
