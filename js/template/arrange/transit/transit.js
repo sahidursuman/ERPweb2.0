@@ -940,6 +940,7 @@ define(function(require, exports) {
 			select: function(event,ui){
 				var _this = this, parents = $(_this).closest('tr');
 				parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
+				
 				rule.update(validator);
 				$.ajax({
 					url: KingServices.build_url("hotel","getHotelById"),
@@ -996,14 +997,15 @@ define(function(require, exports) {
 			select:function(event,ui){
 				var $thisRoom =$(this).closest('tr');
 				$thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
+				var startTime=$thisRoom.find("input[name=hotelCheckInTime]").val();
 				$.ajax({
 					url: KingServices.build_url('hotel','findRoomDetailById'),
 					showLoading:false,
-					data:"id=" + ui.item.id,
+					data:"id=" + ui.item.id+"&startTime="+startTime,
 					success: function(data) {
 						if(showDialog(data)){
 							var hotelRoom = JSON.parse(data.hotelRoom);
-							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.contractPrice).trigger('change');
+							$thisRoom.find("input[name=hotelPrice]").val(hotelRoom.normalMarketPrice).trigger('change');
 						}
 					}
 				})
