@@ -197,6 +197,7 @@ define(function(require, exports) {
             }
 
             name = $tab.find('.T-guideName').text();
+            args.isOuter = FinGuide.isOuter;
         }
         $.ajax({
                 url: KingServices.build_url('account/guideFinancial', 'financialGuideSumStaticsByGuideId'),
@@ -245,13 +246,16 @@ define(function(require, exports) {
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
             var $btn = $tab.find('.T-btn-save');
-
-            FinGuide.initOperationModule({
-                                        guideId: $btn.data('id'), 
-                                        guideName:$btn.data('name'),
-                                        startDate: $datePicker.eq(0).val(),
-                                        endDate: $datePicker.eq(1).val()
-                                    }, type, $tab);
+            var args = {
+                guideId: $btn.data('id'), 
+                guideName:$btn.data('name'),
+                startDate: $datePicker.eq(0).val(),
+                endDate: $datePicker.eq(1).val()
+            };
+            if(type){
+                args.isOuter = FinGuide.isOuter;
+            }
+            FinGuide.initOperationModule(args, type, $tab);
         });
 
 
