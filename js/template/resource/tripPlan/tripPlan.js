@@ -681,6 +681,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
+					$this.closest('tr').find('[name=id]').val(data.arrangeId);
 				}
 			}
 		})
