@@ -380,7 +380,7 @@ define(function(require, exports) {
         });
         //保存结算事件
         hotel.$clearTab.find(".T-saveClear").click(function(){
-            if (!rule.check(hotel.$clearTab).form()) { return; }
+            if (!(new FinRule(isAutoPay== 2?3: 1)).check(hotel.$clearTab).form()) { return; }
             hotel.saveClear(args);
         });
 
