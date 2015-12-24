@@ -193,7 +193,7 @@ define(function(require, exports) {
                 // 查看单据
                 var bigImg = $checkTab.find('input[name=WEB_IMG_URL_BIG]').val();
                 var smallImg = $checkTab.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this,bigImg,smallImg);
+                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewhandle(id);
@@ -309,16 +309,16 @@ define(function(require, exports) {
             $.ajax({
                 url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
                 type: "POST",
-                data:{
+                data: {
                     reconciliation: json
                 },
             }).done(function(data) {
                 if (showDialog(data)) {
                     $checkTab.data('isEdited', false);
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-						if(argumentLen == 2){
+                        if (argumentLen == 2) {
                             OtherAccounts.AccountsChecking(0);
-                        }else{
+                        } else {
                             if (!!tabArgs) {
                                 Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                                 OtherAccounts.checkList(0);
@@ -361,6 +361,7 @@ define(function(require, exports) {
                 console.log(data);
                 var result = showDialog(data);
                 if (result) {
+                    console.log(data)
                     if (OtherAccounts.saveJson.autoPayList) {
                         var saveJson = OtherAccounts.saveJson.autoPayList;
                         console.log(saveJson);
@@ -374,7 +375,7 @@ define(function(require, exports) {
                     };
                     //财务入口调用
                     data.showBtnFlag = OtherAccounts.showBtnFlag
-                    if(OtherAccounts.saveJson.btnShowStatus){
+                    if (OtherAccounts.saveJson.btnShowStatus) {
                         data.btnShowStatus = OtherAccounts.saveJson.btnShowStatus;
                     }
                     var dataTable = data;
@@ -416,10 +417,11 @@ define(function(require, exports) {
         var id = OtherAccounts.$PaymentTabId.find('.T-btn-save').data('id');
         var autoValidator = new FinRule(2).check($PaymentTabId.find('.T-count'));
         var settleValidator = data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
+        var payValidator = settleValidator.check($PaymentTabId);
         OtherAccounts.$PaymentTabId.data('id', id);
-        if(data.btnShowStatus){
+        if (data.btnShowStatus) {
             $PaymentTabId.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
-            OtherAccounts.setAutoFillEdit($PaymentTabId,true);
+            OtherAccounts.setAutoFillEdit($PaymentTabId, true);
         }
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
@@ -453,7 +455,7 @@ define(function(require, exports) {
                 // 查看单据
                 var bigImg = $PaymentTabId.find('input[name=WEB_IMG_URL_BIG]').val();
                 var smallImg = $PaymentTabId.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this,bigImg,smallImg);
+                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -492,6 +494,7 @@ define(function(require, exports) {
         });
         //保存付款事件
         $PaymentTabId.find(".T-savePayment").click(function() {
+            if(!payValidator.form()){return;}
             OtherAccounts.paysave(data, $PaymentTabId);
         });
         // 自动下账
@@ -515,7 +518,7 @@ define(function(require, exports) {
                     autoPayMoney: sumPayMoney,
                     startAccountTime: startAccountTime,
                     endAccountTime: endAccountTime,
-                    info : info,
+                    info: info,
                     payType: sumPayType
                 };
                 showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startAccountTime + " 至 " + endAccountTime + " 下账？", function() {
@@ -542,7 +545,9 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function(data, tabid, title, html) {
+        console.log(data);
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        console.log(json);
         var arguementLen = arguments.length;
         json = JSON.stringify(json);
         if (json.length > 0) {
@@ -571,21 +576,21 @@ define(function(require, exports) {
         }
     };
     //显示单据
-    OtherAccounts.viewInsuranceImg = function(obj,bigImg,smallImg) {
+    OtherAccounts.viewInsuranceImg = function(obj, bigImg, smallImg) {
         var data = {
             "images": []
         };
         var str = $(obj).attr('url');
         var strs = str.split(",");
-        for(var i = 0; i < strs.length; i ++) {
-                var s = strs[i];
-                if(s != null && s != "" && s.length > 0) {
-                    var image = {
-                        "WEB_IMG_URL_BIG":imgUrl+s,
-                        "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-                    }
-                    data.images.push(image);
+        for (var i = 0; i < strs.length; i++) {
+            var s = strs[i];
+            if (s != null && s != "" && s.length > 0) {
+                var image = {
+                    "WEB_IMG_URL_BIG": imgUrl + s,
+                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
                 }
+                data.images.push(image);
+            }
         }
         var html = viewImgCheckingTemplate(data);
 
@@ -749,7 +754,7 @@ define(function(require, exports) {
     //暴露方法
     OtherAccounts.initPayModule = function(options) {
         OtherAccounts.showBtnFlag = true;
-        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate );
+        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate);
     };
     exports.init = OtherAccounts.initModule;
     exports.initPay = OtherAccounts.initPayModule;

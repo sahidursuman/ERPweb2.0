@@ -92,13 +92,13 @@
                 <td><a class="T-action T-lookPay">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
-                    {{Checking.settlementMoney}}
+                    {{Checking.settlementMoney}} 
                 </td>
                 <td>
                     {{Checking.unPayedMoney}}
                 </td>
                 <td>
-                    <input type="text" name="payMoney" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
+                    <input type="text" name="payMoney" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
                 </td>
                 <td>
                     <input type="text" value="{{Checking. payRemark}}" name="checkRemark" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
