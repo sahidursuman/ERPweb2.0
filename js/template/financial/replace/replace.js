@@ -619,7 +619,7 @@ define(function(require, exports) {
 		Replace.balanceId = id;
 		Replace.balanceName = name;
 		Replace.isBalanceSource = false;
-		Replace.balanceList(0, id, Replace.$tab.find('.T-search-end-date').val(), Replace.$tab.find('.T-search-start-date').val());
+		Replace.balanceList(0, id, Replace.$tab.find('.T-search-start-date').val(), Replace.$tab.find('.T-search-end-date').val());
 	};
 	Replace.initIncome = function(args){
 		Replace.$balanceTab = null;
