@@ -825,29 +825,31 @@ define(function(require, exports) {
             type: "POST",
             data: "touristGroupId=" + encodeURIComponent(idJson) + "",
             success: function(data) {
-                data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
-                data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
-                data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
-                data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
-                data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
-                data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
-                if (data.addTripPlan.quoteId != null) {
-                    data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
-                };
-                data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
-                var result = showDialog(data);
-                var html = addTripPlanTemplate(data);
+                    if (showDialog(data)) {
+                        data.addTripPlan.touristGroupList = JSON.parse(data.addTripPlan.touristGroupList);
+                        data.addTripPlan.lineProduct = JSON.parse(data.addTripPlan.lineProduct);
+                        data.addTripPlan.lineProductDayList = JSON.parse(data.addTripPlan.lineProductDayList);
+                        data.addTripPlan.bus = JSON.parse(data.addTripPlan.bus);
+                        data.addTripPlan.driver = JSON.parse(data.addTripPlan.driver);
+                        data.addTripPlan.busCompany = JSON.parse(data.addTripPlan.busCompany);
+                        if (data.addTripPlan.quoteId != null) {
+                            data.addTripPlan.busCompanyArrange = JSON.parse(data.addTripPlan.busCompanyArrange);
+                        };
+                        data.addTripPlan.guide = JSON.parse(data.addTripPlan.guide);
+                        var result = showDialog(data);
+                        var html = addTripPlanTemplate(data);
 
-                var tab_id = menuKey + "-addTripPlan",
-                    title = '新增计划';
-                // 初始化页面
-                if (Tools.addTab(tab_id, title, html)) {
-                    var tab = addTripPlanTabId,
-                        $tab = $("#" + tab),
-                        type = '0',
-                        tbody = 'T-addTripPlanTouristTbody-list';
-                    //Tab切换    
-                    arrangeTourist.init_CRU_event($tab, type, tbody);
+                        var tab_id = menuKey + "-addTripPlan",
+                            title = '新增计划';
+                        // 初始化页面
+                        if (Tools.addTab(tab_id, title, html)) {
+                            var tab = addTripPlanTabId,
+                                $tab = $("#" + tab),
+                                type = '0',
+                                tbody = 'T-addTripPlanTouristTbody-list';
+                            //Tab切换    
+                            arrangeTourist.init_CRU_event($tab, type, tbody);
+                    }
                 }
 
             }
@@ -2292,8 +2294,10 @@ define(function(require, exports) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
 
             //精度限制
-            $price = $editFeeObj.find('.price');
+            $price = $editFeeObj.find('.T-price'),
+            $count = $editFeeObj.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -2339,8 +2343,10 @@ define(function(require, exports) {
 
         var $outFeeObj = $("#T-outEditFeeMain"),
 
-            //精度限制
-            $price = $outFeeObj.find('.price');
+        //精度限制
+         $price = $outFeeObj.find('.T-price'),
+         $count = $outFeeObj.find('.T-count');
+        Tools.inputCtrolFloat($count);
         Tools.inputCtrolFloat($price);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
@@ -2391,15 +2397,17 @@ define(function(require, exports) {
     arrangeTourist.newAddFee = function($tab, type) {
         var html = "<tr><td><span name=\"type\" value=\"0\">其他费用</span></td>" +
             "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
-            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count\" /></td>" +
+            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count\" /></td>" +
             "<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price\" /></td>" +
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
         $tbody.append(html);
 
         //精度限制
-        var $price = $tbody.find('.T-price');
+        var $price = $tbody.find('.T-price'),
+            $count = $tbody.find('.T-count');
         Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
 
         // 更新表单验证的事件绑定
         //rule.update(validator);   
