@@ -243,6 +243,23 @@ define(function(require, exports) {
             Client.ClientCheck(0, false, $tab);
         });
 
+        //导出报表事件
+        Client.$checkSearchArea.find('.T-btn-export').on('click', function(event){
+            event.preventDefault();
+                var $btn = $tab.find('.T-btn-save'),
+                $datePicker = Client.$checkSearchArea.find('.date-picker'),
+                args = {
+                    fromPartnerAgencyId: $tab.data("id"), 
+                    startDate: $datePicker.eq(0).val(),
+                    endDate: $datePicker.eq(1).val(),
+                    lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
+                    lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
+                    creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                };
+                Client.exportReport(args);
+            });
+
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-check'));
 
@@ -940,6 +957,16 @@ define(function(require, exports) {
                 $obj.autocomplete('search', '');
             }
         });        
+    };
+
+    Client.exportReport = function(args){
+        args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+        args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
+        var str = '';
+        for(var i in args){
+            str += "&" + i + "=" + args[i];
+        }
+        exportXLS(KingServices.build_url('export', 'exportPartnerAgencyFinancial') + str);
     };
 
     function getBaseArgs($tab, isAuto) {
