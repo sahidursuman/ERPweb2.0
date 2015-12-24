@@ -514,6 +514,7 @@ define(function(require, exports) {
 			// 导游
 			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
 			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), $tab.find('.T-chooseInsuranceItem'), validator);
+			ResLineProduct.bindSeatCount($tab.find('.T-needSeatCount'), validator);
 			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
 			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
@@ -730,6 +731,74 @@ define(function(require, exports) {
 		})
 	};
 
+	/**
+	 * 选择车座数
+	 * @param  {object} $input    车座数选择框
+	 * @param  {object} validator 校验对象
+	 * @return {[type]}           [description]
+	 */
+	ResLineProduct.bindSeatCount = function($input, validator) {
+		if (!$input || !$input.length) {
+			console.error('绑定车队的autocomplete，主体Dom为空!');
+			return;
+		}
+		$input.autocomplete({
+			minLength:0,
+			change :function(event, ui){
+				if(ui.item == null){
+					var $this = $(this),parents = $(this).closest('tr');
+					$this.val("");
+					parents.find("input[name=companyName]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=licenseNumber]").val("");
+					parents.find("input[name=seatPrice]").val("");
+					parents.find("input[name=seatCount]").val("");
+					parents.find("input[name=charteredPrice]").val("");
+					parents.find("input[name=mobileNumber]").val("");
+				}
+				validator = rule.lineProductUpdate(validator);
+			},
+			select :function(event, ui){
+				var $this = $(this),parents = $(this).closest('tr');
+				parents.find("input[name=companyName]").val("");
+				parents.find("input[name=busCompanyId]").val("");
+				parents.find("input[name=licenseNumber]").val("");
+				parents.find("input[name=seatPrice]").val("");
+				parents.find("input[name=seatCount]").val("");
+				parents.find("input[name=charteredPrice]").val("");
+				parents.find("input[name=mobileNumber]").val("");
+
+				validator = rule.lineProductUpdate(validator);
+			}
+		}).unbind("click").click(function(){
+			var obj = this;
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getSeatCountList'),
+				showLoading: false,
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			})
+		})
+	};
 	/**
 	 * 绑定车队选择
 	 * @param  {[type]} $input [description]
