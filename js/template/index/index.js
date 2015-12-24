@@ -212,9 +212,10 @@ define(function(require, exports) {
                                                 tmp = list[i];
                                                 name = tmp[keys[1]][keys[2]];
                                                 qId = tmp.quoteId;
+                                                tId = tmp.tripPlanId;
                                                 res = tmp.result;
                                                 str.push('<li class="list-group-item boxLiStyle">' + name + (res == 1 ? '已同意' : (res == -1 ? '已拒绝' : '')) +
-                                                    ', <a class="T-view-quote" data-target="' + target + '" data-quote-id="' + qId + '">查看</a></li>');
+                                                    ', <a class="T-view-quote" data-target="' + target + '" data-quote-id="' + qId + '" data-tripplan-id="' + tId + '">查看</a></li>');
                                             }
 
                                             if (len) {
@@ -251,13 +252,20 @@ define(function(require, exports) {
                         event.preventDefault();
                         var $that = $(this),
                             id = $that.data('quote-id'),
+                            tripPlanId = $that.data('tripplan-id'),
                             target = $that.data('target'),
                             count = 0; //target: T-hotel or T-bus
 
-                        // 查看询价                    
-                        seajs.use(ASSETS_ROOT + modalScripts.arrange_quote, function(module) {
-                            module.updateQuoteToOffer(id, target);
-                        });
+                        if (!!tripPlanId) {
+                           seajs.use(ASSETS_ROOT + modalScripts.arrange_all, function(module) {
+                               module.updatePlanInfo(tripPlanId, target);
+                           }); 
+                        } else {
+                            // 查看询价                    
+                            seajs.use(ASSETS_ROOT + modalScripts.arrange_quote, function(module) {
+                                module.updateQuoteToOffer(id, target);
+                            });
+                       }
                         // 验证消息条数
                         $that.closest('ul').children('li').each(function(index, el) {
                             if ($(this).children('a').data('quote-id') == id) {
