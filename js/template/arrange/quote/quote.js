@@ -264,7 +264,8 @@ define(function(require, exports) {
 	quote.addQuote = function(id) {
 		$("#tab-arrange_quote-add-content").find(".T-newData").data("id",id);
 		var $a = {
-			a: 'add'
+			a: 'add',
+			tag: 'add'
 		};
 		if (!!id) {
 			$.ajax({
@@ -302,7 +303,7 @@ define(function(require, exports) {
 			var $container = $("#tab-arrange_quote-add-content");
 
 			var addHtml = addQuoteTemplate(htmlT);
-			$container.find('#quoteContent-'+$a.a).html(addHtml)
+			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(addHtml)
 
 			$container.find('.inquiryContent').on("click",function(){
 				var quoteId = $container.find('[name=quoteId]').val();
@@ -310,7 +311,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
 					return false;
 				} 
-				quote.quoteStatus(quoteId,$container,'add');
+				quote.quoteStatus(quoteId,$container,'add','add');
 			});	
 
 			quote.init_event($container,id);
@@ -324,12 +325,7 @@ define(function(require, exports) {
 			tag: tag
 		}
 		var inquiryHtml = inquiryResultTemplate($a);
-		if (!!$a.tag) {
-			$container.find('#inquiryContent-'+$a.a+'-'+tag).html(inquiryHtml);
-		}else {
-			$container.find('#inquiryContent-'+$a.a).html(inquiryHtml);
-		}
-		
+		$container.find('#inquiryContent-'+$a.a+'-'+$a.tag).html(inquiryHtml);
 		quote.busStatusList(quoteId,$container,$a);
 
 		$container.find('.busInquiryResult').on("click",function(){
@@ -370,11 +366,7 @@ define(function(require, exports) {
 					}
 
 					var busInquiryResultHtml = busInquiryResultTemplate(data);
-					if (!!$a.tag) {
-						$container.find('#busInquiryResult-'+$a.a+'-'+$a.tag).html(busInquiryResultHtml);
-					}else{
-						$container.find('#busInquiryResult-'+$a.a).html(busInquiryResultHtml);
-					}
+					$container.find('#busInquiryResult-'+$a.a+'-'+$a.tag).html(busInquiryResultHtml);
 					//操作
 					$container.find('.T-bus-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
@@ -435,15 +427,11 @@ define(function(require, exports) {
 						}
 					}
 					var hotelInquiryResultHtml = hotelInquiryResultTemplate(data);
-					if (!!$a.tag) {
-						$container.find('#hotelInquiryContent-'+$a.a+'-'+$a.tag).html(hotelInquiryResultHtml);
-					}else{
-						$container.find('#hotelInquiryContent-'+$a.a).html(hotelInquiryResultHtml);
-					}
+					$container.find('#hotelInquiryContent-'+$a.a+'-'+$a.tag).html(hotelInquiryResultHtml);
 
 					$container.find('.T-hotel-add').on("click",function(){
 						var offerId = $(this).closest('td').data("id");
-						quote.hotelAdd(offerId,$container);
+						quote.hotelAdd(offerId,$container,$a);
 					});
 
 					$container.find('.T-hotel-delete').on("click",function(){
@@ -504,7 +492,7 @@ define(function(require, exports) {
 	};
 
 	//询价状态-房-加入
-	quote.hotelAdd = function(offerId,$container){
+	quote.hotelAdd = function(offerId,$container,$a){
 		$.ajax({
 			url: KingServices.build_url('hotelInquiry','sumListInquiryHotelAdd'),
 			type: 'POST',
@@ -521,7 +509,13 @@ define(function(require, exports) {
 
 						for (var i = 0, len = whichDays.length; i < len; i++) {
 							var whichDay = whichDays[i].whichDay-1;
-							$container.find("#dayListUpdate-"+ whichDay +" .T-timeline-detail-container").append(html);
+							if ($a.tag == 'add') {
+								$container.find("#dayListAdd-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}else if($a.tag == 'update') {
+								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}else if($a.tag == 'copy') {
+								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+							}
 						}
 						$container.find('.quoteContent').trigger('click');
 						//删除现有

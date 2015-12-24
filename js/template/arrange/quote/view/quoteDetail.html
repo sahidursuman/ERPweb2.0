@@ -161,6 +161,22 @@
                         <td>￥{{selfPayList.price}}</td>
                     </tr>
                     {{/each}}
+                    <!-- 交通 -->
+                    {{each viewQuoteDaysList.ticketArrange as ticketList}}
+                    <tr>
+                        <td>交通</td>
+                        <td>{{ticketList.startingCity}}-{{ticketList.arriveCity}}</td>
+                        <td>￥{{ticketList.price}}</td>
+                    </tr>
+                    {{/each}}
+                    <!-- 其他 -->
+                    {{each viewQuoteDaysList.otherArrange as ticketList}}
+                    <tr>
+                        <td>其他</td>
+                        <td>{{ticketList.startingCity}}-{{ticketList.arriveCity}}</td>
+                        <td>￥{{ticketList.price}}</td>
+                    </tr>
+                    {{/each}}
                 </table>
                 {{/each}}
             </div>
