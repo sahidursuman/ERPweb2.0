@@ -11,7 +11,6 @@
                 <div class="col-sm-1 input-daterange">
                     <div class="input-group col-sm-12">
                         <input class="col-sm-12 datepicker T-startTime" name="joinTime" value="{{searchParam.startAccountTime}}" type="text">
-                       
                     </div>
                 </div>
                 <label class="pull-left text-right ">至</label>
@@ -35,7 +34,8 @@
                 <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
                 <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney ">{{statistics.sumUnPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
+                 <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney ">{{statistics.confirmedMoney}}</span></label>
                 <label class=" control-label marginLeft-30">本次付款金额合计：<input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
                 <label class=" control-label marginLeft-30">付款方式：
                     <select name="sumPayType">
