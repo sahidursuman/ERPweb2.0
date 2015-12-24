@@ -366,10 +366,14 @@ define(function(require, exports) {
 				});
 
 				//精度调整
-				var $price=$tab.find('.price'),
+				var $adultPrice=$tab.find('input[name=transAdultPrice]'),
+					$childPrice=$tab.find('input[name=transChildPrice]'),
 				    $transPayedMoney=$tab.find('input[name=transPayedMoney]');
+				    $count=$tab.find('.count');
 				Tools.inputCtrolFloat($transPayedMoney);
-				Tools.inputCtrolFloat($price);
+				Tools.inputCtrolFloat($adultPrice);
+				Tools.inputCtrolFloat($childPrice);
+				Tools.inputCtrolFloat($count);
 
 
 				//绑定分团转客信息
@@ -413,8 +417,8 @@ define(function(require, exports) {
 
 			var $tbody=$tab.find(".addTransferCost");
 			    $tbody.append(html);
-			var $price=$tbody.find('input[name=price]');
-			Tools.inputCtrolFloat($price);
+			var $count=$tbody.find('.count');
+			Tools.inputCtrolFloat($count);
 
 			//表单验证
 			rule.update(validator);

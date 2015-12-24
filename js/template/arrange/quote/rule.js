@@ -25,7 +25,7 @@ define(function(require, exports) {
 	rule.getQuoteSettings = function($container)  {
 		var settings = [
 			{
-				$ele: $container.find('input[name="startTime"]'),
+				$ele: $container.find('.T-quoteInfo input[name="startTime"]'),
 				rules: [
 					{
 						type: 'null',
@@ -34,7 +34,7 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $container.find('input[name="adultCount"]'),
+				$ele: $container.find('.T-quoteInfo input[name="adultCount"]'),
 				rules: [
 					{
 						type: 'null',
@@ -47,7 +47,7 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $container.find('input[name="childCount"]'),
+				$ele: $container.find('.T-quoteInfo input[name="childCount"]'),
 				rules: [
 					{
 						type: 'null',
@@ -60,7 +60,7 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $container.find('input[name="partnerAgencyName"]'),
+				$ele: $container.find('.T-quoteInfo input[name="partnerAgencyName"]'),
 				rules: [
 					{
 						type: 'null',
@@ -69,7 +69,7 @@ define(function(require, exports) {
 				]
 			},
 			{
-				$ele: $container.find('input[name="managerName"]'),
+				$ele: $container.find('.T-quoteInfo input[name="managerName"]'),
 				rules: [
 					{
 						type: 'null',

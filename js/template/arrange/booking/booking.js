@@ -183,25 +183,27 @@ define(function(require, exports) {
 
 		BookingArrange.ajax(data, listBookingInfo);
 		function listBookingInfo (data) {
-			BookingArrange.searchData =  {
-				pageNo: page
-			};
-			data.bookingOrderList = JSON.parse(data.bookingOrderList);
+			if (showDialog(data)) {
+				BookingArrange.searchData =  {
+					pageNo: page
+				};
+				data.bookingOrderList = JSON.parse(data.bookingOrderList);
 
-			BookingArrange.$tab.find('.T-list').html(listTableTemplate(data));
-			BookingArrange.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.recordSize));
-			
-			// 绑定翻页组件
-			laypage({
-				cont: BookingArrange.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-				pages: data.totalPage, //总页数
-				curr: (page + 1),
-				jump: function(obj, first) {
-					if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    BookingArrange.listBooking(obj.curr -1);
+				BookingArrange.$tab.find('.T-list').html(filterUnAuth(listTableTemplate(data)));
+				BookingArrange.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.recordSize));
+				
+				// 绑定翻页组件
+				laypage({
+					cont: BookingArrange.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					pages: data.totalPage, //总页数
+					curr: (page + 1),
+					jump: function(obj, first) {
+						if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+						    BookingArrange.listBooking(obj.curr -1);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	};
 

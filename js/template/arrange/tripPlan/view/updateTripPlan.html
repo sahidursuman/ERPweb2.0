@@ -143,7 +143,7 @@
 					</span>
 				</label>
 			</div>
-			<div class="col-sm-2 newAddTripTimer">
+			<div class="col-sm-2 newAddTripTimer" {{if tripPlan.executeTimeType == 0}} style="display:none;" {{/if}}>
 				<input class="form-control col-sm-4 datetimepicker T-timeArea-input" type="text" name="executeTime" value="{{tripPlan.executeTime}}" />
 			</div>
         </div>

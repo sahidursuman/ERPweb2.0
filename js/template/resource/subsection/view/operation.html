@@ -50,7 +50,7 @@
                         <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker col-sm-12" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
                     </td>
                     <td>
-                        <input type="text" name="needPayAllMoney" value="{{subList.needPayAllMoney}}">
+                        <input type="text" name="needPayAllMoney" value="{{subList.subsectionNeedPayAllMoney}}">
                     </td>
                     <td>
                         <input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney==1 }}checked="checked" {{/if}} />
