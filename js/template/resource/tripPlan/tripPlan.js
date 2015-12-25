@@ -681,6 +681,7 @@ define(function(require, exports) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
+					$this.closest('tr').find('[name=id]').val(data.arrangeId);
 				}
 			}
 		})
@@ -2619,7 +2620,26 @@ define(function(require, exports) {
 	 * @return {[type]}            [description]
 	 */
 	tripPlan.updatePlanInfo = function(tripPlanId,target) {
-		tripPlan.updateTripPlanArrange(tripPlanId, '', target)
+		var quoteContent = $(document).find('#tab-arrange_all-update-content'), isThere = 0;
+		quoteContent.each(function(i){
+			var menukeyId = quoteContent.eq(i).attr("id");
+			var id = quoteContent.eq(i).find('[name=tripPlanId]').val();
+			if (tripPlanId == id) {
+				isThere = 1;
+				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
+				var $container = $("#"+menukeyId);
+				if (!!target) {
+					if (target == "T-hotel") {
+						$container.find('.T-hotelTarget').trigger('click');
+					}else if (target == "T-bus") {
+						$container.find('.T-busTarget').trigger('click');
+					}
+				}
+			}
+		})
+		if (isThere == 0) {
+			tripPlan.updateTripPlanArrange(tripPlanId, '', target)
+		}
 	}
 
 	exports.init = tripPlan.initModule;
