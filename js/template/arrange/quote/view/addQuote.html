@@ -70,9 +70,9 @@
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;">
+							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:30px;">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;">
+							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:30px;">
 							<label class="control-label">小孩</label>
 						</div>
 						
@@ -97,6 +97,11 @@
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系电话：</label>
 							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5">
+						</div>
+
+						<div class="col-sm-2 addQuoteInformation" style="padding-top: 10px;">
+						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>报价单号：</label>
+							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" placeholder="系统自动生成">
 						</div>
 					</div>
 					<div class="form-group T-isChooseService">
@@ -333,7 +338,7 @@
                                 <ul class="nav nav-tabs" id="myTab">
                                     {{each daysList as lineProductDaysList i}}
                                     <li {{if i==0 }}class="active" {{/if}}>
-                                        <a aria-expanded="true" data-toggle="tab" href="#dayListUpdate-{{i}}" style="text-align:center;width:140px;">
+                                        <a aria-expanded="true" data-toggle="tab" href="#dayListAdd-{{i}}" style="text-align:center;width:140px;">
 											第{{i+1}}天
 										</a>
                                     </li>
@@ -341,7 +346,7 @@
                                 </ul>
                                 <div class="tab-content T-daylist" style="position: relative; top: -2px; border: 1px solid #ececec">
                                     {{each daysList as lineProductDaysList i}}
-                                    <div id="dayListUpdate-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
+                                    <div id="dayListAdd-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-entity-whichday="{{i+1}}">
                                             <div class="ui-sortable-handle">
                                                 <h5 class="globalAdd">

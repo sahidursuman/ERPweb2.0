@@ -554,7 +554,7 @@ define(function(require, exports) {
     };
 
     hotel.saveClear = function(args,tab_id, title, html){
-        if(!FinancialService.isClearSave(hotel.$clearTab,rule)){
+        if(!FinancialService.isClearSave(hotel.$clearTab,new FinRule(args[0] == 2 ? 3:1))){
             return false;
         }
 
@@ -631,7 +631,7 @@ define(function(require, exports) {
                 if(option == "check"){
                     hotel.saveChecking(id,name,0,tab_id,title,html);
                 } else if(option == "clear"){
-                    hotel.saveClear(id,name,0,tab_id,title,html);
+                    hotel.saveClear(id,name, tab_id,title,html);
                 }
             })
             // 保存后关闭
