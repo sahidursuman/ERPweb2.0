@@ -56,11 +56,21 @@
                         <td class="style-myself" colspan="3"><span>第{{i+1}}天</span> <span style="margin-left: 10px;">{{viewQuoteDaysList.times}}</span> <span></span></td>
                     </tr>
                     <!-- 交通 -->
+                    {{if viewQuoteDaysList.ticketArrange != null}} {{each viewQuoteDaysList.ticketArrange as ticketList index}} {{if index == 0}}
                     <tr>
-                        <td style="width: 160px">交通</td>
-                        <td style="text-align: left;"> <span>{{if !!busCompanyArrange}}{{busCompanyArrange.bus.brand}}{{/if}}</span></td>
-                        <td style="width: 180px;"></td>
+                        <td style="width: 160px"rowspan="{{viewQuoteDaysList.ticketArrange.length}}">交通</td>
+                            <td style="text-align: left;"> <span>
+                            {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
+                            <td style="width: 180px;">￥{{ticketList.price}}</td>
                     </tr>
+                    {{/if}} {{/each}} {{each viewQuoteDaysList.ticketArrange as ticketList index}} {{if index > 0}}
+                    <tr>
+                            <td style="text-align: left;"> <span>
+                            {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
+                            <td style="width: 180px;">￥{{ticketList.price}}</td>
+                    </tr> 
+                    {{/if}} {{/each}} {{/if}}
+
                     <!-- 购物 -->
                     {{each viewQuoteDaysList.shopArrange as shopList}}
                     <tr>
@@ -68,6 +78,7 @@
                         <td>{{shopList.shop.name}}</td>
                         <td> </td>
                     </tr>
+
                     {{/each}}
                     <!-- 餐饮 -->
                     {{if viewQuoteDaysList.restaurantArrange != null}} {{each viewQuoteDaysList.restaurantArrange as restaurantList index}} {{if index == 0}}
@@ -82,63 +93,67 @@
                         <td>￥{{restaurantList.restaurantStandard.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
+
+
                     <!-- 住宿 -->
                     {{if viewQuoteDaysList.hotelArrange != null}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index == 0}}
                     <tr>
                         <td rowspan="{{viewQuoteDaysList.hotelArrange.length}}">住宿</td>
                         <td><span>
                         {{if hotelList.hotel.level == 0}}   
-                                            未选择
-                                        {{else if hotelList.hotel.level == 1}}
-                                            三星以下
-                                        {{else if hotelList.hotel.level == 2}}
-                                            三星
-                                        {{else if hotelList.hotel.level == 3}}
-                                            准四星
-                                        {{else if hotelList.hotel.level == 4}}
-                                            四星
-                                        {{else if hotelList.hotel.level == 5}}
-                                            准五星
-                                        {{else if hotelList.hotel.level == 6}}
-                                            五星
-                                        {{else if hotelList.hotel.level == 7}}
-                                            五星以上
-                                        {{/if}}</span><span style="margin-left: 15px;">{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
-                                        <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
-                                        <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
-                                        <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
-                                        <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
-                                        </td>
-                                        <td>￥{{hotelList.price}}</td>
-                         </tr>
-                            {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
-                            <tr>
-                                <td> <span>
-                                {{if hotelList.hotel.level == 0}}   
                                 未选择
-                                {{else if hotelList.hotel.level == 1}}
+                            {{else if hotelList.hotel.level == 1}}
                                 三星以下
-                                {{else if hotelList.hotel.level == 2}}
+                            {{else if hotelList.hotel.level == 2}}
                                 三星
-                                {{else if hotelList.hotel.level == 3}}
+                            {{else if hotelList.hotel.level == 3}}
                                 准四星
-                                {{else if hotelList.hotel.level == 4}}
+                            {{else if hotelList.hotel.level == 4}}
                                 四星
-                                {{else if hotelList.hotel.level == 5}}
+                            {{else if hotelList.hotel.level == 5}}
                                 准五星
-                                {{else if hotelList.hotel.level == 6}}
+                            {{else if hotelList.hotel.level == 6}}
                                 五星
-                                {{else if hotelList.hotel.level == 7}}
+                            {{else if hotelList.hotel.level == 7}}
                                 五星以上
-                                {{/if}}</span> <span style="margin-left: 15px;"> {{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
-                                 <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
-                                        <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
-                                        <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
-                                        <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
-                                        </td>
+                            {{/if}}</span><span style="margin-left: 15px;">{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
+                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
+                            <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                            </td>
+                            <td>￥{{hotelList.price}}</td>
+                        </tr>
+                        {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
+                        <tr>
+                            <td> <span>
+                            {{if hotelList.hotel.level == 0}}   
+                            未选择
+                            {{else if hotelList.hotel.level == 1}}
+                            三星以下
+                            {{else if hotelList.hotel.level == 2}}
+                            三星
+                            {{else if hotelList.hotel.level == 3}}
+                            准四星
+                            {{else if hotelList.hotel.level == 4}}
+                            四星
+                            {{else if hotelList.hotel.level == 5}}
+                            准五星
+                            {{else if hotelList.hotel.level == 6}}
+                            五星
+                            {{else if hotelList.hotel.level == 7}}
+                            五星以上
+                            {{/if}}</span>
+                            <span style="margin-left: 15px;"> {{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
+                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
+                            <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                            </td>
                             <td>￥{{hotelList.price}}</td>
                         </tr>
                         {{/if}} {{/each}} {{/if}}
+
                     <!-- 景点 -->
                     {{if viewQuoteDaysList.scenicArrange != null}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index == 0}}
                     <tr>
@@ -153,25 +168,13 @@
                         <td>￥{{scenicList.price}}</td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
+                    
                     <!-- 自费 -->
                     {{each viewQuoteDaysList.selfPayArrange as selfPayList}}
                     <tr>
                         <td>自费</td>
                         <td>{{selfPayList.selfPayItem.name}}</td>
                         <td>￥{{selfPayList.price}}</td>
-                    </tr>
-                    {{/each}}
-                    <!-- 交通 -->
-                    {{each viewQuoteDaysList.ticketArrange as ticketList}}
-                    <tr>
-                        <td>交通</td>
-                        <td>
-                            {{if ticketList.type == 1}}机票
-                            {{else if ticketList.type == 2}}汽车票
-                            {{else if ticketList.type == 3}}火车票
-                            {{else if ticketList.type == 4}}轮船票{{/if}}
-                        </td>
-                        <td>￥{{ticketList.price}}</td>
                     </tr>
                     {{/each}}
                     <!-- 其他 -->
