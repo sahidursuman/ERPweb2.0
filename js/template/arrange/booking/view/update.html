@@ -71,8 +71,8 @@
 						<div class="col-sm-2">
 							<input type="text" name="sumCostMoney" class="col-sm-12 sumCostMoney" value="{{bookingOrder.sumCostMoney}}" readonly="readonly">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">预付款:</label>
-						<div class="col-sm-2">
+						<label class="col-sm-1 control-label no-padding-right hidden">预付款:</label>
+						<div class="col-sm-2 hidden">
 							<input type="text" name="prePayMoney" class="col-sm-12 sumPrePayMoney price" readonly="readonly" value="{{bookingOrder.prePayMoney}}" maxlength="9" />
 						</div>
 					</div>
@@ -108,7 +108,7 @@
 										<th class="th-border" width="110"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">预付款</th>
+										<th class="th-border hidden">预付款</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -156,7 +156,7 @@
 										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
 										<td><input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td  class="hidden"><input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
 										<td>
 											<a class="cursor T-action T-hotel-delete">删除</a>
 										</td>
@@ -193,7 +193,7 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
-										<th class="th-border">预付款</th>
+										<th class="th-border hidden">预付款</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -221,7 +221,7 @@
 										<td><input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" /></td>
-										<td><input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td  class="hidden"><input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
 										<td>
 											<a class="cursor T-action T-scenic-delete">删除</a>
 										</td>
@@ -261,7 +261,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">预付款</th>
+										<th class="th-border hidden">预付款</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -297,7 +297,7 @@
 										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td  class="hidden"><input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
 										<td>
 											<a class="cursor T-action T-ticket-delete">删除</a>
 										</td>
@@ -335,7 +335,7 @@
 										<th class="th-border"> 销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">预付款</th>
+										<th class="th-border hidden">预付款</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
 								</thead>
@@ -370,7 +370,7 @@
 										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
 										<td><input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
 										<td><input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
+										<td  class="hidden"><input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
 										<td>
 											<a class="cursor T-action T-bus-delete">删除</a>
 										</td>

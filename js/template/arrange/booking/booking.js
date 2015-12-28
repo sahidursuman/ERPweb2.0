@@ -685,7 +685,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
 		var $container = $this.find(".T-hotelList");
@@ -709,7 +709,7 @@ define(function(require, exports) {
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
-			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
 		var $container=	$this.find('.T-scenicList');
 		    $container.append(html);
@@ -734,7 +734,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
 		var $container=$this.find(".T-ticketList");
 		    $container.append(html);
@@ -757,7 +757,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-bus-delete">删除</a></td></tr>';
 		var $container = $this.find(".T-busList");
 		$container.append(html);	
