@@ -2574,8 +2574,7 @@ define(function(require, exports) {
                 "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
-                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
-                "transPayType": arrangeTourist.getVal($editFeeObj, "transPayType")
+                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
             },
             otherFeeList = [],
             inTransferFee = {
