@@ -313,6 +313,8 @@ define(function(require, exports) {
             Self.GetClear(Self.showBtnFlag ? 2 : 0,0,id,name);
         });
 
+        FinancialService.initPayEvent(Self.$clearTab.find('.T-summary'));
+
         //关闭页面事件
         Self.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");
