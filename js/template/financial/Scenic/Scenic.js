@@ -354,6 +354,8 @@ define(function(require, exports) {
             scenic.scenicClear(0,0,null,name);
         });
 
+        FinancialService.initPayEvent(scenic.$clearTab.find('.T-summary'));
+        
         //报表内的操作
         scenic.listOption(scenic.$clearTab);
 
