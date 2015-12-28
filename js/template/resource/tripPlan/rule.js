@@ -18,7 +18,9 @@ define(function(require, exports) {
 
 		var settings = this.getListTripPlanCheckorSettings($container);
 
-		return $container.formValidate(settings);
+		return $container.formValidate(settings).validateHidden(true, function($obj) {
+			$obj.closest('.tabbable').find('[href="#'+ $obj.closest('.tab-pane').prop('id') +'"]').trigger('click')
+		});
 	};
 
 
@@ -80,8 +82,8 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="memberCount"]'),
 						rules: [
 							{
-								type: 'positive-float',
-								errMsg: '必须为正数'
+								type: 'nonnegative-float',
+								errMsg: '请输入非负数'
 							}
 						]
 					},{//已付  
@@ -106,6 +108,15 @@ define(function(require, exports) {
 							{
 								type: 'float',
 								errMsg: '不能是非法字符'
+							}
+						]
+					},{//房型
+						$ele: $that.find('input[name="hotelRoom"]'),
+						$valObj: $that.find('input[name="hotelRoomId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '房型不能为空'
 							}
 						]
 					}

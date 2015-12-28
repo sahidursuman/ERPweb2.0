@@ -177,42 +177,6 @@
                                                         </tr>
                                                     	{{/if}}
                                                     	{{/each}}
-                                                    	{{if insuranceList.length == 0}}
-                                                    	<tr>
-                                                    		<td>
-                                                                <div class="col-sm-12">
-                                                                    <input type="text" name="insuranceName" maxlength="32" value="" class="col-sm-12 T-chooseInsurance"/>
-                                                                    <input type="hidden" name="insuranceId" value=""/>
-                                                                    <span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司">
-                                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                    		<td>
-                                                                <input type="text" name="type" value="" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
-                                                                <input type="hidden" name="typeId" value="">
-                                                            </td>
-                                                    		<td><input type="text" name="price" value="" class="col-sm-12" maxlength="9"/></td>
-                                                    		<td><input type="text" name="memberCount" value="" class="col-sm-12" maxlength="8"/></td>
-                                                    		<td><input type="text" name="needPayMoney" value="" readonly="readonly" class="col-sm-12" maxlength="9"/></td>
-                                                    		<td><input type="text" name="payedMoney" value="" class="col-sm-12" maxlength="9"/></td>
-                                                    		<td>
-                                                    			<input type="hidden" name="id" value=""/>
-                                                    			<select class="col-sm-12 no-padding" name="payType">
-                                                    				<option value="0">现付</option>
-                                                                    <option value="1">签单</option>
-                                                                  	<option value="2">转账</option>
-                                                                    <option value="3">网付</option>
-                                                                </select>
-                                                    		</td>
-                                                    		<td><input type="text" name="remark" value="" class="col-sm-12" maxlength="500"/></td>
-                                                    		<td>
-                                                    			<a  class="cursor T-btn-deleteTripPlanList" data-entity-id="" data-entity-name="insurance" title="删除">
-                                                    				删除
-                                                    			</a>
-                                                    		</td>
-                                                    	</tr>
-                                                    	{{/if}}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -499,7 +463,7 @@
                                                         <th class="th-border"><span class="necessary">*</span>酒店</th>
                                                         <th class="th-border">联系人</th>
                                                         <th class="th-border">联系电话</th>
-                                                        <th class="th-border">房型</th>
+                                                        <th class="th-border"><span class="necessary">*</span>房型</th>
                                                         <th class="th-border">单价</th>
                                                         <th class="th-border">数量</th>
                                                         <th class="th-border">优惠</th>
