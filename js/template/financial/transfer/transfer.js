@@ -343,7 +343,7 @@ define(function(require, exports) {
         var validatorCheck = settleValidator.check(Transfer.$clearTab),
         autoValidatorCheck = autoValidator.check(Transfer.$clearTab.find('.T-count'));
             
-
+        FinancialService.initPayEvent(Transfer.$clearTab.find('.T-summary'));
         //搜索事件
         Transfer.$clearTab.find(".T-search").click(function(){
             Transfer.clearTempSumDate = false;
