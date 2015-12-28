@@ -7,7 +7,7 @@ var FinancialService = {};
 FinancialService.initPayEvent = function($container)  {
     Tools.setDatePicker($container.find('input[name="tally-date"]'));
 
-    $container.find('input[name="card-number"]').autocomplete({
+    var $card = $container.find('input[name="card-number"]').autocomplete({
         minLength:0,
         change :function(event, ui){
             if(ui.item == null){
@@ -44,7 +44,14 @@ FinancialService.initPayEvent = function($container)  {
                 }
             }
         })
-    })
+    });
+
+    $container.find('select').on('change', function(event) {
+        event.preventDefault();
+        var val = $(this).val();
+
+        $card.closest('div').toggleClass('hidden', val != 1);
+    }).trigger('change');
 };
 
 
