@@ -52,21 +52,6 @@
 						<div class="col-sm-2">
 							<input type="text" name="sumNeedGetMoney" class="col-sm-12 sumNeedGetMoney" value="{{bookingOrder.sumNeedGetMoney}}" readonly="readonly">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已收:</label>
-						<div class="col-sm-2">
-							<input type="text" name="getedMoney" class="col-sm-12 price" value="{{bookingOrder.getedMoney}}" maxlength="9" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">收款方式:</label>
-						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12">
-								<option {{if bookingOrder.getType==0}}selected="selected"{{/if}} value="0">现金</option>
-								<option {{if bookingOrder.getType==1}}selected="selected"{{/if}} value="1">签单</option>
-								<option {{if bookingOrder.getType==2}}selected="selected"{{/if}} value="2">转账</option>
-								<option {{if bookingOrder.getType==3}}selected="selected"{{/if}} value="3">网付</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>总成本:</label>
 						<div class="col-sm-2">
 							<input type="text" name="sumCostMoney" class="col-sm-12 sumCostMoney" value="{{bookingOrder.sumCostMoney}}" readonly="readonly">
