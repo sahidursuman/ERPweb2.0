@@ -18,9 +18,12 @@ define(function(require, exports) {
 
 		var settings = this.getListTripPlanCheckorSettings($container);
 
-		return $container.formValidate(settings).validateHidden(true, function($obj) {
-			$obj.closest('.tabbable').find('[href="#'+ $obj.closest('.tab-pane').prop('id') +'"]').trigger('click')
-		});
+		return $container.formValidate(settings)
+			.validateHidden(true, 
+				function($obj) {
+					$obj.closest('.tabbable').find('[href="#'+ $obj.closest('.tab-pane').prop('id') +'"]').trigger('click')
+				}
+			);
 	};
 
 

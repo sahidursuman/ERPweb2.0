@@ -386,6 +386,12 @@
 		return res;
 	};
 
+	/**
+	 * 设置校验隐藏元素及校验后调用的方法
+	 * @param  {Boolean} enable    true: 要校验隐藏的元素，false：不校验
+	 * @param  {function} hiddenFun 校验失败之后需要调用的方法
+	 * @return {object}           校验对象
+	 */
 	Validate.prototype.validateHidden = function(enable, hiddenFun) {
 		this.validateHiddenObject = !!enable;
 		this.hiddenFun = hiddenFun;
