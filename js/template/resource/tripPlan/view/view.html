@@ -60,7 +60,6 @@
 						<th class="th-border">车辆品牌</th>
 						<th class="th-border">合同号</th>
 						<th class="th-border">导付</th>
-						<th class="th-border">付款方式</th>
 						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 					</tr>
 				</thead>
@@ -73,7 +72,6 @@
 						<td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
 						<td>{{busCompany.contractNumber}}</td>
 						<td>{{busCompany.guidePayMoney}}</td>
-						<td>{{if busCompany.payType == 0}}现付{{else if busCompany.payType==1}}签单{{else if busCompany.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{busCompany.remark}}</td>
 					</tr>
 				{{/each}}
@@ -97,7 +95,6 @@
 						<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 						<th class="th-border">人数</th>
 						<th class="th-border">导付</th>
-						<th class="th-border">付款方式</th>
 						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 					</tr>
 				</thead>
@@ -117,7 +114,6 @@
 						<td>{{restaurant.price}}</td>
 						<td>{{restaurant.memberCount}}</td>
 						<td>{{restaurant.guidePayMoney}}</td>
-						<td>{{if restaurant.payType == 0}}现付{{else if restaurant.payType==1}}签单{{else if restaurant.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{restaurant.remark}}</td>
 					</tr>
                 {{/each}}
@@ -141,7 +137,6 @@
 					<th class="th-border">房型</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -155,7 +150,6 @@
 						<td>{{hotel.hotelRoom.type}}</td>
 						<td>{{hotel.memberCount}}</td>
 						<td>{{hotel.guidePayMoney}}</td>
-						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else if hotel.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{hotel.remark}}</td>
 					</tr>
 				{{/each}}
@@ -181,7 +175,6 @@
 					<th class="th-border">数量</th>
 					<th class="th-border">订单号</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -197,7 +190,6 @@
 						<td>{{scenic.memberCount}}</td>
 						<td>{{scenic.orderNumber}}</td>
 						<td>{{scenic.guidePayMoney}}</td>
-						<td>{{if scenic.payType == 0}}现付{{else if scenic.payType==1}}签单{{else if scenic.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{scenic.remark}}</td>
 					</tr>
 				{{/each}}
@@ -252,7 +244,6 @@
 					<th class="th-border">底价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -267,7 +258,6 @@
 						<td>{{selfPay.price}}</td>
 						<td>{{selfPay.memberCount}}</td>
 						<td>{{selfPay.guidePayMoney}}</td>
-						<td>{{if selfPay.payType == 0}}现付{{else if selfPay.payType==1}}签单{{else if selfPay.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{selfPay.remark}}</td>
 					</tr>
 				{{/each}}
@@ -294,7 +284,6 @@
 					<th class="th-border">单价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -321,7 +310,6 @@
 						<td>{{ticket.price}}</td>
 						<td>{{ticket.memberCount}}</td>
 						<td>{{ticket.guidePayMoney}}</td>
-						<td>{{if ticket.payType == 0}}现付{{else if ticket.payType==1}}签单{{else if ticket.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{ticket.remark}}</td>
 					</tr>
 				{{/each}}
@@ -345,7 +333,6 @@
 					<th class="th-border">单价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -359,7 +346,6 @@
 						<td>{{other.price}}</td>
 						<td>{{other.memberCount}}</td>
 						<td>{{other.guidePayMoney}}</td>
-						<td>{{if other.payType == 0}}现付{{else if other.payType==1}}签单{{else if other.payType==1}}转账{{else}}网付{{/if}}</td>
 						<td>{{other.remark}}</td>
 					</tr>
 				{{/each}}
