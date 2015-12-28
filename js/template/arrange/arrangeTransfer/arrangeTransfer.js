@@ -764,7 +764,6 @@ define(function(require, exports) {
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
 			    status=getValue("status"),
-			    payType = getValue("payType"),
 			    cashFlag = getValue("cashFlag");
 
 	
