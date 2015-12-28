@@ -285,6 +285,7 @@ define(function(require, exports) {
         // 计算
         if (type) {
             FinancialService.updateSumPayMoney($tab, validator);
+            FinancialService.initPayEvent($tab.find('.T-summary'));
         } else {
             FinancialService.updateUnpayMoney($tab, validator);
             $searchArea.find('.T-btn-export').on('click', function(event) {

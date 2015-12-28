@@ -461,6 +461,9 @@ define(function(require, exports) {
                 OtherAccounts.viewOrderDetail(id);
             }
         });
+
+        FinancialService.initPayEvent($PaymentTabId.find('.T-summary'));
+        
         //时间控件
         Tools.setDatePicker(OtherAccounts.$clearSearchArea.find('.datepicker'), true);
         //翻页

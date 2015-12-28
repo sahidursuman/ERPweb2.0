@@ -2299,8 +2299,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(insur.eq(i), "price"),
 						memberCount : tripPlan.getVal(insur.eq(i), "memberCount"),
 						needPayMoney : tripPlan.getVal(insur.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(insur.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(insur.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(insur.eq(i), "payedMoney"),
 						remark : tripPlan.getVal(insur.eq(i), "remark")
 					}
 					tripPlanJson.insuranceArrangeList.push(insurJosn);
@@ -2316,7 +2315,6 @@ define(function(require, exports) {
 						id : tripPlan.getVal(guide.eq(i), "id"),
 						price : tripPlan.getVal(guide.eq(i), "guideFee"),
 						manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
-						payType : tripPlan.getVal(guide.eq(i), "payType"),
 						remark : tripPlan.getVal(guide.eq(i), "remark"),
 					}
 					tripPlanJson.guideArrange = guideJosn;
@@ -2334,8 +2332,7 @@ define(function(require, exports) {
 						reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
 						needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(bus.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(bus.eq(i), "remark"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
@@ -2369,8 +2366,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(restaurant.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(restaurant.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(restaurant.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(restaurant.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(restaurant.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(restaurant.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(restaurant.eq(i), "remark"),
 						type : restaurant.eq(i).find("[name=type]").val(),
@@ -2396,8 +2392,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(hotel.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(hotel.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(hotel.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(hotel.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(hotel.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(hotel.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(hotel.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(hotel.eq(i), "remark"),
 						orderStatus: tripPlan.getVal(hotel.eq(i), "hotelOrder")
@@ -2424,8 +2419,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(scenic.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(scenic.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(scenic.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(scenic.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(scenic.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(scenic.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(scenic.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(scenic.eq(i), "remark"),
 					}
@@ -2467,8 +2461,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(selfPay.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(selfPay.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(selfPay.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(selfPay.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(selfPay.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(selfPay.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(selfPay.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(selfPay.eq(i), "remark")
 					}
@@ -2497,8 +2490,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(ticket.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(ticket.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(ticket.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(ticket.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(ticket.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(ticket.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(ticket.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(ticket.eq(i), "remark"),
 					}
@@ -2523,8 +2515,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(other.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(other.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(other.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(other.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(other.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(other.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(other.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(other.eq(i), "remark")
 					}

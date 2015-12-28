@@ -974,11 +974,8 @@ define(function(require, exports) {
 			    touristRealname : BookingArrange.getValue($that,"touristRealname"),
 			    touristMobileNumber : BookingArrange.getValue($that,"touristMobileNumber"),
 			    sumNeedGetMoney : BookingArrange.getValue($that,"sumNeedGetMoney"),
-			    getedMoney : BookingArrange.getValue($that,"getedMoney"),
-			    getType : BookingArrange.getValue($that,"getType"),
 			    sumCostMoney : BookingArrange.getValue($that,"sumCostMoney"),
-			    payedMoney : BookingArrange.getValue($that,"payedMoney"),
-			    payType : BookingArrange.getValue($that,"payType"),
+			    // payedMoney : BookingArrange.getValue($that,"payedMoney"),
 			    remark : BookingArrange.getValue($that,"remark"),
 			    bookingHotelList : [],
 			    bookingScenicList : [],
@@ -999,9 +996,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(hotelListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumNeedGetMoney"),
-				payedMoney : BookingArrange.getValue(hotelListTr.eq(i),"payedMoney"),
-				payType : BookingArrange.getValue(hotelListTr.eq(i),"payType")
-
+				// payedMoney : BookingArrange.getValue(hotelListTr.eq(i),"payedMoney"),
 			}
 			if(hotelJson.hotelId){
 				bookingOrder.bookingHotelList.push(hotelJson);
@@ -1020,8 +1015,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(scenicListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumNeedGetMoney"),
-				payedMoney : BookingArrange.getValue(scenicListTr.eq(i),"payedMoney"),
-				payType : BookingArrange.getValue(scenicListTr.eq(i),"payType")
+				// payedMoney : BookingArrange.getValue(scenicListTr.eq(i),"payedMoney"),
 			}
 			if(scenicJson.scenicId){
 				bookingOrder.bookingScenicList.push(scenicJson);
@@ -1043,8 +1037,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(ticketListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumNeedGetMoney"),
-				payedMoney : BookingArrange.getValue(ticketListTr.eq(i),"payedMoney"),
-				payType : BookingArrange.getValue(ticketListTr.eq(i),"payType")
+				// payedMoney : BookingArrange.getValue(ticketListTr.eq(i),"payedMoney"),
 			}
 			if(ticketJson.ticketId){
 				bookingOrder.bookingTicketList.push(ticketJson);
@@ -1064,8 +1057,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(busListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(busListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(busListTr.eq(i),"sumNeedGetMoney"),
-				payedMoney : BookingArrange.getValue(busListTr.eq(i),"payedMoney"),
-				payType : BookingArrange.getValue(busListTr.eq(i),"payType")
+				// payedMoney : BookingArrange.getValue(busListTr.eq(i),"payedMoney"),
 			}
 			if(busJson.busCompanyId){
 				bookingOrder.bookingBusCompanieList.push(busJson);

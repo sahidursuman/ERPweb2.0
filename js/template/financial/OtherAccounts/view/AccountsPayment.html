@@ -36,24 +36,57 @@
                 <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
                 <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
                  <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney ">{{statistics.confirmedMoney}}</span></label>
-                <label class=" control-label marginLeft-30">本次付款金额合计：<input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
-                <label class=" control-label marginLeft-30">付款方式：
-                    <select name="sumPayType">
-                        <option>现金</option>
-                        <option>银行转账</option>
-                        <option>网上支付</option>
-                        <option>支票</option>
-                        <option>其他</option>
-                    </select>
-                </label>
-                <label class=" control-label marginLeft-30 ">备注：<input type="text" class="T-otherInfo" name="sumPayRemark"></label>
-                 {{if !showBtnFlag}}
-                    <label class="control-label marginLeft-30">
-                        <button class="btn btn-xs btn-primary T-clear-auto "><i class="ace-icon fa fa-check-circle"></i>自动下账</button>
-                    </label>
-                {{/if}}
             </div>
         </form>
+
+        <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
+            <div class="form-group">
+                <label class="control-label">本次付款金额：</label>
+                <label class="control-label">
+                    <input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
+                </label>
+            </div>
+                
+            {{if !showBtnFlag}}
+            <div class="form-group mar-l-10">
+                <button class="btn btn-xs btn-primary T-clear-auto "><i class="ace-icon fa fa-check-circle"></i>自动下账</button>
+            </div>
+            {{/if}}
+
+            <div class="form-group mar-l-10">
+                <label class="control-label">付款方式：</label>
+                <select class="form-control T-sumPayType" name="sumPayType">
+                    {{getPayTypeOptions}}
+                </select>
+            </div>
+
+            <div class="form-group mar-l-10">
+                <label class="control-label">银行账号：</label>
+                <label class="control-label">
+                    <input type="text" name="card-number" class="money" style="width:230px;">
+                    <input type="hidden" name="card-id">
+                </label>
+            </div>
+            <div class="form-group mar-l-10">
+                <label class="control-label">凭证编号：</label>
+                <label class="control-label">
+                    <input type="text" name="credentials-number">
+                </label>
+            </div>
+            <div class="form-group mar-l-10">
+                <label class="control-label">记账日期：</label>
+                <label class="control-label">
+                    <input type="text" name="tally-date" class="datepicker" style="width:100px;">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group  row">
+            <label class="control-label">备注：</label>
+            <label class="control-label">
+                <input type="text" class="T-otherInfo" name="sumPayRemark" style="width:900px;">
+            </label>
+        </div>
     </div>
     <input type="hidden" name="WEB_IMG_URL_BIG" value="WEB_IMG_URL_BIG" />
     <input type="hidden" name="WEB_IMG_URL_SMALL" value="WEB_IMG_URL_SMALL" />
