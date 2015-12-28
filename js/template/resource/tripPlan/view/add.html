@@ -136,8 +136,7 @@
                                                             <th class="th-border">单价</th>
                                                             <th class="th-border">数量</th>
                                                             <th class="th-border">应付</th>
-                                                            <th class="th-border">已付</th>
-                                                            <th class="th-border">付款方式</th>
+                                                            <th class="th-border hidden">预付款</th>
                                                             <th class="th-border">备注</th>
                                                             <th class="th-border">操作</th>
                                                         </tr>
@@ -162,15 +161,7 @@
                                                     		<td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price" maxlength="8"/></td>
                                                     		<td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="8"/></td>
                                                     		<td><input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12" maxlength="9"/></td>
-                                                    		<td><input type="text" name="payedMoney" value="{{insurance.payedMoney}}" class="col-sm-12 price"  maxlength="9"/></td>
-                                                    		<td>
-                                                    			<input type="hidden" name="id" value="{{insurance.id}}"/>
-                                                    			<select class="col-sm-12 no-padding" name="payType">
-                                                    				<option {{if insurance.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                    <option {{if insurance.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                  	<option {{if insurance.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                    <option {{if insurance.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                    			</select>
+                                                    		<td class="hidden"><input type="text" name="prePayedMoney" value="{{insurance.payedMoney}}" class="col-sm-12 price"  maxlength="9"/></td>
                                                     		</td>
                                                     		<td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
                                                             <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
@@ -203,7 +194,6 @@
                                                         <th class="th-border">联系电话</th>
                                                         <th class="th-border">导服费</th>
                                                         <th class="th-border">管理费</th>
-                                                        <th class="th-border">付款方式</th>
                                                         <th class="th-border">备注</th>
                                                         <th  class="th-border" style="display: none;">操作</th>
                                                     </tr>
@@ -216,14 +206,6 @@
                                                     			<td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
                                                     			<td><input type="text" name="guideFee" value="{{guide.price}}" class="col-sm-12 price" maxlength="9"/></td>
                                                     			<td><input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 price" maxlength="9"/></td>
-                                                    			<td>
-                                                                    <select class="col-sm-12" name="payType">
-                                                                        <option {{if guide.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if guide.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if guide.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if guide.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
-                                                                </td>
                                                                 <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                                 <td style="display: none;">
                                                                     <button class="btn btn-xs btn-success R-right" data-right="1450001" title="发送订单">
@@ -265,8 +247,7 @@
                                                         <th class="th-border">车费</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>
-                                                        <th class="th-border">已付</th>
-                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border hidden">预付款</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">状态</th>
@@ -287,15 +268,7 @@
                                                                 <td><input type="text" name="price" value="{{busCompany.price}}" {{if busCompany.qouteId!=null}}readonly="readonly"{{/if}} class="col-sm-12 price" maxlength="9" style="width: 60px;"/><input type="hidden" name="memberCount" value="1" /></td>
                                                                 <td><input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input type="text" name="payedMoney" value="{{busCompany.payedMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
-                                                                <td>
-                                                                	<input type="hidden" name="id" value="{{busCompany.id}}" />
-                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-                                                                        <option {{if busCompany.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if busCompany.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if busCompany.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if busCompany.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" value="{{busCompany.payedMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
@@ -358,8 +331,7 @@
                                                         <th class="th-border">人数</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>
-                                                        <th class="th-border">已付</th>
-                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border hidden">预付款</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border" width="110px">操作</th>
@@ -399,15 +371,7 @@
                                                                 <td><input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                                <td><input type="text" name="payedMoney" maxlength="9" value="{{restaurant.payedMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
-                                                                <td>
-                                                                	<input type="hidden" name="id" value="{{restaurant.id}}"/>
-                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-                                                                        <option {{if restaurant.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if restaurant.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if restaurant.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if restaurant.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" maxlength="9" value="{{restaurant.payedMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
                                                                 </td>
                                                                 <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                                 <td><input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12"/></td>
@@ -468,8 +432,7 @@
                                                         <th class="th-border">数量</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>
-                                                        <th class="th-border">已付</th>
-                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border hidden">预付款</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">状态</th>
@@ -512,15 +475,7 @@
                                                                 <td><input type="text" class="col-sm-12" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" class="col-sm-12 price" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" class="col-sm-12" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
-                                                                <td><input type="text" class="col-sm-12 price" name="payedMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
-                                                                <td>
-                                                                	<select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-	                                                    				<option {{if hotel.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if hotel.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if hotel.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if hotel.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-	                                                    			</select>
-                                                                </td>
+                                                                <td class="hidden"><input type="text" class="col-sm-12 price" name="prePayedMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                                 <td>
@@ -581,8 +536,7 @@
                                                         <th class="th-border">数量</th>
                                                         <th class="th-border">优惠</th>
                                                         <th class="th-border">应付</th>
-                                                        <th class="th-border">已付</th>
-                                                        <th class="th-border">付款方式</th>
+                                                        <th class="th-border hidden">预付款</th>
                                                         <th class="th-border">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">操作</th>
@@ -619,15 +573,7 @@
                                                                 <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{scenic.needPayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9" value="{{scenic.payedMoney}}" style="width: 60px;" /></td>
-                                                                <td>
-                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-                                                                        <option {{if scenic.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if scenic.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if scenic.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if scenic.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
-                                                                </td>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9" value="{{scenic.payedMoney}}" style="width: 60px;" /></td>
                                                                 <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                                 <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500"/></td>
                                                                 <td>
@@ -740,8 +686,7 @@
                                                         <th style="width: 77px;">数量</th>
                                                         <th style="width: 77px;">优惠</th>
                                                         <th style="width: 77px;">应付</th>
-                                                        <th style="width: 77px;">已付</th>
-                                                        <th style="width: 72px;">付款方式</th>
+                                                        <th class="hidden" style="width: 77px;">预付款</th>
                                                         <th style="width: 77px;">导付</th>
                                                         <th>备注</th>
                                                         <th>操作</th>
@@ -770,15 +715,7 @@
                                                                 <td><input type="text" name="memberCount" class="col-sm-12" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12 price" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{selfPay.needPayMoney}}" style="width: 60px;" /></td>
-                                                                <td><input type="text" name="payedMoney" class="col-sm-12 price" value="{{selfPay.payedMoney}}" style="width: 60px;" maxlength="9"/></td>
-                                                                <td>
-                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-                                                                        <option {{if selfPay.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if selfPay.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if selfPay.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if selfPay.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
-                                                                </td>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" value="{{selfPay.payedMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500"/></td>
                                                                 <td>
@@ -828,8 +765,7 @@
                                                         <th class="th-border" style="width: 77px;">数量</th>
                                                         <th class="th-border" style="width: 77px;">优惠</th>
                                                         <th class="th-border" style="width: 77px;">应付</th>
-                                                        <th class="th-border" style="width: 77px;">已付</th>
-                                                        <th class="th-border" style="width: 72px;">付款方式</th>
+                                                        <th class="th-border hidden" style="width: 77px;">预付款</th>
                                                         <th class="th-border" style="width: 77px;">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border"  style="width: 100px">操作</th>
@@ -866,15 +802,7 @@
                                                                 <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{ticket.memberCount}}" /></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.reduceMoney}}" /></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{ticket.needPayMoney}}" /></td>
-                                                                <td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.payedMoney}}" /></td>
-                                                                <td>
-                                                                    <select name="payType" class="col-sm-12 no-padding">
-                                                                        <option {{if ticket.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if ticket.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if ticket.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if ticket.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
-                                                                </td>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.payedMoney}}" /></td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
                                                                 <td>
@@ -921,8 +849,7 @@
                                                         <th class="th-border" style="width: 77px;">数量</th>
                                                         <th class="th-border" style="width: 77px;">优惠</th>
                                                         <th class="th-border" style="width: 77px;">应付</th>
-                                                        <th class="th-border" style="width: 77px;">已付</th>
-                                                        <th class="th-border" style="width: 72px;">付款方式</th>
+                                                        <th class="th-border hidden" style="width: 77px;">预付款</th>
                                                         <th class="th-border" style="width: 77px;">导付</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">操作</th>
@@ -940,15 +867,7 @@
                                                                 <td><input type="text" name="memberCount" class="col-sm-12" value="{{other.memberCount}}" maxlength="8"/></td>
                                                                 <td><input type="text" name="reduceMoney" class="col-sm-12 price" value="{{other.reduceMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{other.needPayMoney}}" maxlength="9"/></td>
-                                                                <td><input type="text" name="payedMoney" class="col-sm-12 price" value="{{other.payedMoney}}" maxlength="9"/></td>
-                                                                <td>
-                                                                    <select name="payType" class="col-sm-12 no-padding" style="width: 55px;">
-                                                                        <option {{if other.payType == 0}}selected="selected"{{/if}} value="0">现付</option>
-                                                                        <option {{if other.payType == 1}}selected="selected"{{/if}} value="1">签单</option>
-                                                                        <option {{if other.payType == 2}}selected="selected"{{/if}} value="2">转账</option>
-                                                                        <option {{if other.payType == 3}}selected="selected"{{/if}} value="3">网付</option>
-                                                                    </select>
-                                                                </td>
+                                                                <td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" value="{{other.payedMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" maxlength="9"/></td>
                                                                 <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500"/></td>
                                                                 <td>
