@@ -4,6 +4,50 @@
 
 var FinancialService = {};
 
+FinancialService.initPayEvent = function($container)  {
+    Tools.setDatePicker($container.find('input[name="tally-date"]'));
+
+    $container.find('input[name="card-number"]').autocomplete({
+        minLength:0,
+        change :function(event, ui){
+            if(ui.item == null){
+                $(this).val('').nextAll('input[name="card-id"]').val('');
+            }
+        },
+        select :function(event, ui){
+             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
+        }
+    }).one("click", function(){
+        var $that = $(this);
+        $.ajax({
+            url:KingServices.build_url("bookingOrder","getSeatCountList"),
+            showLoading:false,
+            success:function(data){
+                if(showDialog(data)){
+                    var cardNumberJson = [];
+                    var cardNumberList = data.cardNumberList;
+                    if(cardNumberList && cardNumberList.length > 0){
+                        for(var i=0; i < cardNumberList.length; i++){
+                            var seatCount = {
+                                value : cardNumberList[i]
+                            }
+                            cardNumberJson.push(seatCount);
+                        }
+                        $that.autocomplete('option','source', cardNumberJson);
+                        $that.autocomplete('search', '');
+                    }else{
+                        layer.tips('没有内容', $that, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                }
+            }
+        })
+    })
+};
+
+
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
