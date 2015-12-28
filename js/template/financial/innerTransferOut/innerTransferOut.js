@@ -287,6 +287,7 @@ define(function(require,exports) {
 		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
+		FinancialService.initPayEvent($obj.find('.T-summary'));
 		//搜索事件
 		$checkSearchArea.find(".T-checking-search").on('click',function(event){
 			event.preventDefault();
