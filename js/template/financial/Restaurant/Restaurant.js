@@ -314,6 +314,8 @@ define(function(require, exports) {
             }
         }
 
+        FinancialService.initPayEvent(restaurant.$clearTab.find('.T-summary'));
+
         //绑定翻页组件
         var $tr = restaurant.$clearTab.find('.T-clearList tr');
         laypage({
