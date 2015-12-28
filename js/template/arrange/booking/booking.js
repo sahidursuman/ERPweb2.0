@@ -685,8 +685,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
-			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
 		var $container = $this.find(".T-hotelList");
@@ -710,8 +709,7 @@ define(function(require, exports) {
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
-			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
-			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
 		var $container=	$this.find('.T-scenicList');
 		    $container.append(html);
@@ -736,8 +734,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
-			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
 		var $container=$this.find(".T-ticketList");
 		    $container.append(html);
@@ -760,8 +757,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="payedMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
-			'<td><select name="getType" ><option selected="selected" value="0">现金</option><option value="1">银行转账</option><option value="1">网上支付</option><option value="3">支票</option><option value="4">其它</option></select></td>'+
+			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
 			'<td><a class="cursor T-action T-bus-delete">删除</a></td></tr>';
 		var $container = $this.find(".T-busList");
 		$container.append(html);	
@@ -950,7 +946,7 @@ define(function(require, exports) {
 		var sumPayed = eval($payedS.join("+"));
 		$that.find(".sumNeedGetMoney").val(Tools.toFixed(sumSale));
 		$that.find(".sumCostMoney").val(Tools.toFixed(sumCost));
-		$that.find(".sumPayedMoney").val(Tools.toFixed(sumPayed));
+		$that.find(".sumPrePayMoney").val(Tools.toFixed(sumPayed));
 	};
 	/**
 	 * 保存模板数据
