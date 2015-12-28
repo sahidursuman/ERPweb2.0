@@ -122,9 +122,43 @@ define(function(require, exports) {
 								errMsg: '房型不能为空'
 							}
 						]
+					},{//房型
+						$ele: $that.find('input[name="startTime"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '日期不能为空'
+							}
+						]
 					}
 				);
-		});  
+		});  		
+
+		// 景区校验
+		$container.find('#tripPlan_addPlan_scenic').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			settings.push(
+					{//景区
+						$ele: $tr.find('input[name="name"]'),
+						$valObj: $tr.find('input[name="scenicId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '景区不能为空'
+							}
+						]
+					},{//收费项目
+						$ele: $tr.find('input[name="chargingProjects"]'),
+						$valObj: $tr.find('input[name="chargingId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '收费项目不能为空'
+							}
+						]
+					}
+				);
+		});
 
 		return settings;   
 	};
