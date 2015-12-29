@@ -677,7 +677,7 @@ define(function(require, exports) {
                             type: 1,
                             title: "应付金额明细",
                             skin: 'layui-layer-rim', //加上边框
-                            area: '55%', //宽高
+                            area: '1000px', //宽高
                             zIndex: 1028,
                             content: html,
                             scrollbar: false,
