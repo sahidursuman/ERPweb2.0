@@ -294,6 +294,7 @@ define(function(require, exports) {
         if (!isCheck) {
         	oMenuKey = blanceMenuKey;
             FinancialService.updateSumPayMoney($tab, validator);
+            FinancialService.initPayEvent($searchArea);
         } else {
             //给全选按钮绑定事件: 未去重
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));

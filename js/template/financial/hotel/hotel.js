@@ -336,6 +336,7 @@ define(function(require, exports) {
             }
         }
 
+        FinancialService.initPayEvent(hotel.$clearTab.find('.T-summary'));
         // 监听修改
         $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
             event.preventDefault();

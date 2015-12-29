@@ -316,6 +316,8 @@ define(function(require,exports) {
 				//自动计算本次收款金额
 				InnerTransferIn.autoSumIncomeMoney($obj);
 			});
+
+			FinancialService.initPayEvent($obj.find('.T-summary'));
 		}else{
 			$obj.find('.T-checkList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);

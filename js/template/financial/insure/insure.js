@@ -342,6 +342,8 @@ define(function(require, exports) {
             Insure.getClearing(0,0,id,name);
         });
 
+        FinancialService.initPayEvent(Insure.$clearTab.find('.T-summary'));
+        
         //关闭页面事件
         Insure.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");

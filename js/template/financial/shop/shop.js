@@ -292,6 +292,8 @@ define(function(require, exports){
 	                FinShop.setAutoFillEdit($tab, false);
 	            }
 			});
+
+			FinancialService.initPayEvent($searchArea);
 		}else{
 			saveData = FinShop.saveChecking;
 			operationMenuKey = checkMenuKey;

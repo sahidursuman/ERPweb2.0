@@ -501,6 +501,7 @@ define(function(require, exports) {
         });
 
         Client.datepicker(Client.$clearSearchArea);
+        FinancialService.initPayEvent(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
         Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
