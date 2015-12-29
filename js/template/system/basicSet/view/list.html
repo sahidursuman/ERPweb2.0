@@ -1,0 +1,73 @@
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a data-toggle="tab" href="#basicSet-accountObj" class="T-basicSet-accountObj" aria-expanded="false" data-value="1">
+				<i class="fa fa-paper-plane fa-2"></i> 会计科目设置
+			</a>
+		</li>
+		<li>
+			<a data-toggle="tab" href="#basicSet-bankAccount" class="T-basicSet-bankAccount" aria-expanded="true" data-value="2">
+				<i class="fa fa-hourglass"></i> 银行账户设置
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<!--会计科目start-->
+		<div class="tab-pane fade active in" id="basicSet-accountObj">
+			<div class="add-search">
+				<button class="btn btn-sm btn-success T-add-AccObj" style="margin:10px 0 10px 0">
+					<i class="ace-icon fa fa-plus"></i>
+					新增
+				</button>
+			</div>
+			<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
+				<thead>
+					<tr class="bg-blur">
+						<th>科目编号</th>
+						<th>科目名称</th>
+						<th>启用标志</th>
+					</tr>
+				</thead>
+				<tbody class="T-accObjList">
+					<tr> 
+						<td>1</td>
+						<td>主营业务收入</td>
+						<td>启用</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>主营业务支出</td>
+						<td>启用</td>
+					</tr>
+					
+					{{each newSubjectAccountList as rs index}}
+						<tr id="{{rs.id}}">
+							<td>{{rs.number}}</td>
+							<td><span class="title">{{rs.subjectName}}</span><a href="javascript:void(0)" class="T-edit"><span>
+							<i title="编辑" style="float:right;font-size:16px;" class="ace-icon fa fa-edit treeIcon"></i></span></a></td>
+							<td>
+							<span class="status">
+								{{if rs.status == 1}}
+									启用
+								{{else}}
+									停用
+								{{/if}}
+							</span>
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+		<!--会计科目end-->
+
+		<!--银行账户设置start-->
+		<div id="basicSet-bankAccount" class="tab-pane fade" >
+			<div class="T-bankAccount-content">
+				
+			</div>
+		</div>
+		<!--银行账户设置end-->
+
+	</div>
+</div>
