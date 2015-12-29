@@ -405,6 +405,10 @@ table tr td {
     margin-left: 10px;
 }
 
+.mar-l-15 {
+    margin-left: 15px;
+}
+
 .pad-l-5 {
     padding-left: 5px;
 }
@@ -2046,4 +2050,22 @@ p#back-top a span {
 
 .group-info .form-inline .fa-plus {
     cursor: pointer;
+}
+
+/*发团中icon的颜色*/
+.tripplan-area .fa-minus {
+    color: #000;
+}
+
+.tripplan-area .fa-question {
+    color: #888;
+}
+.tripplan-area .fa-exclamation {
+    color: red;
+}
+.tripplan-area .fa-check {
+    color: green;
+}
+.tripplan-area .fa-times {
+    color: red;
 }

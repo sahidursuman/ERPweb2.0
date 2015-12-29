@@ -39,16 +39,16 @@ define(function(require, exports) {
 			url: KingServices.build_url('tripPlan','getQueryTermsForArrange'),
 			type:"POST",
 			success:function(data){
-				autocompleteData.tripList = data.tripNumberList;
-				autocompleteData.guideList = data.guideList;
-				autocompleteData.busList = data.busList;
+				autocompleteData.businessGroupList = data.businessGroupList;
+				autocompleteData.dutyOPUserList = data.dutyOPUserList;
+				autocompleteData.lineProductList = data.lineProductList;
 				if(showDialog(data)){
 					Tools.addTab(menuKey,'发团安排',listMainTemplate())
 
 					tripPlan.$tab = $('#tab-arrange_all-content');
 					tripPlan.$searchArea = tripPlan.$tab.find('.T-search-tripPlan');
+					tripPlan.listTripPlan();
 					tripPlan.init_eventMain();
-					tripPlan.listTripPlan(0);
 				}
 			}
 		})
@@ -60,25 +60,46 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		tripPlan.$tab.find('.T-tripPlanState').on('click', 'a', function() {
-			var $this = $(this);
-			// 设置选择状态的效果
-			$this.closest('ul').prev().data('status', $this.data('value')).children('span').text($this.text());
-			tripPlan.listTripPlan(0);
+		var $searchArea = tripPlan.$searchArea.on('change', function(event) {
+			event.preventDefault();
+			tripPlan.listTripPlan();
 		});
 
+		// 绑定日期
+		Tools.setDatePicker($searchArea.find('.datepicker'), true);
+
 		//搜索按钮事件绑定
-		tripPlan.$tab.find('.T-btn-tripPlan-search').on('click', function() {
-			tripPlan.listTripPlan(0);
+		$searchArea.find('.T-btn-tripPlan-search').on('click', function() {
+			tripPlan.listTripPlan();
 		})
 
 		//查询条件 autocomplete
-		//tripPlan.autocompleteSearch(tripPlan.$tab.find('.T-tripChoose'), autocompleteData.tripList, 'tripNumber', 'tripChooseId');
-		tripPlan.autocompleteSearch(tripPlan.$tab.find('.T-busChoose'), autocompleteData.busList, 'licenseNumber', 'busChooseId');
-		tripPlan.autocompleteSearch(tripPlan.$tab.find('.T-guideChoose'), autocompleteData.guideList, 'realname', 'guideChooseId');
-	
-		//时间控件
-		tripPlan.datepicker(tripPlan.$tab);
+		tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), autocompleteData.lineProductList, 'lineProductName', 'lineProductId');
+		tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), autocompleteData.dutyOPUserList, 'dutyOPUserName', 'dutyOPUserId');
+		tripPlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), autocompleteData.businessGroupList, 'businessGroupName', 'businessGroupId');
+
+		tripPlan.$tab.find('.T-tripPlanList').on('click', '.T-action', function(event) {
+			event.preventDefault();
+			var $this = $(this), $id = $this.closest('tr').data('entity-id'),
+				$billStatus = $this.attr('billStatus');
+			if ($this.hasClass('T-sendOrder')) {
+				//下单
+				var $quoteId = $this.data('entity-quoteId');
+				tripPlan.singleClickSendOrder($quoteId,$id);
+			}else if ($this.hasClass('T-send')){
+				//通知
+				tripPlan.sendTripPlanArrange($id);
+			}else if ($this.hasClass('T-view')) {
+				//查看
+				tripPlan.viewTripPlan($id);
+			}else if ($this.hasClass('T-plan')) {
+				//安排
+				tripPlan.updateTripPlanArrange($id, $billStatus)
+			}else if ($this.hasClass('T-export')) {
+				//导出
+				tripPlan.exportTripPlanArrange($id);
+			}
+		});		
 	};
 
 	/**
@@ -94,65 +115,29 @@ define(function(require, exports) {
 	 * @param  {[type]} status        [状态]
 	 * @return {[type]}               [description]
 	 */
-	tripPlan.listTripPlan = function(page,tripId,tripNumber,startTime,guideId,realname,busId,licenseNumber,status) {
-		if (tripPlan.$searchArea && arguments.length === 1) {
-            // 初始化页面后，可以获取页面的参数
-			tripId = tripPlan.$searchArea.find("input[name=tripChooseId]").val(),
-			tripNumber = tripPlan.$searchArea.find("input[name=tripNumber]").val(),
-			startTime = tripPlan.$searchArea.find("input[name=startTime]").val(),
-			guideId = tripPlan.$searchArea.find("input[name=guideChooseId]").val(),
-			realname = tripPlan.$searchArea.find("input[name=realname]").val(),
-			busId = tripPlan.$searchArea.find("input[name=busChooseId]").val(),
-			licenseNumber = tripPlan.$searchArea.find("input[name=licenseNumber]").val(),
-			status = tripPlan.$searchArea.find("[name=status]").data("status")
-        }
+	tripPlan.listTripPlan = function(page) {
         // 修正页码
         page = page || 0;
 
+		var args = {};
+		if (tripPlan.$searchArea) {
+            // 初始化页面后，可以获取页面的参数
+			args = tripPlan.$searchArea.find('form').serializeJson();
+        }
+
+        args.pageNo = page;
+        args.tripPlan = 'arrange';
+
         $.ajax({
-			url:  KingServices.build_url('tripPlan','listTripPlan'),
+			url:  KingServices.build_url('tripPlan','listTripPlanArrange'),
 			type:"POST",
-			data: {
-				queryType: '1',
-				pageNo: page,
-				tripId: tripId,
-				tripNumber: tripNumber,
-				startTime: startTime,
-				guideId: guideId,
-				guideName: realname,
-				busId: busId,
-				busLicenseNumber: licenseNumber,
-				status: status,
-				sortType: 'auto',
-				tripPlan: 'arrange'
-			},
+			data: args,
 			success:function(data){
-				data.tripPlanList = JSON.parse(data.tripPlanList);
 				if(showDialog(data)){
+					tripPlan.pageNo = page;
+
+					data.tripPlanList = JSON.parse(data.tripPlanList);
 					tripPlan.$tab.find('.T-tripPlanList').html(filterUnAuth(listTemplate(data)));
-					
-					tripPlan.$tab.off('click').on('click', '.T-action', function(event) {
-						event.preventDefault();
-						var $this = $(this), $id = $this.closest('tr').data('entity-id'),
-							$billStatus = $this.attr('billStatus');
-						if ($this.hasClass('T-sendOrder')) {
-							//下单
-							var $quoteId = $this.data('entity-quoteId');
-							tripPlan.singleClickSendOrder($quoteId,$id);
-						}else if ($this.hasClass('T-send')){
-							//通知
-							tripPlan.sendTripPlanArrange($id);
-						}else if ($this.hasClass('T-view')) {
-							//查看
-							tripPlan.viewTripPlan($id);
-						}else if ($this.hasClass('T-plan')) {
-							//安排
-							tripPlan.updateTripPlanArrange($id, $billStatus)
-						}else if ($this.hasClass('T-export')) {
-							//导出
-							tripPlan.exportTripPlanArrange($id);
-						}
-					});
 
 					// 绑定翻页组件
 					laypage({
@@ -169,26 +154,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-	/**
-	 * 下单操作
-	 * @param  {[type]} quoteId    [报价ID]
-	 * @param  {[type]} tripPlanId [发团安排ID]
-	 * @return {[type]}            [description]
-	 */
-	tripPlan.singleClickSendOrder = function(quoteId,tripPlanId) {
-		$.ajax({
-			url:KingServices.build_url("productQuote","saveOrder"),
-			type: 'POST',
-			data: "quoteId="+quoteId+"&tripPlanId="+tripPlanId,
-			success:function(data){
-					if(showDialog(data)){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-					});
-				}
-		    }
-		})
-	}
 
 	/**
 	 * 查看发团安排
@@ -1257,8 +1222,11 @@ define(function(require, exports) {
 				completeList = jsonList;
 			if (completeList && completeList.length > 0) {
 				for(var i = 0, len = completeList.length; i < len; i++) {
+					completeList[i].id = completeList[i][inputIdName];
 					completeList[i].value = completeList[i][valueName];
 				}
+
+				console.info(completeList)
 				$this.autocomplete('option','source', completeList);
 				$this.autocomplete('search', '');
 			}else{

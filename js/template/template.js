@@ -163,5 +163,22 @@
           default:
             return "";
         }
+    }), template.helper("getArrangeIcon", function(status) {
+        switch (1 * status) {
+          case 1:
+            return "fa-question";
+
+          case 2:
+            return "fa-exclamation";
+
+          case 3:
+            return "fa-checked";
+
+          case 4:
+            return "fa-times";
+
+          default:
+            return "fa-minus";
+        }
     });
 }();

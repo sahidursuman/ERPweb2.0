@@ -71,7 +71,7 @@ template.helper("getPayTypeText", function(payType) {
         default:
             return '其他';
     }
-});
+});    
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
     switch (billStatus * 1) {
         case -1:
@@ -88,5 +88,19 @@ template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
             return '财务已审核，若需编辑，需要管理员、财务和计调同时操作退回';
         default:
             return '';
+    }
+});
+template.helper("getArrangeIcon", function(status) {
+    switch (status * 1) {
+        case 1:
+            return 'fa-question';
+        case 2:
+            return 'fa-exclamation';
+        case 3:
+            return 'fa-checked';
+        case 4:
+            return 'fa-times';
+        default:
+            return 'fa-minus';
     }
 });
