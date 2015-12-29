@@ -799,7 +799,6 @@ define(function(require, exports) {
 			    transChildPrice=getValue("transChildPrice"),
 			    transRemark=getValue("transRemark"),
 			    status=getValue("status"),
-			    payType = getValue("payType"),
 			    cashFlag = getValue("cashFlag");
 
 	
@@ -833,8 +832,7 @@ define(function(require, exports) {
 					"id":id,  //转客表ID
 					"remark":remark, //转客备注
 					"status":status,//转客状态，0未完成，1已完成
-					"partnerAgencyId":partnerAgencyId, //转到的地接社
-					"payType":payType				
+					"partnerAgencyId":partnerAgencyId
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
