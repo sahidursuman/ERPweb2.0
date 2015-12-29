@@ -1447,8 +1447,42 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     }
 
     return $obj;
-}
+};
 
+/**
+ * 选择日期组件组
+ * @param {object} $dateObjs 日期的Jquery对象
+ */
+Tools.setDateRange = function($dateObjs) {
+	var len = $dateObjs.length;
+	if (len) {
+		Tools.setDatePicker($dateObjs);
+		$dateObjs.each(function(index, val) {
+			 $(this).on('changeDate.date-range.api', function(event) {
+			 	event.preventDefault();
+			 	var $that = $(this)
+			 		date = $that.val();
+
+			 	if (!!date) {
+			 		for (var i = index + 1, $tmp, d; i < len; i ++) {
+			 			$tmp = $dateObjs.eq(i);
+			 			d = $tmp.val();
+			 			if (!!d) {
+			 				if (d <= date) {
+			 					$tmp.val('');
+			 				}
+			 			}
+
+			 			date = Tools.addDay(date, 1);
+		 				$tmp.datepicker('setStartDate', date);
+			 		}
+			 	}
+			 });
+		});
+	}
+
+	return $dateObjs;
+};
 /**
  * 计算两个日期的差额
  * @param  {string} startDate 日期字符串
@@ -1476,6 +1510,23 @@ Tools.getDateDiff = function(startDate,endDate)
     }
 }
 
+/**
+ * 增加几天
+ * @param {string} date 开始的日期 
+ * @param {int} days 增加的天数
+ */
+Tools.addDay = function(date, days) {
+	if (!isNaN(days)) {
+		if (!(date instanceof Date)) {
+			date = new Date(date);
+		}
+		var timer = date.getTime()+ days*24*60*60*1000;
+		date.setTime(timer);
+		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+	}
+
+	return date;
+}
 /**
  * 获取记录描述信息
  * 主要是为了统一描述
