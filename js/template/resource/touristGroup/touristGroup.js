@@ -333,6 +333,10 @@ define(function(require, exports) {
         //中转安排处理
         touristGroup.innerTransferDispose($innerTransferForm);
 
+        //初始化外联计调Autocomplate
+        $opUserList = $addTabId.find('.T-choose-opUserList');
+        touristGroup.getopUserList($opUserList);
+
 
         //报价单号
         $addTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
@@ -429,6 +433,62 @@ define(function(require, exports) {
             }
         });
     };
+
+    /**
+     * getopUserList 获取外联计调数据
+     * @param  {[type]} $obj [description]
+     * @return {[type]}      [description]
+     */
+    touristGroup.getopUserList = function($obj){
+          $.ajax({
+            url: KingServices.build_url("innerTransferOperation", "getDutyOPUserList"),
+            type: "POST",
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var opUserList;
+                   /* data.opUserList = JSON.parse(data.opUserList);*/
+                    opUserList = data.opUserList;
+                    if (!!opUserList && opUserList.length > 0) {
+                        for (var i = 0; i < opUserList.length; i++) {
+                            opUserList[i].value = opUserList[i].realName;
+                        };
+                    }
+                    $obj.autocomplete({
+                        minLength: 0,
+                        change: function(event, ui) {
+                            if (ui.item == null) {
+                                var $that = $(this),
+                                    $parents = $that.closest('div');
+                                    $parents.find("input[name=outOPUserId]").val("");
+                            }
+                        },
+                        select: function(event, ui) {
+                            var _this = this,
+                                $parents = $(_this).closest('div');
+                            $parents.find("input[name=outOPUserId]").val(ui.item.id).trigger('change');
+                        },
+                        source: opUserList
+                    }).unbind("click").click(function() {
+                        var obj = this,
+                            $obj = $(obj);
+                        if (!!opUserList && opUserList.length) {
+                            $obj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    })
+                }
+            }
+        });
+
+    };
+
+
+
     //删除小组
     touristGroup.deleteGroup = function(id) {
         $.ajax({
@@ -538,7 +598,42 @@ define(function(require, exports) {
         $obj.find(".T-addCostTbody").on('change', 'input', function() {
             touristGroup.autoSumNeedPay($obj);
         })
+
+        //根据单价数量计算金额
+        touristGroup.calcPayMoney($obj);
+
+
     };
+
+
+     /**
+     * calcPayMoney 根据费用【单价、数量】项目计算金额
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    touristGroup.calcPayMoney = function($tab){
+        $tab.find('.T-addCostTbody').on('change', '.T-calc', function(event) {
+            /* Act on the event */
+            var $that=$(this),$tr = $that.closest('tr');
+            if ($that.hasClass('T-count')) {  //若数量改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+
+            }else if($that.hasClass('T-price')){ //若价格改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+            };
+        });
+    };
+
 
       /**
      * 初始化选择线路的对话框
@@ -1375,12 +1470,13 @@ define(function(require, exports) {
     //新增其他费用项
     touristGroup.addOtherCost = function($obj) {
         var html = '<tr>' +
-            '<td><span name="addOrReduceSelect" value="0">其他费用</span></td>' +
-            '<td><input  name="describeInfo" type="text" class="col-sm-12  no-padding-right" /></td>' +
-            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount"/></td>' +
-            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice"/></td>' +
+            '<td><input name="addOrReduceSelect" value="其他费用" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>' +
+            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc"/></td>' +
+            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc"/></td>' +
+            '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" /></td>' +
+            '<td><input  name="describeInfo" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>' +
             '<td><a class="cursor addCost-delete">删除</a></td>' +
-            '</tr>'
+            '</tr>';
         var $parentsObj = $obj.closest(".T-touristGroupMainForm");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
@@ -1395,16 +1491,17 @@ define(function(require, exports) {
         })
     };
     //自动计算应收，未收
-    touristGroup.autoSumNeedPay = function($obj) {
-        var needIncome = $obj.find('input[name=needPayAllMoney]');
-        var hadIncome = $obj.find('input[name=payedMoney]');
-        var unIncome = $obj.find('input[name=unIncomeMoney]');
-        var currentIncome = $obj.find('input[name=currentNeedPayMoney]');
-        var $tr = $obj.find('.T-addCostTbody').find("tr:not(.deleted)");
-        var needSumIncome = 0;
+    touristGroup.autoSumNeedPay = function($tab) {
+        var needIncome = $tab.find('input[name=needPayAllMoney]'),
+            hadIncome = $tab.find('input[name=payedMoney]'),
+            unIncome = $tab.find('input[name=unIncomeMoney]'),
+            currentIncome = $tab.find('input[name=currentNeedPayMoney]'),
+            $tr = $tab.find('.T-addCostTbody').find("tr:not(.deleted)"),
+            needSumIncome = 0;
         $tr.each(function() {
-            var count = parseFloat($(this).find('.T-costCount').val());
-            var price = parseFloat($(this).find('.T-costPrice').val());
+            var $that = $(this),
+                count = parseFloat($that.find('.T-count').val()),
+                price = parseFloat($that.find('.T-price').val());
             if (isNaN(count)) {
                 count = 0;
             }
@@ -1793,15 +1890,17 @@ define(function(require, exports) {
     touristGroup.installData = function($obj, id, typeFlag, tabArgs, typeInner) {
         //判断购买保险状态
         var buyInsuranceS = 1;
-        var $lineInfoForm = $obj.find(".T-touristGroupMainForm");
-        var insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]');
-        if (insuranceStatus.is(":checked") == true) {
+        var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
+            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]');
+        if ($insuranceStatus.is(":checked") == true) {
             buyInsuranceS = 1;
         } else {
             buyInsuranceS = 0;
         }
+
+        //游客小组、账单信息序列化
         var form = $lineInfoForm.serialize(),
-            $startTime = $lineInfoForm.find('input[name="startTime"]');
+            $startTime = $lineInfoForm.find('input[name=startTime]');
 
         // for 出游日期
         if ($startTime.prop('disabled')) {
@@ -1811,20 +1910,21 @@ define(function(require, exports) {
         function trim(str) {
             return str.replace(/(^\s*)|(\s*$)/g, "");
         };
-        var touristGroupFeeJsonAdd = [];
-        var addCostStr
+
+        var touristGroupFeeJsonAdd = [],$addFeeItemTr;
         if (typeFlag == 2) {
-            addCostStr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
+            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         } else {
-            addCostStr = $lineInfoForm.find(".T-addCostTbody tr");
+            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr");
         };
         var isReturn = false;
-        addCostStr.each(function(i) {
+        $addFeeItemTr.each(function(i) {
             if (i > 1) {
-                var type = addCostStr.eq(i).find("[name=addOrReduceSelect]").attr("value");
-                var describeInfo = trim(addCostStr.eq(i).find("input[name=describeInfo]").val());
-                var count = trim(addCostStr.eq(i).find("input[name=count]").val());
-                var price = trim(addCostStr.eq(i).find("input[name=price]").val());
+                var type = addFeeItemTr.eq(i).find("[name=otherFee]").attr("value"),
+                    describeInfo = trim(addFeeItemTr.eq(i).find("input[name=describeInfo]").val()),
+                    count = trim(addFeeItemTr.eq(i).find(".T-count").val()),
+                    price = trim(addFeeItemTr.eq(i).find(".T-price").val());
+
                 if ((describeInfo != "") || (count != "") || (price != "")) {
                     if (count == "") {
                         showMessageDialog($("#confirm-dialog-message"), "请输入自费数量");
@@ -1843,7 +1943,7 @@ define(function(require, exports) {
                     };
                     var touristGroupFeeJson = {};
                     if (typeFlag == 2) {
-                        var id = addCostStr.eq(i).data("entity-id");
+                        var id = $addFeeItemTr.eq(i).data("entity-id");
                         touristGroupFeeJson = {
                             id: id,
                             type: type,
@@ -1869,9 +1969,9 @@ define(function(require, exports) {
         //删除费用项
         if (typeFlag == 2) {
             touristGroupFeeJsonDel = [];
-            var delFeeStr = $lineInfoForm.find(".T-addCostTbody tr.deleted");
-            delFeeStr.each(function(i) {
-                var idDel = delFeeStr.eq(i).attr("data-entity-id");
+            var $delFeeTtr = $lineInfoForm.find(".T-addCostTbody tr.deleted");
+            $delFeeTtr.each(function(i) {
+                var idDel = $delFeeTtr.eq(i).attr("data-entity-id");
                 touristGroupFeeJson = {
                     id: idDel
                 };
@@ -1879,16 +1979,19 @@ define(function(require, exports) {
             })
         };
 
-        //游客名单 酒店星级等
-        var $visiForm = $obj.find(".T-touristGroupMainFormMember");
-        var expectLevel = $visiForm.find("select[name=level]").val()
-        var includeOwnExpense = $visiForm.find("input[name=includeOwnExpense]").val();
-        var touristRemarks = $visiForm.find("input[name=touristRemarks]").val();
+        //获取游客名单住宿、星级、自费、备注
+         var $visiForm = $obj.find(".T-touristGroupMainFormMember"),
+             expectLevel = touristGroup.getVal($visiForm, "level"),
+             includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense"),
+             remark = touristGroup.getVal($obj, "remark");
+
+
         //接团、小车、送团
-        var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
-        var $receptionObj = $arrangeForm.find('input[name=touristReception]');
-        var $smallCarObj = $arrangeForm.find('input[name=smallCar]');
-        var $touristSendObj = $arrangeForm.find('input[name=touristSend]');
+        var $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
+            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
+            $smallCarObj = $arrangeForm.find('input[name=smallCar]'),
+            $touristSendObj = $arrangeForm.find('input[name=touristSend]');
+
         if ($receptionObj.is(':checked') == true) {
             var isNeedArriveService = 1;
         } else {
@@ -1904,8 +2007,9 @@ define(function(require, exports) {
         } else {
             isNeedLeaveService = 0;
         }
+
         var buyInsurance = buyInsuranceS;
-        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&remark=" + touristRemarks + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedBus=" + isNeedBus + "&isNeedLeaveService=" + isNeedLeaveService;
+        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&remark=" + remark + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedBus=" + isNeedBus + "&isNeedLeaveService=" + isNeedLeaveService;
         //游客json串
         var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm, id, typeFlag);
 
@@ -1938,9 +2042,23 @@ define(function(require, exports) {
                  outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm)  
             }
 
-
+        //预收款、计划现收不能大于应收
+        var prePayMoney = touristGroup.getVal($lineInfoForm, "prePayMoney"),
+            planCurrPayMoney = touristGroup.getVal($lineInfoForm, "planCurrPayMoney"),
+            needPayAllMoney = touristGroup.getVal($lineInfoForm, "needPayAllMoney"),
+            type = touristGroup.getVal($lineInfoForm, "type"),needTotalMoney=0;
+            //数据类型转换
+            prePayMoney = parseFloat(prePayMoney);
+            planCurrPayMoney = parseFloat(planCurrPayMoney);
+            needPayAllMoney = parseFloat(needPayAllMoney);
+        //预收款、计划现收之和    
+        needTotalMoney = touristGroup.calcNeedTotalMoney(prePayMoney, planCurrPayMoney);
+        if (needTotalMoney > needPayAllMoney ) {
+            showMessageDialog($("#confirm-dialog-message"), "预收款与计划现收之和不能大于应收");
+             return;
+        };
+        
         //客户来源不能是地接社
-        var type=$lineInfoForm.find('input[name=type]').val();
         if (!!type && type=="0") {
              showMessageDialog($("#confirm-dialog-message"), "客户来源不能是地接社");
              return;
@@ -2081,14 +2199,14 @@ define(function(require, exports) {
     //拼接安排json
     touristGroup.installArrangeJson = function($outArrange) {
         var outArrangeRemarkJson = {
-            arriveTime: $outArrange.find("input[name=receptionTime]").val(),
-            arrivePosition: $outArrange.find("input[name=receptionAddress]").val(),
-            arriveShift: $outArrange.find("input[name=arriveShift]").val(),
-            arriveShiftTime: $outArrange.find("input[name=arriveShiftTime]").val(),
-            leaveTime: $outArrange.find("input[name=sendTime]").val(),
-            leavePosition: $outArrange.find("input[name=sendAddress]").val(),
-            leaveShift: $outArrange.find("input[name=leaveShift]").val(),
-            leaveShiftTime: $outArrange.find("input[name=leaveShiftTime]").val()
+            arriveTime: touristGroup.getVal($outArrange, "receptionTime"),
+            arrivePosition: touristGroup.getVal($outArrange, "receptionAddress"),
+            arriveShift: touristGroup.getVal($outArrange, "arriveShift"),
+            arriveShiftTime: touristGroup.getVal($outArrange, "arriveShiftTime"),
+            leaveTime: touristGroup.getVal($outArrange, "sendTime"),
+            leavePosition: touristGroup.getVal($outArrange, "sendAddress"),
+            leaveShift: touristGroup.getVal($outArrange, "leaveShift"),
+            leaveShiftTime: touristGroup.getVal($outArrange, "leaveShiftTime")
         };
         return outArrangeRemarkJson;
     };
@@ -2097,6 +2215,34 @@ define(function(require, exports) {
         var url = APP_ROOT + "back/touristGroup.do?method=" + method + "&token=" + $.cookie("token") + "&menuKey=" + menuKey + "&operation=" + operation;
         return url;
     };
+
+
+    //预收款、计划现总和计算
+    touristGroup.calcNeedTotalMoney = function(prePayMoney, planCurrPayMoney){
+        if (!isNaN(prePayMoney) && !isNaN(planCurrPayMoney)) {
+            var needTotalMoney = 0,
+                needTotalMoney = parseFloat(needTotalMoney+prePayMoney+planCurrPayMoney);
+            return needTotalMoney;
+        };
+    };
+
+
+    /**
+     * [getVal 获取input控件的值
+     * @param  {[type]} obj  Dom容器对象
+     * @param  {[type]} name 控件name
+     * @return {[type]}
+     */
+    touristGroup.getVal = function(obj, name){
+        return obj.find("[name="+name+"]").val();
+    }
+
+
+
+
+
+
+
     exports.init = touristGroup.initModule;
     exports.updateTouristGroup = touristGroup.updateTouristGroup;
     exports.addTouristGroup = touristGroup.addTouristGroup;
