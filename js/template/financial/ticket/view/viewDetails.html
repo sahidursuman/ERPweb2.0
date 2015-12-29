@@ -4,7 +4,11 @@
             <tr>
                 <td class="th-border">应付类别</td>
                 <td class="th-border">发生业务</td>
-                <td class="th-border">金额</td>
+                <td class="th-border">单价</td>
+                <td class="th-border">数量</td>
+                <td class="th-border">优惠</td>
+                <td class="th-border">账面应付</td>
+                <td class="th-border">结算金额</td>
                 <td class="th-border">备注</td>
                 <td class="th-border">操作人</td>
                 <td class="th-border">操作时间</td>
@@ -15,7 +19,11 @@
             <tr>
                 <td>{{rs.receivableType}}</td>
                 <td>{{rs.businessType}}</td>
-                <td>{{rs.payDifferenceMoney}}</td>
+                <td>{{rs.price}}</td>
+                <td>{{rs.count}}</td>
+                <td>{{rs.reduceMoney}}</td>
+                <td>{{rs.needPayMoney}}</td>
+                <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.remark}}</td>
                 <td>{{rs.checkRealname}}</td>
                 <td>{{rs.checkTime}}</td>

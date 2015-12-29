@@ -7,6 +7,8 @@ define(function(require, exports){
 	var listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
 		listSearchTemplate = require("./view/search"),
+		addTemplate = require("./view/add"),
+		rule = require("./rule"),
 		menuKey = "financial_payment_details";
 
 	var Payment = {
@@ -66,12 +68,14 @@ define(function(require, exports){
 			$datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
 
-		$searchArea.find('.T-btn-search').on('click', function(event){
+		$searchArea.on('click',".T-btn-search",function(event){
 			event.preventDefault();
 			Payment.getTotal(0);
 			Payment.ajaxInit(0);
 		})
-		
+		.on('click',".T-btn-add",function(event){
+			Payment.addPayment();
+		});		
 	};
 	/**
 	 * 初始化搜索栏
@@ -148,7 +152,92 @@ define(function(require, exports){
 			payType : Payment.$tab.find('.T-search-payment').val()
 		}
 		return args;
-	}
+	};
+
+	Payment.addPayment = function(){
+		var html = addTemplate();
+		var addGuideLayer = layer.open({
+		    type: 1,
+		    title:"新增现金日记账",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '750px', //宽高
+		    zIndex:1028,
+		    content: html,
+		    scrollbar: false,
+		    success:function(){
+		    	var $container = $(".T-addPayment-container"),
+		    		$bankCount = $container.find(".T-choose-bankCount"),
+		    		$bankCountList = $container.find(".T-bankCount-list"),
+		    		validator = rule.check($container);
+
+		    	Tools.setDatePicker($container.find('.datepicker'));
+
+		    	$bankCount.one("click",function(){
+		    		var ListData = [],
+		    			listHtml = "";
+		    		for(var i=0;i<8;i++){
+		    			var json = {
+			    			count : "123 456 7890 1234" + i,
+			    			leftMoney : "22.00"
+			    		};
+			    		ListData.push(json);
+		    		}
+		    		if(ListData != null && ListData.length > 0){
+			            for(var j=0;j<ListData.length;j++){
+			                listHtml += "<li><div><label class='T-bankCount'>" + ListData[j].count + "</label>" +
+									"<label class='T-avilableMoney marginLeft-30'>余额：" + ListData[j].leftMoney + "</label></div></li>";
+			            }
+			        	$bankCountList.html(listHtml);
+			        }
+			        
+			        $bankCountList.find("li").on("click",function(){
+			    		var bankCount = $(this).find('.T-bankCount').text(),
+			    			avilableMoney = $(this).find('.T-avilableMoney').text();
+			    		$bankCount.find(".T-count").text(bankCount);
+			    		$bankCount.find(".T-money").text(avilableMoney);
+			    		$bankCountList.trigger("mouseleave");
+			    	});
+		    	});
+
+		    	$bankCountList.hide();
+		    	$container.on("click",".T-choose-bankCount",function(){
+		    		$bankCountList.show();
+		    	})
+		    	.on("mouseleave",".T-choose-bankCount",function(){
+		    		$bankCountList.hide(150);
+		    	});
+		    	
+		    	$container.on("click",".T-option",function(){
+		    		var $this = $(this);
+		    		if($this.hasClass('T-close-payment')){
+		    			layer.close(addGuideLayer);
+		    		} else if($this.hasClass('T-save-payment')){
+		    			if (!validator.form()) { return; }
+		    			Payment.submitPayment();
+		    		}
+		    	});
+		    }
+		});
+	};
+
+	Payment.submitPayment = function(){
+		var form = $(".T-addPayment-container .T-form").serialize();
+		$.ajax({
+			url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
+			type:"POST",
+			data:form,
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+						$(".T-addPayment-container .T-close-payment").trigger('click');
+						Payment.initModule();
+					});
+				}
+			}
+		});
+	};
+
 	// 暴露方法
 	exports.init = Payment.initModule;
 });

@@ -1,8 +1,10 @@
 {{each result as rs}}
-    <tr>
+    <tr><td>记账日期</td>
+        <td>业务类别</td>
         <td>{{rs.resourceName}}</td>
-        <td>{{if rs.receivableType}}{{rs.receivableType.name}}{{/if}}</td>
-        <td>{{if rs.businessType}}{{rs.businessType.name}}{{/if}}</td>
+        <td>主营业务收付类别</td>
+        <td>会计科目</td>
+        <td>凭证编号</td>
         <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
         {{if rs.moneyType == 0}}
         <td>{{rs.incomeDifferenceMoney}}</td>
@@ -11,6 +13,7 @@
         <td>-</td>
         <td>{{rs.payDifferenceMoney}}</td>
         {{/if}}
+        <td>银行账号</td>
         <td>{{rs.remark}}</td>
         <td>{{rs.user.realName}}</td>
         <td>{{rs.createTime}}</td>
