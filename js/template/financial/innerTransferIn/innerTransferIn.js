@@ -204,6 +204,7 @@ define(function(require,exports) {
 					    data.voucher = InnerTransferIn.saveJson.voucher || '';
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
+					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
 					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
@@ -538,7 +539,7 @@ define(function(require,exports) {
 			bankId:bankId,
 			voucher:voucher,
 			billTime:billTime,
-			sumRemark:$obj.find('select[name=sumRemark]').val(),
+			sumRemark:$obj.find('input[name=sumRemark]').val(),
 		};
 		$.ajax({
 			url:KingServices.build_url('account/innerTransferIn','automaticDown'),
@@ -553,6 +554,7 @@ define(function(require,exports) {
 				        InnerTransferIn.saveJson.voucher = voucher;
                         InnerTransferIn.saveJson.billTime = billTime;
                         InnerTransferIn.saveJson.bankNumber = bankNumber;
+                        InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
 						InnerTransferIn.btnSatus = 1;
 						console.log(InnerTransferIn.saveJson);
 						$data.autoAccount = 1;
