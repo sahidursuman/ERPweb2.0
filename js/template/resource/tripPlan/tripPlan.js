@@ -2292,7 +2292,7 @@ define(function(require, exports) {
 			for(var i=0; i<insur.length; i++){
 				if(tripPlan.getVal(insur.eq(i), "insuranceId")){
 					var insurJosn = {
-						id : tripPlan.getVal(insur.eq(i), "id"),
+						id : insur.eq(i).data('entity-arrangeid'),
 						insuranceId : tripPlan.getVal(insur.eq(i), "insuranceId"),
 						type : tripPlan.getVal(insur.eq(i), "type"),
 						typeId: tripPlan.getVal(insur.eq(i), "typeId"),
@@ -2312,7 +2312,7 @@ define(function(require, exports) {
 			for(var i=0; i<guide.length; i++){
 				if(tripPlan.getVal(guide.eq(i), "id")){
 					var guideJosn = {
-						id : tripPlan.getVal(guide.eq(i), "id"),
+						id : guide.eq(i).data('entity-arrangeid'),
 						price : tripPlan.getVal(guide.eq(i), "guideFee"),
 						manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
 						remark : tripPlan.getVal(guide.eq(i), "remark"),
@@ -2327,7 +2327,7 @@ define(function(require, exports) {
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "id")){
 					var busJson = {
-						id : tripPlan.getVal(bus.eq(i), "id"),
+						id : bus.eq(i).data('entity-arrangeid'),
 						price : tripPlan.getVal(bus.eq(i), "price"),
 						reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
@@ -2358,7 +2358,7 @@ define(function(require, exports) {
 				}}
 				if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 					var restaurantJson = {
-						id : tripPlan.getVal(restaurant.eq(i), "id"),
+						id : restaurant.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(restaurant.eq(i), "whichDay"),
 						restaurantId : tripPlan.getVal(restaurant.eq(i), "restaurantId"),
 						restaurantStandardId : tripPlan.getVal(restaurant.eq(i), "restaurantStandardId"),
@@ -2384,7 +2384,7 @@ define(function(require, exports) {
 			for(var i=0; i<hotel.length; i++){
 				if(tripPlan.getVal(hotel.eq(i), "hotelId")){
 					var hotelJson = {
-						id : tripPlan.getVal(hotel.eq(i), "id"),
+						id : hotel.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(hotel.eq(i), "whichDay"),
 						hotelId : tripPlan.getVal(hotel.eq(i), "hotelId"),
 						hotelRoomId : tripPlan.getVal(hotel.eq(i), "hotelRoomId"),
@@ -2408,7 +2408,7 @@ define(function(require, exports) {
 			for(var i=0; i<scenic.length; i++){
 				if(tripPlan.getVal(scenic.eq(i), "scenicId")){
 					var scenicJson = {
-						id : tripPlan.getVal(scenic.eq(i), "id"),
+						id : scenic.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(scenic.eq(i), "whichDay"),
 						scenicId : tripPlan.getVal(scenic.eq(i), "scenicId"),
 						scenicItemId : tripPlan.getVal(scenic.eq(i), "chargingId"),
@@ -2435,7 +2435,7 @@ define(function(require, exports) {
 			for(var i=0; i<shop.length; i++){
 				if(tripPlan.getVal(shop.eq(i), "shopId")){
 					var shopJson = {
-						id : tripPlan.getVal(shop.eq(i), "id"),
+						id : shop.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(shop.eq(i), "whichDay"),
 						shopId : tripPlan.getVal(shop.eq(i), "shopId"),
 						shopPolicyId :tripPlan.getVal(shop.eq(i), "shopPolicyId"),
@@ -2452,7 +2452,7 @@ define(function(require, exports) {
 			for(var i=0; i<selfPay.length; i++){
 				if(tripPlan.getVal(selfPay.eq(i), "selfPayId")){
 					var selfPayJson = {
-						id : tripPlan.getVal(selfPay.eq(i), "id"),
+						id : selfPay.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(selfPay.eq(i), "whichDay"),
 						selfPayId : tripPlan.getVal(selfPay.eq(i), "selfPayId"),
 						selfPayItemId : tripPlan.getVal(selfPay.eq(i), "selfitemId"),
@@ -2477,7 +2477,7 @@ define(function(require, exports) {
 			for(var i=0; i<ticket.length; i++){
 				if(tripPlan.getVal(ticket.eq(i), "tickeId")){
 					var ticketJson = {
-						id : tripPlan.getVal(ticket.eq(i), "id"),
+						id : ticket.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(ticket.eq(i), "whichDay"),
 						ticketId : tripPlan.getVal(ticket.eq(i), "tickeId"),
 						type : tripPlan.getVal(ticket.eq(i), "type"),
@@ -2506,7 +2506,7 @@ define(function(require, exports) {
 			for(var i=0; i<other.length; i++){
 				if(tripPlan.getVal(other.eq(i), "whichDay")){
 					var otherJson = {
-						id : tripPlan.getVal(other.eq(i), "id"),
+						id : other.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(other.eq(i), "whichDay"),
 						managerName : tripPlan.getVal(other.eq(i), "managerName"),
 						mobileNumber : tripPlan.getVal(other.eq(i), "mobileNumber"),
