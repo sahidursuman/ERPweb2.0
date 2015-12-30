@@ -6,7 +6,6 @@
 				<select name="moneyType" class="col-sm-12">
 					<option value="0">收入</option>
 					<option value="1">支出</option>
-					<option value="2">转账</option>
 				</select>
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">对方单位：</label> 
@@ -47,7 +46,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
 			<div class="col-sm-2">
-				<select name="subjectId" class="col-sm-12 T-subject">
+				<select name="subjectId" class="col-sm-12 T-option T-subject">
 					{{each subjectdata as sub}}
 					<option value="{{sub.id}}">{{sub.subjectName}}</option>
 					{{/each}}

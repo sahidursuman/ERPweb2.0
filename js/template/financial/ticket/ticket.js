@@ -613,7 +613,10 @@ define(function(require, exports) {
                 ticketId: Ticket.clearingId,
                 sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
                 payType: $tab.find('.T-sumPayType').val(),
-                payRemark: $tab.find('.T-sumRemark').val()
+                payRemark: $tab.find('.T-sumRemark').val(),
+                bankId : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
 			}
             $.ajax({
                     url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
