@@ -388,7 +388,15 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
+                	var bankId = $tab.find('input[name=card-id]').val();
+					var voucher = $tab.find('input[name=credentials-number]').val();
+					var billTime = $tab.find('input[name=tally-date]').val();
+					var bankNumber = $tab.find('input[name=card-number]').val();
                     Replace.payingJson = data.bookingAccountList;
+                    Replace.payingJson.bankId = bankId;
+                    Replace.payingJson.voucher = voucher;
+                    Replace.payingJson.billTime = billTime;
+                    Replace.payingJson.bankNumber = bankNumber;
 					$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                     Replace.setAutoFillEdit($tab, true);
                 }
@@ -709,7 +717,9 @@ define(function(require, exports) {
 	Replace.savePayingData = function($tab, tabArgs){
 		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
-
+		var bankId = $tab.find('input[name=card-id]').val();
+		var voucher = $tab.find('input[name=credentials-number]').val();
+		var billTime = $tab.find('input[name=tally-date]').val();		
 		if (json.length) {
             $.ajax({
                     url: KingServices.build_url('financial/bookingAccount', 'receiveBookingAccount'),
@@ -718,6 +728,9 @@ define(function(require, exports) {
                         reciveAccountList: JSON.stringify(json),
                         partnerAgencyId: Replace.balanceId,
                         payType: $tab.find('.T-sumPayType').val(),
+                        bankId:bankId,
+                        voucher:voucher,
+                        billTime:billTime,
                         remark: $tab.find('.T-sumRemark').val()
                     },
                 })
