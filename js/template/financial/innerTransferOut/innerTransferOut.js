@@ -246,8 +246,8 @@ define(function(require,exports) {
 	                                    sumPayMoney : sumPayMoney,
 	                                    sumPayType : sumPayType,
 	                                    sumPayRemark : sumPayRemark
-	                                }
-									InnerTransferOut.settlement(obj.curr -1);
+	                                };
+									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
                                 	InnerTransferOut.chenking(obj.curr -1);
                                 }
@@ -296,7 +296,7 @@ define(function(require,exports) {
 				InnerTransferOut.chenking(0);
 			}else{
 				$obj.data('isEdited', false);
-				InnerTransferOut.settlement($data);
+				InnerTransferOut.settlement($data,0);
 			}
 		});
 		//导出报表事件
@@ -610,7 +610,7 @@ define(function(require,exports) {
 	};
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && arguments.length === 1){
+		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
 			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
 			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
 			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
