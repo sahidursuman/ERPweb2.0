@@ -812,11 +812,6 @@ select {
 .globalAdd .editFeeMainForm input {
     padding: 0px 0px 0px 10px;
 }
-
-.checkbox {
-    line-height: 12px;
-}
-
 .addressMinute {
     width: 612px !important;
 }
@@ -2068,4 +2063,24 @@ p#back-top a span {
 }
 .tripplan-area .fa-times {
     color: red;
+}
+
+.info > .row {
+    margin-top: 10px;
+}
+
+.base-title {
+    margin: 0;
+    border-bottom: 1px solid #f4f4f4;
+    color: #428bca;
+    font-weight: bold;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+.fix-w-4 {
+    display: inline-block;
+    margin-right: 5px;
+    width: 57px;
+    text-align: right;
 }

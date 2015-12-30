@@ -122,12 +122,20 @@ define(function(require, exports) {
 								errMsg: '房型不能为空'
 							}
 						]
-					},{//房型
+					},{
 						$ele: $that.find('input[name="startTime"]'),
 						rules: [
 							{
 								type: 'null',
-								errMsg: '日期不能为空'
+								errMsg: '开始日期不能为空'
+							}
+						]
+					},{
+						$ele: $that.find('input[name="endTime"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '结束日期不能为空'
 							}
 						]
 					}

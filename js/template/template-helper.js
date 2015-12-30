@@ -1,4 +1,6 @@
 template.helper("dateFormat", function(date, fmt) {
+    if (!date) return '';
+
     date = date.split('-').join('/');
     date = new Date(date);
     var o = {
@@ -103,4 +105,37 @@ template.helper("getArrangeIcon", function(status) {
         default:
             return 'fa-minus';
     }
+});
+template.helper("getRestaurantDesc", function(status) {
+    var res = '', i = 0;
+
+    if (!!status) {
+        status = status.split(',');
+        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>早餐&nbsp;';
+        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>中餐&nbsp;';
+        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>晚餐&nbsp;';
+    }
+    
+    return res;
+});
+template.helper("getTaskDesc", function(status) {
+    switch (status * 1) {
+        case 1:     return '接机';
+        case 2:     return '送机';
+        case 3:     return '前段';
+        case 4:     return '中段';
+        case 5:     return '后段';
+        default:     return '全程';
+    }
+});
+template.helper("getTaskSelect", function(status) {
+    var str = ['<select name="taskType">'],
+        desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
+   
+    for (var i = 0, len = desc.length;i < len; i ++) {
+        str.push('<option value="'+ i + '" '+ (status == i?'selected': '')+'>'+ desc[i] +'</option>');
+    }
+    str.push('</select>');
+
+    return str.join('');
 });
