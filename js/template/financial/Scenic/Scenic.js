@@ -145,6 +145,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     var fhList = data.financialScenicListData;
+                    data.financialScenicListData = FinancialService.isGuidePay(fhList);
                     data.scenicName = scenicName;
                     var html = scenicChecking(data);
                     
@@ -294,6 +295,7 @@ define(function(require, exports) {
                     }
                     data.isOuter = scenic.isOuter = !!isOuter || scenic.isOuter;
                     var resultList = data.financialScenicListData;
+                    data.financialScenicListData = FinancialService.isGuidePay(resultList);
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
                     var html = scenicClearing(data);
                     
