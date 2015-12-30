@@ -20,16 +20,17 @@ FinancialService.initPayEvent = function($container)  {
     }).one("click", function(){
         var $that = $(this);
         $.ajax({
-            url:KingServices.build_url("bookingOrder","getSeatCountList"),
+            url:KingServices.build_url('financialIncomeOrPay','getBankList'),
             showLoading:false,
             success:function(data){
                 if(showDialog(data)){
                     var cardNumberJson = [];
-                    var cardNumberList = data.cardNumberList;
-                    if(cardNumberList && cardNumberList.length > 0){
-                        for(var i=0; i < cardNumberList.length; i++){
+                    var bankList = data.bankList;
+                    if(bankList && bankList.length > 0){
+                        for(var i=0; i < bankList.length; i++){
                             var seatCount = {
-                                value : cardNumberList[i]
+                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
+                                id: bankList[i].id
                             }
                             cardNumberJson.push(seatCount);
                         }
@@ -44,6 +45,9 @@ FinancialService.initPayEvent = function($container)  {
                 }
             }
         })
+    })
+    .on('click', function() {
+        $(this).autocomplete('search', '');
     });
 
     $container.find('select').on('change', function(event) {
