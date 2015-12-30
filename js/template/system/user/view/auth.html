@@ -41,7 +41,7 @@
 								{{/if}}
 								<tr class="T-submenu" data-id="{{submenu.id}}">
 									<td><input type="checkbox" class="ace T-submenu-check T-submenu-id{{submenu.id}}"/><span class="lbl"></span>{{submenu.name}}</td>
-										{{if submenu.id == 95}}<!-- 内转管理权限范围屏蔽 -->
+										{{if submenu.id == 95 || submenu.id == 93 || submenu.id == 92}}<!-- 内转管理、内转转出、内转转入权限范围屏蔽 -->
 											<td width="80">-</td>
 											<td width="80">-</td>
 										{{else}}
