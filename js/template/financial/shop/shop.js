@@ -566,7 +566,7 @@ define(function(require, exports){
 						$tab.find('.T-checkTr').on('change', function(){
 							$(this).data('change', 'true');
 						});
-						FinShop.initOperationEvent($tab, 1);
+						//FinShop.initOperationEvent($tab, 1);
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-btn-save').data('pageNo', args.pageNo);
