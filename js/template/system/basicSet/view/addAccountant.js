@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":14,"md5":"4fad0f72b11bceb3eb861272e326148b"}*/
+define(function(require) {
+    return require("../../../template")("system/basicSet/view/addAccountant", '<div class="col-xs-12"> <form class="form-horizontal T-add-form" role="form" style="margin-top:50px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>科目名称:</label> <div class="col-sm-6"> <input type="text" name="subjectName" class="col-sm-12" /> </div> </div> <div class="space-10"></div> <button class="btn btn-block btn-primary T-submit"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> </form> </div> ');
+});
