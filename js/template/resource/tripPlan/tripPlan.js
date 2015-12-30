@@ -2310,36 +2310,32 @@ define(function(require, exports) {
 		var guide = $("#tripPlan_addPlan_guide tbody tr");
 		if(guide.length > 0){
 			for(var i=0; i<guide.length; i++){
-				if(tripPlan.getVal(guide.eq(i), "id")){
-					var guideJosn = {
-						id : guide.eq(i).data('entity-arrangeid'),
-						price : tripPlan.getVal(guide.eq(i), "guideFee"),
-						manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
-						remark : tripPlan.getVal(guide.eq(i), "remark"),
-					}
-					tripPlanJson.guideArrange = guideJosn;
+				var guideJosn = {
+					id : guide.eq(i).data('entity-arrangeid'),
+					price : tripPlan.getVal(guide.eq(i), "guideFee"),
+					manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
+					remark : tripPlan.getVal(guide.eq(i), "remark"),
 				}
+				tripPlanJson.guideArrange = guideJosn;
 			}
 		}
 		//旅游车安排
 		var bus = $("#tripPlan_addPlan_bus tbody tr");
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
-				if(tripPlan.getVal(bus.eq(i), "id")){
-					var busJson = {
-						id : bus.eq(i).data('entity-arrangeid'),
-						price : tripPlan.getVal(bus.eq(i), "price"),
-						reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
-						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
-						needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
-						// payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
-						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
-					}
-					tripPlanJson.busCompanyArrange = busJson;
-					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
+				var busJson = {
+					id : bus.eq(i).data('entity-arrangeid'),
+					price : tripPlan.getVal(bus.eq(i), "price"),
+					reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
+					contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
+					needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
+					// payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
+					guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
+					remark : tripPlan.getVal(bus.eq(i), "remark"),
+					orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 				}
+				tripPlanJson.busCompanyArrange = busJson;
+				guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 			}
 		}
 		//餐安排
