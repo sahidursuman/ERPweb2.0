@@ -198,7 +198,7 @@ define(function(require, exports) {
                 OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
-                OtherAccounts.viewhandle(id);
+                OtherAccounts.viewOrderDetail(id);
             }
         });
         //时间控件
@@ -459,7 +459,7 @@ define(function(require, exports) {
                 id = $tr.data('id');
             if ($that.hasClass('T-lookPay')) {
                 // 查看已付明细
-                OtherAccounts.ViewAmountPaid(id);
+                OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
                 var bigImg = $PaymentTabId.find('input[name=WEB_IMG_URL_BIG]').val();
@@ -688,63 +688,7 @@ define(function(require, exports) {
                 }
             }
         })
-
     };
-
-    //应付金额明细a-2
-    OtherAccounts.viewhandle = function(id) {
-            $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "getReconciliationDetails"),
-                type: "POST",
-                data: {
-                    id: id
-                },
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var html = viewhandleTemplate(data);
-                        var lookDetailLayer = layer.open({
-                            type: 1,
-                            title: "应付金额明细",
-                            skin: 'layui-layer-rim', //加上边框
-                            area: '1000px', //宽高
-                            zIndex: 1028,
-                            content: html,
-                            scrollbar: false,
-
-                        });
-                    }
-                }
-            })
-
-        }
-        //已付金额明细b-1
-    OtherAccounts.ViewAmountPaid = function(id) {
-            $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "getPaymentDetails"),
-                type: "POST",
-                data: {
-                    id: id
-                },
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var html = ViewAmountPaidTemplate(data);
-                        var lookDetailLayer = layer.open({
-                            type: 1,
-                            title: "已付金额明细",
-                            skin: 'layui-layer-rim', //加上边框
-                            area: '55%', //宽高
-                            zIndex: 1028,
-                            content: html,
-                            scrollbar: false,
-                        });
-                    }
-
-                }
-            })
-
-        }
         //应付金额明细b-2
     OtherAccounts.viewOrderDetail = function(id) {
         $.ajax({
