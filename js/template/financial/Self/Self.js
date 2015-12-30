@@ -238,6 +238,10 @@ define(function(require, exports) {
                         data.sumPayMoney = Self.clearTempSumDate.sumPayMoney;
                         data.sumPayType = Self.clearTempSumDate.sumPayType;
                         data.sumPayRemark = Self.clearTempSumDate.sumPayRemark;
+                        data.bankNo = Self.clearTempSumDate.bankNo;
+                        data.bankId = Self.clearTempSumDate.bankId;
+                        data.voucher = Self.clearTempSumDate.voucher;
+                        data.billTime = Self.clearTempSumDate.billTime;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
@@ -261,6 +265,7 @@ define(function(require, exports) {
                         Self.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Self.$clearTab.data('isEdited',true);
+                            Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Self.$clearTab.find(".T-cancel-auto").hide();
                         }
@@ -282,13 +287,16 @@ define(function(require, exports) {
                                 Self.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark
+                                    sumPayRemark : sumPayRemark,
+                                    bankNo : Self.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                                    voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
+                                    billTime : Self.$clearTab.find('input[name=tally-date]').val()
                                 }
                                 Self.GetClear(isAutoPay,obj.curr -1,selfId,selfName);
                             }
                         }
                     });
-
                 }
             }
         })
@@ -345,7 +353,7 @@ define(function(require, exports) {
                         selfPayId : id,
                         autoPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
                         payType : Self.$clearTab.find('select[name=sumPayType]').val(),
-                        payRemark : Self.$clearTab.find('input[name=payRemark]').val(),
+                        payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val(),
                         accountTimeStart :startDate,
                         accountTimeEnd : endDate,
                         tripInfo : Self.$clearTab.find('select[name=tripInfo]').val()
@@ -360,7 +368,11 @@ define(function(require, exports) {
                             Self.clearTempSumDate = {
                                 sumPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
                                 sumPayType : Self.$clearTab.find('select[name=sumPayType]').val(),
-                                sumPayRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
+                                sumPayRemark : Self.$clearTab.find('input[name=sumPayRemark]').val(),
+                                bankNo : Self.$clearTab.find('input[name=card-number]').val(),
+                                bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                                voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
+                                billTime : Self.$clearTab.find('input[name=tally-date]').val()
                             };
                             Self.GetClear(1,0,id,name);
                         }
@@ -531,7 +543,10 @@ define(function(require, exports) {
                 selfPayPaymentJson : clearSaveJson,
                 selfPayId : id,
                 payType : Self.$clearTab.find('select[name=sumPayType]').val(),
-                payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val()
+                payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val(),
+                bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
+                billTime : Self.$clearTab.find('input[name=tally-date]').val()
             },
             success:function(data){
                 var result = showDialog(data);

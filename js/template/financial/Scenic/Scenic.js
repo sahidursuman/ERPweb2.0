@@ -277,16 +277,17 @@ define(function(require, exports) {
                         scenic.$clearTab.find(".T-cancel-auto").toggle();
                         scenic.$clearTab.data('isEdited', false);
                         scenic.clearTempData = data.autoPaymentJson;
-                        scenic.clearTempSumDate = {
-                            sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                            sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val()
-                        };
                     }
 
                     //暂存数据读取
                     if(scenic.clearTempSumDate){
                         data.sumPayMoney = scenic.clearTempSumDate.sumPayMoney;
                         data.sumPayType = scenic.clearTempSumDate.sumPayType;
+                        data.sumPayRemark = scenic.clearTempSumDate.sumPayRemark;
+                        data.bankNo = scenic.clearTempSumDate.bankNo;
+                        data.bankId = scenic.clearTempSumDate.bankId;
+                        data.voucher = scenic.clearTempSumDate.voucher;
+                        data.billTime = scenic.clearTempSumDate.billTime;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
@@ -307,6 +308,7 @@ define(function(require, exports) {
                             scenic.$clearTab.find(".T-clear-auto").hide(); 
                             scenic.$clearTab.find(".T-cancel-auto").show();
                             scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
+                            scenic.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else {
                             scenic.$clearTab.find(".T-clear-auto").show(); 
                             scenic.$clearTab.find(".T-cancel-auto").hide();
@@ -326,7 +328,12 @@ define(function(require, exports) {
                                         sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
                                     scenic.clearTempSumDate = {
                                         sumPayMoney : sumPayMoney,
-                                        sumPayType : sumPayType
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
+                                        bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : scenic.$clearTab.find('input[name=tally-date]').val()
                                     }
                                     scenic.scenicClear(isAutoPay,obj.curr-1,scenicId,scenicName);
                                 }
@@ -378,7 +385,17 @@ define(function(require, exports) {
 
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
-            FinancialService.autoPayConfirm(startDate, endDate, function() {
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
+                scenic.clearTempSumDate = {
+                    id : id,
+                    sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                    sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
+                    bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
+                    bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                    voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
+                    billTime : scenic.$clearTab.find('input[name=tally-date]').val()
+                };
                 scenic.scenicClear(1,page,null,name);
             });
         });
@@ -540,10 +557,13 @@ define(function(require, exports) {
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
             searchParam = {
-                        sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                        payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
-                        payRemark : scenic.$clearTab.find('input[name=sumPayRemark]').val()
-                    };
+                sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                payRemark : scenic.$clearTab.find('input[name=remark]').val(),
+                bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
+                billTime : scenic.$clearTab.find('input[name=tally-date]').val()
+            };
 
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),

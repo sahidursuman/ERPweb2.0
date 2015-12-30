@@ -376,7 +376,10 @@ define(function(require, exports) {
 
     	//保存按钮事件绑定
     	$container.find(".T-saveAuth").click(function(){
-    		user.saveAuth(data.user.id,data.user.userName);
+    		if(!$(this).data("click")){
+    			$(this).data("click",true);
+    			user.saveAuth(data.user.id,data.user.userName);
+    		}
     	});
 	};
 

@@ -276,6 +276,11 @@ define(function(require, exports){
             $tab.data('isEdited', true);
         });
 
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+            FinShop.initOperationEvent($tab,type);
+		});
+
 		if(type){
 			var autoValidator = (new FinRule(2)).check($tab);
 			FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
