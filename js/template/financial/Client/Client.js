@@ -206,6 +206,11 @@ define(function(require, exports) {
         var id = $tab.find('.T-btn-save').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
+        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             Client.ClientCheck(Client.checkPageNo, false, $tab);
@@ -239,7 +244,6 @@ define(function(require, exports) {
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            $tab.data('isEdited', false);
             Client.ClientCheck(0, false, $tab);
         });
 

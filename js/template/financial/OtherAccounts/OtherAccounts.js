@@ -230,21 +230,24 @@ define(function(require, exports) {
                 }
                 Ticket.CheckConfirm($checkTab);
             });
+        $checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            event.preventDefault();
+            OtherAccounts.initCheckEvent(data);
+        });
 
         //监听关闭tab
         $checkTab.find(".T-closeTab").on('click', function(event) {
-            alert();
             event.preventDefault();
             if (!!$checkTab.data('isEdited')) {
                 showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    Ticket.CheckConfirm($checkTab);
+                    OtherAccounts.CheckConfirm($checkTab);
                 }, function() {
                     Tools.closeTab(checkMenuKey);
-                    Ticket.getList(Ticket.listPageNo);
+                    OtherAccounts.listFinancialOtherAccounts(0);
                 });
             } else {
                 Tools.closeTab(checkMenuKey);
-                Ticket.getList(Ticket.listPageNo);
+                OtherAccounts.listFinancialOtherAccounts(0);
             }
         });
 
