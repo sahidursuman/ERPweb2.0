@@ -259,7 +259,8 @@ define(function(require,exports) {
 	                                    sumPayRemark : sumPayRemark
 	                                }
 						    	}  // 避免死循环，第一次进入，不调用页面方法
-						    		InnerTransferIn.chenking(obj.curr -1);
+						    		args.pageNo = obj.curr -1;
+						    		InnerTransferIn.chenking(args,typeFlag,tab);
 								}
 						    }
 						});
@@ -316,8 +317,6 @@ define(function(require,exports) {
 				//自动计算本次收款金额
 				InnerTransferIn.autoSumIncomeMoney($obj);
 			});
-
-			FinancialService.initPayEvent($obj.find('.T-summary'));
 		}else{
 			$obj.find('.T-checkList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
