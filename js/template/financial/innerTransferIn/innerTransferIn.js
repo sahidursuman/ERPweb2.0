@@ -193,7 +193,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-               
 				    data.searchParam = $listSearchData;
 				    data.btnShowStatus = args.btnShowStatus;
 				    var title,
@@ -201,6 +200,11 @@ define(function(require,exports) {
 				    	html,
 				    	tempLate;
 				    if(typeFlag == 2 || tab =="settle" || args.autoAccount == 1){
+				    	data.bankNumber = InnerTransferIn.saveJson.bankNumber || '';
+					    data.voucher = InnerTransferIn.saveJson.voucher || '';
+					    data.billTime = InnerTransferIn.saveJson.billTime || '';
+					    data.bankId = InnerTransferIn.saveJson.bankId || '';
+					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -346,10 +350,8 @@ define(function(require,exports) {
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
-			$obj.find('input[name=card-number]').val(InnerTransferIn.saveJson.bankNumber);
-			$obj.find('input[name=credentials-number]').val(InnerTransferIn.saveJson.voucher);
-			$obj.find('input[name=tally-date]').val(InnerTransferIn.saveJson.billTime);
-			$obj.find('input[name=card-id]').val(InnerTransferIn.saveJson.bankId);
+			$obj.find('select[name=sumPayType]').val(1);
+			$obj.find('input[name=card-number]').closest('div').removeClass('hidden');
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
