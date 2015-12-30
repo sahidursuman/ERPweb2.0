@@ -193,7 +193,6 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-               
 				    data.searchParam = $listSearchData;
 				    data.btnShowStatus = args.btnShowStatus;
 				    var title,
@@ -201,6 +200,12 @@ define(function(require,exports) {
 				    	html,
 				    	tempLate;
 				    if(typeFlag == 2 || tab =="settle" || args.autoAccount == 1){
+				    	data.bankNumber = InnerTransferIn.saveJson.bankNumber || '';
+					    data.voucher = InnerTransferIn.saveJson.voucher || '';
+					    data.billTime = InnerTransferIn.saveJson.billTime || '';
+					    data.bankId = InnerTransferIn.saveJson.bankId || '';
+					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
+					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -253,9 +258,17 @@ define(function(require,exports) {
 	                                var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
 	                                    sumPayType = parseFloat($obj.find('select[name=sumPayType]').val()),
 	                                    sumPayRemark = $obj.find('input[name=sumRemark]').val();
+	                                    var bankId = $obj.find('input[name=card-id]').val();
+										var voucher = $obj.find('input[name=credentials-number]').val();
+										var billTime = $obj.find('input[name=tally-date]').val();
+										var bankNumber = $obj.find('input[name=card-number]').val();
 	                                InnerTransferIn.saveJson = {
 	                                    sumPayMoney : sumPayMoney,
 	                                    sumPayType : sumPayType,
+	                                    bankId:bankId,
+	                                    voucher:voucher,
+	                                    billTime:billTime,
+	                                    bankNumber:bankNumber,
 	                                    sumPayRemark : sumPayRemark
 	                                }
 						    	}  // 避免死循环，第一次进入，不调用页面方法
@@ -338,6 +351,8 @@ define(function(require,exports) {
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
+			$obj.find('select[name=sumPayType]').val(1);
+			$obj.find('input[name=card-number]').closest('div').removeClass('hidden');
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
@@ -507,6 +522,10 @@ define(function(require,exports) {
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
+		var bankId = $obj.find('input[name=card-id]').val();
+		var voucher = $obj.find('input[name=credentials-number]').val();
+		var billTime = $obj.find('input[name=tally-date]').val();
+		var bankNumber = $obj.find('input[name=card-number]').val();
 		var args = {
 			lineProductId:$obj.find('input[name=lineProductId]').val(),
 			lineProductName:$obj.find('input[name=lineProductName]').val(),
@@ -517,7 +536,10 @@ define(function(require,exports) {
 			receiveUserId:$obj.find('input[name=receiveUserId]').val(),
 			receiveUserName:$obj.find('input[name=receiveUserName]').val(),
 			payType:$obj.find('select[name=sumPayType]').val(),
-			sumRemark:$obj.find('select[name=sumRemark]').val(),
+			bankId:bankId,
+			voucher:voucher,
+			billTime:billTime,
+			sumRemark:$obj.find('input[name=sumRemark]').val(),
 		};
 		$.ajax({
 			url:KingServices.build_url('account/innerTransferIn','automaticDown'),
@@ -527,8 +549,14 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						InnerTransferIn.saveJson = data
+						InnerTransferIn.saveJson = data;
+						InnerTransferIn.saveJson.bankId = bankId;
+				        InnerTransferIn.saveJson.voucher = voucher;
+                        InnerTransferIn.saveJson.billTime = billTime;
+                        InnerTransferIn.saveJson.bankNumber = bankNumber;
+                        InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
 						InnerTransferIn.btnSatus = 1;
+						console.log(InnerTransferIn.saveJson);
 						$data.autoAccount = 1;
 						$obj.data('isEdited', false);
 						InnerTransferIn.chenking($data,2,"settle");
@@ -755,7 +783,10 @@ define(function(require,exports) {
 		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,settleValidator);
 		var payType = tab_id.find('select[name=sumPayType]').val();
-		var sumRemark = tab_id.find('name[name=sumRemark]').val();
+		var sumRemark = tab_id.find('input[name=sumRemark]').val();
+		var bankId = tab_id.find('input[name=card-id]').val();
+		var voucher = tab_id.find('input[name=credentials-number]').val();
+		var billTime = tab_id.find('input[name=tally-date]').val();
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferIn','saveReceivables'),
@@ -763,6 +794,9 @@ define(function(require,exports) {
             data:{
             	receivables:JsonStr,
             	payType:payType,
+            	bankId:bankId,
+            	voucher:voucher,
+            	billTime:billTime,
             	remark:sumRemark
             },
             success:function(data){

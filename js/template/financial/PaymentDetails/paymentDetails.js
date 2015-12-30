@@ -32,7 +32,7 @@ define(function(require, exports){
 		data = {
 			searchParam : args
 		};
-		Tools.addTab(menuKey, "收支明细", listTemplate(data));
+		Tools.addTab(menuKey, "现金日记", listTemplate(data));
 		Payment.$tab = $('#tab-' + menuKey + '-content');
 		Payment.getTotal(args);
 		Payment.ajaxInit(args);
@@ -93,7 +93,7 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			data.payTypeList = ['现金', '银行转账', '网上支付', '支票', '其它'];
+			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
 			var html = listSearchTemplate(data);
 			Payment.$tab.find('.T-search-area').html(html);
 			Payment.init_event(Payment.$tab);
@@ -155,75 +155,71 @@ define(function(require, exports){
 	};
 
 	Payment.addPayment = function(){
-		var html = addTemplate();
-		var addGuideLayer = layer.open({
-		    type: 1,
-		    title:"新增现金日记账",
-		    skin: 'layui-layer-rim', //加上边框
-		    area: '750px', //宽高
-		    zIndex:1028,
-		    content: html,
-		    scrollbar: false,
-		    success:function(){
-		    	var $container = $(".T-addPayment-container"),
-		    		$bankCount = $container.find(".T-choose-bankCount"),
-		    		$bankCountList = $container.find(".T-bankCount-list"),
-		    		validator = rule.check($container);
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","addIncomeorPay"),
+			type:"POST",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var html = addTemplate(data);
+					var addGuideLayer = layer.open({
+					    type: 1,
+					    title:"新增现金日记账",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '750px', //宽高
+					    zIndex:1028,
+					    content: html,
+					    scrollbar: false,
+					    success:function(){
+					    	var $container = $(".T-addPayment-container"),
+					    		$bankCount = $container.find(".T-choose-bankCount"),
+					    		$bankCountList = $container.find(".T-bankCount-list"),
+					    		validator = rule.check($container);
 
-		    	Tools.setDatePicker($container.find('.datepicker'));
+					    	Tools.setDatePicker($container.find('.datepicker'));
 
-		    	$bankCount.one("click",function(){
-		    		var ListData = [],
-		    			listHtml = "";
-		    		for(var i=0;i<8;i++){
-		    			var json = {
-			    			count : "123 456 7890 1234" + i,
-			    			leftMoney : "22.00"
-			    		};
-			    		ListData.push(json);
-		    		}
-		    		if(ListData != null && ListData.length > 0){
-			            for(var j=0;j<ListData.length;j++){
-			                listHtml += "<li><div><label class='T-bankCount'>" + ListData[j].count + "</label>" +
-									"<label class='T-avilableMoney marginLeft-30'>余额：" + ListData[j].leftMoney + "</label></div></li>";
-			            }
-			        	$bankCountList.html(listHtml);
-			        }
-			        
-			        $bankCountList.find("li").on("click",function(){
-			    		var bankCount = $(this).find('.T-bankCount').text(),
-			    			avilableMoney = $(this).find('.T-avilableMoney').text();
-			    		$bankCount.find(".T-count").text(bankCount);
-			    		$bankCount.find(".T-money").text(avilableMoney);
-			    		$bankCountList.trigger("mouseleave");
-			    	});
-		    	});
+					    	$bankCountList.find("li").on("click",function(){
+					    		var bankId = $(this).data("id"),
+					    			bankCount = $(this).find('.T-bankCount').text(),
+					    			avilableMoney = $(this).find('.T-avilableMoney').text();
+					    		$bankCount.find("input[name=bankId]").val(bankId);
+					    		$bankCount.find(".T-count").text(bankCount);
+					    		$bankCount.find(".T-money").text(avilableMoney);
+					    		$bankCountList.trigger("mouseleave");
+					    	});
 
-		    	$bankCountList.hide();
-		    	$container.on("click",".T-choose-bankCount",function(){
-		    		$bankCountList.show();
-		    	})
-		    	.on("mouseleave",".T-choose-bankCount",function(){
-		    		$bankCountList.hide(150);
-		    	});
-		    	
-		    	$container.on("click",".T-option",function(){
-		    		var $this = $(this);
-		    		if($this.hasClass('T-close-payment')){
-		    			layer.close(addGuideLayer);
-		    		} else if($this.hasClass('T-save-payment')){
-		    			if (!validator.form()) { return; }
-		    			Payment.submitPayment();
-		    		}
-		    	});
-		    }
+					    	$bankCountList.hide();
+					    	$container.on("click",".T-choose-bankCount",function(){
+					    		$bankCountList.show();
+					    	})
+					    	.on("mouseleave",".T-choose-bankCount",function(){
+					    		$bankCountList.hide(150);
+					    	})
+					    	.on("click",".T-option",function(){
+					    		var $this = $(this);
+					    		if($this.hasClass('T-close-payment')){
+					    			layer.close(addGuideLayer);
+					    		} else if($this.hasClass('T-save-payment')){
+					    			if (!validator.form()) { return; }
+					    			Payment.submitPayment();
+					    		}
+					    	})
+					    	.on("click",".T-subject",function(){
+					    		var subjectName = $(this).find("option:selected").text();
+					    		$container.find('input[name=subjectName]').val(subjectName);
+					    	});
+					    }
+					});
+				}
+			}
 		});
+		
 	};
 
 	Payment.submitPayment = function(){
 		var form = $(".T-addPayment-container .T-form").serialize();
 		$.ajax({
-			url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
+			url:KingServices.build_url("financialIncomeOrPay","saveIncomeorPay"),
 			type:"POST",
 			data:form,
 			success:function(data){

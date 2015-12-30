@@ -3,7 +3,7 @@ define(function(require, exports) {
 		check:function($obj){
 			var validator = $obj.formValidate([
 	    	    {	//记账金额
-	    	    	$ele: $obj.find('input[name="addMoney"]'),
+	    	    	$ele: $obj.find('input[name="incomeMoney"]'),
 	    	    	rules: [
     	    	        {
     	    	        	type: 'null', 
@@ -16,7 +16,7 @@ define(function(require, exports) {
 	    	        ]
 	    	    },
 	    	    {	//记账日期
-	    	    	$ele: $obj.find('input[name="paymentTime"]'),
+	    	    	$ele: $obj.find('input[name="billTime"]'),
 	    	    	rules: [
     	    	        {
     	    	        	type: 'null', 

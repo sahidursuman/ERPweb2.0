@@ -206,6 +206,11 @@ define(function(require, exports) {
         var id = $tab.find('.T-btn-save').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
+        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             Client.ClientCheck(Client.checkPageNo, false, $tab);
@@ -239,7 +244,6 @@ define(function(require, exports) {
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            $tab.data('isEdited', false);
             Client.ClientCheck(0, false, $tab);
         });
 
@@ -595,6 +599,15 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
+                        var bankId = $tab.find('input[name=card-id]').val();
+                        var voucher = $tab.find('input[name=credentials-number]').val();
+                        var billTime = $tab.find('input[name=tally-date]').val();
+                        var bankNumber = $tab.find('input[name=card-number]').val();
+                        Client.clearDataArray.bankId = bankId;
+                        Client.clearDataArray.voucher = voucher;
+                        Client.clearDataArray.billTime = billTime;
+                        Client.clearDataArray.bankNumber = bankNumber;
+                        console.log(Client.clearDataArray);
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
@@ -771,6 +784,9 @@ define(function(require, exports) {
 
     Client.saveClearData = function($tab,tabArgs) {
         var argLen = arguments.length;
+        var bankId = $tab.find('input[name=card-id]').val();
+        var voucher = $tab.find('input[name=credentials-number]').val();
+        var billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
 
         $.ajax({
@@ -780,6 +796,9 @@ define(function(require, exports) {
                 receiveAccountList : JSON.stringify(Client.clearDataArray),
                 fromPartnerAgencyId: $tab.data('id'),
                 payType: $tab.find('.T-sumPayType').val(),
+                bankId:bankId,
+                voucher:voucher,
+                billTime:billTime,
                 remark: $tab.find('.T-sumRemark').val()
             },
             success:function(data){
