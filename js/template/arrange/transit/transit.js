@@ -137,7 +137,7 @@ define(function(require, exports) {
 							transit.sendTransit(id);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
-							transit.pageNo=transit.$tab.find('.laypage_curr').html();
+							transit.pageNo = page;
 							transit.updateTransit(id);
 						}else if ($this.hasClass('T-view')) {
 							//查看
