@@ -201,8 +201,8 @@
                                                     <tbody>
                                                     	{{each guideList as guide}}
                                                         {{if guide != "[]" || guide != null}}
-                                                    		<tr>
-                                                    			<td><input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" readonly="readonly" class="col-sm-12 chooseGuide"/><input type="hidden" name="id" value="{{guide.id}}" /></td>
+                                                    		<tr data-entity-arrangeid={{guide.id}}>
+                                                    			<td><input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" readonly="readonly" class="col-sm-12 chooseGuide"/></td>
                                                     			<td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
                                                     			<td><input type="text" name="guideFee" value="{{guide.price}}" class="col-sm-12 price" maxlength="9"/></td>
                                                     			<td><input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 price" maxlength="9"/></td>
