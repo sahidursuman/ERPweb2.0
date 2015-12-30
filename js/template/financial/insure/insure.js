@@ -271,7 +271,7 @@ define(function(require, exports) {
                     // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag;
                     Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
-                    console.log(data);
+                    data.isAutoPay = isAutoPay;
 					var html = insureClearing(data);
 	  				var validator;
                     // 初始化页面
