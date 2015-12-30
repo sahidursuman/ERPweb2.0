@@ -3,7 +3,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>业务类别：</label>
 			<div class="col-sm-2">
-				<select name="gender" class="col-sm-12">
+				<select name="moneyType" class="col-sm-12">
 					<option value="0">收入</option>
 					<option value="1">支出</option>
 					<option value="2">转账</option>
@@ -11,16 +11,15 @@
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">对方单位：</label> 
 			<div class="col-sm-5">
-				<input type="text" name="mobileNumber" class="col-sm-12" />
+				<input type="text" name="resourceName" class="col-sm-12" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>支付方式：</label>
 			<div class="col-sm-2">
-				<select name="gender" class="col-sm-12">
+				<select name="payType" class="col-sm-12">
 					<option value="0">现金</option>
 					<option value="1">银行转账</option>
-					<option value="2">网上支付</option>
 					<option value="3">支票</option>
 					<option value="4">其他</option>
 				</select>
@@ -28,9 +27,18 @@
 			<label class="col-sm-2 control-label no-padding-right">银行账号：</label>
 			<div class="col-sm-5">
 				<div class="col-sm-12 T-choose-bankCount" style="border:1px #ccc solid;background:#fff;height:24px;line-height:24px;">
-					<label class="T-count">123456789012345</label>
-					<label class="T-money marginLeft-30">余额：2654000.00</label>
-					<ul class="T-bankCount-list cursor" style="list-style-type:none;margin:-7px -13px 0px -13px;padding:0px 13px;line-height:24px;position:relative;top:0px;z-index:999;border:1px #ccc solid;background:#f9fafa;">
+					<label class="T-count" style="width:140px;"></label>
+					<label class="T-money marginLeft-30"></label>
+					<input type="hidden" name="bankId" value="" />
+					<ul class="T-bankCount-list cursor" style="list-style-type:none;margin:-7px -13px 0px -13px;padding:0px 13px;line-height:24px;position:relative;top:0px;z-index:999;border:1px #ccc solid;background:#f9fafa;max-height:220px;overflow:auto">
+						{{each bankdata as bank}}
+						<li data-id="{{bank.id}}">
+							<div>
+								<label class="T-bankCount" style="width:140px;">{{bank.bankAccountNumber}}</label>
+								<label class="T-avilableMoney marginLeft-30">余额：{{bank.balance}}</label>
+							</div>
+						</li>
+						{{/each}}
 					</ul>
 				</div>
 			</div>
@@ -39,22 +47,19 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
 			<div class="col-sm-2">
-				<select name="gender" class="col-sm-12">
-					<option value="0">现金</option>
-					<option value="1">银行转账</option>
-					<option value="2">网上支付</option>
-					<option value="3">支票</option>
-					<option value="4">其他</option>
+				<select name="subjectId" class="col-sm-12 T-subject">
+					{{each subjectdata as sub}}
+					<option value="{{sub.id}}">{{sub.subjectName}}</option>
+					{{/each}}
 				</select>
+				<input type="hidden" name="subjectName" value="{{each subjectdata as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">所属部门：</label>
 			<div class="col-sm-5">
-				<select name="gender" class="col-sm-12">
-					<option value="0">现金</option>
-					<option value="1">银行转账</option>
-					<option value="2">网上支付</option>
-					<option value="3">支票</option>
-					<option value="4">其他</option>
+				<select name="departmentId" class="col-sm-12">
+					{{each groupdata as group}}
+						<option value="{{group.id}}">{{group.name}}</option>
+					{{/each}}
 				</select>
 			</div>
 		</div>
@@ -62,18 +67,18 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账金额：</label>
 			<div class="col-sm-2">
-				<input type="text" name="addMoney" class="col-sm-12" maxlength="9"/>
+				<input type="text" name="incomeMoney" class="col-sm-12" maxlength="9"/>
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">凭证编号：</label>
 			<div class="col-sm-5">
-				<input type="text" name="number" class="col-sm-12" maxlength="45"/>
+				<input type="text" name="voucher" class="col-sm-12" maxlength="45"/>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账日期：</label>
 			<div class="col-sm-2">
-				<input type="text" name="paymentTime" class="col-sm-12 datepicker" />
+				<input type="text" name="billTime" class="col-sm-12 datepicker" />
 			</div>
 		</div>
 		<div class="form-group">
