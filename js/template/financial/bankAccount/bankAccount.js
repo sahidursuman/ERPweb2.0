@@ -42,11 +42,12 @@ define(function(require,exports){
 	BankAccount.initEvents = function($obj){
 		// 报表内的操作
 		$obj.find('.T-bankAcc-list').on('click', '.T-action', function(event) {
-			var $that = $(this), id = $that.closest('tr').attr('bankid');
+			var $that = $(this), 
+				id = $that.closest('tr').attr('bankid'),
+				bankNumber = $that.closest('tr').attr('banknum');
 			if ($that.hasClass('T-view'))  {
 				// 查看账户信息
-				//Infrastructure.viewBankAcc(id);
-				console.log(123);
+				KingServices.viewPayMentDetail(id,bankNumber);
 			} 
 		});
 	};
