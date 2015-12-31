@@ -37,34 +37,10 @@
 			<tr>
 				<td class="style-myself">总应收 </td>
 				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.sumNeedGetMoney}}</td>
-				<td class="style-myself">已收 </td>
-				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.getedMoney}}</td>
-				<td class="style-myself">收款方式 </td>
-				<td style="text-align: left;padding-left: 6px;">	{{if bookingOrder.getType==0}}
-					现金
-					{{else if bookingOrder.getType==1}}
-					签单
-					{{else if bookingOrder.getType==2}}
-					转账
-					{{else}}
-					网付
-					{{/if}}</td>
-			</tr>
-			<tr>
 				<td class="style-myself">总成本 </td>
 				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.sumCostMoney}}</td>
-				<td class="style-myself">已付 </td>
-				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.payedMoney}}</td>
-				<td class="style-myself">付款方式 </td>
-				<td style="text-align: left;padding-left: 6px;" >{{if bookingOrder.payType==0}}
-					现金
-					{{else if bookingOrder.payType==1}}
-					签单
-					{{else if bookingOrder.payType==2}}
-					转账
-					{{else}}
-					网付
-					{{/if}}</td>
+				<td class="hidden" class="style-myself">预付款 </td>
+				<td  class="hidden" style="text-align: left;padding-left: 6px;" >{{bookingOrder.prePayMoney}}</td>
 			</tr>
 		</table>
 	</form>
@@ -91,8 +67,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">已付</th>
-										<th class="th-border">付款方式</th>
+										<th class="th-border hidden">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -124,16 +99,7 @@
 										<td>{{hotelList.salePrice}}/天</td>
 										<td>{{hotelList.sumCostMoney}}</td>
 										<td>{{hotelList.sumNeedGetMoney}}</td>
-										<td>{{hotelList.payedMoney}}</td>
-										<td>{{if hotelList.payType==0}}
-												现金
-												{{else if hotelList.payType==1}}
-												签单
-												{{else if hotelList.payType==2}}
-												转账
-												{{else}}
-												网付
-												{{/if}}</td>
+										<td class="hidden">{{hotelList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -162,8 +128,7 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
-										<th class="th-border">已付</th>
-										<th class="th-border">付款方式</th>
+										<th class="th-border hidden">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -177,16 +142,7 @@
 										<td>{{scenicList.sumCostMoney}}</td>
 										<td>{{scenicList.sumNeedGetMoney}}</td>
 										<td>{{scenicList.orderNumber}}</td>
-										<td>{{scenicList.payedMoney}}</td>
-										<td>{{if scenicList.payType==0}}
-												现金
-												{{else if scenicList.payType==1}}
-												签单
-												{{else if scenicList.payType==2}}
-												转账
-												{{else}}
-												网付
-												{{/if}}</td>
+										<td class="hidden">{{scenicList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -218,8 +174,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">已付</th>
-										<th class="th-border">付款方式</th>
+										<th class="th-border hidden">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -246,16 +201,7 @@
 										<td>{{ticketList.salePrice}}</td>
 										<td>{{ticketList.sumCostMoney}}</td>
 										<td>{{ticketList.sumNeedGetMoney}}</td>
-										<td>{{ticketList.payedMoney}}</td>
-										<td>{{if ticketList.payType==0}}
-												现金
-												{{else if ticketList.payType==1}}
-												签单
-												{{else if ticketList.payType==2}}
-												转账
-												{{else}}
-												网付
-												{{/if}}</td>
+										<td class="hidden">{{ticketList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -286,8 +232,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border">已付</th>
-										<th class="th-border">付款方式</th>
+										<th class="th-border hidden">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
@@ -302,16 +247,7 @@
 										<td>{{busList.salePrice}}</td>
 										<td>{{busList.sumCostMoney}}</td>
 										<td>{{busList.sumNeedGetMoney}}</td>
-										<td>{{busList.payedMoney}}</td>
-										<td>{{if busList.payType==0}}
-												现金
-												{{else if busList.payType==1}}
-												签单
-												{{else if busList.payType==2}}
-												转账
-												{{else}}
-												网付
-												{{/if}}</td>
+										<td class="hidden">{{busList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>

@@ -233,7 +233,7 @@ define(function(require, exports) {
 				}
 			});
 		});
-		$tab.find(".T-btn-save").on('click', function(event){
+		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
 		 	if (!validator.form()) {
                 return;
@@ -456,6 +456,8 @@ define(function(require, exports) {
             }
             Ticket.savePayingData($tab);
         });
+
+        FinancialService.initPayEvent($tab.find('.T-search-area'));
         // 监听修改
         $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
             event.preventDefault();
@@ -503,7 +505,7 @@ define(function(require, exports) {
 				Tools.closeTab(clearMenuKey);
 			}
 		});
-		$tab.find(".T-btn-save").on('click', function(event){
+		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
 			Ticket.savePayingData($tab);
 		});
@@ -579,7 +581,7 @@ define(function(require, exports) {
 
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        $tab.find('.T-saveClear').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
@@ -599,7 +601,7 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-		if ($tab.find('.T-btn-save').data('type') == 1) {
+		if ($tab.find('.T-saveClear').data('type') == 1) {
 	        var reciveValidtor = (new FinRule(2)).check($tab);
 	        if(!reciveValidtor.form()){
 	    		return;
@@ -611,7 +613,10 @@ define(function(require, exports) {
                 ticketId: Ticket.clearingId,
                 sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
                 payType: $tab.find('.T-sumPayType').val(),
-                payRemark: $tab.find('.T-sumRemark').val()
+                payRemark: $tab.find('.T-sumRemark').val(),
+                bankId : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
 			}
             $.ajax({
                     url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),

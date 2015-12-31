@@ -1110,8 +1110,8 @@ define(function(require, exports) {
             function getValue(name) {
                 var thisObj = $tab.find(".addTripPlanMain").find("[name=" + name + "]"),
                     objValue;
-                if (thisObj.attr("type") == "checkbox") {
-                    objValue = thisObj.is(":checked") ? 1 : 0;
+                if (thisObj.attr("type") == "radio") {
+                    objValue = thisObj.eq('0').is(":checked") ? 0 : 1;
                 } else {
                     objValue = thisObj.val();
                 }
@@ -1135,7 +1135,7 @@ define(function(require, exports) {
                         "planTouristCount": getValue("planTouristCount"),
                         "setPlacePosition": getValue("setPlacePosition"),
                         "setPlaceTime": getValue("setPlaceTime"),
-                        "executeTimeType": getValue("executeTimeType") + "",
+                        "executeTimeType": getValue("executeTimeType"),
                         "executeTime": getValue("executeTime"),
                         "remark": getValue("remark")
                     },
@@ -1145,6 +1145,11 @@ define(function(require, exports) {
                     "busId": getValue("busLicenseNumberId"),
                     "touristGroupId": [],
                     "qouteId": getValue("qouteId")
+                }
+
+                if (!!saveTripP.tripPlan.executeTimeType && (saveTripP.tripPlan.startTime + ' 06:00:00') < saveTripP.tripPlan.executeTime) {
+                    showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
+                    return;
                 }
                 var touristGroupList = $tab.find(" ." + className + " ." + tbody + " tr").length;
                 $tab.find(" ." + className + " ." + tbody + " tr").each(function(i) {
@@ -2572,10 +2577,9 @@ define(function(require, exports) {
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
                 "transAdultPrice": arrangeTourist.getVal($editFeeObj, "transAdultPrice") || 0,
                 "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
-                "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
+                // "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
-                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0,
-                "transPayType": arrangeTourist.getVal($editFeeObj, "transPayType")
+                "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
             },
             otherFeeList = [],
             inTransferFee = {
@@ -3041,10 +3045,21 @@ define(function(require, exports) {
             language: 'zh-CN'
         })
 
-        //定时发送
-        $tabId.find('.dataTimePicker').datetimepicker({
+        var startTime = $tabId.find('[name="startTime"]').val();
+
+        // 集合时间
+        $tabId.find('input[name="setPlaceTime"]').datetimepicker({
             autoclose: true,
             todayHighlight: true,
+            maxDate: new Date(startTime + ' 23:59:59'),
+            format: 'L',
+            language: 'zh-CN'
+        });
+        // 定时发送时间
+        $tabId.find('input[name="executeTime"]').datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: new Date(startTime + ' 06:00:00'),
             format: 'L',
             language: 'zh-CN'
         });
