@@ -30,7 +30,7 @@
 					<td class="price">{{busOrderList.price}}</td>
 					<td class="totalMoney">{{busOrderList.price * busOrderList.seatCount}}</td>
 					<td>{{busOrderList.creator}}</td>
-					<td>{{busOrderList.createTime}}</td>
+					<td>{{busOrderList.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 					<td>{{busOrderList.remark}}</td>
 					<td>{{busOrderList.status}}</td>
 				</tr>
