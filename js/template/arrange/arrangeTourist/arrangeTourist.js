@@ -2572,7 +2572,7 @@ define(function(require, exports) {
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
                 "transAdultPrice": arrangeTourist.getVal($editFeeObj, "transAdultPrice") || 0,
                 "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
-                "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
+                // "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
                 "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
             },

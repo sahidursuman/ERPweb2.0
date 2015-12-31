@@ -397,7 +397,12 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			Count.getShopRate($(this),$obj);
+            	
+            	
+			var shopPolicyId = $(this).attr('policyId');
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -634,7 +639,10 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			Count.getShopRate($(this),$obj);
+			var shopPolicyId = $(this).attr('policyId');
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -1121,6 +1129,13 @@ define(function(require, exports){
 			Count.autoShopSum($(this),$parentObj);
 			}
 		});
+		//填写金额带出社佣、导佣
+		$bodyObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
+			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
+			var consumeMoney = $(this).val();
+			var date =$parentObj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
+		});
 		//删除新增的购物安排
 		$bodyObj.find('.T-del').off('click').on('click',function(){
 			var $tr = $(this).closest('tr');
@@ -1426,7 +1441,7 @@ define(function(require, exports){
             realCount = Count.changeTwoDecimal(realCount);
             realReduceMoney = Count.changeTwoDecimal(realReduceMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
-            if(badStatus == 0){needPayMoney.text(needSum);}
+            if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
             var needCount = parseFloat(realCount)-parseFloat(memberCount);
             var needIncome = $parent.find('.needIncome');
@@ -1637,7 +1652,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($busFee-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){$tr.find('.BusneedPayMoney').text(needPay);}
+		if(badStatus == 0 || badStatus == undefined){$tr.find('.BusneedPayMoney').text(needPay);}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$planNeedpay);
@@ -1713,7 +1728,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){	
+		if(badStatus == 0  || badStatus == undefined){	
 			$tr.find('.restneedPayMoney').text(needPay);
 		};
 		//计算差额
@@ -1808,7 +1823,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){
+		if(badStatus == 0 || badStatus == undefined){
 			$tr.find('.hotelneedPayMoney').text(needPay);
 		}
 		//计算差额
@@ -1897,7 +1912,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){
+		if(badStatus == 0 || badStatus == undefined){
 			$tr.find('.scenicneedPayMoney').text(needPay);
 		}
 		
@@ -1987,7 +2002,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){$tr.find('.ticketneedPayMoney').text(needPay);}
+		if(badStatus == 0 || badStatus == undefined){$tr.find('.ticketneedPayMoney').text(needPay);}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
@@ -2092,7 +2107,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0){$tr.find('.otherOutNeedPayMoney').text(needPay);}
+		if(badStatus == 0 || badStatus == undefined){$tr.find('.otherOutNeedPayMoney').text(needPay);}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
@@ -2375,6 +2390,9 @@ define(function(require, exports){
 				var result = showDialog(data);
 				$obj.find('input[name=marketPrice]').val(data.marketPrice);
 				$obj.find('input[name=price]').val(data.price);
+				$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
+				$obj.find('input[name=travelAgencyRate]').val((data.travelAgencyRate*100));
+				$obj.find('input[name=guideRate]').val(data.guideRate*100);
 			}
 		});
 	};
@@ -2938,14 +2956,14 @@ define(function(require, exports){
         }
 	};
 	//获取社佣比例、导佣比例
-	Count.getShopRate = function($obj,$bodyObj){
+	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){
 		$.ajax({
 			url:KingServices.build_url('shop','findShopCostRebateBy'),
 			type:'POST',
 			data:{
-				policyId:$obj.attr("policyId"),
-            	consumeMoney:$obj.val(),
-            	date:$bodyObj.find('.tripPlanStartTime').val()
+				policyId:shopPolicyId,
+            	consumeMoney:consumeMoney,
+            	date:date
 			},
 			success:function(data){
 				var result = showDialog(data);
