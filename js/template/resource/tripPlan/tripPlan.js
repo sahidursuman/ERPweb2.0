@@ -1342,8 +1342,8 @@ define(function(require, exports) {
 			},
 			select: function(event, ui) {
 				var $this = $(this), $parents = $this.closest('tr');
-				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
-				$parents.find('[name=price]').val(ui.item.price);
+				$parents.find('[name=typeId]').val(ui.item.id);
+				$parents.find('[name=price]').val(ui.item.price).trigger('change');
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
