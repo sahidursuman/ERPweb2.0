@@ -1486,39 +1486,38 @@ define(function(require, exports) {
 
     //获取组团社的数据
     touristGroup.getPartnerAgencyList = function($obj) {
-        $.ajax({
-            url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
-            data: {
-                operation: 'view'
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (ui.item == null) {
+                    $(this).find('input[name=fromPartnerAgencyId]').val("");
+                    $(this).parent().find('input[name=partnerAgencyNameList]').val("");
+                    $(this).parent().find('input[name=type]').val("");
+                }
             },
-            type: 'POST',
-            success: function(data) {
-                var result = showDialog(data);
-                var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-                data.partnerAgencyList = partnerAgencyList;
-                console.log(data);
-                if (result) {
-                    $obj.autocomplete({
-                        minLength: 0,
-                        change: function(event, ui) {
-                            if (ui.item == null) {
-                                $(this).find('input[name=fromPartnerAgencyId]').val("");
-                                $(this).parent().find('input[name=partnerAgencyNameList]').val("");
-                                $(this).parent().find('input[name=type]').val("");
-                            }
-                        },
-                        select: function(event, ui) {
-                            var $parent = $(this).blur().nextAll("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change').parent(),
-                                $form = $parent.closest('.form-inline');
-                            //通过typeFlag来判断--1、新增；2、修改
-                            $parent.find("input[name=type]").val("");
-                            $form.find("input[name=partnerAgencyNameList]").val("");
-                            $form.find('input[name=partnerAgencyContactId]').val("");
-                        }
-                    }).off('click').on('click', function() {
-                        if (!!$(this).attr('readonly')) return;
-                        var $that = $(this);
-                        var formParObj = data.partnerAgencyList;
+            select: function(event, ui) {
+                var $parent = $(this).blur().nextAll("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change').parent(),
+                    $form = $parent.closest('.form-inline');
+                //通过typeFlag来判断--1、新增；2、修改
+                $parent.find("input[name=type]").val("");
+                $form.find("input[name=partnerAgencyNameList]").val("");
+                $form.find('input[name=partnerAgencyContactId]').val("");
+            }
+        }).off('click').on('click', function() {
+            var $that = $(this);
+            if (!!$that.attr('readonly')) return;
+
+            $.ajax({
+                url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
+                data: {
+                    operation: 'view'
+                },
+                showLoading:false,
+                type: 'POST',
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var formParObj = JSON.parse(data.partnerAgencyList);
+
                         if (formParObj != null && formParObj.length > 0) {
                             for (var i = 0; i < formParObj.length; i++) {
                                 formParObj[i].value = formParObj[i].travelAgencyName
@@ -1526,11 +1525,10 @@ define(function(require, exports) {
                         };
                         $that.autocomplete('option', 'source', formParObj);
                         $that.autocomplete('search', '');
-                    });
+                    }
 
                 }
-
-            }
+            });
         });
     };
     //获取同行联系人
