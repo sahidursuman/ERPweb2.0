@@ -8,11 +8,10 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="label-inline-60">业务类别：</label>
-            <select name="fin-type" id="fin-type">
+            <select name="moneyType" class="T-moneyType">
                 <option value="">全部</option>
                 <option value="0">收入</option>
                 <option value="1">支出</option>
-                <option value="2">转账</option>
             </select>
         </div>
         <div class="form-group marginLeft-30">
@@ -40,28 +39,29 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group">
             <label>会计科目：</label>
-            <select class="form-control T-search-category" style="width:88px">
+            <select class="form-control T-search-subject" style="width:88px">
                 <option value="">全部</option>
             </select>
         </div>
         <div class="form-group marginLeft-30">
             <label>凭证编号：</label>
-            <input type="text" class="form-control T-resourceName" name="resourceName" value="{{searchParam.resourceName}}" placeholder="凭证编号" style="width: 150px;">
+            <input type="text" class="form-control T-search-voucher" name="voucher" value="{{searchParam.voucher}}" placeholder="凭证编号" style="width: 150px;">
         </div>
         <div class="form-group marginLeft-30">
             <label>支付方式：</label>
             <select class="form-control T-search-payment" style="width: 100px;">
                 <option value="">全部</option>
-                <option value="">现金</option>
-                <option value="">银行转账</option>
-                <option value="">支票</option>
-                <option value="">其他</option>
+                {{each payTypeList as rs index}}
+                <option value="{{index}}">{{rs}}</option>
+                {{/each}}
             </select>
         </div>
         <div class="form-group marginLeft-30">
-            <label>银行账号：</label>
-            <input type="text" class="form-control T-resourceName" name="resourceName" value="{{searchParam.resourceName}}" style="width: 150px;">
-        </div>
+        <label>银行账号：</label>
+        <input type="text" class="form-control T-card-number" name="card-number" value="{{searchParam.resourceName}}" style="width: 150px;">
+        <input type="hidden" name="card-id" class="T-bankId" value="{{searchParam.bankId}}">
+        <input type="hidden" name="tally-date" class="datepicker" value="{{searchParam.bankId}}">
+    </div>
         <div class="form-group marginLeft-30">
             <label>收款合计：</label>
             <label class="T-incomeMoney">0</label>

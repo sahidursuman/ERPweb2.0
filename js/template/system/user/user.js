@@ -172,7 +172,7 @@ define(function(require, exports) {
 					}
 					layer.close(user.$addUserLayer);
 					user.listUser(0, "", 1);
-					user.updateAuth(userId,true);
+					user.updateAuth(data.userId,true);
 				}
 			}
 		});
