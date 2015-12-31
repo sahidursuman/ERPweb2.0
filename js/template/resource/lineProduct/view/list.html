@@ -55,17 +55,16 @@
 					<th>线路类型</th>
 					<th>针对客源</th>
 					<th>行程天数</th>
-					<th>车队</th>
-					<th>餐厅</th>
-					<th>酒店</th>
-					<th>购物</th>
-					<th>景区</th>
-					<th>票务</th>
-					<th>保险</th>
-					<th>自费</th>
-					<th>其它</th>
+					<th>车</th>
+					<th>险</th>
+					<th>餐</th>
+					<th>房</th>
+					<th>景</th>
+					<th>票</th>
+					<th>购</th>
+					<th>娱</th>
+					<th>它</th>
 					<th>是否启用</th>
-					<!-- <th>报价</th> -->
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -91,6 +90,13 @@
 						{{/if}}
 						</td>
 						<td>
+						{{if lineProduct.insuranceStatus == 1}}
+							<i class="ace-icon fa fa-check green"></i>
+						{{else}}
+							<i class="ace-icon fa fa-times red"></i>
+						{{/if}}
+						</td>
+						<td>
 						{{if lineProduct.restaurantStatus == 1}}
 							<i class="ace-icon fa fa-check green"></i>
 						{{else}}
@@ -99,13 +105,6 @@
 						</td>
 						<td>
 						{{if lineProduct.hotelStatus == 1}}
-							<i class="ace-icon fa fa-check green"></i>
-						{{else}}
-							<i class="ace-icon fa fa-times red"></i>
-						{{/if}}
-						</td>
-						<td>
-						{{if lineProduct.shopStatus == 1}}
 							<i class="ace-icon fa fa-check green"></i>
 						{{else}}
 							<i class="ace-icon fa fa-times red"></i>
@@ -126,7 +125,7 @@
 						{{/if}}
 						</td>
 						<td>
-						{{if lineProduct.insuranceStatus == 1}}
+						{{if lineProduct.shopStatus == 1}}
 							<i class="ace-icon fa fa-check green"></i>
 						{{else}}
 							<i class="ace-icon fa fa-times red"></i>
