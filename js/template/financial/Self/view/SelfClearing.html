@@ -86,6 +86,7 @@
             <tr>
                 <th class="th-border">团信息</th>
                 <th class="th-border">消费日期(账期)</th>
+                <th class="th-border">自费项目</th>
                 <th class="th-border">底价</th>
                 <th class="th-border">数量</th>
                 <th class="th-border">优惠</th>
@@ -106,6 +107,7 @@
             <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
                 <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
+                <td>{{rs.itemName}}</td>
                 <td>{{rs.lowestPrice}}</td>
                 <td>{{rs.realCount}}</td>
                 <td>{{rs.reduceMoney}}</td>
