@@ -191,7 +191,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-
+					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
@@ -238,7 +238,11 @@ define(function(require, exports){
 	};
 
 	Payment.submitPayment = function(){
-		var form = $(".T-addPayment-container .T-form").serialize();
+		var form = $(".T-addPayment-container .T-form").serializeJson();
+		form.bankId = form['card-id'];
+		delete(form['card-id']);
+		delete(form['card-number']);
+		
 		$.ajax({
 			url:KingServices.build_url("financialIncomeOrPay","saveIncomeorPay"),
 			type:"POST",
