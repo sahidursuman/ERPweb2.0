@@ -408,6 +408,7 @@ define(function(require,exports) {
         		InnerTransferOut.settlement($data);
         	}
         });
+		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
@@ -664,8 +665,8 @@ define(function(require,exports) {
 		var payType;
 		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
-		var payType = tab_id.find('select[name=sumPayType]').val();
-		var sumRemark = tab_id.find('name[name=sumRemark]').val();
+		var payType = tab_id.find('select[name=payType]').val();
+		var sumRemark = tab_id.find('input[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferOutFinancial','operatePayAccount'),
@@ -673,7 +674,10 @@ define(function(require,exports) {
             data:{
             	payJson:JsonStr,
             	payType:payType,
-            	remark:sumRemark
+            	remark:sumRemark,
+            	bankId : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
+	            voucher : InnerTransferOut.$settlementTab.find('input[name=credentials-number]').val(),
+	            billTime : InnerTransferOut.$settlementTab.find('input[name=tally-date]').val()
             },
             success:function(data){
                 var result = showDialog(data);

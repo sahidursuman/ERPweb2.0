@@ -246,8 +246,6 @@ define(function(require, exports) {
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
            searchParam.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
-           searchParam.payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
-           searchParam.payRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
         }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -260,11 +258,6 @@ define(function(require, exports) {
                     data.partnerAgencyName = partnerAgencyName;
                     if(isAutoPay == 1){
                         Transfer.clearTempData = data.autoPaymentJson;
-                        Transfer.clearTempSumDate = {
-                            sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                            sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-                            sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
-                        };
                     }
 
                     //暂存数据读取
@@ -272,6 +265,10 @@ define(function(require, exports) {
                         data.sumPayMoney = Transfer.clearTempSumDate.sumPayMoney;
                         data.sumPayType = Transfer.clearTempSumDate.sumPayType;
                         data.sumPayRemark = Transfer.clearTempSumDate.sumPayRemark;
+                        data.bankNo = Transfer.clearTempSumDate.bankNo;
+                        data.bankId = Transfer.clearTempSumDate.bankId;
+                        data.voucher = Transfer.clearTempSumDate.voucher;
+                        data.billTime = Transfer.clearTempSumDate.billTime;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
@@ -320,7 +317,11 @@ define(function(require, exports) {
                                 Transfer.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark
+                                    sumPayRemark : sumPayRemark,
+                                    bankNo : Transfer.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+                                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+                                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
                                 }
                                 Transfer.transferClear(isAutoPay,obj.curr -1,partnerAgencyId,partnerAgencyName);
                             }
@@ -375,7 +376,21 @@ define(function(require, exports) {
             if(!autoValidatorCheck.form()){return;}
             var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,new FinRule(1));
             if(!isAutoPay){return false;}
-            Transfer.transferClear(1,0,id,name);
+            var startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
+                endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val();
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
+                Transfer.clearTempSumDate = {
+                    id : id,
+                    sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+                    sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
+                    bankNo : Transfer.$clearTab.find('input[name=card-number]').val(),
+                    bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                };
+                Transfer.transferClear(1,0,id,name);
+            });
         });
 
         Transfer.$clearTab.find(".T-cancel-auto").off().on("click",function(){
@@ -528,7 +543,10 @@ define(function(require, exports) {
             partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
         	payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val()
+            payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
+            bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+            voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+            billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
