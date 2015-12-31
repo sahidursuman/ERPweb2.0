@@ -192,15 +192,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));//bankNum
-					    	var bankNum = $container.find('.bankNum');
-					    	// $container.find('select').on('change', function(event) {
-						    //     event.preventDefault();
-						    //     var val = $(this).val();
-						        
-						    //     bankNum.toggleClass('hidden', val != 1);
-
-						    // }).trigger('change');
+					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
