@@ -1,8 +1,8 @@
-<div class="col-xs-12 globalAdd T-bankAcc-container">
+<div class="col-xs-12 T-bankAcc-container">
 	<form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>银行账号:</label>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<input type="text" name="bankNumber" value="{{bankAccount.bankAccountNumber}}" class="col-sm-12"  maxlength="32"/>
 				<input type="hidden" name="bankNumberId" value="{{bankAccount.id}}" class="col-sm-12"  maxlength="32"/>
 			</div>
@@ -18,7 +18,7 @@
 		</div>
 		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户银行:</label>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<input type="text" name="bankName" class="col-sm-12" value="{{bankAccount.openingBank}}" maxlength="32" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初余额:</label>
@@ -28,7 +28,7 @@
 		</div>
 		<div class="form-group guideInterval">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户户名:</label>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<input type="text" name="accountName" class="col-sm-12" value="{{bankAccount.accountName}}" maxlength="20" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初日期:</label>
@@ -43,7 +43,7 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary T-submit guideSubmit">
+		<button class="btn btn-xs btn-block btn-primary T-submit">
 			<i class="ace-icon fa fa-check"></i>
 			提交信息
 		</button>
