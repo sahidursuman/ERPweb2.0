@@ -31,16 +31,16 @@
 			<label><span class="necessary">*</span>人数：</label>
             大人
             <label><span class="necessary">*</span>   
-			<input type="text" name="adultCount" class="form-control" style="width:25px" />
+			<input type="text" name="adultCount" value="{{touristGroupDetail.adultCount}}" class="form-control T-adultCount" style="width:35px" />
             小孩
-            <input type="text" name="childCount" class="form-control"  style="width:25px"/>
+            <input type="text" name="childCount" value="{{touristGroupDetail.childCount}}" class="form-control T-childCount"  style="width:35px"/>
 		</div>
 
 		<div class="form-group">
 			<label>针对客源： </label>
             <select name="customerType" style="width:133px;">
-                <option selected="selected" value="1">散客</option>
-                <option value="2">团体</option>
+                <option{{if touristGroupDetail.customerType == 0}} selected="selected"{{/if}} value="1">散客</option>
+                <option{{if touristGroupDetail.customerType == 1}} selected="selected"{{/if}} value="2">团体</option>
             </select>
 		</div>
 	</div>
@@ -53,13 +53,13 @@
 
         <div class="form-group fixed-width">
             <label><span class="necessary">*</span>完团日期：</label>
-            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" />
+            <input type="text" name="endTime" class="form-control date-picker datepicker T-endTime"  value="{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}" />
         </div>
 
      	<div class="form-group">
     		<label><span class="necessary">*</span>客户：</label>
             <input type="text" name="fromPartnerAgency" class="form-control bind-change T-fromPartnerAgencyName" placeholder="请输入客户来源" style="width:133px;" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}>
-			<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
+			<input type="hidden" name="fromPartnerAgencyId" class="T-fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
 			<input type="hidden" name="type" value="">
 			</label>
 			<span class="{{if type==null}}T-addPartner{{/if}} R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
@@ -69,8 +69,8 @@
 
     	<div class="form-group">
     		<label><span class="necessary">*</span>客户联系人：</label>
-            <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text"  style="width:133px;"value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" {{if !!touristGroupDetail.quoteId || !!type}} readonly {{/if}} />
-			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
+            <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text"  style="width:133px;"value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
+			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" class="T-partnerAgencyContactId" />
 
 			<span class="T-addPartnerManager {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" style="cursor:pointer;" title="为客户来源添加联系人">
 				<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -81,12 +81,12 @@
 	<div class="form-inline">
         <div class="form-group fixed-width">
             <label >全陪：</label>
-            <input type="text" name="" maxlength="100"> 
+            <input type="text" name="accompanyGuideName" value="{{touristGroupDetail.accompanyGuideName}}" maxlength="100"> 
         </div>
 
         <div class="form-group fixed-width">
             <label class="control-label no-padding-right" >全陪电话：</label>
-            <input type="text" name="" value="0" maxlength="11">
+            <input type="text" name="accompanyGuideMobile"  value="{{touristGroupDetail.accompanyGuideMobile}}" maxlength="11">
         </div>
 
         <div class="form-group fixed-width-1">
@@ -109,20 +109,21 @@
     <div class="form-inline">
         <div class="form-group fixed-width">
             <label>外联销售：</label>
-            <input type="text" name="" maxlength="9">
+            <input type="text" name="realName" value="{{if !!touristGroupDetail.outOPUser}}{{touristGroupDetail.outOPUser.realName}}{{/if}}" class="T-choose-opUserList">
+            <input type="hidden" name="outOPUserId" value="{{if !!touristGroupDetail.outOPUser}}{{touristGroupDetail.outOPUser.id}}{{/if}}">
         </div>
 
         <div class="form-group fixed-width-1">
             <label>客源类型： </label>
-            <select name="getCustomType" style="width:133px;">
-                <option selected="selected" value="1">内宾</option>
-                <option value="2">外宾</option>
+            <select name="memberType" style="width:133px;">
+                <option{{if touristGroupDetail.memberType == 0}} selected="selected"{{/if}} value="0">内宾</option>
+                <option{{if touristGroupDetail.memberType == 1}} selected="selected"{{/if}} value="1">外宾</option>
             </select>
         </div>
     
         <div class="form-group fixed-width-1">
             <label>接站牌：</label>
-            <input type="text" name="currentNeedPayMoney" value="0" maxlength="9" > 
+            <input type="text" name="welcomeBoard" value="{{touristGroupDetail.welcomeBoard}}" maxlength="9" >
         </div>
 
         <div class="form-group">
@@ -134,7 +135,7 @@
 
          <div class="form-group fixed-width-1">
             <label>收客单号：</label>
-            <input type="text" name="currentNeedPayMoney" value=""  maxlength="9" placeholder="系统自动生成" >  
+            <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}"  maxlength="9" placeholder="系统自动生成" >  
         </div>
     </div>
 
@@ -161,12 +162,12 @@
     	</div>
     	<div class="form-group fixed-width-1">
     		<label class="control-label no-padding-right">预收款：</label>
-    	    <input type="text" name="prePayMoney" maxlength="9" value="{{touristGroupDetail.payedMoney}}">
+    	    <input type="text" name="preIncomeMoney" maxlength="9" value="{{touristGroupDetail.preIncomeMoney}}">
     	</div>
 
     	<div class="form-group fixed-width-1">
     		<label>计划现收：</label>
-    		<input type="text" name="planCurrPayMoney" maxlength="9" value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 }}readonly="readonly"{{/if}} >
+    		<input type="text" name="currentNeedPayMoney" maxlength="9" value="{{touristGroupDetail.currentNeedPayMoney}}" {{if touristGroupDetail.isReceived == 1 }}readonly="readonly"{{/if}} >
     	</div>
     </div>
 
@@ -189,42 +190,10 @@
                     </tr>
                 </thead>
                 <tbody class="T-addCostTbody">
-                    <tr>
-                        <td><input name="" value="大人结算价" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
-                        
-                        <td>
-                            <input name="adultCount" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right  T-costCount T-adultCount T-count T-calc" maxlength="3"  {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.adultCount}}"/>
-                        </td>
-                        <td>
-                            <input name="adultPrice" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right  T-costPrice T-adultPrice T-price T-calc" maxlength="6"  {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.adultPrice}}"/>
-                        </td>
-                        <td>
-                        	<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney" />
-                        </td>
-                        <td><input name="describeInfo" value="" type="text" class="col-sm-10  no-padding-right" /></td>
-						<td><a class="cursor oldaddCost-delete">删除</a></td>
-                    </tr>
-                    <tr>
-                        <td><input name="" value="小孩结算价" type="text" class="col-sm-10  col-sm-offset-1 no-padding-right" /></td>
-                   
-
-                        <td>
-                            <input name="childCount" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount T-count T-calc" maxlength="3" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childCount}}"/>
-                        </td>
-                        <td>
-                            <input name="childPrice" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice T-price T-calc" maxlength="6" {{if !!touristGroupDetail.quoteId}} readonly {{/if}} value="{{touristGroupDetail.childPrice}}"/>
-                        </td>
-                        
-                        <td>
-                        	<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney" />
-                        </td>
-                        <td><input name="describeInfo" value="" type="text" class="col-sm-10  no-padding-right" /></td>
-						<td><a class="cursor oldaddCost-delete">删除</a></td>
-                    </tr>
                     {{each touristGroupDetail.touristGroupFeeList as feeList}}
 					<tr data-entity-id="{{feeList.id}}">
 						<td>
-							<input name="otherFee" value="其他费用" type="text" class="col-sm-10  no-padding-right" />
+							<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" />
 						</td>
 						<td>
 							<input name="count" value="{{feeList.count}}" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc" />
@@ -235,10 +204,10 @@
 						</td>
 
 						<td>
-                        	<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney" />
+                        	<input name="" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
                         </td>
                        <td>
-							<input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-10  no-padding-right" />
+							<input name="remark" value="{{feeList.remark}}" type="text" class="col-sm-10  col-sm-offset-1 no-padding-right" />
 						</td>
 						
 						<td><a class="cursor oldaddCost-delete">删除</a></td>
