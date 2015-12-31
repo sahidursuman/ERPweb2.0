@@ -622,7 +622,7 @@ define(function(require, exports) {
 
                                 if (tmp.id === id) {
                                     hasData = true;
-                                    $receive.val(tmp.temporaryIncomeMoney).trigger('change');
+                                    $receive.val(tmp.temporaryIncomeMoney);
                                     return true;
                                 }
                             }
