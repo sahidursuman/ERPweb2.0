@@ -977,8 +977,8 @@ define(function(require, exports) {
 		'<td><input type="text" name="price" value="" class="col-sm-12 T-typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="0"/></td>' +
 		'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="hidden"><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-		'<td><input name="prePayedMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
+		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
+		'<td class="hidden"><input name="prePayedMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
