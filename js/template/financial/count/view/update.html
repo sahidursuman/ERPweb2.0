@@ -370,7 +370,7 @@
                     {{each day.selfPayArrange as arrangeList}}
                     {{each arrangeList.selfPayArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}">
+                    <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}">
                             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.selfPay.name}}</td>{{/if}}
                             <td>{{if arrange.selfPayItem != null }}{{arrange.selfPayItem.name}}{{/if}}</td>
@@ -463,7 +463,7 @@
                     <tbody class="T-count-otherIn">
                     {{each arrangeIncomePaymentList as otherInCome}}
                     {{if otherInCome != null}}
-                    <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}">
+                    <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}" >
                         <td whichDay="{{otherInCome.whichDay}}">第{{otherInCome.whichDay}}天</td>
                         <td><input style="width:90px;" type="text" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td><input style="width:90px;" type="text" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"
@@ -572,7 +572,7 @@
                     <tbody class="T-count-bus">
                     {{each busCompanyArrange as busCompany}}
                     {{if busCompany != null}}
-                    <tr busCompanyArrangeId="{{busCompany.id}}" >
+                    <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
                         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
@@ -648,7 +648,7 @@
                     {{each day.restaurantArrange as arrangeList}}
                     {{each arrangeList.restaurantArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
+                    <tr badStatus = "{{arrange.badStatus}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
                         {{if arrange.billUpdateTime != null}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
@@ -733,7 +733,7 @@
                     {{each day.hotelArrange as arrangeList}}
                     {{each arrangeList.hotelArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}">
+                    <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">{{if arrange.hotel != null}}{{arrange.hotel.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
@@ -815,7 +815,7 @@
                     {{each day.scenicArrange as arrangeList}}
                     {{each arrangeList.scenicArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}">
+                    <tr badStatus = "{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
@@ -900,7 +900,7 @@
                     <tbody class="T-count-ticket">
                     {{each ticketArrangeList as ticketArrange}}
                     {{each ticketArrange.ticketArrangeList as arrange index}}
-                    <tr ticketArrangeId="{{arrange.id}}" ticketId="{{arrange.ticket.id}}" itemId="{{arrange.id}}">
+                    <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}" ticketId="{{arrange.ticket.id}}" itemId="{{arrange.id}}">
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.ticket != null}}{{arrange.ticket.name}}{{/if}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.type == 1}}机票{{else if arrange.type== 2}}汽车票{{else if arrange.type == 3}}火车票{{else if arrange.type == 4}}轮船票{{/if}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startTime}}</td>{{/if}}
@@ -982,7 +982,7 @@
                     {{if day.otherArrange != null}}
                     {{each day.otherArrange as arrange index}}
                     {{if arrange != null}}
-                    <tr otherArrangeId="{{arrange.id}}">
+                    <tr otherArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}">
                         <td>第{{arrange.whichDay}}天</td>
                         <td>{{arrange.name}}</td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}} <span class="price">{{arrange.price}}</span>{{/if}}
@@ -1068,7 +1068,6 @@
                     <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[10] != null}}{{remarkArrangeList[10].financeCheckRemark}}{{/if}}" />
                 </div>
                 </div>{{/if}}
-
             </div>
             {{/if}}
         </div>
