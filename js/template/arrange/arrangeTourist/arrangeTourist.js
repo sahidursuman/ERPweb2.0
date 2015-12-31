@@ -1110,8 +1110,8 @@ define(function(require, exports) {
             function getValue(name) {
                 var thisObj = $tab.find(".addTripPlanMain").find("[name=" + name + "]"),
                     objValue;
-                if (thisObj.attr("type") == "checkbox") {
-                    objValue = thisObj.is(":checked") ? 1 : 0;
+                if (thisObj.attr("type") == "radio") {
+                    objValue = thisObj.eq('0').is(":checked") ? 0 : 1;
                 } else {
                     objValue = thisObj.val();
                 }
@@ -1135,7 +1135,7 @@ define(function(require, exports) {
                         "planTouristCount": getValue("planTouristCount"),
                         "setPlacePosition": getValue("setPlacePosition"),
                         "setPlaceTime": getValue("setPlaceTime"),
-                        "executeTimeType": $tab.find(".addTripPlanMain").find('input[name="executeTimeType"]').eq('0').is(':checked')?0:1,
+                        "executeTimeType": getValue("executeTimeType"),
                         "executeTime": getValue("executeTime"),
                         "remark": getValue("remark")
                     },
