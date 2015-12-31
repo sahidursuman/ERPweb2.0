@@ -536,8 +536,8 @@ define(function(require, exports) {
 		//删除操作
 		$tab.on('click', '.T-btn-deleteTripPlanList', function() {
 			var $this = $(this),$parents = $this.closest('tr'), $id = $parents.data('entity-arrangeid'),
-				$name = $this.data('entity-name')
-			tripPlan.deleteTripPlan($this, $id, $name, $tab);
+				$name = $this.data('entity-name'), isBooking = $parents.data('entity-isbooking');
+			tripPlan.deleteTripPlan($this, $id, $name, $tab, isBooking);
 		});
 		//所有autocomplete
 		tripPlan.bindAutocomplete($tab);
@@ -617,6 +617,8 @@ define(function(require, exports) {
 					$this.closest('tr').find('[name=busOrder]').val(2);
 					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
+					$this.closest('tr').data('entity-arrangeid', data.arrangeId);
+					$this.closest('tr').data('entity-isbooking', 1);
 				}
 			}
 		})
@@ -682,6 +684,8 @@ define(function(require, exports) {
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
+					$this.closest('tr').data('entity-arrangeid', data.arrangeId);
+					$this.closest('tr').data('entity-isbooking', 1);
 				}
 			}
 		})
@@ -908,6 +912,8 @@ define(function(require, exports) {
 									trWhichDay = $this.find('[name=whichDay]').val()
 								if (hotelId == trHotelId && hotelRoomId == trHotelRoomId && whichDay == trWhichDay) {
 									$this.find('[name=id]').val(arrangeId);
+									$this.data('entity-arrangeid', arrangeId);
+									$this.data('entity-isbooking', 1);
 								}
 							});
 						}
@@ -953,8 +959,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-		'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +		
+		'<td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -979,8 +984,7 @@ define(function(require, exports) {
 		'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
-		'<td><input name="payedMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input name="prePayedMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="guidePayMoney" type="text" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
@@ -1009,8 +1013,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="6"/></td>' +
 		'<td><input type="text" class="col-sm-12 price" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
-		'<td><input type="text" class="col-sm-12 price" name="payedMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input type="text" class="col-sm-12 price" name="prePayedMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="hotelOrder"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
@@ -1042,8 +1045,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
-		'<td><input type="text" name="payedMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
@@ -1087,8 +1089,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
-		'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
@@ -1117,8 +1118,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-		'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
@@ -1145,8 +1145,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
-		'<td><input type="text" name="payedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
-		'<td><select name="payType" class="col-sm-12 no-padding" style="width:55px;"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>' +
+		'<td class="hidden"><input type="text" name="prePayedMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
@@ -1195,13 +1194,13 @@ define(function(require, exports) {
 	 * @param  {[type]} $id [安排ID]
 	 * @return {[type]}     [description]
 	 */
-	tripPlan.deleteTripPlan = function($this, $id, $name, $tab) {
+	tripPlan.deleteTripPlan = function($this, $id, $name, $tab ,isBooking) {
 		if($id){
 			//默认等于0，说明数据来源于模板表，直接移除tr行，不做后台删除请求
 			//等于1说明数据来源于安排表，发送删除请求
 			var isArranged = $('#isArranged').val() == "1" ? true : false;
 			
-			if(isArranged) {
+			if(isArranged || !!isBooking) {
 				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
@@ -1349,8 +1348,8 @@ define(function(require, exports) {
 			},
 			select: function(event, ui) {
 				var $this = $(this), $parents = $this.closest('tr');
-				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
-				$parents.find('[name=price]').val(ui.item.price);
+				$parents.find('[name=typeId]').val(ui.item.id);
+				$parents.find('[name=price]').val(ui.item.price).trigger('change');
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
@@ -2299,15 +2298,14 @@ define(function(require, exports) {
 			for(var i=0; i<insur.length; i++){
 				if(tripPlan.getVal(insur.eq(i), "insuranceId")){
 					var insurJosn = {
-						id : tripPlan.getVal(insur.eq(i), "id"),
+						id : insur.eq(i).data('entity-arrangeid'),
 						insuranceId : tripPlan.getVal(insur.eq(i), "insuranceId"),
 						type : tripPlan.getVal(insur.eq(i), "type"),
 						typeId: tripPlan.getVal(insur.eq(i), "typeId"),
 						price : tripPlan.getVal(insur.eq(i), "price"),
 						memberCount : tripPlan.getVal(insur.eq(i), "memberCount"),
 						needPayMoney : tripPlan.getVal(insur.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(insur.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(insur.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(insur.eq(i), "payedMoney"),
 						remark : tripPlan.getVal(insur.eq(i), "remark")
 					}
 					tripPlanJson.insuranceArrangeList.push(insurJosn);
@@ -2318,38 +2316,32 @@ define(function(require, exports) {
 		var guide = $("#tripPlan_addPlan_guide tbody tr");
 		if(guide.length > 0){
 			for(var i=0; i<guide.length; i++){
-				if(tripPlan.getVal(guide.eq(i), "id")){
-					var guideJosn = {
-						id : tripPlan.getVal(guide.eq(i), "id"),
-						price : tripPlan.getVal(guide.eq(i), "guideFee"),
-						manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
-						payType : tripPlan.getVal(guide.eq(i), "payType"),
-						remark : tripPlan.getVal(guide.eq(i), "remark"),
-					}
-					tripPlanJson.guideArrange = guideJosn;
+				var guideJosn = {
+					id : guide.eq(i).data('entity-arrangeid'),
+					price : tripPlan.getVal(guide.eq(i), "guideFee"),
+					manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
+					remark : tripPlan.getVal(guide.eq(i), "remark"),
 				}
+				tripPlanJson.guideArrange = guideJosn;
 			}
 		}
 		//旅游车安排
 		var bus = $("#tripPlan_addPlan_bus tbody tr");
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
-				if(tripPlan.getVal(bus.eq(i), "id")){
-					var busJson = {
-						id : tripPlan.getVal(bus.eq(i), "id"),
-						price : tripPlan.getVal(bus.eq(i), "price"),
-						reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
-						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
-						needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(bus.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
-					}
-					tripPlanJson.busCompanyArrange = busJson;
-					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
+				var busJson = {
+					id : bus.eq(i).data('entity-arrangeid'),
+					price : tripPlan.getVal(bus.eq(i), "price"),
+					reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
+					contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
+					needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
+					// payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
+					guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
+					remark : tripPlan.getVal(bus.eq(i), "remark"),
+					orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
 				}
+				tripPlanJson.busCompanyArrange = busJson;
+				guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 			}
 		}
 		//餐安排
@@ -2368,7 +2360,7 @@ define(function(require, exports) {
 				}}
 				if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 					var restaurantJson = {
-						id : tripPlan.getVal(restaurant.eq(i), "id"),
+						id : restaurant.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(restaurant.eq(i), "whichDay"),
 						restaurantId : tripPlan.getVal(restaurant.eq(i), "restaurantId"),
 						restaurantStandardId : tripPlan.getVal(restaurant.eq(i), "restaurantStandardId"),
@@ -2376,8 +2368,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(restaurant.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(restaurant.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(restaurant.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(restaurant.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(restaurant.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(restaurant.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(restaurant.eq(i), "remark"),
 						type : restaurant.eq(i).find("[name=type]").val(),
@@ -2395,7 +2386,7 @@ define(function(require, exports) {
 			for(var i=0; i<hotel.length; i++){
 				if(tripPlan.getVal(hotel.eq(i), "hotelId")){
 					var hotelJson = {
-						id : tripPlan.getVal(hotel.eq(i), "id"),
+						id : hotel.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(hotel.eq(i), "whichDay"),
 						hotelId : tripPlan.getVal(hotel.eq(i), "hotelId"),
 						hotelRoomId : tripPlan.getVal(hotel.eq(i), "hotelRoomId"),
@@ -2403,8 +2394,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(hotel.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(hotel.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(hotel.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(hotel.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(hotel.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(hotel.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(hotel.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(hotel.eq(i), "remark"),
 						orderStatus: tripPlan.getVal(hotel.eq(i), "hotelOrder")
@@ -2420,7 +2410,7 @@ define(function(require, exports) {
 			for(var i=0; i<scenic.length; i++){
 				if(tripPlan.getVal(scenic.eq(i), "scenicId")){
 					var scenicJson = {
-						id : tripPlan.getVal(scenic.eq(i), "id"),
+						id : scenic.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(scenic.eq(i), "whichDay"),
 						scenicId : tripPlan.getVal(scenic.eq(i), "scenicId"),
 						scenicItemId : tripPlan.getVal(scenic.eq(i), "chargingId"),
@@ -2431,8 +2421,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(scenic.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(scenic.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(scenic.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(scenic.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(scenic.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(scenic.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(scenic.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(scenic.eq(i), "remark"),
 					}
@@ -2448,7 +2437,7 @@ define(function(require, exports) {
 			for(var i=0; i<shop.length; i++){
 				if(tripPlan.getVal(shop.eq(i), "shopId")){
 					var shopJson = {
-						id : tripPlan.getVal(shop.eq(i), "id"),
+						id : shop.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(shop.eq(i), "whichDay"),
 						shopId : tripPlan.getVal(shop.eq(i), "shopId"),
 						shopPolicyId :tripPlan.getVal(shop.eq(i), "shopPolicyId"),
@@ -2465,7 +2454,7 @@ define(function(require, exports) {
 			for(var i=0; i<selfPay.length; i++){
 				if(tripPlan.getVal(selfPay.eq(i), "selfPayId")){
 					var selfPayJson = {
-						id : tripPlan.getVal(selfPay.eq(i), "id"),
+						id : selfPay.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(selfPay.eq(i), "whichDay"),
 						selfPayId : tripPlan.getVal(selfPay.eq(i), "selfPayId"),
 						selfPayItemId : tripPlan.getVal(selfPay.eq(i), "selfitemId"),
@@ -2474,8 +2463,7 @@ define(function(require, exports) {
 						memberCount : tripPlan.getVal(selfPay.eq(i), "memberCount"),
 						reduceMoney : tripPlan.getVal(selfPay.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(selfPay.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(selfPay.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(selfPay.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(selfPay.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(selfPay.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(selfPay.eq(i), "remark")
 					}
@@ -2491,7 +2479,7 @@ define(function(require, exports) {
 			for(var i=0; i<ticket.length; i++){
 				if(tripPlan.getVal(ticket.eq(i), "tickeId")){
 					var ticketJson = {
-						id : tripPlan.getVal(ticket.eq(i), "id"),
+						id : ticket.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(ticket.eq(i), "whichDay"),
 						ticketId : tripPlan.getVal(ticket.eq(i), "tickeId"),
 						type : tripPlan.getVal(ticket.eq(i), "type"),
@@ -2504,8 +2492,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(ticket.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(ticket.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(ticket.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(ticket.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(ticket.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(ticket.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(ticket.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(ticket.eq(i), "remark"),
 					}
@@ -2521,7 +2508,7 @@ define(function(require, exports) {
 			for(var i=0; i<other.length; i++){
 				if(tripPlan.getVal(other.eq(i), "whichDay")){
 					var otherJson = {
-						id : tripPlan.getVal(other.eq(i), "id"),
+						id : other.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(other.eq(i), "whichDay"),
 						managerName : tripPlan.getVal(other.eq(i), "managerName"),
 						mobileNumber : tripPlan.getVal(other.eq(i), "mobileNumber"),
@@ -2530,8 +2517,7 @@ define(function(require, exports) {
 						price : tripPlan.getVal(other.eq(i), "fee"),
 						reduceMoney : tripPlan.getVal(other.eq(i), "reduceMoney"),
 						needPayMoney : tripPlan.getVal(other.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(other.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(other.eq(i), "payType"),
+						// payedMoney : tripPlan.getVal(other.eq(i), "payedMoney"),
 						guidePayMoney : tripPlan.getVal(other.eq(i), "guidePayMoney"),
 						remark : tripPlan.getVal(other.eq(i), "remark")
 					}

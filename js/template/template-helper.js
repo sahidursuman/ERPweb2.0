@@ -90,3 +90,15 @@ template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
             return '';
     }
 });
+template.helper("getPayTypeOptions", function(payType) {
+    var options = '', start = 0;
+
+    options += '<option value="0" '+ (start++ == payType?'selected':'') +'>现金</option>';
+    options += '<option value="1" '+ (start++ == payType?'selected':'') +'>银行转账</option>';
+    start++;
+    // options += '<option value="1" '+ (start++ == payType?'selected':'') +'>网上支付</option>';
+    options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
+    options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
+   
+    return options;
+});
