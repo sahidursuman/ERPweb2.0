@@ -50,7 +50,7 @@ define(function(require, exports) {
 		$.ajax(FinIncome.covertArgs(args))
 		.done(function(data) {
 			if (showDialog(data)) {
-				data.list = FinIncome.covertResponse(data);
+				data = FinIncome.covertResponse(data);
 				FinIncome.$tab.find('.T-list').html(listTableTemplate(data));
 
 				FinIncome.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
@@ -58,7 +58,7 @@ define(function(require, exports) {
 				laypage({
 				    cont: FinIncome.$tab.find('.T-pagenation'),
 				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				        if (!first) { // 避免死循环，第一次进入，不调用页面方法
 				            FinIncome.getList(obj.curr - 1);
@@ -131,7 +131,7 @@ define(function(require, exports) {
 							needPayMoney: tmp.settlementMoney,
 							payedMoney: tmp.receiveMoney,
 							unPayedMoney: tmp.unReceivedMoney,
-							id: tmp.partnerAgencyId
+							id: tmp.fromPartnerAgencyId
 						})
 					}
 
@@ -191,7 +191,9 @@ define(function(require, exports) {
 					break;
 			}
 		}
-		return list;
+
+		data.list = list;
+		return data;
 	};
 
 	/**

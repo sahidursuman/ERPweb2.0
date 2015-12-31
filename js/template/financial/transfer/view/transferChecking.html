@@ -58,7 +58,7 @@
             </thead>   
             <tbody class="T-checkList" data-right="1300005">
                 {{each financialTransferList as rs index}}
-                <tr class="T-checkTr" data-id="{{rs.id}}">                
+                <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">                
                     <td>{{index+1}}</td>
                     <td>{{rs.lineProductName}}</td>
                     <td>{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>

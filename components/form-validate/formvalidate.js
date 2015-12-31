@@ -360,11 +360,19 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ($jTmp.is(':visible') && this.task(data, tmp.rules, $jTmp) !== true) {
+				if ((this.validateHiddenObject || (!this.validateHiddenObject && $jTmp.is(':visible')))
+				  && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素
 					 */
-					$jTmp.trigger(FOCUS_OUT_EVENT).focus();
+					
+					if (this.validateHiddenObject && typeof this.hiddenFun === 'function')  {
+						this.hiddenFun($jTmp);
+					}
+
+					setTimeout(function() {
+						$jTmp.trigger(FOCUS_OUT_EVENT).focus();
+					}, 200);
 					res = false;
 					break;
 				}
@@ -378,8 +386,21 @@
 		return res;
 	};
 
+	/**
+	 * 设置校验隐藏元素及校验后调用的方法
+	 * @param  {Boolean} enable    true: 要校验隐藏的元素，false：不校验
+	 * @param  {function} hiddenFun 校验失败之后需要调用的方法
+	 * @return {object}           校验对象
+	 */
+	Validate.prototype.validateHidden = function(enable, hiddenFun) {
+		this.validateHiddenObject = !!enable;
+		this.hiddenFun = hiddenFun;
+		return this;
+	};
+
 	$.fn.formValidate = function(settings)  {
 		var validate = new Validate(settings);
+		validate.validateHiddenObject = false;
 		validate.active();
 
 		return validate;

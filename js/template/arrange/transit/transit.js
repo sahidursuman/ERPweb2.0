@@ -137,7 +137,7 @@ define(function(require, exports) {
 							transit.sendTransit(id);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
-							transit.pageNo=transit.$tab.find('.laypage_curr').html();
+							transit.pageNo = page;
 							transit.updateTransit(id);
 						}else if ($this.hasClass('T-view')) {
 							//查看
@@ -397,9 +397,7 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
 		'<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
-		'<td><input class="col-sm-12 T-number" name="busPayedMoney" maxlength="9" type="text" value="" /></td>'+
-		'<td><select class="" name="busPayType"><option value="0" {{if outBus.payType == 0}}selected="selected"{{/if}}>现付</option>'+
-		'<option value="1" {{if outBus.payType == 1}}selected="selected"{{/if}}>签单</option><option value="2" {{if outBus.payType == 2}}selected="selected"{{/if}}>转账</option><option value="3" {{if outBus.payType == 3}}selected="selected"{{/if}}>网付</option></select></td>'+
+		'<td hidden="hidden"><input class="col-sm-12 T-number" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 		'<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
 		'</tr>';
@@ -436,10 +434,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number" name="hotelPayedMoney" value="" type="text" maxlength="9" /></td>'+
-			'<td><select class="" name="hotelPayType" >'+
-			'<option value="0">现付</option>'+
-			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
+			'<td hidden="hidden"><input class="col-sm-12 T-number" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
@@ -474,10 +469,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number" name="ticketPayedMoney" value=""  maxlength="9"  type="text" /></td>'+
-			'<td><select class="" name="ticketPayType" >'+
-			'<option value="0">现付</option>'+
-			'<option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
+			'<td hidden="hidden"><input class="col-sm-12 T-number" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
 			'</tr>';
@@ -510,8 +502,7 @@ define(function(require, exports) {
 			'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="payedMoney" maxlength="9"  type="text" value="" /></td>'+
-			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
+			'<td hidden="hidden"><input class="col-sm-12" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>'+
 			'</tr>';
@@ -542,8 +533,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="payedMoney" type="text" maxlength="9" value="" /></td>'+
-			'<td><select class="" name="payType"><option value="0">现付</option><option value="1">签单</option><option value="2">转账</option><option value="3">网付</option></select></td>'+
+			'<td hidden="hidden"><input class="col-sm-12" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>'+
 			'</tr>';
@@ -1324,7 +1314,7 @@ define(function(require, exports) {
 				fee : transit.getArrangeTrValue(obj.eq(i),"busFee"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"busReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"busNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"busPayedMoney"),
+				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				payType : transit.getArrangeTrValue(obj.eq(i),"busPayType"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
@@ -1347,7 +1337,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"hotelMemberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"hotelPayedMoney"),
+				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				payType : transit.getArrangeTrValue(obj.eq(i),"hotelPayType"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
@@ -1373,7 +1363,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"ticketMemberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"ticketReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"ticketNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"ticketPayedMoney"),
+				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				payType : transit.getArrangeTrValue(obj.eq(i),"ticketPayType"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
@@ -1395,7 +1385,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"memberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"reduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"needPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"payedMoney"),
+				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				payType : transit.getArrangeTrValue(obj.eq(i),"payType"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
@@ -1418,7 +1408,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"memberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"reduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"needPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"payedMoney"),
+				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				payType : transit.getArrangeTrValue(obj.eq(i),"payType"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
