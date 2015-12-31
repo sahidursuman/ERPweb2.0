@@ -5,6 +5,9 @@
 var FinancialService = {};
 
 FinancialService.initPayEvent = function($container)  {
+    var currDate = new Date();
+    var str = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
+    $container.find('input[name="tally-date"]').val(str);
     Tools.setDatePicker($container.find('input[name="tally-date"]'));
 
     var $card = $container.find('input[name="card-number"]').autocomplete({
