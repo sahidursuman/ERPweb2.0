@@ -579,6 +579,7 @@ define(function(require, exports) {
 
 				//计算金额
 				transfer.calcPayMoney($tab);
+				$tab.find('.T-calc').trigger('change');
 
 				//精度调整
 				var $price=$tab.find('.T-price'),
@@ -625,16 +626,14 @@ define(function(require, exports) {
 		 * @return {[type]}           [description]
 		 */
 		transfer.newAddFee=function($tab,validator){
-			var html="<tr class=\"transferFee1SelectId\">"+
-		    "<td><input  name=\"otherFee\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"6\" /></td>"+
+			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
+		    "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc\" maxlength=\"6\" /></td>"+
-			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\" /></td>"+
-			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
+			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
+            "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
-
-
 			var $tbody=$tab.find(".T-addTransferCost");
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
@@ -812,20 +811,27 @@ define(function(require, exports) {
 			$tab.find(".T-addTransferCost tr").each(function(i){
 				var $that=$(this);
 				var id=$that.attr("data-entity-id"),
-				    type = $that.find("[name=type]").attr("value"),
-				    discribe = $that.find("input[name=discribe]").val(),
+				    discribe = $that.find("input[name=describe]").val(),
+				    remark = $that.find("input[name=remark]").val(),
 				    count = $that.find("input[name=count]").val(),
 				    otherPrice = $that.find("input[name=otherPrice]").val();
-				if(i>1){
-					var otherFeeJson = {
-						"type":type,    
-						"id":id,
+				    var otherFeeJson = {
 						"discribe":discribe,
 						"count":count,
+						"remark":remark,
 						"otherPrice" : otherPrice
 					}
+					if(!!id && id!=null ){
+				    	 otherFeeJson = {
+				    		"id":id,
+				    		"discribe":discribe,
+							"count":count,
+							"remark":remark,
+							"otherPrice" : otherPrice
+				          }
+				    }
 					otherFeeJsonAdd.push(otherFeeJson);
-				}
+				
 			})   
 			var saveDate={
 				touristGroupTransfer : {

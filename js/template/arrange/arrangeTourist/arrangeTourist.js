@@ -31,17 +31,17 @@ define(function(require, exports) {
         },
         touristGroupId: [],
         transferId: [],
-        visFromBusinessList:[],
-        visFromPartnerList:[],
-        vislineProductList:[],
+        visFromBusinessList: [],
+        visFromPartnerList: [],
+        vislineProductList: [],
 
-        groupFromBusinessList:[],
-        groupFromPartnerList:[],
-        grouplineProductList:[],
+        groupFromBusinessList: [],
+        groupFromPartnerList: [],
+        grouplineProductList: [],
 
-        transferFromBusinessList:[],
-        transferFromPartnerList:[],
-        transferProductList:[]
+        transferFromBusinessList: [],
+        transferFromPartnerList: [],
+        transferProductList: []
 
     };
 
@@ -170,15 +170,15 @@ define(function(require, exports) {
                     data.touristGroupList = JSON.parse(data.touristGroupList);
                     if (customerType == 0) { //散拼
                         var html = listTemplate(data);
-                            html = filterUnAuth(html);
+                        html = filterUnAuth(html);
                         $divIdObj.find('.T-touristVisitor-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_visitorEvent();
                         //散拼分页选中效果
                         arrangeTourist.pagerChecked(customerType, divId);
-                    }else if(customerType == 2 ) { //转客
+                    } else if (customerType == 2) { //转客
                         var html = listTransferTemplate(data);
-                            html = filterUnAuth(html);
+                        html = filterUnAuth(html);
                         $divIdObj.find('.T-Transfer-list').html(html);
                         //初始化页面事件
                         arrangeTourist.init_transferEvent();
@@ -729,7 +729,7 @@ define(function(require, exports) {
             //表单验证
             //if (!validator.form()) { return };
             //$tab,validator, tabArgs,className,status,tbody
-            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain",2, "mergeTripPlanTouristTbody");
+            arrangeTourist.saveAddTripPlan($addMergeAddTr, validator, "", "addTripPlanMain", 2, "mergeTripPlanTouristTbody");
             touristGroupMergeData = {
                 touristGroupMergeList: []
             };
@@ -793,7 +793,7 @@ define(function(require, exports) {
         if (type === '1') { //选择计划---并团--修改计划
             //并团修改计划绑定事件
             arrangeTourist.init_upTripEvent($tab, validator);
-        } else if(type == '2'){ //生成计划---并团-生成计划
+        } else if (type == '2') { //生成计划---并团-生成计划
             arrangeTourist.mergeAddTr_Event($tab, validator);
         }
     };
@@ -941,9 +941,9 @@ define(function(require, exports) {
 
                 var saveTripPlan = JSON.stringify(saveTripP);
                 var url = '';
-                if (status == 0) {   //修改
+                if (status == 0) { //修改
                     url = KingServices.build_url("tripPlan", "updateTripPlan")
-                } else if( status==1 || status==2 ){
+                } else if (status == 1 || status == 2) {
                     url = KingServices.build_url("tripPlan", "saveTripPlan")
                 }
                 $.ajax({
@@ -972,7 +972,7 @@ define(function(require, exports) {
                                         arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
                                     }
 
-                                } else if (status == 0 || status==2) { //并团--生成计划
+                                } else if (status == 0 || status == 2) { //并团--生成计划
                                     var divId = "T-Visitor-list",
                                         $VisitorObj = $('#' + divId),
                                         $searchArgumentsForm = $VisitorObj.find('form'),
@@ -1842,11 +1842,6 @@ define(function(require, exports) {
         };
     };
 
-
-
-
-
-
     /**
      * init_innerTransfer_Event 初始化内转报表操作
      * @return {[type]} [description]
@@ -1872,10 +1867,16 @@ define(function(require, exports) {
             arrangeTourist.innerOutEditFee(id, type);
         });
 
-        var $businessObj = $innerTransfer.find(".T-Chosen-businessGroup");
+
+        var $businessObj = $innerTransfer.find(".T-Chosen-businessGroup"),
+            $opUserObj = $innerTransfer.find(".T-Chosen-opUser");
 
         //获取内转对应的部门Autocomplate
         arrangeTourist.getBusinessGroup($businessObj);
+
+        //获取责任计调Autocomplate
+        arrangeTourist.getopUserList($opUserObj);
+
 
         //内转保存操作
         $innerTransfer.find(".T-saveTransfer").on('click', function(event) {
@@ -2126,6 +2127,7 @@ define(function(require, exports) {
 
         //根据费用单价、数量计算金额
         arrangeTourist.calcPayMoney($editFeeObj);
+        $editFeeObj.find(".T-calc").trigger('change');
 
         //提交编辑转客费用信息
         $editFeeObj.find('.T-updateFee').on('click', function(event) {
@@ -2153,9 +2155,9 @@ define(function(require, exports) {
 
         var $outFeeObj = $("#T-outEditFeeMain"),
 
-        //精度限制
-         $price = $outFeeObj.find('.T-price'),
-         $count = $outFeeObj.find('.T-count');
+            //精度限制
+            $price = $outFeeObj.find('.T-price'),
+            $count = $outFeeObj.find('.T-count');
         Tools.inputCtrolFloat($count);
         Tools.inputCtrolFloat($price);
 
@@ -2189,6 +2191,7 @@ define(function(require, exports) {
 
         //根据费用单价、数量计算金额
         arrangeTourist.calcPayMoney($outFeeObj);
+        $outFeeObj.find(".T-calc").trigger('change');
 
         //提交编辑转客费用信息
         $outFeeObj.find('.T-updateFee').on('click', function(event) {
@@ -2204,23 +2207,26 @@ define(function(require, exports) {
      * @param  {[type]} $tab [description]
      * @return {[type]}      [description]
      */
-    arrangeTourist.calcPayMoney = function($tab){
+    arrangeTourist.calcPayMoney = function($tab) {
         $tab.find('.T-innerOutEditFeeTbody').on('change', '.T-calc', function(event) {
             /* Act on the event */
-            var $that=$(this),$tr = $that.closest('tr');
-            if ($that.hasClass('T-count')) {  //若数量改变
+            var $that = $(this),
+                $tr = $that.closest('tr');
+            if ($that.hasClass('T-count')) { //若数量改变
                 var count = $tr.find('.T-count').val(),
-                    price = $tr.find('.T-price').val(),payMoney;
+                    price = $tr.find('.T-price').val(),
+                    payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney = parseFloat(price * count);
                     $tr.find('.T-payMoney').val(payMoney);
                 };
 
-            }else if($that.hasClass('T-price')){ //若价格改变
+            } else if ($that.hasClass('T-price')) { //若价格改变
                 var count = $tr.find('.T-count').val(),
-                    price = $tr.find('.T-price').val(),payMoney;
+                    price = $tr.find('.T-price').val(),
+                    payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney = parseFloat(price * count);
                     $tr.find('.T-payMoney').val(payMoney);
                 };
             };
@@ -2235,11 +2241,11 @@ define(function(require, exports) {
      * @return {[type]}           [description]
      */
     arrangeTourist.newAddFee = function($tab, type) {
-        var html = "<tr><td><input  name=\"otherFee\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
+        var html = "<tr><td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
             "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count T-calc\" /></td>" +
-            "<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-12  no-padding-right price T-price T-calc\" /></td>" +         
+            "<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price T-price T-calc\" /></td>" +
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-12  no-padding-right T-payMoney\" readonly=\"readonly\" /></td>" +
-            "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
+            "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
         $tbody.append(html);
@@ -2389,8 +2395,6 @@ define(function(require, exports) {
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
-                "transAdultPrice": arrangeTourist.getVal($editFeeObj, "transAdultPrice") || 0,
-                "transChildPrice": arrangeTourist.getVal($editFeeObj, "transChildPrice") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
                 "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
@@ -2403,21 +2407,20 @@ define(function(require, exports) {
             $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
             otherFeeListLength = $trNotDelete.length;
         $trNotDelete.each(function(i) {
-            var $that = $(this);
-            if (i > 1) {
-                var FeeJson = {
-                    discribe: arrangeTourist.getVal($that, "describe"),
-                    otherPrice: arrangeTourist.getVal($that, "otherPrice"),
-                    count: arrangeTourist.getVal($that, "count")
+            var $that = $(this),
+                FeeJson = {
+                    discribe: arrangeTourist.getVal($that, "describeInfo"),
+                    price: arrangeTourist.getVal($that, "price"),
+                    count: arrangeTourist.getVal($that, "count"),
+                    remark: arrangeTourist.getVal($that, "remark")
                 };
 
-                if (transferFeeStatus == 1) {
-                    FeeJson.id = $that.attr("data-entity-id");
-                };
-
-                otherFeeList.push(FeeJson);
-                inTransferFee.innerTransferFeeList.push(FeeJson);
+            if (transferFeeStatus == 1) {
+                FeeJson.id = $that.attr("data-entity-id");
             };
+
+            otherFeeList.push(FeeJson);
+            inTransferFee.innerTransferFeeList.push(FeeJson);
         });
 
 
@@ -2509,18 +2512,18 @@ define(function(require, exports) {
             }
         });
         var businessGroupId = arrangeTourist.getVal($innerTransfer, "businessGroupId") || 0,
-            opUserId = arrangeTourist.getVal($innerTransfer,"opUserId") || 0;
+            opUserId = arrangeTourist.getVal($innerTransfer, "opUserId") || 0;
         if (touristGroupIds.length == 0) {
             showMessageDialog($("#confirm-dialog-message"), "请勾选小组");
         } else if (businessGroupId == 0) {
             showMessageDialog($("#confirm-dialog-message"), "请选择部门");
-        }else if(opUserId == 0){
-             showMessageDialog($("#confirm-dialog-message"), "请选择责任计调");
+        } else if (opUserId == 0) {
+            showMessageDialog($("#confirm-dialog-message"), "请选择责任计调");
         } else {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransfer"),
                 type: "POST",
-                data: "touristGroupIds=" + touristGroupIds + "&businessGroupId=" + businessGroupId + "",
+                data: "touristGroupIds=" + touristGroupIds + "&businessGroupId=" + businessGroupId + "&opUserId=" + opUserId,
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
@@ -2680,31 +2683,31 @@ define(function(require, exports) {
      * @param  {[type]} customerType 散客、团体、转客标识
      * @return {[type]}              [description]
      */
-    arrangeTourist.caCheAutocomData = function(customerType){
+    arrangeTourist.caCheAutocomData = function(customerType) {
         $.ajax({
-                url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
-                type: 'POST',
-                dataType: 'json',
-                data: "customerType=" + customerType,
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        if (customerType == 0) {//散客
-                             arrangeTourist.visFromBusinessList = data.fromBusinessGroupList;
-                             arrangeTourist.visFromPartnerList = data.fromPartnerAgencyList;
-                             arrangeTourist.vislineProductList = data.lineProductList;
-                        } else if (customerType == 1) {//团队
-                             arrangeTourist.groupFromBusinessList = data.fromBusinessGroupList;
-                             arrangeTourist.groupFromPartnerList = data.fromPartnerAgencyList;
-                             arrangeTourist.grouplineProductList = data.lineProductList;
-                        } else if (customerType == 2) {//转客
-                             arrangeTourist.transferFromBusinessList = data.fromBusinessGroupList;
-                             arrangeTourist.transferFromPartnerList = data.fromPartnerAgencyList;
-                             arrangeTourist.transferProductList = data.lineProductList;
-                        }
+            url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
+            type: 'POST',
+            dataType: 'json',
+            data: "customerType=" + customerType,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    if (customerType == 0) { //散客
+                        arrangeTourist.visFromBusinessList = data.fromBusinessGroupList;
+                        arrangeTourist.visFromPartnerList = data.fromPartnerAgencyList;
+                        arrangeTourist.vislineProductList = data.lineProductList;
+                    } else if (customerType == 1) { //团队
+                        arrangeTourist.groupFromBusinessList = data.fromBusinessGroupList;
+                        arrangeTourist.groupFromPartnerList = data.fromPartnerAgencyList;
+                        arrangeTourist.grouplineProductList = data.lineProductList;
+                    } else if (customerType == 2) { //转客
+                        arrangeTourist.transferFromBusinessList = data.fromBusinessGroupList;
+                        arrangeTourist.transferFromPartnerList = data.fromPartnerAgencyList;
+                        arrangeTourist.transferProductList = data.lineProductList;
                     }
                 }
-            })
+            }
+        })
     };
 
 
@@ -2730,26 +2733,27 @@ define(function(require, exports) {
                 parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),list;
-                if (customerType == 0) {
-                    list = arrangeTourist.vislineProductList;
-                } else if (customerType == 1) {
-                    list = arrangeTourist.grouplineProductList;
-                } else if (customerType == 2) {
-                    list = arrangeTourist.transferProductList;
-                }
-                if (!!list && list.length > 0) {
-                    for (var i = 0; i < list.length; i++) {
-                        list[i].value = list[i].name;
-                    };
-                } else {
-                    layer.tips('没有内容', obj, {
-                        tips: [1, '#3595CC'],
-                        time: 2000
-                    });
+            var $obj = $(this),
+                list;
+            if (customerType == 0) {
+                list = arrangeTourist.vislineProductList;
+            } else if (customerType == 1) {
+                list = arrangeTourist.grouplineProductList;
+            } else if (customerType == 2) {
+                list = arrangeTourist.transferProductList;
+            }
+            if (!!list && list.length > 0) {
+                for (var i = 0; i < list.length; i++) {
+                    list[i].value = list[i].name;
                 };
-                $obj.autocomplete('option', 'source', list);
-                $obj.autocomplete('search', '');
+            } else {
+                layer.tips('没有内容', obj, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            };
+            $obj.autocomplete('option', 'source', list);
+            $obj.autocomplete('search', '');
         })
     };
 
@@ -2778,26 +2782,27 @@ define(function(require, exports) {
                 parents.find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),list;
-                if (customerType == 0) {
-                    list = arrangeTourist.visFromBusinessList;
-                } else if (customerType == 1) {
-                    list = arrangeTourist.groupFromBusinessList;
-                } else if (customerType == 2) {
-                    list = arrangeTourist.transferFromBusinessList;
-                }
-                if (!!list && list.length > 0) {
-                    for (var i = 0; i < list.length; i++) {
-                        list[i].value = list[i].businessGroupName;
-                    };
-                } else {
-                    layer.tips('没有内容', obj, {
-                        tips: [1, '#3595CC'],
-                        time: 2000
-                    });
+            var $obj = $(this),
+                list;
+            if (customerType == 0) {
+                list = arrangeTourist.visFromBusinessList;
+            } else if (customerType == 1) {
+                list = arrangeTourist.groupFromBusinessList;
+            } else if (customerType == 2) {
+                list = arrangeTourist.transferFromBusinessList;
+            }
+            if (!!list && list.length > 0) {
+                for (var i = 0; i < list.length; i++) {
+                    list[i].value = list[i].businessGroupName;
                 };
-                $obj.autocomplete('option', 'source', list);
-                $obj.autocomplete('search', '');
+            } else {
+                layer.tips('没有内容', obj, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            };
+            $obj.autocomplete('option', 'source', list);
+            $obj.autocomplete('search', '');
         })
     };
 
@@ -2821,28 +2826,77 @@ define(function(require, exports) {
                 parents.find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),list;
-                if (customerType == 0) {
-                    list = arrangeTourist.visFromPartnerList;
-                } else if (customerType == 1) {
-                    list = arrangeTourist.groupFromPartnerList;
-                } else if (customerType == 2) {
-                    list = arrangeTourist.transferFromPartnerList;
-                }
-                if (!!list && list.length > 0) {
-                    for (var i = 0; i < list.length; i++) {
-                        list[i].value = list[i].travelAgencyName;
-                    };
-                } else {
-                    layer.tips('没有内容', obj, {
-                        tips: [1, '#3595CC'],
-                        time: 2000
-                    });
+            var $obj = $(this),
+                list;
+            if (customerType == 0) {
+                list = arrangeTourist.visFromPartnerList;
+            } else if (customerType == 1) {
+                list = arrangeTourist.groupFromPartnerList;
+            } else if (customerType == 2) {
+                list = arrangeTourist.transferFromPartnerList;
+            }
+            if (!!list && list.length > 0) {
+                for (var i = 0; i < list.length; i++) {
+                    list[i].value = list[i].travelAgencyName;
                 };
-                $obj.autocomplete('option', 'source', list);
-                $obj.autocomplete('search', '');
+            } else {
+                layer.tips('没有内容', obj, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            };
+            $obj.autocomplete('option', 'source', list);
+            $obj.autocomplete('search', '');
         })
     };
+
+
+    /**
+     * getopUserList 获取责任计Autocomplate
+     * @param  {[type]} $obj [description]
+     * @return {[type]}      [description]
+     */
+    arrangeTourist.getopUserList = function($obj) {
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (ui.item == null) {
+                    var $that=$(this);
+                        $that.closest('div').find("input[name=opUserId]").val("");
+                }
+            },
+            select: function(event, ui) {
+                var $that=$(this);$that.blur();
+                    $that.closest('div').find("input[name=opUserId]").val(ui.item.id).trigger('change');
+            }
+        }).on('click', function() {
+            var businessGroupId = $obj.closest('div').find('input[name=businessGroupId]').val();
+            $.ajax({
+                url: KingServices.build_url("innerTransferOperation", "getDutyOPUserList"),
+                type: "POST",
+                data: "businessGroupId=" + businessGroupId,
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var listObj = data.opUserList;
+                        if (listObj != null && listObj.length > 0) {
+                            for (var i = 0; i < listObj.length; i++) {
+                                listObj[i].value = listObj[i].realName;
+                            }
+                        } else {
+                            layer.tips('没有内容', $obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                        $obj.autocomplete('option', 'source', listObj);
+                        $obj.autocomplete('search', '');
+                    }
+                }
+            });
+        })
+    };
+
 
     //获取value值
     arrangeTourist.getVal = function(obj, name) {

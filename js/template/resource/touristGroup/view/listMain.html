@@ -40,16 +40,10 @@
 
         <label class="pull-left text-right control-label no-padding-right margin-left60">外联销售</label>
         <div class="col-sm-1 marginLeft-Right7">
-            <input type="text" class="col-xs-12 T-choose-outMarket tourist-userChoose" placeholder="外联销售" name="outMarketName" value=""/>
-            <input type="hidden" name="outMarketId" value="" />
+            <input type="text" class="col-xs-12 T-choose-outUserList" placeholder="外联销售" name="realName" value="{{searchParam.realName}}"/>
+            <input type="hidden" name="outOPUserId" value="" />
         </div>
 
-
-        <label class="pull-left text-right control-label no-padding-right margin-left60">录入人</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <input type="text" class="col-xs-12 T-creatorUserChoose tourist-userChoose" placeholder="录入人" name="creatorName" value="{{searchParam.creatorName}}"/>
-            <input type="hidden" name="creatorId" value="{{searchParam.creatorId}}" />
-        </div>
 
           <label class="pull-left text-right control-label no-padding-right">录入日期</label>
             <div class="col-sm-1 marginLeft-Right7">
@@ -116,23 +110,22 @@
 
     <div class="form-group col-sm-12" style="margin-top:10px;"> 
         
-
             <label class="pull-left text-right control-label no-padding-right">组团单号</label>
             <div class="col-sm-1 marginLeft-Right7">
-                <input type="text" class="col-xs-12 T-choose-outMarket tourist-userChoose" placeholder="组团单号" name="otaOrderNumber" value=""/>
+                <input type="text" class="col-xs-12 T-choose-otaOrderNumber" placeholder="组团单号" name="otaOrderNumber" value="{{searchParam.otaOrderNumber}}"/>
             </div>
 
             <label class="pull-left text-right control-label no-padding-right margin-left60">客源类型</label>
-            <div class="col-sm-1 marginLeft-Right7">
-                <input type="text" class="col-xs-12 T-choose-outMarket tourist-userChoose" placeholder="客源类型" name="customerName" value=""/>
-                <input type="hidden" name="customerId" value="" />
+            <div class="col-sm-1 marginLeft-Right7 rangeTime">
+                <select name="memberType" class="col-xs-12">
+                    <option value="0" {{if searchParam.memberType=="0" }}selected="selected" {{/if}}>内宾</option>
+                    <option value="1" {{if searchParam.memberType=="1" }}selected="selected" {{/if}}>外宾</option>
+                </select>
             </div>
-
 
             <label class="pull-left text-right control-label no-padding-right margin-left60">接站牌</label>
             <div class="col-sm-1 marginLeft-Right7">
-                <input type="text" class="col-xs-12 T-choose-outMarket tourist-userChoose" placeholder="接站牌" name="reciveCard" value=""/>
-                <input type="hidden" name="reciveCardId" value="" />
+                <input type="text" class="col-xs-12 T-choose-welcomeBoard" placeholder="接站牌" name="welcomeBoard" value="{{searchParam.welcomeBoard}}"/>
             </div>
 
 

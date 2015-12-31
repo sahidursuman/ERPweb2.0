@@ -29,9 +29,9 @@
 			<label><span class="necessary">*</span>人数：</label>
             大人
             <label><span class="necessary">*</span>   
-			<input type="text" name="" class="form-control" style="width:25px" />
+			<input type="text" name="adultCount" value="" class="form-control T-adultCount" style="width:35px" />
             小孩
-            <input type="text" name="" class="form-control"  style="width:25px"/>
+            <input type="text" name="childCount" value="" class="form-control T-childCount"  style="width:35px"/>
 		</div>
 
 		<div class="form-group">
@@ -51,7 +51,7 @@
 
         <div class="form-group fixed-width">
             <label><span class="necessary">*</span>完团日期：</label>
-            <input type="text" name="endTime" class="form-control date-picker datepicker T-startTime" />
+            <input type="text" name="endTime" class="form-control date-picker datepicker T-endTime" />
         </div>
 
         <div class="form-group">
@@ -79,7 +79,7 @@
     <div class="form-inline">
         <div class="form-group fixed-width">
             <label >全陪：</label>
-            <input type="text" name="accompanyGuideName" maxlength="100"> 
+            <input type="text" name="accompanyGuideName" value="" maxlength="100"> 
         </div>
         <div class="form-group fixed-width">
             <label class="control-label no-padding-right" >全陪电话：</label>
@@ -97,7 +97,7 @@
         </div>
         <div class="form-group fixed-width-1">   
             <label>组团单号：
-                <input type="text" name="currentNeedPayMoney" value="0" maxlength="9" style="width: 87px;">
+                <input type="text" name="otaOrderNumber" value="" maxlength="9" style="width: 87px;">
             </label>
         </div>
     </div>
@@ -132,12 +132,6 @@
             </label>
         </div>
 
-         <div class="form-group fixed-width-1">
-            <label>收客单号：</label>
-            <input type="text" name="currentNeedPayMoney" value=""  maxlength="9" placeholder="系统自动生成" >
-            
-        </div>
-
     </div>
 
 
@@ -170,7 +164,7 @@
 
         <div class="form-group fixed-width-1">
             <label>计划现收：</label>
-            <input type="text" name="planCurrPayMoney" maxlength="9" value=""  class="T-planCurrPayMoney">
+            <input type="text" name="currentNeedPayMoney" maxlength="9" value=""  class="T-planCurrPayMoney">
         </div>
     </div>
 
@@ -196,33 +190,33 @@
                 </thead>
                 <tbody class="T-addCostTbody">
                     <tr>
-                        <td><input name="" value="大人结算价" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
+                        <td><input name="describeInfo" value="" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
                         <td>
-                            <input name="adultCount" type="text" value="" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-adultCount T-count T-calc" maxlength="3" />
+                            <input name="count" type="text" value="" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-adultCount T-count T-calc" maxlength="3" />
                         </td>
                         <td>
-                            <input name="adultPrice" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right  T-costPrice T-adultPrice T-price T-calc" maxlength="6" />
+                            <input name="price" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right  T-costPrice T-adultPrice T-price T-calc" maxlength="6" />
                         </td>
                         <td>
-                            <input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
+                            <input name="" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
                         </td>
-                        <td><input name="describeInfo" value="" type="text" class="col-sm-10  no-padding-right" /></td>
+                        <td><input name="remark" value="" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
                         <td><a class="cursor oldaddCost-delete T-delete">删除</a></td>
 
                     </tr>
                     <tr>
-                        <td><input name="" value="小孩结算价" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
+                        <td><input name="describeInfo" value="" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
 
                         <td>
-                            <input name="childCount" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount T-count T-calc" maxlength="3" />
+                            <input name="count" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-childCount T-costCount T-count T-calc" maxlength="3" />
                         </td>
                         <td>
-                            <input name="childPrice"  type="text" value="" class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice T-price T-calc" maxlength="6" />
+                            <input name="price"  type="text" value="" class="col-sm-10 col-sm-offset-1 no-padding-right T-childPrice  T-costPrice T-price T-calc" maxlength="6" />
                         </td>
                         <td>
-                            <input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
+                            <input name="" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
                         </td>
-                        <td><input name="describeInfo" value="" type="text" class="col-sm-10  no-padding-right" /></td>
+                        <td><input name="remark" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>
                         <td><a class="cursor oldaddCost-delete T-delete">删除</a></td>
                     </tr>
                 </tbody>
