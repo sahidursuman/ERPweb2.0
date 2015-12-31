@@ -160,9 +160,12 @@ define(function(require, exports){
 			endTime : Payment.$tab.find('.T-search-end-time').val(),
 			startTime : Payment.$tab.find('.T-search-start-time').val(),
 			payType : Payment.$tab.find('.T-search-payment').val(),
-			bankId : Payment.$tab.find('.T-bankId').val(),
 			subjectId : Payment.$tab.find('.T-search-subject').val(),
 			voucher : Payment.$tab.find('.T-search-voucher').val()
+		}
+
+		if (args.payType == 1) {
+			args.bankId = Payment.$tab.find('.T-bankId').val();
 		}
 		return args;
 	};
