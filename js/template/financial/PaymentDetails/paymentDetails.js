@@ -100,6 +100,7 @@ define(function(require, exports){
 			data.total = Payment.total;
 			data.searchParam = args;
 			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
+			console.log(data);
 			var html = listSearchTemplate(data);
 			Payment.$tab.find('.T-search-area').html(html);
 			Payment.init_event(Payment.$tab);
@@ -188,7 +189,15 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
+					    	FinancialService.initPayEvent($container.find('.T-bank-area'));//bankNum
+					    	var bankNum = $container.find('.bankNum');
+					    	// $container.find('select').on('change', function(event) {
+						    //     event.preventDefault();
+						    //     var val = $(this).val();
+						        
+						    //     bankNum.toggleClass('hidden', val != 1);
 
+						    // }).trigger('change');
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
@@ -235,7 +244,11 @@ define(function(require, exports){
 	};
 
 	Payment.submitPayment = function(){
-		var form = $(".T-addPayment-container .T-form").serialize();
+		var form = $(".T-addPayment-container .T-form").serializeJson();
+		form.bankId = form['card-id'];
+		delete(form['card-id']);
+		delete(form['card-number']);
+		
 		$.ajax({
 			url:KingServices.build_url("financialIncomeOrPay","saveIncomeorPay"),
 			type:"POST",

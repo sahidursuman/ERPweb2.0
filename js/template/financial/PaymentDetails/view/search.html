@@ -52,7 +52,7 @@
     <div class="form-group marginLeft-30">
         <label>支付方式：</label>
         <select class="form-control T-search-payment" style="width: 100px;">
-            <option value="">{{searchParam.payType}}</option>
+            <option value="">全部</option>
             {{each payTypeList as rs index}}
             <option value="{{index}}" {{if searchParam.payType !="" && searchParam.payType == index}} selected="selected"{{/if}}>{{rs}}</option>
             {{/each}}
