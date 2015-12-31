@@ -1767,6 +1767,12 @@ KingServices.viewTransit = function(id){
 		module.viewTransit(id);
 	});
 };
+//查看收支明细 
+KingServices.viewPayMentDetail = function(id,num){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.init(id,num);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){

@@ -466,7 +466,7 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
                                 Client.cacheClearData($tab.find('.T-list'));
-                                Client.ClientCheck(obj.curr - 1, false, $tab);
+                                Client.ClientClear(obj.curr - 1, false, $tab);
                             }
                         }
                     });
