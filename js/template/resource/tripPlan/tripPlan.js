@@ -536,8 +536,8 @@ define(function(require, exports) {
 		//删除操作
 		$tab.on('click', '.T-btn-deleteTripPlanList', function() {
 			var $this = $(this),$parents = $this.closest('tr'), $id = $parents.data('entity-arrangeid'),
-				$name = $this.data('entity-name')
-			tripPlan.deleteTripPlan($this, $id, $name, $tab);
+				$name = $this.data('entity-name'), isBooking = $parents.data('entity-isbooking');
+			tripPlan.deleteTripPlan($this, $id, $name, $tab, isBooking);
 		});
 		//所有autocomplete
 		tripPlan.bindAutocomplete($tab);
@@ -617,6 +617,8 @@ define(function(require, exports) {
 					$this.closest('tr').find('[name=busOrder]').val(2);
 					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
+					$this.closest('tr').data('entity-arrangeid', data.arrangeId);
+					$this.closest('tr').data('entity-isbooking', 1);
 				}
 			}
 		})
@@ -682,6 +684,8 @@ define(function(require, exports) {
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
+					$this.closest('tr').data('entity-arrangeid', data.arrangeId);
+					$this.closest('tr').data('entity-isbooking', 1);
 				}
 			}
 		})
@@ -908,6 +912,8 @@ define(function(require, exports) {
 									trWhichDay = $this.find('[name=whichDay]').val()
 								if (hotelId == trHotelId && hotelRoomId == trHotelRoomId && whichDay == trWhichDay) {
 									$this.find('[name=id]').val(arrangeId);
+									$this.data('entity-arrangeid', arrangeId);
+									$this.data('entity-isbooking', 1);
 								}
 							});
 						}
@@ -1188,13 +1194,13 @@ define(function(require, exports) {
 	 * @param  {[type]} $id [安排ID]
 	 * @return {[type]}     [description]
 	 */
-	tripPlan.deleteTripPlan = function($this, $id, $name, $tab) {
+	tripPlan.deleteTripPlan = function($this, $id, $name, $tab ,isBooking) {
 		if($id){
 			//默认等于0，说明数据来源于模板表，直接移除tr行，不做后台删除请求
 			//等于1说明数据来源于安排表，发送删除请求
 			var isArranged = $('#isArranged').val() == "1" ? true : false;
 			
-			if(isArranged) {
+			if(isArranged || !!isBooking) {
 				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
