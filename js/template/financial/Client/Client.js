@@ -622,7 +622,7 @@ define(function(require, exports) {
 
                                 if (tmp.id === id) {
                                     hasData = true;
-                                    $receive.val(tmp.temporaryIncomeMoney).trigger('change');
+                                    $receive.val(tmp.temporaryIncomeMoney);
                                     return true;
                                 }
                             }
@@ -788,12 +788,17 @@ define(function(require, exports) {
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
-
+		var JsonStr = Client.clearDataArray 
+        if(JsonStr.length==0){
+            showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
+            return;
+        };
+        JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
             type:"POST",
             data:{
-                receiveAccountList : JSON.stringify(Client.clearDataArray),
+                receiveAccountList : JsonStr,
                 fromPartnerAgencyId: $tab.data('id'),
                 payType: $tab.find('.T-sumPayType').val(),
                 bankId:bankId,
