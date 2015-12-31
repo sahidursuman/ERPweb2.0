@@ -13,7 +13,7 @@
     <td>{{guide.guideIncomeMoney}}</td>
     <td>{{guide.zhangmiantuibu}}</td>
     <td><input name="settlementMoney" type="text" class="money T-settlementMoney" value="{{guide.settlementMoney}}" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}> </td>
-    <td class="T-payedDetail" data-money="{{guide.payedMoney}}">{{ if (guide.payedMoney != 0)}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
+    <td class="T-payedDetail" data-money="{{guide.payedMoney}}">{{ if guide.payedMoney != 0}}<a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a>{{else}} {{guide.payedMoney}} {{/if}}</td>
     <td name="unPayedMoney">{{guide.unPayedMoney}}</td>
     <td><input type="text" class="T-checkRemark" name="checkRemark" value="{{guide.checkRemark}}"  {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}></td>
     <td>{{guide.checkTime}}</td>
