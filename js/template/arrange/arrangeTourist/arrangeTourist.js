@@ -1135,7 +1135,7 @@ define(function(require, exports) {
                         "planTouristCount": getValue("planTouristCount"),
                         "setPlacePosition": getValue("setPlacePosition"),
                         "setPlaceTime": getValue("setPlaceTime"),
-                        "executeTimeType": getValue("executeTimeType") + "",
+                        "executeTimeType": $tab.find(".addTripPlanMain").find('input[name="executeTimeType"]').eq('0').is(':checked')?0:1,
                         "executeTime": getValue("executeTime"),
                         "remark": getValue("remark")
                     },
@@ -1145,6 +1145,11 @@ define(function(require, exports) {
                     "busId": getValue("busLicenseNumberId"),
                     "touristGroupId": [],
                     "qouteId": getValue("qouteId")
+                }
+
+                if (!!saveTripP.tripPlan.executeTimeType && (saveTripP.tripPlan.startTime + ' 06:00:00') < saveTripP.tripPlan.executeTime) {
+                    showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
+                    return;
                 }
                 var touristGroupList = $tab.find(" ." + className + " ." + tbody + " tr").length;
                 $tab.find(" ." + className + " ." + tbody + " tr").each(function(i) {
@@ -3040,10 +3045,21 @@ define(function(require, exports) {
             language: 'zh-CN'
         })
 
-        //定时发送
-        $tabId.find('.dataTimePicker').datetimepicker({
+        var startTime = $tabId.find('[name="startTime"]').val();
+
+        // 集合时间
+        $tabId.find('input[name="setPlaceTime"]').datetimepicker({
             autoclose: true,
             todayHighlight: true,
+            maxDate: new Date(startTime + ' 23:59:59'),
+            format: 'L',
+            language: 'zh-CN'
+        });
+        // 定时发送时间
+        $tabId.find('input[name="executeTime"]').datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: new Date(startTime + ' 06:00:00'),
             format: 'L',
             language: 'zh-CN'
         });
