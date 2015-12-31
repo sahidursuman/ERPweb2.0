@@ -2391,8 +2391,8 @@ define(function(require, exports){
 				$obj.find('input[name=marketPrice]').val(data.marketPrice);
 				$obj.find('input[name=price]').val(data.price);
 				$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
-				$obj.find('input[name=travelAgencyRate]').val((data.travelAgencyRate*100));
-				$obj.find('input[name=guideRate]').val(data.guideRate*100);
+				$obj.find('input[name=travelAgencyRate]').val(data.travelAgencyRate);
+				$obj.find('input[name=guideRate]').val(data.guideRate);
 			}
 		});
 	};
