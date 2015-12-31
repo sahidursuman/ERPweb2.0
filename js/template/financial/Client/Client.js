@@ -265,7 +265,7 @@ define(function(require, exports) {
             });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-check'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
 
         //绑定表内事件
         $tab.find('.T-list').on('click', '.T-action', function(event){
@@ -284,7 +284,7 @@ define(function(require, exports) {
             var $that = $(this);
 
             // 只处理对账状态改变的数据
-            if ($that.hasClass('T-check')) {
+            if ($that.hasClass('T-checkbox')) {
                 $that.closest('tr').data('change', true);
             }
             $tab.data('isEdited', true);
@@ -733,7 +733,7 @@ define(function(require, exports) {
             selectFlag = 0,
             argLen = arguments.length,
             checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-check');
+            $tr = checkList.find('.T-checkbox');
         $tr.each(function(i){
            var flag = $(this).is(":checked");
            var tr = $(this).closest('tr');
