@@ -397,7 +397,12 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			Count.getShopRate($(this),$obj);
+            	
+            	
+			var shopPolicyId = $(this).attr('policyId');
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -634,7 +639,10 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			Count.getShopRate($(this),$obj);
+			var shopPolicyId = $(this).attr('policyId');
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -1120,6 +1128,13 @@ define(function(require, exports){
 			//计算金额
 			Count.autoShopSum($(this),$parentObj);
 			}
+		});
+		//填写金额带出社佣、导佣
+		$bodyObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
+			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
+			var consumeMoney = $(this).val();
+			var date =$parentObj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
 		});
 		//删除新增的购物安排
 		$bodyObj.find('.T-del').off('click').on('click',function(){
@@ -2941,14 +2956,14 @@ define(function(require, exports){
         }
 	};
 	//获取社佣比例、导佣比例
-	Count.getShopRate = function($obj,$bodyObj){
+	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){
 		$.ajax({
 			url:KingServices.build_url('shop','findShopCostRebateBy'),
 			type:'POST',
 			data:{
-				policyId:$obj.attr("policyId"),
-            	consumeMoney:$obj.val(),
-            	date:$bodyObj.find('.tripPlanStartTime').val()
+				policyId:shopPolicyId,
+            	consumeMoney:consumeMoney,
+            	date:date
 			},
 			success:function(data){
 				var result = showDialog(data);
