@@ -313,13 +313,9 @@ define(function(require, exports) {
             $innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         //精度控制
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
-        Tools.inputCtrolFloat($adultPrice);
-        Tools.inputCtrolFloat($childPrice);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -362,13 +358,9 @@ define(function(require, exports) {
             $groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
-        Tools.inputCtrolFloat($adultPrice);
-        Tools.inputCtrolFloat($childPrice);
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
