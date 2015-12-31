@@ -512,7 +512,7 @@ define(function(require, exports) {
             Tools.closeTab(PaymentTabId);
         });
         //保存付款事件
-        $PaymentTabId.find(".T-savePayment").click(function() {
+        $PaymentTabId.find(".T-saveClear").click(function() {
             if(!payValidator.form()){return;}
             OtherAccounts.paysave(data, $PaymentTabId);
         });

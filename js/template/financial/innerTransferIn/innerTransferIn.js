@@ -440,7 +440,7 @@ define(function(require,exports) {
         	}
         });
         //确认付款
-        $obj.find('.T-incomeMoney').off('click').on('click',function(){
+        $obj.find('.T-saveClear').off('click').on('click',function(){
         	if(!settleCheck.form()){return;}
         	InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
         });

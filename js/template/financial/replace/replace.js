@@ -315,7 +315,7 @@ define(function(require, exports) {
                 Replace.getList(Replace.listPageNo);
 			}
 		});
-		$tab.find('.T-btn-save').on('click', function(event){
+		$tab.find('.T-saveClear').on('click', function(event){
 			if (!validatorCheck.form()) {
                 return;
             }
@@ -467,7 +467,7 @@ define(function(require, exports) {
 
                     // 设置记录条数及页面
                     $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                    $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                    $tab.find('.T-saveClear').data('pageNo', args.pageNo);
 
 					// 绑定翻页组件
 					laypage({

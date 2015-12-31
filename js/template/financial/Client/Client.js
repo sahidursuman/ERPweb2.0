@@ -203,7 +203,7 @@ define(function(require, exports) {
     };
 
     Client.initCheck = function($tab){
-        var id = $tab.find('.T-btn-save').data('id');
+        var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
         $tab.find(".T-List").off('change').on('change',"input",function(event) {
@@ -250,7 +250,7 @@ define(function(require, exports) {
         //导出报表事件
         Client.$checkSearchArea.find('.T-btn-export').on('click', function(event){
             event.preventDefault();
-                var $btn = $tab.find('.T-btn-save'),
+                var $btn = $tab.find('.T-saveClear'),
                 $datePicker = Client.$checkSearchArea.find('.date-picker'),
                 args = {
                     fromPartnerAgencyId: $tab.data("id"), 
@@ -265,7 +265,7 @@ define(function(require, exports) {
             });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-check'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
 
         //绑定表内事件
         $tab.find('.T-list').on('click', '.T-action', function(event){
@@ -284,7 +284,7 @@ define(function(require, exports) {
             var $that = $(this);
 
             // 只处理对账状态改变的数据
-            if ($that.hasClass('T-check')) {
+            if ($that.hasClass('T-checkbox')) {
                 $that.closest('tr').data('change', true);
             }
             $tab.data('isEdited', true);
@@ -296,7 +296,7 @@ define(function(require, exports) {
         });
 
         //确认对账按钮事件
-        $tab.find(".T-btn-save").click(function(){ 
+        $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
             FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
                 Client.saveCheckingData($tab);
@@ -432,7 +432,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
-            type = $tab.find('.T-btn-save').data('type');
+            type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
             type =args.type;
@@ -476,11 +476,11 @@ define(function(require, exports) {
     };
 
     Client.initClear = function($tab, id){
-        var id = $tab.find('.T-btn-save').data('id');
+        var id = $tab.find('.T-saveClear').data('id');
         
         Client.$clearSearchArea = $tab.find('.T-search-area');
         Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
-        var validator = (new FinRule($tab.find('.T-btn-save').data('type') ? 3 : 1)).check($tab),
+        var validator = (new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1)).check($tab),
             autoValidator = (new FinRule(2)).check(Client.$clearSearchArea);
 
         $tab.data('id', id);
@@ -555,7 +555,7 @@ define(function(require, exports) {
             }
         });
         //确认对账按钮事件
-        $tab.find(".T-btn-save").click(function(){ 
+        $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
             Client.saveClearData($tab);
          });
@@ -733,7 +733,7 @@ define(function(require, exports) {
             selectFlag = 0,
             argLen = arguments.length,
             checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-check');
+            $tr = checkList.find('.T-checkbox');
         $tr.each(function(i){
            var flag = $(this).is(":checked");
            var tr = $(this).closest('tr');
@@ -828,7 +828,7 @@ define(function(require, exports) {
     Client.validatorTable = function(){
         var validator;
         var $tr = $("#tab-financial_Client-checking-content .T-checkList tr"),
-            type = $("#tab-financial_Client-checking-content .T-btn-save").data('type');
+            type = $("#tab-financial_Client-checking-content .T-saveClear").data('type');
         $tr.each(function(){
             validator = (new FinRule(type ? 3 : 1)).check($(this));
         });

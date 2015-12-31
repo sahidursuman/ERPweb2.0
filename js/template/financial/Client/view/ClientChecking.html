@@ -107,7 +107,7 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel  R-right" {{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}>
-                        <input type="checkbox" class="ace T-check"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
+                        <input type="checkbox" class="ace T-checkbox"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"<a> |</a></label>
@@ -160,7 +160,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" data-right="1280002|1280005" data-id="{{fromPartnerAgencyId}}" style="margin-left: 20px">
+            <button class="btn btn-xs btn-primary T-saveClear" data-right="1280002|1280005" data-id="{{fromPartnerAgencyId}}" style="margin-left: 20px">
                 <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>
