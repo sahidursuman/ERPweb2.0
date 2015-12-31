@@ -100,7 +100,6 @@ define(function(require, exports){
 			data.total = Payment.total;
 			data.searchParam = args;
 			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-			console.log(data);
 			var html = listSearchTemplate(data);
 			Payment.$tab.find('.T-search-area').html(html);
 			Payment.init_event(Payment.$tab);
