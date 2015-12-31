@@ -248,7 +248,7 @@ define(function(require, exports){
 				if(result){
 					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
 						$(".T-addPayment-container .T-close-payment").trigger('click');
-						Payment.initModule(3,"账户：2,余额：13");
+						Payment.initModule();
 					});
 				}
 			}
