@@ -1079,6 +1079,49 @@ var Tools = {
         return serializeObj;  
     };  
 })(jQuery); 
+
+/**
+ * 获取表格中的数据：input:text radio checkbox password
+ * 通过名称获取，并会获取tr上的Id
+ * @param  {object} $tbody table的query对象
+ * @return {json}        返回JSON
+ */
+Tools.getTableVal = function($tbody, idName) {
+	var res = false;
+
+	if (!!$tbody && $tbody.length) {
+		res = [];
+		var name, value;	
+		idName = idName || 'id';
+
+		$tbody.children('tr').each(function() {
+			var $tr = $(this), val = {id: $tr.data(idName)};
+
+			$tr.find('input').each(function() {
+				var $that = $(this);
+
+				name = $that.prop('name');
+				if (!!name) {
+					if ($that.is('[type=checkbox],[type=radio]')) {
+						value = $that.is(':checked');
+					} else {
+						value = $that.val();
+					}
+
+					val[name] = value;
+				}
+
+
+			});
+
+			res.push(val);
+		});
+	}
+
+	console.info(res);
+	return res;
+};
+
 /**
  * 自定义简介的提示
  * @param  {object} $elements 需要绑定提示的DOM
@@ -1474,6 +1517,24 @@ Tools.getDateDiff = function(startDate,endDate)
     		return (new Date()).getTime();
     	}
     }
+}
+
+/**
+ * 增加几天
+ * @param {string} date 开始的日期 
+ * @param {int} days 增加的天数
+ */
+Tools.addDay = function(date, days) {
+	if (!isNaN(days)) {
+		if (!(date instanceof Date)) {
+			date = new Date(date);
+		}
+		var timer = date.getTime()+ days*24*60*60*1000;
+		date.setTime(timer);
+		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+	}
+
+	return date;
 }
 
 /**
