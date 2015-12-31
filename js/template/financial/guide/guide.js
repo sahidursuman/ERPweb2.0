@@ -405,6 +405,9 @@ define(function(require, exports) {
     FinGuide.savePayingData = function($tab, tabArgs) {
         var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
+		var bankId = $tab.find('input[name=card-id]').val();
+        var voucher = $tab.find('input[name=credentials-number]').val();
+        var billTime = $tab.find('input[name=tally-date]').val();
         if (json.length) {
             $.ajax({
                     url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
@@ -413,7 +416,10 @@ define(function(require, exports) {
                         payJson: JSON.stringify(json),
                         guideId: $tab.find('.T-btn-save').data('id'),
                         payType: $tab.find('.T-sumPayType').val(),
-                        remark: $tab.find('.T-remark').val()
+                        remark: $tab.find('.T-remark').val(),
+                        bankId:bankId,
+                        voucher:voucher,
+                        billTime:billTime
                     },
                 })
                 .done(function(data) {
