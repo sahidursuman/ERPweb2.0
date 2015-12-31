@@ -6,10 +6,14 @@ var FinancialService = {};
 
 FinancialService.initPayEvent = function($container)  {
     var currDate = new Date();
-    var str = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
+    var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
-    Tools.setDatePicker($container.find('input[name="tally-date"]'));
-
+    $container.find('input[name="tally-date"]').datetimepicker({
+        autoclose:true,
+        todayHighlight:true,
+        format:'L',
+        language:'zh-CN'
+     });
     var $card = $container.find('input[name="card-number"]').autocomplete({
         minLength:0,
         change :function(event, ui){
@@ -18,6 +22,7 @@ FinancialService.initPayEvent = function($container)  {
             }
         },
         select :function(event, ui){
+             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
              $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
         }
     }).one("click", function(){
