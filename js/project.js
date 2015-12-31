@@ -686,6 +686,7 @@ var modalScripts = {
     'financial_income': 'js/template/financial/FinIncome/finIncome.js', //财务收款
     'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
     'financial_transfer': "js/template/financial/transfer/transfer.js",
+	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
