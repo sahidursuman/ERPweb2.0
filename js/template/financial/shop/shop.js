@@ -324,7 +324,7 @@ define(function(require, exports){
 
 
 		//绑定确定事件
-		$tab.find('.T-btn-save').on('click', function(event){
+		$tab.find('.T-saveClear').on('click', function(event){
 			event.preventDefault();
 			if(!type){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
@@ -569,7 +569,7 @@ define(function(require, exports){
 						//FinShop.initOperationEvent($tab, 1);
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
-                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        $tab.find('.T-saveClear').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 

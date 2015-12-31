@@ -184,7 +184,7 @@ define(function(require, exports) {
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
             args = {
-                guideId: $tab.find('.T-btn-save').data('id'),
+                guideId: $tab.find('.T-saveClear').data('id'),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
@@ -245,7 +245,7 @@ define(function(require, exports) {
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            var $btn = $tab.find('.T-btn-save');
+            var $btn = $tab.find('.T-saveClear');
             var args = {
                 guideId: $btn.data('id'), 
                 guideName:$btn.data('name'),
@@ -290,7 +290,7 @@ define(function(require, exports) {
             FinancialService.updateUnpayMoney($tab, validator);
             $searchArea.find('.T-btn-export').on('click', function(event) {
                 event.preventDefault();
-                var $btn = $tab.find('.T-btn-save'),
+                var $btn = $tab.find('.T-saveClear'),
                 args = {
                     guideId: $btn.data('id'), 
                     startDate: $datePicker.eq(0).val(),
@@ -322,7 +322,7 @@ define(function(require, exports) {
         });
 
         //确认按钮事件
-        $tab.find(".T-btn-save").click(function() {
+        $tab.find(".T-saveClear").click(function() {
             if (!validatorCheck.form())return;
             if (type) {
                 FinGuide.savePayingData($tab);
@@ -411,7 +411,7 @@ define(function(require, exports) {
                     type: 'post',
                     data: {
                         payJson: JSON.stringify(json),
-                        guideId: $tab.find('.T-btn-save').data('id'),
+                        guideId: $tab.find('.T-saveClear').data('id'),
                         payType: $tab.find('.T-sumPayType').val(),
                         remark: $tab.find('.T-remark').val()
                     },
@@ -441,7 +441,7 @@ define(function(require, exports) {
      */
     FinGuide.autoFillMoney = function($tab) {
         if (!!$tab && $tab.length) {
-            var id = $tab.find('.T-btn-save').data('id'),
+            var id = $tab.find('.T-saveClear').data('id'),
                 args = FinancialService.autoPayJson(id, $tab, new FinRule(2), 0),
                 $line = $tab.find('.T-lineProductName'),
                 $autoPayMoney = $tab.find('.T-sumPayMoney');
@@ -501,7 +501,7 @@ define(function(require, exports) {
 
             var args = {
                 pageNo: pageNo || 0,
-                guideId: $tab.find('.T-btn-save').data('id'),
+                guideId: $tab.find('.T-saveClear').data('id'),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
@@ -522,7 +522,7 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         var html,
-                            type = $tab.find('.T-btn-save').data('type');
+                            type = $tab.find('.T-saveClear').data('type');
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
                             data.isOuter = FinGuide.isOuter;
@@ -539,7 +539,7 @@ define(function(require, exports) {
 
                         // 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        $tab.find('.T-saveClear').data('pageNo', args.pageNo);
                         // 绑定翻页组件
                         laypage({
                             cont: $tab.find('.T-pagenation'),

@@ -278,6 +278,19 @@ FinancialService.isClearSave = function($tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;
     }
+
+    var $saveBtn = $tab.find('.T-saveClear'),
+        saveZero = $saveBtn.data('save-zero');
+    if (!saveZero && sumPayMoney == 0) {
+        showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+            $saveBtn.data('save-zero', true).trigger('click');
+        })
+
+        return false;
+    } else {
+        $saveBtn.data('save-zero', false);
+    }
+    
     return true;
 };
 
