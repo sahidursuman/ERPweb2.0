@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":14,"md5":"4fad0f72b11bceb3eb861272e326148b"}*/
+/*TMODJS:{"debug":true,"version":17,"md5":"47e8863908e562e311d1c6e09983d618"}*/
 define(function(require) {
-    return require("../../../template")("system/basicSet/view/addAccountant", '<div class="col-xs-12"> <form class="form-horizontal T-add-form" role="form" style="margin-top:50px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>科目名称:</label> <div class="col-sm-6"> <input type="text" name="subjectName" class="col-sm-12" /> </div> </div> <div class="space-10"></div> <button class="btn btn-block btn-primary T-submit"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> </form> </div> ');
+    return require("../../../template")("system/basicSet/view/addAccountant", '<div class="col-xs-12"> <form class="form-horizontal T-add-form" role="form" style="margin-top:20px" onsubmit="return false"> <div class="form-group"> <label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>科目名称:</label> <div class="col-sm-8"> <input type="text" name="subjectName" class="col-sm-12" /> </div> </div> <div class="space-10"></div> <button class="btn btn-xs btn-block btn-primary T-submit"> <i class="ace-icon fa fa-check"></i> 提交信息 </button> </form> </div> ');
 });
