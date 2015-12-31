@@ -7,7 +7,7 @@
 				</h5>
 			<div class="pull-right line-bluer line-separated"></div>
 			<div style="clear: both"></div>
-			<div class="widget-body" style="border: 1px solid #DDD;line-height:30px;width: 98%;margin: auto;padding-top: 6px;height:45px;">
+			<div class="widget-body" style="border: 1px solid #DDD;line-height:24px;width: 98%;margin: auto;padding-top: 12px;">
                 <div class="widget-main">
                 {{if lineProduct != null}}
                     <div class="form-group">
@@ -33,6 +33,16 @@
                         <label class="col-sm-1 control-label no-padding-right">应用范围:</label>
                         <div class="col-sm-1">
                             <label class="control-label T-lineProductCusType"> {{if lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{lineProduct.shopIds}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{lineProduct.selfPayItemIds}}">
                         </div>
                     </div>
 					{{else}}
@@ -227,6 +237,12 @@
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addInsurance">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
 										<div class="widget-body">
 											<div class="widget-main">
@@ -234,26 +250,40 @@
 													<thead>
 														<tr>
 															<th class="th-border">保险公司</th>
-															<th class="th-border">险种</th>
+															<th class="th-border">保险类型</th>
 															<th class="th-border">成本价</th>
 															<th class="th-border">市场价</th>
 															<th class="th-border">备注</th>
+															<th class="th-border">删除</th>
 														</tr>
 													</thead>
 													<tbody>{{if insuranceTemplate != null}}
+														{{each insuranceTemplate as rs}}
 														<tr>
-															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{insuranceTemplate.insurance.name}}" /><input type="hidden" name="insuranceId" value="{{insuranceTemplate.insurance.id}}" /></td>
-															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{insuranceTemplate.type}}" /><input type="hidden" name="insuranceItemId" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{insuranceTemplate.price}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value="{{insuranceTemplate.price}}"></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{insuranceTemplate.remark}}" /></td>
-														</tr>{{else}}
+															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{rs.insurance.name}}" /><input type="hidden" name="insuranceId" value="{{rs.insurance.id}}" /></td>
+															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{rs.type}}" /><input type="hidden" name="insuranceItemId" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value="{{rs.price}}"></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
+														</tr>
+														{{/each}}
+														{{else}}
 														<tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /></td>
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="" /><input type="hidden" name="insuranceItemId" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text"></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
 														</tr>
 														{{/if}}
 													</tbody>
@@ -268,6 +298,12 @@
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+	                                            <a href="javascript:void(0)" class="T-add T-addBusCompany">
+	                                                <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+	                                                    <i class="ace-icon fa fa-plus"></i>
+	                                                    新增
+	                                                </button>
+	                                            </a>
 												<button class="btn btn-sm btn-success T-car" style="float: right;"> <i class="ace-icon fa fa-plus"></i> 车辆询价 </button>
 											</h5>
 										<div class="widget-body">
@@ -283,23 +319,30 @@
 															<th class="th-border">座位价(成本价)</th>
 															<th class="th-border">市场价</th>
 															<th class="th-border">备注</th>
+															<th class="th-border">操作</th>
 														</tr>
 													</thead>
 													<tbody>{{if busCompanyTemplate != null}}
+													{{each busCompanyTemplate as rs}}
 														<tr>
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{busCompanyTemplate.bus.seatCount}}" /></td>  
-															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{busCompanyTemplate.bus.brand}}" /></td>
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.bus.seatCount}}" /></td>  
+															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{rs.bus.brand}}" /></td>
 															<td>
-																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{busCompanyTemplate.busCompany.companyName}}" />
-																<input type="hidden" name="busCompanyId" value="{{busCompanyTemplate.busCompany.id}}">
+																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{rs.busCompany.companyName}}" />
+																<input type="hidden" name="busCompanyId" value="{{rs.busCompany.id}}">
 																<input type="hidden" name="offerId" value="">
 															</td>
-															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{busCompanyTemplate.busCompany.managerName}}" /></td>   
-															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyTemplate.busCompany.mobileNumber}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{busCompanyTemplate.price}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="{{busCompanyTemplate.price}}"></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{busCompanyTemplate.remark}}" /></td>
-														</tr>{{else}}
+															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{rs.busCompany.managerName}}" /></td>   
+															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{rs.busCompany.mobileNumber}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{rs.price}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="{{rs.price}}"></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="{{rs.id}}" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
+														</tr>{{/each}}{{else}}
 														<tr>
 															<td><input class="col-xs-12 bind-change  T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="" /></td>
@@ -309,6 +352,11 @@
 															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
 														</tr>
 														{{/if}}
 													</tbody>
