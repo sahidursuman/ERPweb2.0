@@ -818,15 +818,11 @@ define(function(require, exports) {
 	BookingArrange.partnerAgencyChooseList = function(parentObj){
 		var partnerAgencyChoose = parentObj.find(".T-choosePartnerAgency");
 		BookingArrange.choose(partnerAgencyChoose, function(obj){
-			if(BookingArrange.tmpData.partnerAgency){
-				setPartnerAgency(BookingArrange.tmpData.partnerAgency);
-			}else{
-				BookingArrange.ajax({'url' : 'bookingOrder',
-				 'method' : 'getAllPartnerAgencyList', 'menuKey' : menuKey, 'operation' : 'view'}, function(data){
-					BookingArrange.tmpData.partnerAgency = data;
-					setPartnerAgency(data);
-				});
-			}
+			BookingArrange.ajax({'url' : 'bookingOrder',
+			 'method' : 'getAllPartnerAgencyList', 'menuKey' : menuKey, 'operation' : 'view'}, function(data){
+				BookingArrange.tmpData.partnerAgency = data;
+				setPartnerAgency(data);
+			});
 			function setPartnerAgency(data){
 				var partnerAgencieList = JSON.parse(data.partnerAgencieList);
 				if(partnerAgencieList && partnerAgencieList.length > 0){
