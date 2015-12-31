@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":72,"md5":"48c014242ae776410380d51acd754662"}*/
+/*TMODJS:{"debug":true,"version":74,"md5":"48c014242ae776410380d51acd754662"}*/
 define(function(require) {
     return require("../../../template")("financial/bankAccount/view/list", function($data, $filename) {
         try {

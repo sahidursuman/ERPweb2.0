@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":44,"md5":"b49be53466d58bb307df36efa715d355"}*/
+/*TMODJS:{"debug":true,"version":46,"md5":"b49be53466d58bb307df36efa715d355"}*/
 define(function(require) {
     return require("../../../template")("financial/ticket/view/TicketClearing", function($data, $filename) {
         try {
