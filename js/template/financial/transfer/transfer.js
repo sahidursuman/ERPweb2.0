@@ -211,7 +211,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         Transfer.$checkTab.find(".T-saveCheck").click(function(){
             if(!validatorCheck.form()){return;}
-            Transfer.saveChecking(id,name,page);
+            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList").find('tr'), function(){
+                Transfer.saveChecking(id,name,page);
+            });
         });
     };
 
@@ -459,12 +461,10 @@ define(function(require, exports) {
 
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
+        if (!FinancialService.isClearSave(Transfer.$checkTab, new FinRule(0))) {
+            return;
+        }
         var argumentsLen = arguments.length;
-
-	    if(!Transfer.$checkTab.data('isEdited')){
-	        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-	        return false;
-	    }
 
 	    var $list = Transfer.$checkTab.find(".T-checkList"),
 	        $tr = $list.find(".T-checkTr"),

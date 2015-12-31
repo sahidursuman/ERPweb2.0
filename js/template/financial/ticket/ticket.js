@@ -233,7 +233,7 @@ define(function(require, exports) {
 				}
 			});
 		});
-		$tab.find(".T-btn-save").on('click', function(event){
+		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
 		 	if (!validator.form()) {
                 return;
@@ -505,7 +505,7 @@ define(function(require, exports) {
 				Tools.closeTab(clearMenuKey);
 			}
 		});
-		$tab.find(".T-btn-save").on('click', function(event){
+		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
 			Ticket.savePayingData($tab);
 		});
@@ -581,7 +581,7 @@ define(function(require, exports) {
 
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        $tab.find('.T-saveClear').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
@@ -601,7 +601,7 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
-		if ($tab.find('.T-btn-save').data('type') == 1) {
+		if ($tab.find('.T-saveClear').data('type') == 1) {
 	        var reciveValidtor = (new FinRule(2)).check($tab);
 	        if(!reciveValidtor.form()){
 	    		return;
