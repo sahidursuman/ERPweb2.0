@@ -1097,13 +1097,13 @@ Tools.getTableVal = function($tbody, idName) {
 		$tbody.children('tr').each(function() {
 			var $tr = $(this), val = {id: $tr.data(idName)};
 
-			$tr.find('input').each(function() {
+			$tr.find('input,select').each(function() {
 				var $that = $(this);
 
 				name = $that.prop('name');
 				if (!!name) {
 					if ($that.is('[type=checkbox],[type=radio]')) {
-						value = $that.is(':checked');
+						value = $that.is(':checked')?1:0;
 					} else {
 						value = $that.val();
 					}

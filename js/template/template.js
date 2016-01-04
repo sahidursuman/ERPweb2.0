@@ -173,7 +173,7 @@
             return "fa-exclamation";
 
           case 3:
-            return "fa-checked";
+            return "fa-check";
 
           case 4:
             return "fa-times";
