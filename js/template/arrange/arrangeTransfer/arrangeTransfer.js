@@ -577,6 +577,10 @@ define(function(require, exports) {
 					transfer.PayMoneyF($tab);
 				});
 
+				//计算金额
+				transfer.calcPayMoney($tab);
+				$tab.find('.T-calc').trigger('change');
+
 				//精度调整
 				var $price=$tab.find('.T-price'),
 					$count=$tab.find('.count')
@@ -622,14 +626,14 @@ define(function(require, exports) {
 		 * @return {[type]}           [description]
 		 */
 		transfer.newAddFee=function($tab,validator){
-		  var html="<tr class=\"transferFee1SelectId\">"+
-			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-			"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
+		    "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
+            "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
-
 			var $tbody=$tab.find(".T-addTransferCost");
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
@@ -662,6 +666,36 @@ define(function(require, exports) {
 			transfer.PayMoneyF($tab);
 
 		};
+
+
+	    /**
+	     * calcPayMoney 根据费用【单价、数量】项目计算金额
+	     * @param  {[type]} $tab [description]
+	     * @return {[type]}      [description]
+	     */
+	    transfer.calcPayMoney = function($tab){
+	        $tab.find('.T-addTransferCost').on('change', '.T-calc', function(event) {
+	            /* Act on the event */
+	            var $that=$(this),$tr = $that.closest('tr');
+	            if ($that.hasClass('T-count')) {  //若数量改变
+	                var count = $tr.find('.T-count').val(),
+	                    price = $tr.find('.T-price').val(),payMoney;
+	                if (!isNaN(price) && !isNaN(count)) {
+	                     payMoney=parseFloat(price*count);        
+	                    $tr.find('.T-payMoney').val(payMoney);
+	                };
+
+	            }else if($that.hasClass('T-price')){ //若价格改变
+	                var count = $tr.find('.T-count').val(),
+	                    price = $tr.find('.T-price').val(),payMoney;
+	                if (!isNaN(price) && !isNaN(count)) {
+	                     payMoney=parseFloat(price*count);        
+	                    $tr.find('.T-payMoney').val(payMoney);
+	                };
+	            };
+	        });
+	    };
+
 
 
 		/**
@@ -777,20 +811,27 @@ define(function(require, exports) {
 			$tab.find(".T-addTransferCost tr").each(function(i){
 				var $that=$(this);
 				var id=$that.attr("data-entity-id"),
-				    type = $that.find("[name=type]").attr("value"),
-				    discribe = $that.find("input[name=discribe]").val(),
+				    discribe = $that.find("input[name=describe]").val(),
+				    remark = $that.find("input[name=remark]").val(),
 				    count = $that.find("input[name=count]").val(),
 				    otherPrice = $that.find("input[name=otherPrice]").val();
-				if(i>1){
-					var otherFeeJson = {
-						"type":type,    
-						"id":id,
+				    var otherFeeJson = {
 						"discribe":discribe,
 						"count":count,
+						"remark":remark,
 						"otherPrice" : otherPrice
 					}
+					if(!!id && id!=null ){
+				    	 otherFeeJson = {
+				    		"id":id,
+				    		"discribe":discribe,
+							"count":count,
+							"remark":remark,
+							"otherPrice" : otherPrice
+				          }
+				    }
 					otherFeeJsonAdd.push(otherFeeJson);
-				}
+				
 			})   
 			var saveDate={
 				touristGroupTransfer : {

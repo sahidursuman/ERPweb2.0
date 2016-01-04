@@ -1081,6 +1081,49 @@ var Tools = {
         return serializeObj;  
     };  
 })(jQuery); 
+
+/**
+ * 获取表格中的数据：input:text radio checkbox password
+ * 通过名称获取，并会获取tr上的Id
+ * @param  {object} $tbody table的query对象
+ * @return {json}        返回JSON
+ */
+Tools.getTableVal = function($tbody, idName) {
+	var res = false;
+
+	if (!!$tbody && $tbody.length) {
+		res = [];
+		var name, value;	
+		idName = idName || 'id';
+
+		$tbody.children('tr').each(function() {
+			var $tr = $(this), val = {id: $tr.data(idName)};
+
+			$tr.find('input,select').each(function() {
+				var $that = $(this);
+
+				name = $that.prop('name');
+				if (!!name) {
+					if ($that.is('[type=checkbox],[type=radio]')) {
+						value = $that.is(':checked')?1:0;
+					} else {
+						value = $that.val();
+					}
+
+					val[name] = value;
+				}
+
+
+			});
+
+			res.push(val);
+		});
+	}
+
+	console.info(res);
+	return res;
+};
+
 /**
  * 自定义简介的提示
  * @param  {object} $elements 需要绑定提示的DOM
@@ -1529,6 +1572,7 @@ Tools.addDay = function(date, days) {
 
 	return date;
 }
+
 /**
  * 获取记录描述信息
  * 主要是为了统一描述

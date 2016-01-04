@@ -353,6 +353,7 @@ define(function(require, exports) {
 			    //重新计算
 			    innerTransfer.PayMoneyF($tab);
 
+
 			    //数量&&价格change事件
 				$tab.find(".count").on('change',function(event) {
 					event.preventDefault();
@@ -364,6 +365,10 @@ define(function(require, exports) {
 					/* Act on the event */
 					innerTransfer.PayMoneyF($tab);
 				});
+
+				//计算金额
+				innerTransfer.calcPayMoney($tab);
+				$tab.find('.T-calc').trigger('change');
 
 				//精度调整
 				var $adultPrice=$tab.find('input[name=transAdultPrice]'),
@@ -407,14 +412,13 @@ define(function(require, exports) {
      */
 	innerTransfer.innitAddFee=function($tab,validator){
 		var html="<tr class=\"transferFee1SelectId\">"+
-			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\"  maxlength=\"100\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" maxlength=\"6\" /></td>"+
-			"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" maxlength=\"9\" /></td>"+
+		    "<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";
-			$tab.find(".addTransferCost").append(html);
-
 			var $tbody=$tab.find(".addTransferCost");
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
@@ -444,6 +448,36 @@ define(function(require, exports) {
 			});
 
 	};
+
+
+
+	/**
+     * calcPayMoney 根据费用【单价、数量】项目计算金额
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    innerTransfer.calcPayMoney = function($tab){
+        $tab.find('.addTransferCost').on('change', '.T-calc', function(event) {
+            /* Act on the event */
+            var $that=$(this),$tr = $that.closest('tr');
+            if ($that.hasClass('T-count')) {  //若数量改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+
+            }else if($that.hasClass('T-price')){ //若价格改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+            };
+        });
+    };
 
 
 	/**
@@ -482,7 +516,7 @@ define(function(require, exports) {
 	innerTransfer.delTransferData = function(id,$tr,$tab){
 		if( id!=null && id!=""){
 			$.ajax({
-				url:innerTransfer.url("deleteFee","delete"),
+				url:KingServices.build_url("innerTransfer","deleteFee"),
 				type:"POST",
 				data:"id="+id,
 				success:function(data){
@@ -531,12 +565,14 @@ define(function(require, exports) {
 			var discribe = $(this).find("input[name=discribe]").val();
 			var count = $(this).find("input[name=count]").val();
 			var price = $(this).find("input[name=price]").val();
+			var remark = $(this).find("input[name=remark]").val();
 			if(i>1){
 				var otherFeeJson = { 
 					"id":id,
 					"discribe":discribe,
 					"count":count,
-					"price" : price
+					"price" : price,
+					"remark" : remark
 				}
 				otherFeeJsonAdd.push(otherFeeJson);
 			}

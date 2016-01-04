@@ -78,6 +78,7 @@
     }, define(function() {
         return template;
     }), template.helper("dateFormat", function(date, fmt) {
+        if (!date) return "";
         date = date.split("-").join("/"), date = new Date(date);
         var o = {
             "M+": date.getMonth() + 1,
@@ -169,5 +170,51 @@
         options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
         start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
         options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>";
+    }), template.helper("getArrangeIcon", function(status) {
+        switch (1 * status) {
+          case 1:
+            return "fa-question";
+
+          case 2:
+            return "fa-exclamation";
+
+          case 3:
+            return "fa-check";
+
+          case 4:
+            return "fa-times";
+
+          default:
+            return "fa-minus";
+        }
+    }), template.helper("getRestaurantDesc", function(status) {
+        var res = "", i = 0;
+        return status && (status = status.split(","), res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>早餐&nbsp;", 
+        res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>中餐&nbsp;", 
+        res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>晚餐&nbsp;"), 
+        res;
+    }), template.helper("getTaskDesc", function(status) {
+        switch (1 * status) {
+          case 1:
+            return "接机";
+
+          case 2:
+            return "送机";
+
+          case 3:
+            return "前段";
+
+          case 4:
+            return "中段";
+
+          case 5:
+            return "后段";
+
+          default:
+            return "全程";
+        }
+    }), template.helper("getTaskSelect", function(status) {
+        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
+        return str.push("</select>"), str.join("");
     });
 }();
