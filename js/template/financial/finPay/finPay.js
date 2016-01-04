@@ -51,7 +51,8 @@ define(function(require, exports) {
 		$.ajax(FinPay.covertArgs(args))
 		.done(function(data) {
 			if (showDialog(data)) {
-				data.list = FinPay.covertResponse(data);
+				data = FinPay.covertResponse(data);
+				console.info(data)
 				FinPay.$tab.find('.T-list').html(listTableTemplate(data));
 
 				FinPay.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
@@ -59,7 +60,7 @@ define(function(require, exports) {
 				laypage({
 				    cont: FinPay.$tab.find('.T-pagenation'),
 				    pages: data.totalPage, //总页数
-				    curr: (data.pageNo + 1),
+				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				        if (!first) { // 避免死循环，第一次进入，不调用页面方法
 				            FinPay.getList(obj.curr - 1);
@@ -346,7 +347,9 @@ define(function(require, exports) {
 					break;
 			}
 		}
-		return list;
+
+		data.list = list;
+		return data;
 	};
 
 	/**

@@ -686,11 +686,13 @@ var modalScripts = {
     'financial_income': 'js/template/financial/FinIncome/finIncome.js', //财务收款
     'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
     'financial_transfer': "js/template/financial/transfer/transfer.js",
+	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
     'system_user': "js/template/system/user/user.js",
     'system_department': "js/template/system/department/business.js",
+	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
@@ -1490,8 +1492,42 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     }
 
     return $obj;
-}
+};
 
+/**
+ * 选择日期组件组
+ * @param {object} $dateObjs 日期的Jquery对象
+ */
+Tools.setDateRange = function($dateObjs) {
+	var len = $dateObjs.length;
+	if (len) {
+		Tools.setDatePicker($dateObjs);
+		$dateObjs.each(function(index, val) {
+			 $(this).on('changeDate.date-range.api', function(event) {
+			 	event.preventDefault();
+			 	var $that = $(this)
+			 		date = $that.val();
+
+			 	if (!!date) {
+			 		for (var i = index + 1, $tmp, d; i < len; i ++) {
+			 			$tmp = $dateObjs.eq(i);
+			 			d = $tmp.val();
+			 			if (!!d) {
+			 				if (d <= date) {
+			 					$tmp.val('');
+			 				}
+			 			}
+
+			 			date = Tools.addDay(date, 1);
+		 				$tmp.datepicker('setStartDate', date);
+			 		}
+			 	}
+			 });
+		});
+	}
+
+	return $dateObjs;
+};
 /**
  * 计算两个日期的差额
  * @param  {string} startDate 日期字符串
@@ -1773,6 +1809,12 @@ KingServices.viewInnerInfo = function(id,type){
 KingServices.viewTransit = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_transit,function(module){
 		module.viewTransit(id);
+	});
+};
+//查看收支明细 
+KingServices.viewPayMentDetail = function(id,num){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.init(id,num);
 	});
 };
 //报价  修改

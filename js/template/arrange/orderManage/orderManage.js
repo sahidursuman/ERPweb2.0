@@ -567,7 +567,7 @@ define(function(require, exports) {
 
 
 		/**
-	 * chooseBrand 车牌
+	 * 星级
 	 * @param  {[type]} $obj [description]
 	 * @return {[type]}      [description]
 	 */
@@ -576,7 +576,21 @@ define(function(require, exports) {
 			list = orderManage.hotelsLevels;
 		    if(!!list && list.length> 0){
 		    	for(var i=0; i < list.length; i++){
-					list[i].value = list[i];
+		    		if (list[i] == '1') {
+		    			list[i] = '三星以下'
+		    		}else if (list[i] == '2') {
+		    			list[i] = '三星'
+		    		}else if (list[i] == '3') {
+		    			list[i] = '准四星'
+		    		}else if (list[i] == '4') {
+		    			list[i] = '四星'
+		    		}else if (list[i] == '5') {
+		    			list[i] = '准五星'
+		    		}else if (list[i] == '6') {
+		    			list[i] = '五星'
+		    		}else if (list[i] == '7') {
+		    			list[i] = '五星以上'
+		    		}
 			    };
 		    }
 		$that.autocomplete({

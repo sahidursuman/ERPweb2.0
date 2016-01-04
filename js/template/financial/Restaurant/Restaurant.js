@@ -243,8 +243,6 @@ define(function(require, exports) {
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
            searchParam.sumCurrentPayMoney = restaurant.$clearTab.find('input[name=sumPayMoney]').val();
-           searchParam.payType = restaurant.$clearTab.find('select[name=sumPayType]').val();
-           searchParam.payRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
         }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -265,6 +263,10 @@ define(function(require, exports) {
                         data.sumPayMoney = restaurant.clearTempSumDate.sumPayMoney;
                         data.sumPayType = restaurant.clearTempSumDate.sumPayType;
                         data.sumPayRemark = restaurant.clearTempSumDate.sumPayRemark;
+                        data.bankNo = restaurant.clearTempSumDate.bankNo;
+                        data.bankId = restaurant.clearTempSumDate.bankId;
+                        data.voucher = restaurant.clearTempSumDate.voucher;
+                        data.billTime = restaurant.clearTempSumDate.billTime;
 
                         data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
                     } else {
@@ -309,10 +311,13 @@ define(function(require, exports) {
             restaurant.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 restaurant.$clearTab.data('isEdited',true);
+                restaurant.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 restaurant.$clearTab.find(".T-cancel-auto").hide();
             }
         }
+
+        FinancialService.initPayEvent(restaurant.$clearTab.find('.T-summary'));
 
         //绑定翻页组件
         var $tr = restaurant.$clearTab.find('.T-clearList tr');
@@ -325,13 +330,17 @@ define(function(require, exports) {
                     var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, saveRule);
                     restaurant.clearTempData = tempJson;
                     var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                        sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
-                        sumPayRemark = restaurant.$clearTab.find('input[name=sumPayRemark]').val();
+                        sumPayType = parseFloat(restaurant.$clearTab.find('select[name=payType]').val()),
+                        sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
                     restaurant.clearTempSumDate = {
                         id : id,
                         sumPayMoney : sumPayMoney,
                         sumPayType : sumPayType,
-                        sumPayRemark : sumPayRemark
+                        sumPayRemark : sumPayRemark,
+                        bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
+                        bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                        voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
+                        billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                     }
                     restaurant.restaurantClear(isAutoPay,obj.curr -1,id,name);
                 }
@@ -400,8 +409,12 @@ define(function(require, exports) {
                 restaurant.clearTempSumDate = {
                     id : id,
                     sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-                    sumPayRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+                    sumPayType : restaurant.$clearTab.find('select[name=payType]').val(),
+                    sumPayRemark : restaurant.$clearTab.find('input[name=remark]').val(),
+                    bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
+                    bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                    voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
+                    billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                 };
                 restaurant.restaurantClear(1,0,id,name);
             });
@@ -413,7 +426,7 @@ define(function(require, exports) {
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
             restaurant.$clearTab.data('isEdited',false);
-            restaurant.restaurantClear(0,0,id,name);
+            restaurant.restaurantClear(0,0,id,name)
         });
 
         FinancialService.updateSumPayMoney(restaurant.$clearTab, saveRule);
@@ -515,7 +528,7 @@ define(function(require, exports) {
                         type : 1,
                         title : "应付金额明细",
                         skin : 'layui-layer-rim',
-                        area : '800px',
+                        area : '1000px',
                         zIndex : 1028,
                         content : html,
                         scrollbar: false 
@@ -574,8 +587,11 @@ define(function(require, exports) {
         var searchParam = {
             restaurantId : id,
             sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : restaurant.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : restaurant.$clearTab.find('input[name=sumPayRemark]').val()
+            payType : restaurant.$clearTab.find('select[name=payType]').val(),
+            payRemark : restaurant.$clearTab.find('input[name=remark]').val(),
+            bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+            voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
+            billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
