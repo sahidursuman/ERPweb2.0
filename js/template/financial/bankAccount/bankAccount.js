@@ -3,18 +3,23 @@ define(function(require,exports){
 		listTemplate = require('./view/list');
 	var BankAccount = {};
 	BankAccount.initMoudle = function(){
-		BankAccount.listBank(0);
+		var args = {
+			accountName:'',
+			pageNo:0,
+			status:1,
+			sortType:'auto'
+		}
+		BankAccount.listBank(args);
 	};
-	BankAccount.listBank = function(pageNo){
-		pageNo = pageNo || 0;
+	BankAccount.listBank = function(args){
+		
 		$.ajax({
 			url:KingServices.build_url('bankFinancial','listSumBankFinancial'),
 			type:'POST',
-			data:{pageNo:pageNo},
+			data:args,
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,'银行账户',html);
@@ -26,10 +31,11 @@ define(function(require,exports){
 					laypage({
 					    cont: $listTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 					    pages: data.totalPage, //总页数
-					    curr: (pageNo + 1),
+					    curr: (args.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		BankAccount.listBank(obj.curr -1);
+					    		args.pageNo = obj.curr -1;
+					    		BankAccount.listBank(args);
 					    	}
 					    }
 					});
