@@ -196,6 +196,15 @@ define(function(require, exports) {
             Transfer.transferCheck(0,id,name);
         });
 
+        //导出报表事件 btn-hotelExport
+        Transfer.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = { 
+                    startDate: Transfer.$checkSearchArea.find('input[name=startDate]').val(),
+                    endDate: Transfer.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"transfer");
+        });
+
         //报表内的操作
         Transfer.listOption(Transfer.$checkTab);
 

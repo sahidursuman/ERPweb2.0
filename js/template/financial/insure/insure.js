@@ -189,6 +189,16 @@ define(function(require, exports) {
             Insure.GetChecking(0,id,name);
         });
 
+        //导出报表事件
+        Insure.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    insuranceId: id, 
+                    startDate: Insure.$checkSearchArea.find('input[name=startDate]').val(),
+                    endDate: Insure.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"insurance");
+        });
+
         //报表内的操作
         Insure.listOption(Insure.$checkTab);
 

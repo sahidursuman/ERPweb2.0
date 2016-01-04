@@ -185,16 +185,16 @@ define(function(require, exports) {
             event.preventDefault();
             restaurant.restaurantCheck(0,id,name);
         });
-
-        //导出报表事件
-        // restaurant.$checkSearchArea.find(".T-restaurantExport").click(function(){
-        //     var year = restaurant.$checkSearchArea.find("[name=year]").val();
-        //     var month = restaurant.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","restaurant") + "&restaurantId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        
+        //导出报表事件 btn-hotelExport
+        restaurant.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    restaurantId: id, 
+                    startDate: restaurant.$checkSearchArea.find('input[name=startDate]').val(),
+                    endDate: restaurant.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"restaurant");
+        });
 
         //报表内的操作
         restaurant.listOption(restaurant.$checkTab);
