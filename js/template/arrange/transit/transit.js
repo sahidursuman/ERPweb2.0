@@ -434,11 +434,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
-<<<<<<< HEAD
-			'<td hidden="hidden"><input class="col-sm-12 T-number" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
-=======
 			'<td><input class="col-sm-12 T-number" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
->>>>>>> arrange_rebuild
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
@@ -473,11 +469,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-<<<<<<< HEAD
-			'<td hidden="hidden"><input class="col-sm-12 T-number" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
-=======
 			'<td><input class="col-sm-12 T-number" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
->>>>>>> arrange_rebuild
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
 			'</tr>';
