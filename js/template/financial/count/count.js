@@ -1531,7 +1531,7 @@ define(function(require, exports){
 		Count.getSelfData($obj,$parentObj);
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "selfPayName" && $nameFlag != "selfPayItem" && $nameFlag != "billRemark"){
+			if($nameFlag != "selfPayName" &&  $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoSelfSum($(this),$parentObj);
