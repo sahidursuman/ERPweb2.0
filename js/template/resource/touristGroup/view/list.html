@@ -39,13 +39,9 @@
 						{{/if}}
 					</td>
 					<td>
-					    {{if touristGroup.lineProduct != null}}    
-							{{if touristGroup.lineProduct.customerType==0}}
-								  散客
-								{{else}}               
-								  团体  
-							{{/if}}  
-						{{/if}}
+						{{if touristGroup.customerType==0}} 散客
+						{{else if touristGroup.customerType==1}}团体  
+						{{/if}}  
 					</td>
 					<td>
 						{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}
