@@ -2829,6 +2829,8 @@ define(function(require, exports) {
 							$tr.find("input[name=managerName]").val(selfpay.managerName);
 							$tr.find("input[name=selfPayItemName]").val("");
 							$tr.find("input[name=selfPayItemId]").val("");
+							$tr.find("input[name=contractPrice]").val("");
+							$tr.find("input[name=marketPrice]").val("");
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
