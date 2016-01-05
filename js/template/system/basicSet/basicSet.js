@@ -60,6 +60,7 @@ define(function(require,exports){
 				pageNo:0,
 				accountName:'',
 				sortType:'atuo',
+				bankAccountNumber:'',
 				status:1
 			};
 			Infrastructure.$listBankhObj = $obj;
@@ -128,12 +129,17 @@ define(function(require,exports){
 	};
 	//修改会计科目
 	Infrastructure.editAccountant = function($obj,args){
-		var oldTitle = $obj.find('.title').text();
+		var oldTitle = $obj.attr('title');
+		var oldStatus = $obj.attr('status');
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
+		var selected = '';
+		if (oldStatus == 0) {
+			selected = 'selected="selected"'
+		};
 		var selectHtml = '<select name="selectStatus">'+
 		'<option value="1">启用</option>'+
-		'<option value="0">停用</option>'+
+		'<option value="0" '+selected+'>停用</option>'+
 		'</select>';
 		$obj.find('.status').html(selectHtml);
 		$obj.find('input').off('change').on('change',function(){
@@ -142,7 +148,6 @@ define(function(require,exports){
 		$obj.find('select').off('blur').on('blur',function(){
 			Infrastructure.installAccData($obj,args);
 		});
-
 	};
 	//组装会计科目数据
 	Infrastructure.installAccData = function($obj,args){
@@ -169,7 +174,8 @@ define(function(require,exports){
 	Infrastructure.listBankAcc = function(args,$obj){
 		if(arguments.length == 3){
 			var $searchArea = Infrastructure.$listBankhObj.find('.T-search-area');
-			args.accountName = $searchArea.find('input[name=bankAccountNumber]').val();
+			//args.accountName = $searchArea.find('input[name=bankAccountNumber]').val();
+			args.bankAccountNumber = $searchArea.find('input[name=bankAccountNumber]').val();
 			args.status = $searchArea.find(".T-status").find("button").data("value");
 		};
 		args.pageNo = args.pageNo || 0;
@@ -182,6 +188,11 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
+					for(var i = 0;i<data.newBankAccountList.length;i++){
+						var bankNumber = data.newBankAccountList[i].bankAccountNumber;
+						bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+						data.newBankAccountList[i].bankAccountNumber = bankNumber;
+					}
 					var html = bankAccTemplate(data);
 					$obj.html(html);
 					//绑定事件
@@ -272,7 +283,9 @@ define(function(require,exports){
 				if(result){
 					console.log(data);
 					data.bankAccount = JSON.parse(data.bankAccount);
-					console.log(data);
+					var bankNumber = data.bankAccount.bankAccountNumber;
+					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+					data.bankAccount.bankAccountNumber = bankNumber;
 					var html = updateTemplate(data);
 					var updateBankAccLayer = layer.open({
 						type: 1,
@@ -297,7 +310,9 @@ define(function(require,exports){
 	Infrastructure.bankAccEvent = function($obj,args,$parentObj,typeFlag){
 		//格式化日期格式
 		Infrastructure.formatDate($obj);
-		
+		//格式化银行账号
+		var $inputObj = $obj.find('input[name=bankNumber]');
+		Infrastructure.formatBank($inputObj);
 		//表单验证
 		var validator = rule.check($obj);
 
@@ -336,6 +351,9 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
+					var bankNumber = data.bankAccount.bankAccountNumber;
+					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+					data.bankAccount.bankAccountNumber = bankNumber;
 					var html = viewTemplate(data);
 					var viewBankAccTemplate = layer.open({
 						type: 1,
@@ -378,6 +396,13 @@ define(function(require,exports){
 			language: 'zh-CN'
 		});
 	};
+	//格式化银行账户
+	Infrastructure.formatBank = function($obj){
+		$obj.keyup(function(){  
+	        var value=$(this).val().replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");    
+	        $(this).val(value); 
+        }) 
+	};
 	//组装url
 	Infrastructure.Url = function(method){
 		var url = KingServices.build_url('bank',method);
@@ -390,9 +415,10 @@ define(function(require,exports){
 		if(checkStatus){
 			status = 1;
 		};
+		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 		var subData = {
 			accountName:$obj.find('input[name=accountName]').val(),
-			bankAccountNumber:$obj.find('input[name=bankNumber]').val(),
+			bankAccountNumber:bankNumber,
 			beginningBalance:$obj.find('input[name=balanceMoney]').val(),
 			beginningTime:$obj.find('input[name=startTime]').val(),
 			openingBank:$obj.find('input[name=bankName]').val(),
