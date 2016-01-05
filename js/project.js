@@ -1720,12 +1720,32 @@ KingServices.updateQuoteToOffer = function(id){
 		module.updateQuoteToOffer(id);
 	});
 }
-
-
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
 		module.addPartnerAgency(fn);
+	});
+}
+
+//购物自费多选和浮动显示
+KingServices.shopMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.shopMultiselect($this);
+	});
+}
+KingServices.viewOptionalShop = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalShop($this);
+	});
+}
+KingServices.selfPayMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewOptionalSelfPay = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalSelfPay($this);
 	});
 }
 

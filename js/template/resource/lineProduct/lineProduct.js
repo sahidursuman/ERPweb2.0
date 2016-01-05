@@ -2475,9 +2475,9 @@ define(function(require, exports) {
 				lineNotice  : getValue($middleForm, "lineNotice"),
 				status : getValue($form, "status"),
 				shopNames: $form.find('.T-shopMultiselect').val(),
-				shopIds: $form.find('.T-shopMultiselect').data('propover'),
+				shopIds: ResLineProduct.jsonToString($form.find('.T-shopMultiselect').data('propover')),
 				selfPayItemNames: $form.find('.T-selfPayMultiselect').val(),
-				selfPayItemIds: $form.find('.T-selfPayMultiselect').data('propover')
+				selfPayItemIds: ResLineProduct.jsonToString($form.find('.T-selfPayMultiselect').data('propover'))
 			}];
 		
 		// 获取基础安排的数据
@@ -2497,7 +2497,7 @@ define(function(require, exports) {
 					json = {
 					id : getValue($item, "templateId"),
 					insuranceId : getValue($item, "insuranceId"),
-					typeId: getValue($item, "typeId"),
+					insuranceItemId: getValue($item, "typeId"),
 					type : getValue($item, "type"),
 					price : getValue($item, "price"),
 					remark : getValue($item, "remark")
@@ -2834,7 +2834,19 @@ define(function(require, exports) {
 	ResLineProduct.quoteLineProduct = function(id) {
 		KingServices.addQuote(id);
 	};
+
+	ResLineProduct.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
+	}
+
 	exports.init = ResLineProduct.initModule;  
 	exports.addLineProduct = ResLineProduct.addLineProduct;  
 	exports.viewLineProduct = ResLineProduct.viewLineProductDetail;
+	exports.viewOptionalSelfPay = ResLineProduct.viewOptionalSelfPay;
+	exports.viewOptionalShop = ResLineProduct.viewOptionalShop;
+	exports.shopMultiselect = ResLineProduct.shopMultiselect;
+	exports.selfPayMultiselect = ResLineProduct.selfPayMultiselect;
 });
