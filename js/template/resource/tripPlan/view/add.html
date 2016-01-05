@@ -15,7 +15,7 @@
                     <span class="fix-w-4">针对客源:</span>{{basicInfo.tripPlanType}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
+                    <span class="fix-w-4 T-touristCount" data-count="{{basicInfo.touristCount}}">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
                 </div>
                 <div class="col-md-3">
                     <span class="fix-w-4">团号:</span>{{basicInfo.tripNumber}}
@@ -77,7 +77,7 @@
                     <span class="fix-w-4">现收:</span>{{basicInfo.guideAllNowMoney}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">现付:</span>{{basicInfo.guideAllPayMoney}}
+                    <span class="fix-w-4">现付:</span><span class="T-guidePayedMoney">{{basicInfo.guideAllPayMoney}}</span>
                 </div>
                 <div class="col-md-3">
                     <span class="fix-w-4">预支款:</span><input type="text" name="guideAllPreMoney" value="{{basicInfo.guideAllPreMoney}}">
@@ -175,6 +175,7 @@
                 {{/if}}
             </ul>
             <div class="tab-content" style="position:relative;top: -2px">
+                {{if arrangeItemsStauts.insuranceStatus != 0 }}
                 <div id="tripPlan_addPlan_insurance" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -235,7 +236,7 @@
                                                         <td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price" maxlength="8"/></td>
                                                         <td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12" maxlength="8"/></td>
                                                         <td><input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12" maxlength="9"/></td>
-                                                        <td><input type="text" name="prePayMoney" value="{{insurance.payedMoney}}" class="col-sm-12 price"  maxlength="9"/></td>
+                                                        <td><input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price"  maxlength="9"/></td>
                                                         </td>
                                                         <td><input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" /></td>
                                                         <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
@@ -251,6 +252,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.guideStatus != 0 }}
                 <div id="tripPlan_addPlan_guide" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -306,7 +310,7 @@
                                                             <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" /></td>
                                                             <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                                             <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
-                                                            <td><input type="text" name="guideFee" value="{{guide.price}}" class="col-sm-12 price" maxlength="9"/></td>
+                                                            <td><input type="text" name="price" value="{{guide.price}}" class="col-sm-12 price" maxlength="9"/></td>
                                                             <td><input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 price" maxlength="9"/></td>
                                                             <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                             <td>
@@ -326,7 +330,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.busStatus != 0 }}
                 <div id="tripPlan_addPlan_bus" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -374,13 +380,13 @@
                                                             <td><input type="text" name="startTime" class="datepicker" value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                                             <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                                             <td>{{#busCompany.taskType || getTaskSelect}}</td>
-                                                            <td><input type="text" name="needSeatCount" readonly="readonly" value="{{busCompany.seatCount}}" class="col-sm-12" style="width: 60px;"/></td>
+                                                            <td><input type="text" name="needSeatCount" readonly="readonly" value="{{busCompany.needSeatCount}}" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input type="text" name="brand" readonly="readonly" value="{{busCompany.bus.brand}}" class="col-sm-12"/>"></td>
                                                             <td><input type="text" name="licenseNumber" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-sm-12"/><input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId"/></td>
 
                                                             <td><input type="text" name="companyName" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="col-sm-12 chooseBusCompany"/><input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/></td>
 
-                                                            <td><input type="text" name="mobileNumber" readonly="readonly" value="{{busCompany.mobileNumber}}" class="col-sm-12"/></td>
+                                                            <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
 
                                                             <td><input type="text" name="driverName" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-sm-12"/><input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}"></td>
                                                             <td><input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
@@ -391,7 +397,7 @@
 
                                                             <td><input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
-                                                            <td><input type="text" name="prePayMoney" value="{{busCompany.payedMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
+                                                            <td><input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price" maxlength="9" style="width: 60px;"/></td>
                                                             </td>
                                                             <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
@@ -426,7 +432,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.restaurantStatus != 0 }}
                 <div id="tripPlan_addPlan_restaurant" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -511,8 +519,7 @@
                                                             <td><input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
-                                                            <td><input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.payedMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
-                                                            </td>
+                                                            <td><input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
                                                             <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12"/></td>
                                                             <td>
@@ -532,6 +539,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.hotelStatus != 0 }}
                 <div id="tripPlan_addPlan_hotel" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -629,7 +639,7 @@
                                                             <td><input type="text" class="col-sm-12" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
                                                             <td><input type="text" class="col-sm-12 price" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
                                                             <td><input type="text" class="col-sm-12" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
-                                                            <td><input type="text" class="col-sm-12 price" name="prePayMoney" maxlength="9" value="{{hotel.payedMoney}}" style="width: 60px;" /></td>
+                                                            <td><input type="text" class="col-sm-12 price" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" /></td>
                                                             <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                             <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                                             <td>
@@ -661,6 +671,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.scenicStatus != 0 }}
                 <div id="tripPlan_addPlan_scenic" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -687,7 +700,6 @@
                                                    <col style="width:60px;"> 
                                                    <col style="width:60px;"> 
                                                    <col style="width:60px;"> 
-                                                   <col style="width:60px;">
                                                    <col style="width:110px;">
                                                    <col style="width:60px;">
                                                    <col style="width:60px;">
@@ -705,7 +717,6 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">预定</th>
                                                     <th class="th-border">订单号</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">预付款</th>
@@ -736,7 +747,7 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                            <td><input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}" /><input type="hidden" name="scenicItemId" value="{{scenic.scenicItemId}}"/></td>
+                                                            <td><input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}" /><input type="hidden" name="scenicItemId" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.id}}{{/if}}"/></td>
                                                             <td>
                                                                 <input type="text" name="tourDuration" maxlength="3" class="col-sm-12" value="{{scenic.tourDuration}}" style="width: 60px;" />
                                                             </td>
@@ -744,16 +755,10 @@
                                                             <td><input type="text" name="price" class="col-sm-12 price" maxlength="8" value="{{scenic.price}}" style="width: 60px;" /></td>
                                                             <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" /></td>
                                                             <td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" /></td>
-                                                            <td>
-                                                                <select name="order" id="">
-                                                                    <option value="0">是</option>
-                                                                    <option value="1">否</option>
-                                                                </select>
-                                                            </td>
                                                             <td><input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" /></td>
                                                             
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{scenic.needPayMoney}}" style="width: 60px;" /></td>
-                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9" value="{{scenic.payedMoney}}" style="width: 60px;" /></td>
+                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" /></td>
                                                             <td><input name="guidePayMoney" type="text" class="col-sm-12" value="{{scenic.guidePayMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                             <td><input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500"/></td>
                                                             <td>
@@ -773,7 +778,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.shopStatus != 0 }}
                 <div id="tripPlan_addPlan_shop" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -847,7 +854,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.selfPayStatus != 0 }}
                 <div id="tripPlan_addPlan_selfPay" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -914,7 +923,7 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                            <td><input type="hidden" name="selfitemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
+                                                            <td><input type="hidden" name="selfPayItemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
                                                             <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" /></td>
                                                             <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" /></td>
                                                             <td><input type="text" name="price" class="col-sm-12 price" maxlength="8" value="{{selfPay.marketPrice}}" style="width: 60px;" /></td>
@@ -922,7 +931,7 @@
                                                             <td><input type="text" name="memberCount" class="col-sm-12" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" /></td>
                                                             <td><input type="text" name="reduceMoney" class="col-sm-12 price" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{selfPay.needPayMoney}}" style="width: 60px;" /></td>
-                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" value="{{selfPay.payedMoney}}" style="width: 60px;" maxlength="9"/></td>
+                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                             <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{selfPay.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                                             <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500"/></td>
                                                             <td>
@@ -942,7 +951,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.ticketStatus != 0 }}
                 <div id="tripPlan_addPlan_ticket" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -1004,7 +1015,7 @@
                                                                 <div class="col-sm-12">
                                                                     <input type="hidden" name="id" value="{{ticket.id}}" />
                                                                     <input type="text" name="name" class="col-sm-12 T-chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" />
-                                                                    <input type="hidden" name="tickeId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
+                                                                    <input type="hidden" name="ticketId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
                                                                     <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                     </span>
@@ -1027,7 +1038,7 @@
                                                             <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{ticket.memberCount}}" /></td>
                                                             <td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.reduceMoney}}" /></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{ticket.needPayMoney}}" /></td>
-                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.payedMoney}}" /></td>
+                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9" value="{{ticket.prePayMoney}}" /></td>
                                                             <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{ticket.guidePayMoney}}" maxlength="9"/></td>
                                                             <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
                                                             <td>
@@ -1047,6 +1058,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.otherStatus != 0 }}
                 <div id="tripPlan_addPlan_other" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -1107,7 +1121,7 @@
                                                             <td><input type="text" name="memberCount" class="col-sm-12" value="{{other.memberCount}}" maxlength="8"/></td>
                                                             <td><input type="text" name="reduceMoney" class="col-sm-12 price" value="{{other.reduceMoney}}" maxlength="9"/></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{other.needPayMoney}}" maxlength="9"/></td>
-                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" value="{{other.payedMoney}}" maxlength="9"/></td>
+                                                            <td><input type="text" name="prePayMoney" class="col-sm-12 price" value="{{other.prePayMoney}}" maxlength="9"/></td>
                                                             <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{other.guidePayMoney}}" maxlength="9"/></td>
                                                             <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500"/></td>
                                                             <td>
@@ -1127,6 +1141,7 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
             </div>
         </div>
 
