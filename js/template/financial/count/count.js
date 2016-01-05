@@ -1780,6 +1780,15 @@ define(function(require, exports){
 		$obj.append(html);
 		//获取餐厅数据
 		Count.getRestData($obj);
+		//下拉框事件
+		$obj.find('select').off('change').on('change',function(){
+			var $tr = $(this).closest('tr');
+			var restaurantId = $tr.find('input[name=restaurantId]').val();
+			if(restaurantId != null && restaurantId != ""){
+				Count.getRestPrice($tr);
+			};
+			
+		});
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
 		//绑定事件
