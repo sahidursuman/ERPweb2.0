@@ -1173,6 +1173,11 @@ define(function(require, exports) {
 				busId : getValue("busLicenseNumberId"),
 				touristGroupId : []
 			}
+
+			if (!!saveTripP.tripPlan.executeTimeType && (saveTripP.tripPlan.startTime + ' 06:00:00') < saveTripP.tripPlan.executeTime) {
+				showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
+				return;
+			}
 			var touristGroupTr = $tab.find(".T-tourist-list tr");
 			touristGroupTr.each(function(i){
 				saveTripP.touristGroupId.push({

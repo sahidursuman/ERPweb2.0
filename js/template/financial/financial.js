@@ -4,6 +4,69 @@
 
 var FinancialService = {};
 
+FinancialService.initPayEvent = function($container)  {
+    var currDate = new Date();
+    var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+    $container.find('input[name="tally-date"]').val(str);
+    $container.find('input[name="tally-date"]').datetimepicker({
+        autoclose:true,
+        todayHighlight:true,
+        format:'L',
+        language:'zh-CN'
+     });
+    var $card = $container.find('input[name="card-number"]').autocomplete({
+        minLength:0,
+        change :function(event, ui){
+            if(ui.item == null){
+                $(this).val('').nextAll('input[name="card-id"]').val('');
+            }
+        },
+        select :function(event, ui){
+             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
+             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
+        }
+    }).one("click", function(){
+        var $that = $(this);
+        $.ajax({
+            url:KingServices.build_url('financialIncomeOrPay','getBankList'),
+            showLoading:false,
+            success:function(data){
+                if(showDialog(data)){
+                    var cardNumberJson = [];
+                    var bankList = data.bankList;
+                    if(bankList && bankList.length > 0){
+                        for(var i=0; i < bankList.length; i++){
+                            var seatCount = {
+                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
+                                id: bankList[i].id
+                            }
+                            cardNumberJson.push(seatCount);
+                        }
+                        $that.autocomplete('option','source', cardNumberJson);
+                        $that.autocomplete('search', '');
+                    }else{
+                        layer.tips('没有内容', $that, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                }
+            }
+        })
+    })
+    .on('click', function() {
+        $(this).autocomplete('search', '');
+    });
+
+    $container.find('select').on('change', function(event) {
+        event.preventDefault();
+        var val = $(this).val();
+
+        $card.closest('div').toggleClass('hidden', val != 1);
+    }).trigger('change');
+};
+
+
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
@@ -215,6 +278,19 @@ FinancialService.isClearSave = function($tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;
     }
+
+    var $saveBtn = $tab.find('.T-saveClear'),
+        saveZero = $saveBtn.data('save-zero');
+    if (!saveZero && sumPayMoney == 0) {
+        showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+            $saveBtn.data('save-zero', true).trigger('click');
+        })
+
+        return false;
+    } else {
+        $saveBtn.data('save-zero', false);
+    }
+    
     return true;
 };
 

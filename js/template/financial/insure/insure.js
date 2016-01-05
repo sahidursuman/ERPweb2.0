@@ -238,8 +238,6 @@ define(function(require, exports) {
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
            searchParam.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
-           searchParam.payType = Insure.$clearTab.find('select[name=sumPayType]').val();
-           searchParam.payRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
         }
         searchParam = JSON.stringify(searchParam);
   		$.ajax({
@@ -252,11 +250,6 @@ define(function(require, exports) {
 					data.insuranceName = insuranceName;
                     if(isAutoPay == 1){
                         Insure.clearTempData = data.autoPaymentJson;
-                        Insure.clearTempSumDate = {
-                            sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-                            sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-                            sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
-                        };
                     }
 
                     //暂存数据读取
@@ -264,6 +257,10 @@ define(function(require, exports) {
                         data.sumPayMoney = Insure.clearTempSumDate.sumPayMoney;
                         data.sumPayType = Insure.clearTempSumDate.sumPayType;
                         data.sumPayRemark = Insure.clearTempSumDate.sumPayRemark;
+                        data.bankNo = Insure.clearTempSumDate.bankNo;
+                        data.bankId = Insure.clearTempSumDate.bankId;
+                        data.voucher = Insure.clearTempSumDate.voucher;
+                        data.billTime = Insure.clearTempSumDate.billTime;
                     } else {
                         data.sumPayMoney = 0;
                         data.sumPayType = 0;
@@ -274,7 +271,7 @@ define(function(require, exports) {
                     // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag;
                     Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
-                    console.log(data);
+                    data.isAutoPay = isAutoPay;
 					var html = insureClearing(data);
 	  				var validator;
                     // 初始化页面
@@ -294,6 +291,7 @@ define(function(require, exports) {
                         Insure.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Insure.$clearTab.data('isEdited',true);
+                            Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Insure.$clearTab.find(".T-cancel-auto").hide();
                         }
@@ -315,9 +313,13 @@ define(function(require, exports) {
                                 Insure.clearTempSumDate = {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark
+                                    sumPayRemark : sumPayRemark,
+                                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
+                                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
                                 }
-                                Insure.restaurantClear(isAutoPay,obj.curr -1,insuranceId,insuranceName);
+                                Insure.getClearing(isAutoPay,obj.curr -1,insuranceId,insuranceName);
                             }
                         }
                     });
@@ -342,6 +344,8 @@ define(function(require, exports) {
             Insure.getClearing(0,0,id,name);
         });
 
+        FinancialService.initPayEvent(Insure.$clearTab.find('.T-summary'));
+        
         //关闭页面事件
         Insure.$clearTab.find(".T-close-clear").click(function(){
             Tools.closeTab(menuKey + "-clearing");
@@ -361,7 +365,21 @@ define(function(require, exports) {
         Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
             var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,new FinRule(2));
             if(!isAutoPay){return false;}
-            Insure.getClearing(1,0,id,name);
+            var startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
+                endDate = Insure.$clearSearchArea.find("input[name=endDate]").val();
+            FinancialService.autoPayConfirm(startDate,endDate,function(){
+                Insure.clearTempSumDate = {
+                    id : id,
+                    sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                    sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
+                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
+                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
+                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                };
+                Insure.getClearing(1,0,id,name);
+            });
         });
 
         Insure.$clearTab.find(".T-cancel-auto").off().on("click",function(){
@@ -473,7 +491,7 @@ define(function(require, exports) {
                         type : 1,
                         title : "应付金额明细",
                         skin : 'layui-layer-rim',
-                        area : '800px',
+                        area : '1000px',
                         zIndex : 1028,
                         content : html,
                         scrollbar: false 
@@ -528,7 +546,10 @@ define(function(require, exports) {
             insuranceId : id,
             sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
             payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val()
+            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
+            bankId : Insure.$clearTab.find('input[name=card-id]').val(),
+            voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+            billTime : Insure.$clearTab.find('input[name=tally-date]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
@@ -644,7 +665,7 @@ define(function(require, exports) {
                 // 查看单据
                 var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
                 var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-                restaurant.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+                Insure.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
             } else if ($that.hasClass('T-payedDetail')) {
                 // 已付明细
                 Insure.payedDetail(id);

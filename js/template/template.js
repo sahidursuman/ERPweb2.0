@@ -92,6 +92,8 @@
         /(y+)/.test(fmt) && (fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length)));
         for (var k in o) new RegExp("(" + k + ")").test(fmt) && (fmt = fmt.replace(RegExp.$1, 1 == RegExp.$1.length ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
+    }), template.helper("getDateText", function(startTime, whichDay) {
+        return Tools.addDay(startTime, whichDay - 1);
     }), template.helper("encode", function(data) {
         return encodeURIComponent(data);
     }), template.helper("parseInt", function(data) {
@@ -169,6 +171,12 @@
           default:
             return "";
         }
+    }), template.helper("getPayTypeOptions", function(payType) {
+        var options = "", start = 0;
+        return options += '<option value="0" ' + (start++ == payType ? "selected" : "") + ">现金</option>", 
+        options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
+        start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
+        options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>";
     }), template.helper("getArrangeIcon", function(status) {
         switch (1 * status) {
           case 1:
@@ -178,7 +186,7 @@
             return "fa-exclamation";
 
           case 3:
-            return "fa-checked";
+            return "fa-check";
 
           case 4:
             return "fa-times";
@@ -215,5 +223,42 @@
     }), template.helper("getTaskSelect", function(status) {
         for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
+    }), template.helper("getHotelLevelDesc", function(level) {
+        switch (1 * level) {
+          case 2:
+            return "三星";
+
+          case 3:
+            return "准四星";
+
+          case 4:
+            return "四星";
+
+          case 5:
+            return "准五星";
+
+          case 6:
+            return "五星";
+
+          case 7:
+            return "五星以上";
+
+          default:
+            return "三星以下";
+        }
+    }), template.helper("getOrderStatusDesc", function(status) {
+        switch (1 * status) {
+          case 1:
+            return "未预定";
+
+          case 2:
+            return "预定中";
+
+          case 3:
+            return "已预订";
+
+          default:
+            return "无需预订";
+        }
     });
 }();

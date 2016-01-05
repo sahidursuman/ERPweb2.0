@@ -686,11 +686,13 @@ var modalScripts = {
     'financial_income': 'js/template/financial/FinIncome/finIncome.js', //财务收款
     'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
     'financial_transfer': "js/template/financial/transfer/transfer.js",
+	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
     'system_user': "js/template/system/user/user.js",
     'system_department': "js/template/system/department/business.js",
+	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
@@ -1044,7 +1046,8 @@ var _statusText = {
 	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
-	$('#desc-tooltip-containter').hover(function() {
+	$('body').append('<div id="desc-tooltip-containter2"></div>');
+	$('#desc-tooltip-containter, #desc-tooltip-containter2').hover(function() {
 		$(this).data('focus-in', true);
 	}, function() {
 		$(this).data('focus-in', false).html('');
@@ -1052,7 +1055,8 @@ var _statusText = {
 })(jQuery);
 
 var Tools = {
-	$descContainer: $('#desc-tooltip-containter')
+	$descContainer: $('#desc-tooltip-containter'),
+	$descContainer2: $('#desc-tooltip-containter2'),
 };
 
 /**
@@ -1097,13 +1101,13 @@ Tools.getTableVal = function($tbody, idName) {
 		$tbody.children('tr').each(function() {
 			var $tr = $(this), val = {id: $tr.data(idName)};
 
-			$tr.find('input').each(function() {
+			$tr.find('input,select').each(function() {
 				var $that = $(this);
 
 				name = $that.prop('name');
 				if (!!name) {
 					if ($that.is('[type=checkbox],[type=radio]')) {
-						value = $that.is(':checked');
+						value = $that.is(':checked')?1:0;
 					} else {
 						value = $that.val();
 					}
@@ -1118,7 +1122,6 @@ Tools.getTableVal = function($tbody, idName) {
 		});
 	}
 
-	console.info(res);
 	return res;
 };
 
@@ -1146,7 +1149,7 @@ Tools.descToolTip = function($elements,type, placement) {
 			}else if (type == 2) {
 				options = {
 					trigger: 'manual',
-					container: '#desc-tooltip-containter',
+					container: '#desc-tooltip-containter2',
 					content: html,
 					html : true
 				};
@@ -1171,8 +1174,15 @@ Tools.descToolTip = function($elements,type, placement) {
 					}
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
-						if (Tools.$descContainer.data('focus-in') != true)  {
-							$that.popover('hide');
+						if (type === 2) {
+							if (Tools.$descContainer2.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+						} else {
+							if (Tools.$descContainer.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+
 						}
 					}, 100);
 				});
@@ -1490,8 +1500,42 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     }
 
     return $obj;
-}
+};
 
+/**
+ * 选择日期组件组
+ * @param {object} $dateObjs 日期的Jquery对象
+ */
+Tools.setDateRange = function($dateObjs) {
+	var len = $dateObjs.length;
+	if (len) {
+		Tools.setDatePicker($dateObjs);
+		$dateObjs.each(function(index, val) {
+			 $(this).on('changeDate.date-range.api', function(event) {
+			 	event.preventDefault();
+			 	var $that = $(this)
+			 		date = $that.val();
+
+			 	if (!!date) {
+			 		for (var i = index + 1, $tmp, d; i < len; i ++) {
+			 			$tmp = $dateObjs.eq(i);
+			 			d = $tmp.val();
+			 			if (!!d) {
+			 				if (d <= date) {
+			 					$tmp.val('');
+			 				}
+			 			}
+
+			 			date = Tools.addDay(date, 1);
+		 				$tmp.datepicker('setStartDate', date);
+			 		}
+			 	}
+			 });
+		});
+	}
+
+	return $dateObjs;
+};
 /**
  * 计算两个日期的差额
  * @param  {string} startDate 日期字符串
@@ -1531,7 +1575,8 @@ Tools.addDay = function(date, days) {
 		}
 		var timer = date.getTime()+ days*24*60*60*1000;
 		date.setTime(timer);
-		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+		var month = date.getMonth() + 1, day = date.getDate();
+		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
 
 	return date;
@@ -1775,18 +1820,44 @@ KingServices.viewTransit = function(id){
 		module.viewTransit(id);
 	});
 };
+//查看收支明细 
+KingServices.viewPayMentDetail = function(id,num){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.init(id,num);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
 		module.updateQuoteToOffer(id);
 	});
 }
-
-
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
 		module.addPartnerAgency(fn);
+	});
+}
+
+//购物自费多选和浮动显示
+KingServices.shopMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.shopMultiselect($this);
+	});
+}
+KingServices.viewOptionalShop = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalShop($this);
+	});
+}
+KingServices.selfPayMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewOptionalSelfPay = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalSelfPay($this);
 	});
 }
 

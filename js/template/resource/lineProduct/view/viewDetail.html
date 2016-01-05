@@ -42,14 +42,18 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        {{if !!viewLineProduct.lineProduct.shopNames}}
                         <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
                         <div class="col-sm-2">
                             <label class="control-label" style="text-align: left">{{viewLineProduct.lineProduct.shopNames}}</label>
                         </div>
+                        {{/if}}
+                        {{if !!viewLineProduct.lineProduct.selfPayItemNames}}
                         <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
                         <div class="col-sm-2">
                             <label class="control-label" style="text-align: left">{{viewLineProduct.lineProduct.selfPayItemNames}}</label>
                         </div>
+                        {{/if}}
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">备注:</label>

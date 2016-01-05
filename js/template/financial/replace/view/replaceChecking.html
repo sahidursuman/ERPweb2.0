@@ -90,7 +90,7 @@
                 <td><a class="cursor T-action T-receive-money T-payedDetail" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-xs-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
                 <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
-                <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-xs-12" name="checkRemark">{{/if}}</td>
+                <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-xs-12" name="checkRemark" value="{{rs.checkRemark}}">{{/if}}</td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>
@@ -123,7 +123,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary T-btn-save" style="margin-left:20px">
+            <button class="btn btn-xs btn-primary T-saveClear" style="margin-left:20px">
                 <i class="ace-icon fa fa-check-circle"></i> 确认对账
             </button>
         </div>

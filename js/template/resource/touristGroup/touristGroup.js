@@ -130,12 +130,6 @@ define(function(require, exports) {
                     //外联销售
                     touristGroup.getOutUserList($outUserObj);
 
-              /*      //获取组团单号
-                    touristGroup.getOtaOrderNumber($otaOrderNumberObj);
-                    //获取组团单号
-                    touristGroup.getWelcomeBoard($welcomeBoardObj);*/
-
-
                     //获取接站牌
                     //选择组团社与业务部
                     var $selectObj = $searchObj.find(".T-choosePorB");
@@ -327,13 +321,9 @@ define(function(require, exports) {
             $innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         //精度控制
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
-        Tools.inputCtrolFloat($adultPrice);
-        Tools.inputCtrolFloat($childPrice);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -357,7 +347,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             //报价单号的layer层
-            var lineProductId = $addTabId.find(".T-lineProductId").val(),addType='1';
+            var lineProductId = '',addType='1';  
             touristGroup.chooseQuoteProduct(lineProductId,addType);
         });
 
@@ -380,13 +370,9 @@ define(function(require, exports) {
             $groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $adultPrice = $groupInfoForm.find('input[name=adultPrice]'),
-            $childPrice = $groupInfoForm.find('input[name=childPrice]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
-        Tools.inputCtrolFloat($adultPrice);
-        Tools.inputCtrolFloat($childPrice);
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -593,7 +579,7 @@ define(function(require, exports) {
         //删除原有费用项
         if (typeFlag == 2) {
             //addCost-delete
-            $obj.find(".T-addCostTbody").on('click', ".oldaddCost-delete", function() {
+            $obj.find(".T-addCostTbody").on('click', ".T-delete", function() {
                 $tr = $(this).closest('tr');
                 var costListTrId = $tr.attr("data-entity-id");
                 if (costListTrId != null && costListTrId != "") {
@@ -916,7 +902,6 @@ define(function(require, exports) {
             if (!!addType && addType=='1') {
                 $addTabId = $("#tab-resource_touristGroup-add-content");
             };
-        //var $form = $tab.find('.T-touristGroupMainForm');
        
         //保存
         $chooseQuotObj.find('.T-save').on('click', function(event) {
@@ -947,7 +932,7 @@ define(function(require, exports) {
                             childPrice: $tr.attr('data-childPrice')
                         },
                         id = {
-                            id: id
+                            id: chooseQuot.quoteId
                         };
                     //选中报价后带出数据组装
                     chooseQuotObj = chooseQuot;
@@ -972,11 +957,14 @@ define(function(require, exports) {
                 $addTabId.find('.T-adultPrice').val(chooseQuotObj.adultPrice);
                 $addTabId.find('.T-childCount').val(chooseQuotObj.childCount);
                 $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice).trigger('change');
-                $addTabId.find('.T-quoteNumber', '.T-lineProductId', '.T-lineProductIdName', '.T-startTime', '.T-fromPartnerAgencyName', '.T-fromPartnerAgencyId').prop("readonly", true);
-                $addTabId.find('.T-partnerAgencyNameList', '.T-partnerAgencyContactId').prop("readonly", true);
-                //选择报价设置数据
-                //touristGroup.setQuoteData($form,data);
-
+                //设置只读属性
+                touristGroup.setReadonly($addTabId,"quoteNumber");
+                touristGroup.setReadonly($addTabId,"adultCount");
+                touristGroup.setReadonly($addTabId,"childCount");
+                touristGroup.setTimePicRe($addTabId,"startTime");
+                touristGroup.setTimePicRe($addTabId,"endTime");
+                touristGroup.setReadonly($addTabId,"fromPartnerAgency");
+                touristGroup.setReadonly($addTabId,"partnerAgencyNameList");
                 layer.close(touristGroup.chooseQuoteProlayer);
 
             } else {
@@ -1208,6 +1196,7 @@ define(function(require, exports) {
     touristGroup.clearQuoteData = function($mainForm) {
         var names = [
             'startTime',
+            'endTime',
             'fromPartnerAgency',
             'fromPartnerAgencyId',
             'partnerAgencyNameList',
@@ -1493,19 +1482,19 @@ define(function(require, exports) {
     //新增其他费用项
     touristGroup.addOtherCost = function($obj) {
         var html = '<tr>' +
-            '<td><input name="describeInfo" value="其他费用" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>' +
+            '<td><input name="describeInfo" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>' +
             '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc"/></td>' +
             '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc"/></td>' +
             '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" /></td>' +
             '<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>' +
-            '<td><a class="cursor addCost-delete">删除</a></td>' +
+            '<td><a class="cursor T-delete">删除</a></td>' +
             '</tr>';
         var $parentsObj = $obj.closest(".T-touristGroupMainForm");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
 
         //删除事件
-        $tableObj.find(".addCost-delete").off('click').on('click', function() {
+        $tableObj.find(".T-delete").off('click').on('click', function() {
             var $tr = $(this).closest('tr');
             $tr.fadeOut(function() {
                 $(this).remove();
@@ -1615,39 +1604,38 @@ define(function(require, exports) {
 
     //获取组团社的数据
     touristGroup.getPartnerAgencyList = function($obj) {
-        $.ajax({
-            url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
-            data: {
-                operation: 'view'
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (ui.item == null) {
+                    $(this).find('input[name=fromPartnerAgencyId]').val("");
+                    $(this).parent().find('input[name=partnerAgencyNameList]').val("");
+                    $(this).parent().find('input[name=type]').val("");
+                }
             },
-            type: 'POST',
-            success: function(data) {
-                var result = showDialog(data);
-                var partnerAgencyList = JSON.parse(data.partnerAgencyList);
-                data.partnerAgencyList = partnerAgencyList;
-                console.log(data);
-                if (result) {
-                    $obj.autocomplete({
-                        minLength: 0,
-                        change: function(event, ui) {
-                            if (ui.item == null) {
-                                $(this).find('input[name=fromPartnerAgencyId]').val("");
-                                $(this).parent().find('input[name=partnerAgencyNameList]').val("");
-                                $(this).parent().find('input[name=type]').val("");
-                            }
-                        },
-                        select: function(event, ui) {
-                            var $parent = $(this).blur().nextAll("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change').parent(),
-                                $form = $parent.closest('.form-inline');
-                            //通过typeFlag来判断--1、新增；2、修改
-                            $parent.find("input[name=type]").val("");
-                            $form.find("input[name=partnerAgencyNameList]").val("");
-                            $form.find('input[name=partnerAgencyContactId]').val("");
-                        }
-                    }).off('click').on('click', function() {
-                        if (!!$(this).attr('readonly')) return;
-                        var $that = $(this);
-                        var formParObj = data.partnerAgencyList;
+            select: function(event, ui) {
+                var $parent = $(this).blur().nextAll("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change').parent(),
+                    $form = $parent.closest('.form-inline');
+                //通过typeFlag来判断--1、新增；2、修改
+                $parent.find("input[name=type]").val("");
+                $form.find("input[name=partnerAgencyNameList]").val("");
+                $form.find('input[name=partnerAgencyContactId]').val("");
+            }
+        }).off('click').on('click', function() {
+            var $that = $(this);
+            if (!!$that.attr('readonly')) return;
+
+            $.ajax({
+                url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
+                data: {
+                    operation: 'view'
+                },
+                showLoading:false,
+                type: 'POST',
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var formParObj = JSON.parse(data.partnerAgencyList);
+
                         if (formParObj != null && formParObj.length > 0) {
                             for (var i = 0; i < formParObj.length; i++) {
                                 formParObj[i].value = formParObj[i].travelAgencyName
@@ -1655,11 +1643,10 @@ define(function(require, exports) {
                         };
                         $that.autocomplete('option', 'source', formParObj);
                         $that.autocomplete('search', '');
-                    });
+                    }
 
                 }
-
-            }
+            });
         });
     };
     //获取同行联系人
@@ -1931,11 +1918,16 @@ define(function(require, exports) {
 
         //游客小组、账单信息序列化
         var form = $lineInfoForm.serialize(),
-            $startTime = $lineInfoForm.find('input[name=startTime]');
+            $startTime = $lineInfoForm.find('input[name=startTime]'),
+            $endTime = $lineInfoForm.find('input[name=endTime]');
 
         // for 出游日期
         if ($startTime.prop('disabled')) {
             form = form + '&startTime=' + $startTime.val();
+        }
+
+        if ($endTime.prop('disabled')) {
+            form = form + '&endTime=' + $endTime.val();
         }
 
         //内转数据序列化【内转确认】
@@ -2125,8 +2117,6 @@ define(function(require, exports) {
     };
     //提交数据
     touristGroup.submitData = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
-        console.info("submitData" + typeInner);
-        console.info('touristGroupId....' + data.form + "subMit");
         $.ajax({
             url: url,
             type: "POST",
@@ -2145,8 +2135,6 @@ define(function(require, exports) {
                                 }
                             } else {
                                 Tools.closeTab(tabId);
-
-                                console.info(typeInner + "......");
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
                                 var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
                                     $smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
@@ -2276,6 +2264,19 @@ define(function(require, exports) {
     touristGroup.getVal = function(obj, name){
         return obj.find("[name="+name+"]").val();
     }
+
+    /**
+     * [setReadonly设置只读属性
+     * @param {[type]} $tab [description]
+     * @param {[type]} name [description]
+     */
+    touristGroup.setReadonly = function($tab,name){
+        $tab.find("[name="+name+"]").prop("readonly",true);
+    };
+
+    touristGroup.setTimePicRe = function($tab,name){
+       $tab.find("[name="+name+"]").prop('disabled',true);
+    };
 
 
     /**

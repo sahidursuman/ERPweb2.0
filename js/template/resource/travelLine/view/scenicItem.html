@@ -1,0 +1,29 @@
+<table class="table table-striped table-bordered table-hover">
+	<thead>
+		<tr>
+			<th class="th-border" colspan="3">景点选择</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{each scenicList as scenic }}
+		{{each scenic.scenicItemList as scenicItem index}}
+			<tr data-value="{{scenic.id}}">
+				{{if index==0}}<td rowspan="{{scenic.scenicItemList.length}}" style="">{{scenic.name}}</td>{{/if}}
+				<td data-entity-id="{{scenicItem.id}}">{{scenicItem.name}}</td>
+				<td><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span> </label>
+				</td>
+			</tr>
+		{{/each}}
+	{{/each}}
+	</tbody>
+</table>
+
+<div class="row pageMode">
+	<div class="col-xs-6">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>

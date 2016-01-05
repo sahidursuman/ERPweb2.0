@@ -246,8 +246,8 @@ define(function(require,exports) {
 	                                    sumPayMoney : sumPayMoney,
 	                                    sumPayType : sumPayType,
 	                                    sumPayRemark : sumPayRemark
-	                                }
-									InnerTransferOut.settlement(obj.curr -1);
+	                                };
+									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
                                 	InnerTransferOut.chenking(obj.curr -1);
                                 }
@@ -287,6 +287,7 @@ define(function(require,exports) {
 		};
 		//页面时间控件格式化
 		FinancialService.initDate($checkSearchArea);
+		FinancialService.initPayEvent($obj.find('.T-summary'));
 		//搜索事件
 		$checkSearchArea.find(".T-checking-search").on('click',function(event){
 			event.preventDefault();
@@ -295,7 +296,7 @@ define(function(require,exports) {
 				InnerTransferOut.chenking(0);
 			}else{
 				$obj.data('isEdited', false);
-				InnerTransferOut.settlement($data);
+				InnerTransferOut.settlement($data,0);
 			}
 		});
 		//导出报表事件
@@ -407,6 +408,7 @@ define(function(require,exports) {
         		InnerTransferOut.settlement($data);
         	}
         });
+		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
@@ -609,7 +611,7 @@ define(function(require,exports) {
 	};
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && arguments.length === 1){
+		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
 			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
 			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
 			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
@@ -663,8 +665,8 @@ define(function(require,exports) {
 		var payType;
 		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
-		var payType = tab_id.find('select[name=sumPayType]').val();
-		var sumRemark = tab_id.find('name[name=sumRemark]').val();
+		var payType = tab_id.find('select[name=payType]').val();
+		var sumRemark = tab_id.find('input[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferOutFinancial','operatePayAccount'),
@@ -672,7 +674,10 @@ define(function(require,exports) {
             data:{
             	payJson:JsonStr,
             	payType:payType,
-            	remark:sumRemark
+            	remark:sumRemark,
+            	bankId : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
+	            voucher : InnerTransferOut.$settlementTab.find('input[name=credentials-number]').val(),
+	            billTime : InnerTransferOut.$settlementTab.find('input[name=tally-date]').val()
             },
             success:function(data){
                 var result = showDialog(data);
