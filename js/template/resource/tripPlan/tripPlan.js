@@ -2631,7 +2631,6 @@ define(function(require, exports) {
 				}
 
 				if (options.length) {
-					console.info(options)
 					var html = ['<table class="table table-bordered mar-0" style="min-width:400px;width:400px;"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr></thead><tbody>'];
 					for (var i = 0; i < options.length; i++) {
 						html +=('<tr><td>'+options[i].name+'</td><td>'+options[i].managerName+'</td><td>'+options[i].mobileNumber+'</td></tr>');
