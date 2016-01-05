@@ -639,7 +639,7 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).attr('policyId');
+			var shopPolicyId = $(this).attr('policyid');
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
@@ -1117,7 +1117,7 @@ define(function(require, exports){
 		
 		$bodyObj.append(html);
 		//新增获取购物店数据
-		Count.getShopData($bodyObj);
+		Count.getShopData($bodyObj,$parentObj);
 		//设置下拉框
 		Count.setChooseDays($bodyObj,$parentObj);
 		$bodyObj.find('input[type=text]').off('change').on('change',function(){
@@ -2184,7 +2184,7 @@ define(function(require, exports){
 		});
 	};
 	//获取购物店的数据
-	Count.getShopData = function($obj){
+	Count.getShopData = function($obj,$parentObj){
 		var $shopObj = $obj.find('input[name=shopName]');
 		$.ajax({
 			url:KingServices.build_url("shop","findAll"),
@@ -2214,7 +2214,7 @@ define(function(require, exports){
 								$tr.find('input[name=shopPolicy]').val('');
 								$tr.find('input[name=shopPolicyId]').val('');
 								//获取对应的商品政策的数据
-								Count.getShopPolicy($tr);
+								Count.getShopPolicy($tr,$parentObj);
 							}
 						}
 					}).off('click').on('click',function(){
@@ -2237,7 +2237,7 @@ define(function(require, exports){
 		});
 	};
 	//获取商品政策的数据
-	Count.getShopPolicy = function($obj){
+	Count.getShopPolicy = function($obj,$parentObj){
 		var $shopPolicyObj = $obj.find('input[name=shopPolicy]'),shopId = $obj.find('input[name=shopId]').val();
 		$.ajax({
 			url:KingServices.build_url('shop','findPolicyByShopId'),
@@ -2264,6 +2264,11 @@ define(function(require, exports){
 						select:function(event,ui){
 							if(ui.item != null){
 								$obj.find('input[name=shopPolicyId]').val(ui.item.id);
+								var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
+								var consumeMoney = $(this).closest('tr').find('input[name=consumeMoney]').val() || 0;
+								var date =$parentObj.find('.tripPlanStartTime').val();
+								Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
+								//$obj.find('input[name=consumeMoney]').val('');
 							}
 						}
 						}).off('click').on('click',function(){
@@ -2991,9 +2996,13 @@ define(function(require, exports){
                 		}
                 		if(guideRate > 0) {
                 			$obj.closest('tr').find("input[name=guideRate]").val(guideRate);
-                		} else {s
+                		} else {
                 			$obj.closest('tr').find("input[name=guideRate]").val(0);
                 		}
+                		Count.autoShopSum($obj,$bodyObj);
+                	}else{
+                		$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+                		$obj.closest('tr').find("input[name=guideRate]").val(0);
                 		Count.autoShopSum($obj,$bodyObj);
                 	}
 				}
