@@ -252,8 +252,6 @@ define(function(require, exports) {
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
            searchParam.sumCurrentPayMoney = busCompany.$clearTab.find('input[name=sumPayMoney]').val();
-           searchParam.payType = busCompany.$clearTab.find('select[name=sumPayType]').val();
-           searchParam.payRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
         }
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -274,6 +272,10 @@ define(function(require, exports) {
                         data.sumPayMoney = busCompany.clearTempSumDate.sumPayMoney;
                         data.sumPayType = busCompany.clearTempSumDate.sumPayType;
                         data.sumPayRemark = busCompany.clearTempSumDate.sumPayRemark;
+                        data.bankNo = busCompany.clearTempSumDate.bankNo;
+                        data.bankId = busCompany.clearTempSumDate.bankId;
+                        data.voucher = busCompany.clearTempSumDate.voucher;
+                        data.billTime = busCompany.clearTempSumDate.billTime;
 
                         data.financialBusCompanyListData = FinancialService.getTempDate(resultList,busCompany.clearTempData);
                     } else {
@@ -305,13 +307,17 @@ define(function(require, exports) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab,busCompany.clearTempData,new FinRule(isAutoPay== 2?3: 1));
                                 busCompany.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = busCompany.$clearTab.find('input[name=sumPayRemark]').val();
+                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=payType]').val()),
+                                    sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
                                 busCompany.clearTempSumDate = {
                                     id : busCompanyId,
                                     sumPayMoney: sumPayMoney,
                                     sumPayType: sumPayType,
-                                    sumPayRemark: sumPayRemark
+                                    sumPayRemark: sumPayRemark,
+                                    bankNo : busCompany.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : busCompany.$clearTab.find('input[name=card-id]').val(),
+                                    voucher : busCompany.$clearTab.find('input[name=credentials-number]').val(),
+                                    billTime : busCompany.$clearTab.find('input[name=tally-date]').val()
                                 }
                                 busCompany.busCompanyClear(isAutoPay,obj.curr -1,busCompanyId,busCompanyName);
                             }
@@ -341,10 +347,13 @@ define(function(require, exports) {
             busCompany.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 busCompany.$clearTab.data('isEdited',true);
+                busCompany.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 busCompany.$clearTab.find(".T-cancel-auto").hide();
             }
         }
+
+        FinancialService.initPayEvent(busCompany.$clearTab.find('.T-summary'));
 
         // 监听修改
         $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
@@ -408,8 +417,12 @@ define(function(require, exports) {
                 busCompany.clearTempSumDate = {
                     id : id,
                     sumPayMoney : busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : busCompany.$clearTab.find('select[name=sumPayType]').val(),
-                    sumPayRemark : busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+                    sumPayType : busCompany.$clearTab.find('select[name=payType]').val(),
+                    sumPayRemark : busCompany.$clearTab.find('input[name=remark]').val(),
+                    bankNo : busCompany.$clearTab.find('input[name=card-number]').val(),
+                    bankId : busCompany.$clearTab.find('input[name=card-id]').val(),
+                    voucher : busCompany.$clearTab.find('input[name=credentials-number]').val(),
+                    billTime : busCompany.$clearTab.find('input[name=tally-date]').val()
                 };
                 busCompany.busCompanyClear(1,0,id,name);
             });
@@ -475,8 +488,11 @@ define(function(require, exports) {
         var searchParam = {
             busCompanyId: id,
             sumCurrentPayMoney: busCompany.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType: busCompany.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark: busCompany.$clearTab.find('input[name=sumPayRemark]').val()
+            payType: busCompany.$clearTab.find('select[name=payType]').val(),
+            payRemark: busCompany.$clearTab.find('input[name=remark]').val(),
+            bankId : busCompany.$clearTab.find('input[name=card-id]').val(),
+            voucher : busCompany.$clearTab.find('input[name=credentials-number]').val(),
+            billTime : busCompany.$clearTab.find('input[name=tally-date]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
@@ -609,7 +625,7 @@ define(function(require, exports) {
                         type: 1,
                         title: "应付金额明细",
                         skin: 'layui-layer-rim',
-                        area: '800px',
+                        area: '1000px',
                         zIndex: 1028,
                         content: html,
                         scrollbar: false 

@@ -3,7 +3,7 @@
 		<table class="table table-striped table-bordered table-hover T-showHighLight row">
 			<thead>
 				<tr class="bg-blur">  
-					<th >客户来源</th>
+					<th >客户</th>
 					<th >线路产品</th>
 					<th>针对客源</th>               
 					<th >出游日期</th>
@@ -11,11 +11,15 @@
 					<th>联系人</th>
 					<th>人数</th>
 					<th>应收</th>
+					<th>预收款</th>
 					<th>已收</th>
-					<th>现收</th>
+					<th>计划现收</th>
 					<th>未收</th>
 					<th>买保险</th>
-					<th>录入人</th>
+					<th>组团单号</th>
+					<th>客源类型</th>
+					<th>接站牌</th>
+					<th>外联销售</th>
 					<th width="160">录入时间</th>
 					<th>状态</th>
 					<th style="width:150px;">操作</th>
@@ -59,6 +63,7 @@
 					<td>
 						{{touristGroup.needPayAllMoney}}
 					</td>
+					<td>{{touristGroup.preIncomeMoney}}</td>
 					<td>
 						{{touristGroup.payedMoney}}
 					</td>
@@ -71,9 +76,18 @@
 						<i class="ace-icon fa fa-times red bigger-125"></i>
 						{{/if}}
 					</td>
+					<td>{{touristGroup.otaOrderNumber}}</td>
 					<td>
-						{{if touristGroup.user != null}}
-							{{touristGroup.user.realName}}
+						{{if touristGroup.memberType==0}}
+							 内宾
+						{{else}}               
+							 外宾
+						{{/if}}  	
+					</td>
+					<td>{{touristGroup.welcomeBoard}}</td>
+					<td>
+						{{if touristGroup.outOPUser != null}}
+							{{touristGroup.outOPUser.realName}}
 						{{/if}}
 					</td>
 					<td>
@@ -87,7 +101,7 @@
 						{{else if touristGroup.status==2 }}
 							已分团
 						{{else if touristGroup.status==3 }}
-							已转客
+							已外转
 						{{else if touristGroup.status==4 }}
 							已取消
 						{{else if touristGroup.status==5 }}

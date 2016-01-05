@@ -276,6 +276,11 @@ define(function(require, exports){
             $tab.data('isEdited', true);
         });
 
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+			event.preventDefault();
+            FinShop.initOperationEvent($tab,type);
+		});
+
 		if(type){
 			var autoValidator = (new FinRule(2)).check($tab);
 			FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
@@ -292,6 +297,8 @@ define(function(require, exports){
 	                FinShop.setAutoFillEdit($tab, false);
 	            }
 			});
+
+			FinancialService.initPayEvent($searchArea);
 		}else{
 			saveData = FinShop.saveChecking;
 			operationMenuKey = checkMenuKey;
@@ -317,7 +324,7 @@ define(function(require, exports){
 
 
 		//绑定确定事件
-		$tab.find('.T-btn-save').on('click', function(event){
+		$tab.find('.T-saveClear').on('click', function(event){
 			event.preventDefault();
 			if(!type){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
@@ -504,7 +511,15 @@ define(function(require, exports){
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
+                    	var bankId = $tab.find('input[name=card-id]').val();
+						var voucher = $tab.find('input[name=credentials-number]').val();
+						var billTime = $tab.find('input[name=tally-date]').val();
+						var bankNumber = $tab.find('input[name=card-number]').val();
                         FinShop.payingJson = data.autoAccountList;
+                        FinShop.payingJson.bankId = bankId;
+                        FinShop.payingJson.voucher = voucher;
+                        FinShop.payingJson.billTime = billTime;
+                        FinShop.payingJson.bankNumber = bankNumber;
                         $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                         FinShop.setAutoFillEdit($tab, true);
                     }
@@ -551,10 +566,10 @@ define(function(require, exports){
 						$tab.find('.T-checkTr').on('change', function(){
 							$(this).data('change', 'true');
 						});
-						FinShop.initOperationEvent($tab, 1);
+						//FinShop.initOperationEvent($tab, 1);
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
-                        $tab.find('.T-btn-save').data('pageNo', args.pageNo);
+                        $tab.find('.T-saveClear').data('pageNo', args.pageNo);
 						// 绑定翻页组件
 						laypage({
 						    cont: $tab.find('.T-pagenation'), 
@@ -573,11 +588,16 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
+		var bankId = $tab.find('input[name=card-id]').val();
+		var voucher = $tab.find('input[name=credentials-number]').val();
+		var billTime = $tab.find('input[name=tally-date]').val();		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 		if (json.length) {
 			var args = {
                 shopId: FinShop.settlementId,
                 payType: $tab.find('.T-sumPayType').val(),
+                bankId:bankId,
+                voucher:voucher,
+                billTime:billTime,
                 remark: $tab.find('.T-sumRemark').val(),
                 reciveAccountList : JSON.stringify(json)
 			}
