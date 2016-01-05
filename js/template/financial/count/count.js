@@ -388,7 +388,7 @@ define(function(require, exports){
 
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag != "consumeMoney"){
+			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -397,8 +397,6 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-            	
-            	
 			var shopPolicyId = $(this).attr('policyId');
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
