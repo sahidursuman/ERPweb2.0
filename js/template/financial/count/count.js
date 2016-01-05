@@ -388,7 +388,7 @@ define(function(require, exports){
 
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag != "consumeMoney"){
+			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -397,8 +397,6 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-            	
-            	
 			var shopPolicyId = $(this).attr('policyId');
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
@@ -639,7 +637,7 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).attr('policyId');
+			var shopPolicyId = $(this).attr('policyid');
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
@@ -1117,7 +1115,7 @@ define(function(require, exports){
 		
 		$bodyObj.append(html);
 		//新增获取购物店数据
-		Count.getShopData($bodyObj);
+		Count.getShopData($bodyObj,$parentObj);
 		//设置下拉框
 		Count.setChooseDays($bodyObj,$parentObj);
 		$bodyObj.find('input[type=text]').off('change').on('change',function(){
@@ -1531,7 +1529,7 @@ define(function(require, exports){
 		Count.getSelfData($obj,$parentObj);
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "selfPayName" && $nameFlag != "selfPayItem" && $nameFlag != "billRemark"){
+			if($nameFlag != "selfPayName" &&  $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoSelfSum($(this),$parentObj);
@@ -1780,6 +1778,15 @@ define(function(require, exports){
 		$obj.append(html);
 		//获取餐厅数据
 		Count.getRestData($obj);
+		//下拉框事件
+		$obj.find('select').off('change').on('change',function(){
+			var $tr = $(this).closest('tr');
+			var restaurantId = $tr.find('input[name=restaurantId]').val();
+			if(restaurantId != null && restaurantId != ""){
+				Count.getRestPrice($tr);
+			};
+			
+		});
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
 		//绑定事件
@@ -1874,7 +1881,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName" && $nameFlag != "type" && $nameFlag != "billRemark"){
+			if($nameFlag != "hotelName"  && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoHotelSum($(this),$parentObj);
@@ -1964,7 +1971,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "scenicName" && $nameFlag != "type" && $nameFlag != "billRemark"){
+			if($nameFlag != "scenicName"  && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoScenicSum($(this),$parentObj);
@@ -2175,7 +2182,7 @@ define(function(require, exports){
 		});
 	};
 	//获取购物店的数据
-	Count.getShopData = function($obj){
+	Count.getShopData = function($obj,$parentObj){
 		var $shopObj = $obj.find('input[name=shopName]');
 		$.ajax({
 			url:KingServices.build_url("shop","findAll"),
@@ -2205,7 +2212,7 @@ define(function(require, exports){
 								$tr.find('input[name=shopPolicy]').val('');
 								$tr.find('input[name=shopPolicyId]').val('');
 								//获取对应的商品政策的数据
-								Count.getShopPolicy($tr);
+								Count.getShopPolicy($tr,$parentObj);
 							}
 						}
 					}).off('click').on('click',function(){
@@ -2228,7 +2235,7 @@ define(function(require, exports){
 		});
 	};
 	//获取商品政策的数据
-	Count.getShopPolicy = function($obj){
+	Count.getShopPolicy = function($obj,$parentObj){
 		var $shopPolicyObj = $obj.find('input[name=shopPolicy]'),shopId = $obj.find('input[name=shopId]').val();
 		$.ajax({
 			url:KingServices.build_url('shop','findPolicyByShopId'),
@@ -2255,6 +2262,11 @@ define(function(require, exports){
 						select:function(event,ui){
 							if(ui.item != null){
 								$obj.find('input[name=shopPolicyId]').val(ui.item.id);
+								var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
+								var consumeMoney = $(this).closest('tr').find('input[name=consumeMoney]').val() || 0;
+								var date =$parentObj.find('.tripPlanStartTime').val();
+								Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
+								//$obj.find('input[name=consumeMoney]').val('');
 							}
 						}
 						}).off('click').on('click',function(){
@@ -2555,7 +2567,9 @@ define(function(require, exports){
 					startTime = $("#tripPlan_addPlan_content").find("[name=startTime_Choose]").text();
 					parents.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
 					//获取房间标价
-					Count.getHotelRoomPrice(parents,$parentObj);
+					Count.getHotelRoomPrice($(this),parents,$parentObj);
+					
+
 			}
 		}).off('click').on('click',function(){
 			var obj = $(this);
@@ -2587,7 +2601,7 @@ define(function(require, exports){
 		});
 	};
 	//获取房间价格
-	Count.getHotelRoomPrice = function($obj,$parentObj){
+	Count.getHotelRoomPrice = function($td,$obj,$parentObj){
 		var $priceObj = $obj.find('input[name=price]'),
 			id = $obj.find('input[name=hotelRoomId]').val(),
 			whichDay = $obj.find('select[name=whichDay]').val(),
@@ -2604,6 +2618,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					$obj.find('input[name=price]').val(data.price);
+					Count.autoHotelSum($td,$parentObj);
 				}
 			}
 		});
@@ -2637,6 +2652,7 @@ define(function(require, exports){
 							$tr.find('input[name=scenicItemId]').val('');
 							$tr.find('input[name=scenicItemName]').val('');
 							$tr.find('input[name=price]').val('');
+							$tr.find('input[name=scenicItem]').val('');
 							//获取景区项目
 							Count.getScenicItem($tr,$parentObj);
 						}
@@ -2684,7 +2700,7 @@ define(function(require, exports){
 							if(ui.item != null){
 								$tr.find('input[name=scenicItemId]').val(ui.item.id);
 								//获取单价
-								Count.getScenicItemPrice($tr,$parentObj);
+								Count.getScenicItemPrice($(this),$tr,$parentObj);
 							}
 						}
 					}).off('click').on('click',function(){
@@ -2697,7 +2713,7 @@ define(function(require, exports){
 		});
 	};
 	//获取单价
-	Count.getScenicItemPrice = function($obj,$parentObj){
+	Count.getScenicItemPrice = function($td,$obj,$parentObj){
 		var startTime = $parentObj.find('.startTime_Choose').text(),
 			whichDay = $obj.find('select[name=whichDay]').val(),
 			id = $obj.find('input[name=scenicItemId]').val();
@@ -2714,6 +2730,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					$obj.find('input[name=price]').val(data.price);
+					Count.autoScenicSum($td,$parentObj);
 				}
 			}
 		});
@@ -2982,9 +2999,13 @@ define(function(require, exports){
                 		}
                 		if(guideRate > 0) {
                 			$obj.closest('tr').find("input[name=guideRate]").val(guideRate);
-                		} else {s
+                		} else {
                 			$obj.closest('tr').find("input[name=guideRate]").val(0);
                 		}
+                		Count.autoShopSum($obj,$bodyObj);
+                	}else{
+                		$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+                		$obj.closest('tr').find("input[name=guideRate]").val(0);
                 		Count.autoShopSum($obj,$bodyObj);
                 	}
 				}
