@@ -1009,6 +1009,7 @@ define(function(require, exports) {
             if(!args)return false;
         }
         args = {
+            otaOrderNumber : $tab.find('.T-search-number').val(),
             creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
