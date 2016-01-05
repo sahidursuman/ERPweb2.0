@@ -173,7 +173,7 @@ define(function(require, exports) {
 	 */
 	tripPlan.viewTripPlan = function(id) {
 		$.ajax({
-			url: KingServices.build_url('tripPlan','findArrangeTripPlanById'),
+			url: KingServices.build_url('tripPlan','getTripPlanArrange'),
 			type: "GET",
 			data: {
 				id: id,
@@ -181,20 +181,24 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				if(showDialog(data)){
-					var tripPlanInfo = JSON.parse(data.tripPlan),
-						 insuranceList = JSON.parse(data.insuranceList),
-						 hotelList = JSON.parse(data.hotelList),
-						 busCompanyList = JSON.parse(data.busCompanyList),
-						 guideList = JSON.parse(data.guideList),
-						 otherList = JSON.parse(data.otherList),
-						 restaurantList = JSON.parse(data.restaurantList),
-						 scenicList = JSON.parse(data.scenicList),
-						 selfPayList = JSON.parse(data.selfPayList),
-						 shopList = JSON.parse(data.shopList),
-						 ticketList = JSON.parse(data.ticketList);
+					var basicInfo = JSON.parse(data.basicInfo);
+					var arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
+					var tripPlanDayList = JSON.parse(data.tripPlanDayList);
+					var insuranceList = JSON.parse(data.arrangeItems.insuranceList);
+					var hotelList = JSON.parse(data.arrangeItems.hotelList);
+					var busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
+					var guideList = JSON.parse(data.arrangeItems.guideList);
+					var otherList = JSON.parse(data.arrangeItems.otherList);
+					var restaurantList = JSON.parse(data.arrangeItems.restaurantList);
+					var scenicList = JSON.parse(data.arrangeItems.scenicList);
+					var selfPayList = JSON.parse(data.arrangeItems.selfPayList);
+					var shopList = JSON.parse(data.arrangeItems.shopList);
+					var ticketList = JSON.parse(data.arrangeItems.ticketList);
+					basicInfo.touristCount = (basicInfo.touristAdultCount || 0) + (basicInfo.touristChildCount || 0);
 					
 					data = {
-						tripPlan : tripPlanInfo,
+						basicInfo : basicInfo,
+						arrangeItemsStauts: arrangeItemsStauts,
 						insuranceList : insuranceList,
 						hotelList : hotelList,
 						busCompanyList : busCompanyList,
@@ -203,25 +207,26 @@ define(function(require, exports) {
 						restaurantList : restaurantList,
 						scenicList : scenicList,
 						selfPayList : selfPayList,
-						shopList : shopList,
+						shopList : shopList,       
 						ticketList : ticketList
 					};
+					data.days = Tools.getDateDiff(basicInfo.endTime, basicInfo.startTime) + 1;
 					
 					addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
-					$tab.on("mouseenter",".T-viewWhichDaysContainer",function(){
-						var whichDay = $(this).attr("whichDay"),
-							$this = $(this)
-							startTime = $tab.find("span[name=startTime_Choose]").text(),
-							date = new Date(startTime.replace("-", "/").replace("-", "/"));
-						var timer = date.getTime()+(whichDay-1)*24*60*60*1000;
-						date.setTime(timer);
-						var datetime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
-						layer.tips(datetime, $this, {
-				    		tips: [1, '#3595CC'],
-				    		time: 1500
-						});
-					})
+					$tab.find('.T-restaurant-name').each(function() {
+						var $name = $(this);
+
+						if ($name.data('ischoose') == 1) {
+							// 导游任选
+							tripPlan.viewOptionalRestaurant($name);
+						}
+					});
+
+					$tab.find('.T-close').on('click', function(event) {
+						event.preventDefault();
+						Tools.closeTab('arrange_all-view');
+					});
 				}
 			}
 		});
@@ -291,6 +296,7 @@ define(function(require, exports) {
 						var selfPayList = JSON.parse(data.arrangeItems.selfPayList);
 						var shopList = JSON.parse(data.arrangeItems.shopList);
 						var ticketList = JSON.parse(data.arrangeItems.ticketList);
+						basicInfo.touristCount = (basicInfo.touristAdultCount || 0) + (basicInfo.touristChildCount || 0);
 						
 						data = {
 							basicInfo : basicInfo,
@@ -380,6 +386,9 @@ define(function(require, exports) {
 				tripPlan.addOther($that, validator, $tab);
 			}
 		});
+
+		// 设置人数
+		tripPlan.touristCount = $tab.find('.T-touristCount').data('count') || '';
 
 		// 激活第一个菜单
 		var $nav = $tab.find('.T-arrange-tabs'), $target;
@@ -952,7 +961,7 @@ define(function(require, exports) {
 			html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 T-chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="type" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/><input type="hidden" name="typeId" value="" /></td>' +
 		'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price"/></td>' +
-		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
+		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
@@ -1048,7 +1057,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="price" value="" class="col-sm-12 T-typeNameChoose"/><input type="hidden" name="restaurantStandardId" value="0"/></td>' +
-		'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4"/></td>' +
+		'<td><input name="memberCount" type="text" class="col-sm-12" style="width: 60px;" maxlength="4" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12" style="width: 60px;"/></td>' +
 		'<td><input name="prePayMoney" type="text" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
@@ -1077,7 +1086,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 		'<td><input type="text" class="col-sm-12 T-chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
 		'<td><input type="text" class="col-sm-12 price" name="fee" style="width: 60px;" maxlength="6"/></td>' +
-		'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="6"/></td>' +
+		'<td><input type="text" class="col-sm-12" name="memberCount" style="width: 60px;" maxlength="6"  value="'+ (tripPlan.touristCount/2) +'"/></td>' +
 		'<td><input type="text" class="col-sm-12 price" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 		'<td><input type="text" class="col-sm-12 price" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
@@ -1108,7 +1117,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem"/><input type="hidden" name="scenicItemId"/></td>' +
 		'<td><input type="text" name="tourDuration" class="col-sm-12" value="" style="width: 60px;" maxlength="3"> </td>' +
 		'<td><input type="text" name="price" class="col-sm-12 price" style="width: 60px;" maxlength="6"/></td>' +
-		'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8"/></td>' +
+		'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
 		'<td> <select name="order" id=""> <option value="0">是</option> <option value="1">否</option> </select> </td>' +
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
@@ -1154,7 +1163,7 @@ define(function(require, exports) {
 		'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="price" class="col-sm-12 price" maxlength="6"/></td>' +
 		'<td><input type="text" name="lowestPrice" class="col-sm-12 price" maxlength="6"/></td>' +
-		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
+		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9"/></td>' +
@@ -1185,7 +1194,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 T-dateTimePicker"/></td>' +
 		'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
 		'<td><input type="text" name="price" class="col-sm-12 price" maxlength="6"/></td>' +
-		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8"/></td>' +
+		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9"/></td>' +
@@ -2609,24 +2618,30 @@ define(function(require, exports) {
 	};
 	/**
 	 * 浮动查看自选餐厅
-	 * @param  {[type]} $objInput [对象]
+	 * @param  {[type]} $parent [对象]
 	 * @return {[type]}           [description]
 	 */
-	tripPlan.viewOptionalRestaurant = function($objInput){
-		$objInput.each(function(){
-			var $this = $(this),$parents = $this.closest('tr'),$title = [],$value = $this.data("propover");
-			if (!!$value && typeof $value === "string") {
-				$value = JSON.parse($value);
-			}
-			if (!!$value && $value.length > 0) {
-				var html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr><tbody>';
-				for (var i = 0; i < $value.length; i++) {
-					html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].managerName+'</td><td>'+$value[i].mobileNumber+'</td></tr>'
-				};
-				html += '</tbody></table>';
-				$this.data("html",html)
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
+	tripPlan.viewOptionalRestaurant = function($parent){
+		$parent.each(function(){
+			var $this = $(this), options = $this.data("propover");
+
+			if (!!options) {
+				if (typeof options === "string") {
+					options = JSON.parse(options);
+				}
+
+				if (options.length) {
+					console.info(options)
+					var html = ['<table class="table table-bordered mar-0" style="min-width:400px;width:400px;"><thead><tr><th class="th-border">餐厅名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th></tr></thead><tbody>'];
+					for (var i = 0; i < options.length; i++) {
+						html +=('<tr><td>'+options[i].name+'</td><td>'+options[i].managerName+'</td><td>'+options[i].mobileNumber+'</td></tr>');
+					};
+					html +=('</tbody></table>');
+					$this.data("html",html);
+
+					Tools.descToolTip($this,2);
+					$this.data('bs.popover').options.content = html;
+				}
 			}
 		})
 	}
@@ -2789,7 +2804,7 @@ define(function(require, exports) {
 				}}
 				if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 					var restaurantJson = {
-						id : tripPlan.getVal(restaurant.eq(i), "id"),
+						id : restaurant.eq(i).data('entity-arrangeid'),
 						whichDay : tripPlan.getVal(restaurant.eq(i), "whichDay"),
 						restaurantId : tripPlan.getVal(restaurant.eq(i), "restaurantId"),
 						restaurantStandardId : tripPlan.getVal(restaurant.eq(i), "restaurantStandardId"),

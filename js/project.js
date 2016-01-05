@@ -1046,7 +1046,8 @@ var _statusText = {
 	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
-	$('#desc-tooltip-containter').hover(function() {
+	$('body').append('<div id="desc-tooltip-containter2"></div>');
+	$('#desc-tooltip-containter, #desc-tooltip-containter2').hover(function() {
 		$(this).data('focus-in', true);
 	}, function() {
 		$(this).data('focus-in', false).html('');
@@ -1054,7 +1055,8 @@ var _statusText = {
 })(jQuery);
 
 var Tools = {
-	$descContainer: $('#desc-tooltip-containter')
+	$descContainer: $('#desc-tooltip-containter'),
+	$descContainer2: $('#desc-tooltip-containter2'),
 };
 
 /**
@@ -1147,7 +1149,7 @@ Tools.descToolTip = function($elements,type, placement) {
 			}else if (type == 2) {
 				options = {
 					trigger: 'manual',
-					container: '#desc-tooltip-containter',
+					container: '#desc-tooltip-containter2',
 					content: html,
 					html : true
 				};
@@ -1172,8 +1174,15 @@ Tools.descToolTip = function($elements,type, placement) {
 					}
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
-						if (Tools.$descContainer.data('focus-in') != true)  {
-							$that.popover('hide');
+						if (type === 2) {
+							if (Tools.$descContainer2.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+						} else {
+							if (Tools.$descContainer.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+
 						}
 					}, 100);
 				});
@@ -1566,7 +1575,8 @@ Tools.addDay = function(date, days) {
 		}
 		var timer = date.getTime()+ days*24*60*60*1000;
 		date.setTime(timer);
-		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+		var month = date.getMonth() + 1, day = date.getDate();
+		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
 
 	return date;

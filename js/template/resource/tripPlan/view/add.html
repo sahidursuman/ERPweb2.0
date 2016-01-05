@@ -15,7 +15,7 @@
                     <span class="fix-w-4">针对客源:</span>{{basicInfo.tripPlanType}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
+                    <span class="fix-w-4 T-touristCount" data-count="{{basicInfo.touristCount}}">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
                 </div>
                 <div class="col-md-3">
                     <span class="fix-w-4">团号:</span>{{basicInfo.tripNumber}}
@@ -175,6 +175,7 @@
                 {{/if}}
             </ul>
             <div class="tab-content" style="position:relative;top: -2px">
+                {{if arrangeItemsStauts.insuranceStatus != 0 }}
                 <div id="tripPlan_addPlan_insurance" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -251,6 +252,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.guideStatus != 0 }}
                 <div id="tripPlan_addPlan_guide" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -326,7 +330,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.busStatus != 0 }}
                 <div id="tripPlan_addPlan_bus" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -426,7 +432,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.restaurantStatus != 0 }}
                 <div id="tripPlan_addPlan_restaurant" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -512,7 +520,6 @@
                                                             <td><input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price" style="width: 60px;"/></td>
-                                                            </td>
                                                             <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                                             <td><input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12"/></td>
                                                             <td>
@@ -532,6 +539,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.hotelStatus != 0 }}
                 <div id="tripPlan_addPlan_hotel" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -661,6 +671,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.scenicStatus != 0 }}
                 <div id="tripPlan_addPlan_scenic" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -687,7 +700,6 @@
                                                    <col style="width:60px;"> 
                                                    <col style="width:60px;"> 
                                                    <col style="width:60px;"> 
-                                                   <col style="width:60px;">
                                                    <col style="width:110px;">
                                                    <col style="width:60px;">
                                                    <col style="width:60px;">
@@ -705,7 +717,6 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">预定</th>
                                                     <th class="th-border">订单号</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">预付款</th>
@@ -744,12 +755,6 @@
                                                             <td><input type="text" name="price" class="col-sm-12 price" maxlength="8" value="{{scenic.price}}" style="width: 60px;" /></td>
                                                             <td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" /></td>
                                                             <td><input type="text" name="reduceMoney" class="col-sm-12 price" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" /></td>
-                                                            <td>
-                                                                <select name="order" id="">
-                                                                    <option value="0">是</option>
-                                                                    <option value="1">否</option>
-                                                                </select>
-                                                            </td>
                                                             <td><input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" /></td>
                                                             
                                                             <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" value="{{scenic.needPayMoney}}" style="width: 60px;" /></td>
@@ -773,7 +778,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.shopStatus != 0 }}
                 <div id="tripPlan_addPlan_shop" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -847,7 +854,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.selfPayStatus != 0 }}
                 <div id="tripPlan_addPlan_selfPay" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -942,7 +951,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
 
+                {{if arrangeItemsStauts.ticketStatus != 0 }}
                 <div id="tripPlan_addPlan_ticket" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -1047,6 +1058,9 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
+
+                {{if arrangeItemsStauts.otherStatus != 0 }}
                 <div id="tripPlan_addPlan_other" class="tab-pane fade">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -1127,6 +1141,7 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
             </div>
         </div>
 
