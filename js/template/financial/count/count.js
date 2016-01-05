@@ -1883,7 +1883,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName" && $nameFlag != "type" && $nameFlag != "billRemark"){
+			if($nameFlag != "hotelName"  && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoHotelSum($(this),$parentObj);
@@ -1973,7 +1973,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "scenicName" && $nameFlag != "type" && $nameFlag != "billRemark"){
+			if($nameFlag != "scenicName"  && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoScenicSum($(this),$parentObj);
@@ -2569,7 +2569,9 @@ define(function(require, exports){
 					startTime = $("#tripPlan_addPlan_content").find("[name=startTime_Choose]").text();
 					parents.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
 					//获取房间标价
-					Count.getHotelRoomPrice(parents,$parentObj);
+					Count.getHotelRoomPrice($(this),parents,$parentObj);
+					
+
 			}
 		}).off('click').on('click',function(){
 			var obj = $(this);
@@ -2601,7 +2603,7 @@ define(function(require, exports){
 		});
 	};
 	//获取房间价格
-	Count.getHotelRoomPrice = function($obj,$parentObj){
+	Count.getHotelRoomPrice = function($td,$obj,$parentObj){
 		var $priceObj = $obj.find('input[name=price]'),
 			id = $obj.find('input[name=hotelRoomId]').val(),
 			whichDay = $obj.find('select[name=whichDay]').val(),
@@ -2618,6 +2620,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					$obj.find('input[name=price]').val(data.price);
+					Count.autoHotelSum($td,$parentObj);
 				}
 			}
 		});
@@ -2651,6 +2654,7 @@ define(function(require, exports){
 							$tr.find('input[name=scenicItemId]').val('');
 							$tr.find('input[name=scenicItemName]').val('');
 							$tr.find('input[name=price]').val('');
+							$tr.find('input[name=scenicItem]').val('');
 							//获取景区项目
 							Count.getScenicItem($tr,$parentObj);
 						}
@@ -2698,7 +2702,7 @@ define(function(require, exports){
 							if(ui.item != null){
 								$tr.find('input[name=scenicItemId]').val(ui.item.id);
 								//获取单价
-								Count.getScenicItemPrice($tr,$parentObj);
+								Count.getScenicItemPrice($(this),$tr,$parentObj);
 							}
 						}
 					}).off('click').on('click',function(){
@@ -2711,7 +2715,7 @@ define(function(require, exports){
 		});
 	};
 	//获取单价
-	Count.getScenicItemPrice = function($obj,$parentObj){
+	Count.getScenicItemPrice = function($td,$obj,$parentObj){
 		var startTime = $parentObj.find('.startTime_Choose').text(),
 			whichDay = $obj.find('select[name=whichDay]').val(),
 			id = $obj.find('input[name=scenicItemId]').val();
@@ -2728,6 +2732,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					$obj.find('input[name=price]').val(data.price);
+					Count.autoScenicSum($td,$parentObj);
 				}
 			}
 		});
