@@ -164,6 +164,12 @@
           default:
             return "";
         }
+    }), template.helper("getPayTypeOptions", function(payType) {
+        var options = "", start = 0;
+        return options += '<option value="0" ' + (start++ == payType ? "selected" : "") + ">现金</option>", 
+        options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
+        start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
+        options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>";
     }), template.helper("getArrangeIcon", function(status) {
         switch (1 * status) {
           case 1:
@@ -173,7 +179,7 @@
             return "fa-exclamation";
 
           case 3:
-            return "fa-checked";
+            return "fa-check";
 
           case 4:
             return "fa-times";
