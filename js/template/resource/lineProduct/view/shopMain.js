@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":9,"md5":"25c2fdd7f2c1378e4f243f61c8b222fe"}*/
+define(function(require) {
+    return require("../../../template")("resource/lineProduct/view/shopMain", '<div class="col-sm-12 globalAdd T-shopOptional-container" style="margin-top:10px;" > <div class="tabbable"> <div class="T-shopOptionalList col-xs-12" style="padding:10px 0 0 0;"> </div> <div class="space-10"></div> <div class="form-group col-sm-12" style="text-align: center;"> <button class="btn btn-sm btn-danger T-btn-cancelOptional otherButton"> <i class="ace-icon fa fa-times "></i> 取消 </button> <button class="btn btn-sm btn-primary T-btn-saveOptional otherButton" style="margin-left: 30px"> <i class="ace-icon fa fa-check"></i> 保存 </button> </div> <div class="space-10"></div> </div> </div>');
+});

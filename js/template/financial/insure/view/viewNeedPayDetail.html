@@ -10,7 +10,11 @@
 									<tr>
 										<th class="th-border">应付类别</th>
 										<th class="th-border">发生业务</th>
-										<th class="th-border">金额</th>
+										<th class="th-border">单价</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">优惠</th>
+										<th class="th-border">账面应付</th>
+										<th class="th-border">结算金额</th>
 										<th class="th-border">备注</th>
 										<th class="th-border">操作人</th>
 										<th class="th-border">操作时间</th>
@@ -22,7 +26,11 @@
 									<tr data-id="{{rs.id}}">
 										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
+										<td>{{rs.price}}</td>
+										<td>{{rs.count}}</td>
+										<td>{{rs.reduceMoney}}</td>
+										<td>{{rs.needPayMoney}}</td>
+										<td>{{rs.settlementMoney}}</td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
 										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>

@@ -10,34 +10,18 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">基础线路名称:</label>
-						<div class="col-sm-3">
-							<input type="hidden" name="travellineId" value="{{travelLine.id}}"> 
-							<input type="text" readonly="readonly" class="col-sm-12" value="{{travelLine.name}}">
-						</div>
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
-						<div class="col-sm-3">
+						<div class="col-sm-2">
 							<input type="text" name="name" class="col-sm-12 bind-change" placeholder="请输入线路产品名称" maxlength="80">  
 						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
-						<div class="col-sm-3">
+						<div class="col-sm-2">
 							<input type="text" class="col-sm-12" readonly="readonly" name="days" value="{{travelLine.days}}">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路类型:</label>
-						<div class="col-sm-3">
-							<input type="text" name="type" class="col-sm-12" maxlength="80">
-						</div>
-						
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">针对客源:</label>
-						<div class="col-sm-3">
-							<select name="customerType">
-								<option value="0" selected="selected">散客</option>
-								<option value="1">团体</option>
-							</select>
+						<label class="col-sm-1 control-label no-padding-right">线路模板:</label>
+						<div class="col-sm-2">
+							<input type="hidden" name="travellineId" value="{{travelLine.id}}"> 
+							<input type="text" readonly="readonly" class="col-sm-12" value="{{travelLine.name}}">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
 						<div class="col-sm-2 checkbox" style="margin-left:-10px;padding-top: 0px">
@@ -50,7 +34,30 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">线路产品备注:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路类型:</label>
+						<div class="col-sm-2">
+							<input type="text" name="type" class="col-sm-12" maxlength="80">
+						</div>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>针对客源:</label>
+						<div class="col-sm-2">
+							<select name="customerType">
+								<option value="0" selected="selected">散客</option>
+								<option value="1">团体</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+						<div class="col-sm-2">
+							<input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" name="" maxlength="80">
+						</div>
+						<label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+						<div class="col-sm-2">
+							<input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" name="" maxlength="80">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right">备注:</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>       
 						</div>
@@ -62,7 +69,7 @@
 	
 	
 	<form class="form-horizontal T-middleForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
+		<div class="form-group globalAdd">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
 				<div class=" ui-sortable-handle">
 						<h5 class="pull-left title-size">
@@ -75,10 +82,16 @@
 						<div class="widget-main">
 								<div class="clearfix"></div>
 								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
+									<div class="ui-sortable-handle T-baseArrange">
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addInsurance">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
 										<div class="widget-body">
 											<div class="widget-main">
@@ -92,6 +105,7 @@
 															<th class="th-border">联系人姓名</th>
 															<th class="th-border">联系电话</th>
 															<th class="th-border">备注</th>
+															<th class="th-border">操作</th>
 														</tr>
 													</thead>
 													<tbody class="T-insuranceForm">
@@ -106,6 +120,7 @@
 															<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
+															<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>
 														</tr>
 													</tbody>
 												</table>
@@ -115,10 +130,16 @@
 								</div>
 								<div class="clearfix"></div>
 								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
+									<div class="ui-sortable-handle T-baseArrange">
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addBusCompany">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
 										<div class="widget-body">
 											<div class="widget-main">
@@ -133,6 +154,7 @@
 															<th class="th-border">联系电话</th>
 															<th class="th-border">包车价</th>
 															<th class="th-border">备注</th>
+															<th class="th-border">操作</th>
 														</tr>
 													</thead>
 													<tbody class="T-busCompanyForm">
@@ -145,6 +167,7 @@
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" maxlength="9" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
+															<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>
 														</tr>
 													</tbody>
 												</table>
@@ -199,14 +222,6 @@
 															<button class="btn btn-app   btn-xs  T-add T-addScenic" style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
 																景区
-															</button>
-															<button class="btn btn-app   btn-xs  T-add T-addShop" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																购物
-															</button>
-															<button class="btn btn-app   btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>  
-																自费
 															</button>
 															<button class="btn btn-app   btn-xs T-add T-addTraffic " style="background: #1fade0!important;">
 																<i class="ace-icon fa fa-plus bigger-160"></i>
