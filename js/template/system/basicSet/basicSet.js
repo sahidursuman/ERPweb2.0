@@ -129,7 +129,7 @@ define(function(require,exports){
 	};
 	//修改会计科目
 	Infrastructure.editAccountant = function($obj,args){
-		var oldTitle = $obj.find('.title').text();
+		var oldTitle = $obj.attr('title');
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
 		var selectHtml = '<select name="selectStatus">'+
@@ -143,7 +143,6 @@ define(function(require,exports){
 		$obj.find('select').off('blur').on('blur',function(){
 			Infrastructure.installAccData($obj,args);
 		});
-
 	};
 	//组装会计科目数据
 	Infrastructure.installAccData = function($obj,args){
