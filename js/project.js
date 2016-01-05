@@ -1120,7 +1120,6 @@ Tools.getTableVal = function($tbody, idName) {
 		});
 	}
 
-	console.info(res);
 	return res;
 };
 
