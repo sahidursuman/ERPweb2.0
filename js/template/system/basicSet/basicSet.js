@@ -130,11 +130,16 @@ define(function(require,exports){
 	//修改会计科目
 	Infrastructure.editAccountant = function($obj,args){
 		var oldTitle = $obj.attr('title');
+		var oldStatus = $obj.attr('status');
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
+		var selected = '';
+		if (oldStatus == 0) {
+			selected = 'selected="selected"'
+		};
 		var selectHtml = '<select name="selectStatus">'+
 		'<option value="1">启用</option>'+
-		'<option value="0">停用</option>'+
+		'<option value="0" '+selected+'>停用</option>'+
 		'</select>';
 		$obj.find('.status').html(selectHtml);
 		$obj.find('input').off('change').on('change',function(){
