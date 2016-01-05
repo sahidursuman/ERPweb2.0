@@ -291,15 +291,16 @@ define(function(require, exports) {
             $searchArea.find('.T-btn-export').on('click', function(event) {
                 event.preventDefault();
                 var $btn = $tab.find('.T-saveClear'),
-                args = {
-                    guideId: $btn.data('id'), 
-                    startDate: $datePicker.eq(0).val(),
-                    endDate: $datePicker.eq(1).val(),
-                    tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
-                    lineProductName: $searchArea.find('.T-lineProductName').val(),
-                    lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                };
-                FinGuide.exportReport(args);
+                    args = {
+                        guideId: $btn.data('id'), 
+                        startDate: $datePicker.eq(0).val(),
+                        endDate: $datePicker.eq(1).val(),
+                        tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
+                        lineProductName: $searchArea.find('.T-lineProductName').val(),
+                        lineProductId: $searchArea.find('.T-lineProductName').data('id'),
+                    };
+                args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+                FinancialService.exportReport(args,"exportArrangeGuideFinancial");
             });
         }
 
@@ -723,15 +724,6 @@ define(function(require, exports) {
         options.isOuter = FinGuide.isOuter = true;
 
         FinGuide.initOperationModule(options, 1)
-    };
-
-    FinGuide.exportReport = function(args){
-        args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-        var str = '';
-        for(var i in args){
-            str += "&" + i + "=" + args[i];
-        }
-        exportXLS(KingServices.build_url('export', 'exportArrangeGuideFinancial') + str);
     };
 
     // 暴露方法

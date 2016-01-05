@@ -441,6 +441,16 @@ FinancialService.isGuidePay = function(dataList){
     return dataList;
 };
 
+//导出报表
+FinancialService.exportReport = function(args,method){
+    var str = '';
+    for(var i in args){
+        str += "&" + i + "=" + args[i];
+    }
+    console.log("exportReport");
+    exportXLS(KingServices.build_url('export',method) + str);
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;

@@ -299,6 +299,14 @@ define(function(require, exports) {
             //给全选按钮绑定事件: 未去重
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 			FinancialService.updateUnpayMoney($tab, validator);
+			//导出报表事件 btn-hotelExport
+	        $tab.find(".T-btn-export").click(function(){
+	            var args = {
+	                    startTime: $tab.find('.T-search-start-date').val(),
+	                    endTime: $tab.find('.T-search-start-date').val()
+	                };
+	            FinancialService.exportReport(args,"replace");
+	        });
         }
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){

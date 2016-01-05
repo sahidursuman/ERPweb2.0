@@ -181,6 +181,16 @@ define(function(require, exports) {
             Self.Getcheck(0,id,name);
         });
 
+        //导出报表事件 btn-hotelExport
+        Self.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    selfPayId: id, 
+                    startTime: Self.$checkSearchArea.find('input[name=startDate]').val(),
+                    endTime: Self.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"selfPay");
+        });
+
         //报表内的操作
         Self.listOption(Self.$checkTab);
 

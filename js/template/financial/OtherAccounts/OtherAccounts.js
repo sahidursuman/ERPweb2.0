@@ -259,6 +259,15 @@ define(function(require, exports) {
         $checkTab.find('.T-search').click(function(event) {
             OtherAccounts.AccountsChecking(0);
         });
+
+        //导出报表事件 btn-hotelExport
+        $checkTab.find(".T-btn-export").click(function(){
+            var args = { 
+                    startAccountTime: $checkTab.find('.T-startTime').val(),
+                    endAccountTime: $checkTab.find('.T-endTime').val()
+                };
+            FinancialService.exportReport(args,"otherAccounts");
+        });
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($checkTab.find('.T-selectAll'), $checkTab.find('.T-Accounts').find('input[type="checkbox"]'));
 
