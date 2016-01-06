@@ -944,6 +944,8 @@ define(function(require, exports) {
 							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
 							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
 							parents.find("select[name=hotelLevel]").val(hotel.level);
+							parents.find("input[name=hotelRoomType]").val("");
+							parents.find("input[name=hotelRoomTypeId]").val("");
 						}
 					}
 				});
