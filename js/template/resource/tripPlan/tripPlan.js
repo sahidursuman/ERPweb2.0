@@ -2336,6 +2336,9 @@ define(function(require, exports) {
 							$parents.find("input[name=mobileNumber]").val(selfPay.mobileNumber);
 							$parents.find("input[name=selfPayItemId]").val("");
 							$parents.find("input[name=selfitem]").val("");
+							$parents.find("input[name=price]").val(0);
+							$parents.find("input[name=lowestPrice]").val(0);
+							tripPlan.calculatePrice($tab);
 						}
                     }
                 });
@@ -2393,6 +2396,7 @@ define(function(require, exports) {
 						if(showDialog(data)){
 							$parents.find("input[name=oldPrice]").val(data.marketPrice);
 							$parents.find("input[name=price]").val(data.price);
+							tripPlan.calculatePrice($tab);
 						}
                     }
 				})
