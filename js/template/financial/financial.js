@@ -4,10 +4,11 @@
 
 var FinancialService = {};
 
-FinancialService.initPayEvent = function($container)  {
+FinancialService.initPayEvent = function($container,rule)  {
     var currDate = new Date();
     var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
+    var $card = $container.find('input[name="card-number"]').val();
     $container.find('input[name="tally-date"]').datetimepicker({
         autoclose:true,
         todayHighlight:true,
@@ -22,8 +23,10 @@ FinancialService.initPayEvent = function($container)  {
             }
         },
         select :function(event, ui){
+
              $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
              $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
+
         }
     }).one("click", function(){
         var $that = $(this);
@@ -55,13 +58,15 @@ FinancialService.initPayEvent = function($container)  {
         })
     })
     .on('click', function() {
+
         $(this).autocomplete('search', '');
     });
-
     $container.find('select').on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
-
+        if(val == 1){
+            var check =  new FinRule(5).check($card.closest('div'));
+        }
         $card.closest('div').toggleClass('hidden', val != 1);
     }).trigger('change');
 };
@@ -187,26 +192,25 @@ FinancialService.changeUncheck = function(trList,fn){
 
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
-    var $sumPayMoney = $tab.find("input[name=sumPayMoney]");
-    $tab.on('focusin', 'input[name="payMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
-    })
-    .on("change", 'input[name="payMoney"]', function(){
+    $tab.on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
+            $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);
 
         if (!validator.form())  return;
 
-        var sumPayMoney = $sumPayMoney.val() || 0,
+        var sumPayMoney = $sumPayMoney.data("money") || 0,
             newVal = $this.val() || 0,
-            oldVal = $(this).data("oldVal") || 0;
+            oldVal = $this.data("oldVal") || 0;
         if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
         if(isNaN(newVal)){ newVal = 0; }
         if(isNaN(oldVal)){ oldVal = 0; }
-        sumPayMoney = parseFloat(sumPayMoney);
-        $sumPayMoney.val(sumPayMoney + parseFloat(newVal-oldVal));
+        sumPayMoney = parseFloat(sumPayMoney) + parseFloat(newVal-oldVal);
+        $sumPayMoney.data("money",sumPayMoney);
+        $sumPayMoney.val(sumPayMoney);
 
         if(!validator.form()){ return false; }
+        $this.data("oldVal",$this.val());
     });
 };
 
@@ -273,7 +277,12 @@ FinancialService.isClearSave = function($tab,rule){
         return false;
     }
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money")),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
+    if(sumPayMoney != sumListMoney){
+        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        return false;
+    }
     if(sumPayMoney > unpayMoney){
         showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;
@@ -304,6 +313,8 @@ FinancialService.isClearSave = function($tab,rule){
  * @return {[type]}      [description]
  */
 FinancialService.autoPayJson = function(id,$tab,rule, type){
+    var check =  new FinRule(5).check($tab);
+    if(!check.form()){ return false; }
     var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
@@ -441,6 +452,16 @@ FinancialService.isGuidePay = function(dataList){
     return dataList;
 };
 
+//导出报表
+FinancialService.exportReport = function(args,method){
+    var str = '';
+    for(var i in args){
+        str += "&" + i + "=" + args[i];
+    }
+    console.log("exportReport");
+    exportXLS(KingServices.build_url('export',method) + str);
+};
+
 //判断列表是否已全选
 function isAllChecked(checkboxList){
     var isAll = true;
@@ -542,6 +563,17 @@ FinRule.prototype.check = function($obj) {
                             type: 'le',
                             errMsg: '本次收款金额不能超过未收金额'
                         }
+                    ]
+                }]);
+                case 5: // 银行账号
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=card-number]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '银行账号不能为空'
+                        },
                     ]
                 }]);
         default:

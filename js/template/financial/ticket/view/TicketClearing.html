@@ -46,7 +46,7 @@
         <div class="form-group">
             <label class="control-label">本次付款金额合计：</label>
             <label class="control-label">
-                <input type="text" class="form-control money T-sumReciveMoney" name="sumPayMoney" {{if source}}readonly="readonly"{{/if}} >
+                <input type="text" class="form-control money T-sumReciveMoney" name="sumPayMoney" {{if source}}disabled="disabled"{{/if}} >
             </label>
         </div>
 
@@ -66,7 +66,7 @@
         <div class="form-group mar-l-10">
             <label class="control-label">银行账号：</label>
             <label class="control-label">
-                <input type="text" name="card-number" class="money" style="width:230px;">
+                <input type="text" name="card-number" class="money" style="width:300px;">
                 <input type="hidden" name="card-id">
             </label>
         </div>

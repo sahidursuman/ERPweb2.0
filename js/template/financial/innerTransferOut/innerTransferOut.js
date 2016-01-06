@@ -275,14 +275,17 @@ define(function(require,exports) {
 				$(this).closest('tr').data('change',true);
 				//自动计算本次付款金额
 				InnerTransferOut.autoSumPayMoney($obj);
+				$obj.data('isEdited', true);
 			});
 			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
 				InnerTransferOut.setAutoFillEdit($obj,true);
+
 			};
 		}else{
 			$obj.find('.'+$list).off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
+				$obj.data('isEdited', true);
 			});
 		};
 		//页面时间控件格式化
@@ -300,9 +303,12 @@ define(function(require,exports) {
 			}
 		});
 		//导出报表事件
-		$obj.find(".T-transferExport").on('click',function(event){
-			event.preventDefault();
-			InnerTransferOut.exportData($obj)
+		$obj.find(".T-btn-export").on('click',function(event){
+			var args = { 
+                    startDate: $obj.find('input[name=startDate]').val(),
+                    endDate: $obj.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportInnerTransferOut");
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
@@ -412,21 +418,18 @@ define(function(require,exports) {
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
-        	InnerTransferOut.saveBlanceData(0,$data,$obj);
+        	var allMoney = $obj.find('input[name=sumPayMoney]').val();
+        	if(allMoney == 0){
+        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+		            InnerTransferOut.saveBlanceData(0,$data,$obj);
+		        })
+        	}else{
+        		InnerTransferOut.saveBlanceData(0,$data,$obj);
+        	}
+        	
         });
 	};
-	//导出事件
-	InnerTransferOut.exportData = function($obj){
-		var year=$obj.find("select[name=year]").val(),
-			toBusinessGroupId = $obj.find("input[name=toBusinessGroupId]").val(),
-			toBusinessGroupName = $obj.find("input[name=toBusinessGroupName]").val(),
-	      	month=$obj.find("select[name=month]").val();
-      	checkLogin(function(){
-        	var url = KingServices.build_url("export","exportInnerTransferOut");
-        	    url += "&toBusinessGroupId="+toBusinessGroupId+"&toBusinessGroupName="+toBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
-        	exportXLS(url)
-        });
-	};
+
 	//自动下账
 	InnerTransferOut.autoAcountMoney = function($obj,id,name,$data){
 		var args = {
@@ -658,6 +661,12 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
+		var sumPayMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 	    var id; 
 	    var argumentsLen = arguments.length;
@@ -710,11 +719,6 @@ define(function(require,exports) {
 	//切换tab页面自动提示
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
 		if(!!$tab && $tab.length === 1){
-			// 监听修改
-			$tab.on('change', function(event) {
-				event.preventDefault();
-				$tab.data('isEdited', true);
-			});
 			// 监听保存，并切换tab
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();

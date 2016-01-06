@@ -693,6 +693,7 @@ var modalScripts = {
     'system_user': "js/template/system/user/user.js",
     'system_department': "js/template/system/department/business.js",
 	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
+	'system_companyInformation':"js/template/system/companyInfo/company.js",//公司资料
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
@@ -1863,12 +1864,12 @@ KingServices.viewOptionalSelfPay = function($this){
 //景区多选和浮动显示
 KingServices.chooseScenic = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
-		module.selfPayMultiselect($this);
+		module.chooseScenic($this);
 	});
 }
 KingServices.viewOptionalScenic = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
-		module.viewOptionalSelfPay($this);
+		module.viewOptionalScenic($this);
 	});
 }
 
@@ -2054,3 +2055,11 @@ KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
 };
+
+//内部模板
+KingServices.inlineTemplate = function(source, option) {
+	var s = source,
+		render = template.compile(s),
+		html = render(option);
+	return html;
+}

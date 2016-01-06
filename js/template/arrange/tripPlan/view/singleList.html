@@ -27,31 +27,75 @@
         </thead>
         <tbody>
             {{each result as rs}}
-            {{each rs.tripPlanTouristList as tl index}}
-            <tr data-id="rs.id">
-                {{if index == 0}}
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">{{rs.tripNumber}}</td>
-                {{/if}}
-                <td style="vertical-align:middle">{{tl.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{tl.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{tl.touristGroup.lineProduct.name}}</td>
-                <td style="vertical-align:middle">{{tl.touristGroup.adultCount + tl.touristGroup.childCount}}</td>
-                {{if index == 0}}
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">{{rs.touristAdultCount + rs.touristChildCount}}</td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">{{rs.surplusSeat}}</td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">
+            <tr data-id="{{rs.id}}">
+                <td style="vertical-align:middle">{{rs.tripNumber}}</td>
+                <td style="vertical-align:middle" class="pad-0-I">
+                    <table class="table-special">
+                        {{if rs.tripPlanTouristList.length!=0}}
+                            {{each rs.tripPlanTouristList as tripPlanTourist}}
+                            <tr>
+                                <td>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            </tr>                                
+                            {{/each}}
+                        {{else}}
+                        {{rs.startTime | dateFormat: 'yyyy-MM-dd'}}
+                        {{/if}}
+                    </table>
+                </td>
+                <td style="vertical-align:middle" class="pad-0-I">
+                    <table class="table-special">
+                        {{if rs.tripPlanTouristList.length!=0}}
+                            {{each rs.tripPlanTouristList as tripPlanTourist}}
+                            <tr>
+                                <td>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                            </tr>                                
+                            {{/each}}
+                        {{else}}
+                        {{rs.endTime | dateFormat: 'yyyy-MM-dd'}}
+                        {{/if}}
+                    </table>
+                </td>
+                <td style="vertical-align:middle" class="pad-0-I">
+                    <table class="table-special">
+                        {{if rs.tripPlanTouristList.length!=0}}
+                            {{each rs.tripPlanTouristList as tripPlanTourist}}
+                            <tr>
+                                <td>{{tripPlanTourist.touristGroup.lineProduct.name }}</td>
+                            </tr>                                
+                            {{/each}}
+                        {{else}}
+                        {{rs.lineProduct.name}}
+                        {{/if}}
+                    </table>
+                </td>
+                <td style="vertical-align:middle" class="pad-0-I">
+                    <table class="table-special">
+                        {{if rs.tripPlanTouristList.length!=0}}
+                            {{each rs.tripPlanTouristList as tripPlanTourist}}
+                            <tr>
+                                <td>{{tripPlanTourist.touristGroup.adultCount + tripPlanTourist.touristGroup.childCount}}</td>
+                            </tr>                                
+                            {{/each}}
+                        {{else}}
+                        {{rs.touristAdultCount + rs.touristChildCount}}
+                        {{/if}}
+                    </table>
+                </td>
+                <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
+                <td style="vertical-align:middle">{{rs.surplusSeat}}</td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
+                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
+                <td style="vertical-align:middle">
                     {{if rs.status == 0}}
                     <span style="color: #ff9900;">待确认</span>
                     {{else if rs.status == 1}}
@@ -62,22 +106,28 @@
                     <span style="color: #333333;">已过期</span>
                     {{/if}}
                 </td>
-                <td style="vertical-align:middle" rowspan="{{rs.tripPlanTouristList.length}}">
-                    <a class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-send{{/if}} R-right" data-right="1140010" title="通知" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
-                        通知
+                <td style="vertical-align:middle">
+                    <a class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-hair-regiment{{/if}} R-right" data-right="1140010" title="发团" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                        发团
                         <label style="padding-left:10px;">|</label>
                     </a>
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-plan{{/if}} R-right" data-right="1140007" title="安排" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                    <a class="cursor T-action T-update" title="编辑">
                         <label class="padding-right20">|</label>
-                        安排
+                        编辑
+                    </a>
+                    <a class="cursor T-action T-export" title="导出">
+                        <label class="padding-right20">|</label>
+                        导出
+                    </a>
+                    <a billStatus="{{rs.billStatus}}" class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}} R-right" data-right="1140007" title="取消" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                        <label class="padding-right20">|</label>
+                        取消
                     </a>
                 </td>
-                {{/if}}
             </tr>
-            {{/each}}
             {{/each}}
         </tbody>
     </table>
