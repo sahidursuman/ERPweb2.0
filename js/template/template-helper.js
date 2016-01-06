@@ -33,7 +33,10 @@ template.helper("parseInt", function(data) {
     return parseInt(data);
 });
 template.helper("interceptStr", function(data) {
-    return data.substring(0, 39) + "...";
+    if (!!data) {
+        data = data.substring(0, 39) + "...";
+    }
+    return data;
 });
 template.helper("toFixed", function(data) {
     return (data).toFixed(2);

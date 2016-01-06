@@ -286,6 +286,12 @@ define(function(require, exports) {
 	tripPlan.initEdit = function($tab){
 		tripPlan.bindCommonEvent($tab);
 
+		//搜索线路
+        $tab.find(".T-search-line").on('click', function(){
+        	if($tab.find('[name="quoteOrderName"]').val() == ""){
+				tripPlan.initLineProductSearch($tab, 0);
+        	}
+        });
 		//搜索报价单号
     	$tab.find(".T-search-quote-order").on('click', function(){
     		tripPlan.initLineProductSearch($tab, 1);
@@ -472,12 +478,6 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	tripPlan.bindCommonEvent = function($tab) {
-		//搜索线路
-        $tab.find(".T-search-line").on('click', function(){
-        	if($tab.find('[name="quoteOrderName"]').val() == ""){
-				tripPlan.initLineProductSearch($tab, 0);
-        	}
-        });
         //购物商家
         $tab.find(".T-shopNames").on('click', function(){
             KingServices.shopMultiselect($(this));
@@ -760,6 +760,11 @@ define(function(require, exports) {
 
 	tripPlan.initSigleEvent = function($tab) {
 		tripPlan.bindCommonEvent($tab);
+        //搜索线路
+    	$tab.find(".T-search-line").on('click', function(){
+    		tripPlan.initLineProductSearch($tab, 0);
+    	});
+
     	//绑定添加游客小组事件
     	$tab.find('.T-add-touristGroup').on('click', function(event){
     		event.preventDefault();
