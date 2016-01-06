@@ -1,6 +1,6 @@
 {{each lineProductDayList as rs}}
 <tr>
-	<td name="dateDays"></td>
+	<td name="dateDays" data-which-day={{rs.whichDay}}></td>
 	<td><input type="text" class="col-xs-12" name="title" value="{{rs.title}}"></td>
 	<td>
 		<label class="control-label">

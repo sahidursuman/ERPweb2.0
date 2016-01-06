@@ -281,11 +281,27 @@ define(function(require, exports) {
     	$tab.find(".T-selfPayItemNames").on('click', function(){
     		KingServices.selfPayMultiselect($(this));
     	});
+    	tripPlan.getOPUserList($tab.find('[name="dutyOPUserName"]'));
     	//行程安排
     	$tab.find('.T-add-days').on('click', function(event){
     		event.preventDefault();
-    		var $days = $tab.find('.T-days'), len = $days.find('tr').length;
-    		$days.append(travelArrange({lineProductDayList:[{}]}));
+    		var $days = $tab.find('.T-days'), 
+    			$tr = $days.find('tr'),
+    			old = 0;
+    		if($tr.length > 0){
+	    		$tr.each(function(index) {
+	    			var $that = $(this),
+	    				fresh = $that.find('[name="dateDays"]').data("which-day");
+	    			if(old == fresh-1){
+	    				old = fresh;
+	    			}else{
+    					$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+	    				return false
+	    			}
+	    		});
+    		}else{
+    			$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+    		}
     		F.arrangeDate($tab);
     	});
     	//绑定添加游客小组事件
@@ -427,9 +443,11 @@ define(function(require, exports) {
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
-		arge.lineProductId =  $tab.find('[name="lineProductName"]').data("id") || "";
-		arge.quoteId = $tab.find('[name="quoteOrderName"]').data("id") || "";
-		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is("checked") ? 1 : 0;
+		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
+		arge.executeTimeType = $tab.find('[name="addTripPlanMsg"]').eq(0).is(":checked") ? 0 : 1;
+		if(arge.executeTimeType === 1){
+			arge.executeTime = $tab.find('[name="executeTime"]').val();
+		}
 		//转数据
 		arge.tripPlanDayJson = JSON.stringify(arge.tripPlanDayJson);
 		arge.touristGroupMemberJson = JSON.stringify(arge.touristGroupMemberJson);
@@ -589,7 +607,9 @@ define(function(require, exports) {
 				startTime = $time.val();
 			if(startTime != ""){
 				$tab.find('.T-days tr').each(function(index){
-					$(this).find('[name="dateDays"]').text(Tools.addDay(startTime, index));
+					var $days = $(this).find('[name="dateDays"]'),
+						whichDate = Tools.addDay(startTime, $days.data("which-day") - 1);
+					$days.text(whichDate);
 				});
 			}
 		}
