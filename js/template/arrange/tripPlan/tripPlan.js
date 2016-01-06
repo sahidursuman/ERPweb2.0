@@ -8,6 +8,7 @@ define(function(require, exports) {
 		addTripPlanTemplate=require("./view/addTripPlan"),
 		// 散客计划模板
 		addSingleTripPlanTemplate=require("./view/addSingleTripPlan"),
+		updateSingleTripPlanTemplate=require("./view/updateSingleTripPlan"),
 		updateTemplate = require("./view/updateTripPlan"),
 		searchTemplate = require("./view/searchList"),
 		searchQuoteOrderTemplate = require("./view/searchQuoteOrder"),
@@ -120,6 +121,8 @@ define(function(require, exports) {
                 tripPlan.cancelTripPlan(id);
 			}
 		});
+
+		tripPlan.updateGroupTripPlan = function(id) {};
 
 		// 散客
 		$tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
@@ -416,7 +419,7 @@ define(function(require, exports) {
         tripPlan.setExecuteTimer($tab);
         $tab.find('[name="startTime"]').on('change', function(){
             F.arrangeDate($tab);
-        });        
+        }).trigger('change');        
         $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
             // 发送短信效果
             var $that = $(this);
@@ -542,12 +545,52 @@ define(function(require, exports) {
 			.done(function(data) {
 				if (showDialog(data)) {
 					var tabKey = menuKey + "_single_add";
-					if (Tools.addTab(tabKey, '编辑计划', addSingleTripPlanTemplate(data))) {
+					data.require = JSON.parse(data.require);
+					data.touristGroup = JSON.parse(data.touristGroup);
+					data.tripPlan = JSON.parse(data.tripPlan);
+					data.tripPlanDay = JSON.parse(data.tripPlanDay);
+
+					data.hasData = tripPlan.hasTripPlan(data.require);
+
+					console.info(data)
+					if (Tools.addTab(tabKey, '编辑计划', updateSingleTripPlanTemplate(data))) {
 						tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
 					}
 				}
 			});			
 		}
+	};
+
+	/**
+	 * 处理要求数据
+	 * @param  {[type]}  require [description]
+	 * @return {Boolean}         [description]
+	 */
+	var requireText = {
+		'insurance': '保险',
+		'guide': '导游',
+		'bus': '车辆',
+		'restaurant': '餐饮',
+		'hotel': '酒店',
+		'scenic': '景区',
+		'ticket': '票务',
+		'shop': '购物',
+		'selfPay': '自费',
+		'other': '其他'
+	};
+
+	tripPlan.hasTripPlan = function(require) {
+		var res = {};
+
+		if (!!require) {
+			for (var i = 0, len = require.length; i < len; i ++) {
+				require[i].requireText = requireText[require[i].requireType];
+
+				res[require[i].requireType] = true;
+			}
+		}
+
+		return res;
 	};
 
 	tripPlan.initSigleEvent = function($tab) {
