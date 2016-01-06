@@ -97,6 +97,54 @@ define(function(require, exports) {
     		event.preventDefault();
     		tripPlan.addTripPlan($(this).data('type'));
     	});
+
+    	// 团队
+		$tab.find(".T-tripPlan-groupList").on('click', '.T-action', function(event){
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-view')){
+				tripPlan.viewTripPlan(id, 1);
+			} else if($that.hasClass('T-hair-regiment')){
+				// 发团
+                var statusValue = $that.attr("statusValue"),
+					billStatus = $that.attr("billStatus");
+
+                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+			} else if($that.hasClass('T-update')){
+				// 编辑
+                tripPlan.updateGroupTripPlan(id);
+			} else if($that.hasClass('T-export')){
+				// 导出
+                tripPlan.exportTripPlan(id);				
+			} else if($that.hasClass('T-cancel')){
+				// 取消
+                tripPlan.cancelTripPlan(id);
+			}
+		});
+
+		// 散客
+		$tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-view')){
+				tripPlan.viewTripPlan(id, 0);
+			} else if($that.hasClass('T-hair-regiment')){
+				// 发团
+                var statusValue = $that.attr("statusValue"),
+					billStatus = $that.attr("billStatus");
+					
+                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+			} else if($that.hasClass('T-update')){
+				// 编辑
+                tripPlan.updateSingleTripPlan(id);
+			} else if($that.hasClass('T-export')){
+				// 导出
+                tripPlan.exportTripPlan(id);
+			} else if($that.hasClass('T-cancel')){
+				// 取消
+                tripPlan.cancelTripPlan(id);
+			}
+		});
     };
 	
 	tripPlan.listTripPlanGroup = function(page, $tab){
@@ -128,7 +176,6 @@ define(function(require, exports) {
 				data.result = JSON.parse(data.result);
 				var groupHtml = listTemplate(data);
 				$tab.find('.T-tripPlan-groupList').html(groupHtml);
-				tripPlan.init_event($tab, 1);
 				// 绑定翻页组件
 				laypage({
 				    cont: $tab.find('.T-tripPlan-groupList').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -182,28 +229,6 @@ define(function(require, exports) {
 						};
 				    }
 				});
-			}
-		});
-	};
-
-	tripPlan.init_event = function($tab, planType){
-		var $searchArea = $tab.find(".T-search-tripPlan-single"),
-			$tableList = $tab.find('.T-tripPlan-singleList');
-		if(planType == 1){
-			$searchArea = $tab.find(".T-search-tripPlan-group");
-			$tableList = $tab.find(".T-tripPlan-groupList");
-		}
-		$tableList.find('tbody').on('click', '.T-action', function(event){
-			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id');
-			if($that.hasClass('T-view')){
-				tripPlan.viewTripPlan(id, planType);
-			}else if($that.hasClass('T-hair-regiment')){
-
-			}else if($that.hasClass('T-update')){
-
-			}else if($that.hasClass('T-export')){
-				
 			}
 		});
 	};
@@ -565,6 +590,29 @@ define(function(require, exports) {
 		});
 	};
 
+	/**
+	 * 获取散客计划，进入编辑页面
+	 * @param  {int} id 计划ID
+	 * @return {[type]}    [description]
+	 */
+	tripPlan.updateSingleTripPlan = function(id) {
+		if (!!id) {
+			$.ajax({
+				url: KingServices.build_url('tripController', 'editTripPlan'),
+				type: 'post',
+				data: {tripPlanId: id},
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					var tabKey = menuKey + "_single_add";
+					if (Tools.addTab(tabKey, '编辑计划', addSingleTripPlanTemplate(data))) {
+						tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
+					}
+				}
+			});			
+		}
+	};
+
 	tripPlan.initSigleEvent = function($tab) {
 		tripPlan.bindCommonEvent($tab);
     	//绑定添加游客小组事件
@@ -574,6 +622,21 @@ define(function(require, exports) {
 			var startTime = $tab.find("input[name=startTime]").val();
 			tripPlan.addTouristGroup(lineProductId,startTime,$tab);
     	});
+		$tab.find(".T-touristGroup-list").on('click', '.T-action', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that = $(this)
+				id = $that.closest('tr').data('id');
+
+			if ($that.hasClass('T-groupView')) {
+				//查看旅游小组成员
+				tripPlan.viewTouristGroup(id);
+			} else if ($that.hasClass('T-groupDelete')) {
+				//删除小组
+				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=tripPlanId]").val(), $tab);
+			}
+		});
+
     	//删除游客小组或账单
     	$tab.find('.T-tourists-list, .T-fee-list')
     	.on('click', '.T-delete', function(event){
@@ -584,7 +647,7 @@ define(function(require, exports) {
     	// 保存
     	$tab.find('.T-savePlan').on('click', function(event) {
     		event.preventDefault();
-    		tripPlan.saveSiglePlan($tab);
+    		tripPlan.saveSinglePlan($tab);
     	});
 	};
 
@@ -593,7 +656,7 @@ define(function(require, exports) {
 	 * @param  {object} $tab 父容器
 	 * @return {[type]}      [description]
 	 */
-	tripPlan.saveSiglePlan = function($tab, tabArgs) {
+	tripPlan.saveSinglePlan = function($tab, tabArgs) {
 		var args = $tab.find('.T-basic-info').serializeJson();
 
 		// 处理定时发送
@@ -606,18 +669,26 @@ define(function(require, exports) {
 		}
 
 		//团行程json包
-		args.planDayJson = (tripPlan.getTripPlanDays($tab));
+		args.planDayJson =  JSON.stringify(tripPlan.getTripPlanDays($tab));
 		//团计划要求json包
-		args.requireJson = (tripPlan.getTripPlanRequest($tab));
+		args.requireJson =  JSON.stringify(tripPlan.getTripPlanRequest($tab));
 
 		// 获取游客小组Id
 		args.touristGroupIdJson = [];
+		var adultcount = 0, childcount = 0;
 		$tab.find('.T-touristGroup-list').children('tr').each(function() {
+			var $tr = $(this), $countTd = $tr.find('td[name="peopleCount"]');
 			args.touristGroupIdJson.push({
-				id: $(this).data('id')
+				id: $tr.data('id')
 			});
+
+			// 计算人数
+			adultcount += $countTd.data('adultcount')*1;
+			childcount += $countTd.data('childcount')*1;
 		});
-		args.touristGroupIdJson = (args.touristGroupIdJson);
+		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
+		args.touristAdultCount = adultcount;
+		args.touristChildCount = childcount;
 
 		$.ajax({
 			url: KingServices.build_url('tripController', 'saveRetailClient'),
@@ -626,7 +697,8 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)) {
-
+				showMessageDialog($( "#confirm-dialog-message" ), data.message);
+				Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 			}
 		});
 		
@@ -649,8 +721,9 @@ define(function(require, exports) {
 
 			args.push(
 				{
-					detail : $that.find('[name="title"]').val(),
 				    id : $that.data("id") || "",
+					title : $that.find('[name="title"]').val(),
+					detail: encodeURIComponent($that.find('.T-update-detail').data('detail')),
 				    repastDetail : repastDetail,
 				    restPosition : $that.find('[name="restPosition"]').val(),
 				    scenicItemIds : $that.find('[name="scenicItemNames"]').data("propover") || "",
@@ -946,51 +1019,26 @@ define(function(require, exports) {
 						    	})
 						    	//提交按钮事件绑定
 								$container.find(".T-saveGroup").click(function(){
-									var addGroupIdJson = [],html = "";
-									$container.find(".T-group-list tr").find("input:checked").each(function(i){
-										var $tr = $(this).closest('tr');
-										html += "<tr data-id=\""+$tr.data("id")+"\">"+
-											"<td>"+ $.text($tr.find("td[name=creatorName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=lineProductName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=travelAgencyName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=contactMemberName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=contactMemberMobileNumber]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=areaData]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=ageData]")) +"</td>"+
-											"<td class=\"T-memberCount\">"+ $.text($tr.find("td[name=peopleCount]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=currentNeedPayMoney]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=hotelLevel]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=includeSelfPay]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=remark]")) +"</td>"+
-											"<td>"+
+									var addGroupIdJson = [],
+										html = "<td>"+
 											"<div class=\"hidden-sm hidden-xs btn-group\">"+
-											"<a class=\"cursor T-groupView\">"+
+											"<a class=\"cursor T-action T-groupView\">"+
 												"查看"+
 											"</a>"+"<a class='cursor'> </a>"+
-											"<a class=\"cursor T-groupDelete\">"+
+											"<a class=\"cursor T-action T-groupDelete\">"+
 												"删除"+
 											"</a>"+
 											"</div>"+
-											"</td>"+
-											"</tr>";
+											"</td>";
+									$container.find(".T-group-list tr").find("input:checked").each(function(i){
+										var $tr = $(this).closest('tr').clone();
+										// 构造所需的行
+										$tr.children('td').eq(0).remove().end().last().remove().end().end().append(html);
+										// 附加行
+						    			$tab.find(".T-touristGroup-list").append($tr);
 									});
-						    		$tab.find(".T-touristGroup-list").append(html);
-						    		//查看旅游小组成员
-							    	$tab.find(".T-groupView").off().on("click",function(){
-							    		var id = $(this).closest('tr').data("id");
-							    		tripPlan.viewTouristGroup(id);
-							    	});
-							    	//删除小组
-							    	$tab.find(".T-groupDelete").on("click",function(){
-							    		var id = $(this).closest('tr').data("id"),
-							    			tripPlanId = $tab.find("input[name=tripPlanId]").val();
-							    		 tripPlan.deleteTouristGroup($(this),id,tripPlanId,$tab);
-							    	});
 									
 									layer.close(addGroupTemplateLayer);
-									tripPlan.MenberNumber($tab);
-							    	//小组总人数计算
-			    					tripPlan.tripPlanAllMemberCount($tab);
 						    	})
 						    }
 						})
