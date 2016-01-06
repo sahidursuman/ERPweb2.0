@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -115,6 +115,17 @@
           default:
             return "其他";
         }
+    }), template.helper("getWayType", function(status) {
+        var res = "";
+        return status = status || 1, res += '<option value="1" ' + (1 == status ? "selected" : "") + ">旅行社系统</option>", 
+        res += '<option value="2" ' + (2 == status ? "selected" : "") + ">传真</option>", 
+        res += '<option value="3" ' + (3 == status ? "selected" : "") + ">短信</option>", 
+        res += '<option value="4" ' + (4 == status ? "selected" : "") + ">电话</option>", 
+        res += '<option value="5" ' + (5 == status ? "selected" : "") + ">QQ </option>", 
+        res += '<option value="6" ' + (6 == status ? "selected" : "") + ">微信</option>", 
+        res += '<option value="7" ' + (7 == status ? "selected" : "") + ">线上渠道</option>";
+    }), template.helper("checked", function(status) {
+        return status = status || 0, 1 == status ? "checked" : "";
     }), template.helper("getCardOption", function(status) {
         var res = "";
         return status = status || 0, res += '<option value="0" ' + (0 == status ? "selected" : "") + ">身份证</option>", 

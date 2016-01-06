@@ -124,8 +124,6 @@ define(function(require, exports) {
 			}
 		});
 
-		tripPlan.updateGroupTripPlan = function(id) {};
-
 		// 散客
 		$tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
 			event.preventDefault();
@@ -285,7 +283,7 @@ define(function(require, exports) {
 		}	
 	};
 
-	tripPlan.initEdit = function($tab,id){
+	tripPlan.initEdit = function($tab){
 		tripPlan.bindCommonEvent($tab);
 
 		//搜索报价单号
@@ -381,11 +379,12 @@ define(function(require, exports) {
 	        	data.touristGroup = JSON.parse(data.touristGroup);
 	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
-	        	data.tripPlan = JSON.parse(data.tripPlan);
 	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
 	        	data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
-	        	console.log(data)
-	        	Tools.addTab(tabKey, "新增计划", T.updateGroupTripPlan(data));
+	        	data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
+	        	if(Tools.addTab(tabKey, "编辑计划", T.updateGroupTripPlan(data))){
+	        		tripPlan.initEdit($("#tab-"+tabKey+"-content"));
+	        	};
 			}
 		});
 	};
@@ -555,6 +554,10 @@ define(function(require, exports) {
 
 	tripPlan.savePlanData = function($tab){
 		var arge = $tab.find('.T-basic-info').serializeJson();
+		var tripPlanId = $tab.find('.T-tab').data("id");
+		if(tripPlanId){
+			arge.tripPlanId = tripPlanId;
+		}
 		//团行程json包
 		arge.tripPlanDayJson = tripPlan.getTripPlanDays($tab);
 		
@@ -614,7 +617,7 @@ define(function(require, exports) {
 		.done(function(data){
 			if(showDialog(data)){
 				showMessageDialog($( "#confirm-dialog-message" ), data.message);
-				Tools.closeTab(menuKey + "_group_add");
+				Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 			}
 		});
 	};
@@ -710,7 +713,12 @@ define(function(require, exports) {
     	$tab.find('.T-tourists-list, .T-fee-list')
     	.on('click', '.T-delete', function(event){
     		event.preventDefault();
-    		$(this).closest('tr').remove();
+    		var $tr = $(this).closest('tr'), id = $tr.data("id");
+    		if(!!id){
+    			
+    		}else{
+    			$tr.remove();
+    		}
     	});
 
     	// 保存

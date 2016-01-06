@@ -51,7 +51,7 @@ template.helper("getCardText", function(idCardType) {
             return '其他';
     }
 });
-template.helper("getWay", function(status) {
+template.helper("getWayType", function(status) {
     var res = '';
     status = status || 1;
     res += '<option value="1" '+(status == 1?'selected':'')+'>旅行社系统</option>';
@@ -67,7 +67,7 @@ template.helper("checked", function(status) {
     status = status || 0;    
     return status == 1 ? "checked" : "";
 });
-template.helper("get", function(status) {
+template.helper("getCardOption", function(status) {
     var res = '';
     status = status || 0;
     res += '<option value="0" '+(status == 0?'selected':'')+'>身份证</option>';
