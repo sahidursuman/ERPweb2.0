@@ -12,36 +12,36 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right quoteInprodactName">线路产品名称:</label>
                         <div class="col-sm-2">
-                            <label class="control-label T-lineProductName"style="position: absolute;">{{quoteDetailJson.lineProduct.name}}</label>
-                            <input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
-							<input type="hidden" value="{{if isCopy != '1'}}{{quoteDetailJson.id}}{{/if}}" name="quoteId">
+                            <label class="control-label T-lineProductName"style="position: absolute;">{{quote.lineProduct.name}}</label>
+                            <input type="hidden" value="{{quote.lineProduct.id}}" name="lineProductId">
+							<input type="hidden" value="{{if isCopy != '1'}}{{quote.id}}{{/if}}" name="quoteId">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
+                            <label class="control-label T-lineProductStatus" data-entity-status="{{quote.lineProduct.status}}">{{if quote.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
                         </div>
                     
                         <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductDays" name="days" data-entity-days="{{quoteDetailJson.lineProduct.days}}" value="">{{quoteDetailJson.lineProduct.days}}天</label>
+                            <label class="control-label T-lineProductDays" name="days" data-entity-days="{{quote.lineProduct.days}}" value="">{{quote.lineProduct.days}}天</label>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">类别:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductType">{{quoteDetailJson.lineProduct.type}}</label>
+                            <label class="control-label T-lineProductType">{{quote.lineProduct.type}}</label>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">应用范围:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductCusType"> {{if quoteDetailJson.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
+                            <label class="control-label T-lineProductCusType"> {{if quote.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.shopIds}}">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{quote.lineProduct.shopIds}}">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.selfPayItemIds}}">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{quote.lineProduct.selfPayItemIds}}">
                         </div>
                     </div>
                 </div>
@@ -61,61 +61,61 @@
 					<div class="form-group">
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
-							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						
 						<div class="col-sm-1 addQuoteInformation">
 						<label class="col-sm-8 control-label no-padding-right">单房差数：</label>
-							<input type="text" name="singleRoomCount" class="col-sm-4" maxlength="10" value="{{quoteDetailJson.singleRoomCount}}">
+							<input type="text" name="singleRoomCount" class="col-sm-4" maxlength="10" value="{{quote.singleRoomCount}}">
 						</div>
 					
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>客户：</label>
-							<input type="text" name="partnerAgencyName" class="col-sm-7 T-choosePartnerAgency" value="{{quoteDetailJson.partnerAgency.travelAgencyName}}">
-							<input type="hidden" name="partnerAgencyId" value="{{quoteDetailJson.partnerAgency.id}}" >
+							<input type="text" name="partnerAgencyName" class="col-sm-7 T-choosePartnerAgency" value="{{quote.partnerAgency.travelAgencyName}}">
+							<input type="hidden" name="partnerAgencyId" value="{{quote.partnerAgency.id}}" >
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系人：</label>
-							<input type="text" name="managerName" class="col-sm-4 T-chooseManager" value="{{quoteDetailJson.partnerAgencyContact.contactRealname}}">
-							<input type="hidden" name="managerId" value="{{quoteDetailJson.partnerAgencyContact.id}}">
+							<input type="text" name="managerName" class="col-sm-4 T-chooseManager" value="{{quote.partnerAgencyContact.contactRealname}}">
+							<input type="hidden" name="managerId" value="{{quote.partnerAgencyContact.id}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系电话：</label>
-							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}">
+							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quote.partnerAgencyContact.contactMobileNumber}}">
 						</div>
 
 						<div class="col-sm-2 addQuoteInformation" style="padding-top: 10px;">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>报价单号：</label>
-							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" value="{{if isCopy != '1'}}{{quoteDetailJson.quoteNumber}}{{/if}}" placeholder="系统自动生成">
+							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" value="{{if isCopy != '1'}}{{quote.quoteNumber}}{{/if}}" placeholder="系统自动生成">
 						</div>
 					</div>
 					<div class="form-group T-isChooseService">
 						<div style="margin-left: 25px">
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isContainGuideFee == 1}}checked="checked"{{/if}} value="1" name="includeGuideFee">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isContainGuideFee == 1}}checked="checked"{{/if}} value="1" name="includeGuideFee">
 								<span class="lbl">
 									含导服费
 								</span>
 							</label>
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isChildNeedRoom == 1}}checked="checked"{{/if}} value="1" name="childNeedBed">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isChildNeedRoom == 1}}checked="checked"{{/if}} value="1" name="childNeedBed">
 								<span class="lbl">
 									小孩占床
 								</span>
 							</label>
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isContainSelfPay == 1}}checked="checked"{{/if}} value="1" name="includeSelfpay">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isContainSelfPay == 1}}checked="checked"{{/if}} value="1" name="includeSelfpay">
 								<span class="lbl">
 									包含自费
 								</span>
@@ -132,45 +132,45 @@
 			        </div>
 		        	<div class="col-xs-2 viewQuoteFdiv">
 		        	<p style="height: 30px;margin-top: 10px">
-		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.adultCostPrice}}"/>
+		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost" type="text" style="width:80px;margin-left:9px;" value="{{quote.adultCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly" class="T-adultQuote" type="text" style="width:80px;margin-left:18px;" value="{{quoteDetailJson.adultQuotePrice}}" />
+		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly" class="T-adultQuote" type="text" style="width:80px;margin-left:18px;" value="{{quote.adultQuotePrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.adultQuotePrice - quoteDetailJson.adultCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit" style="width:80px;margin-left:9px;">{{quote.adultQuotePrice - quote.adultCostPrice | toFixed}}</span>
 		        	</p>
 		        	<p></p>
 		        	<p></p>
 		        	</div> 
 
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.childCostPrice}}"/>
+		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.childCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quoteDetailJson.childQuotePrice}}"/>
+		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.childQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit">{{quoteDetailJson.childQuotePrice - quoteDetailJson.childCostPrice | toFixed}}</span>
-		        	</p>
-		        	</div>
-		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quoteDetailJson.singleRoomCostPrice}}" />
-		        	</p>
-		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quoteDetailJson.singleRoomQuotePrice}}"/>
-		        	</p>
-		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.singleRoomQuotePrice - quoteDetailJson.singleRoomCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit">{{quote.childQuotePrice - quote.childCostPrice | toFixed}}</span>
 		        	</p>
 		        	</div>
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.sumCostFee}}" />
+		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quote.singleRoomCostPrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote" style="width:80px;margin-left:22px;"value="{{quoteDetailJson.sumQuoteFee}}"/>
+		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.singleRoomQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.sumQuoteFee - quoteDetailJson.sumCostFee | toFixed}}</span>
+		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit" style="width:80px;margin-left:9px;">{{quote.singleRoomQuotePrice - quote.singleRoomCostPrice | toFixed}}</span>
+		        	</p>
+		        	</div>
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.sumCostFee}}" />
+		        	</p>
+		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote" style="width:80px;margin-left:22px;"value="{{quote.sumQuoteFee}}"/>
+		        	</p>
+		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit" style="width:80px;margin-left:9px;">{{quote.sumQuoteFee - quote.sumCostFee | toFixed}}</span>
 		        	</p>
 		        	</div>
         	</div>
 				<div class="form-group">
 				<div class="col-xs-12" style="margin-top: 14px;">
 				<label class="col-sm-1 control-label no-padding-right addQuoteRemerk" >备注:</label>
-				<textarea class="col-xs-10" name="" rows="1" id="" style="margin-left: 8px;">{{quoteDetailJson.remark}}</textarea>
+				<textarea class="col-xs-10" name="" rows="1" id="" style="margin-left: 8px;">{{quote.remark}}</textarea>
 				</div>
 				</div>
 	</form>
@@ -202,13 +202,13 @@
 														</tr>
 													</thead>  
 													<tbody>
-														{{if guideArrange != null}}
-														<tr data-entity-id="{{guideArrange.id}}">
+														{{if guideQuote != null}}
+														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
-																<input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideArrange.price}}" />
-																<input type="hidden" name="arrangeId" value="{{guideArrange.id}}">
+																<input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
+																<input type="hidden" name="arrangeId" value="{{guideQuote.id}}">
 															</td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideArrange.remark}}" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
 														</tr>
 														{{else}}
 														<tr data-entity-id="">
@@ -249,8 +249,8 @@
 														</tr>
 													</thead>
 													<tbody class="T-insuranceForm">
-														{{if insuranceArrange.length > 0}}
-														{{each insuranceArrange as rs}}
+														{{if insuranceQuote.length > 0}}
+														{{each insuranceQuote as rs}}
 														<tr data-entity-id="{{rs.id}}">
 															<td>
 																<input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{rs.insurance.name}}" />
@@ -318,10 +318,10 @@
 															<th class="th-border">操作</th>
 														</tr>
 													</thead>
-													<tbody class="T-busCompanyForm">{{if busCompanyArrange.length > 0}}
-													{{each busCompanyArrange as rs}}
+													<tbody class="T-busCompanyForm">{{if busCompanyQuote.length > 0}}
+													{{each busCompanyQuote as rs}}
 														<tr data-entity-id="{{rs.id}}">
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.bus.seatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.seatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{rs.brand}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td>
 																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{rs.busCompany.companyName}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
@@ -428,7 +428,7 @@
                                                                     <div class="timeline-container T-timeline-container">
                                                                         <div class="timeline-items T-timeline-detail-container">
                                                                             <!-- /.餐饮列表 -->
-                                                                            {{each lineProductDaysList.restaurantArrange as restaurantList}}
+                                                                            {{each lineProductDaysList.restaurantQuote as restaurantList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" data-entity-index="{{restaurantList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -492,7 +492,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.酒店 -->
-                                                                            {{if lineProductDaysList.hotelArrange.length > 0}}
+                                                                            {{if lineProductDaysList.hotelQuote.length > 0}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="{{each lineProductDaysList.hotelTemplate as hotelList index}}{{if index == 0}}{{hotelList.orderIndex}}{{/if}}{{/each}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -515,7 +515,7 @@
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
-                                                                            						{{each lineProductDaysList.hotelArrange as hotelList}}
+                                                                            						{{each lineProductDaysList.hotelQuote as hotelList}}
                                                                                                     <tr>
                                                                                                         <td>{{if hotelList.offerId != null}}<input type='hidden' name='offerId' value='{{hotelList.offerId}}' />{{/if}}
                                                                                                             <select class="col-xs-12 T-choose-hotelStarLevel" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}}>
@@ -566,7 +566,7 @@
                                                                             </div>
                                                                             {{/if}}
                                                                             <!-- /.景区 -->
-                                                                            {{each lineProductDaysList.scenicArrange as scenicList}}
+                                                                            {{each lineProductDaysList.scenicQuote as scenicList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="{{scenicList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -624,7 +624,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.购物 -->
-                                                                            {{each lineProductDaysList.shopArrange as shopList}}
+                                                                            {{each lineProductDaysList.shopQuote as shopList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="{{shopList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -682,7 +682,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.自费 -->
-                                                                            {{each lineProductDaysList.selfPayArrange as selfPayList}}
+                                                                            {{each lineProductDaysList.selfPayQuote as selfPayList}}
                                                                             <div  class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="{{selfPayList.orderIndex}}" >
                                                                                       <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                          <i class="ace-icon fa fa-circle"></i>
@@ -744,7 +744,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.交通 -->
-                                                                            {{each lineProductDaysList.ticketArrange as ticketList}}
+                                                                            {{each lineProductDaysList.ticketQuote as ticketList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="{{ticketList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -810,7 +810,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.其它 -->
-                                                                            {{each lineProductDaysList.otherArrange as otherList}}
+                                                                            {{each lineProductDaysList.otherQuote as otherList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -905,25 +905,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
-                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{quoteDetailJson.includeFee}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{quote.includeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{quoteDetailJson.excludeFee}}</textarea>
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{quote.excludeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{quoteDetailJson.lineFeature}}</textarea>
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{quote.lineFeature}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{quoteDetailJson.lineNotice}}</textarea>
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{quote.lineNotice}}</textarea>
 								</div>   
 							</div>
 						</div>

@@ -2054,3 +2054,11 @@ KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
 };
+
+//内部模板
+KingServices.inlineTemplate = function(source, option) {
+	var s = source,
+		render = template.compile(s),
+		html = render(option);
+	return html;
+}
