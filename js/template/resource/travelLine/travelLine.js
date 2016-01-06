@@ -415,11 +415,13 @@ define(function(require, exports) {
 		var html =  '<tr data-day="'+ dataId +'"><td>第' + day.whichDay +'天</td>"'+
 					'<td><input class="col-sm-12" name="BriefTrip" /></td>'+
 					'<td style="width:205px;"><label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast" /><span class="lbl">&nbsp;早餐</span></label>'+
-					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-lunch" value="2" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>'+
-					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-dinner" value="2" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label></td>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-lunch" value="1" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-dinner" value="1" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label></td>'+
 					'<td><input class="col-sm-12" name="LodgingPlace" /></td>'+
 					'<td><input class="col-sm-12 T-chooseScenic" placeholder="多选" readonly="readonly" name="chooseScenic" /></td>'+
-					'<td style="width:150px"><div class="btn-group"><a class="cursor T-action T-details">编辑行程详情</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>'
+					'<td style="width:150px"><div class="btn-group"><a class="cursor T-action T-details">编辑行程详情</a>'+
+					'<a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>'+
+					'<input type="hidden" name="description" value=""/>'
 					'</tr>';
 		if ($tr.length == 0) {
 			$tbody.append(html);
@@ -454,6 +456,7 @@ define(function(require, exports) {
                 $container.find(".T-btn-submit").on('click' , function() {
                 	var content = encodeURIComponent(UE.getEditor($container.find('.T-editor').prop('id')).getContent())
                 	$this.data('entity-content', content)
+                	$this.find('input[name=description]').val(content);
                    	layer.close(updateDetailsLayer);
                 });
 				// 取消按钮绑定事件
@@ -694,11 +697,11 @@ define(function(require, exports) {
 		// }
 		var args = $tab.find('.T-main-form').serializeJson();
 
-		// 启用标志
-		args.status = 0;
-		if ($tab.find('.T-status').prop('checked')) {
-			args.status = 1;
-		}
+		// // 启用标志
+		// args.status = 0;
+		// if ($tab.find('.T-status').prop('checked')) {
+		// 	args.status = 1;
+		// }
 
 		// 获取日程数据
 		var addJson = [], delJson = [];
@@ -709,7 +712,7 @@ define(function(require, exports) {
 			} else {
 				var $feilds = $tr.children('td'),
 					schedule = {
-					   	whichDay: $tr.data('id') + 1,
+					   	whichDay: $tr.data('day') + 1,
 						// repastDetail: $feilds.eq(1).text(),
 						// restPosition: $feilds.eq(2).text(),
 						// title: $feilds.eq(4).text(),
@@ -717,13 +720,14 @@ define(function(require, exports) {
 						// roadScenic: $tr.find("input[name=roadScenic]").val(),
 						// detail: $tr.find("input[name=description]").val(),
 						BriefTrip:$tr.find("input[name=BriefTrip]").val(),
-						breakfast:$tr.find("input[name=breakfast]").val(),
-						lunch:$tr.find("input[name=lunch]").val(),
-						dinner:$tr.find("input[name=dinner]").val(),
 						LodgingPlace:$tr.find("input[name=LodgingPlace]").val(),
+						detail: $tr.find("input[name=description]").val(),
+						breakfast:$tr.find("input[name=breakfast]").is(':checked')? 1 : 0,
+						lunch:$tr.find("input[name=lunch]").is(':checked')? 1 : 0,
+						dinner:$tr.find("input[name=dinner]").is(':checked')? 1 : 0,
 						chooseScenic:$tr.find("input[name=chooseScenic]").val()	  
 					};
-					// var schedule = JSON.stringify(schedule);
+					var schedule = JSON.stringify(schedule);
 					  
 				if (!!id)  {
 					schedule.id = id;

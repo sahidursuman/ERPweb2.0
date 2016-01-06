@@ -89,7 +89,7 @@
 									{{each travelLine.travelLineDayList as line}}
 									<tr data-id="{{line.whichDay -1}}" {{if !!id}}data-entity-id="{{line.id}}"{{/if}}>
 										<td>第{{line.whichDay}}天<input name="whichDay" value="{{line.whichDay}}" type="hidden"/></td>
-										<td><input class="col-xs-12" type="text" value="{{line.title}}"></td>
+										<td><input class="col-xs-12" name='' type="text" value="{{line.title}}"></td>
 										<td style="width: 205px;">
 										<label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast" /><span class="lbl">&nbsp;早餐</span></label>
 										<label><input type="checkbox" class="ace T-lunch" value="1" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>
@@ -121,10 +121,8 @@
 			</div>
 		</div>
 		<div class="space-10"></div>
-			<button class="btn btn-block btn-primary T-btn-save guideSubmit" {{if !!id}} data-id="{{id}}" {{/if}}>
-				<i class="ace-icon fa fa-check"></i>
-				提交信息
-			</button>
+			 <div class="form-group" style="text-align: center;"> <button class="btn btn-sm btn-danger otherButton T-btn-cancel"> <i class="ace-icon fa fa-times"></i> 取消 </button>
+       		 <button class="btn btn-sm btn-primary otherButton T-btn-save" {{if !!id}} data-id="{{id}}" {{/if}} style="margin-left: 30px"> <i class="ace-icon fa fa-check"></i> 保存 </button> </div>
 		<div class="space-20"></div>
 	</form>
 </div>
