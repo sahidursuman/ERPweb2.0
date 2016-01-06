@@ -12,7 +12,7 @@
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">组团单号：</label>
-            <input type="text" class="form-control T-search-number" value="{{searchParam.otaOrderNumber}}">
+            <input type="text" class="form-control T-search-number" placeholder="组团单号" value="{{searchParam.otaOrderNumber}}">
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">线路名称：</label>
@@ -135,7 +135,7 @@
         <tbody class="T-list">
             {{if customerAccountList != null}} {{each customerAccountList as rs index}}
             <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
-                <td>{{rs.otaOrderNumber}}</td>
+                <td>{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.contactName}}</td>
