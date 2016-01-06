@@ -261,7 +261,7 @@
 														{{each insuranceTemplate as rs}}
 														<tr data-entity-id="{{rs.id}}">
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{rs.insurance.name}}" /><input type="hidden" name="insuranceId" value="{{rs.insurance.id}}" /></td>
-															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{rs.insuranceItem.name}}" /><input type="hidden" name="insuranceItemId" value="{{rs.insuranceItem.id}}" /></td>
+															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}" /><input type="hidden" name="insuranceItemId" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.id}}{{/if}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value="{{rs.price}}"></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
