@@ -1863,12 +1863,12 @@ KingServices.viewOptionalSelfPay = function($this){
 //景区多选和浮动显示
 KingServices.chooseScenic = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
-		module.selfPayMultiselect($this);
+		module.chooseScenic($this);
 	});
 }
 KingServices.viewOptionalScenic = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
-		module.viewOptionalSelfPay($this);
+		module.viewOptionalScenic($this);
 	});
 }
 
