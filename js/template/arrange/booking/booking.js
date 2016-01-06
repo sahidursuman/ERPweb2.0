@@ -421,6 +421,8 @@ define(function(require, exports) {
 				parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
 				parents.find("input[name=hotelRoom]").val("");
 				parents.find("input[name=hotelRoomId]").val("");
+				parents.find("input[name=costPrice]").val(0);
+				parents.find("input[name=salePrice]").val(0);
 				$.ajax({
 					url: KingServices.build_url('hotel','getHotelById'),
 					type: 'POST',
@@ -433,6 +435,7 @@ define(function(require, exports) {
 						}
 	                }
 				});
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 		}, function(obj, ui){
 			var parents = $(obj).closest('tr');
 			parents.find("input[name=hotelId]").val("");
@@ -471,6 +474,7 @@ define(function(require, exports) {
 			var enterTime = parents.find("input[name=enterTime]").val();
 			BookingArrange.ajax({'url' : 'hotel', 'method' : 'getHotelRoomPrice', 'menuKey' : 'resource_hotel', 'operation' : 'view', 'id' : ui.item.id, 'enterTime' : enterTime}, function(data){
 				parents.find("input[name=costPrice]").val(data.price);
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 			});
 		}, function(obj, ui){
 			var $parent = $(obj).closest('tr');
