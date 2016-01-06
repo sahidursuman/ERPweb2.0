@@ -370,6 +370,7 @@ define(function(require, exports) {
 	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
 	        	data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
 	        	data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
+	        	tripPlan.processRepastDetail(data.tripPlanDayList);
 	        	if(Tools.addTab(tabKey, "编辑计划", T.updateGroupTripPlan(data))){
 	        		tripPlan.initEdit($("#tab-"+tabKey+"-content"));
 	        	};
@@ -698,7 +699,7 @@ define(function(require, exports) {
 					data.tripPlanDay = JSON.parse(data.tripPlanDay);
 
 					data.hasData = tripPlan.hasTripPlan(data.require);
-
+					tripPlan.processRepastDetail(data.tripPlanDay);
 					console.info(data)
 					if (Tools.addTab(tabKey, '编辑计划', updateSingleTripPlanTemplate(data))) {
 						tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
@@ -738,6 +739,23 @@ define(function(require, exports) {
 		}
 
 		return res;
+	};
+
+	tripPlan.processRepastDetail = function(detail) {
+		if (!!detail) {
+			for (var i = 0, len = detail.length, tmp; i < len; i ++) {
+				tmp =  detail[i].repastDetail;
+				if (!!tmp) {
+					tmp = tmp.split(',');
+				}
+
+				if (tmp.length === 3) {
+					detail[i].m = tmp[0];
+					detail[i].n = tmp[1];
+					detail[i].e = tmp[2];
+				}
+			}
+		}
 	};
 
 	tripPlan.initSigleEvent = function($tab) {
