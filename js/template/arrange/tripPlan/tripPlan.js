@@ -23,6 +23,7 @@ define(function(require, exports) {
 	//模版
 	var T = {
 		updateDetail : require("./view/updateDetail"),
+		updateGroupTripPlan : require("./view/updateGroupTripPlan"),
 		searchTeam : require("./view/searchTeam"),
 		touristsList : require("./view/touristsList"),
 		feeList : require("./view/feeList"),
@@ -232,7 +233,7 @@ define(function(require, exports) {
 			}
 		});
 	};
-
+	
 	tripPlan.autocompleteSearch = function(chooseObj,jsonList,valueName) {
 		chooseObj.autocomplete({
 			minLength: 0,
@@ -360,6 +361,30 @@ define(function(require, exports) {
     		event.preventDefault();
     		tripPlan.savePlanData($tab);
     	});
+	};
+	/**
+	 * 团队-编辑计划
+	 * @param  {string} id id
+	 */
+	tripPlan.updateGroupTripPlan = function(id){
+		$.ajax({
+			url : KingServices.build_url("tripPlan","editTripPlanByT"),
+			type : "POST",
+			data : {tripPlanId : id}
+		}).done(function(data){
+			if(showDialog(data)){
+				// 团队
+	        	var tabKey = menuKey + "_group_update";
+	        	data.touristGroup = JSON.parse(data.touristGroup);
+	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
+	        	data.tripPlan = JSON.parse(data.tripPlan);
+	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+	        	data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
+	        	console.log(data)
+	        	Tools.addTab(tabKey, "新增计划", T.updateGroupTripPlan(data));
+			}
+		});
 	};
 	tripPlan.chooseTravelAgencyName = function($that){
 		$that.autocomplete({
@@ -569,7 +594,7 @@ define(function(require, exports) {
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
 		arge.buyInsurance = $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0;
-		arge.executeTimeType = $tab.find('[name="addTripPlanMsg"]').eq(0).is(":checked") ? 0 : 1;
+		arge.executeTimeType = $tab.find('.T-timed').is(":checked") ? 1 : 0;
 		if(arge.executeTimeType === 1){
 			arge.executeTime = $tab.find('[name="executeTime"]').val();
 		}
@@ -585,7 +610,8 @@ define(function(require, exports) {
 		})
 		.done(function(data){
 			if(showDialog(data)){
-				console.log('保存成功！');
+				showMessageDialog($( "#confirm-dialog-message" ), data.message);
+				Tools.closeTab(menuKey + "_group_add");
 			}
 		});
 	};
