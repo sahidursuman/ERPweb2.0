@@ -87,20 +87,20 @@
 								</thead>
 								<tbody class="T-schedule-list"> 
 									{{each travelLine.travelLineDayList as line}}
-									<tr data-id="{{line.whichDay -1}}" {{if !!id}}data-entity-id="{{line.id}}"{{/if}}>
+									<tr data-day="{{line.whichDay -1}}" data-entity-id="{{line.id}}">
 										<td>第{{line.whichDay}}天<input name="whichDay" value="{{line.whichDay}}" type="hidden"/></td>
-										<td><input class="col-xs-12" name='' type="text" value="{{line.title}}"></td>
+										<td><input class="col-xs-12" name='BriefTrip' type="text" value="{{line.title}}"></td>
 										<td style="width: 205px;">
-										<label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast" /><span class="lbl">&nbsp;早餐</span></label>
-										<label><input type="checkbox" class="ace T-lunch" value="1" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>
-										<label><input type="checkbox" class="ace T-dinner" value="1" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label>
+										<label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast"  {{if line.repastDetail.breakfast ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;早餐</span></label>
+										<label><input type="checkbox" class="ace T-lunch" value="1" name="lunch"   {{if line.repastDetail.lunch ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;午餐</span></label>
+										<label><input type="checkbox" class="ace T-dinner" value="1" name="dinner"   {{if line.repastDetail.dinner ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;晚餐</span></label>
 										</td>
-										<td><input class="col-xs-12" type="text" value="{{line.restPosition}}"></td>
+										<td><input class="col-xs-12" name="LodgingPlace" type="text" value="{{line.restPosition}}"></td>
 										
-										<td><input class="col-sm-12 T-chooseScenic" placeholder="多选" name="chooseScenic" /></td>
+										<td><input class="col-sm-12 T-chooseScenic" readonly="readonly" placeholder="多选" name="chooseScenic" value="{{line.roadScenic}}" data-propover="{{line.scenicItemIds}}" /></td>
 										<td style="width:150px">
 											<div class="btn-group">
-												<a class="cursor T-details">
+												<a class="cursor T-action T-details" data-entity-content="{{line.detail}}">
 													编辑行程详情
 												</a> <a class="cursor"> |</a>
 												<a class="cursor T-action T-delete">
