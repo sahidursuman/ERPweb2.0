@@ -172,20 +172,20 @@ define(function(require, exports) {
 				if (result) {	
 
 					console.info(data);
-					var busCompanyArrange = JSON.parse(data.busCompanyArrange);
-                    data.busCompanyArrange=busCompanyArrange;
+					var busCompanyQuote = JSON.parse(data.busCompanyQuote);
+                    data.busCompanyQuote=busCompanyQuote;
 
-					var guideArrange = JSON.parse(data.guideArrange);
-					data.guideArrange=guideArrange;
+					var guideQuote = JSON.parse(data.guideQuote);
+					data.guideQuote=guideQuote;
 
-					var insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.insuranceArrange=insuranceArrange;
+					var insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.insuranceQuote=insuranceQuote;
 
 					var daysList = JSON.parse(data.daysList);
 					data.daysList=daysList;
 
-					var quoteDetailJson = JSON.parse(data.quoteDetailJson);
-					data.quoteDetailJson=quoteDetailJson;
+					var quote = JSON.parse(data.quote);
+					data.quoteDetailJson=quote;
 
               
 
@@ -709,11 +709,11 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+					data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
 					data.daysList = JSON.parse(data.daysList);
-					data.guideArrange = JSON.parse(data.guideArrange);
-					data.insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
+					data.guideQuote = JSON.parse(data.guideQuote);
+					data.insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.quote = JSON.parse(data.quote);
 					data.editorName = menukey +'-' + tag + '-ueditor'
 					var $a = {
 						a: 'update',
@@ -798,7 +798,7 @@ define(function(require, exports) {
 		// 监听保存，并切换tab
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 			event.preventDefault();
-			quote.saveQuote(id,$container,tab_id, title, html);
+			quote.saveQuote(id,$container,'',tab_id, title, html);
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			event.preventDefault();
@@ -807,7 +807,7 @@ define(function(require, exports) {
 		// 保存后关闭
 		.on(CLOSE_TAB_SAVE, function(event) {
 			event.preventDefault();
-			quote.saveQuote(id,$container);
+			quote.saveQuote(id,$container,'');
 		});
 
 		//下拉
@@ -1043,7 +1043,7 @@ define(function(require, exports) {
 		});
 		json = JSON.stringify(json);
 		$.ajax({
-			url: KingServices.build_url('productQuote','findCostPrice'),
+			url: KingServices.build_url('quote','findCostPrice'),
 			type: 'POST',
 			data: {dayList: json},
 			success: function(data) {
@@ -3415,29 +3415,13 @@ define(function(require, exports) {
 		var quoteJson = {
 			id: quote.getValue($container,'quoteId'),
 			adultCostPrice: $container.find('.T-adultCost').val(),
-			adultCount: quote.getValue($container,'adultCount'),
 			adultQuotePrice: $container.find('.T-adultQuote').val(),
 			adultGrossProfit: $container.find('.T-adultGrossProfit').text(),
 			childCostPrice: $container.find('.T-childCost').val(),
-			childCount: quote.getValue($container,'childCount'),
 			childQuotePrice: $container.find('.T-childQuote').val(),
 			childGrossProfit: $container.find('.T-childGrossProfit').text(),
 			days: $container.find('.T-lineProductDays').data("entity-days"),
 			lineProductId: quote.getValue($container,'lineProductId'),
-			partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
-			partnerAgencyContactId: quote.getValue($container,'managerId'),
-			singleRoomCostPrice: $container.find('.T-oneRoomCost').val(),
-			singleRoomCount: quote.getValue($container,'singleRoomCount'),
-			singleRoomQuotePrice: $container.find('.T-oneRoomQuote').val(),
-			oneRoomGrossProfit: $container.find('.T-oneRoomGrossProfit').text(),
-			startTime: quote.getValue($container,'startTime'),
-			sumCostFee: $container.find('.T-allCost').val(),
-			sumQuoteFee: $container.find('.T-allQuote').val(),
-			grossProfit: $container.find('.T-allGrossProfit').text(),
-			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
-			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
-			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
-			remark: quote.getValue($container,'quoteRemark'),
 			includeFee: quote.getValue($container,'includeFee'),
 			excludeFee: quote.getValue($container,'excludeFee'),
 			lineFeature: quote.getValue($container,'lineFeature'),
@@ -3445,7 +3429,23 @@ define(function(require, exports) {
 			shopNames: quote.getValue($container,'T-shopMultiselect'),
 			shopIds: $container.find('.T-shopMultiselect').data('propover'), 
 			selfPayItemNames: quote.getValue($container,'T-selfPayMultiselect'),
-			selfPayItemIds: $container.find('.T-selfPayMultiselect').data('propover')
+			selfPayItemIds: $container.find('.T-selfPayMultiselect').data('propover'),
+			startTime: quote.getValue($container,'startTime'),
+			adultCount: quote.getValue($container,'adultCount'),
+			childCount: quote.getValue($container,'childCount'),
+			partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
+			partnerAgencyContactId: quote.getValue($container,'managerId'),
+			singleRoomCount: quote.getValue($container,'singleRoomCount'),
+			singleRoomCostPrice: $container.find('.T-oneRoomCost').val(),
+			singleRoomQuotePrice: $container.find('.T-oneRoomQuote').val(),
+			oneRoomGrossProfit: $container.find('.T-oneRoomGrossProfit').text(),
+			sumCostFee: $container.find('.T-allCost').val(),
+			sumQuoteFee: $container.find('.T-allQuote').val(),
+			grossProfit: $container.find('.T-allGrossProfit').text(),
+			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
+			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
+			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
+			remark: quote.getValue($container,'quoteRemark')
 		}
 
 		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {
@@ -3459,11 +3459,11 @@ define(function(require, exports) {
 		var guideList = $container.find('.T-arrangeGuideList');
 		var insuranceList = $container.find('.T-arrangeInsuranceList');
 		var saveJson = {
-			busCompany: [],
-			insurance: [],
+			busCompanyQuote: [],
+			insuranceQuote: [],
 			lineDayList: [],
-			guide: {
-				arrangeId: quote.getValue(guideList,'arrangeId'),
+			"guideQuote": {
+				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
 				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
 				remark: quote.getValue(guideList,'remark')
@@ -3473,7 +3473,7 @@ define(function(require, exports) {
 		var $trs = busList.find('tbody tr');
 		$trs.each(function(i) {
 			var json = {
-				arrangeId: $trs.eq(i).data('entity-id'),// quote.getValue($trs.eq(i),'arrangeId'),
+				id: $trs.eq(i).data('entity-id'),// quote.getValue($trs.eq(i),'arrangeId'),
 				offerId: quote.getValue($trs.eq(i),'offerId'),
 				brand: quote.getValue($trs.eq(i),'brand'),
 				busCompanyId: quote.getValue($trs.eq(i),'busCompanyId'),
@@ -3482,21 +3482,20 @@ define(function(require, exports) {
 				marketPrice: quote.getValue($trs.eq(i),'marketPrice') || quote.getValue($trs.eq(i),'seatcountPrice'),
 				remark: quote.getValue($trs.eq(i),'remark')
 			}
-			saveJson.busCompany.push(json)
+			saveJson.busCompanyQuote.push(json)
 		});
 
 		var $trs = insuranceList.find('tbody tr');
 		$trs.each(function(i) {
 			var json = {
-				arrangeId: $trs.eq(i).data('entity-id'),//quote.getValue($trs.eq(i),'arrangeId'),
+				id: $trs.eq(i).data('entity-id'),//quote.getValue($trs.eq(i),'arrangeId'),
 				insuranceId: quote.getValue($trs.eq(i),'insuranceId'),
 				insuranceItemId: quote.getValue($trs.eq(i),'insuranceItemId'),
 				price: quote.getValue($trs.eq(i),'price'),
 				marketPrice: quote.getValue($trs.eq(i),'marketPrice') || quote.getValue($trs.eq(i),'price'),
-				remark: quote.getValue($trs.eq(i),'remark'),
-				type: quote.getValue($trs.eq(i),'type')
+				remark: quote.getValue($trs.eq(i),'remark')
 			}
-			saveJson.insurance.push(json)
+			saveJson.insuranceQuote.push(json)
 		});
 
 		$container.find(".T-dailyArrangeList").each(function(index, el) { // 获取每天的数据
@@ -3505,13 +3504,13 @@ define(function(require, exports) {
 			saveJson.lineDayList[index] = {
 				//detailEditor : encodeURIComponent(UE.getEditor($that.find('.T-editor').prop('id')).getContent()),
 				whichDay: index+1,
-				restaurant : [],
-				hotel : [],
-				scenic : [],
-				shop : [],
-				selfPay : [],
-				ticket : [],
-				otherArrangeList: []
+				restaurantQuote : [],
+				hotelQuote : [],
+				scenicQuote : [],
+				shopQuote : [],
+				selfPayQuote : [],
+				ticketQuote : [],
+				otherQuote: []
 			}
 			//获取餐饮
 			$list= $that.find(".T-RestaurantList");
@@ -3523,7 +3522,7 @@ define(function(require, exports) {
 					if(restaurantId){
 						var standardId = $item.find("[name=typeId]").val();
 						var restaurantJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
@@ -3531,7 +3530,7 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].restaurant.push(restaurantJson);
+						saveJson.lineDayList[index].restaurantQuote.push(restaurantJson);
 					}
 				}
 			}
@@ -3548,17 +3547,16 @@ define(function(require, exports) {
 							return false;
 						}
 						var hotelJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							offerId: $item.find("[name=offerId]").val(),
 							hotelId : hotelId,
 							hotelRoomId : hotelRoomId,
-							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].hotel.push(hotelJson)
+						saveJson.lineDayList[index].hotelQuote.push(hotelJson)
 					}
 				}
 			}
@@ -3575,15 +3573,15 @@ define(function(require, exports) {
 							return false;
 						}
 						var scenicJson= {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							scenicId : scenicId,
-							itemId : itemId,
+							scenicItemId : itemId,
 							price : $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].scenic.push(scenicJson);
+						saveJson.lineDayList[index].scenicQuote.push(scenicJson);
 					}
 					
 				}
@@ -3602,13 +3600,13 @@ define(function(require, exports) {
 							return false;
 						}
 						var shopJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							shopId : shopId,
 							policyId : policyId,
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].shop.push(shopJson);
+						saveJson.lineDayList[index].shopQuote.push(shopJson);
 					}
 				}
 			}
@@ -3620,7 +3618,7 @@ define(function(require, exports) {
 					var selfPayId = $item.find("[name=companyId]").val();
 					if(selfPayId){
 						var selfPayJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
 							selfPayId : selfPayId,
 							price : $item.find("[name=contractPrice]").val(),
@@ -3628,7 +3626,7 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].selfPay.push(selfPayJson);
+						saveJson.lineDayList[index].selfPayQuote.push(selfPayJson);
 					}
 					
 				}
@@ -3641,18 +3639,15 @@ define(function(require, exports) {
 					var ticketId = $item.find("[name=tickeId]").val();
 					if(ticketId){
 						ticketJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							ticketId : ticketId,
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
-							orderIndex : $item.attr("data-entity-index"),
-							startTime: $item.find("[name=time]").val(),
-							count: $item.find("[name=count]").val(),
-							seatLevel: $item.find("[name=seatLevel]").val()
+							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].ticket.push(ticketJson);
+						saveJson.lineDayList[index].ticketQuote.push(ticketJson);
 					}
 				}
 			}
@@ -3664,16 +3659,15 @@ define(function(require, exports) {
 					var otherName = $item.find("[name=name]").val();
 					if(otherName){
 						otherJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							name : $item.find("[name=name]").val(),
 							managerName : $item.find("[name=managerName]").val(),
 							mobileNumber : $item.find("[name=mobileNumber]").val(),
-							memberCount: $item.find("[name=count]").val(),
 							price: $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
 						}
-						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
+						saveJson.lineDayList[index].otherQuote.push(otherJson);
 					}
 				}
 			}
@@ -3683,7 +3677,7 @@ define(function(require, exports) {
 		var quoteUrl = 'addQuote';
 		if ($a.a == 'update' && !!$a.isCopy == false) {quoteUrl = 'updateQuote'}
 		$.ajax({
-			url: KingServices.build_url("productQuote",quoteUrl),
+			url: KingServices.build_url("quote",quoteUrl),
 			type: 'POST',
 			data: "quoteJson="+encodeURIComponent(quoteJson)+"&saveJson="+encodeURIComponent(saveJson),
 			success: function(data){
@@ -3691,7 +3685,7 @@ define(function(require, exports) {
 				if (result) {
 					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
 						var idString = $container.attr("id");
-						if(argumentsLen === 2){
+						if(argumentsLen === 3){
 							if (idString == "tab-arrange_quote-add-content") {
 								Tools.closeTab("arrange_quote-add");
 								quote.listQuote(0);
