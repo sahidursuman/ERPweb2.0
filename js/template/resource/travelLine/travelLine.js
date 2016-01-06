@@ -425,8 +425,10 @@ define(function(require, exports) {
 					'</tr>';
 		if ($tr.length == 0) {
 			$tbody.append(html);
-		}else{
+		}else if ($tr.eq(0).data('day') == 0){
 			$tr.eq(day.whichDay-2).after(html);
+		}else{
+			$tbody.prepend(html)
 		}
 	};
 
