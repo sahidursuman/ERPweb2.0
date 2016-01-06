@@ -56,15 +56,16 @@
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户</label>
 				<div class="hct-input-group col-xs-8">
 					<input type="text" class="col-xs-12" name="travelAgencyName">
-					<input type="hidden" name="travelAgencyName">
-					<span class="hct-group-add cursor">[新增]</span>
+					<input type="hidden" name="fromPartnerAgencyId">
+					<span class="hct-group-add cursor T-addPartner">[新增]</span>
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户联系人</label>
 				<div class="hct-input-group col-xs-8">
 					<input type="text" class="col-xs-12" name="contactRealname">
-					<span class="hct-group-add cursor">[新增]</span>
+					<input type="hidden" name="fromPartnerAgencyContactId">
+					<span class="hct-group-add cursor T-addPartnerManager">[新增]</span>
 				</div>
 			</div>
 		</div>
@@ -106,7 +107,8 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">外联销售</label>
 				<div class="col-xs-8">
-					<input type="text" class="col-xs-12" name="outOPUserId">
+					<input type="text" class="col-xs-12" name="outOPUserName">
+					<input type="hidden" name="outOPUserId">
 				</div>
 			</div>
 			<div class="col-xs-3">
@@ -141,18 +143,19 @@
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">自费商家</label>
-				<div class="col-xs-2">
+				<div class="col-xs-8">
 					<input type="text" name="selfPayItemNames" readonly class="col-xs-12 T-selfPayItemNames">
-				</div>
-				<label class="col-xs-4 control-label text-right">是否购买保险</label>
-				<div class="col-xs-2">
-					<input type="text" name="" readonly class="col-xs-12">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">包含自费</label>
-				<div class="col-xs-8">
+				<div class="col-xs-2">
 					<input type="checkbox" class="ace" name="isContainSelfPay">
+					<label class="lbl"></label>
+				</div>
+				<label class="col-xs-4 control-label text-right">是否购买保险</label>
+				<div class="col-xs-2">
+					<input type="checkbox" class="ace" name="buyInsurance">
 					<label class="lbl"></label>
 				</div>
 			</div>
@@ -172,17 +175,17 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-6 T-executeTime">
 				<label class="control-label">确认发团后游客短信设置</label>
 				<label>
-					<input type="radio" class="ace" name="addTripPlanMsg" checked>
+					<input type="radio" class="ace" name="executeTimeType" checked>
 					<span class="lbl">立即发送</span>
 				</label>
 				<label>
-					<input type="radio" class="ace" name="addTripPlanMsg">
+					<input type="radio" class="ace T-timed" name="executeTimeType">
 					<span class="lbl">定时发送</span>
 				</label>
-				<input type="text" class="datetimepicker" name="executeTime">
+				<input type="text" class="datetimepicker hidden" name="executeTime">
 			</div>
 			<div class="col-xs-6">
 				<label class="col-xs-4 control-label text-right">短信签名</label>

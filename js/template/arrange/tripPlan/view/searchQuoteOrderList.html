@@ -1,22 +1,29 @@
-<tr data-quote-id="1">
-		<td name="travelLine-select" data-travelLine-Id="1">报价单号</td>
-		<td>线路产品名称</td>
-		<td>线路类型</td>
+{{each lineProductList as rs}}
+<tr data-quote-id="{{rs.id}}" 
+	data-line-id="{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}">
+		<td name="quoteNumber">{{rs.quoteNumber}}</td>
+		<td name="lineName">{{if rs.lineProduct != null}}{{rs.lineProduct.name}}{{/if}}</td>
+		<td>{{if rs.lineProduct != null}}{{rs.lineProduct.type}}{{/if}}</td>
 		<td>
-			散客
+			{{if rs.lineProduct != null}}    
+				{{if rs.lineProduct.customerType==0}}
+					  散客
+				{{else}}             
+					  团体
+				{{/if}}  
+			{{/if}}
 		</td>
-		<td>人数</td>
-		<td>天数</td>
-		<td>出游日期</td>
-		<td>客户</td>
-		<td>联系人</td>
-		<td>报价时间</td>
+		<td>{{rs.adultCount}}大{{rs.childCount}}小</td>
+		<td>{{if rs.lineProduct !=null }}{{rs.lineProduct.days}}{{/if}}</td>
+		<td>{{rs.createTime}}</td>
+		<td>{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
+		<td>{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}</td>
+		<td>{{rs.startTime}}</td>
 		<td>
-			<label class="choice-TravelLine-click">
+			<label class="T-quote-line">
 				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
-					<span class="lbl">
-						
-					</span>
+					<span class="lbl"></span>
 			</label>
 		</td>
 	</tr>
+{{/each}}
