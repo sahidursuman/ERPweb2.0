@@ -231,7 +231,7 @@ define(function(require,exports) {
 							InnerTransferIn.$checkId = $checkId;
 							InnerTransferIn.$settlementTab = $checkId;
 							InnerTransferIn.$checkSearchArea = $checkId.find(".T-search");
-						
+							
 						var countObj = $checkId.find(".T-count");
 						if(typeFlag !=2){
 							//取消对账权限过滤
@@ -310,9 +310,9 @@ define(function(require,exports) {
 	InnerTransferIn.chenkingEvent = function($obj,$listSearchData,typeFlag){
 		var $list = typeFlag == 2?"T-clearList":"T-checkList";
 		var $checkList = $obj.find('.'+$list);
-		
+		//$obj.data('isEdited', false);
 		//切换tab事件
-		InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag);
+		
 		//表单验证
 		var validator = new FinRule(0),
 			settleValidator,
@@ -321,19 +321,25 @@ define(function(require,exports) {
         	settleCheck,
         	autoValidatorCheck;
         //监听已对账的数据是否被修改
+			
+        
 		if(typeFlag == 2){
+			InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag,"T-clearList");
 			settleValidator = $listSearchData.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 			settleCheck = settleValidator.check($obj);
 			autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
 			$obj.find('.T-clearList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
+				$obj.data('isEdited', true);
 				//自动计算本次收款金额
 				InnerTransferIn.autoSumIncomeMoney($obj);
 			});
 			FinancialService.initPayEvent($obj.find('.T-summary'));
 		}else{
+			InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag,"T-checkList");
 			$obj.find('.T-checkList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
+				$obj.data('isEdited', true);
 			});
 		};
 		//搜索事件
@@ -351,8 +357,6 @@ define(function(require,exports) {
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
-			$obj.find('select[name=sumPayType]').val(1);
-			$obj.find('input[name=card-number]').closest('div').removeClass('hidden');
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
@@ -827,14 +831,8 @@ define(function(require,exports) {
   		});
 	};
 	//切换tab页面自动提示
-	InnerTransferIn.init_CRU_event = function($tab,$listSearchData,typeFlag){
+	InnerTransferIn.init_CRU_event = function($tab,$listSearchData,typeFlag,options){
 		if(!!$tab && $tab.length === 1){
-			// 监听修改
-			$tab.on('change', function(event) {
-				event.preventDefault();
-				$tab.data('isEdited', true);
-				
-			});
 			// 监听保存，并切换tab
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();
