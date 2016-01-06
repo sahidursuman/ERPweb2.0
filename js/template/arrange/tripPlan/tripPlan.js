@@ -286,21 +286,21 @@ define(function(require, exports) {
     	$tab.find('.T-add-days').on('click', function(event){
     		event.preventDefault();
     		var $days = $tab.find('.T-days'), 
-    			$tr = $days.find('tr'),
-    			old = 0;
+    			$tr = $days.find('tr');
     		if($tr.length > 0){
 	    		$tr.each(function(index) {
 	    			var $that = $(this),
-	    				fresh = $that.find('[name="dateDays"]').data("which-day");
-	    			if(old == fresh-1){
-	    				old = fresh;
-	    			}else{
-    					$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
-	    				return false
+	    				whichDay = $that.find('[name="dateDays"]').data("which-day");
+	    			if(whichDay - (index+1) != 0){
+	    				$tr.eq(index).before(travelArrange({lineProductDayList:[{whichDay:index+1}]}));
+	    				return false;
+	    			}else if(index == $tr.length-1){
+	    				$days.append(travelArrange({lineProductDayList:[{whichDay:$tr.length+1}]}));
+	    				return false;
 	    			}
 	    		});
     		}else{
-    			$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+    			$days.append(travelArrange({lineProductDayList:[{whichDay:1}]}));
     		}
     		F.arrangeDate($tab);
     	});
@@ -604,12 +604,17 @@ define(function(require, exports) {
 		//换算行程安排日期
 		arrangeDate : function($tab){
 			var $time = $tab.find('[name="startTime"]'),
-				startTime = $time.val();
+				startTime = $time.val(),
+				endTime = $tab.find('[name="endTime"]'),
+				$tr = $tab.find('.T-days tr');
 			if(startTime != ""){
-				$tab.find('.T-days tr').each(function(index){
+				$tr.each(function(index){
 					var $days = $(this).find('[name="dateDays"]'),
 						whichDate = Tools.addDay(startTime, $days.data("which-day") - 1);
 					$days.text(whichDate);
+					if(endTime.val() != whichDate && index == $tr.length-1){
+						endTime.val(whichDate);
+					}
 				});
 			}
 		}
