@@ -535,7 +535,7 @@ define(function(require, exports) {
         var settleValidator = isAutoPay == 2 ? new FinRule(3) : new FinRule(1);
         if(!FinancialService.isClearSave(Transfer.$clearTab,settleValidator)){
             return false;
-        }
+        };
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,settleValidator);
@@ -569,7 +569,8 @@ define(function(require, exports) {
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
                         }else if(argumentsLen === 3){
                             Transfer.$clearTab.data('isEdited',false);
-                            Transfer.transferClear(0,page,id,name);
+                            var isShow = isAutoPay == 2 ? 2 : 0 ;
+                            Transfer.transferClear(isShow,page,id,name);
                         } else {
                             Transfer.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
