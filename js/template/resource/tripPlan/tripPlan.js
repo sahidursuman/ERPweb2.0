@@ -313,7 +313,6 @@ define(function(require, exports) {
 							ticketList : ticketList
 						};
 						data.days = Tools.getDateDiff(basicInfo.endTime, basicInfo.startTime) + 1;
-
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', addTemplate(data))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
 							tripPlan.init_event($tab,id,target);
@@ -913,7 +912,6 @@ define(function(require, exports) {
 								var $this = $tr.eq(j);
 								var trHotelId = $this.find('[name=hotelId]').val(),
 									trHotelRoomId = $this.find('[name=hotelRoomId]').val(),
-									trWhichDay = $this.find('[name=whichDay]').val()
 								if (hotelId == trHotelId && hotelRoomId == trHotelRoomId && whichDay == trWhichDay) {
 									$this.find('[name=id]').val(arrangeId);
 									$this.data('entity-arrangeid', arrangeId);
@@ -2101,6 +2099,9 @@ define(function(require, exports) {
 				$parents.find("input[name=chargingProjects]").val("");
 				$parents.find("input[name=scenicItemId]").val("");
 				$parents.find("input[name=fee]").val("");
+				$parents.find("input[name=orderNumber]").val("");
+				$parents.find("input[name=price]").val(0);
+				tripPlan.calculatePrice($tab);
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -2147,7 +2148,8 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)) {
-							$parents.find("input[name=fee]").val(data.price);
+							$parents.find("input[name=price]").val(data.price);
+							tripPlan.calculatePrice($tab);
 						}
                     }
                 });
@@ -2995,8 +2997,8 @@ define(function(require, exports) {
 			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		}
-		
 		var json = JSON.stringify(tripPlanJson);
+
 		var tripPlanId = $(this).attr('data-entiy-id');
 		$.ajax({
 			url: KingServices.build_url('tripPlan','saveTripPlanArrange'),
