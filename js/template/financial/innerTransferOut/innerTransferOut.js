@@ -650,6 +650,12 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
+		var sumPayMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 	    var id; 
 	    var argumentsLen = arguments.length;

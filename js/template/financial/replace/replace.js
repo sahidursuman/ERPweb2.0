@@ -724,6 +724,12 @@ define(function(require, exports) {
 		});
 	};
 	Replace.savePayingData = function($tab, tabArgs){
+		var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 		var bankId = $tab.find('input[name=card-id]').val();

@@ -578,9 +578,10 @@ define(function(require, exports) {
         var old = $that.data('old') || 0,
             curr = $that.val() * 1,            
             spread = curr - old,
-            sum = (Client.$sumUnReceivedMoney.val() || 0) * 1;
+            sum = (Client.$sumUnReceivedMoney.data("money") || 0) * 1;
         
         Client.$sumUnReceivedMoney.val(sum + spread);
+        Client.$sumUnReceivedMoney.data("money",sum + spread);
 
         $that.data('old', curr);
     }
@@ -790,11 +791,17 @@ define(function(require, exports) {
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
-		var JsonStr = Client.clearDataArray 
+		var JsonStr = Client.clearDataArray; 
         if(JsonStr.length==0){
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
+        var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
+            sumList = parseFloat(Client.$sumUnReceivedMoney.data("money"));
+        if(sum != sumList){
+            showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+            return false;
+        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

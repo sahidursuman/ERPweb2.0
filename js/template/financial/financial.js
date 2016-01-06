@@ -187,26 +187,25 @@ FinancialService.changeUncheck = function(trList,fn){
 
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
-    var $sumPayMoney = $tab.find("input[name=sumPayMoney]");
-    $tab.on('focusin', 'input[name="payMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
-    })
-    .on("change", 'input[name="payMoney"]', function(){
+    $tab.on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
+            $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);
 
         if (!validator.form())  return;
 
-        var sumPayMoney = $sumPayMoney.val() || 0,
+        var sumPayMoney = $sumPayMoney.data("money") || 0,
             newVal = $this.val() || 0,
-            oldVal = $(this).data("oldVal") || 0;
+            oldVal = $this.data("oldVal") || 0;
         if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
         if(isNaN(newVal)){ newVal = 0; }
         if(isNaN(oldVal)){ oldVal = 0; }
-        sumPayMoney = parseFloat(sumPayMoney);
-        $sumPayMoney.val(sumPayMoney + parseFloat(newVal-oldVal));
+        sumPayMoney = parseFloat(sumPayMoney) + parseFloat(newVal-oldVal);
+        $sumPayMoney.data("money",sumPayMoney);
+        $sumPayMoney.val(sumPayMoney);
 
         if(!validator.form()){ return false; }
+        $this.data("oldVal",$this.val());
     });
 };
 
@@ -273,7 +272,12 @@ FinancialService.isClearSave = function($tab,rule){
         return false;
     }
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money")),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
+    if(sumPayMoney != sumListMoney){
+        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        return false;
+    }
     if(sumPayMoney > unpayMoney){
         showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
         return false;

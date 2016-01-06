@@ -616,6 +616,12 @@ define(function(require, exports) {
 	    		return;
 	        }
         }
+        var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+        if(sumPayMoney != sumListMoney){
+            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+            return false;
+        }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json && json.length) {
 			var args = {

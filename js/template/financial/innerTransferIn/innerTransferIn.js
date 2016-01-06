@@ -767,6 +767,12 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,tab_id,$data,title, html){
+		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
 		var payMoney;
