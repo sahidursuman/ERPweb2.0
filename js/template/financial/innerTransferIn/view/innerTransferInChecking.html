@@ -2,7 +2,7 @@
     <div>
         <div class="T-search">
             <form class="form-inline" role="form" onsubmit="return false">
-                    <div class="form-group">
+                <div class="form-group">
                     <label  class="control-label pull-left" style="margin-left: 0px;">部门:</label>
                     <span>{{searchParam.businessGroupName}}</span>
                     <input type="hidden" value="{{searchParam.businessGroupId}}" name="businessGroupId">
@@ -25,12 +25,9 @@
                     <button class="marginLeft-30 btn-sm search-btn T-checking-search" >
                          <i class="ace-icon fa fa-search"></i>
                              搜索
-                    </button>   
-                        <!-- <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success btn-transferExport">
-                            <span>导出报表</span>
-                            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                        </button> -->
-                    </div>
+                    </button>
+                    <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
+                </div>
             </form>
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">

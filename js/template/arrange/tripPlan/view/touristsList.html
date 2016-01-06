@@ -1,5 +1,5 @@
 {{each touristGroupMemberList as rs index}}
-<tr data-index="{{index + 1}}">
+<tr data-index="{{index + 1}}" data-id="{{rs.id}}">
 	<!-- <td>{{index + 1}}</td> -->
 	<td><input type="text" class="col-xs-12" name="name" value="{{rs.name}}"></td>
 	<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{rs.mobileNumber}}"></td>

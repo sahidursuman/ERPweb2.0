@@ -33,7 +33,7 @@
                 <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td style="vertical-align:middle">{{rs.lineProduct.name}}</td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
-                <td style="vertical-align:middle">{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}</td>
+                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
@@ -44,7 +44,7 @@
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}}</td>
+                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}}</td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
                 <td style="vertical-align:middle">

@@ -356,7 +356,9 @@ define(function(require, exports) {
 			transit.submitUpdateTransit(id, !isOuter, $tab);
 		})
 		//change触发计算
-		$tab.on('change', '.count, .price, .discount', transit.calculation);
+		$tab.on('change', '.count, .price, .discount', function(){
+			transit.calculation($(this));
+		});
 	};
 
 	//添加资源 
@@ -1093,7 +1095,7 @@ define(function(require, exports) {
 		standardType.off("change").on("change", function(){
 			var parents = $(this).closest('tr');
 			parents.find("input[name=restaurantStandardId]").val("");
-			parents.find("input[name=price]").val("");
+			transit.calculation($(this));
 		});
 		//餐厅选择
 		restaurantChoose.autocomplete({
@@ -1110,11 +1112,13 @@ define(function(require, exports) {
 							var restaurant = JSON.parse(data.restaurant);
 							parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 							parents.find("input[name=manager]").val(restaurant.managerName);
-							parents.find("input[name=price]").val("");
-							parents.find("input[name=restaurantStandardId]").val("");
+							parents.find("input[name=price]").val(0);
+							parents.find("input[name=restaurantStandardId]").val(0);
+							transit.calculation($(_this));
 						}
 					}
 				});
+				
 			},
 			change : function(event, ui) {
 				if(ui.item == null) {
@@ -1152,15 +1156,18 @@ define(function(require, exports) {
 			select: function(event, ui){
 				var standardId = ui.item.id;
 				var _this = $(this);
+
 				$(this).closest('tr').find("input[name=price]").val(ui.item.price);
 				$(this).closest('tr').find("input[name=price]").focus();
 				$(this).closest('tr').find("input[name=price]").blur();
+
 			},
 			change: function(event, ui) {
 				if(ui.item == null) {
 					var objParent = $(this).closest('tr');
 					objParent.find("input[name=price]").val("");
-				}
+				};
+				transit.calculation($(this));
 			}
 		}).off("click").on("click", function(){
 			var obj = this, parents = $(obj).closest('tr');
@@ -1424,14 +1431,14 @@ define(function(require, exports) {
 		return obj.find("[name="+name+"]").val();
 	}
 	//计算
-	transit.calculation = function(){
-		var Tr = $(this).closest("tr"),
+	transit.calculation = function($obj){
+		var Tr = $obj.closest("tr"),
 			count = Tr.find(".count").val() || 0,
 			price = Tr.find(".price").val() || 0,
 			discount = Tr.find(".discount").val() || 0,
 			needPay = (count * price)-discount;
 		Tr.find(".needPay").val(needPay);
-	}
+	};
 
 	exports.init = transit.initModule;
 	exports.viewTransit = transit.viewTransit;

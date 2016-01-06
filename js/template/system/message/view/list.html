@@ -1,17 +1,25 @@
 <div class="operation-area clearfix">
+	<input name="menuName" class="col-xs-2 input-default-height T-chooseMenu guideInputList" value="{{searchParam.messageTypeName}}"  placeholder="请输入发生业务"/>&nbsp;
+	<input type="hidden" name="menuId" value="{{searchParam.messageType}}" />
+	<button class=" btn-sm  T-search pull-left search-btn " style="border-radius: 0;background: #51b0c2;border:2px solid #51b0c2!important;color: white">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
 	<button class="pull-right btn btn-sm btn-success T-set-read-all {{if !unReadMsgCount }} hidden {{/if}}">全部标记为已读</button>
 </div>
 <div class="row">
     <div class="col-xs-12">
         <table id="simple-table" class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
             <colgroup>
+            	<col style="width:180px">
                 <col style="width:60%">
-                    <col style="width:100px">
-                        <col style="width:180px">
-                            <col style="width:100px">
+                <col style="width:100px">
+                <col style="width:180px">
+                <col style="width:100px">
             </colgroup>
             <thead>
                 <tr class="bg-blur">
+                	<th>发生业务</th>
                     <th>消息主体</th>
                     <th>是否已读</th>
                     <th>
@@ -23,6 +31,7 @@
             <tbody class="T-message-list">
                 {{each msgList as msg}}
                 <tr data-id="{{msg.id}}">
+                	<td>{{msg.menu.name}}</td>
                     <td class="align-left">{{msg.content}}</td>
                     <td>
                         {{if msg.isRead == 1}}

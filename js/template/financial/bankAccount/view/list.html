@@ -32,7 +32,7 @@
 			</thead>
 			<tbody class="T-bankAcc-list">
 				{{each newBankAccountList as rs}}
-					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}">
+					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}" bankMoney="{{rs.balance}}">
 						<td>{{rs.bankAccountNumber}}</td>
 						<td>
 							{{rs.openingBank}}

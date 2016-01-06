@@ -259,6 +259,15 @@ define(function(require, exports) {
         $checkTab.find('.T-search').click(function(event) {
             OtherAccounts.AccountsChecking(0);
         });
+
+        //导出报表事件 btn-hotelExport
+        $checkTab.find(".T-btn-export").click(function(){
+            var args = { 
+                    startAccountTime: $checkTab.find('.T-startTime').val(),
+                    endAccountTime: $checkTab.find('.T-endTime').val()
+                };
+            FinancialService.exportReport(args,"otherAccounts");
+        });
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($checkTab.find('.T-selectAll'), $checkTab.find('.T-Accounts').find('input[type="checkbox"]'));
 
@@ -571,6 +580,13 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function(data, tabid, title, html) {
+        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content"),
+            sumPayMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val()),
+            sumListMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').data("money"));
+        if(sumPayMoney != sumListMoney){
+            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+            return false;
+        }
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
         var arguementLen = arguments.length,
             searchParam = {
