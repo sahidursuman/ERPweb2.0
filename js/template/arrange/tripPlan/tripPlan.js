@@ -256,54 +256,17 @@ define(function(require, exports) {
 	};
 
 	tripPlan.initEdit = function($tab,id){
+		tripPlan.bindCommonEvent($tab);
+
 		//搜索报价单号
     	$tab.find(".T-search-quote-order").on('click', function(){
     		tripPlan.initLineProductSearch($tab, 1);
-    	});
-		//搜索线路
-    	$tab.find(".T-search-line").on('click', function(){
-    		tripPlan.initLineProductSearch($tab, 0);
-    	});
+    	});		
     	//收客单号
     	$tab.find(".T-search-team").on('click', function(){
     		tripPlan.initTeamSearch($tab);
     	});
-    	//绑定时间
-    	Tools.setDatePicker($tab.find('.datepicker'), true);
-    	$tab.find('[name="startTime"]').on('change', function(){
-    		F.arrangeDate($tab);
-    	});
-    	//购物商家
-    	$tab.find(".T-shopNames").on('click', function(){
-    		KingServices.shopMultiselect($(this));
-    	});
-    	//自费商家
-    	$tab.find(".T-selfPayItemNames").on('click', function(){
-    		KingServices.selfPayMultiselect($(this));
-    	});
-    	tripPlan.getOPUserList($tab.find('[name="dutyOPUserName"]'));
-    	//行程安排
-    	$tab.find('.T-add-days').on('click', function(event){
-    		event.preventDefault();
-    		var $days = $tab.find('.T-days'), 
-    			$tr = $days.find('tr'),
-    			old = 0;
-    		if($tr.length > 0){
-	    		$tr.each(function(index) {
-	    			var $that = $(this),
-	    				fresh = $that.find('[name="dateDays"]').data("which-day");
-	    			if(old == fresh-1){
-	    				old = fresh;
-	    			}else{
-    					$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
-	    				return false
-	    			}
-	    		});
-    		}else{
-    			$days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
-    		}
-    		F.arrangeDate($tab);
-    	});
+    	
     	//绑定添加游客小组事件
     	$tab.find('.T-add-tourists').on('click', function(event){
     		event.preventDefault();
@@ -320,21 +283,6 @@ define(function(require, exports) {
     		event.preventDefault();
     		$(this).closest('tr').remove();
     	});
-    	//绑定操作计划新增事件
-    	$tab.find('.T-action-plan').on('click', '.T-add-action', function(event){
-    		event.preventDefault();
-    		var $that = $(this).prop('disabled', true), 
-    			type = $that.data('type');
-
-    		tripPlan.addActionPlan($tab, $that.text(), type);
-    	});
-    	//绑定操作计划删除事件
-    	$tab.find('.T-action-plan-list').on('click', '.T-delete', function(event){
-    		event.preventDefault();
-    		var $that = $(this).closest('.hct-plan-ask').remove();
-
-    		$tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
-    	});	
     	//绑定账单新增费用项
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
@@ -369,6 +317,79 @@ define(function(require, exports) {
     		event.preventDefault();
     		tripPlan.savePlanData($tab);
     	});
+	};
+
+	/**
+	 * 团散的通用事件绑定
+	 * @param  {object} $tab 顶层父元素
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.bindCommonEvent = function($tab) {
+		//搜索线路
+        $tab.find(".T-search-line").on('click', function(){
+            tripPlan.initLineProductSearch($tab, 0);
+        });
+        //购物商家
+        $tab.find(".T-shopNames").on('click', function(){
+            KingServices.shopMultiselect($(this));
+        });
+        //自费商家
+        $tab.find(".T-selfPayItemNames").on('click', function(){
+            KingServices.selfPayMultiselect($(this));
+        });
+        // 责任计调
+        tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]')).trigger('click');
+
+        //绑定时间
+        Tools.setDatePicker($tab.find('.datepicker'), true);
+        tripPlan.setExecuteTimer($tab);
+        $tab.find('[name="startTime"]').on('change', function(){
+            F.arrangeDate($tab);
+        });        
+        $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
+            // 发送短信效果
+            var $that = $(this);
+            $that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
+        });
+
+        //行程安排
+        $tab.find('.T-add-days').on('click', function(event){
+            event.preventDefault();
+            var $days = $tab.find('.T-days'), 
+                $tr = $days.find('tr'),
+                old = 0;
+            if($tr.length > 0){
+                $tr.each(function(index) {
+                    var $that = $(this),
+                        fresh = $that.find('[name="dateDays"]').data("which-day");
+                    if(old == fresh-1){
+                        old = fresh;
+                    }else{
+                        $days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+                        return false
+                    }
+                });
+            }else{
+                $days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+            }
+            F.arrangeDate($tab);
+        });
+
+        //绑定操作计划新增事件
+        $tab.find('.T-action-plan').on('click', '.T-add-action', function(event){
+            event.preventDefault();
+            var $that = $(this).prop('disabled', true), 
+                type = $that.data('type');
+
+            tripPlan.addActionPlan($tab, $that.text(), type);
+        });
+        //绑定操作计划删除事件
+        $tab.find('.T-action-plan-list').on('click', '.T-delete', function(event){
+            event.preventDefault();
+            var $that = $(this).closest('.hct-plan-ask').remove();
+
+            $tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
+        });
 	};
 
 	tripPlan.savePlanData = function($tab){
@@ -436,36 +457,7 @@ define(function(require, exports) {
 	};
 
 	tripPlan.initSigleEvent = function($tab) {
-		//搜索线路
-    	$tab.find(".T-search-line").on('click', function(){
-    		tripPlan.initLineProductSearch($tab, 0);
-    	});
-    	//购物商家
-    	$tab.find(".T-shopNames").on('click', function(){
-    		KingServices.shopMultiselect($(this));
-    	});
-    	//自费商家
-    	$tab.find(".T-selfPayItemNames").on('click', function(){
-    		KingServices.selfPayMultiselect($(this));
-    	});
-    	tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]')).trigger('click');
-
-    	//绑定时间
-    	Tools.setDatePicker($tab.find('.datepicker'), true);
-    	tripPlan.setExecuteTimer($tab);
-
-    	$tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
-    		var $that = $(this);
-    		$that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
-    	});	
-
-    	//行程安排
-    	$tab.find('.T-add-days').on('click', function(event){
-    		event.preventDefault();
-    		var $days = $tab.find('.T-days'), len = $days.find('tr').length;
-    		$days.append(travelArrange({lineProductDayList:[{}]}));
-    		F.arrangeDate($tab);
-    	});
+		tripPlan.bindCommonEvent($tab);
     	//绑定添加游客小组事件
     	$tab.find('.T-add-touristGroup').on('click', function(event){
     		event.preventDefault();
@@ -479,21 +471,6 @@ define(function(require, exports) {
     		event.preventDefault();
     		$(this).closest('tr').remove();
     	});
-    	//绑定操作计划新增事件
-    	$tab.find('.T-action-plan').on('click', '.T-add-action', function(event){
-    		event.preventDefault();
-    		var $that = $(this).prop('disabled', true), 
-    			type = $that.data('type');
-
-    		tripPlan.addActionPlan($tab, $that.text(), type);
-    	});
-    	//绑定操作计划删除事件
-    	$tab.find('.T-action-plan-list').on('click', '.T-delete', function(event){
-    		event.preventDefault();
-    		var $that = $(this).closest('.hct-plan-ask').remove();
-
-    		$tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
-    	});	
 
     	// 保存
     	$tab.find('.T-savePlan').on('click', function(event) {
@@ -784,7 +761,7 @@ define(function(require, exports) {
 		.on('click', function(event) {
 			event.preventDefault();
 			if ($target.data('ajax')) {
-				$target.autocomplete('search', $target.val());
+				$target.autocomplete('search', '');
 			}
 		});
 	};
@@ -793,7 +770,7 @@ define(function(require, exports) {
 	tripPlan.addTouristGroup = function(lineProductId,startTime,$tab){
 		//添加游客小组 （多选）			
 		var excludeIdJson = [];
-		$tab.find(".touristGroup-list tr").each(function(i){
+		$tab.find(".T-touristGroup-list").children('tr').each(function(i){
 			var excludeId = {
 				id : $(this).data("id")
 			};
