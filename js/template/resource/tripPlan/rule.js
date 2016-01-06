@@ -168,6 +168,110 @@ define(function(require, exports) {
 				);
 		});
 
+		//餐饮校验
+		$container.find('#tripPlan_addPlan_restaurant').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			if(!$tr.attr('data-entity-arrangeid')){
+				settings.push(
+					{//餐厅
+						$ele: $tr.find('input[name="restaurantName"]'),
+						$valObj: $tr.find('input[name="restaurantId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '餐厅不能为空'
+							}
+						]
+					}
+				);
+			}
+		});
+
+		//购物校验
+		$container.find('#tripPlan_addPlan_shop').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			if(!$tr.attr('data-entity-arrangeid')){
+				settings.push(
+					{//购物店
+						$ele: $tr.find('input[name="name"]'),
+						$valObj: $tr.find('input[name="shopId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '购物店不能为空'
+							}
+						]
+					},
+					{//商品
+						$ele: $tr.find('input[name="goodsPolicy"]'),
+						$valObj: $tr.find('input[name="shopPolicyId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '商品不能为空'
+							}
+						]
+					}
+				);
+			}
+		});
+
+		//自费校验
+		$container.find('#tripPlan_addPlan_selfPay').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			if(!$tr.attr('data-entity-arrangeid')){
+				settings.push(
+					{//自费商家
+						$ele: $tr.find('input[name="name"]'),
+						$valObj: $tr.find('input[name="selfPayId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '自费商家不能为空'
+							}
+						]
+					}
+				);
+			}
+		});
+
+		//票务校验
+		$container.find('#tripPlan_addPlan_ticket').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			if(!$tr.attr('data-entity-arrangeid')){
+				settings.push(
+					{//自费商家
+						$ele: $tr.find('input[name="name"]'),
+						$valObj: $tr.find('input[name="ticketId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '票务公司不能为空'
+							}
+						]
+					}
+				);
+			}
+		});
+
+		//保险校验
+		$container.find('#tripPlan_addPlan_insurance').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			if(!$tr.attr('data-entity-arrangeid')){
+				settings.push(
+					{//保险公司
+						$ele: $tr.find('input[name="insuranceName"]'),
+						$valObj: $tr.find('input[name="insuranceId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '保险公司不能为空'
+							}
+						]
+					}
+				);
+			}
+		});
 		return settings;   
 	};
 
