@@ -4,10 +4,11 @@
 
 var FinancialService = {};
 
-FinancialService.initPayEvent = function($container)  {
+FinancialService.initPayEvent = function($container,rule)  {
     var currDate = new Date();
     var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
+    var $card = $container.find('input[name="card-number"]').val();
     $container.find('input[name="tally-date"]').datetimepicker({
         autoclose:true,
         todayHighlight:true,
@@ -22,8 +23,10 @@ FinancialService.initPayEvent = function($container)  {
             }
         },
         select :function(event, ui){
+
              $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
              $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
+
         }
     }).one("click", function(){
         var $that = $(this);
@@ -55,13 +58,15 @@ FinancialService.initPayEvent = function($container)  {
         })
     })
     .on('click', function() {
+
         $(this).autocomplete('search', '');
     });
-
     $container.find('select').on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
-
+        if(val == 1){
+            var check =  new FinRule(5).check($card.closest('div'));
+        }
         $card.closest('div').toggleClass('hidden', val != 1);
     }).trigger('change');
 };
@@ -304,6 +309,8 @@ FinancialService.isClearSave = function($tab,rule){
  * @return {[type]}      [description]
  */
 FinancialService.autoPayJson = function(id,$tab,rule, type){
+    var check =  new FinRule(5).check($tab);
+    if(!check.form()){ return false; }
     var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
@@ -542,6 +549,17 @@ FinRule.prototype.check = function($obj) {
                             type: 'le',
                             errMsg: '本次收款金额不能超过未收金额'
                         }
+                    ]
+                }]);
+                case 5: // 银行账号
+            return $obj.formValidate([
+                {   
+                    $ele: $obj.find('input[name=card-number]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '银行账号不能为空'
+                        },
                     ]
                 }]);
         default:
