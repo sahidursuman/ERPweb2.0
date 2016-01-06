@@ -1,3 +1,8 @@
+/*common*/
+.w100 {
+    width: 100px;
+}
+
 .table-special {
     padding: 0!important;
     width: 100%;
@@ -94,6 +99,9 @@ input {
     overflow-y: auto;
 }
 
+#desc-tooltip-containter2 .popover {
+    max-width: 600px;
+}
 
 /**
  * 重写翻页插件的样式
@@ -415,6 +423,14 @@ table tr td {
 
 .mar-l-15 {
     margin-left: 15px;
+}
+
+.pad-0 {
+    padding: 0;
+}
+
+.pad-0-I {
+    padding: 0 !important;
 }
 
 .pad-l-5 {
@@ -956,7 +972,10 @@ select {
     line-height: 10px;
     padding-top: 3px;
 }
-
+.nav-tabs >li >a.pad-lr-30{
+    padding-right: 30px;
+    padding-left: 30px;
+}
 
 /**
  * public style
@@ -2075,6 +2094,21 @@ p#back-top a span {
 .tripplan-area .fa-times {
     color: red;
     cursor: pointer;
+}
+
+.tripplan-area .warning-text {
+    color: #FF9900;
+    text-align: center;
+}
+
+.tripplan-area .success-text {
+    color: #009900;
+    text-align: center;
+}
+
+.tripplan-area .error-text {
+    color: #ff0000;
+    text-align: center;
 }
 
 .info > .row {

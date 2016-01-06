@@ -1047,7 +1047,8 @@ var _statusText = {
 	}
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
-	$('#desc-tooltip-containter').hover(function() {
+	$('body').append('<div id="desc-tooltip-containter2"></div>');
+	$('#desc-tooltip-containter, #desc-tooltip-containter2').hover(function() {
 		$(this).data('focus-in', true);
 	}, function() {
 		$(this).data('focus-in', false).html('');
@@ -1055,7 +1056,8 @@ var _statusText = {
 })(jQuery);
 
 var Tools = {
-	$descContainer: $('#desc-tooltip-containter')
+	$descContainer: $('#desc-tooltip-containter'),
+	$descContainer2: $('#desc-tooltip-containter2'),
 };
 
 /**
@@ -1121,7 +1123,6 @@ Tools.getTableVal = function($tbody, idName) {
 		});
 	}
 
-	console.info(res);
 	return res;
 };
 
@@ -1149,7 +1150,7 @@ Tools.descToolTip = function($elements,type, placement) {
 			}else if (type == 2) {
 				options = {
 					trigger: 'manual',
-					container: '#desc-tooltip-containter',
+					container: '#desc-tooltip-containter2',
 					content: html,
 					html : true
 				};
@@ -1174,8 +1175,15 @@ Tools.descToolTip = function($elements,type, placement) {
 					}
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
-						if (Tools.$descContainer.data('focus-in') != true)  {
-							$that.popover('hide');
+						if (type === 2) {
+							if (Tools.$descContainer2.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+						} else {
+							if (Tools.$descContainer.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+
 						}
 					}, 100);
 				});
@@ -1568,7 +1576,8 @@ Tools.addDay = function(date, days) {
 		}
 		var timer = date.getTime()+ days*24*60*60*1000;
 		date.setTime(timer);
-		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+		var month = date.getMonth() + 1, day = date.getDate();
+		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
 
 	return date;
@@ -1824,12 +1833,43 @@ KingServices.updateQuoteToOffer = function(id){
 		module.updateQuoteToOffer(id);
 	});
 }
-
-
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
 		module.addPartnerAgency(fn);
+	});
+}
+
+//购物自费多选和浮动显示
+KingServices.shopMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.shopMultiselect($this);
+	});
+}
+KingServices.viewOptionalShop = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalShop($this);
+	});
+}
+KingServices.selfPayMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewOptionalSelfPay = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalSelfPay($this);
+	});
+}
+//景区多选和浮动显示
+KingServices.chooseScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.chooseScenic($this);
+	});
+}
+KingServices.viewOptionalScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.viewOptionalScenic($this);
 	});
 }
 
@@ -2015,3 +2055,11 @@ KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
 };
+
+//内部模板
+KingServices.inlineTemplate = function(source, option) {
+	var s = source,
+		render = template.compile(s),
+		html = render(option);
+	return html;
+}

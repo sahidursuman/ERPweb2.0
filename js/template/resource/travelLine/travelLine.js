@@ -13,6 +13,8 @@ define(function(require, exports) {
 		scanDetailTemplate = require("./view/scanDetail"),
 		viewLineDayTemplate = require("./view/viewDetail"),
 		updateTemplate = require("./view/update"),
+		travelOPtionTemplate = require("./view/travelOPtion"),
+		scenicItemTemplate = require("./view/scenicItem"),
 		scheduleDialogWidth = '950px',
 		EDITOR_HEIGHT = 200;
 
@@ -34,7 +36,7 @@ define(function(require, exports) {
 	 * @param  {int} page 页码
 	 * @return {[type]}      [description]
 	 */
-	ResTravelLine.getList = function(page) {
+	ResTravelLine.getList = function(page) { 
 		var args = {
 			pageNo: (page || 0),
 			status: 1
@@ -120,7 +122,14 @@ define(function(require, exports) {
 			event.preventDefault();
 			ResTravelLine.add();
 		});
-		
+		//取消新建模板
+		// $searchArea.find('.T-btn-delete').on('click', function(event) {
+		// 	event.preventDefault();
+		// 	ResTravelLine.cancelBtn();
+		// });
+
+	
+
 		// 报表内的操作
 		ResTravelLine.$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -144,6 +153,9 @@ define(function(require, exports) {
 			} else if ($that.hasClass('T-delete'))  {
 				// 删除
 				ResTravelLine.delete(id);
+			}else if($that.hasClass('T-btn-delete')){
+				// 取消
+				ResTravelLine.cancelBtn(id);
 			}
 		});
 	};
@@ -186,6 +198,7 @@ define(function(require, exports) {
 				}
 			});
 		}
+
 	};
 
 	/**
@@ -349,17 +362,28 @@ define(function(require, exports) {
 			event.preventDefault();
 			ResTravelLine.CU_Schedule($tab);
 		});
+		//删除日程
+		$tab.find('.T-schedule-list').on('click', '.T-action', function() {
+			var $this = $(this);
+			if ($this.hasClass('T-delete')) {
+				ResTravelLine.deleteSchedule($this);
+			}else if ($this.hasClass('T-details')) {
+				ResTravelLine.updateDetails($this);
 
-		// 表内操作
-		$tab.find('.T-schedule-list').on('click', '.T-action', function(event) {
-			event.preventDefault();
-			var $that = $(this), $tr = $that.closest('tr');
-
-			if ($that.hasClass('T-update')) {
-				ResTravelLine.CU_Schedule($tab, $tr);
-			} else if ($that.hasClass('T-delete')) {
-				ResTravelLine.deleteSchedule($tr);
 			}
+			
+		})
+
+		//取消操作  T-btn-cancel
+		$tab.find(".T-btn-cancel").on('click', function(event) {
+			event.preventDefault();
+			Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+		});
+
+		// 景点初始化
+		$tab.find('.T-schedule-list').on('click', '.T-chooseScenic', function(event) {
+			var $this = $(this);
+			ResTravelLine.chooseScenic($this);
 		});
 		// 保存
 		$tab.find('.T-btn-save').on('click', function(event) {
@@ -373,36 +397,44 @@ define(function(require, exports) {
 	 * @param {object} $tab 父元素
 	 * @param {object} $tr 现有记录的行元素
 	 */
-	ResTravelLine.CU_Schedule = function($tab, $tr) {
-		var title = '新增日程' , data = {}, $tbody = $tab.find('.T-schedule-list'), time = (new Date()).getTime();
-
-		if (!!$tr) {
-			title = '修改日程';
-
-			data = {
-				whichDay: $tr.data('id') + 1,
-				hotelLevel: $tr.find('input[name="hotelLevel"]').val(),
-				title: $tr.children('td').eq(4).text(),
-				hotelAddr: $tr.children('td').eq(2).text(),
-				roadScenic: $tr.find('input[name="roadScenic"]').val(),
-				repastDetail: $tr.children('td').eq(1).text(),
-				description:  $tr.find('input[name="description"]').val()
-			}
+	ResTravelLine.CU_Schedule = function($tab) {
+		var day = {}, $tbody = $tab.find('.T-schedule-list'),
+			$tr = $tbody.find('tr');
+		if ($tr.length == 0) {
+			day.whichDay = 1
 		} else {  // 新增
-			for (var i = 0, $rows = $tbody.children('tr'), len = $rows.length, next = len; i < len ; i ++ )  {
-				if ($rows.eq(i).data('id') != i)  {
-					next = i;   // 第几天
+			for (var i = 0, len = $tr.length, next = len; i < len+1 ; i ++ )  {
+				if ($tr.eq(i).data('day') != i)  {
+					next = i+1;   // 第几天
 					break;
 				}
 			}
-
-			data.whichDay = next + 1;
-			data.hotelLevel = 0;
+			day.whichDay = next;
 		}
+		var dataId = day.whichDay-1
+		var html =  '<tr data-day="'+ dataId +'"><td>第' + day.whichDay +'天</td>"'+
+					'<td><input class="col-sm-12" name="BriefTrip" /></td>'+
+					'<td style="width:205px;"><label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast" /><span class="lbl">&nbsp;早餐</span></label>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-lunch" value="2" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-dinner" value="2" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label></td>'+
+					'<td><input class="col-sm-12" name="LodgingPlace" /></td>'+
+					'<td><input class="col-sm-12 T-chooseScenic" placeholder="多选" readonly="readonly" name="chooseScenic" /></td>'+
+					'<td style="width:150px"><div class="btn-group"><a class="cursor T-action T-details">编辑行程详情</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>'
+					'</tr>';
+		if ($tr.length == 0) {
+			$tbody.append(html);
+		}else if ($tr.eq(0).data('day') == 0){
+			$tr.eq(day.whichDay-2).after(html);
+		}else{
+			$tbody.prepend(html)
+		}
+	};
 
+	// 编辑行程详情
+	ResTravelLine.updateDetails = function($this){
+		var title = '<span class="necessary">*</span>编辑行程详情',data={},time = (new Date()).getTime();
 		data.time = time;
-
-		var addScheduleLayer = layer.open({
+		var updateDetailsLayer = layer.open({
 			type: 1,
 			title: title,
 			skin: 'layui-layer-rim', //加上边框
@@ -410,78 +442,239 @@ define(function(require, exports) {
 			zIndex:1029,
 			content: addScheduleTemplate(data),
 			success:function(){
+				data.description = $this.data('entity-content');
 				var $form = $('.T-schedule-form'), dayCheckor = rule.travelLineDayCheckor($form),
-					ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
-
+				ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
 				if (!! data.description) {
 					ue.ready(function(){
 						ue.setContent(decodeURIComponent(data.description));
 					});
-				}
-
-				$form.find(".T-btn-submit").click(function(){
-					// 数据校验
-					if (!dayCheckor.form()) return;
-
-					
-					var schedule = [], tmp, description = encodeURIComponent(ue.getContent());
-
-					if (description.trim() == "") {
-						showMessageDialog($( "#confirm-dialog-message" ), "请输入行程详情");
-						return false;
-					}
-					if(ue.getContentTxt().length > 10000){
-						showMessageDialog($( "#confirm-dialog-message" ), "行程详情输入过长");
-						return false;
-					}
-					schedule.push('<td>第' + data.whichDay + '天</td>');
-					schedule.push('<td>' + $form.find('input[name="repastDetail"]').val() + '</td>');
-					schedule.push('<td>'+ $form.find('input[name="restPosition"]').val()  +'</td>');
-					tmp = $form.find("select[name=hotelLevel]").val();
-					schedule.push('<td>'+ KingServices.getHotelDesc(tmp) +'</td>');
-					schedule.push('<td>'+  $form.find("input[name=title]").val() +'</td>');
-					schedule.push('<td style="width:120px"><div class="btn-group"><a class="cursor T-action T-update">修改</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>');
-					schedule.push('<input type="hidden" name="hotelLevel" value="'+ tmp + '"/>');
-					schedule.push('<input type="hidden" name="roadScenic" value="'+ $form.find("input[name=roadScenic]").val() + '"/>');
-					schedule.push('<input type="hidden" name="description" value="'+ description + '"/>');
-					schedule.push('</td>');
-
-					// 添加或者更新日程
-					schedule = schedule.join('');
-					if (!!$tr) {
-						$tr.html(schedule).removeClass('hidden');
-					} else {
-						var newTr = '<tr data-id="'+ (data.whichDay -1) +'">' + schedule + '</tr>';
-						if (i < len) {
-							$(newTr).insertBefore($rows.eq(i));
-						} else {
-							$tab.find('.T-schedule-list').append(newTr);
-						}
-					}
-
-					layer.close(addScheduleLayer);
-				});
+				}		
+				
+				var $container = $(".T-schedule-form");
+				//给提交按钮绑定事件
+                $container.find(".T-btn-submit").on('click' , function() {
+                	var content = encodeURIComponent(UE.getEditor($container.find('.T-editor').prop('id')).getContent())
+                	$this.data('entity-content', content)
+                   	layer.close(updateDetailsLayer);
+                });
+				// 取消按钮绑定事件
+				$container.find(".T-btn-delete").off('click').on('click', function() {
+                   layer.close(updateDetailsLayer);
+                });
 			}
 		})
 	};
 
 	/**
+	 * 线路模板景区多选
+	 * @param  {[type]} $this [对象]
+	 * @return {[type]}       [description]
+	 */
+	ResTravelLine.chooseScenic = function($this) {
+		var html = travelOPtionTemplate(),$inputJson = $this.data("propover");
+		if (!!$inputJson && typeof $inputJson === "string") {
+			$inputJson = JSON.parse($inputJson);
+		}
+		var multiselectLayer = layer.open({
+            type: 1,
+            title: "景点选择",
+            skin: 'layui-layer-rim', //加上边框
+            area: '1190px', //宽高
+            zIndex: 1028,
+            content: html,
+            scrollbar: false,
+            success: function(data) {
+				var $container = $(".T-scenic-multiselect"),
+                	$list = $container.find('.T-Scenic-content'),
+                	scenicArray = [];
+
+            	//给提交按钮绑定事件
+                $container.find(".T-btn-sureSubmit").on('click' , saveScenic);
+                //给取消按钮绑定事件
+                $container.find(".T-btn-cancelOption").click(function() {
+                    layer.close(multiselectLayer);
+                });
+
+            	scenicArray = $inputJson || [];
+            	listChooseScenic(0);
+
+            	function listChooseScenic(page,itemName) {
+	            	$.ajax({
+	            		url: KingServices.build_url('scenic','findScenicAndItem'),
+	            		type: 'POST',
+	            		data: {
+	            			pageNo: page,
+	            			itemName: itemName,
+	            			sortType: ''
+	            		},
+	            		success: function(data) {
+	            			if (showDialog(data)) {
+	            				data.scenicList = JSON.parse(data.scenicList);
+	            				var content = scenicItemTemplate(data)
+	            				$list.html(content);
+	            				$(window).trigger("resize");
+
+								// 绑定翻页组件
+								laypage({
+								    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+								    pages: data.totalPage, //总页数
+								    curr: (page + 1),
+								    jump: function(obj, first) {
+								    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+								    		listChooseScenic(obj.curr -1);
+								    	}
+								    }
+								});	
+
+								//翻页自动勾选已选自费项目
+								var $tr = $list.find('tr');
+								if (!!scenicArray.length) {
+									for (var i = 0, len = scenicArray.length; i < len; i++) {
+										for (var k = 0, itemLen = scenicArray[i].item.length; k < itemLen; k++) {
+											$tr.each(function(j) {
+												var $id = $tr.eq(j).find('[name=itemId]').val();
+												if (scenicArray[i].item[k].itemId == $id) {
+													$tr.eq(j).find('.T-add').prop('checked',true);
+												}
+											});
+										}
+									}
+								}
+
+								//添加/删除自选
+								$container.find(".T-add").off('click').on('click', addScenic);
+	            			}
+	            		}
+	            	});
+            	}
+            	//添加自选函数
+	        	function addScenic(){
+	        		var $that = $(this),$parent = $that.closest('tr'),
+						$scenicId = $parent.data("entity-id"),
+						$name = $parent.data("entity-name"),
+						$itemId = $parent.find('[name=itemId]').val(),
+						$itemName = $parent.data("entity-itemname");
+					if (scenicArray.length == 0) {
+						var json = {
+							scenicId: $scenicId,
+							name: $name,
+							item: [{
+								itemId: $itemId,
+								itemName: $itemName
+							}]
+						}
+						scenicArray.push(json);
+					}else{
+						for (var i = 0,len = scenicArray.length; i < len; i++) {
+		        			if (scenicArray[i].scenicId == $scenicId) {
+		        				for (var j = 0, itemLen = scenicArray[i].item.length; j < itemLen; j++) {
+		        					if (scenicArray[i].item[j].itemId == $itemId) {
+		        						scenicArray[i].item.splice(j,1);
+		        						if (scenicArray[i].item.length == 0) {
+		        							scenicArray.splice(i,1)
+    										return;
+		        						}
+    									return;
+		        					}
+		        				}
+		        			}
+		        		}
+		        		var a = 0;
+		        		for (var i = 0,len = scenicArray.length; i < len; i++) {
+		        			if (scenicArray[i].scenicId == $scenicId) {
+		        				a = i+1;
+		        				break;
+		        			}
+		        		}
+		        		if (a == 0) {
+		        			var json = {
+								scenicId: $scenicId,
+								name: $name,
+								item: [{
+									itemId: $itemId,
+									itemName: $itemName
+								}]
+							}
+							scenicArray.push(json);
+		        		} else {
+		        			var itemJson = {
+		        				itemId: $itemId,
+		        				itemName: $itemName
+		        			}
+		        			scenicArray[a-1].item.push(itemJson);
+		        		}
+	        		}
+	        	};
+	        	//保存函数
+	        	function saveScenic(type){
+	        		var optionalJson = scenicArray;
+	        		optionalJson = JSON.stringify(optionalJson);
+	        		$this.data("propover" , optionalJson);
+	        		if (type == 1) {}else{
+	        			layer.close(multiselectLayer);
+	        		}
+					ResTravelLine.viewOptionalScenic($this);
+	        	};
+            }
+        })
+	}
+	/**
+	 * 浮动查看景点多选
+	 * @param  {[type]} $objInput [对象]
+	 * @return {[type]}           [description]
+	 */
+	ResTravelLine.viewOptionalScenic = function($objInput){
+		$objInput.each(function(){
+			var $this = $(this),$parents = $this.closest('.form-group'),$title = [],$value = $this.data("propover");
+			if (!!$value && typeof $value === "string") {
+				$value = JSON.parse($value);
+			}
+			console.log($value)
+			if (!!$value && $value.length > 0) {
+				var inputValue = '',
+					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">景点</th><th class="th-border">收费项目</th></tr><tbody>';
+				for (var i = 0; i < $value.length; i++) {
+					var itemName = '';
+					for (var j = 0, len = $value[i].item.length; j < len; j++) {
+						if (j == len - 1) {
+							itemName += $value[i].item[j].itemName;
+						}else{
+							itemName += $value[i].item[j].itemName + '、';
+						}
+					}
+					if (i == $value.length -1) {
+						inputValue += $value[i].name + '(' + itemName + ')';
+					}else{
+						inputValue += $value[i].name + '(' + itemName + ')、  ';
+					}
+					html += '<tr><td>'+$value[i].name+'</td><td>'+itemName+'</td></tr>'
+				};
+				html += '</tbody></table>';
+				$this.data("html",html);
+				$this.val(inputValue);
+				Tools.descToolTip($this,2);
+				$this.data('bs.popover').options.content = html;
+			}
+		})
+	}
+  
+	/**
 	 * 删除日程
 	 * @param  {object} $tr 列对象
 	 * @return {[type]}     [description]
 	 */
-	ResTravelLine.deleteSchedule = function($tr) {
-		if (!!$tr && $tr.length)  {
+	ResTravelLine.deleteSchedule = function($this) {
+		var $tr = $this.closest('tr'), id = $tr.data('entity-id');
+		if (!!id)  {
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				if (!!$tr.data('entity-id')) {
-					$tr.addClass('deleted').fadeOut(function(){
-						$tr.addClass('hidden');
-					});
-				} else {
-					$tr.fadeOut(function(){
-						$tr.remove();
-					});
-				}
+				$tr.addClass('deleted').fadeOut(function(){
+					$tr.addClass('hidden');
+				});
+			});
+		}else{
+			$tr.fadeOut(function(){
+				$tr.remove();
 			});
 		}
 	};
@@ -497,10 +690,10 @@ define(function(require, exports) {
 	ResTravelLine.save = function($tab, validator, tab_array) {
 		if (!validator.form()) return;
 
-		if (!ResTravelLine.isScheduleInOrder($tab)) {
-			showMessageDialog($( "#confirm-dialog-message" ), '日程安排不连续，请您补充完整!');
-			return;
-		}
+		// if (!ResTravelLine.isScheduleInOrder($tab)) {
+		// 	showMessageDialog($( "#confirm-dialog-message" ), '日程安排不连续，请您补充完整!');
+		// 	return;
+		// }
 		var args = $tab.find('.T-main-form').serializeJson();
 
 		// 启用标志
@@ -518,14 +711,22 @@ define(function(require, exports) {
 			} else {
 				var $feilds = $tr.children('td'),
 					schedule = {
-						whichDay: $tr.data('id') + 1,
-						repastDetail: $feilds.eq(1).text(),
-						restPosition: $feilds.eq(2).text(),
-						title: $feilds.eq(4).text(),
-						hotelLevel: $tr.find("input[name=hotelLevel]").val(),
-						roadScenic: $tr.find("input[name=roadScenic]").val(),
-						detail: $tr.find("input[name=description]").val(),
+					   	whichDay: $tr.data('id') + 1,
+						// repastDetail: $feilds.eq(1).text(),
+						// restPosition: $feilds.eq(2).text(),
+						// title: $feilds.eq(4).text(),
+						// hotelLevel: $tr.find("input[name=hotelLevel]").val(),
+						// roadScenic: $tr.find("input[name=roadScenic]").val(),
+						// detail: $tr.find("input[name=description]").val(),
+						BriefTrip:$tr.find("input[name=BriefTrip]").val(),
+						breakfast:$tr.find("input[name=breakfast]").val(),
+						lunch:$tr.find("input[name=lunch]").val(),
+						dinner:$tr.find("input[name=dinner]").val(),
+						LodgingPlace:$tr.find("input[name=LodgingPlace]").val(),
+						chooseScenic:$tr.find("input[name=chooseScenic]").val()	  
 					};
+					// var schedule = JSON.stringify(schedule);
+					  
 				if (!!id)  {
 					schedule.id = id;
 				}
@@ -537,7 +738,6 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), '至少录入一天的日程!');
 			return;
 		}
-
 		args.travelLineJsonAdd = JSON.stringify(addJson);
 		args.travelLineJsonDel = JSON.stringify(delJson);
 
@@ -587,4 +787,6 @@ define(function(require, exports) {
 
 	// 暴露方法
 	exports.init = ResTravelLine.initModule;
+	exports.chooseScenic = ResTravelLine.chooseScenic;
+	exports.viewOptionalScenic = ResTravelLine.viewOptionalScenic;
 });
