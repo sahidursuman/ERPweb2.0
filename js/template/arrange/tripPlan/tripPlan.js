@@ -448,9 +448,33 @@ define(function(require, exports) {
         //绑定操作计划删除事件
         $tab.find('.T-action-plan-list').on('click', '.T-delete', function(event){
             event.preventDefault();
-            var $that = $(this).closest('.hct-plan-ask').remove();
+            var $that = $(this), $require = $that.closest('.hct-plan-ask'),
+            	title = $require.find('.hct-plan-ask-title').text(),
+            	id = $require.data('id');
 
-            $tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
+			if (!!id) {
+				showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
+					$.ajax({
+						url: KingServices.build_url('tripPlan', 'deleteTripPlanRequire'),
+						type: 'post',
+						data: {requireId: id},
+					})
+					.done(function(data) {
+						if (showDialog(data)) {
+							showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+								removeRequire();
+							});
+						}
+					});
+				})
+			} else {
+				removeRequire();
+			}
+
+			function removeRequire() {
+				$tab.find('.T-action-plan').find('[data-type="'+ $require.data('type')+'"]').prop('disabled', false);
+				$require.remove();
+			}
         });
 
         //绑定行程表内事件
@@ -489,6 +513,12 @@ define(function(require, exports) {
     			KingServices.chooseScenic($that);
     		}
     	});
+
+		// 取消
+		$tab.find('.T-cancelPlan').on('click', function(event) {
+			event.preventDefault();
+			Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+		});
 	};
 
 	tripPlan.savePlanData = function($tab){
