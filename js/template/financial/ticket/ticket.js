@@ -217,6 +217,15 @@ define(function(require, exports) {
 		//给全选按钮绑定事件: 未去重
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
+        //导出报表事件 btn-hotelExport
+        $tab.find(".T-btn-export").click(function(){
+            var args = { 
+                    startDate: $tab.find('.T-search-start-date').val(),
+                    endDate: $tab.find('.T-search-end-date').val()
+                };
+            FinancialService.exportReport(args,"ticket");
+        });
+
 		$tab.find(".T-btn-close").on('click', function(event){
 			event.preventDefault();
 			FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
@@ -606,6 +615,12 @@ define(function(require, exports) {
 	        if(!reciveValidtor.form()){
 	    		return;
 	        }
+        }
+        var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+        if(sumPayMoney != sumListMoney){
+            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+            return false;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json && json.length) {

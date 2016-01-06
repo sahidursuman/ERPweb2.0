@@ -250,7 +250,7 @@ define(function(require, exports) {
         //导出报表事件
         Client.$checkSearchArea.find('.T-btn-export').on('click', function(event){
             event.preventDefault();
-                var $btn = $tab.find('.T-saveClear'),
+            var $btn = $tab.find('.T-saveClear'),
                 $datePicker = Client.$checkSearchArea.find('.date-picker'),
                 args = {
                     fromPartnerAgencyId: $tab.data("id"), 
@@ -261,8 +261,10 @@ define(function(require, exports) {
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
                 };
-                Client.exportReport(args);
-            });
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+            args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
+            FinancialService.exportReport(args,"exportPartnerAgencyFinancial");
+        });
 
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
@@ -576,9 +578,10 @@ define(function(require, exports) {
         var old = $that.data('old') || 0,
             curr = $that.val() * 1,            
             spread = curr - old,
-            sum = (Client.$sumUnReceivedMoney.val() || 0) * 1;
+            sum = (Client.$sumUnReceivedMoney.data("money") || 0) * 1;
         
         Client.$sumUnReceivedMoney.val(sum + spread);
+        Client.$sumUnReceivedMoney.data("money",sum + spread);
 
         $that.data('old', curr);
     }
@@ -788,11 +791,17 @@ define(function(require, exports) {
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
-		var JsonStr = Client.clearDataArray 
+		var JsonStr = Client.clearDataArray; 
         if(JsonStr.length==0){
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
+        var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
+            sumList = parseFloat(Client.$sumUnReceivedMoney.data("money"));
+        if(sum != sumList){
+            showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+            return false;
+        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
@@ -999,16 +1008,6 @@ define(function(require, exports) {
         });        
     };
 
-    Client.exportReport = function(args){
-        args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-        args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
-        var str = '';
-        for(var i in args){
-            str += "&" + i + "=" + args[i];
-        }
-        exportXLS(KingServices.build_url('export', 'exportPartnerAgencyFinancial') + str);
-    };
-
     function getBaseArgs($tab, isAuto) {
         var id = $tab.find('.T-search-enter').data('id'),
             args = {};
@@ -1017,6 +1016,7 @@ define(function(require, exports) {
             if(!args)return false;
         }
         args = {
+            otaOrderNumber : $tab.find('.T-search-number').val(),
             creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),

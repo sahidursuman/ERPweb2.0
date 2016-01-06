@@ -305,6 +305,15 @@ define(function(require, exports){
 			FinancialService.updateUnpayMoney($tab, new FinRule(0));
 			//给全选按钮绑定事件
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+
+        	//导出报表事件 btn-hotelExport
+	        $tab.find(".T-btn-export").click(function(){
+	            var args = { 
+	                    startDate: $tab.find('.T-search-start-date').val(),
+	                    endDate: $tab.find('.T-search-end-date').val()
+	                };
+	            FinancialService.exportReport(args,"shop");
+	        });
 		}
 
 		// 报表内的操作
