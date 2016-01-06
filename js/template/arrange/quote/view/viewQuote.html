@@ -7,7 +7,7 @@
 				</h5>
             <div class="pull-right line-bluer line-separated"></div>
             <div style="clear: both"></div>
-            <div class="widget-body" style="border: 1px solid #DDD;line-height:30px;width: 98%;margin: auto;padding-top: 6px;height:45px;">
+            <div class="widget-body" style="border: 1px solid #DDD;line-height:24px;width: 98%;margin: auto;padding-top: 12px;">
                 <div class="widget-main">
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
@@ -32,6 +32,20 @@
                         <div class="col-sm-1">
                             <label class="control-label"> {{if quoteDetailJson.lineProduct.customerType == 1}} 团体 {{else}} 散客 {{/if}}</label>
                         </div>
+                    </div>
+                    <div class="form-group">
+                    {{if !!quoteDetailJson.lineProduct.shopNames}}
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.shopIds}}">
+                        </div>
+                    {{/if}}
+                    {{if !!quoteDetailJson.lineProduct.selfPayItemNames}}
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.selfPayItemIds}}">
+                        </div>
+                    {{/if}}
                     </div>
                 </div>
             </div>
@@ -181,9 +195,9 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        {{if guideArrange != null}}
-                                                        <td>{{guideArrange.price}}</td>
-                                                        <td>{{guideArrange.remark}}</td>
+                                                        {{if guideQuote != null}}
+                                                        <td>{{guideQuote.price}}</td>
+                                                        <td>{{guideQuote.remark}}</td>
                                                         {{else}}
                                                         <td></td>
                                                         <td></td>
@@ -215,10 +229,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{each insuranceArrange as rs}}
+                                                    {{each insuranceQuote as rs}}
                                                     <tr>
                                                         <td>{{rs.insurance.name}}</td>
-                                                        <td>{{rs.type}}</td>
+                                                        <td>{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}</td>
                                                         <td>{{rs.quotePrice}}</td>
                                                         <td>{{rs.price}}</td>
                                                         <td>{{rs.remark}}</td>
@@ -253,10 +267,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{each busCompanyArrange as rs}}
+                                                    {{each busCompanyQuote as rs}}
                                                     <tr>
-                                                        <td>{{rs.bus.seatCount}}</td>
-                                                        <td>{{rs.bus.brand}}</td>
+                                                        <td>{{rs.seatCount}}</td>
+                                                        <td>{{rs.brand}}</td>
                                                         <td>{{rs.busCompany.companyName}}</td>
                                                         <td>{{rs.busCompany.managerName}}</td>
                                                         <td>{{rs.busCompany.mobileNumber}}</td>
@@ -312,7 +326,7 @@
                                                             <div class="timeline-container T-timeline-container">
                                                                 <div class="timeline-items T-timeline-detail-container">
                                                                     <!-- /.餐饮列表 -->
-                                                                    {{each viewQuoteDaysList.restaurantArrange as restaurantList}}
+                                                                    {{each viewQuoteDaysList.restaurantQuote as restaurantList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -351,7 +365,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.酒店 -->
-                                                                    {{if viewQuoteDaysList.hotelArrange.length > 0}}
+                                                                    {{if viewQuoteDaysList.hotelQuote.length > 0}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -374,7 +388,7 @@
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
-                                                                                            {{each viewQuoteDaysList.hotelArrange as hotelList}}
+                                                                                            {{each viewQuoteDaysList.hotelQuote as hotelList}}
                                                                                             <tr>
                                                                                                 <td>
                                                                                                     {{if hotelList.hotel.level == 1}} 三星以下 {{else if hotelList.hotel.level == 2}} 三星 {{else if hotelList.hotel.level == 3}} 准四星 {{else if hotelList.hotel.level == 4}} 四星 {{else if hotelList.hotel.level == 5}} 准五星 {{else if hotelList.hotel.level == 6}} 五星 {{else}} 五星以上 {{/if}}
@@ -398,7 +412,7 @@
                                                                     </div>
                                                                     {{/if}}
                                                                     <!-- /.景区 -->
-                                                                    {{each viewQuoteDaysList.scenicArrange as scenicList}}
+                                                                    {{each viewQuoteDaysList.scenicQuote as scenicList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -435,7 +449,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.购物 -->
-                                                                    {{each viewQuoteDaysList.shopArrange as shopList}}
+                                                                    {{each viewQuoteDaysList.shopQuote as shopList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -472,7 +486,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.自费 -->
-                                                                    {{each viewQuoteDaysList.selfPayArrange as selfPayList}}
+                                                                    {{each viewQuoteDaysList.selfPayQuote as selfPayList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -512,7 +526,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.交通 -->
-                                                                    {{each viewQuoteDaysList.ticketArrange as ticketList}}
+                                                                    {{each viewQuoteDaysList.ticketQuote as ticketList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -555,7 +569,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.其它 -->
-                                                                    {{each viewQuoteDaysList.otherArrange as otherList}}
+                                                                    {{each viewQuoteDaysList.otherQuote as otherList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>

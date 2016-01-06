@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":617,"md5":"25c6427317bd29aef4c5c033c59ae4f4"}*/
+/*TMODJS:{"debug":true,"version":618,"md5":"25c6427317bd29aef4c5c033c59ae4f4"}*/
 define(function(require) {
     return require("../../../template")("arrange/quote/view/addQuote", function($data, $filename) {
         try {

@@ -172,20 +172,20 @@ define(function(require, exports) {
 				if (result) {	
 
 					console.info(data);
-					var busCompanyArrange = JSON.parse(data.busCompanyArrange);
-                    data.busCompanyArrange=busCompanyArrange;
+					var busCompanyQuote = JSON.parse(data.busCompanyQuote);
+                    data.busCompanyQuote=busCompanyQuote;
 
-					var guideArrange = JSON.parse(data.guideArrange);
-					data.guideArrange=guideArrange;
+					var guideQuote = JSON.parse(data.guideQuote);
+					data.guideQuote=guideQuote;
 
-					var insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.insuranceArrange=insuranceArrange;
+					var insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.insuranceQuote=insuranceQuote;
 
 					var daysList = JSON.parse(data.daysList);
 					data.daysList=daysList;
 
-					var quoteDetailJson = JSON.parse(data.quoteDetailJson);
-					data.quoteDetailJson=quoteDetailJson;
+					var quote = JSON.parse(data.quote);
+					data.quoteDetailJson=quote;
 
               
 
@@ -709,11 +709,11 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+					data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
 					data.daysList = JSON.parse(data.daysList);
-					data.guideArrange = JSON.parse(data.guideArrange);
-					data.insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
+					data.guideQuote = JSON.parse(data.guideQuote);
+					data.insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.quote = JSON.parse(data.quote);
 					data.editorName = menukey +'-' + tag + '-ueditor'
 					var $a = {
 						a: 'update',
@@ -1043,7 +1043,7 @@ define(function(require, exports) {
 		});
 		json = JSON.stringify(json);
 		$.ajax({
-			url: KingServices.build_url('productQuote','findCostPrice'),
+			url: KingServices.build_url('quote','findCostPrice'),
 			type: 'POST',
 			data: {dayList: json},
 			success: function(data) {
