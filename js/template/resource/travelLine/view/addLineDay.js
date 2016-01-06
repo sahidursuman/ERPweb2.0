@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":226,"md5":"33caa8c0ec2008e825453254524a3de9"}*/
+/*TMODJS:{"debug":true,"version":227,"md5":"7f3a4438ec36ce5216c5c1f33a457d93"}*/
 define(function(require) {
     return require("../../../template")("resource/travelLine/view/addLineDay", function($data, $filename) {
         try {

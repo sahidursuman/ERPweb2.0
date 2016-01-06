@@ -16,6 +16,7 @@ define(function(require, exports) {
 		travelOPtionTemplate = require("./view/travelOPtion"),
 		scenicItemTemplate = require("./view/scenicItem"),
 		scheduleDialogWidth = '950px',
+		viewTab = menuKey+'-view',
 		EDITOR_HEIGHT = 200;
 
 	var ResTravelLine = {
@@ -192,6 +193,9 @@ define(function(require, exports) {
 					ResTravelLine.update_id = id;
 					data.id = id;
 					data.travelLine = JSON.parse(data.travelLine);
+					for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
+						data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
+					}
 					if (Tools.addTab(menuKey + '-update', '修改线路模板', updateTemplate(data))) {
 						ResTravelLine.CU_event($('#tab-' + menuKey + '-update-content'));
 					}
@@ -238,6 +242,7 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.preview = function(id) {
 		if (!!id) {
+
 			layer.open({
 				type:2,
 				title:"线路日程详情",
@@ -262,31 +267,14 @@ define(function(require, exports) {
 				success:function(data){
 					if(showDialog(data)){
 						data.travelLine = JSON.parse(data.travelLine);
-						Tools.addTab(menuKey + '-view',"查看线路模板", scanDetailTemplate(data));
-
-						$('#tab-' + menuKey + '-view-content').find('.T-view').on('click', function(event) {
-							event.preventDefault();
-							var scheduleId = $(this).data('id');
-
-					    	$.ajax({
-					    		url: KingServices.build_url('travelLine', 'getTravelLineDayById'),
-								type:"POST",
-								data: {id : scheduleId},
-								success:function(data){
-									if(showDialog(data)){
-										data.lineDay = JSON.parse(data.lineDay);
-										layer.open({
-											type: 1,
-											title:"日程安排",
-											skin: 'layui-layer-rim', //加上边框
-											area: scheduleDialogWidth, //宽高
-											zIndex:1030,
-											content: viewLineDayTemplate(data),
-											scrollbar: false,    // 推荐禁用浏览器外部滚动条
-										});
-									}
-								}
-							})
+						for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
+							data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail);
+							data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
+						};
+						Tools.addTab(viewTab,"查看线路模板", scanDetailTemplate(data));
+						var $viewTab = $('#tab-'+viewTab+'-content');
+						$viewTab.find(".T-btn-viewCancel").click(function() {
+							Tools.closeTab(viewTab);
 						});
 					}
 				}
@@ -362,16 +350,16 @@ define(function(require, exports) {
 			event.preventDefault();
 			ResTravelLine.CU_Schedule($tab);
 		});
+
 		//删除日程
 		$tab.find('.T-schedule-list').on('click', '.T-action', function() {
-			var $this = $(this);
+			var $this = $(this),$tr=$this.closest('tr');
 			if ($this.hasClass('T-delete')) {
 				ResTravelLine.deleteSchedule($this);
 			}else if ($this.hasClass('T-details')) {
-				ResTravelLine.updateDetails($this);
+				ResTravelLine.updateDetails($this,$tr);
 
-			}
-			
+			}	
 		})
 
 		//取消操作  T-btn-cancel
@@ -380,16 +368,25 @@ define(function(require, exports) {
 			Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});
 
+		//关闭查看页面  T-btn-cancel
+		
+
+		// $container.find(".T-btn-cancelOption").click(function() {
+  //                   layer.close(multiselectLayer);
+  //               });
 		// 景点初始化
 		$tab.find('.T-schedule-list').on('click', '.T-chooseScenic', function(event) {
 			var $this = $(this);
 			ResTravelLine.chooseScenic($this);
 		});
+		ResTravelLine.viewOptionalScenic($tab.find('.T-chooseScenic'))
 		// 保存
 		$tab.find('.T-btn-save').on('click', function(event) {
 			event.preventDefault();
 			ResTravelLine.save($tab, validator);
 		});
+
+
 	};
 
 	/**
@@ -399,7 +396,7 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.CU_Schedule = function($tab) {
 		var day = {}, $tbody = $tab.find('.T-schedule-list'),
-			$tr = $tbody.find('tr');
+			$tr = $tbody.find('tr:not(.deleted)');
 		if ($tr.length == 0) {
 			day.whichDay = 1
 		} else {  // 新增
@@ -415,11 +412,13 @@ define(function(require, exports) {
 		var html =  '<tr data-day="'+ dataId +'"><td>第' + day.whichDay +'天</td>"'+
 					'<td><input class="col-sm-12" name="BriefTrip" /></td>'+
 					'<td style="width:205px;"><label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast" /><span class="lbl">&nbsp;早餐</span></label>'+
-					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-lunch" value="2" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>'+
-					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-dinner" value="2" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label></td>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-lunch" value="1" name="lunch" /><span class="lbl">&nbsp;午餐</span></label>'+
+					'<label style="margin-left:10px;"><input type="checkbox" class="ace T-dinner" value="1" name="dinner" /><span class="lbl">&nbsp;晚餐</span></label></td>'+
 					'<td><input class="col-sm-12" name="LodgingPlace" /></td>'+
-					'<td><input class="col-sm-12 T-chooseScenic" placeholder="多选" readonly="readonly" name="chooseScenic" /></td>'+
-					'<td style="width:150px"><div class="btn-group"><a class="cursor T-action T-details">编辑行程详情</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>'
+					'<td><input class="col-sm-12 T-chooseScenic"placeholder="多选" readonly="readonly" name="chooseScenic" data-propover="" /></td>'+
+					'<td style="width:150px"><div class="btn-group"><a class="cursor T-action T-details">编辑行程详情</a>'+
+					'<a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></div>'+
+					'<input type="hidden" name="description" value=""/>'
 					'</tr>';
 		if ($tr.length == 0) {
 			$tbody.append(html);
@@ -431,7 +430,7 @@ define(function(require, exports) {
 	};
 
 	// 编辑行程详情
-	ResTravelLine.updateDetails = function($this){
+	ResTravelLine.updateDetails = function($this,$tr){
 		var title = '<span class="necessary">*</span>编辑行程详情',data={},time = (new Date()).getTime();
 		data.time = time;
 		var updateDetailsLayer = layer.open({
@@ -690,20 +689,31 @@ define(function(require, exports) {
 	ResTravelLine.save = function($tab, validator, tab_array) {
 		if (!validator.form()) return;
 
-		// if (!ResTravelLine.isScheduleInOrder($tab)) {
-		// 	showMessageDialog($( "#confirm-dialog-message" ), '日程安排不连续，请您补充完整!');
-		// 	return;
-		// }
+		if (!ResTravelLine.isScheduleInOrder($tab)) {
+			showMessageDialog($( "#confirm-dialog-message" ), '日程安排不连续，请您补充完整!');
+			return;
+		}
 		var args = $tab.find('.T-main-form').serializeJson();
 
-		// 启用标志
-		args.status = 0;
-		if ($tab.find('.T-status').prop('checked')) {
-			args.status = 1;
-		}
+		// // 启用标志
+		// args.status = 0;
+		// if ($tab.find('.T-status').prop('checked')) {
+		// 	args.status = 1;
+		// }
 
 		// 获取日程数据
-		var addJson = [], delJson = [];
+		var addJson = [], delJson = [],scenicListJson;
+		//景点
+		var $tr = $tab.find('.T-schedule-list').find('tr');
+		/*for (var i = 0; i < $tr.length; i++) {
+			if (!!$tr.eq(i).find('[name=chooseScenic]').data('propover')) {
+				scenicListJson = $tr.eq(i).find('[name=chooseScenic]').data('propover')
+				if(typeof $tr.eq(i).find('[name=chooseScenic]').data('propover') === 'string'){
+					scenicListJson = JSON.parse($tr.eq(i).find('[name=chooseScenic]').data('propover'))
+				}
+			}
+		}*/
+
 		$tab.find('.T-schedule-list').children('tr').each(function(index, el) {
 			var $tr = $(this), id = $tr.data('entity-id');
 			if ($tr.hasClass('deleted')) {  // 删除
@@ -711,19 +721,16 @@ define(function(require, exports) {
 			} else {
 				var $feilds = $tr.children('td'),
 					schedule = {
-					   	whichDay: $tr.data('id') + 1,
-						// repastDetail: $feilds.eq(1).text(),
-						// restPosition: $feilds.eq(2).text(),
-						// title: $feilds.eq(4).text(),
-						// hotelLevel: $tr.find("input[name=hotelLevel]").val(),
-						// roadScenic: $tr.find("input[name=roadScenic]").val(),
-						// detail: $tr.find("input[name=description]").val(),
-						BriefTrip:$tr.find("input[name=BriefTrip]").val(),
-						breakfast:$tr.find("input[name=breakfast]").val(),
-						lunch:$tr.find("input[name=lunch]").val(),
-						dinner:$tr.find("input[name=dinner]").val(),
-						LodgingPlace:$tr.find("input[name=LodgingPlace]").val(),
-						chooseScenic:$tr.find("input[name=chooseScenic]").val()	  
+						id : $tr.attr('data-entity-id'),
+					   	whichDay: $tr.data('day') + 1,
+						BriefTrip: $tr.find("input[name=BriefTrip]").val(),
+						LodgingPlace: $tr.find("input[name=LodgingPlace]").val(),
+						detail: $tr.find(".T-details").data('entity-content'),
+						breakfast: $tr.find("input[name=breakfast]").is(':checked')? 1 : 0,
+						lunch: $tr.find("input[name=lunch]").is(':checked')? 1 : 0,
+						dinner: $tr.find("input[name=dinner]").is(':checked')? 1 : 0,
+						roadScenic: $tr.find("input[name=chooseScenic]").val(),
+						scenicItemIds: ResTravelLine.jsonToString($tr.find('input[name=chooseScenic]').data('propover'))
 					};
 					// var schedule = JSON.stringify(schedule);
 					  
@@ -733,7 +740,6 @@ define(function(require, exports) {
 				addJson.push(schedule);
 			}
 		});
-
 		if (addJson.length === 0) {
 			showMessageDialog($( "#confirm-dialog-message" ), '至少录入一天的日程!');
 			return;
@@ -756,6 +762,7 @@ define(function(require, exports) {
 		.done(function(data) {
 			if (showDialog(data))  {
 				showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+
 					if (!!tab_array) {
 						Tools.addTab(tab_array[0], tab_array[1], tab_array[2]);
 						ResTravelLine.CU_event($tab);
@@ -764,6 +771,8 @@ define(function(require, exports) {
 						ResTravelLine.getList(ResTravelLine.listPageNo);
 					}
 
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+					ResTravelLine.getList();
 					$tab.data('isEdited', false);
 				});
 			}
@@ -777,12 +786,19 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.isScheduleInOrder = function($tab) {
 		for (var i = 0, $row = $tab.find('.T-schedule-list').children('tr:not(.deleted)'), len = $row.length; i < len; i ++ ) {
-			if ($row.eq(i).data('id') != i) {
+			if ($row.eq(i).data('day') != i) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	ResTravelLine.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
 	}
 
 	// 暴露方法
