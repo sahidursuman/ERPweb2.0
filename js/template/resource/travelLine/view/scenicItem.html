@@ -1,15 +1,17 @@
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th class="th-border" colspan="3">景点选择</th>
+			<th class="th-border">景区名称</th>
+			<th class="th-border">收费项目</th>
+			<th class="th-border">操作</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody class="T-scenic-list">
 	{{each scenicList as scenic }}
 		{{each scenic.scenicItemList as scenicItem index}}
-			<tr data-value="{{scenic.id}}">
+			<tr data-entity-id="{{scenic.id}}" data-entity-name="{{scenic.name}}" data-entity-itemname="{{scenicItem.name}}">
 				{{if index==0}}<td rowspan="{{scenic.scenicItemList.length}}" style="">{{scenic.name}}</td>{{/if}}
-				<td data-entity-id="{{scenicItem.id}}">{{scenicItem.name}}</td>
+				<td>{{scenicItem.name}}<input type="hidden" name="itemId" value="{{scenicItem.id}}"></td>
 				<td><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span> </label>
 				</td>
 			</tr>

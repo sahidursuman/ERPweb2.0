@@ -904,7 +904,7 @@ define(function(require, exports) {
 		var $dayListArea = $container.find('.T-timeline-container');
 		quote.bindInsuranceChosen($container.find('.T-insurance-name'),$container.find('.T-insurance-item') ,validator, $container);
 		quote.bindBusChosen($container.find('.T-chooseSeatCount'), $container.find('.T-chooseBrand'), $container.find('.T-chooseBusCompany'), validator, $container)
-		quote.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'), validator, $container);
+		quote.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'), $dayListArea.find('.T-RestaurantList [name=type]'), validator, $container);
 		quote.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'), validator, $container);
 		quote.bindScenicEvent($dayListArea.find('.T-choose-scenicName'), validator, $container);
 		quote.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'), validator, $container);
@@ -2109,13 +2109,20 @@ define(function(require, exports) {
 			quote.costCalculation($container)
 		});
 		
-		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), validator, $container);
+		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), $(".updateRestaurantList [name=type]"), validator, $container);
 		
 		
 		
 	};
 		
-	quote.bindRestaurantEvent = function( obj, typeObj, validator, $container) {
+	quote.bindRestaurantEvent = function( obj, typeObj, $type, validator, $container) {
+		$type.on('change', function() {
+			var $this = $(this), $parents = $this.closest('tr');
+			$parents.find('[name=price]').val('');
+			$parents.find('[name=standardId]').val(0);
+			$parents.find('[name=marketPrice]').val('');
+			$parents.find('[name=menuList]').val('');
+		})
 		//绑定选择餐厅名称事件
 		obj.autocomplete({
 			minLength:0,
@@ -2822,6 +2829,8 @@ define(function(require, exports) {
 							$tr.find("input[name=managerName]").val(selfpay.managerName);
 							$tr.find("input[name=selfPayItemName]").val("");
 							$tr.find("input[name=selfPayItemId]").val("");
+							$tr.find("input[name=contractPrice]").val("");
+							$tr.find("input[name=marketPrice]").val("");
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
