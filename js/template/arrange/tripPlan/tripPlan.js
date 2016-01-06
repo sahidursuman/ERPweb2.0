@@ -511,6 +511,21 @@ define(function(require, exports) {
 			var startTime = $tab.find("input[name=startTime]").val();
 			tripPlan.addTouristGroup(lineProductId,startTime,$tab);
     	});
+		$tab.find(".T-touristGroup-list").on('click', '.T-action', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that = $(this)
+				id = $that.closest('tr').data('id');
+
+			if ($that.hasClass('T-groupView')) {
+				//查看旅游小组成员
+				tripPlan.viewTouristGroup(id);
+			} else if ($that.hasClass('T-groupDelete')) {
+				//删除小组
+				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=tripPlanId]").val(), $tab);
+			}
+		});
+
     	//删除游客小组或账单
     	$tab.find('.T-tourists-list, .T-fee-list')
     	.on('click', '.T-delete', function(event){
@@ -543,18 +558,26 @@ define(function(require, exports) {
 		}
 
 		//团行程json包
-		args.planDayJson = (tripPlan.getTripPlanDays($tab));
+		args.planDayJson =  JSON.stringify(tripPlan.getTripPlanDays($tab));
 		//团计划要求json包
-		args.requireJson = (tripPlan.getTripPlanRequest($tab));
+		args.requireJson =  JSON.stringify(tripPlan.getTripPlanRequest($tab));
 
 		// 获取游客小组Id
 		args.touristGroupIdJson = [];
+		var adultcount = 0, childcount = 0;
 		$tab.find('.T-touristGroup-list').children('tr').each(function() {
+			var $tr = $(this), $countTd = $tr.find('td[name="peopleCount"]');
 			args.touristGroupIdJson.push({
-				id: $(this).data('id')
+				id: $tr.data('id')
 			});
+
+			// 计算人数
+			adultcount += $countTd.data('adultcount')*1;
+			childcount += $countTd.data('childcount')*1;
 		});
-		args.touristGroupIdJson = (args.touristGroupIdJson);
+		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
+		args.touristAdultCount = adultcount;
+		args.touristChildCount = childcount;
 
 		$.ajax({
 			url: KingServices.build_url('tripController', 'saveRetailClient'),
@@ -563,7 +586,8 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)) {
-
+				showMessageDialog($( "#confirm-dialog-message" ), data.message);
+				Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 			}
 		});
 		
@@ -586,8 +610,9 @@ define(function(require, exports) {
 
 			args.push(
 				{
-					detail : $that.find('[name="title"]').val(),
 				    id : $that.data("id") || "",
+					title : $that.find('[name="title"]').val(),
+					detail: encodeURIComponent($that.find('.T-update-detail').data('detail')),
 				    repastDetail : repastDetail,
 				    restPosition : $that.find('[name="restPosition"]').val(),
 				    scenicItemIds : $that.find('[name="scenicItemNames"]').data("propover") || "",
@@ -872,51 +897,26 @@ define(function(require, exports) {
 						    	})
 						    	//提交按钮事件绑定
 								$container.find(".T-saveGroup").click(function(){
-									var addGroupIdJson = [],html = "";
-									$container.find(".T-group-list tr").find("input:checked").each(function(i){
-										var $tr = $(this).closest('tr');
-										html += "<tr data-id=\""+$tr.data("id")+"\">"+
-											"<td>"+ $.text($tr.find("td[name=creatorName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=lineProductName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=travelAgencyName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=contactMemberName]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=contactMemberMobileNumber]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=areaData]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=ageData]")) +"</td>"+
-											"<td class=\"T-memberCount\">"+ $.text($tr.find("td[name=peopleCount]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=currentNeedPayMoney]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=hotelLevel]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=includeSelfPay]")) +"</td>"+
-											"<td>"+ $.text($tr.find("td[name=remark]")) +"</td>"+
-											"<td>"+
+									var addGroupIdJson = [],
+										html = "<td>"+
 											"<div class=\"hidden-sm hidden-xs btn-group\">"+
-											"<a class=\"cursor T-groupView\">"+
+											"<a class=\"cursor T-action T-groupView\">"+
 												"查看"+
 											"</a>"+"<a class='cursor'> </a>"+
-											"<a class=\"cursor T-groupDelete\">"+
+											"<a class=\"cursor T-action T-groupDelete\">"+
 												"删除"+
 											"</a>"+
 											"</div>"+
-											"</td>"+
-											"</tr>";
+											"</td>";
+									$container.find(".T-group-list tr").find("input:checked").each(function(i){
+										var $tr = $(this).closest('tr').clone();
+										// 构造所需的行
+										$tr.children('td').eq(0).remove().end().last().remove().end().end().append(html);
+										// 附加行
+						    			$tab.find(".T-touristGroup-list").append($tr);
 									});
-						    		$tab.find(".T-touristGroup-list").append(html);
-						    		//查看旅游小组成员
-							    	$tab.find(".T-groupView").off().on("click",function(){
-							    		var id = $(this).closest('tr').data("id");
-							    		tripPlan.viewTouristGroup(id);
-							    	});
-							    	//删除小组
-							    	$tab.find(".T-groupDelete").on("click",function(){
-							    		var id = $(this).closest('tr').data("id"),
-							    			tripPlanId = $tab.find("input[name=tripPlanId]").val();
-							    		 tripPlan.deleteTouristGroup($(this),id,tripPlanId,$tab);
-							    	});
 									
 									layer.close(addGroupTemplateLayer);
-									tripPlan.MenberNumber($tab);
-							    	//小组总人数计算
-			    					tripPlan.tripPlanAllMemberCount($tab);
 						    	})
 						    }
 						})
