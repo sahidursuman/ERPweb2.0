@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -115,6 +115,11 @@
           default:
             return "其他";
         }
+    }), template.helper("getCardOption", function(status) {
+        var res = "";
+        return status = status || 0, res += '<option value="0" ' + (0 == status ? "selected" : "") + ">身份证</option>", 
+        res += '<option value="1" ' + (1 == status ? "selected" : "") + ">护照</option>", 
+        res += '<option value="2" ' + (2 == status ? "selected" : "") + ">其它</option>";
     }), template.helper("getTicketText", function(ticketType) {
         switch (1 * ticketType) {
           case 1:

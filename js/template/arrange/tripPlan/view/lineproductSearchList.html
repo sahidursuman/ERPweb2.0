@@ -1,10 +1,7 @@
 {{each lineProductList as lineProduct}}
-	<tr data-quote-id="{{lineProduct.quoteId}}" data-id="{{lineProduct.id}}">
+	<tr data-id="{{lineProduct.id}}">
 		<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}">
 			{{lineProduct.name}}
-		</td>
-		<td>
-			{{lineProduct.days}}
 		</td>
 		<td>
 			{{lineProduct.type}}
@@ -16,23 +13,13 @@
 			团体
 			{{/if}}
 		</td>
-		<!-- <td>
-			{{if lineProduct.status==0}}
-			未启用
-			{{else if lineProduct.status==1}}
-			已启用
-			{{/if}}
-		</td> -->
-		{{if !!quote}}
-		<td>{{lineProduct.travelAgencyName}}</td>
-		<td>{{lineProduct.createTime}}</td>
-		{{/if}}
+		<td>
+			{{lineProduct.days}}
+		</td>
 		<td>
 			<label class="choice-TravelLine-click">
-				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
-					<span class="lbl">
-						
-					</span>
+				<input type="radio" class="ace" name="choice-TravelLine" index="0">
+					<span class="lbl"></span>
 			</label>
 		</td>
 	</tr>

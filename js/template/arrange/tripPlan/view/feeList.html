@@ -1,0 +1,10 @@
+{{each touristGroupFeeList as rs}}
+<tr data-id="{{rs.id}}">
+	<td><input type="text" class="col-xs-12" value="{{rs.describeInfo}}"></td>
+	<td><input type="text" class="col-xs-12" value="{{rs.count}}"></td>
+	<td><input type="text" class="col-xs-12" value="{{rs.price}}"></td>
+	<td><input type="text" class="col-xs-12" readonly value="{{rs.count * rs.price}}"></td>
+	<td><input type="text" class="col-xs-12" value="{{rs.remark}}"></td>
+	<td><a class="cursor T-action T-delete" title="删除">删除</a></td>
+</tr>
+{{/each}}

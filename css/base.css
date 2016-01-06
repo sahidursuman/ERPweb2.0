@@ -93,6 +93,193 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	width: 60px;
 }
 
+/***发团计划样式**/
+
+input.datepicker {
+	border-radius: 0;
+	width: 90px;
+}
+.hct-content-tabs{
+	padding-left: 0;
+	padding-right: 0;
+}
+.hct-content-tabs .nav-tabs{
+	top: 0;
+}
+.hct-content-tabs .nav-tabs{
+	border-color: #c5d0dc;
+}
+.hct-content-tabs .tab-content{
+	padding: 16px 0;
+	border-color: #c5d0dc;
+	border-top: 1px solid #f4f4f4;
+}
+.hct-content-tabs .tab-content .row{
+	padding-right: 10px;
+	padding-left: 10px;
+	margin-left: 0;
+	margin-right: 0;
+}
+.hct-search-area{
+	width: 100%;
+	max-width: 1280px;
+	margin-bottom: 0;
+	overflow: hidden;
+}
+.hct-search-area .form-group,
+.hct-search-area.form-inline .form-group{
+	display: block;
+	float: left;
+	margin-bottom: 0;
+	padding: 5px 10px 5px 0;
+}
+.hct-view-plan{
+	margin-bottom: 20px;
+}
+.hct-view-plan .border{
+	border-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.hct-view-plan .border:last-child{
+	border-bottom: 1px solid #ddd;
+}
+.hct-view-plan .border > [class*="col-xs-"]{
+	border-right: 1px solid #ddd;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.hct-view-plan .border > [class*="col-xs-"]:last-child{
+	border-right: none;
+}
+.hct-view-plan .border > [class*="col-xs-"] span{
+	padding-left: 0;
+}
+.hct-view-plan .border > .col-xs-12 > .col-xs-1{
+	width: 8%;
+}
+.hct-view-plan .border > .col-xs-12.hd{
+	background-color: #f7f8f8;
+}
+.hct-view-plan .border > .hd > h3,
+.hct-editor-plan .row > .hd > h3{
+	color: #428bca;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 1;
+	position: relative;
+}
+.hct-view-plan .border > .hd > h3:before,
+.hct-editor-plan .row > .hd > h3:before{
+	content: '';
+	width: 5px;
+	height: 12px;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -6px;
+	background-color: #428bca;
+	border-radius: 1px;
+}
+.control-label{
+	padding-top: 2px;
+}
+.hct-input-group{
+	position: relative;
+}
+.hct-input-group > input{
+	padding-right: 34px!important;
+}
+.hct-input-group .hct-group-search,
+.hct-input-group .hct-group-add{
+	height: 12px;
+	position: absolute;
+	right: 3px;
+	top: 50%;
+	margin-top: -6px;
+	color: #428bca;
+	font-size: 12px;
+	line-height: 1;
+}
+.hct-input-group[class*="col-xs-"] .hct-group-search,
+.hct-input-group[class*="col-xs-"] .hct-group-add{
+	right: 15px;
+}
+.hct-editor-plan .row > .col-xs-12 > .col-xs-1{
+	width: 7.78%;
+}
+.hct-editor-plan .row > .col-xs-12 > .col-xs-11{
+	width: 92.22%;
+}
+.hct-editor-plan .row > [class*="col-xs-"]{
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+.hct-editor-plan .row > [class*="col-xs-"] label{
+	padding-right: 0;
+	padding-left: 0;
+}
+.hct-editor-plan .row{
+	border-bottom: 1px solid #f4f4f4;
+}
+.hct-editor-plan .table{
+	margin-bottom: 0;
+}
+.hct-plan-ask{
+	position: relative;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+.hct-plan-ask .hct-plan-ask-operate,
+.hct-plan-ask .hct-plan-ask-title{
+	position: absolute;
+	top: 50%;
+	margin-top: -12px;
+	line-height: 24px;
+}
+.hct-plan-ask .hct-plan-ask-title{
+	width: 110px;
+	left: 0;
+	text-align: right;
+	z-index: 2;
+}
+.hct-plan-ask .hct-plan-ask-operate{
+	width: 80px;
+	right: 0;
+	text-align: center;
+	z-index: 2;
+}
+.hct-plan-ask .hct-plan-ask-input{
+	width: 100%;
+	padding-left: 110px;
+	padding-right: 80px;
+	position: relative;
+	z-index: 1;
+}
+.hct-update-detail{
+	width: 100%;
+}
+.hct-update-detail .detail-title{
+	width: 100%;
+	line-height: 36px;
+	padding-left: 34px;
+	background-color: #e4e4e4;
+	border-bottom: 1px solid #c9c9c9;
+	color: #333;
+}
+.hct-update-detail .detail-content{
+	width: 100%;
+}
+.hct-update-detail .detail-footer{
+	width: 100%;
+	text-align: center;
+	padding-top: 10px;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;
@@ -104,9 +291,4 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	    padding-left: 0px;
 	    padding-top: 8px;
 	}
-}
-
-input.datepicker {
-	border-radius: 0;
-	width: 90px;
 }

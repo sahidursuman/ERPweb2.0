@@ -51,6 +51,14 @@ template.helper("getCardText", function(idCardType) {
             return '其他';
     }
 });
+template.helper("getCardOption", function(status) {
+    var res = '';
+    status = status || 0;
+    res += '<option value="0" '+(status == 0?'selected':'')+'>身份证</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>护照</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>其它</option>';
+    return res;
+});
 
 template.helper("getTicketText", function(ticketType) {
     switch (ticketType * 1) {

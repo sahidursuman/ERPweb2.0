@@ -964,7 +964,10 @@ select {
     line-height: 10px;
     padding-top: 3px;
 }
-
+.nav-tabs >li >a.pad-lr-30{
+    padding-right: 30px;
+    padding-left: 30px;
+}
 
 /**
  * public style
