@@ -715,7 +715,23 @@ define(function(require, exports) {
     		event.preventDefault();
     		var $tr = $(this).closest('tr'), id = $tr.data("id");
     		if(!!id){
-    			
+    			/*$.ajax({
+					url:KingServices.build_url("touristGroup","removeTouristGroup"),
+					data:{ 
+						tripPlanId : tripPlanId + "",
+						touristGroupId : id
+					},
+					success: function(data) {
+						var result =showDialog(data);
+						if(result){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+			    				obj.closest('tr').remove();
+								tripPlan.MenberNumber($tab);
+								tripPlan.tripPlanAllMemberCount($tab);
+							});
+						}
+					}
+				});*/
     		}else{
     			$tr.remove();
     		}
