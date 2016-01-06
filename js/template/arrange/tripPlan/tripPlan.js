@@ -6,6 +6,8 @@ define(function(require, exports) {
 		singleListTemplate = require("./view/singleList"),
 		viewTripPlanTemplate = require("./view/viewTripPlan"),
 		addTripPlanTemplate=require("./view/addTripPlan"),
+		// 散客计划模板
+		addSingleTripPlanTemplate=require("./view/addSingleTripPlan"),
 		updateTemplate = require("./view/updateTripPlan"),
 		searchTemplate = require("./view/searchList"),
 		searchQuoteOrderTemplate = require("./view/searchQuoteOrder"),
@@ -237,16 +239,20 @@ define(function(require, exports) {
 
 	//新增计划
 	tripPlan.addTripPlan = function(planType){
-		var addmenuKey = menuKey + "_single_add";
-		if(planType == 1){
-			addmenuKey = menuKey + "_group_add";
-		}
-		var html = addTripPlanTemplate(); 
-        if (Tools.addTab(addmenuKey, "新增计划", html)) {
-			var $tab = $("#tab-" + addmenuKey + "-content");
-            tripPlan.initEdit($tab);
-        }
-        //rule.checkdCreateTripPlan($('.T-addPlan-form'));  	
+		if (planType) {
+			// 团队
+	        var tabKey = menuKey + "_group_add";
+
+	        if (Tools.addTab(tabKey, "新增计划", addTripPlanTemplate())) {
+	            tripPlan.initEdit($("#tab-" + tabKey + "-content"));
+	        }
+		} else {
+			var tabKey = menuKey + "_single_add";
+	        
+	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate())) {
+	            tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
+	        }
+		}	
 	};
 
 	tripPlan.initEdit = function($tab,id){
@@ -268,7 +274,7 @@ define(function(require, exports) {
     	$tab.find(".T-shopNames").on('click', function(){
     		KingServices.shopMultiselect($(this));
     	});
-    	//购物商家
+    	//自费商家
     	$tab.find(".T-selfPayItemNames").on('click', function(){
     		KingServices.selfPayMultiselect($(this));
     	});
@@ -335,6 +341,32 @@ define(function(require, exports) {
     		}
     	});
 	};
+
+	tripPlan.initSigleEvent = function($tab) {
+		//搜索线路
+    	$tab.find(".T-search-line").on('click', function(){
+    		tripPlan.initLineProductSearch($tab, 0);
+    	});
+    	//购物商家
+    	$tab.find(".T-shopNames").on('click', function(){
+    		KingServices.shopMultiselect($(this));
+    	});
+    	//自费商家
+    	$tab.find(".T-selfPayItemNames").on('click', function(){
+    		KingServices.selfPayMultiselect($(this));
+    	});
+    	tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]'));
+
+    	//绑定时间
+    	Tools.setDatePicker($tab.find('.datepicker'), true);
+    	tripPlan.setExecuteTimer($tab);
+
+    	$tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
+    		var $that = $(this);
+    		$that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
+    	});		
+	}
+
 	tripPlan.initTeamSearch = function($tab){
 		var searchTravelLinelayer = layer.open({
 			type: 1,
@@ -446,6 +478,77 @@ define(function(require, exports) {
 			});
 			return countMoney;
 		}
+	};
+
+	//发团定时   
+	tripPlan.setExecuteTimer = function($tab){
+		var maxDateTime = $tab.find('[name="startTime"]').val() + ' 06:00:00';
+		$tab.find("input[name=executeTime]").datetimepicker({
+			autoclose: true,
+			useCurrent:false,
+			todayHighlight: true,
+			maxDate: new Date(maxDateTime),
+			format: 'L',
+			language: 'zh-CN'
+		});
+	}; 
+
+	/**
+	 * 绑定责任计调的选择
+	 * @param  {object} $target 绑定选择的Jquery对象
+	 * @return {[type]}         [description]
+	 */
+	tripPlan.getOPUserList = function($target){
+		$target.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$target.val('')
+					.nextAll('input[name="dutyOPUserId"]').val('')
+					.closest('.T-tab').find('input[name="dutyOPDepartment"]').val('');
+				}
+			},
+			select:function(event,ui){
+				var item = ui.item;
+				console.info(item)
+				$target.blur()
+				.nextAll('input[name="dutyOPUserId"]').val(item.id)
+				.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(item.businessGroup.name);
+			}
+		})
+		.one('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			$.ajax({
+				url: KingServices.build_url('tripPlan', 'getOPUserList'),
+				type: 'post',
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					$target.val(data.realName)
+					.nextAll('input[name="dutyOPUserId"]').val(data.userId)
+					.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
+
+					var userList = JSON.parse(data.userList || false);
+					if (!!userList) {
+						for (var i = 0, len = userList.length;i < len; i++) {
+							userList[i].value = userList[i].realName;
+						}
+
+						$target.autocomplete('option', 'source', userList);
+						$target.autocomplete('search', $target.val());
+
+						$target.data('ajax', true);
+					}
+				}
+			});
+		})
+		.on('click', function(event) {
+			event.preventDefault();
+			if ($target.data('ajax')) {
+				$target.autocomplete('search', $target.val());
+			}
+		});
 	};
 
 	/**old**/
