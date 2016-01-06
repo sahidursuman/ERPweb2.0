@@ -275,14 +275,17 @@ define(function(require,exports) {
 				$(this).closest('tr').data('change',true);
 				//自动计算本次付款金额
 				InnerTransferOut.autoSumPayMoney($obj);
+				$obj.data('isEdited', true);
 			});
 			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
 				InnerTransferOut.setAutoFillEdit($obj,true);
+
 			};
 		}else{
 			$obj.find('.'+$list).off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
+				$obj.data('isEdited', true);
 			});
 		};
 		//页面时间控件格式化
@@ -415,7 +418,15 @@ define(function(require,exports) {
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
-        	InnerTransferOut.saveBlanceData(0,$data,$obj);
+        	var allMoney = $obj.find('input[name=sumPayMoney]').val();
+        	if(allMoney == 0){
+        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+		            InnerTransferOut.saveBlanceData(0,$data,$obj);
+		        })
+        	}else{
+        		InnerTransferOut.saveBlanceData(0,$data,$obj);
+        	}
+        	
         });
 	};
 
@@ -708,11 +719,6 @@ define(function(require,exports) {
 	//切换tab页面自动提示
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
 		if(!!$tab && $tab.length === 1){
-			// 监听修改
-			$tab.on('change', function(event) {
-				event.preventDefault();
-				$tab.data('isEdited', true);
-			});
 			// 监听保存，并切换tab
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();
