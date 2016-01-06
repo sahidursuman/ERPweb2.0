@@ -266,7 +266,17 @@ define(function(require, exports) {
     	$tab.find(".T-search-team").on('click', function(){
     		tripPlan.initTeamSearch($tab);
     	});
-    	
+
+    	//新增同行
+        $tab.find('.T-addPartner').on("click", {
+            function: KingServices.addPartnerAgency,
+            type: ".form-group",
+            name: "fromPartnerAgency",
+            id: "fromPartnerAgencyId"
+        }, KingServices.addResourceFunction);
+        //新增同行联系人
+        tripPlan.chooseTravelAgencyName($tab.find('[name="travelAgencyName"]'))
+
     	//绑定添加游客小组事件
     	$tab.find('.T-add-tourists').on('click', function(event){
     		event.preventDefault();
@@ -317,6 +327,42 @@ define(function(require, exports) {
     		event.preventDefault();
     		tripPlan.savePlanData($tab);
     	});
+	};
+	tripPlan.chooseTravelAgencyName = function($that){
+		$that.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (ui.item == null) {
+                }
+            },
+            select: function(event, ui) {
+
+            }
+        }).off('click').on('click', function() {
+            var $that = $(this);
+            $.ajax({
+                url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
+                data: {
+                    operation: 'view'
+                },
+                showLoading:false,
+                type: 'POST',
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var formParObj = JSON.parse(data.partnerAgencyList);
+
+                        if (formParObj != null && formParObj.length > 0) {
+                            for (var i = 0; i < formParObj.length; i++) {
+                                formParObj[i].value = formParObj[i].travelAgencyName
+                            }
+                        };
+                        $that.autocomplete('option', 'source', formParObj);
+                        $that.autocomplete('search', '');
+                    }
+
+                }
+            });
+        });
 	};
 
 	/**
@@ -687,12 +733,17 @@ define(function(require, exports) {
 		//换算行程安排日期
 		arrangeDate : function($tab){
 			var $time = $tab.find('[name="startTime"]'),
-				startTime = $time.val();
+				startTime = $time.val(),
+				endTime = $tab.find('[name="endTime"]'),
+				$tr = $tab.find('.T-days tr');
 			if(startTime != ""){
-				$tab.find('.T-days tr').each(function(index){
+				$tr.each(function(index){
 					var $days = $(this).find('[name="dateDays"]'),
 						whichDate = Tools.addDay(startTime, $days.data("which-day") - 1);
 					$days.text(whichDate);
+					if(endTime.val() != whichDate && index == $tr.length-1){
+						endTime.val(whichDate);
+					}
 				});
 			}
 		}

@@ -56,6 +56,7 @@
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户</label>
 				<div class="hct-input-group col-xs-8">
 					<input type="text" class="col-xs-12" name="travelAgencyName">
+					<input type="hidden" name="travelAgencyName">
 					<span class="hct-group-add cursor">[新增]</span>
 				</div>
 			</div>
@@ -121,12 +122,13 @@
 				<label class="col-xs-4 control-label text-right">责任计调</label>
 				<div class="col-xs-8">
 					<input type="text" class="col-xs-12" name="dutyOPUserName">
+					<input type="hidden" name="dutyOPUserId" >
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">责任部门</label>
 				<div class="col-xs-8">
-					<input type="text" readonly class="col-xs-12">
+					<input type="text" readonly class="col-xs-12" name="dutyOPDepartment">
 				</div>
 			</div>
 		</div>
@@ -139,8 +141,12 @@
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">自费商家</label>
-				<div class="col-xs-8">
+				<div class="col-xs-2">
 					<input type="text" name="selfPayItemNames" readonly class="col-xs-12 T-selfPayItemNames">
+				</div>
+				<label class="col-xs-4 control-label text-right">是否购买保险</label>
+				<div class="col-xs-2">
+					<input type="text" name="" readonly class="col-xs-12">
 				</div>
 			</div>
 			<div class="col-xs-3">
