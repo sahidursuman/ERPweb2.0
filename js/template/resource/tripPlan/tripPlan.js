@@ -2314,7 +2314,7 @@ define(function(require, exports) {
 					$parents.find("input[name=managerName]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=fee]").val("");
-					$parents.find("input[name=selfitemId]").val("");
+					$parents.find("input[name=selfPayItemId]").val("");
 					$parents.find("input[name=selfitem]").val("");
 				}
 			},
@@ -2331,7 +2331,7 @@ define(function(require, exports) {
 							$parents.find("input[name=selfPayId]").val(ui.item.id).trigger('change');
 							$parents.find("input[name=managerName]").val(selfPay.managerName);
 							$parents.find("input[name=mobileNumber]").val(selfPay.mobileNumber);
-							$parents.find("input[name=selfitemId]").val("");
+							$parents.find("input[name=selfPayItemId]").val("");
 							$parents.find("input[name=selfitem]").val("");
 						}
                     }
@@ -2369,14 +2369,14 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
-					$parents.find("input[name=selfitemId]").val("");
+					$parents.find("input[name=selfPayItemId]").val("");
 				}
 			},
 			select: function(event, ui){
 				var $this = $(this), $parents = $this.closest('tr'),
 					startTime = $parents.find(".T-whichDaysContainer").find('option:selected').text(),
 					whichDay = $parents.find("select[name=whichDay]").val();
-				$parents.find("input[name=selfitemId]").val(ui.item.id).trigger('change');
+				$parents.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
 				$.ajax({
 					url: KingServices.build_url('selfpay','getSelfPayItemPrice'),
                     type: 'POST',
@@ -2902,7 +2902,7 @@ define(function(require, exports) {
 						id : tripPlan.getVal(selfPay.eq(i), "id"),
 						whichDay : tripPlan.getVal(selfPay.eq(i), "whichDay"),
 						selfPayId : tripPlan.getVal(selfPay.eq(i), "selfPayId"),
-						selfPayItemId : tripPlan.getVal(selfPay.eq(i), "selfitemId"),
+						selfPayItemId : tripPlan.getVal(selfPay.eq(i), "selfPayItemId"),
 						lowestPrice : tripPlan.getVal(selfPay.eq(i), "price"),
 						price : tripPlan.getVal(selfPay.eq(i), "oldPrice"),
 						memberCount : tripPlan.getVal(selfPay.eq(i), "memberCount"),
