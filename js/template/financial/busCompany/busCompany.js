@@ -196,14 +196,14 @@ define(function(require, exports) {
         });
 
         //导出报表事件 btn-busCompanyExport
-        // busCompany.$checkSearchArea.find(".T-busCompanyExport").click(function(){
-        //     var year = busCompany.$checkSearchArea.find("[name=year]").val();
-        //     var month = busCompany.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","busCompany") + "&busCompanyId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        busCompany.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    busCompanyId : id,
+                    startTime : busCompany.$checkSearchArea.find("input[name=startDate]").val(),
+                    endTime : busCompany.$checkSearchArea.find("input[name=endDate]").val()
+                };
+            FinancialService.exportReport(args,"busCompany");
+        });
 
         //报表内的操作
         busCompany.listOption(busCompany.$checkTab);

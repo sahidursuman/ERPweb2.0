@@ -299,6 +299,14 @@ define(function(require, exports) {
             //给全选按钮绑定事件: 未去重
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 			FinancialService.updateUnpayMoney($tab, validator);
+			//导出报表事件 btn-hotelExport
+	        $tab.find(".T-btn-export").click(function(){
+	            var args = {
+	                    startTime: $tab.find('.T-search-start-date').val(),
+	                    endTime: $tab.find('.T-search-start-date').val()
+	                };
+	            FinancialService.exportReport(args,"replace");
+	        });
         }
 		$tab.find('.T-btn-close').on('click', function(event){
 			if(!!$tab.data('isEdited')){
@@ -335,9 +343,7 @@ define(function(require, exports) {
 
 	            if ($that.hasClass('btn-primary')) {
 	                if (validatorCheck.form()) {
-	                    FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
-	                    	Replace.autoFillData($tab)
-	                    });
+                    	Replace.autoFillData($tab);
 	                }
 	            } else {
 	            	Replace.payingJson = [];
@@ -381,25 +387,28 @@ define(function(require, exports) {
                 startDate : $tab.find('.T-search-start-date').val(),
                 endDate : $tab.find('.T-search-end-date').val()
             }
-            $.ajax({
-                url: KingServices.build_url('financial/bookingAccount', 'autoBookingAccount'),
-                type: 'post',
-                data: args,
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                	var bankId = $tab.find('input[name=card-id]').val();
-					var voucher = $tab.find('input[name=credentials-number]').val();
-					var billTime = $tab.find('input[name=tally-date]').val();
-					var bankNumber = $tab.find('input[name=card-number]').val();
-                    Replace.payingJson = data.bookingAccountList;
-                    Replace.payingJson.bankId = bankId;
-                    Replace.payingJson.voucher = voucher;
-                    Replace.payingJson.billTime = billTime;
-                    Replace.payingJson.bankNumber = bankNumber;
-					$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
-                    Replace.setAutoFillEdit($tab, true);
-                }
+			var $datepicker = $tab.find('.T-search-area .datepicker');
+            FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
+            	$.ajax({
+	                url: KingServices.build_url('financial/bookingAccount', 'autoBookingAccount'),
+	                type: 'post',
+	                data: args,
+	            })
+	            .done(function(data) {
+	                if (showDialog(data)) {
+	                	var bankId = $tab.find('input[name=card-id]').val();
+						var voucher = $tab.find('input[name=credentials-number]').val();
+						var billTime = $tab.find('input[name=tally-date]').val();
+						var bankNumber = $tab.find('input[name=card-number]').val();
+	                    Replace.payingJson = data.bookingAccountList;
+	                    Replace.payingJson.bankId = bankId;
+	                    Replace.payingJson.voucher = voucher;
+	                    Replace.payingJson.billTime = billTime;
+	                    Replace.payingJson.bankNumber = bankNumber;
+						$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+	                    Replace.setAutoFillEdit($tab, true);
+	                }
+	            });
             });
 		}
 	}
@@ -715,6 +724,12 @@ define(function(require, exports) {
 		});
 	};
 	Replace.savePayingData = function($tab, tabArgs){
+		var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 		var bankId = $tab.find('input[name=card-id]').val();
