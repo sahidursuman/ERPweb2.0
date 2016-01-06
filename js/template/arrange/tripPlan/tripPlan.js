@@ -307,26 +307,18 @@ define(function(require, exports) {
     	//绑定操作计划新增事件
     	$tab.find('.T-action-plan').on('click', '.T-add-action', function(event){
     		event.preventDefault();
-    		var $that = $(this), 
-    			type = $that.data('type'), 
-    			planAsk = $tab.find('.T-action-plan-list .hct-plan-ask');
-    		if(planAsk.length > 0){
-    			planAsk.each(function(index){
-					if($(this).data('type') == type){
-						return;
-	    			}else if(index == planAsk.length - 1){
-	    				tripPlan.addActionPlan($tab, $that.text(), type);
-	    			}
-	    		});
-    		}else{
-    			tripPlan.addActionPlan($tab, $that.text(), type);
-    		}
+    		var $that = $(this).prop('disabled', true), 
+    			type = $that.data('type');
+
+    		tripPlan.addActionPlan($tab, $that.text(), type);
     	});
     	//绑定操作计划删除事件
     	$tab.find('.T-action-plan-list').on('click', '.T-delete', function(event){
     		event.preventDefault();
-    		$(this).closest('.hct-plan-ask').remove();
-    	});
+    		var $that = $(this).closest('.hct-plan-ask').remove();
+
+    		$tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
+    	});	
     	//绑定账单新增费用项
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
@@ -366,23 +358,8 @@ define(function(require, exports) {
 	tripPlan.savePlanData = function($tab){
 		var arge = $tab.find('.T-basic-info').serializeJson();
 		//团行程json包
-		arge.tripPlanDayJson = [];
-		$tab.find('.T-days tr').each(function(index) {
-			var $that = $(this), 
-				repastM = $that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0,
-				repastN = $that.find('[name="repastDetailN"]').is(":checked") ? 1 : 0,
-				repastE = $that.find('[name="repastDetailE"]').is(":checked") ? 1 : 0,
-				daysJson = {
-					detail : $that.find('[name="title"]').val(),
-				    id : $that.data("id") || "",
-				    repastDetail : "" + repastM + "," + repastN + "," + repastE,
-				    restPosition : $that.find('[name="restPosition"]').val(),
-				    scenicItemIds : $that.find('[name="scenicItemNames"]').data("propover") || "",
-				    scenicItemNames : $that.find('[name="scenicItemNames"]').val(),
-				    whichDay : index + 1	
-				};
-			arge.tripPlanDayJson.push(daysJson);
-		});
+		arge.tripPlanDayJson = tripPlan.getTripPlanDays($tab);
+		
 		//游客成员json包
 		arge.touristGroupMemberJson = [];
 		$tab.find('.T-tourists-list tr').each(function(index) {
@@ -397,15 +374,8 @@ define(function(require, exports) {
 			});
 		});
 		//团计划要求json包
-		arge.tripPlanRequireJson = [];
-		$tab.find('.T-action-plan-list .hct-plan-ask').each(function(index) {
-			var $that = $(this);
-			arge.tripPlanRequireJson.push({
-				id : $that.data("id") || "",
-    			requireContent : $that.find('[name="requireContent"]').val(),
-    			requireType : $that.data("type") || ""
-			});
-		});
+		arge.tripPlanRequireJson = tripPlan.getTripPlanRequest($tab);
+		
 		//费用项json包
 		arge.touristGroupFeeJson = [];
 		$tab.find('.T-fee-list tr').each(function(index) {
@@ -460,7 +430,7 @@ define(function(require, exports) {
     	$tab.find(".T-selfPayItemNames").on('click', function(){
     		KingServices.selfPayMultiselect($(this));
     	});
-    	tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]'));
+    	tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]')).trigger('click');
 
     	//绑定时间
     	Tools.setDatePicker($tab.find('.datepicker'), true);
@@ -520,8 +490,92 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	tripPlan.saveSiglePlan = function($tab, tabArgs) {
-		var arge = $tab.find('.T-basic-info').serializeJson();
+		var args = $tab.find('.T-basic-info').serializeJson();
+
+		// 处理定时发送
+		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
+		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
+			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
+			return;
+		} else {
+			delete(args.executeTime);
+		}
+
+		//团行程json包
+		args.planDayJson = (tripPlan.getTripPlanDays($tab));
+		//团计划要求json包
+		args.requireJson = (tripPlan.getTripPlanRequest($tab));
+
+		// 获取游客小组Id
+		args.touristGroupIdJson = [];
+		$tab.find('.T-touristGroup-list').children('tr').each(function() {
+			args.touristGroupIdJson.push({
+				id: $(this).data('id')
+			});
+		});
+		args.touristGroupIdJson = (args.touristGroupIdJson);
+
+		$.ajax({
+			url: KingServices.build_url('tripController', 'saveRetailClient'),
+			type: 'post',
+			data: {tripPlan: JSON.stringify(args)},
+		})
+		.done(function(data) {
+			if (showDialog(data)) {
+
+			}
+		});
 		
+	};
+
+	/**
+	 * 获取行程安排数据
+	 * @param  {object} $tab 顶层父容器
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.getTripPlanDays = function($tab) {
+		var args = [];
+
+		$tab.find('.T-days tr').each(function(index) {
+			var $that = $(this), 
+				repastDetail = $that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0 + ',';
+
+			repastDetail = $that.find('[name="repastDetailN"]').is(":checked") ? 1 : 0 + ',';
+			repastDetail = $that.find('[name="repastDetailE"]').is(":checked") ? 1 : 0;
+
+			args.push(
+				{
+					detail : $that.find('[name="title"]').val(),
+				    id : $that.data("id") || "",
+				    repastDetail : repastDetail,
+				    restPosition : $that.find('[name="restPosition"]').val(),
+				    scenicItemIds : $that.find('[name="scenicItemNames"]').data("propover") || "",
+				    scenicItemNames : $that.find('[name="scenicItemNames"]').val(),
+				    whichDay : index + 1	
+				});
+		});
+
+		return args;
+	};
+
+	/**
+	 * 获取安排要求数据
+	 * @param  {object} $tab 顶级父容器
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.getTripPlanRequest = function($tab) {
+		var args = [];
+
+		$tab.find('.T-action-plan-list .hct-plan-ask').each(function(index) {
+			var $that = $(this);
+			args.push({
+				id : $that.data("id") || "",
+    			requireContent : $that.find('[name="requireContent"]').val(),
+    			requireType : $that.data("type") || ""
+			});
+		});
+
+		return args;
 	};
 
 	tripPlan.initTeamSearch = function($tab){
@@ -666,7 +720,7 @@ define(function(require, exports) {
 	 * @return {[type]}         [description]
 	 */
 	tripPlan.getOPUserList = function($target){
-		$target.autocomplete({
+		return $target.autocomplete({
 			minLength:0,
 			change:function(event,ui){
 				if(ui.item == null){
@@ -702,10 +756,7 @@ define(function(require, exports) {
 							userList[i].value = userList[i].realName;
 						}
 
-						$target.autocomplete('option', 'source', userList);
-						$target.autocomplete('search', $target.val());
-
-						$target.data('ajax', true);
+						$target.autocomplete('option', 'source', userList).data('ajax', true);
 					}
 				}
 			});
