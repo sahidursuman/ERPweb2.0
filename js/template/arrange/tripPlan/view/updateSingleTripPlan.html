@@ -281,7 +281,7 @@
 	<div class="row">
 		<div class="col-xs-12 T-action-plan-list">
 			{{each require as req}}
-			<div class="col-xs-12 hct-plan-ask" data-type="{{req.requireType}}">
+			<div class="col-xs-12 hct-plan-ask" data-type="{{req.requireType}}" data-id="{{req.id}}">
 				<div class="pull-left hct-plan-ask-title">{{req.requireText}}计划要求</div>
 				<div class="pull-left hct-plan-ask-input">
 				    <input type="text" class="col-xs-12" name="requireContent" value="{{req.requireContent}}">
