@@ -337,19 +337,7 @@ define(function(require, exports) {
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
     	});
-    	//绑定行程表内事件
-    	$tab.find(".T-days").on('click', '.T-action', function(event){
-    		event.preventDefault();
-    		var $that = $(this);
-    		if($that.hasClass('T-update-detail')){
-    			tripPlan.daysUpdateDetail($that);
-    		}else if($that.hasClass('T-delete')){
-    			$that.closest('tr').remove();
-    			F.arrangeDate($tab);
-    		}else if($that.hasClass('T-scenicItem')){
-    			KingServices.chooseScenic($that);
-    		}
-    	});
+    	
     	//提交数据
     	$tab.find(".T-savePlan").on('click', function(event){
     		event.preventDefault();
@@ -464,6 +452,43 @@ define(function(require, exports) {
 
             $tab.find('.T-action-plan').find('[data-type="'+ $that.data('type')+'"]').prop('disabled', false);
         });
+
+        //绑定行程表内事件
+    	$tab.find(".T-days").on('click', '.T-action', function(event){
+    		event.preventDefault();
+    		var $that = $(this);
+    		if($that.hasClass('T-update-detail')){
+    			tripPlan.daysUpdateDetail($that);
+    		}else if($that.hasClass('T-delete')){
+    			var id = $that.closest('tr').data('id');
+
+    			if (!!id) {
+    				showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
+    					$.ajax({
+    						url: KingServices.build_url('tripController', 'deletePlanDay'),
+    						type: 'post',
+    						data: {planDayId: id},
+    					})
+    					.done(function(data) {
+    						if (showDialog(data)) {
+    							showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+    								removeDay();
+    							});
+    						}
+    					});
+    				})
+    			} else {
+    				removeDay();
+    			}
+
+    			function removeDay() {
+    				$that.closest('tr').remove();
+	    			F.arrangeDate($tab);
+    			}
+    		}else if($that.hasClass('T-scenicItem')){
+    			KingServices.chooseScenic($that);
+    		}
+    	});
 	};
 
 	tripPlan.savePlanData = function($tab){
@@ -677,8 +702,9 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)) {
-				showMessageDialog($( "#confirm-dialog-message" ), data.message);
-				Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+				});				
 			}
 		});
 		
@@ -694,10 +720,10 @@ define(function(require, exports) {
 
 		$tab.find('.T-days tr').each(function(index) {
 			var $that = $(this), 
-				repastDetail = $that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0 + ',';
+				repastDetail = ($that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0) + ',';
 
-			repastDetail = $that.find('[name="repastDetailN"]').is(":checked") ? 1 : 0 + ',';
-			repastDetail = $that.find('[name="repastDetailE"]').is(":checked") ? 1 : 0;
+			repastDetail += ($that.find('[name="repastDetailN"]').is(":checked") ? 1 : 0) + ',';
+			repastDetail += $that.find('[name="repastDetailE"]').is(":checked") ? 1 : 0;
 
 			args.push(
 				{

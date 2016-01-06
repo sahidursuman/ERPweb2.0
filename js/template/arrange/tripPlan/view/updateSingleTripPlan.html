@@ -1,6 +1,7 @@
 <div class="container-fulid hct-editor-plan T-tab globalAdd">
 	<!-- 1. 基本信息 -->
 	<form class="T-basic-info" role="form" onsubmit="return false">
+		<input type="hidden" name="id" value="{{tripPlan.id}}">
 		<div class="row">
 			<div class="col-xs-12 hd">
 				<h3 class="">基本信息</h3>
@@ -9,9 +10,8 @@
 		<div class="row">
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
-				<div class="hct-input-group col-xs-8 T-search-line">
+				<div class="hct-input-group col-xs-8">
 					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{tripPlan.lineProduct.name}}">
-					<span class="hct-group-search cursor">[搜索]</span>
 					<input type="hidden" name="lineProductId" value="{{tripPlan.lineProduct.id}}">
 				</div>
 			</div>
@@ -149,7 +149,7 @@
 				</thead>
 				<tbody class="T-days">
 				{{each tripPlanDay as rs}}
-				<tr>
+				<tr data-id={{rs.id}}>
 					<td name="dateDays" data-which-day={{rs.whichDay}}></td>
 					<td><input type="text" class="col-xs-12" name="title" value="{{rs.title}}"></td>
 					<td>
@@ -216,7 +216,7 @@
 				<tbody class="T-touristGroup-list">
 					{{each touristGroup as group}}
 					<tr data-id="{{group.id}}">
-						<td name="creatorName">{{group.creatorName}}</td>
+						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
 						<td name="lineProductName">{{group.lineProduct.name}}</td>
 						<td name="travelAgencyName">{{group.partnerAgency.travelAgencyName}}</td>
 						<td name="contactMemberName">{{group.contactMember.name}}</td>
