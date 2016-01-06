@@ -281,7 +281,7 @@ define(function(require, exports) {
     	$tab.find(".T-selfPayItemNames").on('click', function(){
     		KingServices.selfPayMultiselect($(this));
     	});
-    	tripPlan.getOPUserList($tab.find('[name="dutyOPUserName"]'));
+    	tripPlan.getOPUserList($tab.find('input[name="dutyOPUserName"]')).trigger('click');
     	//行程安排
     	$tab.find('.T-add-days').on('click', function(event){
     		event.preventDefault();
@@ -304,6 +304,15 @@ define(function(require, exports) {
     		}
     		F.arrangeDate($tab);
     	});
+    	//新增同行
+        $tab.find('.T-addPartner').on("click", {
+            function: KingServices.addPartnerAgency,
+            type: ".form-group",
+            name: "fromPartnerAgency",
+            id: "fromPartnerAgencyId"
+        }, KingServices.addResourceFunction);
+        //新增同行联系人
+        tripPlan.chooseTravelAgencyName($tab.find('[name="travelAgencyName"]'))
     	//绑定添加游客小组事件
     	$tab.find('.T-add-tourists').on('click', function(event){
     		event.preventDefault();
@@ -370,7 +379,42 @@ define(function(require, exports) {
     		tripPlan.savePlanData($tab);
     	});
 	};
+	tripPlan.chooseTravelAgencyName = function($that){
+		$that.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (ui.item == null) {
+                }
+            },
+            select: function(event, ui) {
 
+            }
+        }).off('click').on('click', function() {
+            var $that = $(this);
+            $.ajax({
+                url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
+                data: {
+                    operation: 'view'
+                },
+                showLoading:false,
+                type: 'POST',
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var formParObj = JSON.parse(data.partnerAgencyList);
+
+                        if (formParObj != null && formParObj.length > 0) {
+                            for (var i = 0; i < formParObj.length; i++) {
+                                formParObj[i].value = formParObj[i].travelAgencyName
+                            }
+                        };
+                        $that.autocomplete('option', 'source', formParObj);
+                        $that.autocomplete('search', '');
+                    }
+
+                }
+            });
+        });
+	};
 	tripPlan.savePlanData = function($tab){
 		var arge = $tab.find('.T-basic-info').serializeJson();
 		//团行程json包
