@@ -96,6 +96,54 @@ define(function(require, exports) {
     		event.preventDefault();
     		tripPlan.addTripPlan($(this).data('type'));
     	});
+
+    	// 团队
+		$tab.find(".T-tripPlan-groupList").on('click', '.T-action', function(event){
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-view')){
+				tripPlan.viewTripPlan(id, 1);
+			} else if($that.hasClass('T-hair-regiment')){
+				// 发团
+                var statusValue = $that.attr("statusValue"),
+					billStatus = $that.attr("billStatus");
+
+                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+			} else if($that.hasClass('T-update')){
+				// 编辑
+                tripPlan.updateGroupTripPlan(id);
+			} else if($that.hasClass('T-export')){
+				// 导出
+                tripPlan.exportTripPlan(id);				
+			} else if($that.hasClass('T-cancel')){
+				// 取消
+                tripPlan.cancelTripPlan(id);
+			}
+		});
+
+		// 散客
+		$tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
+			event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').data('id');
+			if($that.hasClass('T-view')){
+				tripPlan.viewTripPlan(id, 0);
+			} else if($that.hasClass('T-hair-regiment')){
+				// 发团
+                var statusValue = $that.attr("statusValue"),
+					billStatus = $that.attr("billStatus");
+					
+                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+			} else if($that.hasClass('T-update')){
+				// 编辑
+                tripPlan.updateSingleTripPlan(id);
+			} else if($that.hasClass('T-export')){
+				// 导出
+                tripPlan.exportTripPlan(id);
+			} else if($that.hasClass('T-cancel')){
+				// 取消
+                tripPlan.cancelTripPlan(id);
+			}
+		});
     };
 	
 	tripPlan.listTripPlanGroup = function(page, $tab){
@@ -127,7 +175,6 @@ define(function(require, exports) {
 				data.result = JSON.parse(data.result);
 				var groupHtml = listTemplate(data);
 				$tab.find('.T-tripPlan-groupList').html(groupHtml);
-				tripPlan.init_event($tab, 1);
 				// 绑定翻页组件
 				laypage({
 				    cont: $tab.find('.T-tripPlan-groupList').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -181,28 +228,6 @@ define(function(require, exports) {
 						};
 				    }
 				});
-			}
-		});
-	};
-
-	tripPlan.init_event = function($tab, planType){
-		var $searchArea = $tab.find(".T-search-tripPlan-single"),
-			$tableList = $tab.find('.T-tripPlan-singleList');
-		if(planType == 1){
-			$searchArea = $tab.find(".T-search-tripPlan-group");
-			$tableList = $tab.find(".T-tripPlan-groupList");
-		}
-		$tableList.find('tbody').on('click', '.T-action', function(event){
-			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id');
-			if($that.hasClass('T-view')){
-				tripPlan.viewTripPlan(id, planType);
-			}else if($that.hasClass('T-hair-regiment')){
-
-			}else if($that.hasClass('T-update')){
-
-			}else if($that.hasClass('T-export')){
-				
 			}
 		});
 	};
@@ -502,6 +527,29 @@ define(function(require, exports) {
 		});
 	};
 
+	/**
+	 * 获取散客计划，进入编辑页面
+	 * @param  {int} id 计划ID
+	 * @return {[type]}    [description]
+	 */
+	tripPlan.updateSingleTripPlan = function(id) {
+		if (!!id) {
+			$.ajax({
+				url: KingServices.build_url('tripController', 'editTripPlan'),
+				type: 'post',
+				data: {tripPlanId: id},
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					var tabKey = menuKey + "_single_add";
+					if (Tools.addTab(tabKey, '编辑计划', addSingleTripPlanTemplate(data))) {
+						tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
+					}
+				}
+			});			
+		}
+	};
+
 	tripPlan.initSigleEvent = function($tab) {
 		tripPlan.bindCommonEvent($tab);
     	//绑定添加游客小组事件
@@ -536,7 +584,7 @@ define(function(require, exports) {
     	// 保存
     	$tab.find('.T-savePlan').on('click', function(event) {
     		event.preventDefault();
-    		tripPlan.saveSiglePlan($tab);
+    		tripPlan.saveSinglePlan($tab);
     	});
 	};
 
@@ -545,7 +593,7 @@ define(function(require, exports) {
 	 * @param  {object} $tab 父容器
 	 * @return {[type]}      [description]
 	 */
-	tripPlan.saveSiglePlan = function($tab, tabArgs) {
+	tripPlan.saveSinglePlan = function($tab, tabArgs) {
 		var args = $tab.find('.T-basic-info').serializeJson();
 
 		// 处理定时发送
