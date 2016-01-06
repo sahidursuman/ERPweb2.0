@@ -360,7 +360,7 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ((this.validateHiddenObject || (!this.validateHiddenObject && $jTmp.is(':visible')))
+				if (((this.validateHiddenObject && $jTmp.closest('body').length) || (!this.validateHiddenObject && $jTmp.is(':visible')))
 				  && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素

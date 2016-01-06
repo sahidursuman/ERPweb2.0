@@ -20,6 +20,12 @@ template.helper("dateFormat", function(date, fmt) {
         }
     return fmt;
 });
+
+template.helper("getDateText", function(startTime, whichDay) {
+    return Tools.addDay(startTime, whichDay -1);
+});
+
+
 template.helper("encode", function(data) {
     return encodeURIComponent(data);
 });
@@ -44,6 +50,14 @@ template.helper("getCardText", function(idCardType) {
         default:
             return '其他';
     }
+});
+template.helper("getCardOption", function(status) {
+    var res = '';
+    status = status || 0;
+    res += '<option value="0" '+(status == 0?'selected':'')+'>身份证</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>护照</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>其它</option>';
+    return res;
 });
 
 template.helper("getTicketText", function(ticketType) {
@@ -151,4 +165,24 @@ template.helper("getTaskSelect", function(status) {
     str.push('</select>');
 
     return str.join('');
+});
+template.helper("getHotelLevelDesc", function(level) {
+    switch (level * 1) {
+        case 2:     return '三星';
+        case 3:     return '准四星';
+        case 4:     return '四星';
+        case 5:     return '准五星';
+        case 6:     return '五星';
+        case 7:     return '五星以上';
+        default:     return '三星以下';
+    }
+});
+
+template.helper("getOrderStatusDesc", function(status) {
+    switch (status * 1) {
+        case 1:     return '未预定';
+        case 2:     return '预定中';
+        case 3:     return '已预订';
+        default:     return '无需预订';
+    }
 });

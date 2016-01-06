@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -92,6 +92,8 @@
         /(y+)/.test(fmt) && (fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length)));
         for (var k in o) new RegExp("(" + k + ")").test(fmt) && (fmt = fmt.replace(RegExp.$1, 1 == RegExp.$1.length ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
+    }), template.helper("getDateText", function(startTime, whichDay) {
+        return Tools.addDay(startTime, whichDay - 1);
     }), template.helper("encode", function(data) {
         return encodeURIComponent(data);
     }), template.helper("parseInt", function(data) {
@@ -113,6 +115,11 @@
           default:
             return "其他";
         }
+    }), template.helper("getCardOption", function(status) {
+        var res = "";
+        return status = status || 0, res += '<option value="0" ' + (0 == status ? "selected" : "") + ">身份证</option>", 
+        res += '<option value="1" ' + (1 == status ? "selected" : "") + ">护照</option>", 
+        res += '<option value="2" ' + (2 == status ? "selected" : "") + ">其它</option>";
     }), template.helper("getTicketText", function(ticketType) {
         switch (1 * ticketType) {
           case 1:
@@ -216,5 +223,42 @@
     }), template.helper("getTaskSelect", function(status) {
         for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
+    }), template.helper("getHotelLevelDesc", function(level) {
+        switch (1 * level) {
+          case 2:
+            return "三星";
+
+          case 3:
+            return "准四星";
+
+          case 4:
+            return "四星";
+
+          case 5:
+            return "准五星";
+
+          case 6:
+            return "五星";
+
+          case 7:
+            return "五星以上";
+
+          default:
+            return "三星以下";
+        }
+    }), template.helper("getOrderStatusDesc", function(status) {
+        switch (1 * status) {
+          case 1:
+            return "未预定";
+
+          case 2:
+            return "预定中";
+
+          case 3:
+            return "已预订";
+
+          default:
+            return "无需预订";
+        }
     });
 }();
