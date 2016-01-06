@@ -1777,7 +1777,7 @@ define(function(require, exports){
 		'</tr>';
 		$obj.append(html);
 		//获取餐厅数据
-		Count.getRestData($obj);
+		Count.getRestData($obj,$parentObj);
 		//下拉框事件
 		$obj.find('select').off('change').on('change',function(){
 			var $tr = $(this).closest('tr');
@@ -1792,7 +1792,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "restaurantName" && $nameFlag != "type" && $nameFlag != "billRemark"){
+			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoRestaurantSum($(this),$parentObj);
@@ -2409,7 +2409,7 @@ define(function(require, exports){
 		});
 	};
 	//获取餐厅
-	Count.getRestData = function($obj){
+	Count.getRestData = function($obj,$parentObj){
 		var $restObj = $obj.find('input[name=restaurantName]');
 		$.ajax({
 			url:KingServices.build_url('restaurant','findAll'),
@@ -2431,16 +2431,19 @@ define(function(require, exports){
 								var $tr = $(this).closest('tr');
 								$tr.find('input[name=price]').val('');
 								$tr.find('input[name=standardId]').val(ui.item.id);
+
 							}
 						},
 						select:function(event,ui){
 							if(ui.item != null){
 								var $tr = $(this).closest('tr');
 								$tr.find('input[name=restaurantId]').val(ui.item.id);
-								$tr.find('input[name=price]').val('');
+								$tr.find('input[name=price]').val(0);
 								$tr.find('input[name=standardId]').val(ui.item.id);
+								Count.autoRestaurantSum($(this),$parentObj);
 								//获取餐标
-								Count.getRestPrice($tr);
+								Count.getRestPrice($tr,$parentObj);
+
 							}
 						}
 					}).off('click').on('click',function(){
@@ -2453,7 +2456,7 @@ define(function(require, exports){
 		});
 	};
 	//获取餐标
-	Count.getRestPrice = function($obj){
+	Count.getRestPrice = function($obj,$parentObj){
 		var id = $obj.find('input[name=restaurantId]').val(),
 			standardObj = $obj.find('input[name=price]'),
 			type = $obj.find('select[name=type]').val();
@@ -2480,6 +2483,7 @@ define(function(require, exports){
 								 	var $tr = $(this).closest('tr');
 								 	$tr.find('input[name=standardId]').val('');
 								 }
+								 Count.autoRestaurantSum($(this),$parentObj);
 							},
 							select:function(event,ui){
 								if(ui.item !=null){
