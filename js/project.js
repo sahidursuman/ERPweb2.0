@@ -693,6 +693,7 @@ var modalScripts = {
     'system_user': "js/template/system/user/user.js",
     'system_department': "js/template/system/department/business.js",
 	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
+	'system_companyInformation':"js/template/system/companyInfo/company.js",//公司资料
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",

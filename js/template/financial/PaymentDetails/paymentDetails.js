@@ -35,11 +35,12 @@ define(function(require, exports){
 			searchParam : args
 		};
 		Tools.addTab(menuKey, "现金日记", listTemplate(data));
-		Payment.$tab = $('#tab-' + menuKey + '-content');
-		FinancialService.initPayEvent(Payment.$tab);
-		Payment.getTotal(args);
+		$tab = $('#tab-' + menuKey + '-content');
+		FinancialService.initPayEvent($tab);
+		Payment.getTotal(args,$tab);
 		Payment.ajaxInit(args);
 		Payment.initSearch(args,bankNo);
+		Payment.$tab = $tab;
 	};
 	/**
 	 * 获取收/付款合计
@@ -57,8 +58,8 @@ define(function(require, exports){
 			data : {searchParam : JSON.stringify(args)},
 			showLoading: false
 		}).done(function(data){
-			Payment.$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
-			Payment.$tab.find('.T-payMoney').html(data.total.payMoney);
+			$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
+			$tab.find('.T-payMoney').html(data.total.payMoney);
 			Payment.total = data.total;
 		});
 	};

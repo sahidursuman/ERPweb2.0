@@ -362,9 +362,12 @@ define(function(require,exports) {
 		//格式化日期控件
 		FinancialService.initDate(InnerTransferIn.$checkSearchArea);
 		//导出报表事件
-		$obj.find(".T-transferExport").on('click',function(event){
-			event.preventDefault();
-			InnerTransferIn.exportData($obj)
+		$obj.find(".T-btn-export").on('click',function(event){
+			var args = { 
+                    startAccountTime: $obj.find('input[name=startDate]').val(),
+                    endAccountTime: $obj.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportInnerTransferIn");
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
@@ -476,18 +479,6 @@ define(function(require,exports) {
 	};
 	//给修改了但未勾选的得数据打钩
 
-	//导出事件
-	InnerTransferIn.exportData = function($obj){
-		var year=$obj.find("select[name=year]").val(),
-			fromBusinessGroupId = $obj.find("input[name=fromBusinessGroupId]").val(),
-			fromBusinessGroupName = $obj.find("input[name=fromBusinessGroupName]").val(),
-	      	month=$obj.find("select[name=month]").val();
-      	checkLogin(function(){
-        	var url = KingServices.build_url("export","exportInnerTransferIn");
-        	    url += "&fromBusinessGroupId="+fromBusinessGroupId+"&fromBusinessGroupName="+fromBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
-        	exportXLS(url)
-        });
-	};
 	//自动计算本次收款金额
 	InnerTransferIn.autoSumIncomeMoney = function($obj){
 		var sumPayMoney = $obj.find('input[name=sumPayMoney]'),
@@ -780,6 +771,12 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,tab_id,$data,title, html){
+		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
 		var payMoney;

@@ -12,18 +12,25 @@ define(function(require, exports) {
 
 	message.listMsg = function(page){
 		page = page || 0;
+		var $tab = $("#" + tabId),
+		    searchParam = {
+				pageNo : page,
+				messageTypeName : $tab.find("input[name=menuName]").val(),
+				messageType : $tab.find("input[name=menuId]").val(),
+				sortType : "auto"
+			}
 		$.ajax({
 			url:KingServices.build_url("message","listMessage"),
 			type:"POST",
-			data:{
-				pageNo : page,
-				sortType : "auto"
-			},
+			data: searchParam,
 			success:function(data){
+				data.searchParam = searchParam;
 				var result = showDialog(data);
 				if (result) {
+					data.msgList = JSON.parse(data.msgList);
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"消息列表",html);
+					message.getQuery();
 					message.$tab = $('#tab-public_message-content');
 
 					//查看消息内容
@@ -41,6 +48,12 @@ define(function(require, exports) {
 					message.$tab.find('.T-set-read-all').on('click', function(event) {
 						event.preventDefault();
 						message.setReadAll();
+					});
+
+					//搜索事件
+					message.$tab.find('.T-search').on('click', function(event) {
+						event.preventDefault();
+						message.listMsg(0);
 					});
 
 					// 绑定翻页组件
@@ -94,7 +107,6 @@ define(function(require, exports) {
 	    		    	}
 				    }
 				});
-
 				// 设置list
 				message.$tab.find('[data-id="'+id+'"]').children('td').eq(1).find('b').text('已读').css('color', 'green');
 			}
@@ -115,6 +127,36 @@ define(function(require, exports) {
 				})
 			}
 		});		
+	};
+
+	message.getQuery = function(){
+		$.ajax({
+			url: KingServices.build_url("message","findMessageType"),
+			type: 'POST',
+		})
+		.done(function(data) {
+			var menus = JSON.parse(data.menus),
+				$menu = $("#" + tabId + " .T-chooseMenu");
+			for(var i = 0 ;i < menus.length; i ++){
+				menus[i].value = menus[i].name;
+			}
+
+			$menu.autocomplete({
+	            minLength: 0,
+	            source : menus,
+	            change: function(event,ui) {
+	                if (!ui.item)  {
+	                    $(this).nextAll('input[name="menuId"]').val('');
+	                }
+	            },
+	            select: function(event,ui) {
+	                $(this).blur().nextAll('input[name="menuId"]').val(ui.item.id);
+	            }
+	        }).on("click",function(){
+	            $menu.autocomplete('search','');
+	        }); 
+		});
+		
 	};
 
 	exports.init = message.initModule;
