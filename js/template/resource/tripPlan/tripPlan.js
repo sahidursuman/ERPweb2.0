@@ -912,6 +912,7 @@ define(function(require, exports) {
 								var $this = $tr.eq(j);
 								var trHotelId = $this.find('[name=hotelId]').val(),
 									trHotelRoomId = $this.find('[name=hotelRoomId]').val(),
+									trWhichDay = $this.find('[name=whichDay]').val();
 								if (hotelId == trHotelId && hotelRoomId == trHotelRoomId && whichDay == trWhichDay) {
 									$this.find('[name=id]').val(arrangeId);
 									$this.data('entity-arrangeid', arrangeId);
