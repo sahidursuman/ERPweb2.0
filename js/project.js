@@ -1851,6 +1851,17 @@ KingServices.viewOptionalSelfPay = function($this){
 		module.viewOptionalSelfPay($this);
 	});
 }
+//景区多选和浮动显示
+KingServices.chooseScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewOptionalScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.viewOptionalSelfPay($this);
+	});
+}
 
 
 //添加资源函数
