@@ -37,13 +37,13 @@
                     {{if !!quoteDetailJson.lineProduct.shopNames}}
                         <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.shopIds}}">
+                            <label class="control-label" style="text-align: left">{{quoteDetailJson.lineProduct.shopNames}}</label>
                         </div>
                     {{/if}}
                     {{if !!quoteDetailJson.lineProduct.selfPayItemNames}}
                         <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quoteDetailJson.lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{quoteDetailJson.lineProduct.selfPayItemIds}}">
+                            <label class="control-label" style="text-align: left">{{quoteDetailJson.lineProduct.selfPayItemNames}}</label>
                         </div>
                     {{/if}}
                     </div>
