@@ -51,6 +51,22 @@ template.helper("getCardText", function(idCardType) {
             return '其他';
     }
 });
+template.helper("getWayType", function(status) {
+    var res = '';
+    status = status || 1;
+    res += '<option value="1" '+(status == 1?'selected':'')+'>旅行社系统</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>传真</option>';
+    res += '<option value="3" '+(status == 3?'selected':'')+'>短信</option>';
+    res += '<option value="4" '+(status == 4?'selected':'')+'>电话</option>';
+    res += '<option value="5" '+(status == 5?'selected':'')+'>QQ </option>';
+    res += '<option value="6" '+(status == 6?'selected':'')+'>微信</option>';
+    res += '<option value="7" '+(status == 7?'selected':'')+'>线上渠道</option>';
+    return res;
+});
+template.helper("checked", function(status) {
+    status = status || 0;    
+    return status == 1 ? "checked" : "";
+});
 template.helper("getCardOption", function(status) {
     var res = '';
     status = status || 0;
@@ -59,7 +75,6 @@ template.helper("getCardOption", function(status) {
     res += '<option value="2" '+(status == 2?'selected':'')+'>其它</option>';
     return res;
 });
-
 template.helper("getTicketText", function(ticketType) {
     switch (ticketType * 1) {
         case 1:
@@ -145,6 +160,7 @@ template.helper("getRestaurantDesc", function(status) {
     
     return res;
 });
+
 template.helper("getTaskDesc", function(status) {
     switch (status * 1) {
         case 1:     return '接机';
