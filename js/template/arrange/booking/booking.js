@@ -379,6 +379,7 @@ define(function(require, exports) {
 					Tools.setDatePicker($datepickers, true).on('changeDate.diff.api', function(event) {
 						event.preventDefault();
 						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
 					});
 				} else {
 					Tools.setDatePicker($datepicker);
@@ -420,6 +421,21 @@ define(function(require, exports) {
 				parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
 				parents.find("input[name=hotelRoom]").val("");
 				parents.find("input[name=hotelRoomId]").val("");
+				parents.find("input[name=costPrice]").val(0);
+				parents.find("input[name=salePrice]").val(0);
+				$.ajax({
+					url: KingServices.build_url('hotel','getHotelById'),
+					type: 'POST',
+	                showLoading: false,
+	                data: "id=" + ui.item.id,
+	                success: function(data) {
+						if(showDialog(data)){
+							var hotel = JSON.parse(data.hotel);
+							parents.find(".T-hotelStar").val(hotel.level);
+						}
+	                }
+				});
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 		}, function(obj, ui){
 			var parents = $(obj).closest('tr');
 			parents.find("input[name=hotelId]").val("");
@@ -458,6 +474,7 @@ define(function(require, exports) {
 			var enterTime = parents.find("input[name=enterTime]").val();
 			BookingArrange.ajax({'url' : 'hotel', 'method' : 'getHotelRoomPrice', 'menuKey' : 'resource_hotel', 'operation' : 'view', 'id' : ui.item.id, 'enterTime' : enterTime}, function(data){
 				parents.find("input[name=costPrice]").val(data.price);
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 			});
 		}, function(obj, ui){
 			var $parent = $(obj).closest('tr');
@@ -672,8 +689,8 @@ define(function(require, exports) {
 	//添加酒店代订列表
 	BookingArrange.addHotelList = function($that){
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="enterTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
-			'<td><div class="input-group"><input name="leaveTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="enterTime" value="" type="text" class="datepicker"/></div></td>'+
+			'<td><div class="input-group"><input name="leaveTime" value="" type="text" class="datepicker"/></div></td>'+
 			'<td><select name="level" class="col-sm-12 T-hotelStar"><option selected="selected" value="" {{if hotelList.hotel.level == 0}}selected="selected"{{/if}}>全部</option>'+
 			'<option value="1">三星以下</option>'+
 			'<option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
@@ -700,7 +717,7 @@ define(function(require, exports) {
 	BookingArrange.addScenicList = function($that){
 		var $this = $that.closest(".T-bookingScenicList");
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/></div></td>'+
 			'<td><input name="scenicName" value="" type="text" class="col-sm-12 T-chooseScenic bind-change" /><input name="scenicId" value="" type="hidden" /></td>'+
 			'<td><input name="scenicItemName" value="" type="text"  class="col-sm-12 T-chooseScenicItem bind-change" /><input name="scenicItemId" value="" type="hidden" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur"  maxlength="5" /></td>'+
@@ -747,8 +764,8 @@ define(function(require, exports) {
 	BookingArrange.addBusList = function($that){
 		var $this = $that.closest('.T-bookingBusList');
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker" /><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
-			'<td><div class="input-group"><input name="endTime" value="" type="text" class="datepicker" /><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker" /></div></td>'+
+			'<td><div class="input-group"><input name="endTime" value="" type="text" class="datepicker" /></div></td>'+
 			'<td><input name="needSeatCount" value="" type="text" class="col-sm-12 T-chooseSeatCount bind-change" /></td>'+
 			'<td><input name="needBusBrand" value="" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" /></td>'+
 			'<td><input name="busCompany" value="" type="text" class="col-sm-12 bind-change T-busCompany" /><input name="busCompanyId" value="" type="hidden" /></td>'+
