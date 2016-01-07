@@ -5,7 +5,7 @@ define(function(require, exports){
 		updateTemplate = require("./view/update"),
 		Reimbursement = require("./view/Reimbursement"),
 		arrangeDetailTempLate = require("./view/arrangeDetail"),
-		groupDetailTemplate = require("./view/groupDetail"),
+		
 		qualityTempLate = require("./view/quality"),
 		billImageTempLate = require("./view/billImage"),
 		viewLogTemplate = require("./view/viewLog"),
@@ -239,12 +239,7 @@ define(function(require, exports){
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -385,12 +380,7 @@ define(function(require, exports){
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -625,12 +615,6 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -1065,33 +1049,6 @@ define(function(require, exports){
 				}   
 			}
     	});
-	};
-	//团款明细事件
-	Count.viewGroupDetail = function(id){
-		$.ajax({
-		    url:KingServices.build_url('touristGroup',"findTouristGroupByTripPlanId"),
-			type:"POST",
-			data:{
-				tripPlanId:id
-			},
-			showLoading:false,
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					var touristGroupList = JSON.parse(data.touristGroupList);
-					data.touristGroupList = touristGroupList;
-					var html = groupDetailTemplate(data);
-					layer.open({
-					    type: 1,
-					    title:"团款明细",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: ['1000px', '500px'], //宽高
-					    zIndex:1028,
-					    content: html
-					});
-				}
-			}
-		});
 	};
 	//中转明细
 	Count.ViewOutDetail = function(id){
