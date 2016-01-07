@@ -599,7 +599,7 @@
                                         <td><input type="text" name="guidePayMoney" class="col-sm-12" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                         <td>
-                                            <select name="hotelOrder">
+                                            <select name="orderStatus">
                                                 <option {{if hotel.orderStatus == 1}}selected="selected"{{/if}} value="1">未预定</option>
                                                 <option {{if hotel.orderStatus == 2}}selected="selected"{{/if}} value="2">预定中</option>
                                                 <option {{if hotel.orderStatus == 3}}selected="selected"{{/if}} value="3">已预订</option>
