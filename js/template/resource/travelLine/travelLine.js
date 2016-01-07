@@ -431,7 +431,7 @@ define(function(require, exports) {
 
 	// 编辑行程详情
 	ResTravelLine.updateDetails = function($this,$tr){
-		var title = '<span class="necessary">*</span>编辑行程详情',data={},time = (new Date()).getTime();
+		var title = '编辑行程详情',data={},time = (new Date()).getTime();
 		data.time = time;
 		var updateDetailsLayer = layer.open({
 			type: 1,
