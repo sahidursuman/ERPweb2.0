@@ -378,7 +378,7 @@
                                         <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12" style="width: 60px;"/></td>
                                         <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                         <td>
-                                            <select name="busOrder">
+                                            <select name="orderStatus">
                                                 <option value="1" {{if busCompany.orderStatus == 1}}selected="selected"{{/if}}>未预定</option>
                                                 <option value="2" {{if busCompany.orderStatus == 2}}selected="selected"{{/if}}>预定中</option>
                                                 <option value="3" {{if busCompany.orderStatus == 3}}selected="selected"{{/if}}>已预订</option>

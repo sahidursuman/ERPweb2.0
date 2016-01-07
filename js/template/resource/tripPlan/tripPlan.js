@@ -391,7 +391,7 @@ define(function(require, exports) {
 
 		tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 		//修改预订状态
-		$tab.find('.tabbable').on('change', '[name=busOrder],[name=hotelOrder]', function() {
+		$tab.find('.tabbable').on('change', '[name=orderStatus],[name=hotelOrder]', function() {
 			var $this = $(this), $parents = $this.closest('tr'), value = $this.val(), cateName = $parents.find('.T-btn-deleteTripPlanList').data('entity-name');
 			if (value == 2 || value == 3 || value == 0) {
 				if (cateName == 'hotel') {
@@ -610,7 +610,7 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					showMessageDialog($( "#confirm-dialog-message" ), data.message);
-					$this.closest('tr').find('[name=busOrder]').val(2);
+					$this.closest('tr').find('[name=orderStatus]').val(2);
 					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
 					$this.closest('tr').data('entity-arrangeid', data.arrangeId);
@@ -1029,7 +1029,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12" style="width: 60px;"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
-					+ '<td> <select name="busOrder"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
+					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a></td></tr>',
 
 			$tr = $(filterUnAuth(html)).appendTo($tbody),
