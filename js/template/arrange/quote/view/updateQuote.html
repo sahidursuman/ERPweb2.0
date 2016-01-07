@@ -321,7 +321,7 @@
 													<tbody class="T-busCompanyForm">{{if busCompanyQuote.length > 0}}
 													{{each busCompanyQuote as rs}}
 														<tr data-entity-id="{{rs.id}}">
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.seatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.needSeatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{rs.brand}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td>
 																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{rs.busCompany.companyName}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} />

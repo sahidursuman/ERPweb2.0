@@ -278,7 +278,7 @@ define(function(require, exports) {
 						data.viewLineProduct = {
 								lineProduct: JSON.parse(data.lineProduct),
 								busCompanyTemplate: JSON.parse(data.busCompanyTemplate),
-								guideTemplate: JSON.parse(data.guideTemplate),
+								//guideTemplate: JSON.parse(data.guideTemplate),
 								insuranceTemplate: JSON.parse(data.insuranceTemplate),
 								daysList: JSON.parse(data.daysList)
 						};
