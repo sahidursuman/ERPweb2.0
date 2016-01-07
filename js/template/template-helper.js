@@ -205,3 +205,20 @@ template.helper("getOrderStatusDesc", function(status) {
         default:     return '无需预订';
     }
 });
+template.helper("getRepastDetail", function(repastDetail) {
+    var res = [];
+
+    if (repastDetail.breakfast ==1) {
+        res.push('早餐');
+    }
+
+    if (repastDetail.lunch ==1) {
+        res.push('午餐');
+    }
+
+    if (repastDetail.dinner ==1) {
+        res.push('晚餐');
+    }
+
+    return res.join('、');
+});
