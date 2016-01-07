@@ -271,5 +271,9 @@
           default:
             return "无需预订";
         }
+    }), template.helper("getRepastDetail", function(repastDetail) {
+        var res = [];
+        return 1 == repastDetail.breakfast && res.push("早餐"), 1 == repastDetail.lunch && res.push("午餐"), 
+        1 == repastDetail.dinner && res.push("晚餐"), res.join("、");
     });
 }();
