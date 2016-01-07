@@ -152,13 +152,14 @@ template.helper("getArrangeIcon", function(status) {
     }
 });
 template.helper("getRestaurantDesc", function(status) {
-    var res = '', i = 0;
+    var res = '', i = 0, txt = ['早餐', '中餐', '晚餐'];
 
     if (!!status) {
         status = status.split(',');
-        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>早餐&nbsp;';
-        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>中餐&nbsp;';
-        res += '<input type="radio" readonly '+ (status[i++] == 0?'checked': '') +'/>晚餐&nbsp;';
+        
+        for (var i = 0; i < 3; i ++) {
+            res += '<label>&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>';
+        }
     }
     
     return res;
@@ -204,4 +205,21 @@ template.helper("getOrderStatusDesc", function(status) {
         case 3:     return '已预订';
         default:     return '无需预订';
     }
+});
+template.helper("getRepastDetail", function(repastDetail) {
+    var res = [];
+
+    if (repastDetail.breakfast ==1) {
+        res.push('早餐');
+    }
+
+    if (repastDetail.lunch ==1) {
+        res.push('午餐');
+    }
+
+    if (repastDetail.dinner ==1) {
+        res.push('晚餐');
+    }
+
+    return res.join('、');
 });
