@@ -3526,6 +3526,7 @@ define(function(require, exports) {
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
+							type : $item.find("[name=type]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
