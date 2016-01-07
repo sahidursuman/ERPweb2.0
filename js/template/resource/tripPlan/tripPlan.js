@@ -2686,7 +2686,7 @@ define(function(require, exports) {
 		var table = $tab.find(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
 		table.each(function(){
 			var $this = $(this), $parents = $this.closest('tr');
-			$this.find("input[name=price], input[name=payedMoney], input[name=reduceMoney], input[name=fee], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
+			$this.find("input[name=price], input[name=payedMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").on("change", function(){
@@ -2705,8 +2705,13 @@ define(function(require, exports) {
 		var $parents = $this.closest('tr');
 		var payType = $parents.find("select[name=payType]").val(),
 			payedMoney = $parents.find("input[name=payedMoney]").val(),
-			payedMoney = isNaN(payedMoney) ? 0 : payedMoney;
-		price = parseFloat($parents.find("input[name=price], input[name=fee]").val());
+			payedMoney = isNaN(payedMoney) ? 0 : payedMoney,
+			price = parseFloat($parents.find("input[name=price]").val()),
+			lowestPrice = $parents.find("input[name=lowestPrice]").val();
+
+		if (lowestPrice != undefined) { // 处理底价问题
+			price = lowestPrice*1;
+		}
 		price = isNaN(price) ? 0 : price;
 		num = parseFloat($parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
 		num = isNaN(num) ? 0 : num;
