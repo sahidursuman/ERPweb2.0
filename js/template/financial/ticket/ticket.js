@@ -516,7 +516,15 @@ define(function(require, exports) {
 		});
 		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
-			Ticket.savePayingData($tab);
+			var allMoney = $tab.find('input[name=sumPayMoney]').val();
+        	if(allMoney == 0){
+        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+		            Ticket.savePayingData($tab);
+		        })
+        	}else{
+        		Ticket.savePayingData($tab);
+        	}
+			
 		});
 
 		FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
@@ -615,7 +623,7 @@ define(function(require, exports) {
 	        if(!reciveValidtor.form()){
 	    		return;
 	        }
-        }
+        };
         var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
             sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
         if(sumPayMoney != sumListMoney){

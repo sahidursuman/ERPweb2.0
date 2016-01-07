@@ -559,7 +559,15 @@ define(function(require, exports) {
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
-            Client.saveClearData($tab);
+            var allMoney = $tab.find('input[name=sumPayMoney]').val();
+            if(allMoney == 0){
+                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                    Client.saveClearData($tab);
+                })
+            }else{
+                Client.saveClearData($tab);
+            }
+            
          });
 
         //关闭页面事件
