@@ -2509,7 +2509,17 @@ define(function(require, exports) {
                 	}
                 }
                 //初始化list列表
-                listOptional(0);
+                  listOptional(0,'','');
+                 $container.find('.T-restaurant-search').on('click', function(event) {
+                	event.preventDefault();
+                	/* Act on the event */
+                	var $that = $(this),$searchKey = $that.closest('div');
+                	var name = $searchKey.find('.T-name').val(),
+                	    startPrice = $searchKey.find('.T-start-price').val(),
+               	        endPrice = $searchKey.find('.T-end-price').val();
+               	        listOptional(0,name,startPrice,endPrice);
+
+                });
                 
                 //给提交按钮绑定事件
                 $container.find(".T-btn-saveOptional").on('click' , saveOptional);
@@ -2517,11 +2527,18 @@ define(function(require, exports) {
                 $container.find(".T-btn-cancelOptional").click(function() {
                     layer.close(addOptionalLayer);
                 });
-                function listOptional(page){
+                function listOptional(page,name,startPrice,endPrice){
+                	var searchJson = {
+                			pageNo:page,
+                			name:name,
+                			startPrice:startPrice,
+                			endPrice:endPrice
+                	};
+                	searchJson=JSON.stringify(searchJson);
 					$.ajax({
 			        	url: KingServices.build_url('restaurant','getRestaurantListByChooseMode'),
 			        	type: "POST",
-			        	data: "pageNo="+page,
+			        	data: "searchJson="+searchJson,
 			        	success: function(data){
 			        		if (showDialog(data)) {
 			        			data.restaurantList = JSON.parse(data.restaurantList);
