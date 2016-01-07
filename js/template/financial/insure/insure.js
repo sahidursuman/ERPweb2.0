@@ -192,11 +192,12 @@ define(function(require, exports) {
         //导出报表事件
         Insure.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
-                    insuranceId: id, 
+                    insuranceName: name, 
+                    accountInfo : Insure.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startDate: Insure.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: Insure.$checkSearchArea.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"insurance");
+            FinancialService.exportReport(args,"exportArrangeInsuranceFinancial");
         });
 
         //报表内的操作
