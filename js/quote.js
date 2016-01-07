@@ -11,7 +11,7 @@ define(function(require, exports) {
 
 				data.quote = JSON.parse(data.quote);
 				data.daysList = JSON.parse(data.daysList);
-				data.busCompanyArrange = JSON.parse(data.busCompanyQuote);
+				data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
 				//var shareQuoteHtml = template("shareQuoteTemplate",data);
 				var startTime = data.quote.startTime;
 				for (var i = 0, len = data.daysList.length; i < len; i++) {
