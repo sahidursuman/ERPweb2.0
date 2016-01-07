@@ -26,19 +26,19 @@
 	</form>
 
 <form action="" style="margin-top: 40px;">
-	<table class="whereQ whereTwo" style="width: 100%">
+	<table class="table table-bordered" style="width: 100%">
 			<!-- <tr>
 				<td colspan="8" class="HeadManage" style="text-align: left">线路主体信息</td>
 			</tr> -->
 			<tr  style="background-color: #E4E4E4;height: 40px;">
 				<td class="style-myself">日期</td>
 				<td class="style-myself">含餐情况</td>
-				<td class="style-myself">住宿地：</td>
+				<td class="style-myself">住宿地</td>
 				<td class="style-myself">景点</td>
 				<td class="style-myself">简要行程</td>
 			</tr>
 			{{each travelLine.travelLineDayList as line}}
-			<tr style="border-top: 2px solid #ABADB3;">
+			<tr style="">
 				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">第{{line.whichDay}}天</td>
 				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">
 					<span>{{if line.repastDetail.breakfast ==1}}早餐{{/if}}</span>
@@ -49,8 +49,8 @@
 				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">{{line.roadScenic}}</td>
 				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">{{line.title}}</td>
 			</tr>
-			<tr>
-			<td colspan="5" style="padding: 10px 25px 10px 12px;text-align: left;max-height: 140px;overflow: scroll;">{{#line.detail}}</td>
+			<tr style="background-color: #F4F4F4;">
+			<td colspan="5" style="padding: 10px 25px 10px 12px;text-align: left;line-height:30px; ">{{#line.detail}}</td>
 			</tr>
 			{{/each}}
 		</table>
