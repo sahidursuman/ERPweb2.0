@@ -466,11 +466,11 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="{{restaurantList.price}}" />
-                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard.id}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
+                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
                                                                                                         <td>
-                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="{{restaurantList.restaurant.mobileNumber}}" />
