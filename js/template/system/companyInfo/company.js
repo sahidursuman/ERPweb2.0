@@ -40,9 +40,9 @@ define(function(require, exports) {
 					$tab.find(".form-group").css("height","40px");
 					company.initUpload($tab);
 					//省市区事件
-					if(data.province.id != null )var provinceId = data.province.id;
-					if(data.city.id != null )var cityId = data.city.id;
-					if(data.district.id != null ) var districtId = data.district.id;
+					if(data.province != null )var provinceId = data.province.id;
+					if(data.city != null )var cityId = data.city.id;
+					if(data.district != null ) var districtId = data.district.id;
 					KingServices.provinceCity($tab,provinceId,cityId,districtId);
 					
 					//移除选择图片
