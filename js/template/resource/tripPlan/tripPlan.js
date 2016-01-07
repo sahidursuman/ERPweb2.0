@@ -1832,7 +1832,8 @@ define(function(require, exports) {
 					$parents.find("input[name=restaurantId]").val("");
 					$parents.find("input[name=managerName]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=reduceMoney]").val('');
+					$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select: function(event,ui){
@@ -1842,7 +1843,8 @@ define(function(require, exports) {
 					$parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
 					$parents.find("input[name=mobileNumber]").val(ui.item.mobileNumber);
 					$parents.find("input[name=managerName]").val(ui.item.managerName);
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=reduceMoney]").val('');
+					$parents.find("input[name=price]").val("").trigger('change');
 				}else{
 					if($this.data('bs.popover')){
 						$this.data('bs.popover').options.content = "";
@@ -1860,7 +1862,8 @@ define(function(require, exports) {
 								var restaurant = JSON.parse(data.restaurant);
 								$parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
 								$parents.find("input[name=managerName]").val(restaurant.managerName);
-								$parents.find("input[name=price]").val("");
+								$parents.find("input[name=reduceMoney]").val('');
+								$parents.find("input[name=price]").val("").trigger('change');
 								$parents.find("input[name=optional]").val("");
 							}
 	                    }
@@ -1901,11 +1904,12 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $parents = $(this).closest('tr');
 					$parents.find("input[name=restaurantStandardId]").val('0');
+					$parents.find("input[name=reduceMoney]").val('').trigger('change');
 				}
 			},
 			select: function(event,ui){
 				var $this = $(this), $parents = $this.closest('tr');
-				$parents.find("input[name=fee]").val(ui.item.price);
+				$parents.find("input[name=price]").val(ui.item.price).trigger('change');
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this), parents = $this.closest('tr');
