@@ -1025,6 +1025,15 @@ define(function(require, exports) {
 				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
+				if(!!groupData.quote){
+					$tab.find('[name="quoteOrderName"]').val(groupData.quote.name);
+					$tab.find('[name="quoteId"]').val(groupData.quote.id);
+				}
+				if(!!groupData.lineProduct){
+					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
+					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
+					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+				}
 				$tab.find('[name="adultCount"]').val(groupData.adultCount);
 				$tab.find('[name="childCount"]').val(groupData.childCount);
 				$tab.find('[name="startTime"]').val(groupData.startTime ? groupData.startTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
@@ -1662,7 +1671,8 @@ define(function(require, exports) {
 		// 选择线路产品
 		$dialog.find('.T-btn-submit').on('click', function(event) {
 			event.preventDefault();
-			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr');
+			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
+				oldLinetId = $tab.find('input[name="lineProductId"]').val();
 
 			if (!$tr.length) {
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
@@ -1670,11 +1680,11 @@ define(function(require, exports) {
 			}
 			var lineId = $tr.data('id');
 			if(type == 1){
-				var quoteId = $tr.data('id');
+				quoteId = $tr.data('id');
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('change');
 				lineId = $tr.data('line-id');
-			}else{
+			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 			}
