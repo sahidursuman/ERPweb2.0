@@ -230,7 +230,7 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="type" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
+                                                            <input type="text" name="insuranceItem" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/>
                                                             <input type="hidden" name="insuranceItemId" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.id}}{{/if}}">
                                                         </td>
                                                         <td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price" maxlength="8"/></td>
