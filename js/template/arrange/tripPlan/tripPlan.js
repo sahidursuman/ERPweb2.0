@@ -790,7 +790,7 @@ define(function(require, exports) {
 		'ticket': '票务',
 		'shop': '购物',
 		'selfPay': '自费',
-		'other': '其他'
+		'other': '其它'
 	};
 
 	tripPlan.hasTripPlan = function(require) {

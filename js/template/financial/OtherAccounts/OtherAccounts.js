@@ -51,7 +51,7 @@ define(function(require, exports) {
                     data.startAccountTime = startAccountTime
                     data.endAccountTime = endAccountTime
                     var html = listTemplate(data);
-                    Tools.addTab(menuKey, "其他账务", html);
+                    Tools.addTab(menuKey, "其它账务", html);
                     OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime);
                     //翻页
                     laypage({
@@ -142,7 +142,7 @@ define(function(require, exports) {
                             dataTable.statistics = data.statistics;
                             if (showDialog(data)) {
                                 // 切换tab内容成功
-                                if (Tools.addTab(checkTabId, "其他对账", AccountsCheckingTemplate(dataTable))) {
+                                if (Tools.addTab(checkTabId, "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.initCheckEvent(dataTable);
                                 } else if (OtherAccounts.$checkTab && OtherAccounts.$checkTab.length) {
                                     OtherAccounts.$checkTab.data('next', dataTable);
@@ -274,7 +274,7 @@ define(function(require, exports) {
         OtherAccounts.$checkTab = $checkTab;
     };
     /**
-     * 获取其他账务list列表
+     * 获取其它账务list列表
      * @param  {object} $obj 客户列表搜索框的Jquery对象
      * @return {[type]}      [description]
      */
@@ -410,7 +410,7 @@ define(function(require, exports) {
 
                                 dataTable.statistics = data.statistics;
 
-                                if (Tools.addTab(PaymentTabId, "其他付款", AccountsPaymentTemplate(dataTable))) {
+                                if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
                                     OtherAccounts.$PaymentTabId.data('next', dataTable);
