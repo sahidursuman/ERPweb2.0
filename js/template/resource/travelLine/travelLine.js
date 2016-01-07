@@ -227,6 +227,9 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					ResTravelLine.copy_id = id;
 					data.travelLine = JSON.parse(data.travelLine);
+					for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
+						data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
+					}
 					if (Tools.addTab(menuKey + '-copy', '复制线路模板', updateTemplate(data))) {
 						ResTravelLine.CU_event($('#tab-' + menuKey + '-copy-content'));
 					}
@@ -326,6 +329,7 @@ define(function(require, exports) {
 	 */
 	ResTravelLine.CU_event = function($tab) {
 		var validator = rule.traveLineCheckor($tab);
+		//var validator = rule.lineProductCheckor($tab);
 
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change', function(event) {
@@ -350,7 +354,8 @@ define(function(require, exports) {
 		// 添加日程
 		$tab.find('.T-add-schedule').on('click', function(event) {
 			event.preventDefault();
-			ResTravelLine.CU_Schedule($tab);
+			ResTravelLine.CU_Schedule($tab,validator);
+			validator = rule.update(validator);
 		});
 
 		//删除日程
@@ -396,7 +401,7 @@ define(function(require, exports) {
 	 * @param {object} $tab 父元素
 	 * @param {object} $tr 现有记录的行元素
 	 */
-	ResTravelLine.CU_Schedule = function($tab) {
+	ResTravelLine.CU_Schedule = function($tab,validator) {
 		var day = {}, $tbody = $tab.find('.T-schedule-list'),
 			$tr = $tbody.find('tr:not(.deleted)');
 		if ($tr.length == 0) {
@@ -429,6 +434,8 @@ define(function(require, exports) {
 		}else{
 			$tbody.prepend(html)
 		}
+		//表单验证
+		rule.lineProductUpdate(validator);
 	};
 
 	// 编辑行程详情

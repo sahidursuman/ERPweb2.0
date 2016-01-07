@@ -359,9 +359,14 @@ define(function(require, exports) {
 		// 设置人数
 		tripPlan.touristCount = $tab.find('.T-touristCount').data('count') || '';
 
-		// 激活第一个菜单
 		var $nav = $tab.find('.T-arrange-tabs'), $target;
+		// 绑定安排完成的选择
+		$nav.on('click', 'a', function(event) {
+			event.preventDefault();
+			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
+		});
 		
+		// 激活第一个菜单
 		if (!!target) {
 			if (target == 'T-bus') {
 				$target = $tab.find('.T-busTarget');
@@ -528,6 +533,9 @@ define(function(require, exports) {
 			    return; 
 			 }
 			tripPlan.submitTripPlan($tab,0,id);
+		}); 
+		$tab.find(".T-cancel").on("click",function(){
+			 Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});  
 	};
 
@@ -968,12 +976,12 @@ define(function(require, exports) {
 			$tr = $(filterUnAuth(html)).appendTo($tbody),
 			//精度控件
 			$price = $tr.find('.price');
+		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
 		tripPlan.calculatePrice($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
-		Tools.setDatePicker($tr.find('.datepicker'), true);
 		tripPlan.bindGuideChosen($tr);
 		if ($tr.index() === 0) {
 			$tr.find('input[name="isAccountGuide"]').trigger('click');;
@@ -988,7 +996,7 @@ define(function(require, exports) {
 	 */
 	tripPlan.addBus = function($btn, validator, $tab) {
 		var $tbody = $btn.closest('.ui-sortable-handle').find('tbody'),
-			html = '<tr> <td class="feild-relative"><input type="text" name="startTime" class="datepicker input-error"><label class="feild-label feild-error-tip" title="" data-original-title="日期不能为空" style="top: 12px; right: -85px;"><i class="fa fa-exclamation"></i></label></td>'
+			html = '<tr> <td><input type="text" name="startTime" class="datepicker"></td>'
 					+ '<td><input type="text" name="endTime" class="datepicker"></td>'
 					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
 					+ '<td><input type="text" name="needSeatCount" class="col-sm-12" style="width: 60px;"></td>'
@@ -1011,12 +1019,12 @@ define(function(require, exports) {
 			$tr = $(filterUnAuth(html)).appendTo($tbody),
 		//精度控件
 			$price = $tr.find('.price');
+		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
 		tripPlan.calculatePrice($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
-		Tools.setDatePicker($tr.find('.datepicker'), true);
 		tripPlan.bindBusCompanyChoose($tr);
 	}
 
@@ -2992,7 +3000,13 @@ define(function(require, exports) {
 			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		}
-		var json = JSON.stringify(tripPlanJson);
+		var json = JSON.stringify(tripPlanJson),
+			arrangeStatus = {};
+
+		$tab.find('.T-finishedArrange').each(function() {
+			var $that = $(this);
+			arrangeStatus[$that.prop('name')] = $that.is(':checked')?1:0;
+		})
 
 		var tripPlanId = $(this).attr('data-entiy-id');
 		$.ajax({
@@ -3001,11 +3015,14 @@ define(function(require, exports) {
 			data: {
 				arrangeItems: json,
 				basicInfo: JSON.stringify(tmp),
-				finishedArrange: $tab.find('.T-finishedArrange').is(':checked')?1:0
+				arrangeStatus: JSON.stringify(arrangeStatus)
 			},
 			success: function(data){
 				if(showDialog(data)){
-					tripPlan.listTripPlan(0);
+					if (!!tripPlan.$tab) {  // 未打开发团安排
+						tripPlan.listTripPlan(0);
+					}
+
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {

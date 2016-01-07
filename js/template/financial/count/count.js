@@ -5,7 +5,7 @@ define(function(require, exports){
 		updateTemplate = require("./view/update"),
 		Reimbursement = require("./view/Reimbursement"),
 		arrangeDetailTempLate = require("./view/arrangeDetail"),
-		groupDetailTemplate = require("./view/groupDetail"),
+		
 		qualityTempLate = require("./view/quality"),
 		billImageTempLate = require("./view/billImage"),
 		viewLogTemplate = require("./view/viewLog"),
@@ -13,6 +13,17 @@ define(function(require, exports){
 		tripDetailTempLate = require("./view/tripDetail"),
 		billImageTempLate = require("./view/billImage"),
 		viewLogTemplate = require("./view/viewLog"),
+		shopArrangeTemplate = require('./view/shopArrange'),
+		selfArrangeTemplate = require('./view/selfPayArrange'),
+		otherInArrangeTemplate = require('./view/otherIn'),
+		insuranceArrangeTemplate = require('./view/insuranceArrange'),
+		busArrangeTemplate = require('./view/busArrange'),
+		restArrangeTemplate = require('./view/restArrange'),
+		hotelArrangeTemplate = require('./view/hotelArrange'),
+		scenicArrangeTemplate = require('./view/scenicArrange'),
+		ticketArrangeTemplate = require('./view/ticketArrange'),
+		otherOutTemplate = require('./view/otherOutArrange'),
+		guideTamplate = require('./view/guideAccount'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -209,6 +220,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
@@ -227,12 +239,7 @@ define(function(require, exports){
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -343,6 +350,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					var tmp = {
+						"editStatus":1,
 	                    "busCompanyArrange":JSON.parse(data.busCompanyArrange),
 	                    "tripPlan":JSON.parse(data.tripPlan),
 	                    "dayList":JSON.parse(data.dayList),
@@ -352,6 +360,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
@@ -362,8 +371,8 @@ define(function(require, exports){
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
-					//页面事件
-					Count.reimbursementEvents($ReimbursementId);
+					//加载列表
+					Count.installList($ReimbursementId,tmp);
 				}
 			}
 		});
@@ -371,12 +380,7 @@ define(function(require, exports){
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -575,6 +579,7 @@ define(function(require, exports){
 				if(result){
 					
 					var tmp = {
+							"editStatus":0,
 							"busCompanyArrange":JSON.parse(data.busCompanyArrange),
 							"tripPlan":JSON.parse(data.tripPlan),
 							"dayList":JSON.parse(data.dayList),
@@ -584,6 +589,7 @@ define(function(require, exports){
 							"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 							"touristGroup":data.touristGroup,
+							"touristGroups":JSON.parse(data.touristGroup.touristGroups),
 							"financialTripPlanId":data.financialTripPlanId,
 							"insurancePrice":data.insurancePrice,
 							"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
@@ -595,12 +601,13 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
+                    console.log(tmp);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
-					//页面事件
-					Count.updateEvent($updateTabId);
+					//加载列表
+					Count.installList($updateTabId,tmp);
 				}
 			}
 		});
@@ -608,12 +615,6 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
-		//团款明细
-		var $tripDetailObj = $listObj.find('.T-tripDetail');
-		$tripDetailObj.find('.T-viewGroupDetail').off('click').on('click',function(){
-			var $tripId = $obj.find('.financial-tripPlanId').val();
-			Count.viewGroupDetail($tripId);
-		});
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -790,6 +791,59 @@ define(function(require, exports){
 			id = $obj.find('.financial-tripPlanId').val();
 			Count.viewTripLog(id);
 		});
+	};
+	//加载list
+	Count.installList = function($obj,data){
+		//加载购物安排列表
+		var shopHtml = shopArrangeTemplate(data);
+		$obj.find('.T-shop-add').html(shopHtml);
+
+		//加载自费安排列表
+		var selfHtml = selfArrangeTemplate(data);
+		$obj.find('.T-self-add').html(selfHtml);
+
+		//加载其他收入安排列表
+		var otherInHtml = otherInArrangeTemplate(data);
+		$obj.find('.T-income').html(otherInHtml);
+		
+		//保险列表
+		var insuranceHtml = insuranceArrangeTemplate(data);
+		$obj.find('.T-insurance').html(insuranceHtml);
+
+		//车费列表 
+		var busHtml = busArrangeTemplate(data);
+		$obj.find('.T-bus').html(busHtml);
+
+		//餐费列表 
+		var restHtml = restArrangeTemplate(data);
+		$obj.find('.T-restaurant').html(restHtml);
+
+		//房费列表 
+		var hotelHtml = hotelArrangeTemplate(data);
+		$obj.find('.T-hotel').html(hotelHtml);
+
+		//景区费用列表列表 
+		var scenicHtml = scenicArrangeTemplate(data);
+		$obj.find('.T-scenic').html(scenicHtml);
+
+		//票务费用列表列表 
+		var ticketHtml = ticketArrangeTemplate(data);
+		$obj.find('.T-ticket').html(ticketHtml);
+
+		//其他支出费用列表列表  guideTamplate
+		var otherOutHtml = otherOutTemplate(data);
+		$obj.find('.T-otherOut').html(otherOutHtml);
+
+		//导游列表
+		var guideHtml = guideTamplate(data);
+		$obj.find('.T-guide').html(guideHtml);
+		//页面事件 
+		if(data.editStatus == 1){
+			//页面事件
+			Count.reimbursementEvents($obj);
+		}else {
+			Count.updateEvent($obj);
+		};
 	};
 	//查看操作记录事件
 	Count.viewTripLog = function(id){
@@ -995,33 +1049,6 @@ define(function(require, exports){
 				}   
 			}
     	});
-	};
-	//团款明细事件
-	Count.viewGroupDetail = function(id){
-		$.ajax({
-		    url:KingServices.build_url('touristGroup',"findTouristGroupByTripPlanId"),
-			type:"POST",
-			data:{
-				tripPlanId:id
-			},
-			showLoading:false,
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					var touristGroupList = JSON.parse(data.touristGroupList);
-					data.touristGroupList = touristGroupList;
-					var html = groupDetailTemplate(data);
-					layer.open({
-					    type: 1,
-					    title:"团款明细",
-					    skin: 'layui-layer-rim', //加上边框
-					    area: ['1000px', '500px'], //宽高
-					    zIndex:1028,
-					    content: html
-					});
-				}
-			}
-		});
 	};
 	//中转明细
 	Count.ViewOutDetail = function(id){

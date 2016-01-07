@@ -340,7 +340,15 @@ define(function(require, exports){
 					saveData($tab);
 				});
 			}else{
-				saveData($tab);
+				var allMoney = $tab.find('input[name=sumPayMoney]').val();
+	        	if(allMoney == 0){
+	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+			            saveData($tab);
+			        })
+	        	}else{
+	        		saveData($tab);
+	        	}
+				
 			}
 			
 		});

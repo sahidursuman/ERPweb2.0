@@ -321,9 +321,17 @@ define(function(require, exports) {
             $innerTransferForm = $addTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         //精度控制
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
+            $price = $groupInfoForm.find('.T-price'),
+            $count = $groupInfoForm.find('.T-count');
+
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
+        Tools.inputCtrolFloat($count);
+        Tools.inputCtrolFloat($price);
+
+        //外联计调默认是当前登录账号
+        $groupInfoForm.find('.T-choose-opUserList').val(IndexData.userInfo.realName);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -370,9 +378,13 @@ define(function(require, exports) {
             $groupMemberForm = $updateTabId.find(".T-touristGroupMainFormMember"), //游客名单对象
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
-            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]');
+            $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
+            $price = $groupInfoForm.find('.T-price'),
+        $count = $groupInfoForm.find('.T-count');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
+        Tools.inputCtrolFloat($count);
+        Tools.inputCtrolFloat($price);
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -956,7 +968,12 @@ define(function(require, exports) {
                 $addTabId.find('.T-adultCount').val(chooseQuotObj.adultCount);
                 $addTabId.find('.T-adultPrice').val(chooseQuotObj.adultPrice);
                 $addTabId.find('.T-childCount').val(chooseQuotObj.childCount);
-                $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice).trigger('change');
+                $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice); 
+                $addTabId.find('.T-Fee-adultCount').val(chooseQuotObj.adultCount);
+                $addTabId.find('.T-Fee-childCount').val(chooseQuotObj.childCount);
+                $addTabId.find('.T-adultPrice').trigger('change');
+                $addTabId.find('.T-childPrice').trigger('change'); 
+
                 //设置只读属性
                 touristGroup.setReadonly($addTabId,"quoteNumber");
                 touristGroup.setReadonly($addTabId,"adultCount");
@@ -1492,7 +1509,10 @@ define(function(require, exports) {
         var $parentsObj = $obj.closest(".T-touristGroupMainForm");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
-
+        var $price =  $tableObj.find('.T-price'),
+            $count = $tableObj.find('.T-count');
+        Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($count);
         //删除事件
         $tableObj.find(".T-delete").off('click').on('click', function() {
             var $tr = $(this).closest('tr');

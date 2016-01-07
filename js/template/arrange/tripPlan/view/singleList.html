@@ -83,16 +83,16 @@
                 </td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
                 <td style="vertical-align:middle">{{rs.surplusSeat}}</td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
                 <td style="vertical-align:middle">
@@ -107,7 +107,7 @@
                     {{/if}}
                 </td>
                 <td style="vertical-align:middle">
-                    <a class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-hair-regiment{{/if}} R-right" data-right="1140010" title="发团" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                    <a class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-hair-regiment{{/if}} R-right" data-right="1140010" title="发团" data-bill-status="{{rs.billStatus}}" data-status-value="{{rs.status}}" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
                         发团
                         <label style="padding-left:10px;">|</label>
                     </a>
