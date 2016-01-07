@@ -114,15 +114,15 @@
         <h5 class="base-title">安排资源</h5>
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
-                {{if arrangeItemsStauts.insuranceStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
-                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
-                </li>
-                {{/if}}
-
                 {{if arrangeItemsStauts.guideStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
+                </li>
+                {{/if}}
+
+                {{if arrangeItemsStauts.insuranceStatus != 0 }}
+                <li class="col-sm-1 no-padding align-center">
+                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                 </li>
                 {{/if}}
 
@@ -150,6 +150,12 @@
                 </li>
                 {{/if}}
 
+                {{if arrangeItemsStauts.ticketStatus != 0 }}
+                <li class="col-sm-1 no-padding align-center">
+                    <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
+                </li>
+                {{/if}}
+
                 {{if arrangeItemsStauts.shopStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="false">购物</a>
@@ -159,12 +165,6 @@
                 {{if arrangeItemsStauts.selfPayStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="false">自费</a>
-                </li>
-                {{/if}}
-
-                {{if arrangeItemsStauts.ticketStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
-                    <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                 </li>
                 {{/if}}
 
