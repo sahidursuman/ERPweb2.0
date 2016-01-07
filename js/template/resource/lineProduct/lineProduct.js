@@ -1187,6 +1187,7 @@ define(function(require, exports) {
 					$this.val("");
 					parents.find("input[name=companyName]").val("");
 					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=brand]").val("");
 					parents.find("input[name=licenseNumber]").val("");
 					parents.find("input[name=seatPrice]").val("");
 					parents.find("input[name=seatCount]").val("");
@@ -1198,6 +1199,7 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 				parents.find("input[name=companyName]").val("");
+				parents.find("input[name=brand]").val("");
 				parents.find("input[name=busCompanyId]").val("");
 				parents.find("input[name=licenseNumber]").val("");
 				parents.find("input[name=seatPrice]").val("");
@@ -1247,7 +1249,9 @@ define(function(require, exports) {
 			minLength: 0,
 			change: function(event, ui) {
 				var $this = $(this);
-				$this.val('')
+				if(ui.item == null){
+					$this.val('')
+				}
 			},
 			select: function(event, ui) {
 
@@ -2557,7 +2561,7 @@ define(function(require, exports) {
 			for (var i = 0, len = $form.length; i < len; i++) {
 				var $item = $form.eq(i),
 					json = {
-					id : getValue($item, "templateId"),
+					id : $item.data('entity-arrangeid'),
 					needSeatCount : getValue($item, "needSeatCount"),
 					brand: getValue($item, "brand"),
 					remark : getValue($item, "remark")
