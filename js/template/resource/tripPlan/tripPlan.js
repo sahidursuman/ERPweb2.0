@@ -3005,7 +3005,10 @@ define(function(require, exports) {
 			},
 			success: function(data){
 				if(showDialog(data)){
-					tripPlan.listTripPlan(0);
+					if (!!tripPlan.$tab) {  // 未打开发团安排
+						tripPlan.listTripPlan(0);
+					}
+
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
