@@ -114,15 +114,15 @@
         <h5 class="base-title">安排资源</h5>
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
-                {{if arrangeItemsStauts.insuranceStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
-                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
-                </li>
-                {{/if}}
-
                 {{if arrangeItemsStauts.guideStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
+                </li>
+                {{/if}}
+
+                {{if arrangeItemsStauts.insuranceStatus != 0 }}
+                <li class="col-sm-1 no-padding align-center">
+                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                 </li>
                 {{/if}}
 
@@ -150,6 +150,12 @@
                 </li>
                 {{/if}}
 
+                {{if arrangeItemsStauts.ticketStatus != 0 }}
+                <li class="col-sm-1 no-padding align-center">
+                    <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
+                </li>
+                {{/if}}
+
                 {{if arrangeItemsStauts.shopStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="false">购物</a>
@@ -159,12 +165,6 @@
                 {{if arrangeItemsStauts.selfPayStatus != 0 }}
                 <li class="col-sm-1 no-padding align-center">
                     <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="false">自费</a>
-                </li>
-                {{/if}}
-
-                {{if arrangeItemsStauts.ticketStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
-                    <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                 </li>
                 {{/if}}
 
@@ -1153,13 +1153,95 @@
             <button data-entity-id="{{basicInfo.id}}" class="btn btn-sm btn-primary T-btn-submit-tripPlan">
                 <i class="ace-icon fa fa-check-circle"></i> 提交信息
             </button>
-
-            <div class="checkbox checkbox-inline mar-0">
+            {{if arrangeItemsStauts.restaurantStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_restaurant">
                 <label>
-                    <input name="form-field-checkbox" type="checkbox" class="ace T-finishedArrange">
-                    <span class="lbl"> 全部安排完成</span>
+                    <input name="restaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeItemsStauts.restaurantStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 餐饮安排完成</span>
                 </label>
             </div>
+            {{/if}}
+
+            {{if arrangeItemsStauts.insuranceStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_insurance">
+                <label>
+                    <input name="insuranceStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.insuranceStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 保险安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.selfPayStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_selfPay">
+                <label>
+                    <input name="selfPayStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.selfPayStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 自费安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.ticketStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_ticket">
+                <label>
+                    <input name="ticketStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.ticketStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 票务安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.scenicStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_scenic">
+                <label>
+                    <input name="scenicStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.scenicStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 景区安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.shopStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_shop">
+                <label>
+                    <input name="shopStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.shopStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 购物安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.guideStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_guide">
+                <label>
+                    <input name="guideStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.guideStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 导游安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.busStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_bus">
+                <label>
+                    <input name="busStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.busStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 车辆安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.otherStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_other">
+                <label>
+                    <input name="otherStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.otherStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 其它安排完成</span>
+                </label>
+            </div>
+            {{/if}}
+            
+            {{if arrangeItemsStauts.hotelStatus != 0 }}
+            <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_hotel">
+                <label>
+                    <input name="hotelStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.hotelStatus == 3}}checked{{/if}}>
+                    <span class="lbl"> 酒店安排完成</span>
+                </label>
+            </div>
+            {{/if}}
         </div>
     </div>
 </div>
