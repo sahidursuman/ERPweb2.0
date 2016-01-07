@@ -305,10 +305,14 @@ define(function(require,exports) {
 		//导出报表事件
 		$obj.find(".T-btn-export").on('click',function(event){
 			var args = { 
+					toBusinessGroupId:$obj.find('input[name=toBusinessGroupId]').val(),
+					lineProductId:$obj.find('input[name=lineProductId]').val(),
+					lineProductName:$obj.find('input[name=lineProductName]').val(),
+					operateUserId:$obj.find('select[name=operater]').val(),
                     startDate: $obj.find('input[name=startDate]').val(),
                     endDate: $obj.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"exportInnerTransferOut");
+            FinancialService.exportReport(args,"exportArrangeInnerTransferOutFinancial");
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
