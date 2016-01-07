@@ -8,10 +8,10 @@
             <div class="share-quote-offer">
                 <p style="font-size: 16px;color: #ff6511;"><span>{{quote.partnerAgency.travelAgencyName}}</span> <span style="margin-left: 12px;">{{quote.partnerAgencyContact.contactRealname}}</span> <span style="margin-left: 12px;">{{quote.partnerAgencyContact.contactMobileNumber}}：</span></p>
                 <p class="share-thank-p">感谢惠顾，线路行程和报价为您展示如下，如有不明白之处请来电，谢谢！</p>
-                <p class="share-agency-name"><span>{{quote.name}}</span>
-                    <span style="margin-left: 8px;">{{quote.realName}}</span>
-                    <span style="margin-left: 8px;">{{quote.mobileNumber}}</span></p>
-                <p style="margin-left:560px;color: #444;margin-top: -5px;">{{quote.createTime}}</p>
+                <p class="share-agency-name"><span>{{quote.partnerAgency.travelAgency.name}}</span>
+                    <span style="margin-left: 8px;">{{quote.user.realName}}</span>
+                    <span style="margin-left: 8px;">{{quote.user.mobileNumber}}</span></p>
+                <p style="margin-left:560px;color: #444;margin-top: -5px;">{{quote.startTime}}</p>
                 <div class="share-quote-offerdetails">
                     <p class="share-dividing">线路报价</p>
                     <p>{{quote.lineProduct.name}}</p>
@@ -40,12 +40,14 @@
                         </tr>
                     </table>
                     <p><span style="color: #ff6511">*</span>备注：&nbsp;&nbsp;&nbsp;单房差报价：{{quote.singleRoomQuotePrice}}，单房差数量：{{quote.singleRoomCount}}。</p>
+                    {{each busCompanyQuote as busCompany}}
                     {{if !!busCompanyQuote}}
                     <p style="margin-left: 55px;">交通：
-                        <span>{{if !!busCompanyQuote.bus}}{{busCompanyQuote.brand}}{{/if}}</span>
-                        <span>{{if !!busCompanyQuote.bus}}{{busCompanyQuote.needSeatCount}}{{/if}}座，</span>
-                        <span>{{busCompanyQuote.remark}}</span></p>
+                        <span>{{busCompany.brand}}</span>
+                        <span>{{busCompany.needSeatCount}}座，</span>
+                        <span>{{busCompany.remark}}</span></p>
                     {{/if}}
+                    {{/each}}
                 </div>
             </div>
             <div class="share-quote-arrange">
@@ -81,16 +83,16 @@
 
                     {{/each}}
                     <!-- 餐饮 -->
-                    {{if daysList.restaurantArrange != null}} {{each daysList.restaurantArrange as restaurantList index}} {{if index == 0}}
+                    {{if daysList.restaurantQuote != null}} {{each daysList.restaurantQuote as restaurantList index}} {{if index == 0}}
                     <tr>
-                        <td rowspan="{{daysList.restaurantArrange.length}}">餐饮</td>
-                        <td>{{restaurantList.restaurantStandard.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.restaurantStandard.quotePrice}}</td>
+                        <td rowspan="{{daysList.restaurantQuote.length}}">餐饮</td>
+                        <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
+                        <td>￥{{restaurantList.quotePrice}}</td>
                     </tr>
-                    {{/if}} {{/each}} {{each daysList.restaurantArrange as restaurantList index}} {{if index > 0}}
+                    {{/if}} {{/each}} {{each daysList.restaurantQuote as restaurantList index}} {{if index > 0}}
                     <tr>
-                        <td>{{restaurantList.restaurantStandard.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.restaurantStandard.quotePrice}}</td>
+                        <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
+                        <td>￥{{restaurantList.quotePrice}}</td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
 
