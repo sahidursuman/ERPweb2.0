@@ -26,6 +26,12 @@ define(function(require, exports) {
                             type: 'null',
                             errMsg: '出游日期不能为空'
                         }]
+                    },{ //出游日期   
+                        $ele: $obj.find('input[name="endTime"]'),
+                        rules: [{
+                            type: 'null',
+                            errMsg: '完团日期不能为空'
+                        }]
                     }, {
                         $ele: $obj.find('input[name="fromPartnerAgency"]'),
                         $valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
