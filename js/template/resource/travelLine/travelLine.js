@@ -269,7 +269,7 @@ define(function(require, exports) {
 						data.travelLine = JSON.parse(data.travelLine);
 						for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
 							data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail);
-							data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
+							//data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
 						};
 						Tools.addTab(viewTab,"查看线路模板", scanDetailTemplate(data));
 						var $viewTab = $('#tab-'+viewTab+'-content');
@@ -446,14 +446,14 @@ define(function(require, exports) {
 				ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
 				if (!! data.description) {
 					ue.ready(function(){
-						ue.setContent(decodeURIComponent(data.description));
+						ue.setContent(data.description);
 					});
 				}		
 				
 				var $container = $(".T-schedule-form");
 				//给提交按钮绑定事件
                 $container.find(".T-btn-submit").on('click' , function() {
-                	var content = encodeURIComponent(UE.getEditor($container.find('.T-editor').prop('id')).getContent())
+                	var content = UE.getEditor($container.find('.T-editor').prop('id')).getContent()
                 	$this.data('entity-content', content)
                    	layer.close(updateDetailsLayer);
                 });
