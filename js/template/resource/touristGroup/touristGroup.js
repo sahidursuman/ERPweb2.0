@@ -956,9 +956,12 @@ define(function(require, exports) {
                 $addTabId.find('.T-adultCount').val(chooseQuotObj.adultCount);
                 $addTabId.find('.T-adultPrice').val(chooseQuotObj.adultPrice);
                 $addTabId.find('.T-childCount').val(chooseQuotObj.childCount);
-                $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice).trigger('change');
+                $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice); 
                 $addTabId.find('.T-Fee-adultCount').val(chooseQuotObj.adultCount);
                 $addTabId.find('.T-Fee-childCount').val(chooseQuotObj.childCount);
+                $addTabId.find('.T-adultPrice').trigger('change');
+                $addTabId.find('.T-childPrice').trigger('change'); 
+
                 //设置只读属性
                 touristGroup.setReadonly($addTabId,"quoteNumber");
                 touristGroup.setReadonly($addTabId,"adultCount");
