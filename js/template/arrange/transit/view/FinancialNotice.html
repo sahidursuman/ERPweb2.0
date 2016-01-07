@@ -1,0 +1,27 @@
+<input name="financial_name" class="col-xs-2 input-default-height guideInputList T-financial-name" value="{{searchParam.realName}}" placeholder="请输入财务关键词">
+    <button class=" btn-sm T-btn-search btn-financial-search search-btn" style="margin-left: 33px;"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
+	<table class="table table-striped table-bordered table-hover" style="margin-top: 15px;">
+	<thead>
+		<tr>
+			<th class="th-border" colspan="3">财务通知</th>
+		</tr>
+	</thead>
+	<tbody>
+			{{each userList as user}}
+			<tr data-value="{{user.id}}" data-realName='{{user.realName}}'>
+				<td data-entity-id="" style="text-align:left;">{{user.realName}}</td>
+				<td><label class="pos-rel"><input type="checkbox" name="receiveUserName" class="ace T-add"> <span class="lbl"></span> </label>
+				</td>
+			</tr>
+			{{/each}}
+	</tbody>
+</table>
+<div class="row pageMode">
+	<div class="col-xs-3">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-9">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>
