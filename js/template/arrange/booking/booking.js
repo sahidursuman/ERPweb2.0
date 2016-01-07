@@ -833,7 +833,7 @@ define(function(require, exports) {
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
 			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur T-prePayMoney"/></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
 		var $container = $this.find(".T-hotelList");
