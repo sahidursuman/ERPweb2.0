@@ -512,10 +512,23 @@ define(function(require, exports) {
 		//第N天
 		tripPlan.setChooseDays();
 		//删除操作
-		$tab.on('click', '.T-btn-deleteTripPlanList', function() {
-			var $this = $(this),$parents = $this.closest('tr'), id = $parents.data('entity-arrangeid'),
-				$name = $this.data('entity-name'), isBooking = $parents.data('entity-isbooking');
-			tripPlan.deleteTripPlan($this, id, $name, $tab, isBooking);
+		$tab.on('click', '.T-btn-deleteTripPlanList, [name="isAccountGuide"]', function() {
+			var $that = $(this);
+
+			if ($that.is('input[name="isAccountGuide"]')) {
+				var $priceObj = $that.closest('tbody').find('.price:not(.hidden)').addClass('hidden'),
+					$price = $priceObj.filter('input[name="price"]'),
+					$manageFee = $priceObj.filter('input[name="manageFee"]'),
+					$trPriceObj = $that.closest('tr').find('.price');
+
+				$trPriceObj.filter('input[name="price"]').removeClass('hidden').val($price.val());
+				$trPriceObj.filter('input[name="manageFee"]').removeClass('hidden').val($manageFee.val());
+				$priceObj.addClass('hidden').val(0);
+			} else {
+				var $parents = $that.closest('tr'), id = $parents.data('entity-arrangeid'),
+					$name = $that.data('entity-name'), isBooking = $parents.data('entity-isbooking');
+				tripPlan.deleteTripPlan($that, id, $name, $tab, isBooking);
+			}
 		});
 		//所有autocomplete
 		tripPlan.bindAutocomplete($tab);
@@ -983,8 +996,11 @@ define(function(require, exports) {
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
-		if ($tr.index() === 0) {
-			$tr.find('input[name="isAccountGuide"]').trigger('click');;
+		if ($tr.index() === 0) {  // 第一条时，默认选中
+			$tr.find('input[name="isAccountGuide"]')[0].checked = true;
+		} else {
+			// 其他条时，默认隐藏费用项
+			$tr.find('.price').addClass('hidden');
 		}
 	}
 
