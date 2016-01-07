@@ -2,7 +2,7 @@
  * 发团计划验证 
  */
 define(function(require, exports) {
-    return {
+    var rule = {
         checkedEditor : function($obj){
             var settings = [
             { 
@@ -96,6 +96,79 @@ define(function(require, exports) {
                         errMsg: '应收不能为空'
                     }
                 ]
+            },
+            { 
+                //预收款
+                $ele: $obj.find('input[name="preIncomeMoney"]'),
+                rules : [
+                    {
+                        type: 'nonnegative-float',
+                        errMsg: '预收款必须为数字'
+                    }
+                ]
+            },
+            { 
+                //计划现收
+                $ele: $obj.find('input[name="currentNeedPayMoney"]'),
+                rules : [
+                    {
+                        type: 'nonnegative-float',
+                        errMsg: '计划现收必须为数字'
+                    }
+                ]
+            },
+            {
+                $ele: $obj.find('input[name="title"]'),
+                rules: [{
+                    type: 'null',
+                    errMsg: '简要行程不能为空'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="name"]'),
+                rules: [{
+                    type: 'null',
+                    errMsg: '姓名不能为空'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="mobileNumber"]'),
+                rules: [{
+                    type: 'null',
+                    errMsg: '手机号码不能为空'
+                },
+                {
+                    type: 'mobile-phone',
+                    errMsg: '手机号码不能为空'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="requireContent"]'),
+                rules: [{
+                    type: 'null',
+                    errMsg: '计划要求不能为空'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="describeInfo"]'),
+                rules: [{
+                    type: 'null',
+                    errMsg: '费用项不能为空'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="count"]'),
+                rules: [{
+                    type: 'nonnegative-int',
+                    errMsg: '数量必须为正整数'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="price"]'),
+                rules: [{
+                    type: 'nonnegative-float',
+                    errMsg: '单价必须为数字'
+                }]
             }];
             var timeSettings = [];
             if ($obj.find('.T-timed').prop('checked')) {
@@ -109,8 +182,19 @@ define(function(require, exports) {
             }else{
                 timeSettings = [];
             }
-            return $obj.formValidate(settings.concat(timeSettings));
+            return settings.concat(timeSettings);
         }
     };
+    rule.checkPlan = function($container) {
+        this.$container = $container;
+        return $container.formValidate(this.checkedEditor($container));
+    };
+    rule.update = function(validator) {
+        if (!!validator)  {
+            validator.update(this.checkedEditor(this.$container));
+        }
+
+        return validator;
+    }
     return rule;
 });

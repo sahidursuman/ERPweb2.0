@@ -8,17 +8,15 @@
 		<div class="row">
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">报价单号</label>
-				<div class="hct-input-group col-xs-8">
-					<input type="text" name="quoteOrderName" class="col-xs-12" value="{{tripPlan.quoteNumber}}">
-					<span class="hct-group-search cursor T-search-quote-order">[搜索]</span>
+				<div class="col-xs-8">
+					<input type="text" name="quoteOrderName" class="col-xs-12" readonly value="{{tripPlan.quoteNumber}}">
 					<input type="hidden" name="quoteId" value="{{tripPlan.quoteId}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
-				<div class="hct-input-group col-xs-8 T-search-line">
+				<div class="col-xs-8">
 					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{tripPlan.lineProductName}}">
-					<span class="hct-group-search cursor">[搜索]</span>
 					<input type="hidden" name="lineProductId" value="{{tripPlan.lineProductId}}">
 				</div>
 			</div>
@@ -33,9 +31,8 @@
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">收客单号</label>
-				<div class="hct-input-group col-xs-8 T-search-team">
+				<div class="col-xs-8">
 					<input type="text" readonly class="col-xs-12" name="partnerAgencyName" value="{{touristGroup}}" data-id="{{touristGroup.id}}">
-					<span class="hct-group-search cursor">[搜索]</span>
 				</div>
 			</div>
 		</div>
