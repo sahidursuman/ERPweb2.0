@@ -535,8 +535,9 @@ define(function(require, exports) {
 			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
 			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), $tab.find('.T-chooseInsuranceItem'), validator);
 			ResLineProduct.bindSeatCount($tab.find('.T-needSeatCount'), validator);
-			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
-			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
+			ResLineProduct.bindBusBrand($tab.find('.T-busBrand'), validator);
+			// ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
+			// ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
 			$tab.find('.T-btn-submit').on('click', function(event) {
 				event.preventDefault();
@@ -933,7 +934,6 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
-			console.log($value)
 			if (!!$value && $value.length > 0) {
 				var inputValue = '',
 					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">自费商家</th><th class="th-border">自费项目</th></tr><tbody>';
@@ -1236,6 +1236,53 @@ define(function(require, exports) {
 			})
 		})
 	};
+
+	/**
+	 * 绑定车队安排品牌选择
+	 * @param  {[type]} $input [description]
+	 * @return {[type]}        [description]
+	 */
+	ResLineProduct.bindBusBrand = function($input, validator) {
+		$input.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+				var $this = $(this);
+				$this.val('')
+			},
+			select: function(event, ui) {
+
+			}
+		}).click(function() {
+			var $this = $(this), $parents = $this.closest('tr'),
+				needSeatCount = $parents.find('[name=needSeatCount]').val();
+			if (!!needSeatCount) {
+				$.ajax({
+					url: KingServices.build_url('bookingOrder', 'getBusBrandList'),
+					data:"seatCount="+needSeatCount,
+					showLoading:false,
+					success: function(data) {
+						var result = showDialog(data);
+						if(result){
+							var busBrandList = data.busBrandList;
+							if(busBrandList != null && busBrandList.length > 0){
+								for(var i=0;i<busBrandList.length;i++){
+									busBrandList[i].value = busBrandList[i];
+								}
+							}
+							$this.autocomplete('option','source', busBrandList);
+							$this.autocomplete('search', '');
+						}
+					}
+				});
+			}else {
+				layer.tips('请选择座位数', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
+	}
+
 	/**
 	 * 绑定车队选择
 	 * @param  {[type]} $input [description]
@@ -2404,13 +2451,8 @@ define(function(require, exports) {
 	ResLineProduct.addBusCompany = function($btn, validator) {
 		var busCompanyDetails = ''
 		+'<tr>'
-		+'<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>'  
-		+'<td><input name="companyName" class="T-buscompany-name col-xs-12 bind-change" type="text"/><input type="hidden" name="busCompanyId"></td>'
-		+'<td><input name="licenseNumber" class="T-licenseNumber col-xs-12 bind-change" type="text"/><input type="hidden" name="busLicenseNumberId"></td>'
-		+'<td><input class="col-xs-12" name="seatPrice" type="text" maxlength="6" /></td>'
-		+'<td><input class="col-xs-12" name="seatCount" type="text" readonly="readonly"/></td>'
-		+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>'
-		+'<td><input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" maxlength="9" /></td>'
+		+'<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>'
+		+'<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>'
 		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>'
 		+'<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>'
 		+'</tr>';
@@ -2421,8 +2463,9 @@ define(function(require, exports) {
 		    Tools.inputCtrolFloat($price);
 
 		ResLineProduct.bindSeatCount($container.find('.T-needSeatCount'), validator);
-		ResLineProduct.bindBusCompanyChosen($container.find('.T-buscompany-name'), validator);
-		ResLineProduct.bindBusDetailChosen($container.find('.T-licenseNumber'), validator);
+		// ResLineProduct.bindBusCompanyChosen($container.find('.T-buscompany-name'), validator);
+		// ResLineProduct.bindBusDetailChosen($container.find('.T-licenseNumber'), validator);
+		ResLineProduct.bindBusBrand($container.find('.T-busBrand'), validator)
 	};
 
 	/**
@@ -2513,10 +2556,8 @@ define(function(require, exports) {
 				var $item = $form.eq(i),
 					json = {
 					id : getValue($item, "templateId"),
-					busCompanyId : getValue($item, "busCompanyId"),
 					needSeatCount : getValue($item, "needSeatCount"),
-					busId : getValue($item, "busLicenseNumberId"),
-					price : getValue($item, "seatPrice"),
+					brand: getValue($item, "brand"),
 					remark : getValue($item, "remark")
 				}
 				travelLineData.busCompany.push(json);
