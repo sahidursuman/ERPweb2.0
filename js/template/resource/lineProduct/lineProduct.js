@@ -248,13 +248,13 @@ define(function(require, exports) {
 					if(result){
 						var lineProduct = JSON.parse(data.lineProduct);
 						var busCompanyTemplate = JSON.parse(data.busCompanyTemplate);
-						var guideTemplate = JSON.parse(data.guideTemplate);
+						//var guideTemplate = JSON.parse(data.guideTemplate);
 						var insuranceTemplate = JSON.parse(data.insuranceTemplate);
 						var daysList = JSON.parse(data.daysList);
 						data.viewLineProduct = {
 								lineProduct : lineProduct,
 								busCompanyTemplate : busCompanyTemplate,
-								guideTemplate : guideTemplate,
+								//guideTemplate : guideTemplate,
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
@@ -326,14 +326,14 @@ define(function(require, exports) {
 					if(result){
 						var lineProductDetail = JSON.parse(data.lineProduct),
 							busCompanyTemplate = JSON.parse(data.busCompanyTemplate),
-							guideTemplate = JSON.parse(data.guideTemplate),
+							//guideTemplate = JSON.parse(data.guideTemplate),
 							insuranceTemplate = JSON.parse(data.insuranceTemplate),
 							daysList = JSON.parse(data.daysList);					
 
 						data.viewLineProduct = {
 								lineProduct : lineProductDetail,
 								busCompanyTemplate : busCompanyTemplate,
-								guideTemplate : guideTemplate,
+								//guideTemplate : guideTemplate,
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
