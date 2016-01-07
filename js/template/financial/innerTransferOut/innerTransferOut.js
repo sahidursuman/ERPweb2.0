@@ -663,7 +663,8 @@ define(function(require,exports) {
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
 		var sumPayMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').val()),
 	        sumListMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').data("money"));
-	    if(sumPayMoney != sumListMoney){
+	    var sumMoney = InnerTransferOut.autoSumPayMoney(tab_id);
+	    if(sumPayMoney != sumMoney){
 	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 	        return false;
 	    }
@@ -848,6 +849,7 @@ define(function(require,exports) {
 			sumMoney += $thisVal;
 		});
 		sumPayMoney.val(sumMoney);
+		return sumMoney;
 	};
 	//规范输入的数字数据
 	InnerTransferOut.changeTwoDecimal = function($val){

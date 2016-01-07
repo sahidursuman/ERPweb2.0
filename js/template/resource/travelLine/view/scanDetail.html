@@ -1,89 +1,95 @@
-<div class="col-xs-12  lineTemplate ">
-	<form class="form-horizontal travelLineMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<h5 class="">
-			<label class="middle title-size">线路主体信息</label>
-		</h5>
-		<table class="whereQ whereTwo" style="width: 100%">
-			<!-- <tr>
-				<td colspan="8" class="HeadManage" style="text-align: left">线路主体信息</td>
-			</tr> -->
-			<tr>
-				<td class="style-myself">线路名称：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px">{{travelLine.name}}</td>
-				<td class="style-myself">行程天数：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px">{{travelLine.days}}天</td>
-				<td class="style-myself">是否启用</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px">
-					{{if travelLine.status == 1}}
-						已启用
-					{{else if travelLine.status == 0}}
-						已停用
-					{{/if}}
-				</td>
-			</tr>
-			
-		</table>
-	</form>
-
-<form action="" style="margin-top: 40px;">
-	<table class="whereQ whereTwo" style="width: 100%">
-			<!-- <tr>
-				<td colspan="8" class="HeadManage" style="text-align: left">线路主体信息</td>
-			</tr> -->
-			<tr  style="background-color: #E4E4E4;height: 40px;">
-				<td class="style-myself">日期</td>
-				<td class="style-myself">含餐情况</td>
-				<td class="style-myself">住宿地：</td>
-				<td class="style-myself">景点</td>
-				<td class="style-myself">简要行程</td>
-			</tr>
-			{{each travelLine.travelLineDayList as line}}
-			<tr style="border-top: 2px solid #ABADB3;">
-				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">第{{line.whichDay}}天</td>
-				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">
-					<span>{{if line.repastDetail.breakfast ==1}}早餐{{/if}}</span>
-					<span style="margin-left: 5px;">{{if line.repastDetail.lunch ==1}}午餐{{/if}}</span>
-					<span style="margin-left: 5px;">{{if line.repastDetail.dinner ==1}}晚餐{{/if}}</span>
-				</td>
-				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">{{line.restPosition}}</td>
-				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">{{line.roadScenic}}</td>
-				<td class="style-myself" style="border-right: 1px solid #D7D7D7;">{{line.title}}</td>
-			</tr>
-			<tr>
-			<td colspan="5" style="padding: 10px 25px 10px 12px;text-align: left;max-height: 140px;overflow: scroll;">{{#line.detail}}</td>
-			</tr>
-			{{/each}}
-		</table>
-
-
-	<table class="whereQ whereTwo" style="width: 100%;margin-top: 30px;">
+<!-- 1. 基本信息 -->
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:100px;">
+		<col>
+		<col style="width:100px;">
+		<col>
+		<col style="width:100px;">
+		<col>
+	</colgroup>
+	<tbody>
 		<tr>
-				<td class="style-myself">费用包含：</td>
-				<td style="text-align: left;padding: 10px 10px 10px 20px" colspan="5">{{travelLine.includeFee}}</td>
-				</tr>
+			<td class="th-border">线路名称</td>
+			<td style="text-align: left">{{travelLine.name}}</td>
+			<td class="th-border">行程天数</td>
+			<td style="text-align: left">{{travelLine.days}}天</td>
+			<td class="th-border">是否启用</td>
+			<td style="text-align: left">
+				{{if travelLine.status == 1}}
+					已启用
+				{{else if travelLine.status == 0}}
+					已停用
+				{{/if}}
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<tr>
-				<td class="style-myself">费用不包含：</td>
-				<td style="text-align: left;padding:10px 10px 10px 20px" colspan="5">{{travelLine.excludeFee}}</td>
-			</tr>
+<!-- 2. 行程安排 -->
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:50px;">
+		<col style="width:100px;">
+		<col style="width:12%;">
+		<col style="width:18%;">
+		<col style="width:54%;">
+	</colgroup>
+	<thead>
+		<tr>
+			<td class="th-border">日期</td>
+			<td class="th-border">含餐情况</td>
+			<td class="th-border">住宿地点</td>
+			<td class="th-border">景点</td>
+			<td class="th-border">简要行程</td>
+		</tr>
+	</thead>
+	<tbody>
+		{{each travelLine.travelLineDayList as line}}
+		<tr>
+			<td rowspan="2" style="vertical-align: middle;">第{{line.whichDay}}天</td>
+			<td>{{line.repastDetail | getRepastDetail }}</td>
+			<td>{{line.restPosition}}</td>
+			<td>{{line.roadScenic}}</td>
+			<td>{{line.title}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="text-align: left">{{#line.detail}}</td>
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
 
-			<tr>
-				<td class="style-myself">行程特色：</td>
-				<td style="text-align: left;padding:10px 10px 10px 20px" colspan="5">{{travelLine.lineFeature}}</td>
-			</tr>
+<!-- 3. 费用说明 -->
+<table class="table table-bordered">
+	<colgroup>
+		<col style="width:100px;">
+		<col>
+	</colgroup>
+	<tbody>
+		<tr>
+			<td class="th-border">费用包含</td>
+			<td style="text-align: left">{{travelLine.includeFee}}</td>
+		</tr>
+		<tr>
+			<td class="th-border">费用不包含</td>
+			<td style="text-align: left">{{travelLine.excludeFee}}</td>
+		</tr>
+		<tr>
+			<td class="th-border">行程特色</td>
+			<td style="text-align: left">{{travelLine.lineFeature}}</td>
+		</tr>
+		<tr>
+			<td class="th-border">行程须知</td>
+			<td style="text-align: left">{{travelLine.lineNotice}}</td>
+		</tr>
+		<tr>
+			<td class="th-border">备注</td>
+			<td style="text-align: left">{{travelLine.remark}}</td>
+		</tr>
+	</tbody>
+</table>
 
-			<tr>
-				<td class="style-myself">行程须知：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.lineNotice}}</td>
-			</tr>
-
-			<tr>
-				<td class="style-myself">行程备注：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">{{travelLine.remark}}</td>
-			</tr>
-	</table>
-
-	
-</form>
-<div class="form-group" style="text-align: center;margin-top: 20px;"> <button class="btn btn-sm btn-danger otherButton T-btn-viewCancel"> <i class="ace-icon fa fa-times"></i> 关闭 </button></div>
+<div class="text-center">
+	<button class="btn btn-xs w100 T-btn-viewCancel"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
 </div>

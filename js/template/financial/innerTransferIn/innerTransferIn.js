@@ -449,7 +449,14 @@ define(function(require,exports) {
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
         	if(!settleCheck.form()){return;}
-        	InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
+        	var sumMoney = $obj.find('input[name=sumPayMoney]').val();
+        	if(sumMoney == 0){
+        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+		            InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
+		        })
+        	}else{
+        		InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
+        	};
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
@@ -477,7 +484,6 @@ define(function(require,exports) {
         	}
         });
 	};
-	//给修改了但未勾选的得数据打钩
 
 	//自动计算本次收款金额
 	InnerTransferIn.autoSumIncomeMoney = function($obj){
@@ -490,6 +496,7 @@ define(function(require,exports) {
 			sumMoney += $thisVal;
 		});
 		sumPayMoney.val(sumMoney);
+		return sumMoney;
 	};
 	//自动计算返款
 	InnerTransferIn.autoSumBackMoney = function($obj,$parentObj){
@@ -771,12 +778,12 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,tab_id,$data,title, html){
-		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val()),
-	        sumListMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').data("money"));
-	    if(sumPayMoney != sumListMoney){
+		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
+		var sumMoney = InnerTransferIn.autoSumIncomeMoney(tab_id);
+	    if(sumMoney != sumPayMoney){
 	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 	        return false;
-	    }
+	    };
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
 		var payMoney;
@@ -890,7 +897,7 @@ define(function(require,exports) {
 				endAccountTime:options.endDate,
 				btnShowStatus:true
 			}
-        InnerTransferIn.chenking(args,2,"settle"); 
+        InnerTransferIn.chenking(args,2); 
     };
 	exports.init = InnerTransferIn.initModule;
 	exports.initIncome = InnerTransferIn.initIncome;
