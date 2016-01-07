@@ -123,6 +123,7 @@
             <label class="pull-left text-right control-label no-padding-right margin-left60">客源类型</label>
             <div class="col-sm-1 marginLeft-Right7 rangeTime">
                 <select name="memberType" class="col-xs-12">
+                    <option value="" {{if searchParam.memberType=="" }}selected="selected" {{/if}}>全部</option>
                     <option value="0" {{if searchParam.memberType=="0" }}selected="selected" {{/if}}>内宾</option>
                     <option value="1" {{if searchParam.memberType=="1" }}selected="selected" {{/if}}>外宾</option>
                 </select>
