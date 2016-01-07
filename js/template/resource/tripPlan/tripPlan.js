@@ -359,9 +359,14 @@ define(function(require, exports) {
 		// 设置人数
 		tripPlan.touristCount = $tab.find('.T-touristCount').data('count') || '';
 
-		// 激活第一个菜单
 		var $nav = $tab.find('.T-arrange-tabs'), $target;
+		// 绑定安排完成的选择
+		$nav.on('click', 'a', function(event) {
+			event.preventDefault();
+			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
+		});
 		
+		// 激活第一个菜单
 		if (!!target) {
 			if (target == 'T-bus') {
 				$target = $tab.find('.T-busTarget');
@@ -528,6 +533,9 @@ define(function(require, exports) {
 			    return; 
 			 }
 			tripPlan.submitTripPlan($tab,0,id);
+		}); 
+		$tab.find(".T-cancel").on("click",function(){
+			 Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});  
 	};
 
@@ -2992,7 +3000,13 @@ define(function(require, exports) {
 			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		}
-		var json = JSON.stringify(tripPlanJson);
+		var json = JSON.stringify(tripPlanJson),
+			arrangeStatus = {};
+
+		$tab.find('.T-finishedArrange').each(function() {
+			var $that = $(this);
+			arrangeStatus[$that.prop('name')] = $that.is(':checked')?1:0;
+		})
 
 		var tripPlanId = $(this).attr('data-entiy-id');
 		$.ajax({
@@ -3001,7 +3015,7 @@ define(function(require, exports) {
 			data: {
 				arrangeItems: json,
 				basicInfo: JSON.stringify(tmp),
-				finishedArrange: $tab.find('.T-finishedArrange').is(':checked')?1:0
+				arrangeStatus: JSON.stringify(arrangeStatus)
 			},
 			success: function(data){
 				if(showDialog(data)){
