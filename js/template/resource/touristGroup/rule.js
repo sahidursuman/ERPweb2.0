@@ -95,13 +95,13 @@ define(function(require, exports) {
                         $ele: $obj.find('input[name="count"]'),
                         rules: [{
                             type: 'float',
-                            errMsg: '其他费用的数量的格式不正确'
+                            errMsg: '其它费用的数量的格式不正确'
                         }]
                     }, { //其它
                         $ele: $obj.find('input[name="price"]'),
                         rules: [{
                             type: 'float',
-                            errMsg: '其他费用单价不合法'
+                            errMsg: '其它费用单价不合法'
                         }]
                     }, { //姓名
                         $ele: $obj.find('input[name="name"]'),
