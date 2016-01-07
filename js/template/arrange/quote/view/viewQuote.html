@@ -318,7 +318,7 @@
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
                                             <div class="ui-sortable-handle">
                                                 <h5 class="">
-														<label class="title-size">行程标题：{{viewQuoteDaysList.lineProductDay.title}}</label>
+														<label class="title-size">简要行程：{{viewQuoteDaysList.lineProductDay.title}}</label>
 													</h5>
                                                 <div id="timeline-1">
                                                     <div class="row">
@@ -351,10 +351,10 @@
                                                                                             <tr>
                                                                                                 <td>{{restaurantList.restaurant.name}}</td>
                                                                                                 <td>{{restaurantList.restaurant.mobileNumber}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.type}}</td>
+                                                                                                <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.type}}{{/if}}</td>
                                                                                                 <td>{{restaurantList.quotePrice}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.price}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.menuList}}</td>
+                                                                                                <td>{{restaurantList.price}}</td>
+                                                                                                <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}</td>
                                                                                                 <td>{{restaurantList.remark}}</td>
                                                                                             </tr>
                                                                                         </tbody>

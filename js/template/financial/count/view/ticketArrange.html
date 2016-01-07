@@ -1,0 +1,83 @@
+<div class="ui-sortable-handle widget-container-col">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-medkit"></i>票务
+        <a href="javascript:void(0)" class="T-ticket-add">
+            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                <i class="ace-icon fa fa-plus"></i>
+                新增
+            </button>
+        </a>
+    </h5>
+</div>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="th-border"><span class="necessary">*</span>票务商家</th>
+        <th class="th-border"><span class="necessary">*</span>类型</th>
+        <th class="th-border"><span class="necessary">*</span>日期</th>
+        <th class="th-border">出发地</th>
+        <th class="th-border">目的地</th>
+        <th class="th-border">班次</th>
+        <th class="th-border"><span class="necessary">*</span>座位级别</th>
+        <th class="th-border"><span class="necessary">*</span>单价</th>
+        <th class="th-border"><span class="necessary">*</span>数量</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">已付</th>
+        <th class="th-border">导付</th>
+        <th class="th-border">单据</th>
+        <th class="th-border">差额</th>
+        <th class="th-border">导游报账备注</th>
+        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+    </tr>
+    </thead>
+    <tbody class="T-count-ticket">
+    {{each ticketArrangeList as ticketArrange}}
+    {{each ticketArrange.ticketArrangeList as arrange index}}
+    <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}" ticketId="{{arrange.ticket.id}}" itemId="{{arrange.id}}">
+    {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.ticket != null}}{{arrange.ticket.name}}{{/if}}</td>{{/if}}
+    {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.type == 1}}机票{{else if arrange.type== 2}}汽车票{{else if arrange.type == 3}}火车票{{else if arrange.type == 4}}轮船票{{/if}}</td>{{/if}}
+    {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startTime}}</td>{{/if}}
+    {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startingCity}}</td>{{/if}}
+    {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.arriveCity}}</td>{{/if}}
+    <td>{{arrange.shift}}</td>
+    <td>{{arrange.seatLevel}}</td>
+        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
+        <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+        <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" name="realCount" type="text" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5" 
+        {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+        </td>
+        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
+        </td>
+        <td>{{if arrange.badStatus == 1}}<span class="ticketneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="ticketneedPayMoney"></span>{{/if}}
+        <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
+        <td>{{arrange.payedMoney}}</td>
+        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}} <input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}" {{else}}value=0{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+            <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
+            <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
+        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+            {{else}}
+                <span style="color:#bbb;">查看</span>
+            {{/if}}
+        </td>
+        <td><span class="difference"></span></td>
+        <td>{{arrange.billRemark}}</td>
+        {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+    </tr>
+    {{/each}}
+    {{/each}}
+    </tbody>
+</table>
+
+{{if tripPlan.billStatus > -1}}
+    <div style="width:60%;">
+        <div> 
+            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].opCheckRemark}}{{/if}}" />
+        
+            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].financeCheckRemark}}{{/if}}" />
+        </div>
+    </div>
+{{/if}}

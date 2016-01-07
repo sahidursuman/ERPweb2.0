@@ -1,0 +1,93 @@
+<div>
+    <div class="ui-sortable-handle widget-container-col">
+        <h5 class="title-size">
+            <i class="ace-icon fa fa-medkit"></i> 购物安排
+            <a href="javascript:void(0)" class="T-addShopping">
+                <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                    <i class="ace-icon fa fa-plus"></i>
+                    新增
+                </button>
+            </a>
+        </h5>
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="th-border" colspan="6">打单</th>
+            <th class="th-border" colspan="2">社佣</th>
+            <th class="th-border" colspan="2">导佣</th>
+            <th class="th-border" colspan="2">人数返佣</th>
+            <th class="th-border" colspan="2">停车返佣</th>
+            <th class="th-border" rowspan="2">购物返佣总收入</th>
+            <!--  <th class="th-border" rowspan="2">现收</th> -->
+            <th class="th-border" rowspan="2">导游报账备注</th>
+            {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+        </tr>
+        <tr>
+          <th class="th-border"><span class="necessary">*</span>时间</th>
+          <th class="th-border"><span class="necessary">*</span>购物店</th>
+          <th class="th-border"><span class="necessary">*</span>商品</th>
+          <th class="th-border"><span class="necessary">*</span>金额</th>
+          <th class="th-border">单据</th>
+          <th class="th-border">总金额</th>
+          <th class="th-border">比例%</th>
+          <th class="th-border">返佣</th>
+          <th class="th-border"><span class="necessary">*</span>比例%</th>
+          <th class="th-border">返佣</th>
+          <th class="th-border"><span class="necessary">*</span>元/人</th>
+          <th class="th-border">返佣</th>
+          <th class="th-border">元/车</th>
+          <th class="th-border">返佣</th>
+        </tr></thead>
+        <tbody class="T-count-shopping"> 
+        {{each dayList as day}}
+        {{if day.shopArrange != null}}
+        {{each day.shopArrange as shopArrangeList}}
+        {{each shopArrangeList.shopArrangePolicy as arrange index}}
+        {{if arrange != null}}
+        <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}">
+            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
+            <td>{{arrange.shopPolicy.name}}</td>
+            <td><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
+            {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+            <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                    <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                {{else}}
+                    <span style="color:#bbb;">查看</span>
+                {{/if}}
+            </td>
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumMoney{{arrange.whichDay}}_{{arrange.shopId}}"></span></td>{{/if}}
+            <td><input name="travelAgencyRate" style="width:90px;" type="text" value="{{arrange.travelAgencyRate*100}}" old="{{arrange.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+            <td><span class="travelAgencyRateMoney">{{arrange.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{arrange.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td><input name="guideRate" style="width:90px;" type="text" value="{{arrange.guideRate*100}}" old="{{arrange.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td><span class="guideRateMoney">{{arrange.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{arrange.guideRateMoney}}" 
+            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><input type="text" name="customerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}}" value="{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}" style="width:90px;" old="{{if arrange.customerRebateMoney < 1}}{{arrange.shop.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/><input type="hidden" name="touristAdultCount{{arrange.whichDay}}_{{arrange.shopId}}" value="{{tripPlan.touristAdultCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>{{/if}}
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumCustomerRebateMoney{{arrange.whichDay}}_{{arrange.shopId}} sumCustomerRebateMoney">{{shopArrangeList.customerRebateMoney}}</span></td>{{/if}}
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><input {{if arrange.isConfirmAccount == 1}}readonly="readOnly"{{/if}} type="text" name="parkingRebateMoney{{arrange.whichDay}}_{{arrange.shopId}}" value="{{if arrange.parkingRebateMoney < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}" style="width:90px;" old="{{if arrange.parkingRebateMoney < 1}}{{arrange.shop.parkingRebateMoney}}{{else}}{{arrange.parkingRebateMoney}}{{/if}}" maxlength="11" 
+            /><input type="hidden" name="busNumber{{arrange.whichDay}}_{{arrange.shopId}}" class="busNumber" value="{{busCompanyArrange.length}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>{{/if}}
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="sumParkingRebateMoney{{arrange.whichDay}}_{{arrange.shopId}} sumParkingRebateMoney">{{shopArrangeList.parkingRebateMoney}}</span></td>{{/if}}
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="T-shopIncome T-shopIncome{{arrange.whichDay}}_{{arrange.shopId}}"></span></td>{{/if}}
+            <!-- {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><input type="text" style="width:90px;"/></td>{{/if}} -->
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</td>{{/if}}
+            {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+        </tr>
+        {{/if}}
+        {{/each}}  
+        {{/each}}
+        {{/if}}
+        {{/each}}
+        </tbody>
+    </table>
+
+    {{if tripPlan.billStatus > -1}}
+    <div style="width:60%;"><div> 
+        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[1] != null}}{{remarkArrangeList[1].opCheckRemark}}{{/if}}" />
+    
+        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[1] != null}}{{remarkArrangeList[1].financeCheckRemark}}{{/if}}" />
+    </div>
+    </div>{{/if}}
+</div>

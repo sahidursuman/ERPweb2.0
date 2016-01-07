@@ -1,0 +1,71 @@
+<!-- <div class="ui-sortable-handle widget-container-col">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-medkit"></i> 车费
+        <a href="javascript:void(0)" class="T-buspay-add">
+            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                <i class="ace-icon fa fa-plus"></i>
+                新增
+            </button>
+        </a>
+    </h5>
+</div> -->
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="th-border"><span class="necessary">*</span>所属车队</th>
+        <th class="th-border"><span class="necessary">*</span>车牌号</th>
+        <th class="th-border"><span class="necessary">*</span>座位数</th>
+        <th class="th-border"><span class="necessary">*</span>车费</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">已付</th>
+        <th class="th-border">导付</th>
+        <th class="th-border">单据</th>
+        <th class="th-border">差额</th>
+        <th class="th-border">导游报账备注</th>
+        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+
+    </tr>
+    </thead>
+    <tbody class="T-count-bus">
+    {{each busCompanyArrange as busCompany}}
+    {{if busCompany != null}}
+    <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
+        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+        <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
+        <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
+        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}"/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
+        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/>{{/if}}</td>
+        <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}
+        <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
+        <td>{{busCompany.payedMoney}}</td>
+        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value=0 {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
+            
+            <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+            <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
+         <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
+                <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
+            {{else}}
+                <span style="color:#bbb;">查看</span>
+            {{/if}}
+        </td>
+        <td><span class="difference"></span></td>
+        <td>{{busCompany.billRemark}}</td>
+        {{if tripPlan.billStatus == 2}}<td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+    </tr>
+    {{/if}}
+    {{/each}}
+    </tbody>
+</table>
+
+{{if tripPlan.billStatus > -1}}
+    <div style="width:60%;">
+        <div> 
+            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].opCheckRemark}}{{/if}}" />
+        
+            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].financeCheckRemark}}{{/if}}" />
+        </div>
+    </div>
+{{/if}}

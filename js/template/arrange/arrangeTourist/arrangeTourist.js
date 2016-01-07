@@ -53,7 +53,6 @@ define(function(require, exports) {
 
         //请求搜索数据
         arrangeTourist.caCheAutocomData(0);
-        arrangeTourist.caCheAutocomData(1);
         arrangeTourist.caCheAutocomData(2);
 
         var html = listMainTemplate();
@@ -72,7 +71,6 @@ define(function(require, exports) {
      */
     arrangeTourist.init_event = function() {
         var $visitorObj = $('#T-Visitor-list'),
-            $GroupObj = $('#T-Group-list'),
             $TransferObj = $('#T-Transfer-list');
         //散拼
         $visitorObj.find('.T-visitorTourist-search').off().on('click', function(event) {
@@ -114,34 +112,27 @@ define(function(require, exports) {
 
         //线路产品的AutocomPlate数据
         var $visitorLinPro = $visitorObj.find('.T-Choose-linProList'),
-            $groupLinPro = $GroupObj.find('.T-Choose-linProList'),
             $transferLinPro = $TransferObj.find('.T-Choose-linProList');
 
         arrangeTourist.chooseLineProduct($visitorLinPro, 0);
-        arrangeTourist.chooseLineProduct($groupLinPro, 1);
         arrangeTourist.chooseLineProduct($transferLinPro, 2);
 
         //业务部AutocomPlate数据
         var $visitorfromBus = $visitorObj.find('.T-fromBussinessGroup'),
-            $groupfromBus = $GroupObj.find('.T-fromBussinessGroup'),
             $transferfromBus = $TransferObj.find('.T-fromBussinessGroup');
 
         arrangeTourist.chooseBusinessGroup($visitorfromBus, 0);
-        arrangeTourist.chooseBusinessGroup($groupfromBus, 1);
         arrangeTourist.chooseBusinessGroup($transferfromBus, 2);
 
         //组团社AutocomPlate数据
         var $visitorPart = $visitorObj.find('.T-fromPartnerAgency'),
-            $groupPart = $GroupObj.find('.T-fromPartnerAgency'),
             $transferPart = $TransferObj.find('.T-fromPartnerAgency');
 
         arrangeTourist.choosePartnerAgency($visitorPart, 0);
-        arrangeTourist.choosePartnerAgency($groupPart, 1);
         arrangeTourist.choosePartnerAgency($transferPart, 2);
 
         //模拟Click事件
         $visitorObj.find('.T-visitorTourist-search').trigger('click');
-        $GroupObj.find('.T-GroupTourist-search').trigger('click');
         $TransferObj.find('.T-Transfer-search').trigger('click');
 
     };
@@ -2701,11 +2692,7 @@ define(function(require, exports) {
                         arrangeTourist.visFromBusinessList = data.fromBusinessGroupList;
                         arrangeTourist.visFromPartnerList = data.fromPartnerAgencyList;
                         arrangeTourist.vislineProductList = data.lineProductList;
-                    } else if (customerType == 1) { //团队
-                        arrangeTourist.groupFromBusinessList = data.fromBusinessGroupList;
-                        arrangeTourist.groupFromPartnerList = data.fromPartnerAgencyList;
-                        arrangeTourist.grouplineProductList = data.lineProductList;
-                    } else if (customerType == 2) { //转客
+                    }else if (customerType == 2) { //转客
                         arrangeTourist.transferFromBusinessList = data.fromBusinessGroupList;
                         arrangeTourist.transferFromPartnerList = data.fromPartnerAgencyList;
                         arrangeTourist.transferProductList = data.lineProductList;
@@ -2742,9 +2729,7 @@ define(function(require, exports) {
                 list;
             if (customerType == 0) {
                 list = arrangeTourist.vislineProductList;
-            } else if (customerType == 1) {
-                list = arrangeTourist.grouplineProductList;
-            } else if (customerType == 2) {
+            }else if (customerType == 2) {
                 list = arrangeTourist.transferProductList;
             }
             if (!!list && list.length > 0) {
@@ -2791,9 +2776,7 @@ define(function(require, exports) {
                 list;
             if (customerType == 0) {
                 list = arrangeTourist.visFromBusinessList;
-            } else if (customerType == 1) {
-                list = arrangeTourist.groupFromBusinessList;
-            } else if (customerType == 2) {
+            }else if (customerType == 2) {
                 list = arrangeTourist.transferFromBusinessList;
             }
             if (!!list && list.length > 0) {
@@ -2835,9 +2818,7 @@ define(function(require, exports) {
                 list;
             if (customerType == 0) {
                 list = arrangeTourist.visFromPartnerList;
-            } else if (customerType == 1) {
-                list = arrangeTourist.groupFromPartnerList;
-            } else if (customerType == 2) {
+            }else if (customerType == 2) {
                 list = arrangeTourist.transferFromPartnerList;
             }
             if (!!list && list.length > 0) {
