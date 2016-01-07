@@ -29,7 +29,8 @@ define(function(require, exports) {
 		touristsList : require("./view/touristsList"),
 		feeList : require("./view/feeList"),
 		addPartnerManager : require('./view/addPartnerManager'),
-		viewTripPlanGroup : require('./view/viewTripPlanGroup')
+		viewTripPlanGroup : require('./view/viewTripPlanGroup'),
+		viewTripPlanSingle : require('./view/viewTripPlanSingle'),
 	}
 	var tripPlan = {
 		searchData : false,
@@ -1067,21 +1068,33 @@ define(function(require, exports) {
 		$tab.find('.T-action-plan-list').append(list);
 	}
 	tripPlan.viewTripPlan = function(id, planType){
-		var html = viewGroupTemplate
+		var html = T.viewTripPlanSingle
 		if(planType == 1){
 			html = T.viewTripPlanGroup
 		}
 		$.ajax({
-			url : KingServices.build_url("tripPlan", "getTripPlanArrange"),
+			url : KingServices.build_url("tripController", "viewTripPlan"),
 			type : "POST",
-			data : {id : id}
+			data : {tripPlanId : id}
 		})
 		.done(function(data){
 			if(showDialog(data)){
-				console.log(data);
-				data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
-				data.basicInfo = JSON.parse(data.basicInfo);
-				data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+				for(var i=0; i<data.dayList.length; i++){
+					data.dayList[i].dayInfo = JSON.parse(data.dayList[i].dayInfo);
+					var arrangeData = data.dayList[i].arrangeData;
+					arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);
+					arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);
+					arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);
+					arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);
+					arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);
+					arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);
+					arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);
+				}
+				data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+				data.guideArrange = JSON.parse(data.guideArrange);
+				data.insuranceArrange = JSON.parse(data.insuranceArrange);
+				data.touristGroup = JSON.parse(data.touristGroup);
+				data.tripPlan = JSON.parse(data.tripPlan);
 				Tools.addTab(menuKey+"_group_view", "查看计划", html(data));
 			}
 		});
