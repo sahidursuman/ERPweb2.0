@@ -326,7 +326,15 @@ define(function(require, exports) {
         $tab.find(".T-saveClear").click(function() {
             if (!validatorCheck.form())return;
             if (type) {
-                FinGuide.savePayingData($tab);
+                var allMoney = $tab.find('input[name=sumPayMoney]').val();
+                if(allMoney == 0){
+                    showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                        FinGuide.savePayingData($tab);
+                    })
+                }else{
+                    FinGuide.savePayingData($tab);
+                }
+                
             } else {
                 FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
                     FinGuide.saveCheckingData($tab);
