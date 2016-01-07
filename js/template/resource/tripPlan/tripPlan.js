@@ -181,36 +181,21 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				if(showDialog(data)){
-					var basicInfo = JSON.parse(data.basicInfo);
-					var arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
-					var tripPlanDayList = JSON.parse(data.tripPlanDayList);
-					var insuranceList = JSON.parse(data.arrangeItems.insuranceList);
-					var hotelList = JSON.parse(data.arrangeItems.hotelList);
-					var busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
-					var guideList = JSON.parse(data.arrangeItems.guideList);
-					var otherList = JSON.parse(data.arrangeItems.otherList);
-					var restaurantList = JSON.parse(data.arrangeItems.restaurantList);
-					var scenicList = JSON.parse(data.arrangeItems.scenicList);
-					var selfPayList = JSON.parse(data.arrangeItems.selfPayList);
-					var shopList = JSON.parse(data.arrangeItems.shopList);
-					var ticketList = JSON.parse(data.arrangeItems.ticketList);
-					basicInfo.touristCount = (basicInfo.touristAdultCount || 0) + (basicInfo.touristChildCount || 0);
-					
-					data = {
-						basicInfo : basicInfo,
-						arrangeItemsStauts: arrangeItemsStauts,
-						insuranceList : insuranceList,
-						hotelList : hotelList,
-						busCompanyList : busCompanyList,
-						guideList : guideList,
-						otherList : otherList,
-						restaurantList : restaurantList,
-						scenicList : scenicList,
-						selfPayList : selfPayList,
-						shopList : shopList,       
-						ticketList : ticketList
-					};
-					data.days = Tools.getDateDiff(basicInfo.endTime, basicInfo.startTime) + 1;
+					data.basicInfo = JSON.parse(data.basicInfo);
+					data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
+					data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+					data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
+					data.hotelList = JSON.parse(data.arrangeItems.hotelList);
+					data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
+					data.guideList = JSON.parse(data.arrangeItems.guideList);
+					data.otherList = JSON.parse(data.arrangeItems.otherList);
+					data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
+					data.scenicList = JSON.parse(data.arrangeItems.scenicList);
+					data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
+					data.shopList = JSON.parse(data.arrangeItems.shopList);
+					data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
+					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 					
 					addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
@@ -282,37 +267,22 @@ define(function(require, exports) {
 				data: {id: id},
 				success:function(data){
 					if(showDialog(data)){
-						
-						var basicInfo = JSON.parse(data.basicInfo);
-						var arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
-						var tripPlanDayList = JSON.parse(data.tripPlanDayList);
-						var insuranceList = JSON.parse(data.arrangeItems.insuranceList);
-						var hotelList = JSON.parse(data.arrangeItems.hotelList);
-						var busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
-						var guideList = JSON.parse(data.arrangeItems.guideList);
-						var otherList = JSON.parse(data.arrangeItems.otherList);
-						var restaurantList = JSON.parse(data.arrangeItems.restaurantList);
-						var scenicList = JSON.parse(data.arrangeItems.scenicList);
-						var selfPayList = JSON.parse(data.arrangeItems.selfPayList);
-						var shopList = JSON.parse(data.arrangeItems.shopList);
-						var ticketList = JSON.parse(data.arrangeItems.ticketList);
-						basicInfo.touristCount = (basicInfo.touristAdultCount || 0) + (basicInfo.touristChildCount || 0);
-						
-						data = {
-							basicInfo : basicInfo,
-							arrangeItemsStauts: arrangeItemsStauts,
-							insuranceList : insuranceList,
-							hotelList : hotelList,
-							busCompanyList : busCompanyList,
-							guideList : guideList,
-							otherList : otherList,
-							restaurantList : restaurantList,
-							scenicList : scenicList,
-							selfPayList : selfPayList,
-							shopList : shopList,       
-							ticketList : ticketList
-						};
-						data.days = Tools.getDateDiff(basicInfo.endTime, basicInfo.startTime) + 1;
+						data.basicInfo = JSON.parse(data.basicInfo);
+						data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
+						data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+						data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
+						data.hotelList = JSON.parse(data.arrangeItems.hotelList);
+						data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
+						data.guideList = JSON.parse(data.arrangeItems.guideList);
+						data.otherList = JSON.parse(data.arrangeItems.otherList);
+						data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
+						data.scenicList = JSON.parse(data.arrangeItems.scenicList);
+						data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
+						data.shopList = JSON.parse(data.arrangeItems.shopList);
+						data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+						data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
+						data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
+
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', addTemplate(data))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
 							tripPlan.init_event($tab,id,target);
@@ -958,7 +928,7 @@ define(function(require, exports) {
 	tripPlan.addInsurance = function($this, validator, $tab) {
 		var tableContainer = $this.closest('.ui-sortable-handle').find('.table tbody'),
 			html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 T-chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
-		'<td><input type="text" name="type" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/><input type="hidden" name="typeId" value="" /></td>' +
+		'<td><input type="text" name="insuranceItem" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/><input type="hidden" name="insuranceItemId" value="" /></td>' +
 		'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
@@ -1005,6 +975,9 @@ define(function(require, exports) {
 		tripPlan.bindInsuranceChoose($tab);
 		Tools.setDatePicker($tr.find('.datepicker'), true);
 		tripPlan.bindGuideChosen($tr);
+		if ($tr.index() === 0) {
+			$tr.find('input[name="isAccountGuide"]').trigger('click');;
+		}
 	}
 
 	/**
@@ -1437,7 +1410,7 @@ define(function(require, exports) {
 			select: function(event, ui) {
 				var $this = $(this), $parents = $this.closest('tr');
 				$parents.find('[name=insuranceItemId]').val(ui.item.id);
-				$parents.find('[name=price]').val(ui.item.price).trigger('click');
+				$parents.find('[name=price]').val(ui.item.price).trigger('change');
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
