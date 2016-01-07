@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":21,"md5":"3a901051c9f9cc4a5929e32533b51562"}*/
+/*TMODJS:{"debug":true,"version":23,"md5":"3a901051c9f9cc4a5929e32533b51562"}*/
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/travelArrange", function($data, $filename) {
         try {
