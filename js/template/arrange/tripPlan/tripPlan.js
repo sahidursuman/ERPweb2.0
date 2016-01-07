@@ -868,7 +868,7 @@ define(function(require, exports) {
 	tripPlan.saveSinglePlan = function($tab, validate, tabArgs) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
-
+		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
 		// 处理定时发送
 		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
@@ -899,7 +899,7 @@ define(function(require, exports) {
 		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
 		args.touristAdultCount = adultcount;
 		args.touristChildCount = childcount;
-
+		
 		$.ajax({
 			url: KingServices.build_url('tripController', 'saveRetailClient'),
 			type: 'post',
@@ -1170,10 +1170,12 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
-					$target.val(data.realName)
-					.nextAll('input[name="dutyOPUserId"]').val(data.userId)
-					.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
-
+					if($target.val() == ""){
+						$target.val(data.realName)
+						.nextAll('input[name="dutyOPUserId"]').val(data.userId)
+						.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
+					}
+					
 					var userList = JSON.parse(data.userList || false);
 					if (!!userList) {
 						for (var i = 0, len = userList.length;i < len; i++) {

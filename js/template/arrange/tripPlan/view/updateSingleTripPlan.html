@@ -51,14 +51,14 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">责任计调</label>
 				<div class="col-xs-8">
-					<input name="dutyOPUserName" type="text" class="col-xs-12"  value="{{tripPlan.dutyOPUserName}}">
-					<input type="hidden" name="dutyOPUserId"  value="{{tripPlan.dutyOPUserId}}">
+					<input name="dutyOPUserName" type="text" class="col-xs-12"  value="{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}">
+					<input type="hidden" name="dutyOPUserId"  value="{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.id}}{{/if}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">责任部门</label>
 				<div class="col-xs-8">
-					<input type="text" name="dutyOPDepartment" readonly class="col-xs-12"  value="{{tripPlan.dutyOPDepartment}}">
+					<input type="text" name="dutyOPDepartment" readonly class="col-xs-12"  value="{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.businessGroup.name}}{{/if}}">
 				</div>
 			</div>
 		</div>
@@ -98,7 +98,7 @@
 			<div class="col-xs-12">
 				<label class="col-xs-1 control-label text-right">备注</label>
 				<div class="col-xs-11">
-					<textarea class="col-xs-12" name="remark" maxlength="1000" value="{{tripPlan.remark}}"></textarea>
+					<textarea class="col-xs-12" name="remark" maxlength="1000">{{tripPlan.remark}}</textarea>
 				</div>
 			</div>
 		</div>
