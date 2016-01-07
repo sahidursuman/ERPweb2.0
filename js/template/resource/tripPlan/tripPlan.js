@@ -1403,14 +1403,14 @@ define(function(require, exports) {
 					if(ui.item == null){
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val('')
-					$parents.find('[name=insuranceItemId]').val('');
+					$parents.find('[name=typeId]').val('');
 					$parents.find('[name=price]').val('');
 				}
 			},
 			select: function(event, ui) {
 				var $this = $(this), $parents = $this.closest('tr');
-				$parents.find('[name=insuranceItemId]').val(ui.item.id);
-				$parents.find('[name=price]').val(ui.item.price).trigger('click');
+				$parents.find('[name=typeId]').val(ui.item.id);
+				$parents.find('[name=price]').val(ui.item.price).trigger('change');
 			}
 		}).off('click').on('click', function() {
 			var $this = $(this), $parents =$this.closest('tr'),
