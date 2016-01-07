@@ -330,6 +330,9 @@ define(function(require, exports) {
         Tools.inputCtrolFloat($count);
         Tools.inputCtrolFloat($price);
 
+        //外联计调默认是当前登录账号
+        $groupInfoForm.find('.T-choose-opUserList').val(IndexData.userInfo.realName);
+
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
