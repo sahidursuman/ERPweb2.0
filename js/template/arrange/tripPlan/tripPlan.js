@@ -850,7 +850,7 @@ define(function(require, exports) {
 				tripPlan.viewTouristGroup(id);
 			} else if ($that.hasClass('T-groupDelete')) {
 				//删除小组
-				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=tripPlanId]").val(), $tab);
+				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=id]").val(), $tab);
 			}
 		});
 
@@ -1306,7 +1306,7 @@ define(function(require, exports) {
 	//删除小组成员
 	tripPlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
 		showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
-			if(tripPlanId){
+			if(!!id){
 				$.ajax({
 					url:KingServices.build_url("touristGroup","removeTouristGroup"),
 					data:{ 
