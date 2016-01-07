@@ -278,7 +278,7 @@ define(function(require, exports) {
 						data.viewLineProduct = {
 								lineProduct: JSON.parse(data.lineProduct),
 								busCompanyTemplate: JSON.parse(data.busCompanyTemplate),
-								guideTemplate: JSON.parse(data.guideTemplate),
+								//guideTemplate: JSON.parse(data.guideTemplate),
 								insuranceTemplate: JSON.parse(data.insuranceTemplate),
 								daysList: JSON.parse(data.daysList)
 						};
@@ -3683,7 +3683,7 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
+					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 						var idString = $container.attr("id");
 						if(argumentsLen === 3){
 							if (idString == "tab-arrange_quote-add-content") {
