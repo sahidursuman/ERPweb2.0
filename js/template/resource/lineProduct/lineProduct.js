@@ -2545,7 +2545,9 @@ define(function(require, exports) {
 					price : getValue($item, "price"),
 					remark : getValue($item, "remark")
 				}
-				travelLineData.insurance.push(json);
+				if (!!json.insuranceId) {
+					travelLineData.insurance.push(json);
+				}
 			}
 		}
 
