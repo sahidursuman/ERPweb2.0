@@ -928,7 +928,7 @@ define(function(require, exports) {
 	tripPlan.addInsurance = function($this, validator, $tab) {
 		var tableContainer = $this.closest('.ui-sortable-handle').find('.table tbody'),
 			html = '<tr><td><div class="col-sm-12"><input type="text" maxlength="32" name="insuranceName" class="col-sm-12 T-chooseInsurance bind-change"/><input type="hidden" name="insuranceId"/><span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
-		'<td><input type="text" name="type" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/><input type="hidden" name="typeId" value="" /></td>' +
+		'<td><input type="text" name="insuranceItem" maxlength="32" class="col-sm-12 T-chooseInsuranceType"/><input type="hidden" name="insuranceItemId" value="" /></td>' +
 		'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12"/></td>' +
@@ -1403,13 +1403,13 @@ define(function(require, exports) {
 					if(ui.item == null){
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val('')
-					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=insuranceItemId]').val('');
 					$parents.find('[name=price]').val('');
 				}
 			},
 			select: function(event, ui) {
 				var $this = $(this), $parents = $this.closest('tr');
-				$parents.find('[name=typeId]').val(ui.item.id);
+				$parents.find('[name=insuranceItemId]').val(ui.item.id);
 				$parents.find('[name=price]').val(ui.item.price).trigger('change');
 			}
 		}).off('click').on('click', function() {
