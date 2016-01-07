@@ -37,10 +37,18 @@
 			<tr>
 				<td class="style-myself">总应收 </td>
 				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.sumNeedGetMoney}}</td>
+				<td class="style-myself">已收 </td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.getedMoney}}</td>
+				<td class="style-myself">预收款 </td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.preIncomeMoney}}	</td>
+			</tr>
+			<tr>
 				<td class="style-myself">总成本 </td>
 				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.sumCostMoney}}</td>
-				<td class="hidden" class="style-myself">预付款 </td>
-				<td  class="hidden" style="text-align: left;padding-left: 6px;" >{{bookingOrder.prePayMoney}}</td>
+				<td class="style-myself">已付 </td>
+				<td  style="text-align: left;padding-left: 6px;" >{{bookingOrder.prePayMoney}}</td>
+				<td></td>
+				<td></td>
 			</tr>
 		</table>
 	</form>
@@ -67,7 +75,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -99,7 +107,7 @@
 										<td>{{hotelList.salePrice}}/天</td>
 										<td>{{hotelList.sumCostMoney}}</td>
 										<td>{{hotelList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{hotelList.prePayMoney}}</td>
+										<td>{{hotelList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -128,7 +136,7 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -142,7 +150,7 @@
 										<td>{{scenicList.sumCostMoney}}</td>
 										<td>{{scenicList.sumNeedGetMoney}}</td>
 										<td>{{scenicList.orderNumber}}</td>
-										<td class="hidden">{{scenicList.prePayMoney}}</td>
+										<td>{{scenicList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -174,7 +182,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -201,7 +209,7 @@
 										<td>{{ticketList.salePrice}}</td>
 										<td>{{ticketList.sumCostMoney}}</td>
 										<td>{{ticketList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{ticketList.prePayMoney}}</td>
+										<td>{{ticketList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -232,7 +240,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border ">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
@@ -247,7 +255,7 @@
 										<td>{{busList.salePrice}}</td>
 										<td>{{busList.sumCostMoney}}</td>
 										<td>{{busList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{busList.prePayMoney}}</td>
+										<td>{{busList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
