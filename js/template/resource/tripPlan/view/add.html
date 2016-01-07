@@ -12,7 +12,7 @@
                     <span class="fix-w-4">线路产品:</span>{{basicInfo.lineProduct.name}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">针对客源:</span>{{basicInfo.tripPlanType}}
+                    <span class="fix-w-4">针对客源:</span>{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}
                 </div>
                 <div class="col-md-3">
                     <span class="fix-w-4 T-touristCount" data-count="{{basicInfo.touristCount}}">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩

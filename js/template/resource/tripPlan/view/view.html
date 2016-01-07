@@ -4,7 +4,7 @@
 		<td class="style-myself">线路产品：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.lineProduct.name}}</td>
 		<td class="style-myself">针对客源：</td>
-		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripPlanType}}</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
 		<td class="style-myself">人数：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩</td>
 		<td class="style-myself">团号：</td>
