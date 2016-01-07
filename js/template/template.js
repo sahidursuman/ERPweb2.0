@@ -206,11 +206,12 @@
             return "fa-minus";
         }
     }), template.helper("getRestaurantDesc", function(status) {
-        var res = "", i = 0;
-        return status && (status = status.split(","), res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>早餐&nbsp;", 
-        res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>中餐&nbsp;", 
-        res += '<input type="radio" readonly ' + (0 == status[i++] ? "checked" : "") + "/>晚餐&nbsp;"), 
-        res;
+        var res = "", i = 0, txt = [ "早餐", "中餐", "晚餐" ];
+        if (status) {
+            status = status.split(",");
+            for (var i = 0; 3 > i; i++) res += '<label>&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ace" disabled="disabled" ' + (1 == status[i] ? "checked" : "") + '><span class="lbl"> ' + txt[i] + "</span></label>";
+        }
+        return res;
     }), template.helper("getTaskDesc", function(status) {
         switch (1 * status) {
           case 1:
