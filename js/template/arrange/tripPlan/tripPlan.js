@@ -29,6 +29,7 @@ define(function(require, exports) {
 		touristsList : require("./view/touristsList"),
 		feeList : require("./view/feeList"),
 		addPartnerManager : require('./view/addPartnerManager'),
+		viewTripPlanGroup : require('./view/viewTripPlanGroup')
 	}
 	var tripPlan = {
 		searchData : false,
@@ -39,7 +40,6 @@ define(function(require, exports) {
 	autocompleteData = {};
 
 	tripPlan.initModule = function() {
-		//tripPlan.viewTripPlan();
 		tripPlan.listMainTripPlan();
     };	
 
@@ -288,9 +288,7 @@ define(function(require, exports) {
 
 		//搜索线路
         $tab.find(".T-search-line").on('click', function(){
-        	if($tab.find('[name="quoteOrderName"]').val() == ""){
-				tripPlan.initLineProductSearch($tab, 0);
-        	}
+        	tripPlan.initLineProductSearch($tab, 0);
         });
 		//搜索报价单号
     	$tab.find(".T-search-quote-order").on('click', function(){
@@ -346,7 +344,7 @@ define(function(require, exports) {
     		if($that.hasClass('T-count') || $that.hasClass('T-price')){
     			var count = $tr.find('[name="count"]').val() || 0,
     				price = $tr.find('[name="price"]').val() || 0;
-    			$tr.find('[name="money"]').val(count*1 + price*1);
+    			$tr.find('[name="money"]').val(count * price);
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
     	});
@@ -388,7 +386,7 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                	$(this).next('[name="fromPartnerAgencyId"]').val("");
+                	$(this).val("").next('[name="fromPartnerAgencyId"]').val("");
                 }
             },
             select: function(event, ui) {
@@ -424,7 +422,7 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    $(this).next('[name="fromPartnerAgencyContactId"]').val("");
+                    $(this).val("").next('[name="fromPartnerAgencyContactId"]').val("");
                 }
             },
             select: function(event, ui) {
@@ -478,6 +476,7 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	tripPlan.bindCommonEvent = function($tab) {
+		var validate = rule.checkedEditor($tab); 
         //购物商家
         $tab.find(".T-shopNames").on('click', function(){
             KingServices.shopMultiselect($(this));
@@ -505,21 +504,22 @@ define(function(require, exports) {
         $tab.find('.T-add-days').on('click', function(event){
             event.preventDefault();
             var $days = $tab.find('.T-days'), 
-                $tr = $days.find('tr'),
-                old = 0;
+                $tr = $days.find('tr');
             if($tr.length > 0){
                 $tr.each(function(index) {
                     var $that = $(this),
                         fresh = $that.find('[name="dateDays"]').data("which-day");
-                    if(old == fresh-1){
-                        old = fresh;
-                    }else{
-                        $days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
-                        return false
+                        console.log(fresh - (index+1) != 0);
+                    if(fresh - (index+1) != 0){
+                        $that.before(travelArrange({lineProductDayList:[{whichDay:index+1}]}));
+                        return false;
+                    }else if(index + 1 >= $tr.length){
+                        $days.append(travelArrange({lineProductDayList:[{whichDay:$tr.length+1}]}));
+                        return false;
                     }
                 });
             }else{
-                $days.append(travelArrange({lineProductDayList:[{whichDay:old+1}]}));
+                $days.append(travelArrange({lineProductDayList:[{whichDay:$tr.length+1}]}));
             }
             F.arrangeDate($tab);
         });
@@ -672,8 +672,12 @@ define(function(require, exports) {
 		})
 		.done(function(data){
 			if(showDialog(data)){
-				showMessageDialog($( "#confirm-dialog-message" ), data.message);
-				Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+					if(!!tripPlan.$tab){
+						tripPlan.$tab.find('.T-search-tripPlan-group .T-btn-tripPlan-search').trigger('click');
+					}
+				});
 			}
 		});
 	};
@@ -870,6 +874,9 @@ define(function(require, exports) {
 			if (showDialog(data)) {
 				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
 					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+					if(!!tripPlan.$tab){
+						tripPlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
+					}
 				});				
 			}
 		});
@@ -1023,11 +1030,24 @@ define(function(require, exports) {
 		$tab.find('.T-action-plan-list').append(list);
 	}
 	tripPlan.viewTripPlan = function(id, planType){
-		var html = viewGroupTemplate();
+		var html = viewGroupTemplate
 		if(planType == 1){
-			html = viewGroupTemplate();
+			html = T.viewTripPlanGroup
 		}
-		Tools.addTab(menuKey+"_view", "查看计划", html);
+		$.ajax({
+			url : KingServices.build_url("tripPlan", "getTripPlanArrange"),
+			type : "POST",
+			data : {id : id}
+		})
+		.done(function(data){
+			if(showDialog(data)){
+				console.log(data);
+				data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
+				data.basicInfo = JSON.parse(data.basicInfo);
+				data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+				Tools.addTab(menuKey+"_group_view", "查看计划", html(data));
+			}
+		});
 	};
 
 	var F = {
@@ -1564,6 +1584,9 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('change');
 				lineId = $tr.data('line-id');
+			}else{
+				$tab.find('input[name="quoteId"]').val("");
+				$tab.find('input[name="quoteOrderName"]').val("");
 			}
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text());
 			$tab.find('input[name="lineProductId"]').val(lineId);
