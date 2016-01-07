@@ -68,15 +68,13 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">购物商家</label>
 				<div class="col-xs-8">
-					<input type="text" name="shopNames" readonly class="col-xs-12 T-shopNames" value="{{tripPlan.shopNames}}">
-					<input type="hidden" name="shopIds" value="{{tripPlan.shopIds}}">
+					<input type="text" name="shopNames" readonly class="col-xs-12 T-shopNames" data-propover="{{tripPlan.shopIds}}" value="{{tripPlan.shopNames}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">自费商家</label>
 				<div class="col-xs-8">
-					<input type="text" name="selfPayItemNames" readonly class="col-xs-12 T-selfPayItemNames"  value="{{tripPlan.selfPayItemNames}}">
-					<input type="hidden" name="selfPayItemIds"  value="{{tripPlan.selfPayItemIds}}">
+					<input type="text" name="selfPayItemNames" readonly class="col-xs-12 T-selfPayItemNames" data-propover="{{tripPlan.selfPayItemIds}}"  value="{{tripPlan.selfPayItemNames}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
@@ -167,7 +165,7 @@
 						</label>
 					</td>
 					<td><input type="text" class="col-xs-12" name="restPosition" value="{{rs.restPosition}}"></td>
-					<td><input type="text" class="col-xs-12 T-action T-scenicItem" name="scenicItemNames" readonly value="{{rs.scenicItemNames}}"></td>
+					<td><input type="text" class="col-xs-12 T-action T-scenicItem" name="scenicItemNames" data-propover="{{rs.scenicItemIds}}" readonly value="{{rs.scenicItemNames}}"></td>
 					<td>
 						<a class="cursor T-action T-update-detail" title="编辑行程详情" data-detail="{{rs.detail}}">
 				            编辑行程详情
