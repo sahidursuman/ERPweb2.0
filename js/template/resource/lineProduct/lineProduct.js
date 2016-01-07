@@ -2561,7 +2561,7 @@ define(function(require, exports) {
 			for (var i = 0, len = $form.length; i < len; i++) {
 				var $item = $form.eq(i),
 					json = {
-					id : getValue($item, "templateId"),
+					id : $item.data('entity-arrangeid'),
 					needSeatCount : getValue($item, "needSeatCount"),
 					brand: getValue($item, "brand"),
 					remark : getValue($item, "remark")
