@@ -75,21 +75,21 @@
 											</td>  
 											
 											<td>
-												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc"  maxlength="10" />
+												<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc"  maxlength="10" />
 											</td>
 											<td>
-												<input name="price" value="{{transferList.price}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc"  maxlength="10" />
+												<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc"  maxlength="10" />
 											</td>
 
 											<td>
-												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney"/>
+												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right {{if subsection==0}}T-payMoney{{/if}}"/>
 											</td>
 											<td>
 												<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-10  no-padding-right"  maxlength="500" />
 											</td>
 											<td><a class="T-delete cursor">删除</a></td>
 										</tr>
-									{{/each}} 
+									{{/each}}
 									<!--游客小组费end-->
 									{{else}}
 									<!--转客其他费用start-->
@@ -124,8 +124,9 @@
 				</div>
 			</div>
 		</div>
-	</form>   
+	</form> 
 
+  {{if subsection==0}}
 	<!--收客信息 start-->
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
@@ -212,7 +213,8 @@
 			</div>   
 		</div>  
 	</form>     
-	<!--收客信息 end-->  
+	<!--收客信息 end--> 
+	{{/if}}
 
 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
