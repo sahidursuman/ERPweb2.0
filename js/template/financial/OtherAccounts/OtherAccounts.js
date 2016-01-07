@@ -523,7 +523,15 @@ define(function(require, exports) {
         //保存付款事件
         $PaymentTabId.find(".T-saveClear").click(function() {
             if(!payValidator.form()){return;}
-            OtherAccounts.paysave(data, $PaymentTabId);
+            var allMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
+            if(allMoney == 0){
+                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                    OtherAccounts.paysave(data, $PaymentTabId);
+                })
+            }else{
+                OtherAccounts.paysave(data, $PaymentTabId);
+            }
+            
         });
         // 自动下账
         $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
