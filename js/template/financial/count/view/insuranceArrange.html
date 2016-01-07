@@ -1,0 +1,39 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="th-border">保险公司</th>
+        <th class="th-border">险种</th>
+        <th class="th-border">单价</th>
+        <th class="th-border">数量</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">已付</th>
+        <th class="th-border">导游报账备注</th>
+        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+    </tr>
+    </thead>
+    <tbody class="T-count-insurance">
+    {{each insuranceArrangeList as insuranceArrange}}
+    <tr>
+    <td>{{insuranceArrange.insurance.name}}</td>
+    <td>{{insuranceArrange.type}}</td>
+    <td>{{insuranceArrange.price}}</td>
+    <td>{{insuranceArrange.memberCount}}</td>
+    <td>{{insuranceArrange.needPayMoney}}</td>
+    <td>{{insuranceArrange.payedMoney}}</td>
+    <td></td>
+    </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+{{if tripPlan.billStatus > -1}}
+<div style="width:60%;">
+    <div> 
+        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[3] != null}}{{remarkArrangeList[3].opCheckRemark}}{{/if}}" />
+    
+        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[11] != null}}{{remarkArrangeList[11].financeCheckRemark}}{{/if}}" />
+    </div>
+</div>
+{{/if}}

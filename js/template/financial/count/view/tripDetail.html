@@ -4,30 +4,40 @@
             <i class="ace-icon fa fa-file-excel-o"></i>导出电子表格
         </button>
     </div>
-    <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
-        <tbody>
-            <tr style="">
-                <td><label  style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
-                <td><label  style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
-                <td><label  style="font-weight: bold;">应用范围：{{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label></td>
-                <td><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
-            </tr>
-            <tr>
-                <td><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
-                <td><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
-                <td><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
-                <td><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
-            </tr>
-            <tr>
-                <td> <label  style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label></td>
-                <td><label  style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
-    <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
+    <div class="col-xs-12 border">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="cursor: default;height:30px">
+                <div class="form-group">
+                    <label class="col-sm-3" style="font-weight: bold;">线路: {{tripPlan.lineProduct.name}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">类别: {{tripPlan.lineProduct.type}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">应用范围: {{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">天数: {{tripPlan.lineProduct.days}}</label>
+                </div>
+            </div>
+        </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;cursor: default;height:30px">
+                <div class="form-group">
+                    <label class="col-sm-3" style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label>
+                    <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
+                    <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
+                </div>
+            </div>
+        </form>
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="search-area  editable editable-click" style="margin-top: 10px;border-bottom:0px;cursor: default;margin-left: -15px">
+                <div class="">
+                    <label class="col-sm-3" style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label>
+                    <label class="col-sm-2" style="font-weight: bold;"></label>
+                    <label class="col-sm-2" style="font-weight: bold;"></label>
+                </div>
+            </div>
+        </form>
+    </div>
     <div style="clear: both"></div>
     <table class="table table-striped table-bordered table-hover all T-main-table" style="margin-top: 30px;">
         <tbody>
@@ -135,30 +145,52 @@
         </ul>
         <div class="tab-content T-list" style="position:relative;top: -2px">
             <!-- 团款 -->
-            <div id="financial-count-tripdetail-money" class="tab-pane fade active in T-tripDetail">
+            <div id="financial-count-update-money" class="tab-pane fade active in T-tripCost">
                 <table class="table table-striped table-bordered table-hover">
-                    <tbody>
+                    <tbody class="T-tripDetail">
+                    <tr>
+                        <td>序号</td>
+                        <td>来源</td>
+                        <td>小组联系人</td>
+                        <td>联系电话</td>
+                        <td>人数</td>
+                        <td>应收</td>
+                        <td>已收</td>
+                        <td>现收</td>
+                        <td>明细</td>
+                   {{each touristGroups as touristGroup index}}
                         <tr>
-                            <td class="th-border">应收</td>
-                            <td class="th-border">已收</td>
-                            <td class="th-border">现收</td>
-                            <td class="th-border">明细</td>
-                            <tr class="th-border">
-                                <td><span class="">{{touristGroup.needPayAllMoney}}</span></td>
-                                <td><span class="">{{touristGroup.payedMoney}}</span></td>
-                                <td><span class="">{{touristGroup.currentNeedPayMoney}}</span></td>
-                                <td><a href="javascript:void(0);" data-entity-id="{{tripPlan.id}}" class="T-viewGroupDetail">查看</a></td>
-                            </tr>
+                            <td>{{index+1}}</td>
+                            <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
+                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</td>
+                            <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
+                            <td>{{touristGroup.needPayAllMoney}}</td>
+                            <td>{{touristGroup.payedMoney}}</td>
+                            <td>{{touristGroup.currentNeedPayMoney}}</td>
+                            <td>
+                                {{if touristGroup.adultCount > 0}}
+                                大人：{{touristGroup.adultPrice}}X{{touristGroup.adultCount}}={{touristGroup.adultPrice * touristGroup.adultCount}}<br />
+                                小孩：{{touristGroup.childPrice}}X{{touristGroup.childCount}}={{touristGroup.childPrice * touristGroup.childCount}}<br />
+                                    {{each touristGroup.touristGroupFeeList as touristGroupFee}}
+                                        {{touristGroupFee.describeInfo}} ：{{touristGroupFee.price}}X{{touristGroupFee.count}}={{touristGroupFee.price * touristGroupFee.count}}<br />
+                                    {{/each}}
+                                {{/if}}
+                            </td>
+                            <td>{{if touristGroup.remark != null}}{{touristGroup.remark}}{{/if}}</td>
+                        </tr>
+                    {{/each}}
                     </tbody>
                 </table>
+
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].financeCheckRemark}}{{/if}}" />
-                    </div>
+                <div style="width:60%;"><div> 
+                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].opCheckRemark}}{{/if}}" />
+                
+                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].financeCheckRemark}}{{/if}}" />
+                </div>
                 </div>{{/if}}
             </div>
             <!-- 购物 -->
