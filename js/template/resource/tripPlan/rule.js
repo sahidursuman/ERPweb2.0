@@ -64,7 +64,7 @@ define(function(require, exports) {
 	  	    	    	rules: [
 	  	    	        {
 	  	    	        	type:'null', 
-	  	    	        	errMsg:'其他项目不能为空'       
+	  	    	        	errMsg:'其它项目不能为空'       
 	  	    	        }
 	  	    	        ]    
 	  			    }
