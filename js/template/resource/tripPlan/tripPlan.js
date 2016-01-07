@@ -60,8 +60,17 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		var $searchArea = tripPlan.$searchArea.on('change', function(event) {
+		var $searchArea = tripPlan.$searchArea.on('change', 'input, select', function(event) {
 			event.preventDefault();
+			var $that = $(this);
+
+			if ($that.is('select[name="arrangeItem"]')) {
+				$searchArea.find('#arrangeItemStatus').val('');
+			}
+
+			if ($that.is('select[name="tripPlanItem"]')) {
+				$searchArea.find('#tripPlanItemStatus').toggleClass('hidden', $that.val() != '0').val('');
+			}
 			tripPlan.listTripPlan();
 		});
 
