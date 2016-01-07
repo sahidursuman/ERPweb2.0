@@ -31,7 +31,7 @@
             <tbody class="T-message-list">
                 {{each msgList as msg}}
                 <tr data-id="{{msg.id}}">
-                	<td>{{msg.menu.name}}</td>
+                	<td>{{if msg.menu == null || msg.menu == ""}}-{{else}}{{msg.menu.name}}{{/if}}</td>
                     <td class="align-left">{{msg.content}}</td>
                     <td>
                         {{if msg.isRead == 1}}
