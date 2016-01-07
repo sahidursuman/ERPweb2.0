@@ -1115,7 +1115,6 @@ define(function(require, exports) {
 		'<td><input type="text" name="price" class="col-sm-12 price" style="width: 60px;" maxlength="6"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12" style="width: 60px;" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
-		'<td> <select name="order" id=""> <option value="0">是</option> <option value="1">否</option> </select> </td>' +
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12" style="width: 60px;"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price" style="width: 60px;" maxlength="9"/></td>' +
