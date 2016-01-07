@@ -11,7 +11,9 @@ define(function(require, exports) {
 		listMainTemplate = require("./view/listMain"),
 		listTemplate = require("./view/list"),
 		arrangeTemplate = require("./view/arrange"),
-		viewTemplate = require("./view/view");
+		viewTemplate = require("./view/view"),
+		financiaListTemplate = require("./view/financiaList")
+		financialNoticeTemplate = require("./view/FinancialNotice");
 	/**
 	 * 自定义中转对象
 	 * @type {Object}
@@ -19,7 +21,9 @@ define(function(require, exports) {
 	var transit = {
 		$tab: false,
 		$searchArea: false,
-		pageNo: ""
+		pageNo: "",
+		// isPrePayMoney : false,
+		receiveUserIdList : []
 	}
 	//搜索数据
 	var autocompleteData = {}
@@ -31,7 +35,9 @@ define(function(require, exports) {
 	};
 
 	//中转安排搜索模块
-	transit.listMainTransit = function() {
+	transit.listMainTransit = function(page) {
+		
+
 		$.ajax({
 			url: KingServices.build_url('touristGroup', 'getQueryTermsForTransitArrange'),
 			type: "POST",
@@ -101,7 +107,8 @@ define(function(require, exports) {
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val()
         }
         // 修正页码
-        page = page || 0;
+			pageNo: (page || 0)
+		
 
         $.ajax({
 			url: KingServices.build_url('touristGroup','listTransitArrange'),
@@ -228,7 +235,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}    [description]
 	 */
-	transit.updateTransit = function(id, isOuter) {
+	transit.updateTransit = function(id, isOuter,$tab) {
 		$.ajax({
 			url: KingServices.build_url('touristGroup','findTouristGroupArrangeById'),
 			type:"POST",
@@ -256,10 +263,133 @@ define(function(require, exports) {
 						var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
 						transit.init_event(transit.$arrangeTab, validator, id);
 					}
+		
 				}
 			}
-		})
+		})	
 	};
+
+
+		/**
+		 * /通知财务勾选列表
+		 * @return {[type]} [description]
+		 */
+ 		transit.chooseFinancial = function(){
+		var title = '财务列表',data={};
+		var addFinancialLayer = layer.open({
+			type: 1,
+			title: title,
+			skin: 'layui-layer-rim', //加上边框
+			area: '860px', //宽高
+			zIndex:1028,
+			content: financiaListTemplate(data),
+			success:function(){
+				var $container = $(".T-optional-financial");
+				// 初始化list列表
+				transit.listFinancialUser(0,$container);
+				 //给提交按钮绑定事件
+                // $container.find(".T-btn-sureSubmit").on('click' , saveFinancial);
+				// 取消按钮绑定事件
+				$container.find(".T-btn-sureSubmit").click(function() {
+                   layer.close(addFinancialLayer);
+                });
+
+			}
+		})
+
+	}
+	transit.listFinancialUser = function(page,$container){
+
+		var $container = $(".T-optional-financial");
+		  // 修正页码
+        var args = {
+			pageNo: (page || 0)
+		}
+		if (!!transit.$tab) {
+			args = {
+				pageNo: (page || 0),
+				realName: $container.find('.T-financial-name').val()
+			}
+		}
+			$.ajax({
+					url: KingServices.build_url('touristGroup', 'getReceiveUserList'),
+					type: 'POST',
+					// data: "pageNo="+page,
+					data: args,
+					success:function(data){
+					    if(showDialog(data)){
+					    	data.userList=JSON.parse(data.userList);
+					    	var html = financialNoticeTemplate(data);
+					    	$container.find('.T-financial-content').html(html);
+					    	// 关键字搜索事件
+							$container.find('.T-financial-name').on('click',function(e){
+								if(e.which == 13 && !window.forbiddenError){
+									transit.listFinancialUser();
+								}
+							});
+							$container.find('.T-btn-search').on('click', function(event) {
+									event.preventDefault();
+									transit.listFinancialUser();
+							});
+
+							//勾选记录
+							$container.find('.T-add').on('click',transit.addFinancialUser);
+							//分页自动勾选
+							var $tr = $container.find('tr');
+						   for (var i = 0; i < transit.receiveUserIdList.length; i++) {
+						   	$tr.each(function(j) {
+						    	var id = $tr.eq(j).attr('data-value');
+						    	if (transit.receiveUserIdList[i].receiveUserId == id ) {
+						    		$tr.eq(j).find('.T-add').prop('checked',true);
+						    	}
+						    })
+						   };
+
+							
+					    	// 让对话框居中
+							$(window).trigger('resize');
+
+					    	// 绑定翻页组件
+							laypage({
+							    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.totalPage, //总页数
+							    curr: (page + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		transit.listFinancialUser(obj.curr -1,$container);
+							    	}
+							    }
+							});
+			    }
+
+	        }
+       });
+	};
+
+	// transit.saveFinancial = function(){
+
+	// }
+	/**
+	 * addFinancialUser 分页勾选
+	 */
+	transit.addFinancialUser = function(){
+		var $that=$(this),
+		    $tr=$that.closest('tr'),
+		    id= $tr.attr('data-value');
+	    if ($that.is(':checked')) {
+	    	var receiveUserIdArray = {
+	    		receiveUserId : id
+	    	};
+	    	transit.receiveUserIdList.push(receiveUserIdArray);
+	    } else {
+	    	for (var i = 0; i < transit.receiveUserIdList.length; i++) {
+	    		if ( !!transit.receiveUserIdList[i].receiveUserId &&  id == transit.receiveUserIdList[i].receiveUserId ) {
+	    			transit.receiveUserIdList.splice(i,1);
+	    		}
+	    	}
+	    }
+	};
+
 
 	transit.init_event = function($tab, validator, $id) {
 
@@ -282,6 +412,13 @@ define(function(require, exports) {
 		.on(CLOSE_TAB_SAVE, function(event) {
 			event.preventDefault();
 			transit.submitUpdateTransit($id,0,$tab);
+		});
+
+
+		// 通知财务初始化
+		$tab.find('.T-btn-financial').on('click', function(event) {
+			event.preventDefault();
+			transit.chooseFinancial();
 		});
 
 		//接团
@@ -331,6 +468,10 @@ define(function(require, exports) {
 			var thisObj = $(this),id = thisObj.closest('.T-tab-pane').attr("id");
 			transit.addOtherList(id,1,validator);
 		});
+
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tab);
+
 		//Input控件位数的输入
 		Tools.inputCtrolFloat($tab.find('.T-number'));
 		//删除安排
@@ -397,7 +538,7 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
 		'<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
-		'<td><input class="col-sm-12 T-number" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 		'<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
 		'</tr>';
@@ -414,6 +555,8 @@ define(function(require, exports) {
 		transit.bindBusCompanyChoose($tbody);
 		//添加资源
 		transit.addResource($tbody);
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tbody);
 	};
 	//新增团外安排酒店
 	transit.addOutHotel = function(id,type,validator){
@@ -434,7 +577,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
@@ -452,6 +595,9 @@ define(function(require, exports) {
 		transit.bindHotelChoose($tbody, validator);
 		//添加资源
 		transit.addResource($tbody);
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tbody);
+
 	};
 	//新增团外安排票务
 	transit.addTicketList = function(id,type,validator){
@@ -469,7 +615,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
 			'</tr>';
@@ -487,6 +633,8 @@ define(function(require, exports) {
 		transit.bindTicketChoose($tbody);
 		//添加资源
 		transit.addResource($tbody);
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tbody);
 	}
 	//新增餐厅安排
 	transit.addRestaurantList = function(id,type,validator){
@@ -502,7 +650,7 @@ define(function(require, exports) {
 			'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>'+
 			'</tr>';
@@ -521,6 +669,8 @@ define(function(require, exports) {
 		transit.bindRestaurantChoose($tbody);
 		//添加资源
 		transit.addResource($tbody);
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tbody);
 	},
 	//新增其他安排
 	transit.addOtherList = function(id,type,validator){
@@ -533,7 +683,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>'+
 			'</tr>';
@@ -548,7 +698,22 @@ define(function(require, exports) {
 		transit.datepicker($tbody);
 		//添加资源
 		transit.addResource($tbody);
+		//判定预付款是否发生改变
+		// transit.prePayMoneyChange($tbody);
 	};
+
+	/**
+	 * prePayMoneyChange 判定预付款是否发生改变
+	 * @param  {[type]} $tab [description]
+	 * @return {[type]}      [description]
+	 */
+	// transit.prePayMoneyChange = function($tab){
+	//     $tab.find('.T-prePayMoney').on('change',function(event) {
+	// 		event.preventDefault();
+	// 		transit.isPrePayMoney=true;
+	// 	});
+	// };
+	
 
 	/**
 	 * 中转安排删除安排
@@ -1230,16 +1395,16 @@ define(function(require, exports) {
 			argumentsLen = arguments.length,
 			idString = $tab.attr('id');
 		if (!validator.form())  return;
-
 		var touristGroupArrange = {
 			touristGroup : {},
 			outBusList : [],
 			outHotelList : [],
 			outTicketList : [],
 			outRestaurantList : [],
-			outOtherList : []
+			outOtherList : [],
+			receiveUserIdList : []
 		};
-
+		touristGroupArrange.receiveUserIdList = transit.receiveUserIdList;
 		//小组ID
 		touristGroupArrange.touristGroup = {
 			id : $tab.find('[name=touristGroup]').val()
@@ -1271,6 +1436,12 @@ define(function(require, exports) {
 		transit.outOtherJson(receptionOutOtherTr,touristGroupArrange.outOtherList);
 		var sendOutOtherTr = $tab.find("#sendList .otherList tbody tr");
 		transit.outOtherJson(sendOutOtherTr,touristGroupArrange.outOtherList);
+
+		//预付款发生改变，请通知财务
+		// if (transit.isPrePayMoney==true && transit.receiveUserIdList.length ==0 ) {
+		// 	showMessageDialog($( "#confirm-dialog-message" ),"预付款发生改变，请通知财务！");
+		// 	return;
+		// };
 
 		touristGroupArrange = JSON.stringify(touristGroupArrange);
 		$.ajax({
@@ -1314,8 +1485,7 @@ define(function(require, exports) {
 				fee : transit.getArrangeTrValue(obj.eq(i),"busFee"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"busReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"busNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
-				payType : transit.getArrangeTrValue(obj.eq(i),"busPayType"),
+				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(busJson.busCompanyId != "" && busJson.busCompanyId.length>0){
@@ -1337,8 +1507,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"hotelMemberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
-				payType : transit.getArrangeTrValue(obj.eq(i),"hotelPayType"),
+				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(hotelJson.hotelId != "" && hotelJson.hotelId.length>0){
@@ -1363,8 +1532,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"ticketMemberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"ticketReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"ticketNeedPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
-				payType : transit.getArrangeTrValue(obj.eq(i),"ticketPayType"),
+				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(ticketJson.ticketId != "" && ticketJson.ticketId.length>0){
@@ -1385,8 +1553,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"memberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"reduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"needPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
-				payType : transit.getArrangeTrValue(obj.eq(i),"payType"),
+				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(restaurantJson.restaurantId != "" && restaurantJson.restaurantId.length>0){
@@ -1408,8 +1575,7 @@ define(function(require, exports) {
 				memberCount : transit.getArrangeTrValue(obj.eq(i),"memberCount"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"reduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"needPayMoney"),
-				payedMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
-				payType : transit.getArrangeTrValue(obj.eq(i),"payType"),
+				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(otherJson.name != "" && otherJson.name.length>0){

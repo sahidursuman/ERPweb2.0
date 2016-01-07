@@ -52,11 +52,11 @@
 						<div class="col-sm-2">
 							<input type="text" name="sumNeedGetMoney" class="col-sm-12 sumNeedGetMoney" value="" readonly="readonly">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>已收:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>预收款:</label>
 						<div class="col-sm-2">
-							<input type="text" name="getedMoney" class="col-sm-12 price" value="" maxlength="9" />
+							<input type="text" name="preIncomeMoney" class="col-sm-12 price" value="" maxlength="9" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">收款方式:</label>
+						<!-- <label class="col-sm-1 control-label no-padding-right">收款方式:</label>
 						<div class="col-sm-2">
 							<select name="getType" class="col-sm-12">
 								<option selected="selected" value="0">现金</option>
@@ -64,22 +64,24 @@
 								<option value="2">转账</option>
 								<option value="3">网付</option>
 							</select>
-						</div>
+						</div> -->
 					</div>
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>总成本:</label>
 						<div class="col-sm-2">
 							<input type="text" name="sumCostMoney" class="col-sm-12 sumCostMoney" value="" readonly="readonly">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>预付款:</label>
+						<!-- <label class="col-sm-1 control-label no-padding-right"><span class="necessary"></span>预付款:</label>
 						<div class="col-sm-2">
 							<input type="text" name="prePayMoney" class="col-sm-12 sumPayedMoney price" readonly="readonly" value="" maxlength="9" />
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
+	<a href="javascript:void(0)" hidden="hidden" class="T-btn-financial" style="right: 25px;position: absolute;z-index:1001;"> 
+		<button class="btn btn-sm  btn-success" style="margin-left: 20px"> 通知财务 </button> </a>
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col T-bookingHotelList">

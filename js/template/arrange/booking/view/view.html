@@ -39,16 +39,8 @@
 				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.sumNeedGetMoney}}</td>
 				<td class="style-myself">已收 </td>
 				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.getedMoney}}</td>
-				<td class="style-myself">收款方式 </td>
-				<td style="text-align: left;padding-left: 6px;">	{{if bookingOrder.getType==0}}
-					现金
-					{{else if bookingOrder.getType==1}}
-					签单
-					{{else if bookingOrder.getType==2}}
-					转账
-					{{else}}
-					网付
-					{{/if}}</td>
+				<td class="style-myself">预收款 </td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.preIncomeMoney}}	</td>
 			</tr>
 			<tr>
 				<td class="style-myself">总成本 </td>
