@@ -268,8 +268,10 @@ define(function(require, exports) {
 					if(showDialog(data)){
 						data.travelLine = JSON.parse(data.travelLine);
 						for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
-							data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail);
-							//data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
+							if (!!data.travelLine.travelLineDayList[i].repastDetail) {
+								data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail);
+								//data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
+							}
 						};
 						Tools.addTab(viewTab,"查看线路模板", scanDetailTemplate(data));
 						var $viewTab = $('#tab-'+viewTab+'-content');
