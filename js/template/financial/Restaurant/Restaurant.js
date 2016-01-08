@@ -190,10 +190,11 @@ define(function(require, exports) {
         restaurant.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
                     restaurantId: id, 
+                    accountInfo : restaurant.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startDate: restaurant.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: restaurant.$checkSearchArea.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"restaurant");
+            FinancialService.exportReport(args,"exportArrangeRestaurantFinancial");
         });
 
         //报表内的操作

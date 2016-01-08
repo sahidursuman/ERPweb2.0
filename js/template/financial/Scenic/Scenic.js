@@ -196,10 +196,11 @@ define(function(require, exports) {
         scenic.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
                     scenicId: id, 
+                    accountInfo : scenic.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startDate: scenic.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: scenic.$checkSearchArea.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"scenic");
+            FinancialService.exportReport(args,"exportArrangeScenicFinancial");
         });
 
         //复选框事件初始化

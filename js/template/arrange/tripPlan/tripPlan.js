@@ -29,7 +29,8 @@ define(function(require, exports) {
 		touristsList : require("./view/touristsList"),
 		feeList : require("./view/feeList"),
 		addPartnerManager : require('./view/addPartnerManager'),
-		viewTripPlanGroup : require('./view/viewTripPlanGroup')
+		viewTripPlanGroup : require('./view/viewTripPlanGroup'),
+		viewTripPlanSingle : require('./view/viewTripPlanSingle'),
 	}
 	var tripPlan = {
 		searchData : false,
@@ -849,7 +850,7 @@ define(function(require, exports) {
 				tripPlan.viewTouristGroup(id);
 			} else if ($that.hasClass('T-groupDelete')) {
 				//删除小组
-				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=tripPlanId]").val(), $tab);
+				tripPlan.deleteTouristGroup($that, id, $tab.find("input[name=id]").val(), $tab);
 			}
 		});
 
@@ -868,7 +869,9 @@ define(function(require, exports) {
 	tripPlan.saveSinglePlan = function($tab, validate, tabArgs) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
-
+		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
+		arge.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
+		arge.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
 		// 处理定时发送
 		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
@@ -899,7 +902,7 @@ define(function(require, exports) {
 		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
 		args.touristAdultCount = adultcount;
 		args.touristChildCount = childcount;
-
+		
 		$.ajax({
 			url: KingServices.build_url('tripController', 'saveRetailClient'),
 			type: 'post',
@@ -1024,6 +1027,15 @@ define(function(require, exports) {
 				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
+				if(!!groupData.quote){
+					$tab.find('[name="quoteOrderName"]').val(groupData.quote.name);
+					$tab.find('[name="quoteId"]').val(groupData.quote.id);
+				}
+				if(!!groupData.lineProduct){
+					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
+					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
+					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+				}
 				$tab.find('[name="adultCount"]').val(groupData.adultCount);
 				$tab.find('[name="childCount"]').val(groupData.childCount);
 				$tab.find('[name="startTime"]').val(groupData.startTime ? groupData.startTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
@@ -1067,21 +1079,33 @@ define(function(require, exports) {
 		$tab.find('.T-action-plan-list').append(list);
 	}
 	tripPlan.viewTripPlan = function(id, planType){
-		var html = viewGroupTemplate
+		var html = T.viewTripPlanSingle
 		if(planType == 1){
 			html = T.viewTripPlanGroup
 		}
 		$.ajax({
-			url : KingServices.build_url("tripPlan", "getTripPlanArrange"),
+			url : KingServices.build_url("tripController", "viewTripPlan"),
 			type : "POST",
-			data : {id : id}
+			data : {tripPlanId : id}
 		})
 		.done(function(data){
 			if(showDialog(data)){
-				console.log(data);
-				data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
-				data.basicInfo = JSON.parse(data.basicInfo);
-				data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+				for(var i=0; i<data.dayList.length; i++){
+					data.dayList[i].dayInfo = JSON.parse(data.dayList[i].dayInfo);
+					var arrangeData = data.dayList[i].arrangeData;
+					arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);
+					arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);
+					arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);
+					arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);
+					arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);
+					arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);
+					arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);
+				}
+				data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+				data.guideArrange = JSON.parse(data.guideArrange);
+				data.insuranceArrange = JSON.parse(data.insuranceArrange);
+				data.touristGroup = JSON.parse(data.touristGroup);
+				data.tripPlan = JSON.parse(data.tripPlan);
 				Tools.addTab(menuKey+"_group_view", "查看计划", html(data));
 			}
 		});
@@ -1170,10 +1194,12 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
-					$target.val(data.realName)
-					.nextAll('input[name="dutyOPUserId"]').val(data.userId)
-					.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
-
+					if($target.val() == ""){
+						$target.val(data.realName)
+						.nextAll('input[name="dutyOPUserId"]').val(data.userId)
+						.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
+					}
+					
 					var userList = JSON.parse(data.userList || false);
 					if (!!userList) {
 						for (var i = 0, len = userList.length;i < len; i++) {
@@ -1282,7 +1308,7 @@ define(function(require, exports) {
 	//删除小组成员
 	tripPlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
 		showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
-			if(tripPlanId){
+			if(!!id){
 				$.ajax({
 					url:KingServices.build_url("touristGroup","removeTouristGroup"),
 					data:{ 
@@ -1647,7 +1673,8 @@ define(function(require, exports) {
 		// 选择线路产品
 		$dialog.find('.T-btn-submit').on('click', function(event) {
 			event.preventDefault();
-			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr');
+			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
+				oldLinetId = $tab.find('input[name="lineProductId"]').val();
 
 			if (!$tr.length) {
 				showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
@@ -1655,11 +1682,11 @@ define(function(require, exports) {
 			}
 			var lineId = $tr.data('id');
 			if(type == 1){
-				var quoteId = $tr.data('id');
+				quoteId = $tr.data('id');
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('change');
 				lineId = $tr.data('line-id');
-			}else{
+			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 			}

@@ -220,10 +220,13 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var args = { 
+                    ticketId: $tab.find('input[name=ticketId]').val(),
+                    ticketName: $tab.find('input[name=ticketName]').val(),
                     startDate: $tab.find('.T-search-start-date').val(),
+                    accountInfo: $tab.find('.T-search-type').val(),
                     endDate: $tab.find('.T-search-end-date').val()
                 };
-            FinancialService.exportReport(args,"ticket");
+            FinancialService.exportReport(args,"exportArrangeTicketFinancial");
         });
 
 		$tab.find(".T-btn-close").on('click', function(event){
