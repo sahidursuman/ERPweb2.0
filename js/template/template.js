@@ -211,7 +211,7 @@
         var res = "", i = 0, txt = [ "早餐", "中餐", "晚餐" ];
         if (status) {
             status = status.split(",");
-            for (var i = 0; 3 > i; i++) res += '<label><input type="checkbox" class="ace" disabled="disabled" ' + (1 == status[i] ? "checked" : "") + '><span class="lbl"> ' + txt[i] + "</span></label>&nbsp;&nbsp;&nbsp;";
+            for (var i = 0; 3 > i; i++) res += '<label>&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ace" disabled="disabled" ' + (1 == status[i] ? "checked" : "") + '><span class="lbl"> ' + txt[i] + "</span></label>";
         }
         return res;
     }), template.helper("getTaskDesc", function(status) {

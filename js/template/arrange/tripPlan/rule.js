@@ -23,7 +23,7 @@ define(function(require, exports) {
                         errMsg: '大人数量不能为空'
                     },
                     {
-                        type: 'positive-int',
+                        type: 'NoNumber',
                         errMsg: '大人数量必须大于0'
                     }
                 ]
@@ -33,7 +33,7 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="childCount"]'),
                 rules : [
                     {
-                        type: 'nonnegative-int',
+                        type: 'NoNumber',
                         errMsg: '小孩数必须正整数'
                     }
                 ]
