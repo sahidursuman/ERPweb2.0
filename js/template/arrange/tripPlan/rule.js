@@ -160,7 +160,7 @@ define(function(require, exports) {
             {
                 $ele: $obj.find('input[name="count"]'),
                 rules: [{
-                    type: 'nonnegative-int',
+                    type: 'NoNumber',
                     errMsg: '数量必须为正整数'
                 }]
             },

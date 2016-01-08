@@ -67,7 +67,9 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
-
+	html = Tools.filterCount(html);
+	html = Tools.filterMoney(html);
+	html = Tools.filterUnPoint(html);
 	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
@@ -1360,7 +1362,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 			Tools.justifyTab();
 		}
-
+		html = Tools.filterCount(html);
+		html = Tools.filterMoney(html);
+		html = Tools.filterUnPoint(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -1530,6 +1534,41 @@ Tools.toFixed = function(data, length) {
 	return data;
 };
 /**
+ * 过滤金额精度为2位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterMoney = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-money").each(function(){
+		var $taht = $(this);
+		if(!$taht.is(':not("input")')){
+			$taht.val(Tools.toFixed($taht.val(), 2))
+		}else{
+			$taht.text(Tools.toFixed($taht.text(), 2));
+		}
+	});
+	return $obj;
+};
+/**
+ * 过滤数量精度为1位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterCount = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-count").each(function(){
+		if(!$(this).is(':not("input")')){
+			$(this).val(Tools.toFixed($(this).val(), 1));
+		}else{
+			$(this).text(Tools.toFixed($(this).text(), 1));
+		}
+	});
+	return $obj;
+};
+/**
  * 添加千分位
  * @param  {float} num   数据
  * @return {string}      返回添加千分位后的数据
@@ -1540,7 +1579,6 @@ Tools.thousandPoint = function(num, length){
 	}
 	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
 };
-
 /**
  * 过滤千分位
  * @param  {string} obj html数据
@@ -1571,7 +1609,7 @@ Tools.filterUnPoint = function(obj){
  * @return {[type]}      [description]
  */
 Tools.formatQuantile = function(data){
-	return Number(data.replace(/,/g, ''));
+	return data.replace(/,/g, '');
 };
 
 /**

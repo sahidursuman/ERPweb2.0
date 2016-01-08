@@ -278,7 +278,7 @@ define(function(require, exports) {
 	}
 
 	//新增计划
-	tripPlan.addTripPlan = function(planType, id, name, GroupIds){
+	tripPlan.addTripPlan = function(planType, args){
 		if (planType) {
 			// 团队
 	        var tabKey = menuKey + "_group_add";
@@ -288,14 +288,13 @@ define(function(require, exports) {
 	        }
 		} else {
 			var tabKey = menuKey + "_single_add";
-	        
-	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate({lineProductId : id, lineProductName : name}))) {
+	        if(!args){
+	        	args = {}
+	        }
+	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
 	            tripPlan.initSigleEvent($("#tab-" + tabKey + "-content")) 
-	            if(!!id){
+	            if(!!args){//id, name, GroupIds
 	            	tripPlan.initNormalLineProduct($("#tab-" + tabKey + "-content"), id);
-	            }
-	            if(!!GroupIds){
-
 	            }
 	        }
 		}	
@@ -304,20 +303,20 @@ define(function(require, exports) {
 	tripPlan.initEdit = function($tab){
 		var validate = tripPlan.bindCommonEvent($tab, 1);
 		//搜索线路
-        $tab.find(".T-search-line").on('click', function(){
+        $tab.find(".T-search-line").off('click').on('click', function(){
         	tripPlan.initLineProductSearch($tab, 0);
         });
 		//搜索报价单号
-    	$tab.find(".T-search-quote-order").on('click', function(){
+    	$tab.find(".T-search-quote-order").off('click').on('click', function(){
     		tripPlan.initLineProductSearch($tab, 1);
     	});		
     	//收客单号
-    	$tab.find(".T-search-team").on('click', function(){
+    	$tab.find(".T-search-team").off('click').on('click', function(){
     		tripPlan.initTeamSearch($tab);
     	});
 
     	//新增同行
-        $tab.find('.T-addPartner').on("click", {
+        $tab.find('.T-addPartner').off('click').on("click", {
             function: KingServices.addPartnerAgency,
             type: ".form-group",
             name: "travelAgencyName",
@@ -325,7 +324,7 @@ define(function(require, exports) {
         }, KingServices.addResourceFunction);
 
         //新增同行联系人
-        $tab.find('.T-addPartnerManager').on("click", function(){
+        $tab.find('.T-addPartnerManager').off('click').on("click", function(){
         	tripPlan.addPartnerManager($tab.find('[name="contactRealname"]'), $tab);
         });
 
@@ -1391,6 +1390,24 @@ define(function(require, exports) {
 		}
 	};
 
+	//新增计划带出游客小组
+	/*tripPlan.getTouristGroup = function(args, $tab){
+		$.ajax({
+			url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
+			type:"POST",
+			data:{
+				lineProductId : args.lineProductId,
+				startTime : args.startTime,
+				type : 1,
+				excludeIdJson : JSON.stringify([]);
+			},
+			success:function(data){
+				if(showDialog(data)){
+
+				}
+			}
+		});
+	};*/
 	//删除小组成员
 	tripPlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
 		showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
@@ -1526,12 +1543,19 @@ define(function(require, exports) {
                 event.preventDefault();
                 $tab.data('isEdited', true);
             });
-            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event, tab_id, title, html) {
             	event.preventDefault();
+            	$tab.data('isEdited', false);
+            	if(type == 1){
+            		tripPlan.initEdit($("#tab-"+tab_id+"-content"));
+            	}else{
+            		tripPlan.initSigleEvent($("#tab-"+tab_id+"-content"));
+            	}
             })
             // 监听保存，并切换tab
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
+                $tab.data('isEdited', false);
                 if(type == 1){
                 	tripPlan.savePlanData($tab, validate, [tab_id, title, html]);
                 }else{
@@ -1541,6 +1565,7 @@ define(function(require, exports) {
             // 保存后关闭
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
+                $tab.data('isEdited', false);
                 if(type == 1){
                 	tripPlan.savePlanData($tab, validate);
                 }else{
