@@ -3054,7 +3054,7 @@ define(function(require, exports) {
 		var $addTripTab = $tab.find('.baseinfo');
 		var tmp = {
 			id : $addTripTab.find('input[name=tripPlanId]').val(),
-			guideAllPayMoney : $addTripTab.find('input[name=guideAllPayMoney]').val(),
+			guideAllPayMoney : $addTripTab.find('.T-guidePayedMoney').text(),
 			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val(),
 		}
 
