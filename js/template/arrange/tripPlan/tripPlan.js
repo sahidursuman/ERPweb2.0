@@ -870,8 +870,8 @@ define(function(require, exports) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
 		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
-		arge.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
-		arge.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
+		args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
+		args.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
 		// 处理定时发送
 		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
