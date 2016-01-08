@@ -385,18 +385,19 @@ define(function(require, exports) {
 				$target = $nav.find('[href='+ target +']');
 			}
 		}
-
 		if (!$target || !$target.length) {
 			$target = $nav.find('a').eq(0);
 		}
-
 		$target.trigger('click');
-
-
 		if (!$nav.find('.active').length) {
 
 			$nav.find('a').eq(0).trigger('click');
 		}
+
+		// 记录状态改变，在提交数据时，只对改变了的数据进行提交
+		$tab.find('.T-finishedArrange').on('change', function(event) {
+			$(this).data('change', true);
+		});
 
 		tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
 		//修改预订状态
@@ -2403,8 +2404,10 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-							$parents.find("input[name=oldPrice]").val(data.marketPrice);
-							$parents.find("input[name=price]").val(data.price);
+							// 底价
+							$parents.find("input[name=lowestPrice]").val(data.price);
+							// 单价
+							$parents.find("input[name=price]").val(data.marketPrice);
 							tripPlan.calculatePrice($tab);
 						}
                     }
@@ -3038,7 +3041,10 @@ define(function(require, exports) {
 
 		$tab.find('.T-finishedArrange').each(function() {
 			var $that = $(this);
-			arrangeStatus[$that.prop('name')] = $that.is(':checked')?1:0;
+
+			if ($that.data('change')) {
+				arrangeStatus[$that.prop('name')] = $that.is(':checked')?1:0;
+			}
 		})
 
 		var tripPlanId = $(this).attr('data-entiy-id');
