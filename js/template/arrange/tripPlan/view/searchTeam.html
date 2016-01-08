@@ -22,7 +22,7 @@
 		<tr data-id="{{rs.id}}" data-orderNumber="{{rs.orderNumber}}"> 
 			<td name="partnerAgencyName">{{rs.fromPartnerAgencyName}}</td> 
 			<td>{{rs.lineProductName}}</td> 
-			<td>{{rs.customerType}}</td> 
+			<td>{{if rs.customerType == 1}}团体{{else}}散客{{/if}}</td> 
 			<td>{{rs.startTime}}</td> 
 			<td>{{rs.quoteNumber}}</td> 
 			<td>{{rs.contactMemberName}}</td> 
