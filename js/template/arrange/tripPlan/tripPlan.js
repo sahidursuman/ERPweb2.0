@@ -2744,4 +2744,7 @@ define(function(require, exports) {
 	};
 
 	exports.init = tripPlan.initModule;
+	//散客发团计划编辑
+	exports.updateSingleTripPlan = tripPlan.updateSingleTripPlan;
+	exports.addTripPlan = tripPlan.addTripPlan;
 });
