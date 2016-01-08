@@ -1811,6 +1811,7 @@ define(function(require, exports) {
 							data.lineProductDayList[i].e = repastDetail[2];
 						}
 						$tab.find(".T-days").html(travelArrange(data));
+						$tab.find('input[name="lineProductName"]').trigger('change');
 						//KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
 						F.arrangeDate($tab);
 					}
