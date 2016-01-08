@@ -278,7 +278,7 @@ define(function(require, exports) {
 	}
 
 	//新增计划
-	tripPlan.addTripPlan = function(planType, args){
+	tripPlan.addTripPlan = function(planType, args, groupIds){
 		if (planType) {
 			// 团队
 	        var tabKey = menuKey + "_group_add";
@@ -295,6 +295,7 @@ define(function(require, exports) {
 	        	var $tab = $("#tab-" + tabKey + "-content");
 	            tripPlan.initSigleEvent($tab) 
 	            if(!!args){//id, name, GroupIds
+	            	args.mergeTouristGroupIdJson = groupIds;
 	            	tripPlan.initNormalLineProduct($tab, args.id);
 	            	tripPlan.getTouristGroup(args, $tab);
 	            }
@@ -462,7 +463,9 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id);
+            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id)
+            	.closest('.T-tab').find('[name="contactRealname"]').val("")
+            	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
         }).off('click').on('click', function() {
             var $that = $(this);
@@ -1397,19 +1400,32 @@ define(function(require, exports) {
 	//新增计划带出游客小组
 	tripPlan.getTouristGroup = function(args, $tab){
 		$.ajax({
-			url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
+			//url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
+			url:KingServices.build_url("touristGroup","getTouristGroupByIdsForTransit"),
 			type:"POST",
 			data:{
-				lineProductId : args.id,
-				startTime : args.startTime,
-				type : 1,
-				excludeIdJson : JSON.stringify([])
+				ids : JSON.stringify(args.mergeTouristGroupIdJson)
 			}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.lineProduct = JSON.parse(data.lineProduct);
-				data.touristGroupList = JSON.parse(data.touristGroupList);
-				console.log(data);
+				var group = JSON.parse(data.touristGroupJson);
+				var html = "";
+				for(var i=0; i<group.length; i++){
+					html += '<tr><td></td><td>'+
+					group[i].lineProduct.name+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].contactMember.name+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.travelAgencyName+'</td></tr>';
+				}
+				$tab.find('.T-touristGroup-list').html(html);
 			}
 		});
 	};
