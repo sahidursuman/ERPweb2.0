@@ -18,7 +18,7 @@
 				<td>{{payedRecord.receivableType}}</td>
 				<td>{{payedRecord.businessType}}</td>
 				<td>{{payedRecord.payParty}}</td>
-				<td>{{payedRecord.payDifferenceMoney}}</td>
+				<td><span class="F-float F-money">{{payedRecord.payDifferenceMoney}}</span></td>
 				<td>{{if payedRecord.payType == 0}}
 					现金
 				{{else if payedRecord.payType == 1}}

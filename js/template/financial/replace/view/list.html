@@ -35,10 +35,10 @@
         {{each bookingAccountList as rs}}
             <tr data-id="{{rs.partnerAgencyId}}" data-name="{{rs.fromPartnerAgencyName}}">
                 <td>{{rs.fromPartnerAgencyName}}</td>
-                <td>{{rs.bookingMoney}}</td>
-                <td>{{rs.settlementMoney}}</td>
-                <td>{{rs.receiveMoney}}</td>
-                <td><span {{if rs.unReceivedMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReceivedMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.receiveMoney}}</span></td>
+                <td><span class="F-float F-money" {{if rs.unReceivedMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReceivedMoney}}</span></td>
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>

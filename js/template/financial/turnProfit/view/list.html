@@ -32,12 +32,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">总人数：{{sumAdultCount}} 大 {{sumChildCount}} 小</label>
-            <label class="control-label marginLeft-30">团款应收合计：{{sumTripIncome}}</label>
-            <label class="control-label marginLeft-30">中转成本合计：{{sumOutCost}}</label>
-            <label class="control-label marginLeft-30">外转成本合计：{{sumTransCost}}</label>
-            <label class="control-label marginLeft-30">毛利合计：{{sumProfit}}</label>
-            <label class="control-label marginLeft-30">人均毛利合计：{{sumAverProfit}}</label>
+            <label class="control-label">总人数：<span class="F-float F-count">{{sumAdultCount}}</span> 大 <span class="F-float F-count">{{sumChildCount}}</span> 小</label>
+            <label class="control-label marginLeft-30">团款应收合计：<span class="F-float F-money">{{sumTripIncome}}</span></label>
+            <label class="control-label marginLeft-30">中转成本合计：<span class="F-float F-money">{{sumOutCost}}</span></label>
+            <label class="control-label marginLeft-30">外转成本合计：<span class="F-float F-money">{{sumTransCost}}</span></label>
+            <label class="control-label marginLeft-30">毛利合计：<span class="F-float F-money">{{sumProfit}}</span></label>
+            <label class="control-label marginLeft-30">人均毛利合计：<span class="F-float F-money">{{sumAverProfit}}</span></label>
         </div>
     </div>
     <div class="row ticketList" style="margin-top:10px;">
@@ -65,20 +65,24 @@
                         <!--给日期转码-->
                         <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                         <td>{{turnProfit.contact}}</td>
-                        <td><a href="javascript:void(0)" class="T-option T-showTourist">{{turnProfit.adultCount}}大{{turnProfit.childCount}}小</a></td>
+                        <td><a href="javascript:void(0)" class="T-option T-showTourist">
+                                <span class="F-float F-count">{{turnProfit.adultCount}}</span>大
+                                <span class="F-float F-count">{{turnProfit.childCount}}</span>小
+                            </a>
+                        </td>
                         <td>{{turnProfit.partnerAgencyName}}</td>
-                        <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">{{turnProfit.needInComeMoney}}</a></td>
+                        <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail F-float F-money">{{turnProfit.needInComeMoney}}</a></td>
                         <td>{{if turnProfit.change == ""}}空{{else}}{{turnProfit.change}}{{/if}}</td>
-                        <td><a href="javascript:void(0)" class="T-option T-showChangePay">{{turnProfit.changeNeedPayMoney}}</a></td>
+                        <td><a href="javascript:void(0)" class="T-option T-showChangePay F-float F-money">{{turnProfit.changeNeedPayMoney}}</a></td>
                         <td>{{turnProfit.transferPartnerAgencyName}}</td> 
                         <td>
-                            <a href="javascript:void(0)" class="T-option T-showTransPay" data-id = "{{turnProfit.tgTransferId}}">{{turnProfit.transNeedPayAllMoney}}</a>
+                            <a href="javascript:void(0)" class="T-option T-showTransPay F-float F-money" data-id = "{{turnProfit.tgTransferId}}">{{turnProfit.transNeedPayAllMoney}}</a>
                         </td>
                         <td>
-                            <span style="color: red">{{turnProfit.grossProfit}}</span>
+                            <span class="F-float F-money" style="color: red">{{turnProfit.grossProfit}}</span>
                         </td>
                         <td>
-                          <span style="color: red"> {{turnProfit.averageGrossProfit}}</span>
+                          <span class="F-float F-money" style="color: red"> {{turnProfit.averageGrossProfit}}</span>
                         </td>
                     </tr>   
                 {{/each}}

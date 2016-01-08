@@ -34,31 +34,31 @@
     <div class="form-inline T-sum-area" style="padding-top: 10px;">
         <div class="form-group">
             <label class="control-label">人数合计：</label>
-            <label class="control-label">{{totalList.sumCount}}</label>
+            <label class="control-label F-float F-count">{{totalList.sumCount}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">合同金额合计：</label>
-            <label class="control-label">{{totalList.sumContractMoney}}</label>
+            <label class="control-label F-float F-money">{{totalList.sumContractMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">已收金额合计：</label>
-            <label class="control-label">{{totalList.sumReceiveMoney}}</label>
+            <label class="control-label F-float F-money">{{totalList.sumReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">返款金额合计：</label>
-            <label class="control-label T-sumBackMoney">{{totalList.sumBackMoney}}</label>
+            <label class="control-label T-sumBackMoney F-float F-money">{{totalList.sumBackMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">结算金额合计：</label>
-            <label class="control-label T-sumSettlementMoney">{{totalList.sumSettlementMoney}}</label>
+            <label class="control-label T-sumSettlementMoney F-float F-money">{{totalList.sumSettlementMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">未收金额合计：</label>
-            <label class="control-label T-sumUnReceivedMoney">{{totalList.sumUnReceivedMoney}}</label>
+            <label class="control-label T-sumUnReceivedMoney F-float F-money">{{totalList.sumUnReceivedMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">未付金额合计(已对账)：</label>
-            <label class="control-label T-unpayMoney">{{totalList.checkedUnPayedMoney}}</label>
+            <label class="control-label T-unpayMoney F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
 </div>
@@ -93,19 +93,30 @@
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.contactName}}</td>
-                <td>{{rs.adultCount}}大{{rs.childCount}}小<a class="cursor T-action T-unfold">展开</a></td>
+                <td><span class="F-float F-count">{{rs.adultCount}}</span>大
+                    <span class="F-float F-count">{{rs.childCount}}</span>小
+                    <a class="cursor T-action T-unfold">展开</a>
+                </td>
                 <td>{{rs.creatorName}}</td>
                 <td>{{rs.createTime}}</td>
-                <td class="T-contractMoney">{{rs.contractMoney}}</td>
+                <td class="T-contractMoney F-float F-money">{{rs.contractMoney}}</td>
                 <td>
                 {{each rs.detailList as rsl j}}
-                    {{rsl.describeInfo}}：{{rsl.price}}x{{rsl.count}}={{rsl.price * rsl.count}}{{if j != rs.detailList.length - 1}}{{/if}}<br>
+                    {{rsl.describeInfo}}：
+                    <span class="F-float F-money">{{rsl.price}}</span>x
+                    <span class="F-float F-count">{{rsl.count}}</span>=
+                    <span class="F-float F-money">{{rsl.price * rsl.count}}</span>
+                    {{if j != rs.detailList.length - 1}}{{/if}}<br>
                 {{/each}}
                 </td>
-                <td><a class="cursor T-action T-receive">社收{{rs.travleReciveMoney}}，导游现收{{rs.guideReciveMoney}}</a></td>
-                <td><input type="text" class="col-sm-12 T-refund money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
-                <td class="T-settlementMoney">{{rs.settlementMoney}}</td>
-                <td class="T-unReceivedMoney">{{rs.unReceivedMoney}}</td>
+                <td><a class="cursor T-action T-receive">
+                        社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>，
+                        导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span>
+                    </a>
+                </td>
+                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
+                <td class="T-unReceivedMoney F-float F-money">{{rs.unReceivedMoney}}</td>
                 <td><input type="text" class="col-sm-12 T-remark"  {{if rs.isConfirmAccount}} disabled="disabled"{{/if}} value="{{rs.checkRemark}}"></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
