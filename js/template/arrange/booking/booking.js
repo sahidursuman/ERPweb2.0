@@ -654,6 +654,7 @@ define(function(require, exports) {
 			$parent.find("input[name=scenicItemId]").val(nameUiId).trigger('change');
 			BookingArrange.ajax({'url' : 'scenic', 'method' : 'getScenicItemPrice', 'menuKey' : 'resource_scenic', 'operation' : 'view', 'id' : nameUiId, 'startTime' : startTime}, function(data){
 				$parent.find("input[name=costPrice]").val(data.price);
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 			});
 		}, function(obj, ui){
 			var $parent = $(obj).closest('tr');

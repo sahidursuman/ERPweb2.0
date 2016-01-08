@@ -1040,7 +1040,7 @@ define(function(require, exports) {
 					+ '<td><input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12" style="width: 60px;"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
-					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a></td></tr>',
+					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="hotel">删除</a></td></tr>',
 
 			$tr = $(filterUnAuth(html)).appendTo($tbody),
 		//精度控件
@@ -1394,6 +1394,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
+					$parents.find('[name=insuranceItem]').val('');
 					$parents.find('[name=insuranceId]').val('');
 					$parents.find('[name=type]').val('');
 					$parents.find('[name=typeId]').val('');
@@ -1403,6 +1404,8 @@ define(function(require, exports) {
 			select: function(event,ui){
 				$(this).blur();
 				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=insuranceItem]').val('');
+				$parents.find('[name=needPayMoney]').val('');
 				$parents.find('[name=insuranceId]').val(ui.item.id);
 				$parents.find('[name=type]').val('');
 				$parents.find('[name=typeId]').val('');
@@ -2057,6 +2060,7 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)){
 	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
+	                    	$parents.find("input[name=price]").val(data.price);
 						}
                     }
                 });
@@ -2070,6 +2074,7 @@ define(function(require, exports) {
                 data: "id=" + id,
                 success: function(data) {
 					if(showDialog(data)) {
+						console.log(data)
 						var hotelRommList = JSON.parse(data.hotelRommList);
 						if(hotelRommList && hotelRommList.length > 0){
 							for(var i=0; i < hotelRommList.length; i++){

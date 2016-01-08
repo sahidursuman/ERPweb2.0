@@ -372,6 +372,8 @@ define(function(require,exports) {
                     startAccountTime: $obj.find('input[name=startDate]').val(),
                     endAccountTime: $obj.find('input[name=endDate]').val()
                 };
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+            args.receiveUserName = args.receiveUserName === "全部" ? "" : args.receiveUserName;
             FinancialService.exportReport(args,"exportArrangeInnerTransferInFinancial");
 		});
 		//全选事件
