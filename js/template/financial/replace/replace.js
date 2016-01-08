@@ -9,7 +9,6 @@ define(function(require, exports) {
 		billImagesTemplate = require("./view/billImages"),
 		replaceChecking = require("./view/replaceChecking"),
 		replaceClearing = require("./view/replaceClearing"),
-		blanceRecords = require("./view/replaceRecords"),
 		viewReceivedTemplate = require("./view/viewReceived"),
 		viewAccountTemplate = require('./view/viewAccount'),
 		payingTableTemplate = require('./view/replacePayingTable'),
@@ -303,10 +302,6 @@ define(function(require, exports) {
 	        $tab.find(".T-btn-export").click(function(){
 
 	            var args = {
-	                    busCompanyOrderStatus: false,
-	                    hotelOrderStatus: false,
-	                    scenicOrderStatus: false,
-	                    ticketOrderStatus: false,
 	                    orderNumber: $tab.find('.T-search-order').val(),
 	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
 	                    travelAgencyName: $tab.find('input[name=name]').val(),
