@@ -1187,14 +1187,10 @@ define(function(require, exports) {
 	            if (dataArray.length > 0) {
 	                for (var i = 0; i < dataArray.length; i++) {
 	                	var memberInfo = trim(dataArray[i]);
-	                	
-	                	var name = F.getName(memberInfo);
-	                	var phone = F.getPhone(memberInfo);
-	                	var idCard = F.getIdCard(memberInfo);
 	                    $obj.append(T.touristsList({touristGroupMemberList:[{
-	                    	name : name,
-	                    	mobileNumber : phone,
-	                    	idCardNumber : idCard
+	                    	name : F.getName(memberInfo),
+	                    	mobileNumber : F.getPhone(memberInfo),
+	                    	idCardNumber : F.getIdCard(memberInfo)
 	                    }]}));
 	                    layer.close(addVisotorMoreLayer);
 	                }
