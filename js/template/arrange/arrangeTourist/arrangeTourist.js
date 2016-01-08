@@ -403,7 +403,19 @@ define(function(require, exports) {
                 }
             });
             if (!!tripPlanId && tripPlanId != null) {
-                $.ajax({
+                //关闭layer层
+                layer.close(arrangeTourist.chosenMergenTripPlanlayer);
+                KingServices.updateSingleTripPlan(tripPlanId);
+                //清空游客小组Id
+                arrangeTourist.touristGroupId = [];
+                var divId = "T-Visitor-list",
+                    $VisitorObj = $('#' + divId),
+                    $searchArgumentsForm = $VisitorObj.find('form'),
+                    customerType = 0;
+                //数据刷新
+                arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+
+        /*        $.ajax({
                     url: KingServices.build_url("tripPlan", "chooseTripPlanByMerge"),
                     data: "tripPlanId=" + tripPlanId + "&mergeTouristGroupIdJson=" + encodeURIComponent(mergeTouristGroupIdJson) + "",
                     type: "POST",
@@ -437,7 +449,7 @@ define(function(require, exports) {
                             //arrangeTourist.init_upTripEvent();
                         }
                     }
-                });
+                });*/
 
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择计划");
@@ -491,16 +503,32 @@ define(function(require, exports) {
 
             //选中游客小组
             var $mergenTrList = $mergenTripPlan.find('.chooseMergeTbody').find('tr'),
-                standardTouristGroupId = "";
+                standardTouristGroupId = "",lineProName = "",startTime="",days="";
             $mergenTrList.each(function(i) {
                 if ($mergenTrList.find(".ridioCheck").is(":checked") == true) {
                     standardTouristGroupId = $mergenTrList.eq(i).attr("data-entity-id");
+                    lineProName = $mergenTrList.eq(i).attr("data-linePro-name");
+                    startTime = $mergenTrList.eq(i).attr("data-entity-startTime");
+                    days = $mergenTrList.eq(i).attr("data-days");
                 }
             })
 
 
             if (standardTouristGroupId != null && mergeTouristGroupIdJson.length > 0) {
-                $.ajax({
+                 //关闭层
+                layer.close(arrangeTourist.chosenMergenTripPlanlayer);
+                KingServices.addTripPlan(standardTouristGroupId,lineProName,startTime,days);
+                //清空游客小组Id
+                arrangeTourist.touristGroupId = [];
+                var divId = "T-Visitor-list",
+                    $VisitorObj = $('#' + divId),
+                    $searchArgumentsForm = $VisitorObj.find('form'),
+                    customerType = 0;
+                //数据刷新
+                arrangeTourist.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+
+
+            /*    $.ajax({
                     url: KingServices.build_url("tripPlan", "addTripPlanByMergeData"),
                     data: "standardTouristGroupId=" + standardTouristGroupId + "&mergeTouristGroupIdJson=" + mergeTouristGroupIdJson,
                     dateType: "json",
@@ -534,7 +562,7 @@ define(function(require, exports) {
                         //生成计划绑定事件
                         //arrangeTourist.mergeAddTr_Event();
                     }
-                })
+                })*/
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
             };

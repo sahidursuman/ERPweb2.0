@@ -8,6 +8,7 @@ define(function(require, exports) {
             { 
                 //线路产品
                 $ele: $obj.find('input[name="lineProductName"]'),
+                $valObj: $obj.find('input[name="lineProductId"]'),
                 rules : [{
                     type: 'null',
                     errMsg: '线路产品不能为空'
@@ -168,6 +169,12 @@ define(function(require, exports) {
                 rules: [{
                     type: 'nonnegative-float',
                     errMsg: '单价必须为数字'
+                }]
+            },{
+                $ele: $obj.find('input[name="planTouristCount"]'),
+                rules: [{
+                    type: 'positive-int',
+                    errMsg: '计划人数必须为正整数'
                 }]
             }];
             var timeSettings = [];

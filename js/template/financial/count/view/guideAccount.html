@@ -10,34 +10,36 @@
         <th class="th-border"><span class="necessary">*</span>管理费</th>
         <th class="th-border"><span class="necessary">*</span>导游预支金额</th>
         <th class="th-border"><span class="necessary">*</span>备注</th>
-        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
     </tr>
     </thead>
     <tbody class="T-count-guide">
-    <tr >
-        <td><input type="radio" name="" /></td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-    </tr>
-    <tr >
-        <td><input type="radio" name="" /></td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-        <td>11</td>
-    </tr>
+    {{each guideArranges as rs index}}
+        <tr guideid = "{{rs.guide.id}}">
+            <td><input type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
+            <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+            <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+            <td>
+                {{if rs.taskType == 0}}
+                    全程
+                {{else if rs.taskType == 1}}
+                    接机
+                {{else if rs.taskType == 2}}
+                    送机
+                {{else if rs.taskType == 3}}
+                    前段
+                {{else if rs.taskType == 4}}
+                    中段
+                {{else if rs.taskType == 5}}
+                    后段
+                {{/if}}
+            </td>
+            <td>{{rs.guide.realname}}</td>
+            <td>{{rs.price}}</td>
+            <td>{{rs.manageFee}}</td>
+            <td>{{rs.guideAllPreMoney}}</td>
+            <td>{{rs.remark}}</td>
+        </tr>
+    {{/each}}
     </tbody>
 </table>
 
