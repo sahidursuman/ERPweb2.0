@@ -208,6 +208,8 @@ define(function(require, exports) {
                     startDate: Transfer.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: Transfer.$checkSearchArea.find('input[name=endDate]').val()
                 };
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+            args.operateName = args.operateName === "全部" ? "" : args.operateName;
             FinancialService.exportReport(args,"exportArrangeTransferFinancial");
         });
 
