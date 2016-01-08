@@ -169,6 +169,12 @@ define(function(require, exports) {
                     type: 'nonnegative-float',
                     errMsg: '单价必须为数字'
                 }]
+            },{
+                $ele: $obj.find('input[name="planTouristCount"]'),
+                rules: [{
+                    type: 'positive-int',
+                    errMsg: '计划人数必须为正整数'
+                }]
             }];
             var timeSettings = [];
             if ($obj.find('.T-timed').prop('checked')) {
