@@ -19,10 +19,10 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group globalAdd T-count">
                 <label>账面应付合计：{{sumData.needPayMoney}}元 </label>
-                <label class="marginLeft-30">已付金额合计：{{sumData.payedMoney}} </label>
-                <label class="marginLeft-30">结算金额合计：{{sumData.settlementMoney}}</label>
-                <label class="marginLeft-30">未付金额合计：{{sumData.unPayedMoney}}</label>
-                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{sumData.unPayedMoneyConfirmed}}</span></label>
+                <label class="marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumData.payedMoney}} </span></label>
+                <label class="marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumData.settlementMoney}}</span></label>
+                <label class="marginLeft-30">未付金额合计：<span class="F-float F-money">{{sumData.unPayedMoney}}</span></label>
+                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{sumData.unPayedMoneyConfirmed}}</span></label>
             </div>
         </form>
 
@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="control-label">本次付款金额：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money"  value="{{sumPayMoney}}"  {{if showBtnFlag == true}}readonly="true"{{/if}} >
+                    <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}"  {{if showBtnFlag == true}}readonly="true"{{/if}} >
                 </label>
             </div>
                 
@@ -108,16 +108,16 @@
                 <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{rs.itemName}}</td>
-                <td>{{rs.lowestPrice}}</td>
-                <td>{{rs.realCount}}</td>
-                <td>{{rs.reduceMoney}}</td>
-                <td>{{rs.needPayMoney}}</td>
-                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{"，"}}{{"导付："}}{{rs.guidePayMoney}}</a></td>
+                <td class="F-float F-money">{{rs.lowestPrice}}</td>
+                <td class="F-float F-count">{{rs.realCount}}</td>
+                <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}{{"，"}}</span>{{"导付："}}<span class="F-float F-money">{{rs.guidePayMoney}}</span></a></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a class="T-option T-selfPayImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>{{rs.settlementMoney}}</td>
-                <td>{{rs.unPayedMoney}}</td>
+                <td class="F-float F-money">{{rs.settlementMoney}}</td>
+                <td class="F-float F-money">{{rs.unPayedMoney}}</td>
                 <td>
-                    <input name="payMoney" class="money" type="text" value="{{rs.payMoney}}" data-le="{{rs.unPayedMoney}}" maxlength="9" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}>
+                    <input name="payMoney" class="money F-float F-money" type="text" value="{{rs.payMoney}}" data-le="{{rs.unPayedMoney}}" maxlength="9" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}>
                 </td>
                 <td>
                     <input type="text" maxlength="1000" name="payRemark" value="{{rs.payRemark}}" style="text-align:center"  {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}/>
