@@ -280,6 +280,9 @@ input.datepicker {
 	text-align: center;
 	padding-top: 10px;
 }
+.w-8{
+	width: 8%;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

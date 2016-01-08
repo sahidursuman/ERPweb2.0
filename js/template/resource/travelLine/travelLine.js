@@ -455,7 +455,7 @@ define(function(require, exports) {
 				ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
 				if (!! data.description) {
 					ue.ready(function(){
-						ue.setContent(data.description);
+						ue.setContent(decodeURIComponent(data.description));
 					});
 				}		
 				
@@ -463,7 +463,7 @@ define(function(require, exports) {
 				//给提交按钮绑定事件
                 $container.find(".T-btn-submit").on('click' , function() {
                 	var content = UE.getEditor($container.find('.T-editor').prop('id')).getContent()
-                	$this.data('entity-content', content)
+                	$this.data('entity-content', encodeURIComponent(content))
                    	layer.close(updateDetailsLayer);
                 });
 				// 取消按钮绑定事件
@@ -639,8 +639,10 @@ define(function(require, exports) {
 				$value = JSON.parse($value);
 			}
 			console.log($value)
+			var inputValue = '',
+				html = '';
+
 			if (!!$value && $value.length > 0) {
-				var inputValue = '',
 					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">景点</th><th class="th-border">收费项目</th></tr><tbody>';
 				for (var i = 0; i < $value.length; i++) {
 					var itemName = '';
@@ -659,11 +661,11 @@ define(function(require, exports) {
 					html += '<tr><td>'+$value[i].name+'</td><td>'+itemName+'</td></tr>'
 				};
 				html += '</tbody></table>';
-				$this.data("html",html);
-				$this.val(inputValue);
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
 			}
+			$this.data("html",html);
+			$this.val(inputValue);
+			Tools.descToolTip($this,2);
+			$this.data('bs.popover').options.content = html;
 		})
 	}
   

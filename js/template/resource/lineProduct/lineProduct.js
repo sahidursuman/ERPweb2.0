@@ -720,9 +720,10 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
+			var inputValue= '',
+				html = '';
 			if (!!$value && $value.length > 0) {
-				var inputValue = '',
-					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">商家名称</th><th class="th-border">商品列表</th></tr><tbody>';
+				html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">商家名称</th><th class="th-border">商品列表</th></tr><tbody>';
 				for (var i = 0; i < $value.length; i++) {
 					html += '<tr><td>'+$value[i].name+'</td><td>'+$value[i].item+'</td></tr>'
 					if (i == $value.length - 1) {
@@ -732,11 +733,11 @@ define(function(require, exports) {
 					}
 				};
 				html += '</tbody></table>';
-				$this.data("html",html);
-				$this.val(inputValue);
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
 			}
+			$this.data("html",html);
+			$this.val(inputValue);
+			Tools.descToolTip($this,2);
+			$this.data('bs.popover').options.content = html;
 		})
 	}
 
@@ -934,9 +935,10 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
+			var inputValue= '',
+				html = '';
 			if (!!$value && $value.length > 0) {
-				var inputValue = '',
-					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">自费商家</th><th class="th-border">自费项目</th></tr><tbody>';
+				html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">自费商家</th><th class="th-border">自费项目</th></tr><tbody>';
 				for (var i = 0; i < $value.length; i++) {
 					var itemName = '';
 					for (var j = 0, len = $value[i].item.length; j < len; j++) {
@@ -954,11 +956,11 @@ define(function(require, exports) {
 					html += '<tr><td>'+$value[i].name+'</td><td>'+itemName+'</td></tr>'
 				};
 				html += '</tbody></table>';
-				$this.data("html",html);
-				$this.val(inputValue);
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
 			}
+			$this.data("html",html);
+			$this.val(inputValue);
+			Tools.descToolTip($this,2);
+			$this.data('bs.popover').options.content = html;
 		})
 	}
 
