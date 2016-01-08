@@ -1262,6 +1262,10 @@ define(function(require, exports) {
 						.nextAll('input[name="dutyOPUserId"]').val(data.userId)
 						.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
 					}
+					var $tab = $target.closest('.T-tab');
+					if($tab.find('[name="travelAgencyTag"]').val() == ""){
+						$tab.find('[name="travelAgencyTag"]').val(data.travelAgencyTag)
+					}
 					
 					var userList = JSON.parse(data.userList || false);
 					if (!!userList) {
@@ -1560,20 +1564,6 @@ define(function(require, exports) {
 		tripPlan.creatorListChoose(tripPlan.$tab);		
 	};
 
-	//新增计划
-	/*tripPlan.addTripPlan = function(){
-		var $tab = $("#tab-" + menuKey + "-add-content");
-		if ($tab.length) {// 如果打开的是相同产品，则不替换
-			$('.tab-arrange_plan-add').children('a').trigger('click');
-			return;
-		}
-
-		var html = addTripPlanTemplate(); 
-        if (Tools.addTab(menuKey+"-add", "新增计划", html)) {
-            tripPlan.initEdit("add");                         
-        }
-        rule.checkdCreateTripPlan($('.T-addPlan-form'));  	
-	};*/
 	//编辑计划
 	tripPlan.updateTripPlan = function(id){
 		var $tab = $("#tab-" + menuKey + "-update-content");
