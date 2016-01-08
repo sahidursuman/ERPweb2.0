@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":18,"md5":"588eb16746cadd0cea2427c6e1b05ab1"}*/
+/*TMODJS:{"debug":true,"version":19,"md5":"63b4d8fd11c2f62ef04e89374ec759b5"}*/
 define(function(require) {
     return require("../../../template")("resource/tripPlan/view/busbookingView", function($data, $filename) {
         try {
@@ -9,12 +9,12 @@ define(function(require) {
                 $out += ' <tr data-value="', $line = 22, $out += $escape(busOrderList.id), $out += '"> <td>', 
                 $line = 23, $out += $escape(busOrderList.orderNumber), $out += "</td> <td>", $line = 24, 
                 $out += $escape(busOrderList.orderType), $out += "</td> <td>", $line = 25, $out += $escape(busOrderList.tripNumber), 
-                $out += "</td> <td>", $line = 26, $out += $escape(busOrderList.companyName), $out += "</td> <td>", 
+                $out += "</td> <td>", $line = 26, $out += $escape(busOrderList.companyName), $out += '</td> <td class="F-float F-count">', 
                 $line = 27, $out += $escape(busOrderList.seatCount), $out += "</td> <td>", $line = 28, 
-                $out += $escape(busOrderList.brand), $out += '</td> <td class="count">', $line = 29, 
-                $out += $escape(busOrderList.seatCount), $out += '</td> <td class="price">', $line = 30, 
-                $out += $escape(busOrderList.price), $out += '</td> <td class="totalMoney">', $line = 31, 
-                $out += $escape(busOrderList.price * busOrderList.seatCount), $out += "</td> <td>", 
+                $out += $escape(busOrderList.brand), $out += '</td> <td class="count F-float F-count">', 
+                $line = 29, $out += $escape(busOrderList.seatCount), $out += '</td> <td class="price F-float F-money">', 
+                $line = 30, $out += $escape(busOrderList.price), $out += '</td> <td class="totalMoney F-float F-money">', 
+                $line = 31, $out += $escape(busOrderList.price * busOrderList.seatCount), $out += "</td> <td>", 
                 $line = 32, $out += $escape(busOrderList.creator), $out += "</td> <td>", $line = 33, 
                 $out += $escape($helpers.dateFormat(busOrderList.createTime, "yyyy-MM-dd hh:mm:ss")), 
                 $out += "</td> <td>", $line = 34, $out += $escape(busOrderList.remark), $out += "</td> <td>", 
@@ -26,7 +26,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<div class="row col-xs-12 listBusCompany" style="padding: 20px 0 0 20px">\r\n	<table class="table table-striped table-bordered table-hover">\r\n			<thead>\r\n				<tr>\r\n					<th class="th-border">订单号</th>\r\n					<th class="th-border">类型</th>\r\n					<th class="th-border">类型编号</th>\r\n					<th class="th-border">车队</th>\r\n					<th class="th-border">车座数</th>\r\n					<th class="th-border">车量品牌</th>\r\n					<th class="th-border">数量</th>\r\n					<th class="th-border">单价</th>\r\n					<th class="th-border">金额</th>\r\n					<th class="th-border">操作人</th>\r\n					<th class="th-border">操作时间</th>\r\n					<th class="th-border">备注</th>\r\n					<th class="th-border">状态</th>\r\n				</tr>\r\n			</thead>\r\n			<tbody class="T-Bus-list">\r\n			{{each busOrderJson as busOrderList}}\r\n				<tr data-value="{{busOrderList.id}}">\r\n				    <td>{{busOrderList.orderNumber}}</td>\r\n				    <td>{{busOrderList.orderType}}</td>\r\n					<td>{{busOrderList.tripNumber}}</td>\r\n					<td>{{busOrderList.companyName}}</td>\r\n					<td>{{busOrderList.seatCount}}</td>\r\n					<td>{{busOrderList.brand}}</td>\r\n					<td class="count">{{busOrderList.seatCount}}</td>\r\n					<td class="price">{{busOrderList.price}}</td>\r\n					<td class="totalMoney">{{busOrderList.price * busOrderList.seatCount}}</td>\r\n					<td>{{busOrderList.creator}}</td>\r\n					<td>{{busOrderList.createTime | dateFormat: \'yyyy-MM-dd hh:mm:ss\'}}</td>\r\n					<td>{{busOrderList.remark}}</td>\r\n					<td>{{busOrderList.status}}</td>\r\n				</tr>\r\n			{{/each}}									\r\n			</tbody>\r\n	</table>\r\n</div>\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<div class="row col-xs-12 listBusCompany" style="padding: 20px 0 0 20px">\r\n	<table class="table table-striped table-bordered table-hover">\r\n			<thead>\r\n				<tr>\r\n					<th class="th-border">订单号</th>\r\n					<th class="th-border">类型</th>\r\n					<th class="th-border">类型编号</th>\r\n					<th class="th-border">车队</th>\r\n					<th class="th-border">车座数</th>\r\n					<th class="th-border">车量品牌</th>\r\n					<th class="th-border">数量</th>\r\n					<th class="th-border">单价</th>\r\n					<th class="th-border">金额</th>\r\n					<th class="th-border">操作人</th>\r\n					<th class="th-border">操作时间</th>\r\n					<th class="th-border">备注</th>\r\n					<th class="th-border">状态</th>\r\n				</tr>\r\n			</thead>\r\n			<tbody class="T-Bus-list">\r\n			{{each busOrderJson as busOrderList}}\r\n				<tr data-value="{{busOrderList.id}}">\r\n				    <td>{{busOrderList.orderNumber}}</td>\r\n				    <td>{{busOrderList.orderType}}</td>\r\n					<td>{{busOrderList.tripNumber}}</td>\r\n					<td>{{busOrderList.companyName}}</td>\r\n					<td class="F-float F-count">{{busOrderList.seatCount}}</td>\r\n					<td>{{busOrderList.brand}}</td>\r\n					<td class="count F-float F-count">{{busOrderList.seatCount}}</td>\r\n					<td class="price F-float F-money">{{busOrderList.price}}</td>\r\n					<td class="totalMoney F-float F-money">{{busOrderList.price * busOrderList.seatCount}}</td>\r\n					<td>{{busOrderList.creator}}</td>\r\n					<td>{{busOrderList.createTime | dateFormat: \'yyyy-MM-dd hh:mm:ss\'}}</td>\r\n					<td>{{busOrderList.remark}}</td>\r\n					<td>{{busOrderList.status}}</td>\r\n				</tr>\r\n			{{/each}}									\r\n			</tbody>\r\n	</table>\r\n</div>\r\n'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

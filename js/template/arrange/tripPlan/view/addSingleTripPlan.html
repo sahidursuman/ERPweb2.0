@@ -3,22 +3,26 @@
 	<form class="T-basic-info" role="form" onsubmit="return false">
 		<div class="row">
 			<div class="col-xs-12 hd">
-				<h3 class="">基本信息</h3>
+				<h3 class="pull-left">基本信息</h3>
+				<div class="pull-right" style="width:280px;">
+					<label class="col-xs-4 control-label text-right par-r-15">团号</label>
+					<input type="text" readonly class="col-xs-8" value="系统自动生成">
+				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
 				<div class="hct-input-group col-xs-8 T-search-line">
-					<input type="text" name="lineProductName" readonly class="col-xs-12">
+					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{lineProductName}}">
 					<span class="hct-group-search cursor">[搜索]</span>
-					<input type="hidden" name="lineProductId">
+					<input type="hidden" name="lineProductId" value="{{lineProductId}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">计划人数</label>
 				<div class="col-xs-8">
-					<input type="text" class="form-control" name="planTouristCount">
+					<input type="text" class="form-control F-float F-count" name="planTouristCount">
 				</div>
 			</div>
 			<div class="col-xs-3">

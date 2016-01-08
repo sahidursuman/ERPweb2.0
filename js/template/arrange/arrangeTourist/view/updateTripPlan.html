@@ -25,7 +25,7 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>计划人数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" />
+										<input class="col-sm-12 F-float F-count" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
 									<div class="col-sm-2">
@@ -35,7 +35,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if bus.seatCount!=0}}{{bus.seatCount}}{{/if}}" />
+										<input class="col-sm-12 bind-change T-chooseSeatCount F-float F-count" type="text" name="seatCount" id="" value="{{if bus.seatCount!=0}}{{bus.seatCount}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
@@ -167,7 +167,7 @@
 											<i class="ace-icon fa fa-plus"></i>
 											添加游客小组
 										</button> -->
-										<div style="display: inline-block;padding-left: 30px;">总人数：<span class="tripPlanAllMemberCount"></span></div>
+										<div style="display: inline-block;padding-left: 30px;">总人数：<span class="tripPlanAllMemberCount F-float F-count"></span></div>
 									</div>
 								</div>
 								<div class="form-group">
@@ -200,9 +200,9 @@
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 													<td>{{touristGroup.areaData}}</td>
-													<td>{{touristGroup.ageData}}</td>
-													<td class="tripPlanTrMemberCount">{{touristGroup.adultCount + touristGroup.childCount}}</td>
-													<td>{{touristGroup.transNeedPayAllMoney}}</td>
+													<td class="F-float F-count">{{touristGroup.ageData}}</td>
+													<td class="tripPlanTrMemberCount F-float F-count">{{touristGroup.adultCount + touristGroup.childCount}}</td>
+													<td class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</td>
 													<td>{{if touristGroup.hotelLevel==0}}
 													   未选择
 													   {{else if touristGroup.hotelLevel==1}}
@@ -268,7 +268,7 @@
 											</div>
 											<label class="col-sm-1 control-label no-padding-right">天数：</label>
 											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="days" id="" value="{{lineProduct.days}}" />
+												<input class="col-sm-12 F-float F-count" readonly="readonly" type="text" name="days" id="" value="{{lineProduct.days}}" />
 											</div>				
 										</div>
 									</div>

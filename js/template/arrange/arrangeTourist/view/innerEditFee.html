@@ -17,17 +17,17 @@
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.needPayAllMoney}}{{else}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12" />
+							<input value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.needPayAllMoney}}{{else}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price"  maxlength="10" readonly="readonly" />
+							<input value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price F-float F-money"  maxlength="10" readonly="readonly" />
 						</div>
 
 					 	<label class="col-sm-1 control-label no-padding-right">计划现收:</label>
 						<div class="col-xs-1">
 						{{if cashFlag== 1}}
-							<span>{{touristGroup.currentNeedPayMoney}}</span>
+							<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 							{{else}}
 							<span>0</span>
 						{{/if}}
@@ -36,10 +36,10 @@
 
                         <label class="control-label no-padding-right">对方现收</label>
 						<label style="margin: 2px 5px 0">
-							<input type="checkbox" disabled="disabled" {{if cashFlag== 1}}checked="checked"{{/if}} class="ace send-check">
+							<input type="checkbox" disabled="disabled" {{if cashFlag== 1}}checked="checked"{{/if}} class="ace send-check F-float F-money">
 							<span class="lbl">
 							</span>
-							<input type="hidden" name="cashFlag" value="{{cashFlag}}">
+							<input type="hidden" name="cashFlag F-float F-money" value="{{cashFlag}}">
 						</label>
 					</div>
 				<div class="form-group">
@@ -75,14 +75,14 @@
 											</td>  
 											
 											<td>
-												<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc"  maxlength="10" />
+												<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" />
 											</td>
 											<td>
-												<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc"  maxlength="10" />
+												<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
 											</td>
 
 											<td>
-												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right {{if subsection==0}}T-payMoney{{/if}}"/>
+												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right {{if subsection==0}}T-payMoney{{/if}} F-float F-money"/>
 											</td>
 											<td>
 												<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-10  no-padding-right"  maxlength="500" />
@@ -100,13 +100,13 @@
 										</td>
 										
 										<td>
-											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc"  maxlength="10" />
+											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" />
 										</td>
 										<td>
-											<input name="price" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc"  maxlength="10" />
+											<input name="price" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
 										</td>
 										<td>
-											<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney"/>
+											<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money"/>
 										</td>
 										<td>
 											<input name="remark" value="{{innerFee.remark}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
@@ -143,7 +143,7 @@
 				</div> 
 				<div class="form-group">
 					<label class="col-sm-2 control-label no-padding-right">应收:</label>
-					<div class="col-sm-2">
+					<div class="col-sm-2 F-float F-money">
 						{{ if touristGroup.parentTouristGroup == null}}
 							{{touristGroup.needPayAllMoney}}
 						{{else}}
@@ -153,7 +153,7 @@
 
 					{{if subsection==0}}
 					<label class="col-sm-1 control-label no-padding-right">已收:</label>
-					<div class="col-sm-2">
+					<div class="col-sm-2 F-float F-money">
 						{{ if touristGroup.parentTouristGroup == null}}
 							{{touristGroup.payedMoney}}
 						{{else}}
@@ -164,7 +164,7 @@
 
 
 					<label class="col-sm-2 control-label no-padding-right">计划现收:</label>
-					<div class="col-sm-1">
+					<div class="col-sm-1 F-float F-money">
 						{{if cashFlag== 1}}
 							<span>{{touristGroup.currentNeedPayMoney}}</span>
 							{{else}}
@@ -192,13 +192,13 @@
 											<td>
 												{{touristGroupFlist.describeInfo}}
 											</td>
-											<td>
+											<td class="F-float F-count">
 												{{touristGroupFlist.count}}
 											</td>
-											<td>
+											<td class="F-float F-money">
 												{{touristGroupFlist.price}}  
 											</td>
-											<td>
+											<td class="F-float F-money">
 												{{touristGroupFlist.count*touristGroupFlist.price}}
 											</td>
 											<td>

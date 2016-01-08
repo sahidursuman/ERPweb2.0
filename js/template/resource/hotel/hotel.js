@@ -261,14 +261,14 @@ define(function(require, exports) {
 			html = '<tr>' +
 			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' +
 			'<td class="T-time"><div class="clearfix" style="margin-top:1px;">日常价格<label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
-			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
-			'<td><div class="clearfix" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
+			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12 F-float F-money" maxlength="9" type="text"/></div></td>' +
+			'<td><div class="clearfix" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12 F-float F-money normalInnerPrice" maxlength="9" type="text"/></div></td>' +
 			'<td><select name="containBreakfast" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containLunch" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containDinner" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><input name="broadband" class="col-sm-12" type="text"  maxlength="100" /></td>' + 
-			'<td><input name="areaSize" class="col-sm-12" type="text"  maxlength="3" /></td>' +
-			'<td><input name="guestNumber" class="col-sm-12" type="text"  maxlength="4" /></td>' +
+			'<td><input name="areaSize" class="col-sm-12 F-float F-count" type="text"  maxlength="3" /></td>' +
+			'<td><input name="guestNumber" class="col-sm-12 F-float F-count" type="text"  maxlength="4" /></td>' +
 			'<td><input name="remark" class="col-sm-12" type="text"  maxlength="1000" /></td>' +
 			'<td style="width:70px"><a data-entity-id="" href="#" class=" btn-xs  T-btn-hotel-standard-delete">删除</a></td>' +
 			'</tr>';

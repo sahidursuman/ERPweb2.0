@@ -24,11 +24,11 @@
 				    <td>{{busOrderList.orderType}}</td>
 					<td>{{busOrderList.tripNumber}}</td>
 					<td>{{busOrderList.companyName}}</td>
-					<td>{{busOrderList.seatCount}}</td>
+					<td class="F-float F-count">{{busOrderList.seatCount}}</td>
 					<td>{{busOrderList.brand}}</td>
-					<td class="count">{{busOrderList.seatCount}}</td>
-					<td class="price">{{busOrderList.price}}</td>
-					<td class="totalMoney">{{busOrderList.price * busOrderList.seatCount}}</td>
+					<td class="count F-float F-count">{{busOrderList.seatCount}}</td>
+					<td class="price F-float F-money">{{busOrderList.price}}</td>
+					<td class="totalMoney F-float F-money">{{busOrderList.price * busOrderList.seatCount}}</td>
 					<td>{{busOrderList.creator}}</td>
 					<td>{{busOrderList.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 					<td>{{busOrderList.remark}}</td>
