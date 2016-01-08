@@ -1089,14 +1089,13 @@ define(function(require, exports) {
 		var html = T.updateDetail({detail : $that.data('detail')});
 		var daysLayer = layer.open({
 		    type: 1,
-		    title: false,
-		    closeBtn: 0,
+		    title: '编辑行程详情',
 		    skin: 'layui-layer-rim',
 		    area: '900px',
 		    content: html,
 		    scrollbar: false,
 		});
-		init_editor('tripPlanUpdateDetail');
+		init_editor('tripPlanUpdateDetail', {zIndex:99999999});
 		var $layer = $(".hct-update-detail ");
 		$layer.find('.T-cancel').on('click', function(){
 			layer.close(daysLayer);
