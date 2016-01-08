@@ -264,7 +264,7 @@
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}" /><input type="hidden" name="insuranceItemId" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.id}}{{/if}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value="{{rs.price}}"></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id="{{rs.id}}" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
 	                                                                删除
@@ -336,7 +336,7 @@
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value=""></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id="{{rs.id}}" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
 	                                                                删除
@@ -475,7 +475,7 @@
                                                                                                     <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="{{restaurantList.restaurant.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input class="col-xs-12" type="text" name="remark" value="{{restaurantList.remark}}" />
+                                                                                                    <input class="col-xs-12" type="text" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="" class="cursor btn-restaurant-delete T-delete">
@@ -547,7 +547,7 @@
                                                                                                     <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐、{{/if}}{{if hotelList.hotelRoom.containLunch==1}}含午餐、{{/if}}{{if hotelList.hotelRoom.containDinner==1}}含晚餐、{{/if}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{hotelList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="8" class="cursor btn-restaurant-delete T-delete T-delTr" data-entity-name="hotelTemplate">
@@ -606,7 +606,7 @@
                                                                                                     <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{scenicList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="4" class="cursor btn-restaurant-delete T-delete">
@@ -664,7 +664,7 @@
                                                                                                     <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{shopList.shop.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{shopList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="6" class="cursor btn-restaurant-delete T-delete">
@@ -726,7 +726,7 @@
                                                                                                     <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{selfPayList.selfPay.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{selfPayList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="7" class="cursor btn-restaurant-delete T-delete">
@@ -792,7 +792,7 @@
                                                                                                     <input type="text" class="col-xs-12" name="mobileNumber" readonly="readonly" value="{{ticketList.ticket.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{ticketList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="" data-entity-type="5" class="cursor btn-restaurant-delete T-delete">
@@ -848,7 +848,7 @@
                                                                                                     <input type="text" class="col-xs-12" name="mobileNumber" value="{{otherList.mobileNumber}}" />
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" class="col-xs-12" name="remark" value="{{otherList.remark}}" />
+                                                                                                    <input type="text" class="col-xs-12" name="remark" value="" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <a data-entity-id="{{otherList.id}}" data-entity-type="9" class="cursor btn-restaurant-delete T-delete">

@@ -4,6 +4,7 @@
         <input type="hidden" name="tripPlanId" value="{{basicInfo.id}}"  />
         <input type="hidden" id="isArranged" value="{{basicInfo.isArranged}}">
         <span class="T-days hidden">{{days}}</span>
+        <span class="T-status hidden">{{basicInfo.status}}</span>
 
         <h5 class="base-title">基本信息</h5>
         <div class="info">
@@ -288,7 +289,7 @@
                                 {{each guideList as guide}}
                                 {{if guide != "[]" || guide != null}}
                                     <tr data-entity-arrangeid={{guide.id}} >
-                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1}} checked="checked" {{/if}}></td>
+                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#guide.taskType | getTaskSelect}}</td>
@@ -357,7 +358,7 @@
                                         <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#busCompany.taskType || getTaskSelect}}</td>
                                         <td><input type="text" name="needSeatCount" readonly="readonly" value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
-                                        <td><input type="text" name="brand" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}" class="col-sm-12"/></td>
+                                        <td><input type="text" name="brand" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
                                         <td><input type="text" name="licenseNumber" readonly="readonly" value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-sm-12"/><input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId"/></td>
 
                                         <td><input type="text" name="companyName" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="col-sm-12 chooseBusCompany"/><input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/></td>
