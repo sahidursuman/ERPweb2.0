@@ -1776,11 +1776,15 @@ define(function(require, exports) {
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=needSeatCount]").val(),
 				busBrand = parents.find("[name=brand]").val();
+				var searchJson = {
+					seatCount:parents.find('input[name=seatCount]').val(),
+					brand:"",
+					licenseNumber:parents.find('input[name=licenseNumber]').val()
+				};
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
 				data: {
-					seatCount: seatCount,
-					brand: busBrand
+					searchJson:JSON.stringify(searchJson)
 				},
 				showLoading:false,
 				type:"POST",
