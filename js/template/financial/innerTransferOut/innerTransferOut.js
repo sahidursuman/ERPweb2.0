@@ -312,6 +312,7 @@ define(function(require,exports) {
                     startDate: $obj.find('input[name=startDate]').val(),
                     endDate: $obj.find('input[name=endDate]').val()
                 };
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
             FinancialService.exportReport(args,"exportArrangeInnerTransferOutFinancial");
 		});
 		//全选事件
