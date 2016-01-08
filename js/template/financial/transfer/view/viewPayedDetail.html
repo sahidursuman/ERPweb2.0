@@ -24,7 +24,7 @@
 										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
 										<td>{{if rs.payParty == null || rs.payParty == ""}}-{{else}}{{rs.payParty}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
+										<td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
 										<td>{{if rs.payType == 0}}
 												现金
 											{{else if rs.payType == 1}}

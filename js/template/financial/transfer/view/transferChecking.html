@@ -27,21 +27,19 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group ">
-                <label style="margin-left: 15px">人数合计：{{sumPerson}}</label>
-                <label style="margin-left:30px;">外转金额合计：{{sumNeedPayMoney}}</label>
-                <label style="margin-left:30px;">已付金额合计：{{sumPayedMoney}}</label>
-                <label style="margin-left:30px;">返款金额合计：<span class="T-punishMoney">{{sumPunishMoney}}</span></label>
-                <label style="margin-left:30px;">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
-                <label style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
+                <label style="margin-left: 15px">人数合计：<span class="F-float F-count">{{sumPerson}}</span></label>
+                <label style="margin-left:30px;">外转金额合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
+                <label style="margin-left:30px;">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span></label>
+                <label style="margin-left:30px;">返款金额合计：<span class="T-punishMoney F-float F-money">{{sumPunishMoney}}</span></label>
+                <label style="margin-left:30px;">结算金额合计：<span class="T-stMoney F-float F-money">{{sumSettlementMoney}}</span></label>
+                <label style="margin-left:30px;">未付金额合计：<span class="T-unpayMoney F-float F-money">{{sumUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
     <div class="clearfix"></div>
         <table class="table table-striped table-bordered table-hover all">
             <thead>
-                <tr>
-                     <th class="th-border">序号</th>
-                     <th class="th-border">线路产品</th>
+                <tr><th class="th-border">线路产品</th>
                      <th class="th-border">出游日期</th>
                      <th class="th-border">联系人</th>
                      <th class="th-border">人数</th>
@@ -60,25 +58,30 @@
                 </tr>
             </thead>   
             <tbody class="T-checkList" data-right="1300005">
-                {{each financialTransferList as rs index}}
+                {{each financialTransferList as rs}}
                 <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">                
-                    <td>{{index+1}}</td>
                     <td>{{rs.lineProductName}}</td>
                     <td>{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td>{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
-                    <td>{{rs.adultCount}} 大 {{rs.childCount}} 小<a href="#" class="T-option T-viewGroup" style="margin-left:5px">展开</a></td>
+                    <td><span class="F-float F-count">{{rs.adultCount}}</span> 大 
+                        <span class="F-float F-count">{{rs.childCount}}</span> 小
+                        <a href="#" class="T-option T-viewGroup" style="margin-left:5px">展开</a>
+                    </td>
                     <td>{{rs.operateName}}</td>
                     <td>{{rs.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                    <td>{{rs.needPayMoney}}</td>
+                    <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
                     <td>
     	                {{each rs.detailList as detail}}
-    	                	{{detail.describe}}：{{detail.count}} * {{detail.price}} = {{detail.count*detail.price}}<br> 
+    	                	{{detail.describe}}：
+                            <span class="F-float F-money">{{detail.price}}</span> * 
+                            <span class="F-float F-count">{{detail.count}}</span> = 
+                            <span class="F-float F-money">{{detail.count*detail.price}}</span><br> 
     	                {{/each}}  
                     </td>
-                    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}{{rs.payedMoney}}</a></td> 
-                    <td><input type="text" maxlength="9" name="settlementMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
-                    <td name="settlementMoney">{{rs.settlementMoney}}</td>
-                    <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
+                    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td> 
+                    <td><input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
+                    <td name="settlementMoney"><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                    <td name="unPayedMoney"><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
     	            <td><input type="text" maxlength="1000"  name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"></td>
     				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
     	            <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
