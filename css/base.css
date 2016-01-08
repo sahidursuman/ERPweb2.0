@@ -283,6 +283,9 @@ input.datepicker {
 .w-8{
 	width: 8%;
 }
+.par-r-15{
+	padding-right: 15px!important;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;
