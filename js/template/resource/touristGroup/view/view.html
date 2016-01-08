@@ -13,7 +13,7 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}</td>
 
 						<td class="style-myself">人数</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.adultCount}}大人 {{touristGroupDetail.childCount}}小孩</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-count">{{touristGroupDetail.adultCount}}</span>大人 <span class="F-float F-count">{{touristGroupDetail.childCount}}</span>小孩</td>
 
 						
 						<td width="80px">是否购买保险</td>
@@ -80,11 +80,11 @@
 					<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 20px">
 						<tr>
 							<td class="style-myself">应收：</td>
-							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.needPayAllMoney}}</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.needPayAllMoney}}</span></td>
 							<td class="style-myself">预收款：</td>
-							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.preIncomeMoney}}</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.preIncomeMoney}}</span></td>
 							<td class="style-myself">计划现收：</td>
-							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.currentNeedPayMoney}}</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.currentNeedPayMoney}}</span></td>
 							<td></td>
 						    <td></td>
 
@@ -110,14 +110,14 @@
 											{{touristGroup.describeInfo}}
 										</td>
 										<td>
-											{{touristGroup.count}}
+											<span class="F-float F-count">{{touristGroup.count}}</span>
 										</td>
 										<td>
-											{{touristGroup.price}}
+											<span class="F-float F-money">{{touristGroup.price}}</span>
 										</td>
 
 										<td>
-											{{touristGroup.price*touristGroup.count}}
+											<span class="F-float F-money">{{touristGroup.price*touristGroup.count}}</span>
 										</td>
 										<td>
 											{{touristGroup.remark}}

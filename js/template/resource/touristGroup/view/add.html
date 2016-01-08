@@ -29,9 +29,9 @@
 			<label><span class="necessary">*</span>人数：</label>
             大人
             <label><span class="necessary">*</span>   
-			<input type="text" name="adultCount" value="" class="form-control T-adultCount" style="width:35px" />
+			<input type="text" name="adultCount" value="" class="form-control T-adultCount F-float F-count" style="width:35px" />
             小孩
-            <input type="text" name="childCount" value="" class="form-control T-childCount"  style="width:35px"/>
+            <input type="text" name="childCount" value="" class="form-control T-childCount F-float F-count"  style="width:35px"/>
 		</div>
 
 		<div class="form-group">
@@ -154,17 +154,17 @@
     <div class="form-inline">
         <div class="form-group fixed-width-1">
             <label>应收：</label>
-            <input readonly="readonly" type="text" name="needPayAllMoney" maxlength="9" value=""> 
+            <input readonly="readonly" type="text" name="needPayAllMoney" maxlength="9" value="" class="F-float F-money"> 
         </div>
 
         <div class="form-group fixed-width-1">
             <label class="control-label no-padding-right">预收款：</label>
-            <input type="text" name="preIncomeMoney" maxlength="9" value="" class="T-prePayMoney">
+            <input type="text" name="preIncomeMoney" maxlength="9" value="" class="T-prePayMoney F-float F-money">
         </div>
 
         <div class="form-group fixed-width-1">
             <label>计划现收：</label>
-            <input type="text" name="currentNeedPayMoney" maxlength="9" value=""  class="T-planCurrPayMoney">
+            <input type="text" name="currentNeedPayMoney" maxlength="9" value=""  class="T-planCurrPayMoney F-float F-money">
         </div>
     </div>
 
@@ -194,11 +194,11 @@
                             <input name="describeInfo" value="大人结算价" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" />
                         </td>
                         <td>
-                            <input name="count" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-Fee-adultCount T-count T-calc" />
+                            <input name="count" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-Fee-adultCount T-count T-calc F-float F-count" />
                         </td>
 
                         <td>
-                            <input name="price" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-adultPrice T-price T-calc" />
+                            <input name="price" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-adultPrice T-price T-calc F-float F-money" />
                         </td>
 
                         <td>
@@ -216,11 +216,11 @@
                             <input name="describeInfo" value="小孩结算价" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" />
                         </td>
                         <td>
-                            <input name="count" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-Fee-childCount T-count T-calc" />
+                            <input name="count" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-Fee-childCount T-count T-calc F-float F-count" />
                         </td>
 
                         <td>
-                            <input name="price" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-childPrice T-price T-calc" />
+                            <input name="price" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-childPrice T-price T-calc F-float F-money" />
                         </td>
                         <td>
                             <input name="" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" />
