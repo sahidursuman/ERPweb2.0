@@ -870,8 +870,8 @@ define(function(require, exports) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
 		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
-		arge.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
-		arge.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
+		args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
+		args.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
 		// 处理定时发送
 		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
@@ -1079,9 +1079,10 @@ define(function(require, exports) {
 		$tab.find('.T-action-plan-list').append(list);
 	}
 	tripPlan.viewTripPlan = function(id, planType){
-		var html = T.viewTripPlanSingle
+		var html = T.viewTripPlanSingle, viewMenuKey = menuKey+"_single_view";
 		if(planType == 1){
-			html = T.viewTripPlanGroup
+			html = T.viewTripPlanGroup;
+			viewMenuKey = menuKey+"_group_view";
 		}
 		$.ajax({
 			url : KingServices.build_url("tripController", "viewTripPlan"),
@@ -1106,7 +1107,12 @@ define(function(require, exports) {
 				data.insuranceArrange = JSON.parse(data.insuranceArrange);
 				data.touristGroup = JSON.parse(data.touristGroup);
 				data.tripPlan = JSON.parse(data.tripPlan);
-				Tools.addTab(menuKey+"_group_view", "查看计划", html(data));
+				if(Tools.addTab(viewMenuKey, "查看计划", html(data))){
+					$("#tab-"+viewMenuKey+"-content").find('.T-btn-close').on('click', function(event){
+						event.preventDefault();
+						Tools.closeTab(viewMenuKey);
+					});
+				}
 			}
 		});
 	};
