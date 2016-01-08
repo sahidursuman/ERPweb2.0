@@ -780,7 +780,7 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					var tabKey = menuKey + "_single_add";
 					data.require = JSON.parse(data.require);
-					data.touristGroup = JSON.parse(data.touristGroup);
+					data.touristGroupList = JSON.parse(data.touristGroupList);
 					data.tripPlan = JSON.parse(data.tripPlan);
 					data.tripPlanDay = JSON.parse(data.tripPlanDay);
 
@@ -1130,7 +1130,12 @@ define(function(require, exports) {
 				data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
 				data.guideArrange = JSON.parse(data.guideArrange);
 				data.insuranceArrange = JSON.parse(data.insuranceArrange);
-				data.touristGroup = JSON.parse(data.touristGroup);
+				if (planType == 1) {
+					data.touristGroup = JSON.parse(data.touristGroup);
+				} else {
+					data.touristGroupList = JSON.parse(data.touristGroupList);
+					
+				}
 				data.tripPlan = JSON.parse(data.tripPlan);
 				if(Tools.addTab(viewMenuKey, "查看计划", html(data))){
 					$("#tab-"+viewMenuKey+"-content").find('.T-btn-close').on('click', function(event){
