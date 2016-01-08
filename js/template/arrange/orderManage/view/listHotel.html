@@ -55,9 +55,9 @@
 					{{each hotOrderList.hotelOrderNeedRoomList as htOrderNList index}}
 					{{if index == 0}}
 					<td>{{htOrderNList.type}}</td>
-					<td>{{htOrderNList.needRoomCount}}</td>
-					<td>{{htOrderNList.price}}</td>
-					<td>{{htOrderNList.needRoomCount*htOrderNList.price}}</td>
+					<td class="F-float F-count">{{htOrderNList.needRoomCount}}</td>
+					<td class="F-float F-money">{{htOrderNList.price}}</td>
+					<td class="F-float F-money">{{htOrderNList.needRoomCount*htOrderNList.price}}</td>
 					{{/if}}
 					{{/each}}
 					{{else}}
@@ -89,9 +89,9 @@
 				{{if index > 0}}
 				<tr>
 					<td>{{htOrderNList.type}}</td>
-					<td class="count">{{htOrderNList.needRoomCount}}</td>
-					<td class="price">{{htOrderNList.price}}</td>
-					<td class="totalMoney">{{htOrderNList.price}}</td>
+					<td class="count F-float F-count">{{htOrderNList.needRoomCount}}</td>
+					<td class="price F-float F-money">{{htOrderNList.price}}</td>
+					<td class="totalMoney F-float F-money">{{htOrderNList.price}}</td>
 				</tr>
 				{{/if}}
 				{{/each}}
