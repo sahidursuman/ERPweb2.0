@@ -639,8 +639,10 @@ define(function(require, exports) {
 				$value = JSON.parse($value);
 			}
 			console.log($value)
+			var inputValue = '',
+				html = '';
+
 			if (!!$value && $value.length > 0) {
-				var inputValue = '',
 					html = '<table class="table table-striped table-hover"><thead><tr><th class="th-border">景点</th><th class="th-border">收费项目</th></tr><tbody>';
 				for (var i = 0; i < $value.length; i++) {
 					var itemName = '';
@@ -659,11 +661,11 @@ define(function(require, exports) {
 					html += '<tr><td>'+$value[i].name+'</td><td>'+itemName+'</td></tr>'
 				};
 				html += '</tbody></table>';
-				$this.data("html",html);
-				$this.val(inputValue);
-				Tools.descToolTip($this,2);
-				$this.data('bs.popover').options.content = html;
 			}
+			$this.data("html",html);
+			$this.val(inputValue);
+			Tools.descToolTip($this,2);
+			$this.data('bs.popover').options.content = html;
 		})
 	}
   
