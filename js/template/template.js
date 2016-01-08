@@ -96,6 +96,8 @@
         return Tools.addDay(startTime, whichDay - 1);
     }), template.helper("encode", function(data) {
         return encodeURIComponent(data);
+    }), template.helper("decode", function(data) {
+        return decodeURIComponent(data);
     }), template.helper("parseInt", function(data) {
         return parseInt(data);
     }), template.helper("interceptStr", function(data) {
