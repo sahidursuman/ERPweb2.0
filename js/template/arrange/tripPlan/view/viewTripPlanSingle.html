@@ -11,7 +11,7 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">人数：</label>
-			<span class="col-xs-8 F-float F-count">{{tripPlan.touristAdultCount}}大人 {{tripPlan.touristChildCount}}小孩</span>
+			<span class="col-xs-8 "><span class="F-float F-count">{{tripPlan.touristAdultCount}}</span>大人 <span class="F-float F-count">{{tripPlan.touristChildCount}}</span>小孩</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">出游日期：</label>
@@ -648,7 +648,7 @@
 						<td>{{if rs.contactMember}}{{rs.contactMember.mobileNumber}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.area}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.age}}{{/if}}</td>
-						<td class="F-float F-count">{{if rs.lineProduct}}{{rs.lineProduct.adultCount}}大{{rs.lineProduct.childCount}}小{{/if}}</td>
+						<td><span class="F-float F-count">{{if rs.lineProduct}}{{rs.lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{rs.lineProduct.childCount}}</span>小{{/if}}</td>
 						<td class="F-float F-money">{{rs.payedMoney}}</td>
 						<td>{{rs.hotelLevel | getHotelLevelDesc}}</td>
 						<td>{{rs.includeSelfPay}}</td>
