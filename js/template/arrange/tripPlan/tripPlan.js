@@ -1170,7 +1170,7 @@ define(function(require, exports) {
 		getName : function(str){
 			//return trim(str.replace(/[^\u4e00-\u9fa5a-zA-Z\s]/ig, "").replace(/\s+/g, " "));
 			var name = str.match(/(^|\s)([\u4e00-\u9fa5a-zA-Z\s]+)(\s|$)/ig);
-			return trim(name ? name[0] : " ");
+			return trim(name ? name[0] : " ").replace(/\s+/g, " ");
 		},
 		getPhone : function(str){
 			var phone = str.match(/(^|\s)(1[34587]\d{9})|(0[1-9]\d{1,2}[-\s]\d{7,8})(\s|$)/ig);
@@ -1187,12 +1187,14 @@ define(function(require, exports) {
 	            if (dataArray.length > 0) {
 	                for (var i = 0; i < dataArray.length; i++) {
 	                	var memberInfo = trim(dataArray[i]);
-	                    $obj.append(T.touristsList({touristGroupMemberList:[{
-	                    	name : F.getName(memberInfo),
-	                    	mobileNumber : F.getPhone(memberInfo),
-	                    	idCardNumber : F.getIdCard(memberInfo)
-	                    }]}));
-	                    layer.close(addVisotorMoreLayer);
+	                	if(memberInfo){
+		                    $obj.append(T.touristsList({touristGroupMemberList:[{
+		                    	name : F.getName(memberInfo),
+		                    	mobileNumber : F.getPhone(memberInfo),
+		                    	idCardNumber : F.getIdCard(memberInfo)
+		                    }]}));
+		                    layer.close(addVisotorMoreLayer);
+	                	}
 	                }
 	            }
         	}else{
