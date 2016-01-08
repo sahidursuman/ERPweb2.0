@@ -1882,9 +1882,9 @@ KingServices.updateSingleTripPlan = function(id){
 		module.updateSingleTripPlan(id);
 	});
 }
-KingServices.addTripPlan = function(id,name,startTime,days){
+KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
-		module.addTripPlan('',id,name,startTime,days);
+		module.addTripPlan(false,args,mergeTouristGroupIdJson);
 	});
 }
 
