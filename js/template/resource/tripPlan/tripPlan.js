@@ -2403,8 +2403,10 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-							$parents.find("input[name=oldPrice]").val(data.marketPrice);
-							$parents.find("input[name=price]").val(data.price);
+							// 底价
+							$parents.find("input[name=lowestPrice]").val(data.price);
+							// 单价
+							$parents.find("input[name=price]").val(data.marketPrice);
 							tripPlan.calculatePrice($tab);
 						}
                     }
