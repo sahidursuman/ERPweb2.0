@@ -3,19 +3,19 @@
     <tr>
         <th class="th-border"><span class="necessary">*</span>指定导游报账</th>
         <th class="th-border"><span class="necessary">*</span>开始日期</th>
-        <th class="th-border"><span class="necessary">*</span>结束日期</th>
+        <th class="th-border">结束日期</th>
         <th class="th-border">任务</th>
         <th class="th-border">导游</th>
         <th class="th-border">导服费</th>
-        <th class="th-border"><span class="necessary">*</span>管理费</th>
-        <th class="th-border"><span class="necessary">*</span>导游预支金额</th>
-        <th class="th-border"><span class="necessary">*</span>备注</th>
+        <th class="th-border">管理费</th>
+        <th class="th-border">导游预支金额</th>
+        <th class="th-border">备注</th>
     </tr>
     </thead>
     <tbody class="T-count-guide">
     {{each guideArranges as rs index}}
-        <tr guideid = "{{rs.guide.id}}">
-            <td><input type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
+        <tr guideid = "{{rs.guide.id}}" isAccountGuide = "{{rs.isAccountGuide}}">
+            <td><input disabled="disabled" type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
             <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>
@@ -34,8 +34,8 @@
                 {{/if}}
             </td>
             <td>{{rs.guide.realname}}</td>
-            <td>{{rs.price}}</td>
-            <td>{{rs.manageFee}}</td>
+            <td>{{if rs.isAccountGuide == 1}}<input name="price" value="{{rs.price}}" type="text">{{else}}{{rs.price}}{{/if}}</td>
+            <td>{{if rs.isAccountGuide == 1}}<input name="manageFee" value="{{rs.manageFee}}" type="text">{{else}}{{rs.manageFee}}{{/if}}</td>
             <td>{{rs.guideAllPreMoney}}</td>
             <td>{{rs.remark}}</td>
         </tr>
