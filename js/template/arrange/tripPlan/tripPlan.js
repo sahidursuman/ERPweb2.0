@@ -320,7 +320,12 @@ define(function(require, exports) {
 
     	//新增同行
         $tab.find('.T-addPartner').off('click').on("click", {
-            function: KingServices.addPartnerAgency,
+            function: function(){
+            	KingServices.addPartnerAgency(function(data){
+            		$tab.find('[name="travelAgencyName"]').val(data.name);
+            		$tab.find('[name="fromPartnerAgencyId"]').val(data.id);
+            	})
+            },
             type: ".form-group",
             name: "travelAgencyName",
             id: "fromPartnerAgencyId"
@@ -680,7 +685,7 @@ define(function(require, exports) {
     			KingServices.chooseScenic($that);
     		}
     	});
-
+		$tab.data('isEdited', false);
 		// 取消
 		$tab.find('.T-cancelPlan').on('click', function(event) {
 			event.preventDefault();
