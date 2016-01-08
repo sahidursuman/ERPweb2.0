@@ -138,8 +138,8 @@ define(function(require,exports){
 			selected = 'selected="selected"'
 		};
 		var selectHtml = '<select name="selectStatus">'+
-		'<option value="1">启用</option>'+
-		'<option value="0" '+selected+'>停用</option>'+
+		'<option value="1">已启用</option>'+
+		'<option value="0" '+selected+'>已停用</option>'+
 		'</select>';
 		$obj.find('.status').html(selectHtml);
 		$obj.find('input').off('change').on('change',function(){
