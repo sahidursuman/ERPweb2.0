@@ -90,24 +90,24 @@
 			
 
 			<td class="no-padding">
-				{{shopPolicy.normalMarketPrice}}<br>
+				<span class='F-float F-money'>{{shopPolicy.normalMarketPrice}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-					{{hopTimeArea.marketPrice}}<br>
+					<span class='F-float F-money'>{{hopTimeArea.marketPrice}}</span><br>
 				{{/each}}
 			</td>
 
 
 			<td>
-			    {{shopPolicy.customerRebateMoney}}<br>
+			    <span class='F-float F-money'>{{shopPolicy.customerRebateMoney}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as customer}}
-					{{customer.customerRebateMoney}}<br>
+					<span class='F-float F-money'>{{customer.customerRebateMoney}}</span><br>
 				{{/each}}
 			</td>
 
 			<td class="no-padding">
-				{{shopPolicy.normalInnerPrice}}<br>
+				<span class='F-float F-money'>{{shopPolicy.normalInnerPrice}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
-					{{hopTimeArea.price}}<br>
+					<span class='F-float F-money'>{{hopTimeArea.price}}</span><br>
 				{{/each}}
 			</td>
 

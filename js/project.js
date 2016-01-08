@@ -1463,19 +1463,23 @@ Tools.getTabKey = function(id) {
 Tools.inputCtrolFloat=function($inputCtrol){
 	if (jQuery.isArray($inputCtrol)) {
 		for (var i = 0, len = $inputCtrol.length; i < len; i++) {
-			$inputCtrol[i].on('keyup', function (event) {
+			$inputCtrol[i].on('input', function (event) {
 			    var $amountInput = $(this);
 			    //响应鼠标事件，允许左右方向键移动 
 			    event = window.event || event;
 			    if (event.keyCode == 37 | event.keyCode == 39) {
 			        return;
 			    }
-			    //先把非数字的都替换掉，除了数字和. 
-			    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-			        //只允许一个小数点              
-			        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-			        //只能输入小数点后两位
-			        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    };
 		    });
 			$inputCtrol[i].on('blur', function () {
 			    var $amountInput = $(this);
@@ -1484,19 +1488,23 @@ Tools.inputCtrolFloat=function($inputCtrol){
 			});
 		}
 	}else{
-		$inputCtrol.on('keyup', function (event) {
+		$inputCtrol.on('input', function (event) {
 		    var $amountInput = $(this);
 		    //响应鼠标事件，允许左右方向键移动 
 		    event = window.event || event;
 		    if (event.keyCode == 37 | event.keyCode == 39) {
 		        return;
 		    }
-		    //先把非数字的都替换掉，除了数字和. 
-		    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-		        //只允许一个小数点              
-		        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-		        //只能输入小数点后两位
-		        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+		     if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    }; 
 	    });
 		$inputCtrol.on('blur', function () {
 		    var $amountInput = $(this);
