@@ -527,7 +527,7 @@ define(function(require, exports) {
 	//新增团外安排接送车辆
 	transit.addOutBusList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-		'<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>'+
+		'<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>'+
 		'<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 		'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
@@ -537,10 +537,10 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
-		'<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
-		'<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
-		'<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
-		'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
+		'<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 		'<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
 		'</tr>';
@@ -575,11 +575,11 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
-			'<td><input class="col-sm-12 T-number price" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
-			'<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
+			'<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
+			'<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
@@ -613,11 +613,11 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketShift" value=""  maxlength="20"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="ticketSeatLevel"  maxlength="20"  value="" type="text" />'+
-			'<td><input class="col-sm-12 T-number price" name="ticketPrice"  maxlength="9"  value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
-			'<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
-			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9"  value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
+			'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
 			'</tr>';
@@ -648,11 +648,11 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
 			'<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
-			'</td><td><input class="col-sm-12 T-chooseStandard price" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
-			'</td><td><input class="col-sm-12 count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
+			'</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
+			'</td><td><input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>'+
 			'</tr>';
@@ -681,11 +681,11 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /><input type="hidden" name="serviceType" value="'+type+'" /></td>'+
 			'<td><input class="col-sm-12" name="managerName" type="text" value="" maxlength="20" /></td>'+
 			'<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>'+
-			'<td><input class="col-sm-12 price" name="price" type="text" maxlength="9" value="" /></td>'+
-			'<td><input class="col-sm-12 count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number discount" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number needPay" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
-			'<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 price F-float F-money" name="price" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 count F-float F-count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
+			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>'+
 			'</tr>';

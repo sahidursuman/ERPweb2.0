@@ -23,7 +23,7 @@
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
                         <div class="col-sm-2">
-                            <input type="text" class="col-sm-12" readonly="readonly" name="days" value="{{lineProduct.days}}">
+                            <input type="text" class="col-sm-12 F-float F-count" readonly="readonly" name="days" value="{{lineProduct.days}}">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">线路模板:</label>
                         <div class="col-sm-2">
@@ -134,7 +134,7 @@
                                                             <input type="hidden" name="typeId" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.id}}{{/if}}">
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="price" type="text" value="{{rs.price}}" />
+                                                            <input class="col-xs-12 F-float F-money" name="price" type="text" value="{{rs.price}}" />
                                                         </td>
                                                         <td>
                                                             <input class="col-xs-12" name="telNumber" type="text" readonly="readonly" value="{{rs.insurance.telNumber}}" />
@@ -221,7 +221,7 @@
                                                     {{each busCompanyTemplate as rs}}
                                                     <tr data-entity-arrangeid = "{{rs.id}}">
                                                         <td>
-                                                            <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
+                                                            <input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
                                                         </td>
                                                         <td><input type="text" class="col-xs-12 T-busBrand" name="brand" value="{{rs.brand}}"></td>
                                                         <td>
@@ -358,7 +358,7 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.price}}" />
+                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change F-float F-money" value="{{restaurantList.restaurantStandard.price}}" />
                                                                                                             <input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}" />
                                                                                                         </td>
                                                                                                         <td>
@@ -428,7 +428,7 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="contractPrice" value="{{hotelList.price}}"  />
+                                                                                                            <input type="text" class="F-float F-money" name="contractPrice" value="{{hotelList.price}}"  />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐 {{/if}}{{if hotelList.hotelRoom.containLunch==1}}-含午餐{{/if}}{{if hotelList.hotelRoom.containDinner==1}}-含晚餐{{/if}}" />
@@ -487,7 +487,7 @@
                                                                                                             <input type="hidden" name="chargingId" value="{{scenicList.scenicItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="price" value="{{scenicList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="price" value="{{scenicList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
@@ -547,7 +547,7 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="price" value="{{ticketList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="price" value="{{ticketList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{ticketList.ticket.managerName}}" />
@@ -608,7 +608,7 @@
                                                                                                             <input type="text" class="col-xs-12" name="mobileNumber" value="{{otherList.mobileNumber}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{otherList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{otherList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="{{otherList.remark}}" />

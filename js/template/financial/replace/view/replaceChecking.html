@@ -32,23 +32,23 @@
     <div class="form-inline" style="padding-top: 10px;">
         <div class="form-group">
             <label>代订金额合计：</label>
-            <label>{{totalList.sumBookingMoney}}</label>
+            <label class="F-float F-money">{{totalList.sumBookingMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>已收金额合计：</label>
-            <label>{{totalList.sumReceiveMoney}}</label>
+            <label class="F-float F-money">{{totalList.sumReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>结算金额合计：</label>
-            <label class="T-stMoney">{{totalList.sumSettlementMoney}}</label>
+            <label class="T-stMoney F-float F-money">{{totalList.sumSettlementMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
+            <label class="T-unpayMoney F-float F-money">{{totalList.sumUnReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计(已对账)：</label>
-            <label>{{totalList.checkedUnPayedMoney}}</label>
+            <label class="F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
 </div>
@@ -91,10 +91,10 @@
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
                 <td class="T-ctrl-tip" title="{{rs.newDetail}}"><span>{{rs.newDetail}}</span></td>
-                <td>{{rs.bookingMoney}}</td>
-                <td><a class="cursor T-action T-receive-money T-payedDetail" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
-                <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-xs-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
-                <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
+                <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
+                <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
+                <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
+                <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-xs-12" name="checkRemark" value="{{rs.checkRemark}}">{{/if}}</td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>

@@ -22,7 +22,7 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>计划人数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="" />
+										<input class="col-sm-12 F-float F-count" type="text" name="planTouristCount" id="" value="" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>团队编号：</label>
 									<div class="col-sm-2">
@@ -32,7 +32,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 bind-change T-chooseSeatCount" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{ if addTripPlan.bus.seatCount!=0}}{{addTripPlan.bus.seatCount}}{{/if}}{{/if}}" />
+										<input class="col-sm-12 bind-change T-chooseSeatCount F-float F-count" type="text" name="seatCount" id="" value="{{if addTripPlan.bus != null}}{{ if addTripPlan.bus.seatCount!=0}}{{addTripPlan.bus.seatCount}}{{/if}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
@@ -208,8 +208,8 @@
 													</td>
 													<td>{{touristGroupList.areaData}}</td>
 													<td>{{touristGroupList.ageData}}</td>
-													<td class="tripPlanTrMemberCount">{{touristGroupList.adultCount + touristGroupList.childCount}}</td>  
-													<td>{{touristGroupList.currentNeedPayMoney}}</td>
+													<td class="tripPlanTrMemberCount F-float F-count">{{touristGroupList.adultCount + touristGroupList.childCount}}</td>  
+													<td class="F-float F-money">{{touristGroupList.currentNeedPayMoney}}</td>
 													<td>{{if touristGroupList.hotelLevel==0}}
 													   未选择
 													   {{else if touristGroupList.hotelLevel==1}}
@@ -273,7 +273,7 @@
 											</div>
 											<label class="col-sm-1 control-label no-padding-right">天数：</label>
 											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="days" id="" value="{{addTripPlan.lineProduct.days}}" />
+												<input class="col-sm-12 F-float F-count" readonly="readonly" type="text" name="days" id="" value="{{addTripPlan.lineProduct.days}}" />
 											</div>				
 										</div>
 									</div>

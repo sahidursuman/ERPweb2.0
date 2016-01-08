@@ -184,7 +184,7 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         Self.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
-                    selfPayName: Self.$checkSearchArea.find('input[name=selfPayName]').val(), 
+                    selfPayId: id, 
                     tripInfo: Self.$checkSearchArea.find('input[name=tripInfo]').val(),
                     startTime: Self.$checkSearchArea.find('input[name=startDate]').val(),
                     endTime: Self.$checkSearchArea.find('input[name=endDate]').val()

@@ -6,7 +6,7 @@
 		<td class="style-myself">针对客源：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
 		<td class="style-myself">人数：</td>
-		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px" class="F-float F-count">{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩</td>
 		<td class="style-myself">团号：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripNumber}}</td>
 	</tr>
@@ -59,9 +59,9 @@
 <table class="table table-bordered">
     <tbody>
         <tr>
-            <td>现收：{{basicInfo.guideAllNowMoney}}</td>
-            <td>现付：{{basicInfo.guideAllPayMoney}}</td>
-            <td>预付款：{{basicInfo.guideAllPreMoney}}</td>
+            <td class="F-float F-money">现收：{{basicInfo.guideAllNowMoney}}</td>
+            <td class="F-float F-money">现付：{{basicInfo.guideAllPayMoney}}</td>
+            <td class="F-float F-money">预付款：{{basicInfo.guideAllPreMoney}}</td>
         </tr>
     </tbody>
 </table>
@@ -120,10 +120,10 @@
         <tr data-entity-arrangeid="{{insurance.id}}">
             <td>{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}</td>
             <td>{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}</td>
-            <td>{{insurance.price}}</td>
-            <td>{{insurance.memberCount}}</td>
-            <td>{{insurance.needPayMoney}}</td>
-            <td>{{insurance.prePayMoney}}</td>
+            <td class="F-float F-money">{{insurance.price}}</td>
+            <td class="F-float F-count">{{insurance.memberCount}}</td>
+            <td class="F-float F-money">{{insurance.needPayMoney}}</td>
+            <td class="F-float F-money">{{insurance.prePayMoney}}</td>
             <td>{{insurance.remark}}</td>
         </tr>
         {{/if}}
@@ -170,8 +170,8 @@
                 <td>{{#guide.taskType | getTaskDesc}}</td>
                 <td>{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}</td>
                 <td>{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}</td>
-                <td>{{guide.price}}</td>
-                <td>{{guide.manageFee}}</td>
+                <td class="F-float F-money">{{guide.price}}</td>
+                <td class="F-float F-money">{{guide.manageFee}}</td>
                 <td>{{guide.remark}}</td>
             </tr>
         {{/if}}
@@ -211,19 +211,19 @@
                 <td>{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{#busCompany.taskType || getTaskDesc}}</td>
-                <td>{{busCompany.needSeatCount}}</td>
-                <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
+                <td class="F-float F-mcount">{{busCompany.needSeatCount}}</td>
+                <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}</td>
                 <td>{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}</td>
 				<td>{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}</td>
 				<td>{{busCompany.contractNumber}}</td>
-				<td>{{busCompany.price}}</td>
-				<td>{{busCompany.reduceMoney}}</td>
-				<td>{{busCompany.needPayMoney}}</td>
-				<td>{{busCompany.prePayMoney}}</td>
-				<td>{{busCompany.guidePayMoney}}</td>
+				<td class="F-float F-money">{{busCompany.price}}</td>
+				<td class="F-float F-money">{{busCompany.reduceMoney}}</td>
+				<td class="F-float F-money">{{busCompany.needPayMoney}}</td>
+				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
+				<td class="F-float F-money">{{busCompany.guidePayMoney}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}
@@ -274,12 +274,12 @@
                 <td><span class="T-restaurant-name" data-ischoose="{{restaurant.isChoose}}" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}">{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}</span></td>
                 <td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}</td>
                 <td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
-                <td>{{restaurant.price}}</td>
-                <td>{{restaurant.memberCount}}</td>
-                <td>{{restaurant.reduceMoney}}</td>
-                <td>{{restaurant.needPayMoney}}</td>
-                <td>{{restaurant.prePayMoney}}</td>
-                <td>{{restaurant.guidePayMoney}}</td>
+                <td class="F-float F-money">{{restaurant.price}}</td>
+                <td class="F-float F-count">{{restaurant.memberCount}}</td>
+                <td class="F-float F-money">{{restaurant.reduceMoney}}</td>
+                <td class="F-float F-money">{{restaurant.needPayMoney}}</td>
+                <td class="F-float F-money">{{restaurant.prePayMoney}}</td>
+                <td class="F-float F-money">{{restaurant.guidePayMoney}}</td>
                 <td>{{restaurant.remark}}</td>
             </tr>
             {{/if}}
@@ -335,12 +335,12 @@
                 <td>{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}</td>
                 <td>{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}</td>
                 <td>{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}</td>
-                <td>{{hotel.price}}</td>
-                <td>{{hotel.memberCount}}</td>
-                <td>{{hotel.reduceMoney}}</td>
-                <td>{{hotel.needPayMoney}}</td>         
-                <td>{{hotel.prePayMoney}}</td>
-                <td>{{hotel.guidePayMoney}}</td>
+                <td class="F-float F-money">{{hotel.price}}</td>
+                <td class="F-float F-count">{{hotel.memberCount}}</td>
+                <td class="F-float F-money">{{hotel.reduceMoney}}</td>
+                <td class="F-float F-money">{{hotel.needPayMoney}}</td>         
+                <td class="F-float F-money">{{hotel.prePayMoney}}</td>
+                <td class="F-float F-money">{{hotel.guidePayMoney}}</td>
                 <td>{{hotel.remark}}</td>
                 <td>{{hotel.orderStatus | getOrderStatusDesc}}</td>
             </tr>
@@ -395,14 +395,14 @@
                 <td>{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}</td>
                 <td>{{scenic.tourDuration}}</td>
                 
-                <td>{{scenic.price}}</td>
-                <td>{{scenic.memberCount}}</td>
-                <td>{{scenic.reduceMoney}}</td>
+                <td class="F-float F-money">{{scenic.price}}</td>
+                <td class="F-float F-count">{{scenic.memberCount}}</td>
+                <td class="F-float F-money">{{scenic.reduceMoney}}</td>
                 <td>{{scenic.orderNumber}}</td>
                 
-                <td>{{scenic.needPayMoney}}</td>
-                <td>{{scenic.prePayMoney}}</td>
-                <td>{{scenic.guidePayMoney}}</td>
+                <td class="F-float F-money">{{scenic.needPayMoney}}</td>
+                <td class="F-float F-money">{{scenic.prePayMoney}}</td>
+                <td class="F-float F-money">{{scenic.guidePayMoney}}</td>
                 <td>{{scenic.remark}}</td>
             </tr>
             {{/if}}
@@ -495,13 +495,13 @@
                 <td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}</td>
                 <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}</td>
                 <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}</td>
-                <td>{{selfPay.marketPrice}}</td>
-                <td>{{selfPay.price}}</td>
-                <td>{{selfPay.memberCount}}</td>
-                <td>{{selfPay.reduceMoney}}</td>
-                <td>{{selfPay.needPayMoney}}</td>
-                <td>{{selfPay.prePayMoney}}</td>
-                <td>{{selfPay.guidePayMoney}}</td>
+                <td class="F-float F-money">{{selfPay.marketPrice}}</td>
+                <td class="F-float F-money">{{selfPay.price}}</td>
+                <td class="F-float F-count">{{selfPay.memberCount}}</td>
+                <td class="F-float F-money">{{selfPay.reduceMoney}}</td>
+                <td class="F-float F-money">{{selfPay.needPayMoney}}</td>
+                <td class="F-float F-money">{{selfPay.prePayMoney}}</td>
+                <td class="F-float F-money">{{selfPay.guidePayMoney}}</td>
                 <td>{{selfPay.remark}}</td>
             </tr>
         {{/if}}
@@ -558,12 +558,12 @@
                 <td>{{ticket.shift}}</td>
                 <td>{{ticket.startTime}}</td>
                 <td>{{ticket.seatLevel}}</td>
-                <td>{{ticket.price}}</td>
-                <td>{{ticket.memberCount}}</td>
-                <td>{{ticket.reduceMoney}}</td>
-                <td>{{ticket.needPayMoney}}</td>
-                <td>{{ticket.prePayMoney}}</td>
-                <td>{{ticket.guidePayMoney}}</td>
+                <td class="F-float F-money">{{ticket.price}}</td>
+                <td class="F-float F-count">{{ticket.memberCount}}</td>
+                <td class="F-float F-money">{{ticket.reduceMoney}}</td>
+                <td class="F-float F-money">{{ticket.needPayMoney}}</td>
+                <td class="F-float F-money">{{ticket.prePayMoney}}</td>
+                <td class="F-float F-money">{{ticket.guidePayMoney}}</td>
                 <td>{{ticket.remark}}</td>
             </tr>
             {{/if}}
@@ -611,12 +611,12 @@
                 <td>{{other.name}}</td>
                 <td>{{other.managerName}}</td>
                 <td>{{other.mobileNumber}}</td>
-                <td>{{other.price}}</td>
-                <td>{{other.memberCount}}</td>
-                <td>{{other.reduceMoney}}</td>
-                <td>{{other.needPayMoney}}</td>
-                <td>{{other.prePayMoney}}</td>
-                <td>{{other.guidePayMoney}}</td>
+                <td class="F-float F-money">{{other.price}}</td>
+                <td class="F-float F-count">{{other.memberCount}}</td>
+                <td class="F-float F-money">{{other.reduceMoney}}</td>
+                <td class="F-float F-money">{{other.needPayMoney}}</td>
+                <td class="F-float F-money">{{other.prePayMoney}}</td>
+                <td class="F-float F-money">{{other.guidePayMoney}}</td>
                 <td>{{other.remark}}</td>
             </tr>
             {{/if}}

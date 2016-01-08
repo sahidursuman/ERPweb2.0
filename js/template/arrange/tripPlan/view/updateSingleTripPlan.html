@@ -22,7 +22,7 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">计划人数</label>
 				<div class="col-xs-8">
-					<input type="text" class="form-control" name="planTouristCount" value="{{tripPlan.planTouristCount}}">
+					<input type="text" class="form-control F-float F-count" name="planTouristCount" value="{{tripPlan.planTouristCount}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
@@ -224,9 +224,9 @@
 						<td name="contactMemberName">{{group.contactMember.name}}</td>
 						<td name="contactMemberMobileNumber">{{group.contactMember.mobileNumber}}</td>
 						<td name="areaData">{{group.areaData}}</td>
-						<td name="ageData">{{group.ageData}}</td>
-						<td name="peopleCount" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount+group.childCount}}</td>
-						<td name="currentNeedPayMoney">{{group.currentNeedPayMoney}}</td>
+						<td name="ageData" class="F-float F-count">{{group.ageData}}</td>
+						<td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount+group.childCount}}</td>
+						<td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
 						<td name="hotelLevel">{{if group.hotelLevel==1 }}
 						   三星以下
 						   {{else if group.hotelLevel==2 }}

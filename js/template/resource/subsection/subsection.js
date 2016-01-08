@@ -155,8 +155,8 @@ define(function(require, exports) {
 				operationEndDate: operationEndDate
 			},
 			success: function(data){
-				subsection.$tab.find(".T-search-memberCount").text("人数合计："+data.adultCount+"大"+data.childCount+"小");
-				subsection.$tab.find(".T-search-currentNeedPayMoney").text("现收款合计："+data.currentNeedPayMoney+"元");
+				subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
+				subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
 			}
 		})
 	};
@@ -280,9 +280,9 @@ define(function(require, exports) {
 			+ '<tr data-entity-id="">'
 			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
-			+ '<td><input type="text" name="days" class="col-sm-10" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
+			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><input type="text" name="needPayAllMoney"></td>'
+			+ '<td><input type="text" name="needPayAllMoney" class="F-float F-money"></td>'
 			+ '<td>' + radio + '</td>'
 			+ '<td>-</td>'
 			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'

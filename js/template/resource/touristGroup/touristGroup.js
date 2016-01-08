@@ -27,6 +27,7 @@ define(function(require, exports) {
         autocompleteDate: {},
         typeFlag: 0,
         visitorId: 0,
+        days:0,
         chooseQuoteProlayer: "",
         args: {
             pageNo: 0,
@@ -573,6 +574,15 @@ define(function(require, exports) {
             // touristGroup.searchLinproduct(true,0,"",typeFlag);
             touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
         });
+        //选择出游日期带出完团日期
+        $obj.find('.T-startTime').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that = $(this),startTime = $that.val(),$row = $that.closest('.form-inline');
+                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days));
+                
+        });
+
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -692,6 +702,7 @@ define(function(require, exports) {
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
                 $tab = $('#tab-resource_touristGroup-add-content'),
                 lineProductId = $tr.data('id');
+                touristGroup.days = $tr.data('days');
 
             if (lineProductId==null || lineProductId=='' || lineProductId==undefined) {
                showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
@@ -1507,9 +1518,9 @@ define(function(require, exports) {
     touristGroup.addOtherCost = function($obj) {
         var html = '<tr>' +
             '<td><input name="describeInfo" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>' +
-            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc"/></td>' +
-            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc"/></td>' +
-            '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" /></td>' +
+            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc F-float F-count"/></td>' +
+            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc F-float F-money"/></td>' +
+            '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney F-float F-money" /></td>' +
             '<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>' +
             '<td><a class="cursor T-delete">删除</a></td>' +
             '</tr>';

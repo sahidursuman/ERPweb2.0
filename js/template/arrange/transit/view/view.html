@@ -11,7 +11,7 @@
 				<td class="style-myself">出游日期：</td>
 				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td class="style-myself">人数合计：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3"><span class=" F-float F-count">{{touristGroup.adultCount}}</span>大<span class=" F-float F-count">{{touristGroup.childCount}}</span>小</td>
 			</tr>
 		</table>
 		<div class="form-group" style="margin-left: 23px;margin-top: 10px">
@@ -91,10 +91,10 @@
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
 													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
-													<td>{{outBus.fee}}</td>
-													<td>{{outBus.reduceMoney}}</td>
-													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.prePayMoney}}</span></td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -154,11 +154,11 @@
 													<td>{{outHotel.hotel.managerName}}</td>
 													<td>{{outHotel.hotel.mobileNumber}}</td>
 													<td>{{outHotel.hotelRoom.type}}</td>
-													<td>{{outHotel.price}}</td>
-													<td>{{outHotel.memberCount}}</td>
-													<td>{{outHotel.reduceMoney}}</td>
-													<td>{{outHotel.needPayMoney}}</td>
-													<td>{{outHotel.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outHotel.price}}</span></td>
+													<td><span class=" F-float F-count">{{outHotel.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.prePayMoney}}</span></td>
 													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -212,11 +212,11 @@
 													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
-													<td>{{outTicket.price}}</td>
-													<td>{{outTicket.memberCount}}</td>
-													<td>{{outTicket.reduceMoney}}</td>
-													<td>{{outTicket.needPayMoney}}</td>
-													<td>{{outTicket.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>
+													<td><span class=" F-float F-count">{{outTicket.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.prePayMoney}}</span></td>
 													<td>{{outTicket.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -259,11 +259,11 @@
 													<td>{{outRestaurant.restaurant.managerName}}</td>
 													<td>{{outRestaurant.restaurant.mobileNumber}}</td>
 													<td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
-													<td>{{outRestaurant.price}}</td>
-													<td>{{outRestaurant.memberCount}}</td>
-													<td>{{outRestaurant.reduceMoney}}</td>
-													<td>{{outRestaurant.needPayMoney}}</td>
-													<td>{{outRestaurant.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outRestaurant.price}}</span></td>
+													<td><span class=" F-float F-count">{{outRestaurant.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.prePayMoney}}</span></td>
 													<td>{{outRestaurant.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -304,11 +304,11 @@
 													<td>{{outOther.name}}</td>
 													<td>{{outOther.managerName}}</td>
 													<td>{{outOther.mobileNumber}}</td>
-													<td>{{outOther.price}}</td>
-													<td>{{outOther.memberCount}}</td>
-													<td>{{outOther.reduceMoney}}</td>
-													<td>{{outOther.needPayMoney}}</td>
-													<td>{{outOther.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outOther.price}}</span></td>
+													<td><span class=" F-float F-count">{{outOther.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.prePayMoney}}</span></td>
 													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -359,10 +359,10 @@
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
 													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
-													<td>{{outBus.fee}}</td>
-													<td>{{outBus.reduceMoney}}</td>
-													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.prePayMoney}}</span></td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -413,10 +413,10 @@
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
 													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
-													<td>{{outBus.fee}}</td>
-													<td>{{outBus.reduceMoney}}</td>
-													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outBus.prePayMoney}}</span></td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -476,11 +476,11 @@
 													<td>{{outHotel.hotel.managerName}}</td>
 													<td>{{outHotel.hotel.mobileNumber}}</td>
 													<td>{{outHotel.hotelRoom.type}}</td>
-													<td>{{outHotel.price}}</td>
-													<td>{{outHotel.memberCount}}</td>
-													<td>{{outHotel.reduceMoney}}</td>
-													<td>{{outHotel.needPayMoney}}</td>
-													<td>{{outHotel.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outHotel.price}}</span></td>
+													<td><span class=" F-float F-count">{{outHotel.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outHotel.prePayMoney}}</span></td>
 													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -534,11 +534,11 @@
 													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
-													<td>{{outTicket.price}}</td>
-													<td>{{outTicket.memberCount}}</td>
-													<td>{{outTicket.reduceMoney}}</td>
-													<td>{{outTicket.needPayMoney}}</td>
-													<td>{{outTicket.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>
+													<td><span class=" F-float F-count">{{outTicket.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outTicket.prePayMoney}}</span></td>
 													<td>{{outTicket.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -581,11 +581,11 @@
 													<td>{{outRestaurant.restaurant.managerName}}</td>
 													<td>{{outRestaurant.restaurant.mobileNumber}}</td>
 													<td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
-													<td>{{outRestaurant.price}}</td>
-													<td>{{outRestaurant.memberCount}}</td>
-													<td>{{outRestaurant.reduceMoney}}</td>
-													<td>{{outRestaurant.needPayMoney}}</td>
-													<td>{{outRestaurant.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outRestaurant.price}}</span></td>
+													<td><span class=" F-float F-count">{{outRestaurant.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outRestaurant.prePayMoney}}</span></td>
 													<td>{{outRestaurant.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -626,11 +626,11 @@
 													<td>{{outOther.name}}</td>
 													<td>{{outOther.managerName}}</td>
 													<td>{{outOther.mobileNumber}}</td>
-													<td>{{outOther.price}}</td>
-													<td>{{outOther.memberCount}}</td>
-													<td>{{outOther.reduceMoney}}</td>
-													<td>{{outOther.needPayMoney}}</td>
-													<td>{{outOther.prePayMoney}}</td>
+													<td><span class=" F-float F-money">{{outOther.price}}</span></td>
+													<td><span class=" F-float F-count">{{outOther.memberCount}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.reduceMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.needPayMoney}}</span></td>
+													<td><span class=" F-float F-money">{{outOther.prePayMoney}}</span></td>
 													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>

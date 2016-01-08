@@ -31,14 +31,14 @@
 				</td>
 				<td>
 				
-				    {{result.touristGroup.adultCount}}大{{result.touristGroup.childCount}}小
+				    <span class="F-float F-count">{{result.touristGroup.adultCount}}</span>大<span class="F-float F-money">{{result.touristGroup.childCount}}</span>小
 				</td>	
-				<td>{{result.touristGroup.transNeedPayAllMoney}}</td>
-				<td>{{result.touristGroup.transPayedMoney}}</td>
+				<td><span class="F-float F-money">{{result.touristGroup.transNeedPayAllMoney}}</span></td>
+				<td><span class="F-float F-money">{{result.touristGroup.transPayedMoney}}</span></td>
 				{{else}}
 				<td></td>
 				<td></td>
-				<td>0大0小</td>	
+				<td><span class="F-float F-count">0</span>大<span class="F-float F-money">0</span>小</td>	
 				<td></td>
 				<td></td>
 				{{/if}}

@@ -8,7 +8,6 @@ define(function(require, exports){
 		shopCheckingTemplate = require("./view/shopChecking"),
 		billImagesTemplate = require("./view/shopLookImg"),
 		shopClearingTemplate = require("./view/shopClearing"),
-		shopRecords = require("./view/shopRecords"),
 		viewReceivedTemplate = require("./view/viewReceived"),
 		viewAccountTemplate = require('./view/viewAccount'),
 		payingTableTemplate = require('./view/shopPayingTable'),

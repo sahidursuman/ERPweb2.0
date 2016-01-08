@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":231,"md5":"dbf5982e8afab6944a3d57f537fa2313"}*/
+/*TMODJS:{"debug":true,"version":235,"md5":"318dd25d4567eee5114616232ead1626"}*/
 define(function(require) {
     return require("../../../template")("financial/replaceProfit/view/list", function($data, $filename) {
         try {
@@ -16,10 +16,11 @@ define(function(require) {
                 $line = 22) : ($out += " ", $line = 23, $out += $escape(rs.financialScenic), $out += " ", 
                 $line = 24), $out += " </td> <td> ", $line = 27, "" == rs.financialBus ? ($out += " - ", 
                 $line = 29) : ($out += " ", $line = 30, $out += $escape(rs.financialBus), $out += " ", 
-                $line = 31), $out += ' </td> <td><a class="T-option T-needPayDetail">', $line = 33, 
-                $out += $escape(rs.sumNeedGetMoney), $out += '</a></td> <td><a class="T-option T-costDetail">', 
-                $line = 34, $out += $escape(rs.sumCostMoney), $out += "</a></td> <td>", $line = 35, 
-                $out += $escape(rs.financialGrossProfit), $out += "</td> </tr> ", $line = 37;
+                $line = 31), $out += ' </td> <td><a class="T-option T-needPayDetail F-float F-money">', 
+                $line = 33, $out += $escape(rs.sumNeedGetMoney), $out += '</a></td> <td><a class="T-option T-costDetail F-float F-money">', 
+                $line = 34, $out += $escape(rs.sumCostMoney), $out += '</a></td> <td><span class="F-float F-money">', 
+                $line = 35, $out += $escape(rs.financialGrossProfit), $out += "</span></td> </tr> ", 
+                $line = 37;
             }), new String($out);
         } catch (e) {
             throw {
@@ -27,7 +28,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each bookingOrderList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>\r\n	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>\r\n	<td>\r\n		{{if rs.financialHotel == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialHotel}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialTicket == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialTicket}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialScenic == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialScenic}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialBus == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialBus}}\r\n		{{/if}}\r\n	</td>\r\n	<td><a class="T-option T-needPayDetail">{{rs.sumNeedGetMoney}}</a></td>\r\n	<td><a class="T-option T-costDetail">{{rs.sumCostMoney}}</a></td>\r\n	<td>{{rs.financialGrossProfit}}</td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each bookingOrderList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>\r\n	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>\r\n	<td>\r\n		{{if rs.financialHotel == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialHotel}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialTicket == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialTicket}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialScenic == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialScenic}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialBus == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialBus}}\r\n		{{/if}}\r\n	</td>\r\n	<td><a class="T-option T-needPayDetail F-float F-money">{{rs.sumNeedGetMoney}}</a></td>\r\n	<td><a class="T-option T-costDetail F-float F-money">{{rs.sumCostMoney}}</a></td>\r\n	<td><span class="F-float F-money">{{rs.financialGrossProfit}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

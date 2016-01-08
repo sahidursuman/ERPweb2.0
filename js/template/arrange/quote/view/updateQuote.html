@@ -23,7 +23,7 @@
                     
                         <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductDays" name="days" data-entity-days="{{quote.lineProduct.days}}" value="">{{quote.lineProduct.days}}天</label>
+                            <label class="control-label T-lineProductDays F-float F-count" name="days" data-entity-days="{{quote.lineProduct.days}}" value="">{{quote.lineProduct.days}}天</label>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">类别:</label>
                         <div class="col-sm-1">
@@ -66,15 +66,15 @@
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.adultCount}}">
+							<input type="text" name="adultCount" class="T-changeQuote F-float F-count" maxlength="5" style="width:50px;" value="{{quote.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.childCount}}">
+							<input type="text" name="childCount" class="T-changeQuote F-float F-count" maxlength="5" style="width:50px;" value="{{quote.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						
 						<div class="col-sm-1 addQuoteInformation">
 						<label class="col-sm-8 control-label no-padding-right">单房差数：</label>
-							<input type="text" name="singleRoomCount" class="col-sm-4" maxlength="10" value="{{quote.singleRoomCount}}">
+							<input type="text" name="singleRoomCount" class="col-sm-4 F-float F-count" maxlength="10" value="{{quote.singleRoomCount}}">
 						</div>
 					
 						
@@ -132,38 +132,38 @@
 			        </div>
 		        	<div class="col-xs-2 viewQuoteFdiv">
 		        	<p style="height: 30px;margin-top: 10px">
-		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost" type="text" style="width:80px;margin-left:9px;" value="{{quote.adultCostPrice}}"/>
+		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost F-float F-money" type="text" style="width:80px;margin-left:9px;" value="{{quote.adultCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly" class="T-adultQuote" type="text" style="width:80px;margin-left:18px;" value="{{quote.adultQuotePrice}}" />
+		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly " class="T-adultQuote F-float F-money" type="text" style="width:80px;margin-left:18px;" value="{{quote.adultQuotePrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit" style="width:80px;margin-left:9px;">{{quote.adultQuotePrice - quote.adultCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.adultQuotePrice - quote.adultCostPrice | toFixed}}</span>
 		        	</p>
 		        	<p></p>
 		        	<p></p>
 		        	</div> 
 
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.childCostPrice}}"/>
+		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.childCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.childQuotePrice}}"/>
+		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.childQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit">{{quote.childQuotePrice - quote.childCostPrice | toFixed}}</span>
-		        	</p>
-		        	</div>
-		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quote.singleRoomCostPrice}}" />
-		        	</p>
-		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.singleRoomQuotePrice}}"/>
-		        	</p>
-		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit" style="width:80px;margin-left:9px;">{{quote.singleRoomQuotePrice - quote.singleRoomCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit F-float F-money">{{quote.childQuotePrice - quote.childCostPrice | toFixed}}</span>
 		        	</p>
 		        	</div>
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.sumCostFee}}" />
+		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost F-float F-money" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quote.singleRoomCostPrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote" style="width:80px;margin-left:22px;"value="{{quote.sumQuoteFee}}"/>
+		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.singleRoomQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit" style="width:80px;margin-left:9px;">{{quote.sumQuoteFee - quote.sumCostFee | toFixed}}</span>
+		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.singleRoomQuotePrice - quote.singleRoomCostPrice | toFixed}}</span>
+		        	</p>
+		        	</div>
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.sumCostFee}}" />
+		        	</p>
+		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote F-float F-money" style="width:80px;margin-left:22px;"value="{{quote.sumQuoteFee}}"/>
+		        	</p>
+		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.sumQuoteFee - quote.sumCostFee | toFixed}}</span>
 		        	</p>
 		        	</div>
         	</div>
@@ -205,7 +205,7 @@
 														{{if guideQuote != null}}
 														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
-																<input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
+																<input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
 																<input type="hidden" name="arrangeId" value="{{guideQuote.id}}">
 															</td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
@@ -258,8 +258,8 @@
 																<input type="hidden" name="arrangeId" value="{{rs.id}}">
 															</td>
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}" /><input type="hidden" name="insuranceItemId" value="{{rs.insuranceItem.id}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value="{{rs.quotePrice}}"></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value="{{rs.quotePrice}}"></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id="{{rs.id}}" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
@@ -272,8 +272,8 @@
 														<tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /></td>
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="" /><input type="hidden" name="insuranceItemId" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value=""></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id="" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
@@ -321,7 +321,7 @@
 													<tbody class="T-busCompanyForm">{{if busCompanyQuote.length > 0}}
 													{{each busCompanyQuote as rs}}
 														<tr data-entity-id="{{rs.id}}">
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{rs.needSeatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" value="{{rs.needSeatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{rs.brand}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td>
 																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{rs.busCompany.companyName}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
@@ -331,8 +331,8 @@
 															</td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{rs.busCompany.managerName}}" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{rs.busCompany.mobileNumber}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{rs.price}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="{{rs.quotePrice}}"></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="{{rs.price}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="{{rs.quotePrice}}"></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id="{{rs.id}}" data-entity-type="3" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
@@ -341,13 +341,13 @@
 	                                                        </td>
 														</tr>{{/each}}{{else}}
 														<tr>
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="" /></td>
 															<td><input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value=""></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 	                                                        <td>
 	                                                            <a data-entity-id=""  data-entity-type="3"data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
@@ -465,10 +465,10 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="{{restaurantList.price}}" />
+                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote F-float F-money" value="{{restaurantList.price}}" />
                                                                                                             <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
                                                                                                         </td>
-                                                                                                        <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
+                                                                                                        <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                         </td>
@@ -540,10 +540,10 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{hotelList.quotePrice}}" style="width:70px;" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{hotelList.quotePrice}}" style="width:70px;" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐、{{/if}}{{if hotelList.hotelRoom.containLunch==1}}含午餐、{{/if}}{{if hotelList.hotelRoom.containDinner==1}}含晚餐、{{/if}}" />
@@ -599,10 +599,10 @@
                                                                                                             <input type="hidden" name="chargingId" value="{{scenicList.scenicItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{scenicList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{scenicList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{scenicList.quotePrice}}" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{scenicList.quotePrice}}" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
@@ -657,10 +657,10 @@
                                                                                                             <input type="hidden" name="shopPolicyId" value="{{shopList.shopPolicy.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{shopList.shop.mobileNumber}}" />
@@ -716,10 +716,10 @@
                                                                                                             <input type="hidden" name="selfPayItemId" value="{{selfPayList.selfPayItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{selfPayList.quotePrice}}" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{selfPayList.quotePrice}}" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
@@ -782,10 +782,10 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{ticketList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{ticketList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{ticketList.quotePrice}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{ticketList.quotePrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="managerName" readonly="readonly" value="{{ticketList.ticket.managerName}}" />
@@ -838,10 +838,10 @@
 																											<input type="hidden" name="arrangeId" value="{{otherList.id}}">
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{otherList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{otherList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{otherList.quotePrice}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{otherList.quotePrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="managerName" value="{{otherList.managerName}}" />

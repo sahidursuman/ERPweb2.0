@@ -3,7 +3,6 @@ define(function(require,exports) {
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferOutChecking"),
 		settlementTemplate = require("./view/InnerTransferClearing"),
-		recordTemplate = require("./view/innerTransferOutRecord"),
 		checkTableTemplate = require('./view/innerTransferOutCheckTable'),
 		checkDetailTemplate = require('./view/innerTransferOutDetail'),
 		clearTableTemplate = require('./view/innerTransferOutClearTable'),

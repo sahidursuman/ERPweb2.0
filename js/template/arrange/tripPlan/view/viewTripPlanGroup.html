@@ -15,7 +15,7 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">人数：</label>
-			<span class="col-xs-8">{{tripPlan.touristAdultCount}}大人 {{tripPlan.touristChildCount}}小孩</span>
+			<span class="col-xs-8"><span class="F-float F-count">{{tripPlan.touristAdultCount}}</span>大人 <span class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">团号：</label>
@@ -144,8 +144,8 @@
 												<td>{{guideList.taskType}}</td>
 												<td>{{if guideList.guide}}{{guideList.guide.realname}}{{/if}}</td>
 												<td>{{guideList.mobileNumber}}</td>
-												<td>{{guideList.price}}</td>
-												<td>{{guideList.manageFee}}</td>
+												<td class="F-float F-money">{{guideList.price}}</td>
+												<td class="F-float F-money">{{guideList.manageFee}}</td>
 												<td>{{guideList.remark}}</td>
 											</tr>
 											{{/each}}
@@ -182,10 +182,10 @@
 											<tr>
 												<td>{{if insuranceList.insurance}}{{insuranceList.insurance.name}}{{/if}}</td>
 												<td>{{if insuranceList.insuranceItem}}{{insuranceList.insuranceItem.name}}{{/if}}</td>
-												<td>{{insuranceList.price}}</td>
-												<td>{{insuranceList.memberCount}}</td>
-												<td>{{insuranceList.needPayMoney}}</td>
-												<td>{{insuranceList.prePayMoney}}</td>
+												<td class="F-float F-money">{{insuranceList.price}}</td>
+												<td class="F-float F-count">{{insuranceList.memberCount}}</td>
+												<td class="F-float F-money">{{insuranceList.needPayMoney}}</td>
+												<td class="F-float F-money">{{insuranceList.prePayMoney}}</td>
 												<td>{{insuranceList.remark}}</td>
 											</tr>
 											{{/each}}
@@ -233,7 +233,7 @@
 												<td>{{busCompanyList.startTime}}</td>
 												<td>{{busCompanyList.endTime}}</td>
 												<td>{{busCompanyList.taskType}}</td>
-												<td>{{busCompanyList.needSeatCount}}</td>
+												<td class="F-float F-count">{{busCompanyList.needSeatCount}}</td>
 												<td>{{busCompanyList.brand}}</td>
 												<td>{{if busCompanyList.bus}}{{busCompanyList.bus.licenseNumber}}{{/if}}</td>
 												<td>{{if busCompanyList.busCompany}}{{busCompanyList.busCompany.companyName}}{{/if}}</td>
@@ -241,11 +241,11 @@
 												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.name}}{{/if}}</td>
 												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.mobileNumber}}{{/if}}</td>
 												<td>{{busCompanyList.contractNumber}}</td>
-												<td>{{busCompanyList.price}}</td>
-												<td>{{busCompanyList.reduceMoney}}</td>
-												<td>{{busCompanyList.needPayMoney}}</td>
-												<td>{{busCompanyList.prePayMoney}}</td>
-												<td>{{busCompanyList.guidePayMoney}}</td>
+												<td class="F-float F-money">{{busCompanyList.price}}</td>
+												<td class="F-float F-money">{{busCompanyList.reduceMoney}}</td>
+												<td class="F-float F-money">{{busCompanyList.needPayMoney}}</td>
+												<td class="F-float F-money">{{busCompanyList.prePayMoney}}</td>
+												<td class="F-float F-money">{{busCompanyList.guidePayMoney}}</td>
 												<td>{{busCompanyList.remark}}</td>
 											</tr>
 											{{/each}}
@@ -691,19 +691,19 @@
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">应收：</label>
-			<span class="col-xs-8">3000</span>
+			<span class="col-xs-8 F-float F-money">3000</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">预收款：</label>
-			<span class="col-xs-8">3000</span>
+			<span class="col-xs-8 F-float F-money">3000</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">已收：</label>
-			<span class="col-xs-8">3000</span>
+			<span class="col-xs-8 F-float F-money">3000</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">计划现收：</label>
-			<span class="col-xs-8">3000</span>
+			<span class="col-xs-8 F-float F-money">3000</span>
 		</div>
 	</div>
 	<div class="row border">

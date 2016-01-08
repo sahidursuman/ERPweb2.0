@@ -6,7 +6,10 @@
                     <label class="col-sm-3" >团号: {{tripPlanMainInfo.tripNumber}}</label>
                     <label class="col-sm-2" >导游: {{tripPlanMainInfo.guideName}}</label>
                     <label class="col-sm-2" >全陪: {{tripPlanMainInfo.accompanyGuideName}}</label>
-                    <label class="col-sm-2" >团队人数:{{tripPlanMainInfo.adultCount}}大{{tripPlanMainInfo.childCount}}小</label>
+                    <label class="col-sm-2" >团队人数:
+                        <span class="F-float F-count">{{tripPlanMainInfo.adultCount}}</span>大
+                        <span class="F-float F-count">{{tripPlanMainInfo.childCount}}</span>小
+                    </label>
                 </div>
             </div>
         </form>
@@ -17,19 +20,19 @@
                     <label class="col-sm-2" >天数：{{tripPlanMainInfo.days}}</label>
                     <label class="col-sm-2" >出团日期：{{tripPlanMainInfo.startTime | dateFormat:'yyyy-MM-dd'}}</label>
                     <label class="col-sm-2" >完团日期：{{tripPlanMainInfo.endTime | dateFormat:'yyyy-MM-dd'}}</label>
-                    <label class="col-sm-2" >导游收入：{{tripPlanMainInfo.guideIncome}}</label>
+                    <label class="col-sm-2" >导游收入：<span class="F-float F-money">{{tripPlanMainInfo.guideIncome}}</span></label>
                 </div>
             </div>
         </form>
         <div class="col-sm-12 widget-container-col" >
-            <div class="pull-left" style="margin-left: -15px">预支款：{{tripPlanMainInfo.guideAllPreMoney}}</div>
-            <div class="pull-left" style="margin-left: 50px;">现收：{{tripPlanMainInfo.guideAllNowIncomeMoney}}</div>
-            <div class="pull-left" style="margin-left: 50px;">现付：{{tripPlanMainInfo.guideAllNowPayMoney}}</div>
-            <div class="pull-left" style="margin-left: 20px;">导服费：{{tripPlanMainInfo.guideFee}}</div>
-            <div class="pull-left" style="margin-left: 20px;">管理费：{{tripPlanMainInfo.guideManageFee}}</div>
-            <div class="pull-left" style="margin-left: 50px;">导游购物返佣：{{tripPlanMainInfo.gshoppingRebateMoney}}</div>
-            <div class="pull-left" style="margin-left: 50px;">导游自费返佣：{{tripPlanMainInfo.selfPayRebateMoney}}</div>
-            <div class="pull-left" style="margin-left: 50px;">账面退补：{{tripPlanMainInfo.zhangmiantuibu}}</div>
+            <div class="pull-left" style="margin-left: -15px">预支款：<span class="F-float F-money"><span class="F-float F-money">{{tripPlanMainInfo.guideAllPreMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">现收：<span class="F-float F-money">{{tripPlanMainInfo.guideAllNowIncomeMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">现付：<span class="F-float F-money">{{tripPlanMainInfo.guideAllNowPayMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 20px;">导服费：<span class="F-float F-money">{{tripPlanMainInfo.guideFee}}</span></div>
+            <div class="pull-left" style="margin-left: 20px;">管理费：<span class="F-float F-money">{{tripPlanMainInfo.guideManageFee}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">导游购物返佣：<span class="F-float F-money">{{tripPlanMainInfo.gshoppingRebateMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">导游自费返佣：<span class="F-float F-money">{{tripPlanMainInfo.selfPayRebateMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">账面退补：<span class="F-float F-money">{{tripPlanMainInfo.zhangmiantuibu}}</span></div>
             <div class="clearfix"></div>
         </div>
     </div>
@@ -68,9 +71,9 @@
 	                            </td>
 	                            <td>{{member.idCardNumber}}</td>
                                 {{if memberIndex == 0}}
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.needPayAllMoney}}</td>
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.payedMoney}}</td>
-                                <td rowspan="{{group.touristGroupMemberList.length}}">{{group.currentNeedPayMoney}}</td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}"><span class="F-float F-money">{{group.needPayAllMoney}}</span></td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}"><span class="F-float F-money">{{group.payedMoney}}</span></td>
+                                <td rowspan="{{group.touristGroupMemberList.length}}"><span class="F-float F-money">{{group.currentNeedPayMoney}}</span></td>
                                 {{/if}}
                                 <td>{{if member.isContactUser == 1}}是{{/if}}</td>
 	                        </tr>
@@ -112,12 +115,12 @@
                             <td>{{item.time}}</td>
                             <td>{{item.selfPayName}}</td>
                             <td>{{item.selfPayItemName}}</td>
-                            <td>{{item.marketPrice}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needGetMoney}}</td>
-                            <td>{{item.agencyGetMoney}}</td>
-                            <td>{{item.guideGetMoney}}</td>
+                            <td><span class="F-float F-money">{{item.marketPrice}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyGetMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guideGetMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -183,12 +186,12 @@
                         {{each currentIncomeData.incomePaymentData as item}}
                         <tr>
                             <td>{{item.time}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.count}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needGetMoney}}</td>
-                            <td>{{item.agencyGetMoney}}</td>
-                            <td>{{item.guideGetMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.count}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyGetMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guideGetMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -230,10 +233,10 @@
                             <td>{{item.driverName}}</td>
                             <td>{{item.busType}}</td>
                             <td>{{item.licenseNumber}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -273,12 +276,12 @@
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.stardardType}}</td>
-                            <td>{{item.price}}/人</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span>/人</td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -317,12 +320,12 @@
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.roomType}}</td>
-                            <td>{{item.price}}/间</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span>/间</td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -363,12 +366,12 @@
                             <td>{{item.time}}</td>
                             <td>{{item.scenicName}}</td>
                             <td>{{item.scenicItemName}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -407,12 +410,12 @@
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.ticketType | getTicketText}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -449,12 +452,12 @@
                         {{each currentPayData.selfPayData as item}}
                         <tr>
                             <td>{{item.time}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -490,12 +493,12 @@
                         {{each currentPayData.otherData as item}}
                         <tr>
                             <td>{{item.time}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.reduceMoney}}</td>
-                            <td>{{item.needPayMoney}}</td>
-                            <td>{{item.agencyPayedMoney}}</td>
-                            <td>{{item.guidePayedMoney}}</td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -538,12 +541,12 @@
                         <tr>
                             <td>{{item.time}}</td>
                             <td>{{item.shopName}}</td>
-                            <td>{{item.sumConsumeMoney}}</td>
-                            <td>{{item.sumRebateMoney}}</td>
-                            <td>{{item.sumCustomerRebateMoney}}</td>
-                            <td>{{item.sumParkingRebateMoney}}</td>
-                            <td>{{item.sumBuyRebateMoney}}</td>
-                            <td>{{item.sumGuideRebateMoney}}</td>
+                            <td><span class="F-float F-money">{{item.sumConsumeMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.sumRebateMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.sumCustomerRebateMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.sumParkingRebateMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.sumBuyRebateMoney}}</span></td>
+                            <td><span class="F-float F-money">{{item.sumGuideRebateMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImages }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -584,11 +587,11 @@
                             <td>{{item.time}}</td>
                             <td>{{item.selfPayName}}</td>
                             <td>{{item.selfPayItemName}}</td>
-                            <td>{{item.marketPrice}}</td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.memberCount}}</td>
-                            <td>{{item.realCount}}</td>
-                            <td>{{item.guideRebateMoney}}</td>
+                            <td><span class="F-float F-money">{{item.marketPrice}}</span></td>
+                            <td><span class="F-float F-money">{{item.price}}</span></td>
+                            <td><span class="F-float F-count">{{item.memberCount}}</span></td>
+                            <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                            <td><span class="F-float F-money">{{item.guideRebateMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
