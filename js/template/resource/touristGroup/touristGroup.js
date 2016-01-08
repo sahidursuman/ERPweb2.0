@@ -1993,17 +1993,17 @@ define(function(require, exports) {
 
                 if ((describeInfo != "") || (count != "") || (price != "")) {
                     if (count == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入自费数量");
+                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
                         isReturn = true;
                         return false;
                     }
                     if (describeInfo == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用说明");
+                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
                         isReturn = true;
                         return false;
                     }
                     if (price == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入自费单价");
+                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
                         isReturn = true;
                         return false;
                     };

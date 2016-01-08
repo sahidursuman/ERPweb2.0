@@ -212,7 +212,7 @@
                 <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{#busCompany.taskType || getTaskDesc}}</td>
                 <td>{{busCompany.needSeatCount}}</td>
-                <td>{{busCompany.bus.brand}}</td>
+                <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}</td>

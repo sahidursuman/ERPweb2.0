@@ -1575,6 +1575,10 @@ Tools.getDateDiff = function(startDate,endDate)
 Tools.addDay = function(date, days) {
 	if (!isNaN(days)) {
 		if (!(date instanceof Date)) {
+			if (typeof date === 'string') {
+				date = date.split('-').join('/');
+			}
+			
 			date = new Date(date);
 		}
 		var timer = date.getTime()+ days*24*60*60*1000;
@@ -1876,6 +1880,17 @@ KingServices.viewOptionalScenic = function($this){
 	});
 }
 
+//发团计划--散客
+KingServices.updateSingleTripPlan = function(id,mergeTouristGroupIdJson){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.updateSingleTripPlan(id,mergeTouristGroupIdJson);
+	});
+}
+KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.addTripPlan(false,args,mergeTouristGroupIdJson);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
