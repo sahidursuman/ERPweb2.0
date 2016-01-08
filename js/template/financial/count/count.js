@@ -1741,7 +1741,7 @@ define(function(require, exports){
 		//获取车队数据
 		Count.getBusData($obj,$parentObj);
 		//获取车牌
-		//Count.getLicenseNumber($obj,$parentObj);
+		Count.getLicenseNumber($obj,$parentObj);
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
