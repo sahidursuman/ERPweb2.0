@@ -161,25 +161,25 @@
 										
 
 										<td><div class="col-sm-12 no-padding">
-												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="0">
+												<input name="normalMarketPrice" value="{{itemList.normalMarketPrice}}" class="col-sm-12 T-marketPrice T-calc F-float F-money" type="text" maxlength="10" data-index="0">
 											</div>
 											{{each itemList.SelfPayRebateList as rebateList index}}
 												<div class="col-sm-12 no-padding" style="padding-top:5px!important;">
-													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10" data-index="{{index+1}}">
+													<input name="marketPrice" value="{{rebateList.marketPrice}}" class="col-sm-12 T-marketPrice T-calc F-float F-money" type="text" maxlength="10" data-index="{{index+1}}">
 												</div>
 											{{/each}}
 										</td>
 
 										<td>
 											<div class="col-sm-12">
-												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc" maxlength="10" data-index="0">
+												<input type="text" name="customerRebateMoney" value="{{itemList.customerRebateMoney}}" class="col-sm-12 T-customerRebateMoney T-calc F-float F-money" maxlength="10" data-index="0">
 											</div>
 											
 										</td>
 
 
 										<td><div class="col-sm-12 no-padding" data-index="0">
-												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10" data-index="0">
+												<input name="normalInnerPrice" value="{{itemList.normalInnerPrice}}" class="col-sm-12 T-contractPrice T-calc  F-float F-money" type="text" maxlength="10" data-index="0">
 											</div>
 
 											{{each itemList.SelfPayRebateList as rebateList index}}
