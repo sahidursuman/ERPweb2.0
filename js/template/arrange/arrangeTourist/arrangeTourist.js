@@ -370,7 +370,6 @@ define(function(require, exports) {
                 mergeTouristGroupIdJson.push(ids);
             };
         };
-        mergeTouristGroupIdJson = JSON.stringify(mergeTouristGroupIdJson);
 
         //选择计划查询
         $chooseTipPlan.find('.T-lineProduct-search').on('click', function(event) {
@@ -393,7 +392,7 @@ define(function(require, exports) {
             if (!!tripPlanId && tripPlanId != null) {
                 //关闭layer层
                 layer.close(arrangeTourist.chosenMergenTripPlanlayer);
-                KingServices.updateSingleTripPlan(tripPlanId);
+                KingServices.updateSingleTripPlan(tripPlanId,mergeTouristGroupIdJson);
                 //清空游客小组Id
                 arrangeTourist.touristGroupId = [];
                 //数据刷新
