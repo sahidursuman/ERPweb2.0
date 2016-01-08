@@ -1012,6 +1012,10 @@ define(function(require, exports) {
 			// 其他条时，默认隐藏费用项
 			$tr.find('.price').addClass('hidden');
 		}
+
+		if ($tab.find('.T-status').text() != 0) {
+			$tr.find('[name="isAccountGuide"]').prop('disabled', true)
+		}
 	}
 
 	/**
