@@ -23,7 +23,6 @@
 					<th>车队</th>
 					<th>车座数</th>
 					<th>车量品牌</th>
-					<th>数量</th>
 					<th>单价</th>
 					<th>金额</th>
 					<th>操作人</th>
@@ -41,7 +40,6 @@
 					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
 					<td class="F-float F-count">{{if !!busOrderList.busCompanyArrange}}{{busOrderList.busCompanyArrange.needSeatCount}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null}}{{busOrderList.busCompanyArrange.brand}}{{/if}}</td>
-					<td class="F-float F-count">{{busOrderList.seatCount}}</td>
 					<td class="F-float F-money">{{busOrderList.price}}</td>
 					<td class="F-float F-money">{{busOrderList.seatCount*busOrderList.price}}</td>
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
