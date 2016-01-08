@@ -1491,8 +1491,11 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     if (isInputRange && $obj.length === 2) {
         $obj.eq(0).on('changeDate', function(event) {
              event.preventDefault();
-             var start = $(this).val(),
-                 $end = $obj.eq(1).datepicker('setStartDate', start);
+             var start = $(this).val();
+         	 if(options.moreDay && start != ""){
+         	 	start = Tools.addDay(start,options.moreDay);
+         	 }
+             var $end = $obj.eq(1).datepicker('setStartDate', start);
 
              if ($end.val() < start) {
                  $end.val(start);
