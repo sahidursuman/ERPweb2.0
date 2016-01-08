@@ -1725,6 +1725,9 @@ define(function(require, exports){
 	//新增车费--这个版本对于车队没有新增
 	Count.addBus = function($obj,$parentObj){
 		var html = '<tr>'+
+		'<td></td>'+
+		'<td></td>'+
+		'<td></td>'+
 		'<td><input type="text" name="companyName" style="width:200px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
@@ -1741,7 +1744,9 @@ define(function(require, exports){
 		//获取车队数据
 		Count.getBusData($obj,$parentObj);
 		//获取车牌
-		//Count.getLicenseNumber($obj,$parentObj);
+		Count.getLicenseNumber($obj,$parentObj);
+		//获取座位
+		Count.getSeatCount($obj,$parentObj);
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
@@ -2514,14 +2519,18 @@ define(function(require, exports){
 				$(this).closest('tr').find('input[name=companyId]').val(ui.item.id);
 			}
 		}).off('click').on('click',function(){
-			var obj = this;
+			var obj = this,
+			parents = $(obj).closest('tr');
+			var searchJson = {
+					seatCount:parents.find('input[name=seatCount]').val(),
+					brand:"",
+					licenseNumber:parents.find('input[name=licenseNumber]').val()
+				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
 				showLoading:false,
 				data:{
-					seatCount:'',
-					brand:'',
-					licenseNumber:''
+					searchJson:JSON.stringify(searchJson)
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -2546,28 +2555,114 @@ define(function(require, exports){
 	//获取车牌
 	Count.getLicenseNumber = function($obj,$parentObj){
 		var licenseNumber = $obj.find('input[name=licenseNumber]');
-		var id = $obj.find('input[name=companyId]').val();
 		licenseNumber.autocomplete({
 			minLength:0,
 			change:function(event,ui){
-
+				if(ui.item == null){
+					var $this = $(this),parents = $(this).closest('tr');
+					$this.val("");
+					parents.find("input[name=seatCount]").val("");
+					parents.find("input[name=companyId]").val("");
+					parents.find("input[name=companyName]").val("");
+				}
 			},
 			select:function(event,ui){
-
+				var $this = $(this),parents = $(this).closest('tr');
+					$this.val("");
+					parents.find("input[name=seatCount]").val("");
+					parents.find("input[name=companyId]").val("");
+					parents.find("input[name=companyName]").val("");
 			}
 		}).off('click').on('click',function(){
+			var obj = this,
+			parents = $(obj).closest('tr');
+			var searchJson = {
+					seatCount:parents.find('input[name=seatCount]').val(),
+					brand:"",
+					busCompanyId:parents.find('input[name=companyId]').val()
+				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
 				data:{
-					busCompanyId:id,
-					seatCount:'',
-					brand:''
+					searchJson:JSON.stringify(searchJson)
 				},
 				showLoading:false,
 				type:'POST',
 				success:function(data){
 					if(showDialog(data)){
+						var licenseList = JSON.parse(data.busList);
+						if(licenseList && licenseList.length > 0){
+							for(var i=0; i < licenseList.length; i++){
+								licenseList[i].value = licenseList[i].licenseNumber;
+							}
+							$(obj).autocomplete('option','source', licenseList);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			});
+		});
+	};
+	//座位数的下拉
+	Count.getSeatCount = function($obj,$parentObj){
+		var seatCount = $obj.find('input[name=seatCount]');
+		seatCount.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					var $this = $(this),parents = $(this).closest('tr');
+					$this.val("");
+					parents.find("input[name=licenseNumber]").val("");
+					parents.find("input[name=companyName]").val("");
+					parents.find("input[name=companyId]").val("");
+				};
+			},
+			select:function(event,ui){
+				var $this = $(this),parents = $(this).closest('tr');
+				parents.find("input[name=companyName]").val("");
+				parents.find("input[name=LicenseNumber]").val("");
+				parents.find("input[name=companyId]").val("");
+			}
+		}).off('click').on('click',function(){
+			var obj = this,
+			parents = $(obj).closest('tr');
 
+			var searchJson = {
+					licenseNumber:parents.find('input[name=licenseNumber]').val(),
+					brand:"",
+					busCompanyId:parents.find('input[name=companyId]').val()
+				};
+			$.ajax({
+				url:KingServices.build_url('bookingOrder','getSeatCountList'),
+				data:{
+					searchJson:JSON.stringify(searchJson)
+				},
+				showLoading:false,
+				type:'POST',
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
 					}
 				}
 			});
@@ -3116,12 +3211,13 @@ define(function(require, exports){
 	//设置下拉框的日期
 	Count.setChooseDays = function($obj,$parentObj){
 		var days = $parentObj.find('.T-ProductDays').text();
+		var startTime = $parentObj.find('.tripPlanStartTime').val();
         if(parseInt(days) < 1)return;
         if($obj){
             var tr = $obj.find("tr");
             var selectText = '<select class="col-sm-12" name="whichDay">';
             for(var i = 0; i < parseInt(days); i++){
-                selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';
+                selectText += '<option value="'+(i+1)+'">'+Tools.addDay(startTime, i)+'</option>';
             }
             selectText += '</select>';
             tr.eq(tr.length-1).find(".countWhichDaysContainer").html(selectText);
@@ -3131,9 +3227,9 @@ define(function(require, exports){
                 var selectText = '<select class="col-sm-12" name="whichDay">';
                 for(var i = 0; i < parseInt(days); i++){
                     if(val == (i+1)){
-                        selectText += '<option value="'+(i+1)+'" selected="selected">第'+(i+1)+'天</option>';
+                        selectText += '<option value="'+(i+1)+'" selected="selected">'+Tools.addDay(startTime, i)+'</option>';
                     }else{
-                        selectText += '<option value="'+(i+1)+'">第'+(i+1)+'天</option>';
+                        selectText += '<option value="'+(i+1)+'">'+Tools.addDay(startTime, i)+'</option>';
                     }
                 }
                 selectText += '</select>';
