@@ -247,15 +247,15 @@
 							<div class="col-xs-3 checkbox" style="margin-top: 0;">
 								<label class="control-label">含餐：</label>
 								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{days.dayInfo.restPosition[0] | checked}}>
+									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[0] | checked}}{{/if}}>
 									<span class="lbl">早餐</span>
 								</label>
 								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{days.dayInfo.restPosition[2] | checked}}>
+									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[2] | checked}}{{/if}}>
 									<span class="lbl">午餐</span>
 								</label>
 								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{days.dayInfo.restPosition[4] | checked}}>
+									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[4] | checked}}{{/if}}>
 									<span class="lbl">晚餐</span>
 								</label>
 							</div>

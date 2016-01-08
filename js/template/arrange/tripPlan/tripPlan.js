@@ -292,9 +292,11 @@ define(function(require, exports) {
 	        	args = {}
 	        }
 	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
-	            tripPlan.initSigleEvent($("#tab-" + tabKey + "-content")) 
+	        	var $tab = $("#tab-" + tabKey + "-content");
+	            tripPlan.initSigleEvent($tab) 
 	            if(!!args){//id, name, GroupIds
-	            	tripPlan.initNormalLineProduct($("#tab-" + tabKey + "-content"), id);
+	            	tripPlan.initNormalLineProduct($tab, args.id);
+	            	tripPlan.getTouristGroup(args, $tab);
 	            }
 	        }
 		}	
@@ -562,15 +564,17 @@ define(function(require, exports) {
         tripPlan.setExecuteTimer($tab);
         $tab.find('[name="startTime"]').on('change', function(){
             F.arrangeDate($tab);
-        }).trigger('change');        
-        $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
-            // 发送短信效果
-            var $that = $(this);
-            $that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
-        });
+        }).trigger('change'); 
 
 		var validate = rule.checkPlan($tab); 
 		tripPlan.init_edit_event($tab, validate, type);
+        $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
+            // 发送短信效果
+            var $that = $(this);
+            rule.update(validate);
+            $that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
+        });
+
 
         //行程安排
         $tab.find('.T-add-days').on('click', function(event){
@@ -1391,23 +1395,24 @@ define(function(require, exports) {
 	};
 
 	//新增计划带出游客小组
-	/*tripPlan.getTouristGroup = function(args, $tab){
+	tripPlan.getTouristGroup = function(args, $tab){
 		$.ajax({
 			url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
 			type:"POST",
 			data:{
-				lineProductId : args.lineProductId,
+				lineProductId : args.id,
 				startTime : args.startTime,
 				type : 1,
-				excludeIdJson : JSON.stringify([]);
-			},
-			success:function(data){
-				if(showDialog(data)){
-
-				}
+				excludeIdJson : JSON.stringify([])
+			}
+		}).done(function(data){
+			if(showDialog(data)){
+				data.lineProduct = JSON.parse(data.lineProduct);
+				data.touristGroupList = JSON.parse(data.touristGroupList);
+				console.log(data);
 			}
 		});
-	};*/
+	};
 	//删除小组成员
 	tripPlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
 		showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
