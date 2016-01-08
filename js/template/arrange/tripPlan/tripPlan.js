@@ -391,19 +391,20 @@ define(function(require, exports) {
     		
     		if(!!id){
     			showConfirmDialog($('#confirm-dialog-message'), '是否删除该条费用项？', function() {
-    				$.ajax({
-						url : KingServices.build_url("tripPlan","saveTripPlanByT"),
-						type : "POST",
-						data : {touristGroupFeeDelJson : "{id : "+id+"}"}
-					})
-					.done(function(data){
-						if(showDialog(data)){
-							showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
-								$tr.remove();
-								$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
-							});
-						}
-					});
+    				$tr.remove();
+    				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+    				var $fee = $tab.find('.T-fee-list');
+    				deleteIds = $fee.data('deleteIds');
+    				console.log(deleteIds)
+    				if(deleteIds){
+    					deleteIds = JSON.parse(deleteIds);
+    					console.log(deleteIds, 1)
+    					deleteIds.push({id : id});
+    				}else{
+    					deleteIds = [{id : id}]
+    				}
+    				console.log(deleteIds, 2);
+    				$fee.data('deleteIds', JSON.stringify(deleteIds));
     			});
     		}else{
     			$tr.remove();
@@ -469,7 +470,7 @@ define(function(require, exports) {
             },
             select: function(event, ui) {
             	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id)
-            	.closest('.T-tab').find('[name="contactRealname"]').val("")
+            	.closest('.T-tab').find('[name="contactRealname"]').val("").trigger('change')
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
         }).off('click').on('click', function() {
@@ -752,6 +753,8 @@ define(function(require, exports) {
 		arge.touristGroupMemberJson = JSON.stringify(arge.touristGroupMemberJson);
 		arge.tripPlanRequireJson = JSON.stringify(arge.tripPlanRequireJson);
 		arge.touristGroupFeeJson = JSON.stringify(arge.touristGroupFeeJson);
+		arge.touristGroupFeeDelJson = $tab.find('.T-fee-list').data('deleteIds');
+
 		$.ajax({
 			url : KingServices.build_url("tripPlan","saveTripPlanByT"),
 			type : "POST",
