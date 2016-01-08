@@ -2422,7 +2422,7 @@ define(function(require, exports){
 					var $tr = $(this).closest('tr');
 					$tr.find('input[name=selfPayItemId]').val(ui.item.id);
 					//获取单价底价
-					Count.getSelfPrice($tr,$parentObj);
+					Count.getSelfPrice($(this),$tr,$parentObj);
 
 				}
 			}
@@ -2453,7 +2453,7 @@ define(function(require, exports){
 		});
 	};
 	//获取单价底价
-	Count.getSelfPrice = function($obj,$parentObj){
+	Count.getSelfPrice = function($td,$obj,$parentObj){
 		var startTime = $parentObj.find('.startTime_Choose').text(),
 			whichDay = false,
 			id = false;
@@ -2481,19 +2481,20 @@ define(function(require, exports){
 					$obj.find('.price').text(data.price);
 					$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
 					$obj.find('input[name=marketPrice]').val(data.marketPrice);
-					$obj.find('input[name=marketPrice]').val(data.marketPrice);
 					$obj.find('input[name=price]').val(data.price);
 					$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
 					$obj.find('input[name=travelAgencyRate]').val(data.travelAgencyRate);
 					$obj.find('input[name=guideRate]').val(data.guideRate);
-					Count.autoSelfSum($(this),$parentObj);
+					Count.autoSelfSum($td,$parentObj);
 
 				}else{
 					$obj.find('input[name=marketPrice]').val(data.marketPrice);
 					$obj.find('input[name=price]').val(data.price);
+					$obj.find('input[name=realCount]').val(0);
 					$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
 					$obj.find('input[name=travelAgencyRate]').val(data.travelAgencyRate);
 					$obj.find('input[name=guideRate]').val(data.guideRate);
+					Count.autoSelfSum($td,$parentObj);
 				}
 				
 			}
