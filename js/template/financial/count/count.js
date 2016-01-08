@@ -3401,6 +3401,7 @@ define(function(require, exports){
 			"ticketArrangeList":[],
 			"addTicketArrangeList":[],
 			"otherArrangeList":[],
+			"guideArrangeList":[],
 	        "remarkArrangeList":[],
 			"log":{
 				"type":"1",
@@ -3774,6 +3775,19 @@ define(function(require, exports){
                 saveJson.otherArrangeList.push(otherArrange);
             }
 		});
+		//导游
+		var $guideObj = $obj.find('.T-count-guide'),
+		$tr = $guideObj.find('tr');
+		$tr.each(function(){
+			if($(this).attr('isAccountGuide') == 1){
+				var guideJson = {
+					price:$(this).find('input[name=price]').val(),
+					manageFee:$(this).find('input[name=manageFee]').val()
+				};
+				saveJson.guideArrangeList.push(guideJson);
+			}
+		});
+		
 		// 批注
         var $tab = $obj,
             $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),

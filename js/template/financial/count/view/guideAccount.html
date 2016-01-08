@@ -14,7 +14,7 @@
     </thead>
     <tbody class="T-count-guide">
     {{each guideArranges as rs index}}
-        <tr guideid = "{{rs.guide.id}}">
+        <tr guideid = "{{rs.guide.id}}" isAccountGuide = "{{rs.isAccountGuide}}">
             <td><input disabled="disabled" type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
             <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
