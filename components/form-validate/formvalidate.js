@@ -42,7 +42,7 @@
 
 		if (!$formStyle.length)  {
 			$('body').append('<style id="form-style">'
-				+ '.feild-error-tip {position:absolute;  color: #d25b47; cursor:pointer;}'
+				+ '.feild-error-tip {position:absolute;  color: #d25b47; cursor:pointer; z-index: +1;}'
 				+ '.input-error {    padding-right: 20px; border-color: #d25b47 !important; }'
 				+ '.input-success {    padding-right: 4px;}'
 				+ ' #form-validation-tip-area > .tooltip > .tooltip-inner { background-color: #d25b47;}   #form-validation-tip-area > .tooltip > .tooltip-arrow{border-top-color: #d25b47;}'
