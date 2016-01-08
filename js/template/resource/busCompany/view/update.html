@@ -85,9 +85,9 @@
 					</div>
 
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">车队最低价:</label>
+						<label class="col-sm-2 control-label no-padding-right ">车队最低价:</label>
 						<div class="col-sm-4">
-							<input class="form-control" name="lowestPrice" value="{{busCompany.lowestPrice}}" class="col-sm-12" maxlength="9" />
+							<input class="form-control F-float F-money" name="lowestPrice" value="{{busCompany.lowestPrice}}" class="col-sm-12" maxlength="9" />
 						</div>
 					</div>
 
@@ -130,7 +130,7 @@
 										<tr data-entity-id="{{bus.id}}">
 											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
 											<td><input name="brand" type="text" class="col-sm-12" value="{{bus.brand}}" maxlength="32" /></td>
-											<td><input name="seatCount" class="col-sm-10" type="text" value="{{bus.seatCount}}"/></td>
+											<td><input name="seatCount" class="col-sm-10 F-float F-count" type="text" value="{{bus.seatCount}}"/></td>
 											<td class="col-sm-1"><div class="input-group col-sm-12"><input name="buyTime" type="text" class="date-picker datepicker" style="width: 130px" {{if bus.buyTime == null || bus.buyTime == ""}} value="" {{else}} value="{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}" {{/if}}/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>
 											<td>
 												<select name="isChartered">
@@ -173,12 +173,12 @@
 												{{if bus.isChartered == 1}}
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" class="clearfix T-appendDiv div-{{i+1}}" style="margin-top:3px;margin-bottom:7px;">
-														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="F-float F-money" value="{{price.contractPrice}}"/><label>&nbsp;元</label>
 													</div>
 													{{/each}}
 												{{else}}
 													<div data-index="1" class="clearfix T-appendDiv div-1" style="margin-top:3px;margin-bottom:7px;">
-														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" class="F-float F-money" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}
 											</td>

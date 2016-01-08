@@ -128,11 +128,11 @@
 										</td>
 										<td>
 											<div class="clearfix normalInnerPrice" style="margin-top:2px" data-index="0">
-												<input name="normalInnerPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7"/>
+												<input name="normalInnerPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7" class="F-float F-money" />
 											</div>
 											{{each item.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:7px">
-												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/>
+												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7" class="F-float F-money" />
 											</div>
 											{{/each}}
 										</td>
