@@ -994,6 +994,89 @@ var _statusText = {
 		return _ajax(opt);
 	};
 
+	jQuery.fn.extend({
+		//重写jquery的text方法
+		text : function( value ){
+			return jQuery.access( this, function( value ) {
+				if(value === undefined){
+					value = jQuery.text( this )
+					if($(this).hasClass('F-float')){
+						value = Tools.formatQuantile(value);
+					}
+				}else{
+					if($(this).hasClass('F-float')){
+						value = Tools.thousandPoint(value);
+					}
+					value = this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) )
+				}
+				return value;
+			}, null, value, arguments.length );
+		},
+
+		//重写jquery的val方法
+		val : function( value ){
+			var ret, hooks, isFunction,rreturn = /\r/g,
+			elem = this[0];
+
+			if ( !arguments.length ) {
+				if ( elem ) {
+					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
+
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+						return ret;
+					}
+
+					ret = elem.value;
+					if($(this).hasClass('F-float') && ret !== ""){
+						ret = Tools.formatQuantile(ret);
+					}
+					return typeof ret === "string" ?
+						ret.replace(rreturn, "") :
+						ret == null ? "" : ret;
+				}
+
+				return;
+			}
+
+			isFunction = jQuery.isFunction( value );
+
+			return this.each(function( i ) {
+				var val;
+
+				if ( this.nodeType !== 1 ) {
+					return;
+				}
+
+				if ( isFunction ) {
+					val = value.call( this, i, jQuery( this ).val() );
+				} else {
+					val = value;
+				}
+
+				// Treat null/undefined as ""; convert numbers to string
+				if ( val == null ) {
+					val = "";
+				} else if ( typeof val === "number" ) {
+					val += "";
+				} else if ( jQuery.isArray( val ) ) {
+					val = jQuery.map(val, function ( value ) {
+						return value == null ? "" : value + "";
+					});
+				}
+
+				hooks = jQuery.valHooks[ this.type ] || jQuery.valHooks[ this.nodeName.toLowerCase() ];
+
+				// If set returns undefined, fall back to normal setting
+				if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
+					if($(this).hasClass('F-float')){
+						val = Tools.thousandPoint(val);
+					}
+					this.value = val;
+				}
+			});
+		}
+	});
+
 	/****
 		Tools
 	*****/
@@ -1445,6 +1528,50 @@ Tools.toFixed = function(data, length) {
 	}
 
 	return data;
+};
+/**
+ * 添加千分位
+ * @param  {float} num   数据
+ * @return {string}      返回添加千分位后的数据
+ */
+Tools.thousandPoint = function(num, length){
+	if(!!length){
+		mun = Tools.toFixed(num, length);
+	}
+	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+};
+
+/**
+ * 过滤千分位
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterUnPoint = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-float").each(function(){
+		if(!$(this).is(':not("input")')){
+			$(this).val(Tools.thousandPoint($(this).val()));
+			$(this).on('input', function(event){
+				event.preventDefault();
+				var value = $(this).val();
+				if(!isNaN(value)){
+					$(this).val(value);
+				}
+			});
+		}else{
+			$(this).text(Tools.thousandPoint($(this).text()));
+		}
+	});
+	return $obj;
+};
+/**
+ * 把千分位转换为数字
+ * @param  {string} data [description]
+ * @return {[type]}      [description]
+ */
+Tools.formatQuantile = function(data){
+	return Number(data.replace(/,/g, ''));
 };
 
 /**
