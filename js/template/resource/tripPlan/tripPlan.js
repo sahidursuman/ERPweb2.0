@@ -2060,6 +2060,7 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)){
 	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
+	                    	$parents.find("input[name=price]").val(data.price);
 						}
                     }
                 });
@@ -2073,6 +2074,7 @@ define(function(require, exports) {
                 data: "id=" + id,
                 success: function(data) {
 					if(showDialog(data)) {
+						console.log(data)
 						var hotelRommList = JSON.parse(data.hotelRommList);
 						if(hotelRommList && hotelRommList.length > 0){
 							for(var i=0; i < hotelRommList.length; i++){
