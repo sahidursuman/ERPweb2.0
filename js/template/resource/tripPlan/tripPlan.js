@@ -1576,9 +1576,17 @@ define(function(require, exports) {
 			}
 		}).unbind("click").click(function(){
 			var obj = this;
+			var searchJson = {
+					brand:$(this).closest('tr').find("input[name=brand]").val(),
+					licenseNumber:$(this).closest('tr').find("input[name=licenseNumber]").val(),
+					busCompanyId:$(this).closest('tr').find("input[name=needSeatCount]").val()
+				};
 			$.ajax({
 				url: KingServices.build_url('bookingOrder','getSeatCountList'),
 				showLoading: false,
+				data:{
+					searchJson:JSON.stringify(searchJson)
+				},
 				success:function(data){
 					if(showDialog(data)){
 						var seatCountListJson = [];
@@ -1632,9 +1640,16 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj = this;
 			var seatCount = $(this).closest('tr').find("[name=needSeatCount]").val();
+			var searchJson = {
+						seatCount:seatCount,
+						licenseNumber:$(this).closest('tr').find("[name=licenseNumber]").val(),
+						busCompanyId:$(this).closest('tr').find("[name=busCompanyId]").val()
+					};
 				$.ajax({
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
-					data:"seatCount="+seatCount+"",
+					data:{
+						searchJson:JSON.stringify(searchJson)
+					},
 					showLoading:false,
 					type:"POST",
 					success:function(data){
@@ -1681,11 +1696,15 @@ define(function(require, exports) {
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=needSeatCount]").val(),
 				busBrand = parents.find("[name=brand]").val();
+				var searchJson = {
+						seatCount:seatCount,
+						brand:busBrand,
+						busCompanyId:parents.find("input[name=busCompanyId]").val()
+					};
 				$.ajax({
 					url: KingServices.build_url('busCompany','getLicenseNumbers'),
 					data: {
-						seatCount: seatCount,
-						brand: busBrand
+						searchJson:JSON.stringify(searchJson)
 					},
 					showLoading:false,
 					type:"POST",
@@ -1727,12 +1746,18 @@ define(function(require, exports) {
 					parents.find("input[name=driverName]").val('');
 					parents.find("input[name=driverMobileNumber]").val('');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-
+					var searchJson = {
+						seatCount:parents.find('input[name=needSeatCount]').val(),
+						brand:parents.find('input[name=brand]').val(),
+						licenseNumber:parents.find('input[name=licenseNumber]').val()
+					};
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'findBusCompanyById'),
+					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
 					type: 'post',
 					dataType: 'json',
-					data: {id: ui.item.id},
+					data: {
+						searchJson:JSON.stringify(searchJson)
+					},
 				})
 				.done(function(data) {
 					if (showDialog(data)) {

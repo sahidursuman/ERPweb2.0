@@ -12,6 +12,9 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
     <tr>
+        <th class="th-border"><span class="necessary">*</span>开始时间</th>
+        <th class="th-border"><span class="necessary">*</span>结束时间</th>
+        <th class="th-border"><span class="necessary">*</span>任务</th>
         <th class="th-border"><span class="necessary">*</span>所属车队</th>
         <th class="th-border"><span class="necessary">*</span>车牌号</th>
         <th class="th-border"><span class="necessary">*</span>座位数</th>
@@ -32,6 +35,9 @@
     {{if busCompany != null}}
     <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
         <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>
         <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}" class="F-float F-money"/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
@@ -49,7 +55,7 @@
             {{/if}}
         </td>
         <td><span class="difference F-float F-money"></span></td>
-        <td>{{busCompany.billRemark}}</td>
+        <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text"></td>
         {{if tripPlan.billStatus == 2}}<td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
     </tr>
     {{/if}}
