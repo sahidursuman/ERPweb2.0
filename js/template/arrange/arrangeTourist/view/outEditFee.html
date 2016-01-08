@@ -17,19 +17,19 @@
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup != null}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12" />
+							<input value="{{if touristGroup != null}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">已付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price" readonly="readonly" />
+							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price F-float F-money" readonly="readonly" />
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">计划现收:</label>
 						<div class="col-xs-1">
 						{{if cashFlag== 1}}
-							<span>{{touristGroup.currentNeedPayMoney}}</span>
+							<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 							{{else}}
-							<span>0</span>
+							<span class="F-float F-money">0</span>
 						{{/if}}
 						</div>
 						                        
