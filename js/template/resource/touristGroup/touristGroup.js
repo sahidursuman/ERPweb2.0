@@ -27,6 +27,7 @@ define(function(require, exports) {
         autocompleteDate: {},
         typeFlag: 0,
         visitorId: 0,
+        days:0,
         chooseQuoteProlayer: "",
         args: {
             pageNo: 0,
@@ -573,6 +574,15 @@ define(function(require, exports) {
             // touristGroup.searchLinproduct(true,0,"",typeFlag);
             touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
         });
+        //选择出游日期带出完团日期
+        $obj.find('.T-startTime').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that = $(this),startTime = $that.val(),$row = $that.closest('.form-inline');
+                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days));
+                
+        });
+
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -692,6 +702,7 @@ define(function(require, exports) {
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
                 $tab = $('#tab-resource_touristGroup-add-content'),
                 lineProductId = $tr.data('id');
+                touristGroup.days = $tr.data('days');
 
             if (lineProductId==null || lineProductId=='' || lineProductId==undefined) {
                showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
