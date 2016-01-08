@@ -22,9 +22,9 @@
 							<h1>
 								<small class="transferOut-Header-Cost">
 									<i class="ace-icon fa fa-angle-double-right"></i>                    
-									<lable style="min-width:10%; display:inline-block;">人数合计 : <span class="adultCount">0</span>大<span class="childCount">0</span>小</lable>  
-								    <lable style="min-width:10%; display:inline-block;">应收款合计:<span class="transNeedPayMoney">0 </span>元</lable>    
-								    <lable style="min-width:10%; display:inline-block;">已收款合计:<span class="transPayedMoney">0</span>元</lable>          
+									<lable style="min-width:10%; display:inline-block;">人数合计 : <span class="adultCount F-float F-count">0</span>大<span class="childCount T-float T-count">0</span>小</lable>  
+								    <lable style="min-width:10%; display:inline-block;">应收款合计:<span class="transNeedPayMoney F-float F-money">0 </span>元</lable>    
+								    <lable style="min-width:10%; display:inline-block;">已收款合计:<span class="transPayedMoney F-float F-money">0</span>元</lable>          
 								</small>
 							</h1>
 						</div>
@@ -155,10 +155,10 @@
 									    <td>{{if rs.toBusinessGroup}}{{rs.toBusinessGroup.name}}{{/if}}</td>
 										{{if rs.touristGroup != null}}
 										<td>{{if rs.touristGroup.contactMember!=null}}{{rs.touristGroup.contactMember.name}}{{/if}}</td>
-										<td>{{rs.touristGroup.adultCount}}大{{rs.touristGroup.childCount}}小</td>
+										<td><span class="F-float F-count">{{rs.touristGroup.adultCount}}</span>大<span class="F-float F-count">{{rs.touristGroup.childCount}}</span>小</td>
 										{{/if}} 
-										<td>{{rs.transNeedPayMoney}}</td>
-										<td>{{rs.transPayedMoney}}</td>
+										<td><span class="F-float F-money">{{rs.transNeedPayMoney}}</span></td>
+										<td><span class="F-float F-money">{{rs.transPayedMoney}}</span></td>
 										{{if rs.user!=null}}
 										<td>{{rs.user.realName}}</td>
 										<td>{{rs.touristGroup.startTime}}</td>
