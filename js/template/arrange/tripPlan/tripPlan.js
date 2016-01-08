@@ -1518,8 +1518,8 @@ define(function(require, exports) {
                 if (result) {
                     var contact = JSON.parse(data.partnerAgencyContact);
                     layer.close(addPartnerManagerLayer);
-                    $tab.find('input[name=contactRealname]').val(contact.contactRealname + "-[" + contact.contactMobileNumber + "]").trigger('change');
-                    $tab.find('input[name=fromPartnerAgencyContactId]').val(contact.id);
+                    $obj.find('input[name=contactRealname]').val(contact.contactRealname + "-[" + contact.contactMobileNumber + "]").trigger('change');
+                    $obj.find('input[name=fromPartnerAgencyContactId]').val(contact.id);
                 }
             }
         });
