@@ -7,7 +7,7 @@
             <label class="control-label col-xs-2">线路产品: {{ptGroup.lineProduct.name}}</label>
             <label class="control-label col-xs-2">类别：{{ptGroup.lineProduct.type}}</label>
             <label class="control-label col-xs-2">应用范围：{{if ptGroup.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</label>
-            <label class="control-label col-xs-2">天数：{{ptGroup.lineProduct.days}}天</label>
+            <label class="control-label col-xs-2">天数：<span class='F-float F-count'>{{ptGroup.lineProduct.days}}</span>天</label>
             <label class="control-label col-xs-2 ">出游日期: <span class="T-startTime">{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</span></label>
         </div>
         <div class="row">
@@ -15,7 +15,7 @@
             <label class="control-label col-xs-2">联系人: {{ptGroup.contactMember.name}}</label>
             <label class="control-label col-xs-2">联系电话: {{ptGroup.contactMember.mobileNumber}}</label>
             <label class="control-label col-xs-2">人数合计: {{ptGroup.adultCount}}大{{ptGroup.childCount}}小</label>
-            <label class="control-label col-xs-2">应收: {{ptGroup.needPayAllMoney}}</label>
+            <label class="control-label col-xs-2">应收: <span class='F-float F-money'>{{ptGroup.needPayAllMoney}}</span></label>
         </div>
     </div>
     <div class="form-group">
@@ -45,12 +45,12 @@
                         <input type="text" name="customerType" class="col-sm-12" readonly="readonly" value="{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}" />
                     </td>
                     <td>
-                        <input type="text" name="days" class="col-sm-10" readonly="readonly" value="{{subList.lineProduct.days}}" /><span class="col-sm-2" style="line-height: 30px">天</span></td>
+                        <input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" value="{{subList.lineProduct.days}}" /><span class="col-sm-2" style="line-height: 30px">天</span></td>
                     <td>
                         <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker col-sm-12" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
                     </td>
                     <td>
-                        <input type="text" name="needPayAllMoney" value="{{subList.subsectionNeedPayAllMoney}}">
+                        <input class="F-float F-money" type="text" name="needPayAllMoney" value="{{subList.subsectionNeedPayAllMoney}}">
                     </td>
                     <td>
                         <input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney==1 }}checked="checked" {{/if}} />
