@@ -103,7 +103,7 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="preIncomeMoney"]'),
                 rules : [
                     {
-                        type: 'nonnegative-float',
+                        type: 'float',
                         errMsg: '预收款必须为数字'
                     }
                 ]
@@ -113,7 +113,7 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="currentNeedPayMoney"]'),
                 rules : [
                     {
-                        type: 'nonnegative-float',
+                        type: 'float',
                         errMsg: '计划现收必须为数字'
                     }
                 ]
