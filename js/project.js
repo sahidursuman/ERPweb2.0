@@ -2046,14 +2046,14 @@ KingServices.viewOptionalScenic = function($this){
 }
 
 //发团计划--散客
-KingServices.updateSingleTripPlan = function(id){
+KingServices.updateSingleTripPlan = function(id,mergeTouristGroupIdJson){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
-		module.updateSingleTripPlan(id);
+		module.updateSingleTripPlan(id,mergeTouristGroupIdJson);
 	});
 }
-KingServices.addTripPlan = function(id,name,startTime,days){
+KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
-		module.addTripPlan('',id,name,startTime,days);
+		module.addTripPlan(false,args,mergeTouristGroupIdJson);
 	});
 }
 
