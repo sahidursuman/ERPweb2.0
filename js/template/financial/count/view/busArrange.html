@@ -33,14 +33,13 @@
     <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
-        <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
-        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}"/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
-        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/>{{/if}}</td>
-        <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}
+        <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>
+        <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}" class="F-float F-money"/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
+        <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/>{{/if}}</td>
+        <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney F-float F-money">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney F-float F-money"></span>{{/if}}
         <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
-        <td>{{busCompany.payedMoney}}</td>
-        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value=0 {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
-            
+        <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
+        <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value=0 {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
@@ -49,7 +48,7 @@
                 <span style="color:#bbb;">查看</span>
             {{/if}}
         </td>
-        <td><span class="difference"></span></td>
+        <td><span class="difference F-float F-money"></span></td>
         <td>{{busCompany.billRemark}}</td>
         {{if tripPlan.billStatus == 2}}<td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
     </tr>

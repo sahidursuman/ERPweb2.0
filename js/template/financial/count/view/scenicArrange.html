@@ -37,18 +37,17 @@
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.price}}</span>{{else}}<span class="F-float F-money">{{arrange.price}}</span>{{/if}}
                         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
+                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" class="F-float F-count" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                         </td>
-                        <td>{{if arrange.badStatus == 1}}<span>{arrange.realReduceMoney}</span>{{else}}<input type="text" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
                         </td>
-                        <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney"></span>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney F-float F-money"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
-                        <td>
-                        {{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.needPayMoney}}</span>{{else}}<input style="width:90px;" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}} value="{{arrange.realGuidePayMoney}}"{{else}}value=0{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+                        <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
+                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.needPayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}} value="{{arrange.realGuidePayMoney}}"{{else}}value=0{{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -57,7 +56,7 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
+                        <td><span class="difference F-float F-money"></span></td>
                         <td>{{arrange.billRemark}}</td>
                         {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>

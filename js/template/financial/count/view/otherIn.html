@@ -28,12 +28,12 @@
                     <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}" >
                         <td whichDay="{{otherInCome.whichDay}}">第{{otherInCome.whichDay}}天</td>
                         <td><input style="width:90px;" type="text" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td><input style="width:90px;" type="text" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"
+                        <td><input style="width:90px;" type="text" class="F-float F-money" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
                         /></td>
-                        <td><input style="width:90px;" type="text" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
+                        <td><input style="width:90px;" type="text" class="F-float F-count" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td><span class="needPayMoney"><input type="hidden" name="needPayMoney" value="{{otherInCome.needPayMoney}}" 
+                        <td><span class="needPayMoney F-float F-money"><input type="hidden" name="needPayMoney" value="{{otherInCome.needPayMoney}}" 
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></span></td>
                         <td>{{if otherInCome.billImage != null && otherInCome.billImage != ""}}
                                 <a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a>
