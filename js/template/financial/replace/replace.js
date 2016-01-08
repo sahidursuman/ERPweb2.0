@@ -310,8 +310,8 @@ define(function(require, exports) {
 	                    orderNumber: $tab.find('.T-search-order').val(),
 	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
 	                    travelAgencyName: $tab.find('input[name=name]').val(),
-	                    startTime: $tab.find('.T-search-start-date').val(),
-	                    endTime: $tab.find('.T-search-end-date').val()
+	                    startDate: $tab.find('.T-search-start-date').val(),
+	                    endDate: $tab.find('.T-search-end-date').val()
 	                };
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
 	        	if(project.length > 0){

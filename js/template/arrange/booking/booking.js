@@ -505,9 +505,12 @@ define(function(require, exports) {
 				var $datepickerTr = $datepicker.closest('tr');
 
 				if ($datepickerTr.length) {
-					var $datepickers = $datepickerTr.find('.datepicker');
+					var $datepickers = $datepickerTr.find('.datepicker'),
+						options = {
+							moreDay : 1
+						};
 
-					Tools.setDatePicker($datepickers, true).on('changeDate.diff.api', function(event) {
+					Tools.setDatePicker($datepickers, true,options).on('changeDate.diff.api', function(event) {
 						event.preventDefault();
 						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
 						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
