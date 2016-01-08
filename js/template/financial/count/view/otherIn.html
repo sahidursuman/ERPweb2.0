@@ -41,7 +41,7 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td>{{if editStatus == 1}}<input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</td>
+                        <td>{{if editStatus == 1}}<input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000" />{{else}}{{otherInCome.billRemark}}{{/if}}</td>
                         {{if tripPlan.billStatus == 2}}<td>{{if otherInCome.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/if}}
