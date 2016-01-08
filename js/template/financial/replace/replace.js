@@ -313,6 +313,7 @@ define(function(require, exports) {
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val()
 	                };
+	            args.orderNumber = args.orderNumber === "全部" ? "" : args.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
 	        	if(project.length > 0){
 					for(var i=0; i<project.length; i++){

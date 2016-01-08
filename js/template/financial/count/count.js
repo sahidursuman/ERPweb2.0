@@ -2520,7 +2520,8 @@ define(function(require, exports){
 				showLoading:false,
 				data:{
 					seatCount:'',
-					brand:''
+					brand:'',
+					licenseNumber:''
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -2556,9 +2557,11 @@ define(function(require, exports){
 			}
 		}).off('click').on('click',function(){
 			$.ajax({
-				url:KingServices.build_url('busCompany','getBusCompanyById'),
+				url:KingServices.build_url('busCompany','getLicenseNumbers'),
 				data:{
-					id:id,
+					busCompanyId:id,
+					seatCount:'',
+					brand:''
 				},
 				showLoading:false,
 				type:'POST',

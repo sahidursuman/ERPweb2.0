@@ -1,7 +1,7 @@
 define(function(require, exports) {
 	var menuKey = "system_company",
 		infoTemplate = require("./view/info"),
-		imgTemplate = require("./view/viewImage");
+		rule = require("./rule");
 	
 	var company = {
 		imgCount : 0 //需要上传的图片数量
@@ -38,6 +38,7 @@ define(function(require, exports) {
 
 					$tab = $("#tab-" + menuKey + "-content");
 					$tab.find(".form-group").css("height","40px");
+					var validator = rule.check($tab);
 					company.initUpload($tab);
 					//省市区事件
 					if(data.province != null )var provinceId = data.province.id;
@@ -63,6 +64,7 @@ define(function(require, exports) {
 
 					//保存
 					$tab.find(".T-save-company").on("click",function(){
+						if(!validator.form()){return false;}
 						if(company.imgCount == 0){
 							company.submitForm($tab);
 						} else {
