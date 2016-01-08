@@ -1873,6 +1873,17 @@ KingServices.viewOptionalScenic = function($this){
 	});
 }
 
+//发团计划--散客
+KingServices.updateSingleTripPlan = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.updateSingleTripPlan(id);
+	});
+}
+KingServices.addTripPlan = function(id,name,startTime,days){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.addTripPlan('',id,name,startTime,days);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
