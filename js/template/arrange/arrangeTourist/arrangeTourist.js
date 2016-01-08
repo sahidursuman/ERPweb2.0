@@ -1135,9 +1135,9 @@ define(function(require, exports) {
      */
     arrangeTourist.newAddFee = function($tab, type) {
         var html = "<tr><td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
-            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count T-calc\" /></td>" +
-            "<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price T-price T-calc\" /></td>" +
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-12  no-padding-right T-payMoney\" readonly=\"readonly\" /></td>" +
+            "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count T-calc F-float F-count\" /></td>" +
+            "<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price T-price T-calc F-float F-money\" /></td>" +
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-12  no-padding-right T-payMoney F-float F-money\" readonly=\"readonly\" /></td>" +
             "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
