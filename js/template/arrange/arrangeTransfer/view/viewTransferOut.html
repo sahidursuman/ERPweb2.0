@@ -13,9 +13,9 @@
 					</tr>
 				<tr>
 					<td class="style-myself">应付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.transNeedPayAllMoney}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
 					<td class="style-myself">已付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3">{{touristGroup.transPayedMoney}}
+					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3"><span class="F-float F-money">{{touristGroup.transPayedMoney}}</span>
 					</td>
 
 					<td>
@@ -70,9 +70,9 @@
 								    {{if transferFee!=null}}
 								      <tr>
 								            <td>{{transferFee.discribe}}</td>
-								            <td>{{transferFee.count}}</td>  
-								            <td>{{transferFee.otherPrice}}</td>
-								            <td>{{transferFee.count*transferFee.otherPrice}}</td>  
+								            <td><span class="F-float F-count">{{transferFee.count}}</span></td>  
+								            <td><span class="F-float F-money">{{transferFee.otherPrice}}</span></td>
+								            <td><span class="F-float F-money">{{transferFee.count*transferFee.otherPrice}}</span></td>  
 								            <td>{{transferFee.remark}}</td>
 								      </tr>
 								      {{/if}}  
@@ -143,13 +143,13 @@
 			  				<table class="whereQ whereTwo" style="width: 100%">
 							<tr>
 								<td class="style-myself CheckPlan">应收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{parentTouristGroup.needPayAllMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{parentTouristGroup.needPayAllMoney}}</span></td>
 								<td class="style-myself CheckPlan">已收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{parentTouristGroup.payedMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{parentTouristGroup.payedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px">
 								    {{if cashFlag==1}}
-								       	{{parentTouristGroup.currentNeedPayMoney}}
+								       	<span class="F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span>
 									  {{else}}0 
 								    {{/if}}
 							    </td>
@@ -159,13 +159,13 @@
 						    <table class="whereQ whereTwo" style="width: 100%">
 							<tr>
 								<td class="style-myself CheckPlan">应收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.needPayAllMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
 								<td class="style-myself CheckPlan">已收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.payedMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px">
 								    {{if cashFlag==1}}
-								       	{{touristGroup.currentNeedPayMoney}}
+								       	<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 									  {{else}}0 
 								    {{/if}}
 							    </td>
@@ -190,9 +190,9 @@
 								      {{each touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
 											<td>{{transferFeeList.describeInfo}}</td>
-											<td>{{transferFeeList.count}}</td>
-											<td>{{transferFeeList.price}}</td>	
-											<td>{{transferFeeList.count*transferFeeList.price}}</td>
+											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
+											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>	
+											<td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
 											<td>{{transferFeeList.remark}}</td> 
 										</tr>
 									   {{/each}}  

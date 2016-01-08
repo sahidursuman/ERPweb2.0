@@ -157,13 +157,13 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					if(divId == "inner-TransferIn"){
-						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-						$("#"+divId).find(".needPayMoney").text("应收款合计:"+data.total.transNeedPayMoney+"元");
-						$("#"+divId).find(".payedMoney").text("已收款合计:"+data.total.transPayedMoney+"元");
+						$("#"+divId).find(".peopleCount").html("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
+						$("#"+divId).find(".needPayMoney").text("应收款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").text("已收款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					} else {
-						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-						$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
-						$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+						$("#"+divId).find(".peopleCount").text("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
+						$("#"+divId).find(".needPayMoney").text("应付款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").text("已付款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					}
 				}
 			}
@@ -413,9 +413,9 @@ define(function(require, exports) {
 	innerTransfer.innitAddFee=function($tab,validator){
 		var html="<tr class=\"transferFee1SelectId\">"+
 		    "<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"6\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc\" maxlength=\"6\" /></td>"+
-			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";

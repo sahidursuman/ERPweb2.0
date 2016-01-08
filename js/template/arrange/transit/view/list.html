@@ -59,7 +59,7 @@
             <td>{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
             <td>{{transit.touristGroupMemberName}}</td>
             <td>
-                {{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.adultCount}}{{/if}}大 {{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.childCount}}{{/if}}小
+                <span class="F-float F-count">{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.adultCount}}{{/if}}</span>大 <span class="F-float F-count">{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.childCount}}{{/if}}</span>小
             </td>
             <td>{{if transit.touristGroupOutRemark.isNeedArriveService == 0}}-{{else}}{{if transit.receiveTicketStatus == 0}}<i class="ace-icon fa fa-times red bigger-125"></i>{{else if transit.receiveTicketStatus == 1}}<i class="ace-icon fa fa-check green bigger-130"></i>{{/if}}{{/if}}</td>
             <td>{{if transit.touristGroupOutRemark.isNeedArriveService == 0}}-{{else}}{{if transit.receiveBusStatus == 0}}<i class="ace-icon fa fa-times red bigger-125"></i>{{else if transit.receiveBusStatus == 1}}<i class="ace-icon fa fa-check green bigger-130"></i>{{/if}}{{/if}}</td>

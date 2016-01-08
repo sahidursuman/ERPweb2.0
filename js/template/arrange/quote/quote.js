@@ -3118,7 +3118,7 @@ define(function(require, exports) {
 			if (!!id) {
 				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 					$.ajax({
-						url: KingServices.build_url('productQuote', 'delete'),
+						url: KingServices.build_url('quote', 'deleteItem'),
 						type:"POST",
 						showLoading:false,
 						data: {
@@ -3164,7 +3164,7 @@ define(function(require, exports) {
 					    type = $obj.data("entity-type");
 					
 					$.ajax({
-						url: KingServices.build_url('productQuote', 'delete'),
+						url: KingServices.build_url('quote', 'deleteItem'),
 						type:"POST",
 						showLoading:false,
 						data: {

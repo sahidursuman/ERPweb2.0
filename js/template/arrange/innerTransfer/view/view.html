@@ -16,9 +16,9 @@
 				</tr>
 				<tr>
 					<td class="style-myself CheckPlan">应付</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transNeedPayMoney}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
 					<td class="style-myself CheckPlan" style="text-align: left;padding: 0px 0px 0px 10px" colspan="2">已付 </td>
-					<td>{{innerTransfer.transPayedMoney}}</td>
+					<td><span class=" F-float F-money">{{innerTransfer.transPayedMoney}}</span></td>
 				</tr>
 			</table>
 		</div>
@@ -84,13 +84,13 @@
 					    <table class="whereQ whereTwo" style="width: 100%">
 							<tr>
 								<td class="style-myself CheckPlan">应付：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transNeedPayMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
 								<td class="style-myself CheckPlan">已付：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.transPayedMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transPayedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px">
 								    {{if cashFlag==1}}
-								       	{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}
+								       	{{if !!innerTransfer.touristGroup}}<span class=" F-float F-money">{{innerTransfer.touristGroup.currentNeedPayMoney}}</span>{{/if}}
 									  {{else}}0 
 								    {{/if}}
 							    </td>
@@ -115,9 +115,9 @@
 										{{each innerTransfer.innerTransferFeeSet as rs}}
 										<tr>
 											<td>{{rs.discribe}}</td>
-											<td>{{rs.count}}</td>
-											<td>{{rs.price}}</td>
-											<td>{{rs.count*rs.price}}</td>
+											<td><span class=" F-float F-count">{{rs.count}}</span></td>
+											<td><span class=" F-float F-money">{{rs.price}}</span></td>
+											<td><span class=" F-float F-money">{{rs.count*rs.price}}</span></td>
 											<td>{{rs.remark}}</td>
 										</tr>
 										{{/each}}
@@ -146,13 +146,13 @@
 					<table class="whereQ whereTwo" style="width: 100%">
 							<tr>
 								<td class="style-myself CheckPlan">应收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.touristGroup.needPayAllMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.touristGroup.needPayAllMoney}}</span></td>
 								<td class="style-myself CheckPlan">已收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.touristGroup.payedMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.touristGroup.payedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px">
 								    {{if cashFlag==1}}
-								       	{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}
+								       	{{if !!innerTransfer.touristGroup}}<span class=" F-float F-money">{{innerTransfer.touristGroup.currentNeedPayMoney}}</span>{{/if}}
 									  {{else}}0 
 								    {{/if}}
 							    </td>
@@ -162,14 +162,14 @@
 					<table class="whereQ whereTwo" style="width: 100%">
 							<tr>
 								<td class="style-myself CheckPlan">应收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{parentTouristGroup.needPayAllMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{parentTouristGroup.needPayAllMoney}}</span></td>
 								<td class="style-myself CheckPlan">已收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">{{parentTouristGroup.payedMoney}}</td>
+								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{parentTouristGroup.payedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px">
 								    {{if cashFlag==1}}
-								       {{parentTouristGroup.currentNeedPayMoney}}
-									  {{else}}0 
+								       <span class=" F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span>
+									  {{else}}<span class=" F-float F-money">0</span> 
 								    {{/if}}
 							    </td>
 						    </tr>
@@ -191,9 +191,9 @@
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
 										<td>{{rs.describeInfo}}</td>
-										<td>{{rs.count}}</td>
-										<td>{{rs.price}}</td>
-										<td>{{rs.price*rs.count}}</td>
+										<td><span class=" F-float F-count">{{rs.count}}</span></td>
+										<td><span class=" F-float F-money">{{rs.price}}</span></td>
+										<td><span class=" F-float F-money">{{rs.price*rs.count}}</span></td>
 										<td>{{rs.remark}}</td>
 									</tr>
 									{{/each}}

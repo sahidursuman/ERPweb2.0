@@ -20,11 +20,11 @@
  	{{each pager.resultList as result}}
 		<tr data-entity-id="{{result.id}}">
 			<td>{{if result.lineProduct != null}}{{result.lineProduct.name}}{{/if}}</td>
-			<td>{{if result.lineProduct != null}}{{result.lineProduct.days}}{{/if}}</td>
+			<td><span class="F-float F-count">{{if result.lineProduct != null}}{{result.lineProduct.days}}{{/if}}</span></td>
 			<td>{{result.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 			<td>{{if result.touristGroup!=null}}{{if result.touristGroup.contactMember!=null}}{{result.touristGroup.contactMember.name}}{{/if}}{{/if}}</td>
 
-			<td>{{if result.touristGroup!=null}}{{result.touristGroup.adultCount}}{{/if}}大{{if result.touristGroup!=null}}{{result.touristGroup.childCount}}{{/if}}小</td>
+			<td><span class="F-float F-count">{{if result.touristGroup!=null}}{{result.touristGroup.adultCount}}{{/if}}</span>大<span class="F-float F-count">{{if result.touristGroup!=null}}{{result.touristGroup.childCount}}{{/if}}</span>小</td>
 
 			<td>
 <!-- 				{{if result.partnerAgency!=null}} -->
@@ -50,9 +50,9 @@
 			   {{result.fromNumber}}
 			</td>
 
-			<td>{{if result.touristGroup != null}}{{result.touristGroup.transNeedPayAllMoney}}{{/if}}</td>
-			<td>{{if result.touristGroup != null}}{{result.touristGroup.transPayedMoney}}{{/if}}</td>
-			<td>{{result.touristGroup.currentNeedPayMoney}}</td>  
+			<td><span class="F-float F-money">{{if result.touristGroup != null}}{{result.touristGroup.transNeedPayAllMoney}}{{/if}}</span></td>
+			<td><span class="F-float F-money">{{if result.touristGroup != null}}{{result.touristGroup.transPayedMoney}}{{/if}}</span></td>
+			<td><span class="F-float F-money">{{result.touristGroup.currentNeedPayMoney}}</span></td>  
 			<td class="result-status">{{if result.transName==null}}未使用{{else}}{{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>{{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>{{else}}<span style="color: red;" data-status="2">已拒收</span>{{/if}}{{/if}}</td>
 			  <td>
 				<div class="hidden-sm hidden-xs btn-group">

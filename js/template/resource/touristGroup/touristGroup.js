@@ -1507,9 +1507,9 @@ define(function(require, exports) {
     touristGroup.addOtherCost = function($obj) {
         var html = '<tr>' +
             '<td><input name="describeInfo" value="" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right" /></td>' +
-            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc"/></td>' +
-            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc"/></td>' +
-            '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney" /></td>' +
+            '<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc F-float F-count"/></td>' +
+            '<td><input  name="price" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costPrice T-price T-calc F-float F-money"/></td>' +
+            '<td><input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-payMoney F-float F-money" /></td>' +
             '<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>' +
             '<td><a class="cursor T-delete">删除</a></td>' +
             '</tr>';

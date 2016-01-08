@@ -16,7 +16,7 @@
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
 						<div class="col-sm-2">
-							<input type="text" class="col-sm-12" readonly="readonly" name="days" value="{{travelLine.days}}">
+							<input type="text" class="col-sm-12 F-float F-count" readonly="readonly" name="days" value="{{travelLine.days}}">
 						</div>
 						<label class="col-sm-1 control-label no-padding-right">线路模板:</label>
 						<div class="col-sm-2">
@@ -115,7 +115,7 @@
 																<input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" maxlength="100" />
 																<input type="hidden" name="typeId" value="">
 															</td>
-															<td><input class="col-xs-12" name="price" type="text" maxlength="6" /></td>
+															<td><input class="col-xs-12 F-float F-money" name="price" type="text" maxlength="6" /></td>
 															<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>
@@ -160,7 +160,7 @@
 													</thead>
 													<tbody class="T-busCompanyForm">
 														<tr>
-															<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td> 
+															<td><input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" /></td> 
 															<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td> 
 															<!-- <td><input name="companyName" class="T-buscompany-name col-xs-12 bind-change" type="text"/><input type="hidden" name="busCompanyId"></td>
 															<td><input name="licenseNumber" class="T-licenseNumber col-xs-12 bind-change" type="text"/><input type="hidden" name="busLicenseNumberId"></td>
