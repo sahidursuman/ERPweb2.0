@@ -1834,13 +1834,14 @@ define(function(require, exports){
 		//获取餐厅数据
 		Count.getRestData($obj,$parentObj);
 		//下拉框事件
-		$obj.find('select').off('change').on('change',function(){
+		$obj.find('select').off('click').on('click',function(){
 			var $tr = $(this).closest('tr');
 			var restaurantId = $tr.find('input[name=restaurantId]').val();
 			if(restaurantId != null && restaurantId != ""){
-				Count.getRestPrice($tr);
+				$tr.find('input[name=price]').val(0);
+				Count.autoRestaurantSum($(this),$parentObj);
+				Count.getRestPrice($tr,$parentObj);
 			};
-			
 		});
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
