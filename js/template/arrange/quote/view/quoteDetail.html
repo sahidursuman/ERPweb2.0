@@ -119,9 +119,9 @@
                             {{else if hotelList.hotel.level == 7}}
                                 五星以上
                             {{/if}}</span><span style="margin-left: 15px;">{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
-                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}不含早{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}不含午{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}不含晚{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containBreakfast == 1}}含早{{else}}不含早{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containLunch == 1}}含午{{else}}不含午{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containDinner == 1}}含晚{{else}}不含晚{{/if}}</span>
                             <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
                             </td>
                             <td>￥{{hotelList.quotePrice}}</td>
