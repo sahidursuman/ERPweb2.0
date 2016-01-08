@@ -158,12 +158,12 @@ define(function(require, exports) {
 				if(result){
 					if(divId == "inner-TransferIn"){
 						$("#"+divId).find(".peopleCount").html("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
-						$("#"+divId).find(".needPayMoney").text("应收款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
-						$("#"+divId).find(".payedMoney").text("已收款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
+						$("#"+divId).find(".needPayMoney").html("应收款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").html("已收款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					} else {
-						$("#"+divId).find(".peopleCount").text("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
-						$("#"+divId).find(".needPayMoney").text("应付款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
-						$("#"+divId).find(".payedMoney").text("已付款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
+						$("#"+divId).find(".peopleCount").html("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
+						$("#"+divId).find(".needPayMoney").html("应付款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").html("已付款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					}
 				}
 			}
