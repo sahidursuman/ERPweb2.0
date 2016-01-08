@@ -430,7 +430,7 @@ define(function(require, exports){
 			}
 		});
 
-		if($selfObj.find('input[name=selfPayItemName]')>0){
+		if($selfObj.find('input[name=selfPayItemName]').length>0){
 			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
 		};
 		//新增自费安排
@@ -664,7 +664,7 @@ define(function(require, exports){
 		});
 		//商品选择
 		var $shopPolicyObj = $shopObj.find('input[name=shopPolicyName]');
-		if($shopPolicyObj>0){
+		if($shopPolicyObj.length>0){
 			Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
 		};
 		//自费处理--计算、新增
@@ -682,7 +682,7 @@ define(function(require, exports){
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
 			Count.addSelf($selfObj,$obj);
 		});
-		if($selfObj.find('input[name=selfPayItemName]')>0){
+		if($selfObj.find('input[name=selfPayItemName]').length>0){
 			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
 		};
 		//其他收入--计算、新增
