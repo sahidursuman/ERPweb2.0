@@ -3504,6 +3504,7 @@ define(function(require, exports){
 			"addSelfPayArrangeList":[],
 			"otherInList":[],
 			"busCompanyArrangeList":[],
+			"addBusCompanyArrangeList":[],
 			"restaurantArrangeList":[],
 			"addRestArrangeList":[],
 			"hotelArrangeList":[],
