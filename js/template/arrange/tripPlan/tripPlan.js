@@ -293,7 +293,7 @@ define(function(require, exports) {
 	        }
 	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
 	            tripPlan.initSigleEvent($("#tab-" + tabKey + "-content")) 
-	            if(!!args){//id, name, GroupIds
+	            if(!$.isEmptyObject(args)) {//id, name, GroupIds
 	            	tripPlan.initNormalLineProduct($("#tab-" + tabKey + "-content"), id);
 	            }
 	        }
@@ -1660,14 +1660,14 @@ define(function(require, exports) {
 			if(type == 1){
 				quoteId = $tr.data('id');
 				$tab.find('input[name="quoteId"]').val(quoteId);
-				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('change');
+				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				lineId = $tr.data('line-id');
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 			}
-			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('change');
 			$tab.find('input[name="lineProductId"]').val(lineId);
+			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId);
 			layer.close(searchTravelLinelayer);
 		});	
