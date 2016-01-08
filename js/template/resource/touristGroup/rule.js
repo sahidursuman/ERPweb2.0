@@ -26,6 +26,12 @@ define(function(require, exports) {
                             type: 'null',
                             errMsg: '出游日期不能为空'
                         }]
+                    },{ //出游日期   
+                        $ele: $obj.find('input[name="endTime"]'),
+                        rules: [{
+                            type: 'null',
+                            errMsg: '完团日期不能为空'
+                        }]
                     }, {
                         $ele: $obj.find('input[name="fromPartnerAgency"]'),
                         $valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
@@ -89,13 +95,13 @@ define(function(require, exports) {
                         $ele: $obj.find('input[name="count"]'),
                         rules: [{
                             type: 'float',
-                            errMsg: '其他费用的数量的格式不正确'
+                            errMsg: '其它费用的数量的格式不正确'
                         }]
                     }, { //其它
                         $ele: $obj.find('input[name="price"]'),
                         rules: [{
                             type: 'float',
-                            errMsg: '其他费用单价不合法'
+                            errMsg: '其它费用单价不合法'
                         }]
                     }, { //姓名
                         $ele: $obj.find('input[name="name"]'),

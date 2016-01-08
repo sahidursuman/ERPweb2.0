@@ -309,10 +309,13 @@ define(function(require, exports){
         	//导出报表事件 btn-hotelExport
 	        $tab.find(".T-btn-export").click(function(){
 	            var args = { 
+	            		shopId:$tab.find('input[name=shopId]').val(),
+	            		shopName:$tab.find('input[name=shopName]').val(),
+	            		tripMessage:$tab.find('.T-search-trip').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val()
 	                };
-	            FinancialService.exportReport(args,"shop");
+	            FinancialService.exportReport(args,"exportArrangeShopFinancial");
 	        });
 		}
 
@@ -340,7 +343,15 @@ define(function(require, exports){
 					saveData($tab);
 				});
 			}else{
-				saveData($tab);
+				var allMoney = $tab.find('input[name=sumPayMoney]').val();
+	        	if(allMoney == 0){
+	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+			            saveData($tab);
+			        })
+	        	}else{
+	        		saveData($tab);
+	        	}
+				
 			}
 			
 		});

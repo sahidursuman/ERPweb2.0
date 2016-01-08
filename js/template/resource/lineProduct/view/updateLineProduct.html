@@ -211,12 +211,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="th-border">需求座位数</th>
-                                                        <th class="th-border">车队名称</th>
-                                                        <th class="th-border">车辆牌照</th>
-                                                        <th class="th-border">座位价</th>
-                                                        <th class="th-border">实际座位数</th>
-                                                        <th class="th-border">联系电话</th>
-                                                        <th class="th-border">包车价</th>
+                                                        <th class="th-border">车辆品牌</th>
                                                         <th class="th-border">备注</th>
                                                         <th class="th-border">操作</th>
                                                     </tr>
@@ -228,27 +223,7 @@
                                                         <td>
                                                             <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
                                                         </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-buscompany-name bind-change" name="companyName" type="text" value="{{rs.busCompany.companyName}}" />
-                                                            <input type="hidden" name="busCompanyId" value="{{rs.busCompany.id}}" /> {{if clipboardMode == false}}
-                                                            <input type="hidden" name="templateId" value="{{rs.id}}" />{{/if}}
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-licenseNumber bind-change" name="licenseNumber" type="text" value="{{rs.bus.licenseNumber}}" />
-                                                            <input type="hidden" name="busLicenseNumberId" value="{{rs.bus.id}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatPrice" type="text" value="{{rs.price}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatCount" type="text" readonly="readonly" value="{{rs.bus.seatCount}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{rs.busCompany.mobileNumber}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" value="{{rs.charteredPrice}}" />
-                                                        </td>
+                                                        <td><input type="text" class="col-xs-12 T-busBrand" name="brand" value="{{rs.brand}}"></td>
                                                         <td>
                                                             <input class="col-xs-12" name="remark" type="text" value="{{rs.remark}}" />
                                                         </td>
@@ -264,26 +239,7 @@
                                                         <td>
                                                             <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" />
                                                         </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-buscompany-name bind-change" name="companyName" type="text" value="" />
-                                                            <input type="hidden" name="busCompanyId" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-licenseNumber" name="licenseNumber" type="text" value="" />
-                                                            <input type="hidden" name="busLicenseNumberId" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatPrice" type="text" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatCount" type="text" readonly="readonly" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" value="" />
-                                                        </td>
+                                                        <td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>
                                                         <td>
                                                             <input class="col-xs-12" name="remark" type="text" value="" />
                                                         </td>

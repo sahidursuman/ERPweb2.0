@@ -6,62 +6,62 @@
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">报价单号</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">报价单号：</label>
+			<span class="col-xs-8">{{tripPlan}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">线路产品</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">线路产品：</label>
+			<span class="col-xs-8">{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">人数</label>
-			<span class="col-xs-8">30大人 3小孩</span>
+			<label class="col-xs-4 text-right">人数：</label>
+			<span class="col-xs-8">{{tripPlan.touristAdultCount}}大人 {{basicInfo.touristChildCount}}小孩</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">团号</label>
-			<span class="col-xs-8">0000000</span>
-		</div>
-	</div>
-	<div class="row border">
-		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪</label>
-			<span class="col-xs-8">0000000</span>
-		</div>
-		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪电话</label>
-			<span class="col-xs-8">0000000</span>
-		</div>
-		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任计调</label>
-			<span class="col-xs-8">30大人 3小孩</span>
-		</div>
-		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任部门</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">团号：</label>
+			<span class="col-xs-8">{{basicInfo.tripNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">购物商家</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">全陪：</label>
+			<span class="col-xs-8">{{basicInfo.accompanyGuideName}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">自费商家</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">全陪电话：</label>
+			<span class="col-xs-8">{{basicInfo.accompanyGuideMobile}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">包含自费</label>
-			<span class="col-xs-8">30大人 3小孩</span>
+			<label class="col-xs-4 text-right">责任计调：</label>
+			<span class="col-xs-8">{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">接站牌</label>
-			<span class="col-xs-8">0000000</span>
+			<label class="col-xs-4 text-right">责任部门：</label>
+			<span class="col-xs-8">{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}</span>
+		</div>
+	</div>
+	<div class="row border">
+		<div class="col-xs-3">
+			<label class="col-xs-4 text-right">购物商家：</label>
+			<span class="col-xs-8">{{basicInfo.shopNames}}</span>
+		</div>
+		<div class="col-xs-3">
+			<label class="col-xs-4 text-right">自费商家：</label>
+			<span class="col-xs-8">{{basicInfo.selfPayItemNames}}</span>
+		</div>
+		<div class="col-xs-3">
+			<label class="col-xs-4 text-right">包含自费：</label>
+			<span class="col-xs-8">{{if basicInfo.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}</span>
+		</div>
+		<div class="col-xs-3">
+			<label class="col-xs-4 text-right">接站牌：</label>
+			<span class="col-xs-8">{{basicInfo.welcomeBoard}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-12">
-			<label class="col-xs-1 text-right">备注</label>
-			<span class="col-xs-11">0000000</span>
+			<label class="col-xs-1 text-right">备注：</label>
+			<span class="col-xs-11">---</span>
 		</div>
 	</div>
 </div>
@@ -98,7 +98,18 @@
 											</tr>
 										</thead>
 										<tbody>
-											
+											{{each arrangeItems.guideList as guideList}}
+											<tr>
+												<td>{{guideList.startTime}}</td>
+												<td>{{guideList.endTime}}</td>
+												<td>{{guideList.taskType}}</td>
+												<td>{{if guideList.guide}}{{guideList.guide.realname}}{{/if}}</td>
+												<td>{{guideList.mobileNumber}}</td>
+												<td>{{guideList.price}}</td>
+												<td>{{guideList.manageFee}}</td>
+												<td>{{guideList.remark}}</td>
+											</tr>
+											{{/each}}
 										</tbody>
 									</table>
                             	</div>
@@ -126,7 +137,17 @@
 											</tr>
 										</thead>
 										<tbody>
-											
+											{{each arrangeItems.insuranceList as insuranceList}}
+											<tr>
+												<td>{{if insuranceList.insurance}}{{insuranceList.insurance.name}}{{/if}}</td>
+												<td>{{if insuranceList.insuranceItem}}{{insuranceList.insuranceItem.name}}{{/if}}</td>
+												<td>{{insuranceList.price}}</td>
+												<td>{{insuranceList.memberCount}}</td>
+												<td>{{insuranceList.needPayMoney}}</td>
+												<td>{{insuranceList.prePayMoney}}</td>
+												<td>{{insuranceList.remark}}</td>
+											</tr>
+											{{/each}}
 										</tbody>
 									</table>
                             	</div>
@@ -164,7 +185,27 @@
 											</tr>
 										</thead>
 										<tbody>
-											
+											{{each arrangeItems.busCompanyList as busCompanyList}}
+											<tr>
+												<td>{{busCompanyList.startTime}}</td>
+												<td>{{busCompanyList.endTime}}</td>
+												<td>{{busCompanyList.taskType}}</td>
+												<td>{{busCompanyList.needSeatCount}}</td>
+												<td>{{busCompanyList.brand}}</td>
+												<td>{{if busCompanyList.bus}}{{busCompanyList.bus.licenseNumber}}{{/if}}</td>
+												<td>{{if busCompanyList.busCompany}}{{busCompanyList.busCompany.companyName}}{{/if}}</td>
+												<td>{{busCompanyList.mobileNumber}}</td>
+												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.name}}{{/if}}</td>
+												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.mobileNumber}}{{/if}}</td>
+												<td>{{busCompanyList.contractNumber}}</td>
+												<td>{{busCompanyList.price}}</td>
+												<td>{{busCompanyList.reduceMoney}}</td>
+												<td>{{busCompanyList.needPayMoney}}</td>
+												<td>{{busCompanyList.prePayMoney}}</td>
+												<td>{{busCompanyList.guidePayMoney}}</td>
+												<td>{{busCompanyList.remark}}</td>
+											</tr>
+											{{/each}}
 										</tbody>
 									</table>
                             	</div>
@@ -186,7 +227,7 @@
 	<div class="row border">
 		<div class="col-xs-12">
 			<div class="tabbable">
-				<ul class="nav nav-tabs" id="myTab">
+				<ul class="nav nav-tabs">
                     <li class="active">
                         <a aria-expanded="true" data-toggle="tab" href="#planDayListView-0" style="text-align:center;width:140px;"> 
 							第1天
@@ -292,7 +333,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					
 				</tbody>
 			</table>
 		</div>
@@ -306,19 +346,19 @@
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">应收</label>
+			<label class="col-xs-4 text-right">应收：</label>
 			<span class="col-xs-8">3000</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">预收款</label>
+			<label class="col-xs-4 text-right">预收款：</label>
 			<span class="col-xs-8">3000</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">已收</label>
+			<label class="col-xs-4 text-right">已收：</label>
 			<span class="col-xs-8">3000</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">计划现收</label>
+			<label class="col-xs-4 text-right">计划现收：</label>
 			<span class="col-xs-8">3000</span>
 		</div>
 	</div>

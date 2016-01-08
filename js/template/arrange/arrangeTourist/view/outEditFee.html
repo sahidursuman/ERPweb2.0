@@ -76,15 +76,15 @@
 										</td>   
 										
 										<td>
-											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc" />
+											<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc" />
 										</td>
 										<td>
-											<input name="price" value="{{transferList.price}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc" />
+											<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc" />
 										</td>
 								
 
 										<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney" />
+										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right {{if subsection==0}}T-payMoney{{/if}}" />
 										</td>
 										<td>
 											<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-12  no-padding-right" />
@@ -129,93 +129,90 @@
 		</div>
 	</form>  
 
+	{{if subsection==0}}
+		<!--收客信息 start--> 
+		<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+			<div class=" ui-sortable-handle">
+					<h5 class="title">
+						<span class="badge badge-primary">2</span>
+						<label class="middle title-size">收客信息</label>
+					</h5>
+				<div class="widget-body" >
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right">收客备注：</label>
+						<div class="col-sm-8">
+							<input readonly="readonly" value="{{if touristGroup != null}}{{touristGroup.remark}}{{/if}}" class="col-sm-12  no-padding-right" type="text">  
+						</div>
+					</div> 
 
+					<div class="form-group" style="margin-left:25%;">
+						    <label class="col-sm-1 control-label no-padding-right">应收：</label>
+							<div class="col-sm-2">
+								<span>{{touristGroup.needPayAllMoney}}</span>
+							</div>
 
+							
+							{{if subsection==0}}
+							<label class="col-sm-1 control-label no-padding-right">已收：</label>
+							<div class="col-sm-2">
+								<span>{{touristGroup.payedMoney}}</span>
+							</div>
+							{{/if}}
 
-
-
-	<!--收客信息 start--> 
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-				<h5 class="title">
-					<span class="badge badge-primary">2</span>
-					<label class="middle title-size">收客信息</label>
-				</h5>
-			<div class="widget-body" >
-				<div class="form-group">
-					<label class="col-sm-2 control-label no-padding-right">收客备注：</label>  
-					<div class="col-sm-8">
-						<input readonly="readonly" value="{{if touristGroup != null}}{{touristGroup.transRemark}}{{/if}}" class="col-sm-12  no-padding-right" type="text">  
+							<label class="col-sm-2 control-label no-padding-right">计划现收：</label>
+							<div class="col-sm-1">
+	                            {{if cashFlag== 1}}
+									<span>{{touristGroup.currentNeedPayMoney}}</span>
+								{{else}}
+								    <span>0</span>
+							{{/if}}				 
+	                        </div>
 					</div>
-				</div> 
-
-				<div class="form-group" style="margin-left:25%;">
-					    <label class="col-sm-1 control-label no-padding-right">应收：</label>
-						<div class="col-sm-2">
-							<span>{{touristGroup.needPayAllMoney}}</span>
-						</div>
-
-						
-						{{if subsection==0}}
-						<label class="col-sm-1 control-label no-padding-right">已收：</label>
-						<div class="col-sm-2">
-							<span>{{touristGroup.payedMoney}}</span>
-						</div>
-						{{/if}}
-
-						<label class="col-sm-2 control-label no-padding-right">计划现收：</label>
-						<div class="col-sm-1">
-                            {{if cashFlag== 1}}
-								<span>{{touristGroup.currentNeedPayMoney}}</span>
-							{{else}}
-							    <span>0</span>
-						{{/if}}				 
-                        </div>
-				</div>
 
 
-				<div class="form-group">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-8">
-						<table class="table table-striped table-bordered table-hover addCostList"> 
-							<thead>
-								<tr>
-									<th class="th-border">费用项</th>
-									<th class="th-border">数量</th>
-									<th class="th-border">单价</th>
-									<th class="th-border">金额</th>
-									<th class="th-border">说明</th>
-								</tr>
-							</thead>   
-							<tbody>
-							   {{each touristGroupFeeList as touristGroupFlist}}    	                                           
-											 <tr>       
-												<td>    
-													<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
-												</td>   
-								
-												<td>
-													<input  value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount" />
-												</td>
-												<td>
-													<input  value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
-												</td>
-												<td>
-													<input  value="{{touristGroupFlist.price*touristGroupFlist.count}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
-												</td>
-												<td>
-													<input  value="{{touristGroupFlist.remark}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
-												</td>
-											</tr>
-									{{/each}}    
-							</tbody>
-						</table>
+					<div class="form-group">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-8">
+							<table class="table table-striped table-bordered table-hover addCostList"> 
+								<thead>
+									<tr>
+										<th class="th-border">费用项</th>
+										<th class="th-border">数量</th>
+										<th class="th-border">单价</th>
+										<th class="th-border">金额</th>
+										<th class="th-border">说明</th>
+									</tr>
+								</thead>   
+								<tbody>
+								   {{each touristGroupFeeList as touristGroupFlist}}    	                                           
+												 <tr>       
+													<td>    
+														<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
+													</td>   
+									
+													<td>
+														<input  value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount" />
+													</td>
+													<td>
+														<input  value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+													</td>
+													<td>
+														<input  value="{{touristGroupFlist.price*touristGroupFlist.count}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+													</td>
+													<td>
+														<input  value="{{touristGroupFlist.remark}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+													</td>
+												</tr>
+										{{/each}}    
+								</tbody>
+							</table>
+					    </div>
 				    </div>
-			    </div>
-			</div>   
-		</div>  
-	</form>     
-	<!--收客信息 end-->  
+				</div>   
+			</div>  
+		</form>     
+		<!--收客信息 end-->
+	{{/if}}
 
 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">

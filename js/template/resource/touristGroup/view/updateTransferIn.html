@@ -115,7 +115,7 @@
     
         <div class="form-group fixed-width-1">
             <label>接站牌：</label>
-            <input type="text" name="welcomeBoard" value="{{touristGroupDetail.welcomeBoard}}" maxlength="9"  readonly="readonly" >
+            <input type="text" name="welcomeBoard" value="{{touristGroupDetail.welcomeBoard}}" maxlength="20"  readonly="readonly" >
         </div>
 
         <div class="form-group">
@@ -384,9 +384,6 @@
 											<div class="col-sm-9">
 												<div class="input-group">
 													<input type="text" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}" name="sendTime" class="col-sm-12 date-picker datepicker" />
-													<span class="input-group-addon">
-														<i class="fa fa-calendar"></i>
-													</span>
 												</div>
 											</div>
 										</div>
@@ -407,10 +404,6 @@
 											<div class="col-sm-9">
 												<div class="input-group">
 													<input name="leaveShiftTime" type="text" class="col-sm-12  date-picker ShiftDatepicker" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}" />
-													<span class="input-group-addon">
-															<i class="fa fa-calendar"></i>
-													</span>
-
 												</div>
 											</div>
 										</div>

@@ -199,10 +199,11 @@ define(function(require, exports) {
         busCompany.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
                     busCompanyId : id,
+                    accountInfo : busCompany.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startTime : busCompany.$checkSearchArea.find("input[name=startDate]").val(),
                     endTime : busCompany.$checkSearchArea.find("input[name=endDate]").val()
                 };
-            FinancialService.exportReport(args,"busCompany");
+            FinancialService.exportReport(args,"exportArrangeBusCompanyFinancial");
         });
 
         //报表内的操作

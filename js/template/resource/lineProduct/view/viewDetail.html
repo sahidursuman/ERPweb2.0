@@ -140,11 +140,7 @@
                                     <thead>
                                         <tr>
                                             <th class="th-border">需求座位数</th>
-                                            <th class="th-border">车队名称</th>
-                                            <th class="th-border">车辆牌照</th>
-                                            <th class="th-border">座位价</th>
-                                            <th class="th-border">实际座位数</th>
-                                            <th class="th-border">联系电话</th>
+                                            <th class="th-border">车辆品牌</th>
                                             <th class="th-border">备注</th>
                                         </tr>
                                     </thead>
@@ -153,11 +149,7 @@
                                         {{each viewLineProduct.busCompanyTemplate as rs}}
                                         <tr>
                                             <td>{{rs.needSeatCount}}</td>
-                                            <td>{{rs.busCompany.companyName}}</td>
-                                            <td>{{rs.bus.licenseNumber}}</td>
-                                            <td>{{rs.price}}</td>
-                                            <td>{{rs.bus.seatCount}}</td>
-                                            <td>{{rs.busCompany.mobileNumber}}</td>
+                                            <td>{{rs.brand}}</td>
                                             <td>{{rs.remark}}</td>
                                         </tr>
                                         {{/each}}
@@ -451,12 +443,12 @@
                                                                     </div>
                                                                 </div>
                                                                 {{/each}}
-                                                                <!-- /.其他安排 -->
+                                                                <!-- /.其它安排 -->
                                                                 {{each lineProductDaysList.otherTemplate as otherList}}
                                                                 <div class="timeline-item clearfix viewLineProductDaysDetail" data-entity-index="{{otherList.orderIndex}}">
                                                                     <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                         <i class="ace-icon fa fa-circle"></i>
-                                                                        <span>其他</span>
+                                                                        <span>其它</span>
                                                                     </div>
                                                                     <div class="widget-box transparent" style="margin-top: 20px">
                                                                         <div class="widget-body">

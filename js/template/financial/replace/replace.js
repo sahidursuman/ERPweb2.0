@@ -301,11 +301,33 @@ define(function(require, exports) {
 			FinancialService.updateUnpayMoney($tab, validator);
 			//导出报表事件 btn-hotelExport
 	        $tab.find(".T-btn-export").click(function(){
+
 	            var args = {
+	                    busCompanyOrderStatus: false,
+	                    hotelOrderStatus: false,
+	                    scenicOrderStatus: false,
+	                    ticketOrderStatus: false,
+	                    orderNumber: $tab.find('.T-search-order').val(),
+	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
+	                    travelAgencyName: $tab.find('input[name=name]').val(),
 	                    startTime: $tab.find('.T-search-start-date').val(),
-	                    endTime: $tab.find('.T-search-start-date').val()
+	                    endTime: $tab.find('.T-search-end-date').val()
 	                };
-	            FinancialService.exportReport(args,"replace");
+                var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
+	        	if(project.length > 0){
+					for(var i=0; i<project.length; i++){
+						if(project[i] == "车队"){
+							args.busCompanyOrderStatus = 1;
+						}else if(project[i] == "酒店"){
+							args.hotelOrderStatus = 1;
+						}else if(project[i] == "景区"){
+							args.scenicOrderStatus = 1;
+						}else if(project[i] == "票务"){
+							args.ticketOrderStatus = 1;
+						}
+					}
+				}
+	            FinancialService.exportReport(args,"exportArrangeBookingOrderFinancial");
 	        });
         }
 		$tab.find('.T-btn-close').on('click', function(event){
@@ -332,7 +354,15 @@ define(function(require, exports) {
 					Replace.saveCheckingData($tab, true);
 	            });
 			}else{
-				Replace.savePayingData($tab, true);
+				var allMoney = $tab.find('input[name=sumPayMoney]').val();
+	        	if(allMoney == 0){
+	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+			            Replace.savePayingData($tab, true);
+			        })
+	        	}else{
+	        		Replace.savePayingData($tab, true);
+	        	}
+				
 			}
 		});
 

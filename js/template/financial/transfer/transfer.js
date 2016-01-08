@@ -199,10 +199,16 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         Transfer.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = { 
+                    lineProductId:Transfer.$checkSearchArea.find('input[name=lineProductId]').val(),
+                    lineProductName:Transfer.$checkSearchArea.find('input[name=lineProductName]').val(),
+                    operateId:Transfer.$checkSearchArea.find('input[name=operateId]').val(),
+                    operateName:Transfer.$checkSearchArea.find('input[name=operateName]').val(),
+                    partnerAgencyId:Transfer.$checkSearchArea.find('input[name=partnerAgencyId]').val(),
+                    travelAgencyId:"",
                     startDate: Transfer.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: Transfer.$checkSearchArea.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"transfer");
+            FinancialService.exportReport(args,"exportArrangeTransferFinancial");
         });
 
         //报表内的操作
@@ -651,9 +657,11 @@ define(function(require, exports) {
                
             },
             select: function(event,ui) {
-                
+                console.log(ui);
+                $(this).next().val(ui.item.lineProductId);
             }
         }).on("click",function(){
+
             $lineProduct.autocomplete('search','');
         });      
     };

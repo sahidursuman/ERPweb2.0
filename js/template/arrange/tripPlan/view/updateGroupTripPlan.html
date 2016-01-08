@@ -8,17 +8,15 @@
 		<div class="row">
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">报价单号</label>
-				<div class="hct-input-group col-xs-8">
-					<input type="text" name="quoteOrderName" class="col-xs-12" value="{{tripPlan.quoteNumber}}">
-					<span class="hct-group-search cursor T-search-quote-order">[搜索]</span>
+				<div class="col-xs-8">
+					<input type="text" name="quoteOrderName" class="col-xs-12" readonly value="{{tripPlan.quoteNumber}}">
 					<input type="hidden" name="quoteId" value="{{tripPlan.quoteId}}">
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
-				<div class="hct-input-group col-xs-8 T-search-line">
+				<div class="col-xs-8">
 					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{tripPlan.lineProductName}}">
-					<span class="hct-group-search cursor">[搜索]</span>
 					<input type="hidden" name="lineProductId" value="{{tripPlan.lineProductId}}">
 				</div>
 			</div>
@@ -33,9 +31,8 @@
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right">收客单号</label>
-				<div class="hct-input-group col-xs-8 T-search-team">
-					<input type="text" readonly class="col-xs-12" name="partnerAgencyName" value="{{touristGroup}}" data-id="{{touristGroup.id}}">
-					<span class="hct-group-search cursor">[搜索]</span>
+				<div class="col-xs-8">
+					<input type="text" readonly class="col-xs-12" name="partnerAgencyName" value="{{touristGroup.orderNumber}}" data-id="{{touristGroup.id}}">
 				</div>
 			</div>
 		</div>
@@ -55,16 +52,16 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户</label>
 				<div class="hct-input-group col-xs-8">
-					<input type="text" class="col-xs-12" name="travelAgencyName" value="{{if !!tripPlan.partnerAgency}}{{tripPlan.partnerAgency.travelAgencyName}}{{/if}}">
-					<input type="hidden" name="fromPartnerAgencyId" value="{{if !!tripPlan.partnerAgency}}{{tripPlan.partnerAgency.id}}{{/if}}">
+					<input type="text" class="col-xs-12" name="travelAgencyName" value="{{if !!touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}">
+					<input type="hidden" name="fromPartnerAgencyId" value="{{if !!touristGroup.partnerAgency}}{{touristGroup.partnerAgency.id}}{{/if}}">
 					<span class="hct-group-add cursor T-addPartner">[新增]</span>
 				</div>
 			</div>
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户联系人</label>
 				<div class="hct-input-group col-xs-8">
-					<input type="text" class="col-xs-12" name="contactRealname" value="{{if !!tripPlan.partnerAgencyContact}}{{tripPlan.partnerAgencyContact.contactRealname}}{{/if}}">
-					<input type="hidden" name="fromPartnerAgencyContactId" value="{{if !!tripPlan.partnerAgencyContact}}{{tripPlan.partnerAgencyContact.id}}{{/if}}">
+					<input type="text" class="col-xs-12" name="contactRealname" value="{{if !!touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.contactRealname}}{{/if}}">
+					<input type="hidden" name="fromPartnerAgencyContactId" value="{{if !!touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.id}}{{/if}}">
 					<span class="hct-group-add cursor T-addPartnerManager">[新增]</span>
 				</div>
 			</div>
@@ -149,7 +146,7 @@
 				</div>
 				<label class="col-xs-4 control-label text-right">是否购买保险</label>
 				<div class="col-xs-2">
-					<input type="checkbox" class="ace" name="buyInsurance" {{tripPlan.buyInsurance | checked}}>
+					<input type="checkbox" class="ace" name="buyInsurance" {{touristGroup.buyInsurance | checked}}>
 					<label class="lbl"></label>
 				</div>
 			</div>
@@ -164,7 +161,7 @@
 			<div class="col-xs-12">
 				<label class="col-xs-1 control-label text-right">备注</label>
 				<div class="col-xs-11">
-					<textarea class="col-xs-12" name="remark" maxlength="1000" value="{{tripPlan.remark}}"></textarea>
+					<textarea class="col-xs-12" name="remark" maxlength="1000">{{tripPlan.remark}}</textarea>
 				</div>
 			</div>
 		</div>
@@ -184,7 +181,7 @@
 			<div class="col-xs-6">
 				<label class="col-xs-4 control-label text-right">短信签名</label>
 				<div class="col-xs-8">
-					<input type="text" class="col-xs-12" value="{{tripPlan.travelAgencyTag}}">
+					<input type="text" class="col-xs-12" name="travelAgencyTag" value="{{tripPlan.travelAgencyTag}}">
 				</div>
 			</div>
 		</div>
@@ -228,7 +225,7 @@
 						</label>
 					</td>
 					<td><input type="text" class="col-xs-12" name="restPosition" value="{{rs.restPosition}}"></td>
-					<td><input type="text" class="col-xs-12 T-action T-scenicItem" name="scenicItemNames" readonly value="{{rs.roadScenic}}"></td>
+					<td><input type="text" class="col-xs-12 T-action T-scenicItem" name="scenicItemNames" data-propover="{{rs.scenicItemIds}}" readonly value="{{rs.scenicItemNames}}"></td>
 					<td>
 						<a class="cursor T-action T-update-detail" title="编辑行程详情" data-detail="{{rs.detail}}">
 				            编辑行程详情
@@ -308,7 +305,7 @@
 		</div>
 		<div class="col-xs-12 T-action-plan-list">
 			{{each tripPlanRequireList as req}}
-			<div class="col-xs-12 hct-plan-ask" data-type="{{req.requireType}}">
+			<div class="col-xs-12 hct-plan-ask" data-type="{{req.requireType}}" data-id="{{req.id}}">
 				<div class="pull-left hct-plan-ask-title">{{req.requireText}}计划要求</div>
 				<div class="pull-left hct-plan-ask-input">
 				    <input type="text" class="col-xs-12" name="requireContent" value="{{req.requireContent}}">
