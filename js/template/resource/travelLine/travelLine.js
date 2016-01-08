@@ -455,7 +455,7 @@ define(function(require, exports) {
 				ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
 				if (!! data.description) {
 					ue.ready(function(){
-						ue.setContent(data.description);
+						ue.setContent(decodeURIComponent(data.description));
 					});
 				}		
 				
@@ -463,7 +463,7 @@ define(function(require, exports) {
 				//给提交按钮绑定事件
                 $container.find(".T-btn-submit").on('click' , function() {
                 	var content = UE.getEditor($container.find('.T-editor').prop('id')).getContent()
-                	$this.data('entity-content', content)
+                	$this.data('entity-content', encodeURIComponent(content))
                    	layer.close(updateDetailsLayer);
                 });
 				// 取消按钮绑定事件

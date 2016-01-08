@@ -29,6 +29,9 @@ template.helper("getDateText", function(startTime, whichDay) {
 template.helper("encode", function(data) {
     return encodeURIComponent(data);
 });
+template.helper("decode", function(data) {
+    return decodeURIComponent(data);
+});
 template.helper("parseInt", function(data) {
     return parseInt(data);
 });
