@@ -8,7 +8,7 @@
 			<input type="hidden" name="contactMemberId" value="{{touristGroup.contactMember.id}}" />
 			<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">联系电话：{{touristGroup.contactMember.mobileNumber}}</label>
 			<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">出游日期：{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</label>
-			<label class="col-sm-1 control-label no-padding-right" style="text-align: left;">人数合计：{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</label>
+			<label class="col-sm-1 control-label no-padding-right" style="text-align: left;">人数合计：<span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</label>
 		</div>
 		<div class="form-group">
 			{{if arriveTime != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
@@ -91,7 +91,7 @@
 											<tbody>{{each receiveGroup.outBusList as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -124,10 +124,10 @@
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
 													<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
@@ -208,11 +208,11 @@
 														<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" />
 														<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
 													</td>
-													<td><input class="col-sm-12 T-number price" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" /></td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}"  maxlength="1000"/></td>
 													<td>
@@ -294,11 +294,11 @@
 														</select> -->
 													<!-- <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" /> -->
 													</td>
-													<td><input class="col-sm-12 T-number price" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" /></td>
 													<td>
@@ -370,13 +370,13 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-12 T-chooseStandard price" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
+														<input class="col-sm-12 T-chooseStandard price F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
 													</td>
-													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
-													<td><input class="col-sm-12 T-number discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
@@ -432,11 +432,11 @@
 													</td>
 													<td><input class="col-sm-12" name="managerName"  maxlength="20" type="text" value="{{outOther.managerName}}" /></td>
 													<td><input class="col-sm-12" name="mobileNumber"  maxlength="11" type="text" value="{{outOther.mobileNumber}}" /></td>
-													<td><input class="col-sm-12 price" name="price"  maxlength="9" type="text" value="{{outOther.price}}" /></td>
-													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6"  type="text" value="{{outOther.memberCount}}" /></td>
-													<td><input class="col-sm-12 T-number discount" name="reduceMoney"   maxlength="9" type="text" value="{{outOther.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney"  maxlength="9" type="text" value="{{outOther.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 price F-float F-money" name="price"  maxlength="9" type="text" value="{{outOther.price}}" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6"  type="text" value="{{outOther.memberCount}}" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"   maxlength="9" type="text" value="{{outOther.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" type="text" value="{{outOther.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="other">
@@ -493,7 +493,7 @@
 											<tbody>{{each bus as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if !!outBus.bus && !!outBus.bus.seatCount}}{{outBus.bus.seatCount}}{{else if !!outBus.seatCount}}{{outBus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if !!outBus.bus && !!outBus.bus.seatCount}}{{outBus.bus.seatCount}}{{else if !!outBus.seatCount}}{{outBus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -526,10 +526,10 @@
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
 													<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="bus">
@@ -586,7 +586,7 @@
 											<tbody>{{each sendGroup.outBusList as outBus}}
 												{{if outBus.id != null && outBus.busCompany != null}}
 												<tr data-entity-id="{{outBus.id}}">
-													<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
+													<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
 													<td>
 														<div class="col-sm-12">
@@ -619,10 +619,10 @@
 													<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
 													<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
 													<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
-													<td><input class="col-sm-12 T-number price" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
-													<td><input class="col-sm-12 T-number discount" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="bus">
@@ -702,11 +702,11 @@
 														<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" />
 														<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
 													</td>
-													<td><input class="col-sm-12 T-number price" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number discount" name="hotelReduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count" name="hotelMemberCount F-float F-count"  maxlength="6" value="{{outHotel.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" /></td>
 													<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" /></td>
 													<td>
@@ -789,11 +789,11 @@
 														</select> -->
 													<!-- <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" /> -->
 													</td>
-													<td><input class="col-sm-12 T-number price" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
-													<td><input class="col-sm-12 count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number discount" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 needPay" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
 														<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" /></td>
 													<td>
@@ -865,13 +865,13 @@
 														</select>
 													</td>
 													<td>
-														<input class="col-sm-12 pirce T-chooseStandard" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
+														<input class="col-sm-12 pirce T-chooseStandard F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" />
 														<input type="hidden" name="price" value="{{outRestaurant.price}}" />
 													</td>
-													<td><input class="col-sm-12 count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
-													<td><input class="col-sm-12 T-number discount" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
@@ -927,11 +927,11 @@
 													</td>
 													<td><input class="col-sm-12" name="managerName" type="text" value="{{outOther.managerName}}" maxlength="20" /></td>
 													<td><input class="col-sm-12" name="mobileNumber" type="text" value="{{outOther.mobileNumber}}" maxlength="11" /></td>
-													<td><input class="col-sm-12 price" name="price" type="text" value="{{outOther.price}}" maxlength="9" /></td>
-													<td><input class="col-sm-12 count" name="memberCount" type="text" value="{{outOther.memberCount}}" maxlength="6" /></td>
-													<td><input class="col-sm-12 T-number discount" name="reduceMoney" type="text" value="{{outOther.reduceMoney}}" maxlength="9" /></td>
-													<td><input class="col-sm-12 needPay" name="needPayMoney" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
-													<td><input class="col-sm-12 T-number T-prePayMoney" name="prePayMoney" type="text" value="{{outOther.prePayMoney}}" maxlength="9" /></td>
+													<td><input class="col-sm-12 price F-float F-money" name="price" type="text" value="{{outOther.price}}" maxlength="9" /></td>
+													<td><input class="col-sm-12 count F-float F-count" name="memberCount" type="text" value="{{outOther.memberCount}}" maxlength="6" /></td>
+													<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" type="text" value="{{outOther.reduceMoney}}" maxlength="9" /></td>
+													<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
+													<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" value="{{outOther.prePayMoney}}" maxlength="9" /></td>
 													<td><input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" maxlength="1000" /></td>
 													<td>
 														<a class="cursor T-arrange-delete" title="删除" data-catename="other">
