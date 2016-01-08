@@ -1394,6 +1394,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
+					$parents.find('[name=insuranceItem]').val('');
 					$parents.find('[name=insuranceId]').val('');
 					$parents.find('[name=type]').val('');
 					$parents.find('[name=typeId]').val('');
@@ -1403,6 +1404,8 @@ define(function(require, exports) {
 			select: function(event,ui){
 				$(this).blur();
 				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=insuranceItem]').val('');
+				$parents.find('[name=needPayMoney]').val('');
 				$parents.find('[name=insuranceId]').val(ui.item.id);
 				$parents.find('[name=type]').val('');
 				$parents.find('[name=typeId]').val('');
