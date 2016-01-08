@@ -52,7 +52,7 @@
 					{{/if}} 
 				{{/if}}
 				</td>
-				<td>{{if group.lineProduct != null}}{{group.lineProduct.days}}{{/if}}</td>
+				<td class="F-float F-count">{{if group.lineProduct != null}}{{group.lineProduct.days}}{{/if}}</td>
 				<td>{{group.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
 				{{if !!group.contactMember}}
 				<td>{{group.contactMember.name}}</td>
@@ -61,7 +61,7 @@
 				<td></td>
 				<td></td>
 				{{/if}}
-				<td>{{group.adultCount}} 大 {{group.childCount}}小</td>
+				<td class="F-float F-count">{{group.adultCount}} 大 {{group.childCount}}小</td>
 					
 				<td>{{group.areaData}}</td>
 				<td>{{group.ageData}}</td>

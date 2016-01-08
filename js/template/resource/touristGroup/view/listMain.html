@@ -154,11 +154,11 @@
         <div style="clear: both;height: 0px;line-height: 0px;"></div>
     </div>
     <div class="form-horizontal T-countData">
-        <label class="control-label pull-left" name="statistics-count">人数合计：<span class="allPerson">{{statistics.adultCount}}大{{statistics.childCount}}小</span></label>
-        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：<span class="needIncome">{{statistics.needPay | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：<span class="payedMoney">{{statistics.payedMoney | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay">{{statistics.currentNeedPay | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：<span class="unIncome">{{statistics.unIncomeMoney | toFixed}}元</span></label>
+        <label class="control-label pull-left" name="statistics-count">人数合计：<span class="allPerson"><span class="F-float F-count">{{statistics.adultCount}}</span>大<span class="F-float F-count">{{statistics.childCount}}</span>小</span></label>
+        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：<span class="needIncome"><span class="F-float F-money">{{statistics.needPay | toFixed}}</span>元</span></label>
+        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：<span class="payedMoney"><span class="F-float F-money">{{statistics.payedMoney | toFixed}}</span>元</span></label>
+        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay"><span class="F-float F-money">{{statistics.currentNeedPay | toFixed}}</span>元</span></label>
+        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：<span class="unIncome"><span class="F-float F-money">{{statistics.unIncomeMoney | toFixed}}</span>元</span></label>
     </div>
 </div>
 <div id="touristGroup-listMain" class="col-sm-12 clearfix">

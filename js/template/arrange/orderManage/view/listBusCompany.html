@@ -39,11 +39,11 @@
 				    <td>发团</td>
 					<td>{{if busOrderList.tripPlan!=null}}{{busOrderList.tripPlan.tripNumber}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
-					<td>{{if !!busOrderList.busCompanyArrange}}{{busOrderList.busCompanyArrange.needSeatCount}}{{/if}}</td>
+					<td class="F-float F-count">{{if !!busOrderList.busCompanyArrange}}{{busOrderList.busCompanyArrange.needSeatCount}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null}}{{busOrderList.busCompanyArrange.brand}}{{/if}}</td>
-					<td>{{busOrderList.seatCount}}</td>
-					<td>{{busOrderList.price}}</td>
-					<td>{{busOrderList.seatCount*busOrderList.price}}</td>
+					<td class="F-float F-count">{{busOrderList.seatCount}}</td>
+					<td class="F-float F-money">{{busOrderList.price}}</td>
+					<td class="F-float F-money">{{busOrderList.seatCount*busOrderList.price}}</td>
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
 					<td>{{if busOrderList.createTime!=null}}{{busOrderList.createTime  | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 					<td>{{busOrderList.remark}}</td>

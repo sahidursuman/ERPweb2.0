@@ -53,18 +53,18 @@
 						{{/if}}
 					</td>
 					<td>
-							{{touristGroup.adultCount}}大
-							{{touristGroup.childCount}}小
+							<span class="F-float F-count">{{touristGroup.adultCount}}</span>大
+							<span class="F-float F-count">{{touristGroup.childCount}}</span>小
 					</td>
 					<td>
-						{{touristGroup.needPayAllMoney}}
+						<span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 					</td>
-					<td>{{touristGroup.preIncomeMoney}}</td>
+					<td><span class="F-float F-money">{{touristGroup.preIncomeMoney}}</span></td>
 					<td>
-						{{touristGroup.payedMoney}}
+						<span class="F-float F-money">{{touristGroup.payedMoney}}</span>
 					</td>
-					<td>{{touristGroup.currentNeedPayMoney}}</td>
-					<td>{{touristGroup.unIncomeMoney}}</td>
+					<td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
+					<td><span class="F-float F-money">{{touristGroup.unIncomeMoney}}</span></td>
 					<td>
 						{{if touristGroup.buyInsurance==1 }}
 						<i class="ace-icon fa fa-check green bigger-130"></i>

@@ -1,5 +1,6 @@
 {{each result as rs}}
-    <tr><td>{{rs.accountTime}}</td>
+    <tr>
+        <td>{{rs.accountTime}}</td>
         <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{/if}}</td>
         <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>
         <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
@@ -7,11 +8,11 @@
         <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>
         <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
         {{if rs.moneyType == 0}}
-        <td>{{rs.incomeDifferenceMoney}}</td>
+        <td class="F-float F-money">{{rs.incomeDifferenceMoney}}</td>
         <td>-</td>
         {{else}}
         <td>-</td>
-        <td>{{rs.payDifferenceMoney}}</td>
+        <td class="F-float F-money">{{rs.payDifferenceMoney}}</td>
         {{/if}}
         <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>
         <td>{{rs.remark}}</td>

@@ -13,9 +13,9 @@
 					</tr>
 				<tr>
 					<td class="style-myself">应付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.transNeedPayAllMoney}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
 					<td class="style-myself">已付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="1">{{touristGroup.transPayedMoney}}
+					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="1"><span class="F-float F-money">{{touristGroup.transPayedMoney}}</span>
 					</td>
 
 					<td>
@@ -74,16 +74,16 @@
 									<tr>
 										<td>转客价</td>
 										<td>大人</td>
-										<td>{{touristGroup.adultCount}}</td>
-										<td>{{touristGroup.transAdultPrice}}</td>
+										<td><span class="F-float F-count">{{touristGroup.adultCount}}</span></td>
+										<td><span class="F-float F-money">{{touristGroup.transAdultPrice}}</span></td>
 								
 									</tr>
 									
 									<tr>
 										<td>转客价</td>
 										<td>小孩</td>
-										<td>{{touristGroup.childCount}}</td>
-										<td>{{touristGroup.transChildPrice}}</td>	
+										<td><span class="F-float F-count">{{touristGroup.childCount}}</span></td>
+										<td><span class="F-float F-money">{{touristGroup.transChildPrice}}</span></td>	
 									</tr>  
 									
 								  <!-- 其他费用 -->
@@ -92,8 +92,8 @@
 								      <tr>   
 								            <td>其他费用</td>  
 								            <td>{{transferFee.discribe}}</td>
-								            <td>{{transferFee.count}}</td>  
-								            <td>{{transferFee.otherPrice}}</td>
+								            <td><span class="F-float F-count">{{transferFee.count}}</span></td>  
+								            <td><span class="F-float F-money">{{transferFee.otherPrice}}</span></td>
 								      </tr>
 								      {{/if}}  
 								  {{/each}} 										  
@@ -171,17 +171,17 @@
 					<div class="search-area col-sm-12">
 						<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
 						<div class="col-sm-1">
-							<input name="needPayAllMoney" value="{{touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							<input name="needPayAllMoney" value="{{touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">已收：</label>
 						<div class="col-sm-1">
-							<input name="payedMoney" value="{{touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							<input name="payedMoney" value="{{touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">现收：</label>
 						<div class="col-sm-1">
-							<input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
+							<input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 						</div>
 					</div>
 					<div class="search-area col-sm-12">
@@ -205,23 +205,23 @@
 										<tr>
 											<td>结算价</td>
 											<td>大人</td>
-											<td>{{touristGroup.adultCount}}</td>
-											<td>{{touristGroup.adultPrice}}</td>	
+											<td><span class="F-float F-count">{{touristGroup.adultCount}}</span></td>
+											<td><span class="F-float F-money">{{touristGroup.adultPrice}}</span></td>	
 										</tr>
 										
 										<tr>   
 											<td>结算价</td>
 											<td>小孩</td>
-											<td>{{touristGroup.childCount}}</td>
-											<td>{{touristGroup.childPrice}}</td>	
+											<td><span class="F-float F-count">{{touristGroup.childCount}}</span></td>
+											<td><span class="F-float F-money">{{touristGroup.childPrice}}</span></td>	
 										</tr>
 										
 								      {{each touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
 											<td>{{if transferFeeList.type==0}}增加{{else}}减少{{/if}}</td>
 											<td>{{transferFeeList.describeInfo}}</td>
-											<td>{{transferFeeList.count}}</td>
-											<td>{{transferFeeList.price}}</td>	  
+											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
+											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>	  
 										</tr>
 									   {{/each}}  
 										

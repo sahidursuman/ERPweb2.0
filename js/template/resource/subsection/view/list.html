@@ -32,10 +32,10 @@
 				</td>
 				<td>{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</td>
 				<td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-				<td>{{subList.lineProduct.days}}</td>
-				<td>{{subList.currentNeedPayMoney}}</td>
+				<td><span class="F-float F-count">{{subList.lineProduct.days}}</span></td>
+				<td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
 				<td>{{if subList.contactMember!=null}}{{subList.contactMember.name}}{{/if}}</td>
-				<td>{{subList.adultCount}}大{{subList.childCount}}小</td>
+				<td><span class="F-float F-count">{{subList.adultCount}}</span>大<span class="F-float F-count">{{subList.childCount}}</span>小</td>
 				<td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
 				<td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
 				<td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
@@ -59,7 +59,7 @@
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td>{{subDetails.days}}</td>
+					<td><span class="F-float F-count">{{subDetails.days}}</span></td>
 			 		<td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
 					<td colspan="4"></td>
 					<td>{{if subDetails.status == 1}}

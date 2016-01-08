@@ -628,9 +628,9 @@ define(function(require, exports) {
 		transfer.newAddFee=function($tab,validator){
 			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
 		    "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc\" maxlength=\"6\" /></td>"+
-			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc\" maxlength=\"9\" /></td>"+
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
             "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";

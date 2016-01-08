@@ -1524,7 +1524,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><select name="type" class="col-xs-12 T-restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-		'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+		'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change  F-float F-money"/><input type="hidden" name="typeId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
@@ -1681,7 +1681,7 @@ define(function(require, exports) {
 			'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="">全部</option><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
+			'<td><input type="text" class="col-xs-12 F-float F-money" name="contractPrice" /></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
@@ -1696,7 +1696,7 @@ define(function(require, exports) {
 			'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="">全部</option><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 			'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-			'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
+			'<td><input type="text" class="col-xs-12 F-float F-money" name="contractPrice" /></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 			'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
@@ -1870,7 +1870,7 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
-		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12 F-float F-money" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
@@ -2331,7 +2331,7 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
 		'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
-		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12 F-float F-money" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
@@ -2420,7 +2420,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 otherName bind-change" name="name"/><input type="hidden" name="otherId"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="managerName"/></td>'+
         '<td><input type="text" class="col-xs-12" name="mobileNumber" value=""></td>'+
-		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12 F-float F-money" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
 		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
@@ -2438,7 +2438,7 @@ define(function(require, exports) {
 		+'<input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" maxlength="100" />'
 		+'<input type="hidden" name="typeId" value="">'
 		+'</td>'
-		+'<td><input class="col-xs-12" name="price" type="text" maxlength="6" /></td>'
+		+'<td><input class="col-xs-12 F-float F-money" name="price" type="text" maxlength="6" /></td>'
 		+'<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>'
 		+'<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>'
 		+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>'
@@ -2457,7 +2457,7 @@ define(function(require, exports) {
 	ResLineProduct.addBusCompany = function($btn, validator) {
 		var busCompanyDetails = ''
 		+'<tr>'
-		+'<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>'
+		+'<td><input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" /></td>'
 		+'<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>'
 		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>'
 		+'<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>'

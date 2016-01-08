@@ -15,10 +15,10 @@
                 <div class="share-quote-offerdetails">
                     <p class="share-dividing">线路报价</p>
                     <p>{{quote.lineProduct.name}}</p>
-                    <p style="margin-top: -5px;"><span>天数：{{quote.lineProduct.days}}</span>
+                    <p style="margin-top: -5px;"><span>天数：<span class="F-float F-count">{{quote.lineProduct.days}}</span></span>
                         <span style="margin-left: 20px; ">类别：{{quote.lineProduct.type}}</span>
                         <span style="margin-left: 20px; ">出游日期：{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</span>
-                        <span style="margin-left: 20px; ">出游人数：{{quote.adultCount}}大{{quote.childCount}}小</span>
+                        <span style="margin-left: 20px; ">出游人数：<span class="F-float F-count">{{quote.adultCount}}</span>大<span class="F-float F-count">{{quote.childCount}}</span>小</span>
                     </p>
                     <table class="whereQ whereTwo quoteTable" style="width: 100%;margin-bottom: 10px;">
                         <tr style="font-weight: bold;background-color: #F3F3F3;">
@@ -29,14 +29,14 @@
                         </tr>
                         <tr>
                             <td>单价</td>
-                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥{{quote.adultQuotePrice}}</td>
-                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥{{quote.childQuotePrice}}</td>
-                            <td rowspan="3" style="font-size: 14px;font-weight: bold;">￥{{quote.sumQuoteFee}}</td>
+                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥<span class="F-float F-money">{{quote.adultQuotePrice}}</span></td>
+                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥<span class="F-float F-money">{{quote.childQuotePrice}}</span></td>
+                            <td rowspan="3" style="font-size: 14px;font-weight: bold;">￥<span class="F-float F-money">{{quote.sumQuoteFee}}</span></td>
                         </tr>
                         <tr>
                             <td>数量</td>
-                            <td>{{quote.adultCount}}</td>
-                            <td>{{quote.childCount}}</td>
+                            <td><span class="F-float F-count">{{quote.adultCount}}</span></td>
+                            <td><span class="F-float F-count">{{quote.childCount}}</span></td>
                         </tr>
                     </table>
                     <p><span style="color: #ff6511">*</span>备注：&nbsp;&nbsp;&nbsp;单房差报价：{{quote.singleRoomQuotePrice}}，单房差数量：{{quote.singleRoomCount}}。</p>
@@ -44,7 +44,7 @@
                     {{if !!busCompanyQuote}}
                     <p style="margin-left: 55px;">交通：
                         <span>{{busCompany.brand}}</span>
-                        <span>{{busCompany.needSeatCount}}座，</span>
+                        <span><span class="F-float F-count">{{busCompany.needSeatCount}}</span>座，</span>
                         <span>{{busCompany.remark}}</span></p>
                     {{/if}}
                     {{/each}}
@@ -63,13 +63,13 @@
                         <td style="width: 160px"rowspan="{{daysList.ticketQuote.length}}">交通</td>
                             <td style="text-align: left;"> <span>
                             {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
-                            <td style="width: 180px;">￥{{ticketList.quotePrice}}</td>
+                            <td style="width: 180px;">￥<span class="F-float F-money">{{ticketList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{each daysList.ticketQuote as ticketList index}} {{if index > 0}}
                     <tr>
                             <td style="text-align: left;"> <span>
                             {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
-                            <td style="width: 180px;">￥{{ticketList.quotePrice}}</td>
+                            <td style="width: 180px;">￥<span class="F-float F-money">{{ticketList.quotePrice}}</span></td>
                     </tr> 
                     {{/if}} {{/each}} {{/if}}
 
@@ -87,12 +87,12 @@
                     <tr>
                         <td rowspan="{{daysList.restaurantQuote.length}}">餐饮</td>
                         <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{restaurantList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{each daysList.restaurantQuote as restaurantList index}} {{if index > 0}}
                     <tr>
                         <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{restaurantList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
 
@@ -124,7 +124,7 @@
                             <span>{{if hotelList.hotelRoom.containDinner == 1}}含晚{{else}}不含晚{{/if}}</span>
                             <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
                             </td>
-                            <td>￥{{hotelList.quotePrice}}</td>
+                            <td>￥<span class="F-float F-money">{{hotelList.quotePrice}}</span></td>
                         </tr>
                         {{/if}} {{/each}} {{each daysList.hotelQuote as hotelList index}} {{if index > 0}}
                         <tr>
@@ -152,7 +152,7 @@
                             <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}不含晚{{/if}}</span>
                             <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
                             </td>
-                            <td>￥{{hotelList.quotePrice}}</td>
+                            <td>￥<span class="F-float F-money">{{hotelList.quotePrice}}</span></td>
                         </tr>
                         {{/if}} {{/each}} {{/if}}
 
@@ -161,12 +161,12 @@
                     <tr>
                         <td rowspan="{{daysList.scenicQuote.length}}">景点</td>
                         <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">{{if !!scenicList.tourDuration}}{{scenicList.tourDuration}}{{/if}}</span>
-                        <td>￥{{scenicList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{scenicList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{each daysList.scenicQuote as scenicList index}} {{if index > 0}}
                     <tr>
                         <td>{{scenicList.scenic.name}}</td>
-                        <td>￥{{scenicList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{scenicList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
                     
@@ -175,7 +175,7 @@
                     <tr>
                         <td>自费</td>
                         <td>{{selfPayList.selfPayItem.name}}</td>
-                        <td>￥{{selfPayList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{selfPayList.quotePrice}}</span></td>
                     </tr>
                     {{/each}}
                     <!-- 其他 -->
@@ -183,7 +183,7 @@
                     <tr>
                         <td>其他</td>
                         <td>{{otherList.name}}</td>
-                        <td>￥{{otherList.quotePrice}}</td>
+                        <td>￥<span class="F-float F-money">{{otherList.quotePrice}}</span></td>
                     </tr>
                     {{/each}}
                 </table>
