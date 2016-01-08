@@ -263,10 +263,12 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $checkTab.find(".T-btn-export").click(function(){
             var args = { 
+                    name: $checkTab.find('input[name=itemName]').val(),
+                    info: $checkTab.find('.T-creatorUserChoose').val(),
                     startAccountTime: $checkTab.find('.T-startTime').val(),
                     endAccountTime: $checkTab.find('.T-endTime').val()
                 };
-            FinancialService.exportReport(args,"otherAccounts");
+            FinancialService.exportReport(args,"exportArrangeOtherFinancial");
         });
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($checkTab.find('.T-selectAll'), $checkTab.find('.T-Accounts').find('input[type="checkbox"]'));

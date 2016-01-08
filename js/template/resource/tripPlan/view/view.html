@@ -4,7 +4,7 @@
 		<td class="style-myself">线路产品：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.lineProduct.name}}</td>
 		<td class="style-myself">针对客源：</td>
-		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripPlanType}}</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
 		<td class="style-myself">人数：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩</td>
 		<td class="style-myself">团号：</td>
@@ -54,6 +54,16 @@
 		<td  class="style-myself">备注：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="9">{{basicInfo.remark}}</td>
 	</tr>
+</table>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>现收：{{basicInfo.guideAllNowMoney}}</td>
+            <td>现付：{{basicInfo.guideAllPayMoney}}</td>
+            <td>预付款：{{basicInfo.guideAllPreMoney}}</td>
+        </tr>
+    </tbody>
 </table>
 
 <div class="trip-arrange">
@@ -202,7 +212,7 @@
                 <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{#busCompany.taskType || getTaskDesc}}</td>
                 <td>{{busCompany.needSeatCount}}</td>
-                <td>{{busCompany.bus.brand}}</td>
+                <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}</td>
@@ -332,7 +342,7 @@
                 <td>{{hotel.prePayMoney}}</td>
                 <td>{{hotel.guidePayMoney}}</td>
                 <td>{{hotel.remark}}</td>
-                <td>{{ hotel.orderStatus | getOrderStatusDesc}}</td>
+                <td>{{hotel.orderStatus | getOrderStatusDesc}}</td>
             </tr>
             {{/if}}
         {{/each}}

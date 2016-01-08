@@ -364,10 +364,17 @@ define(function(require,exports) {
 		//导出报表事件
 		$obj.find(".T-btn-export").on('click',function(event){
 			var args = { 
+					businessGroupId:$obj.find('input[name=businessGroupId]').val(),
+					lineProductId:$obj.find('input[name=lineProductId]').val(),
+					lineProductName:$obj.find('input[name=lineProductName]').val() == ""?"全部":$obj.find('input[name=lineProductName]').val(),
+					receiveUserId:$obj.find('input[name=receiveUserId]').val(),
+					receiveUserName:$obj.find('input[name=receiveUserName]').val() == ""?"全部":$obj.find('input[name=receiveUserName]').val(),
                     startAccountTime: $obj.find('input[name=startDate]').val(),
                     endAccountTime: $obj.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"exportInnerTransferIn");
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+            args.receiveUserName = args.receiveUserName === "全部" ? "" : args.receiveUserName;
+            FinancialService.exportReport(args,"exportArrangeInnerTransferInFinancial");
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");

@@ -94,14 +94,20 @@ define(function(require, exports) {
                     }, { //其它
                         $ele: $obj.find('input[name="count"]'),
                         rules: [{
-                            type: 'float',
-                            errMsg: '其它费用的数量的格式不正确'
+                            type: 'null',
+                            errMsg: '费用项数量不能为空！'
                         }]
                     }, { //其它
                         $ele: $obj.find('input[name="price"]'),
                         rules: [{
-                            type: 'float',
-                            errMsg: '其它费用单价不合法'
+                            type: 'null',
+                            errMsg: '费用项单价不能为空！'
+                        }]
+                    },{ //其它
+                        $ele: $obj.find('input[name="describeInfo"]'),
+                        rules: [{
+                            type: 'null',
+                            errMsg: '费用项不能为空！'
                         }]
                     }, { //姓名
                         $ele: $obj.find('input[name="name"]'),

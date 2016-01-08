@@ -309,10 +309,13 @@ define(function(require, exports){
         	//导出报表事件 btn-hotelExport
 	        $tab.find(".T-btn-export").click(function(){
 	            var args = { 
+	            		shopId:$tab.find('input[name=shopId]').val(),
+	            		shopName:$tab.find('input[name=shopName]').val(),
+	            		tripMessage:$tab.find('.T-search-trip').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val()
 	                };
-	            FinancialService.exportReport(args,"shop");
+	            FinancialService.exportReport(args,"exportArrangeShopFinancial");
 	        });
 		}
 

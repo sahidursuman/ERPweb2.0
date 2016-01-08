@@ -190,10 +190,11 @@ define(function(require, exports) {
         hotel.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
                     hotelId: id, 
+                    accountInfo : hotel.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startTime: hotel.$checkSearchArea.find('input[name=startDate]').val(),
                     endTime: hotel.$checkSearchArea.find('input[name=endDate]').val()
                 };
-            FinancialService.exportReport(args,"hotel");
+            FinancialService.exportReport(args,"exportArrangeHotelFinancial");
         });
 
         //复选框事件初始化

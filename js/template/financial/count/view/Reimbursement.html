@@ -47,7 +47,7 @@
 
         <tr>
             <td><label>应收团款：<span class="tripIncome-getAllMoney">{{touristGroup.needPayAllMoney}}</span></label></td>
-            <td><label>自费返佣：<span class="tripIncome-selfPayTravelAgencyRebateMoney">0</span></label></td>
+            <td><label>自费收入：<span class="tripIncome-selfPayTravelAgencyRebateMoney">0</span></label></td>
             <td><label>导服费：<span class="tripCost-guideArrangePrice">{{guideArrange.price}}</span></label></td>
             <td><label>保险：<span class="tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
             <td><label>车费：<span class="tripCost-busCompanyNeedPayMoney">0</span></label></td>
@@ -143,7 +143,7 @@
         </ul>
         <div class="tab-content financial-count-reimbursement-reimbursement-tab T-list" style="position: relative;top:-2px"> 
             <!-- 团款 -->
-            <div id="financial-count-update-money" class="tab-pane fade active in T-tripCost">
+            <div id="financial-count-reimbursement-money" class="tab-pane fade active in T-tripCost">
                 <table class="table table-striped table-bordered table-hover">
                     <tbody class="T-tripDetail">
                     <tr>
@@ -167,15 +167,12 @@
                             <td>{{touristGroup.payedMoney}}</td>
                             <td>{{touristGroup.currentNeedPayMoney}}</td>
                             <td>
-                                {{if touristGroup.adultCount > 0}}
-                                大人：{{touristGroup.adultPrice}}X{{touristGroup.adultCount}}={{touristGroup.adultPrice * touristGroup.adultCount}}<br />
-                                小孩：{{touristGroup.childPrice}}X{{touristGroup.childCount}}={{touristGroup.childPrice * touristGroup.childCount}}<br />
+                                {{if touristGroup.touristGroupFeeList.length > 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
-                                        {{touristGroupFee.describeInfo}} ：{{touristGroupFee.price}}X{{touristGroupFee.count}}={{touristGroupFee.price * touristGroupFee.count}}<br />
+                                        {{touristGroupFee.describeInfo}} ：{{touristGroupFee.price}}&nbsp;X&nbsp;{{touristGroupFee.count}}={{touristGroupFee.price * touristGroupFee.count}}<br />
                                     {{/each}}
                                 {{/if}}
                             </td>
-                            <td>{{if touristGroup.remark != null}}{{touristGroup.remark}}{{/if}}</td>
                         </tr>
                     {{/each}}
                     </tbody>
