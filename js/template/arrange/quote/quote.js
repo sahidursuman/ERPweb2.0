@@ -2411,7 +2411,12 @@ define(function(require, exports) {
 
 							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
 							$tr.find("input[name=marketPrice]").val(hotelRoom.normalMarketPrice);
-							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
+							var containEat = '';
+							containEat += hotelRoom.containBreakfast == "0" ? "" : "含早餐、";
+							containEat += hotelRoom.containLunch == "0" ? "" : "含午餐、";
+							containEat += hotelRoom.containDinner == "0" ? "" : "含晚餐、";
+
+							$tr.find("input[name=containBreakfast]").val(containEat);
 							quote.costCalculation($container)
 						}
                     }
