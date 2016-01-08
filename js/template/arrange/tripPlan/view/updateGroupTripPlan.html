@@ -365,7 +365,7 @@
 						<td><input type="text" class="col-xs-12 T-calculate T-count F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-calculate T-price F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete" title="删除">删除</a></td>
 					</tr>
 					{{/each}}
