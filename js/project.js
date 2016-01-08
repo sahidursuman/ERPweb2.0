@@ -67,7 +67,9 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
-
+	html = Tools.filterCount(html);
+	html = Tools.filterMoney(html);
+	html = Tools.filterUnPoint(html);
 	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
@@ -994,6 +996,89 @@ var _statusText = {
 		return _ajax(opt);
 	};
 
+	jQuery.fn.extend({
+		//重写jquery的text方法
+		text : function( value ){
+			return jQuery.access( this, function( value ) {
+				if(value === undefined){
+					value = jQuery.text( this )
+					if($(this).hasClass('F-float')){
+						value = Tools.formatQuantile(value);
+					}
+				}else{
+					if($(this).hasClass('F-float')){
+						value = Tools.thousandPoint(value);
+					}
+					value = this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) )
+				}
+				return value;
+			}, null, value, arguments.length );
+		},
+
+		//重写jquery的val方法
+		val : function( value ){
+			var ret, hooks, isFunction,rreturn = /\r/g,
+			elem = this[0];
+
+			if ( !arguments.length ) {
+				if ( elem ) {
+					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
+
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+						return ret;
+					}
+
+					ret = elem.value;
+					if($(this).hasClass('F-float') && ret !== ""){
+						ret = Tools.formatQuantile(ret);
+					}
+					return typeof ret === "string" ?
+						ret.replace(rreturn, "") :
+						ret == null ? "" : ret;
+				}
+
+				return;
+			}
+
+			isFunction = jQuery.isFunction( value );
+
+			return this.each(function( i ) {
+				var val;
+
+				if ( this.nodeType !== 1 ) {
+					return;
+				}
+
+				if ( isFunction ) {
+					val = value.call( this, i, jQuery( this ).val() );
+				} else {
+					val = value;
+				}
+
+				// Treat null/undefined as ""; convert numbers to string
+				if ( val == null ) {
+					val = "";
+				} else if ( typeof val === "number" ) {
+					val += "";
+				} else if ( jQuery.isArray( val ) ) {
+					val = jQuery.map(val, function ( value ) {
+						return value == null ? "" : value + "";
+					});
+				}
+
+				hooks = jQuery.valHooks[ this.type ] || jQuery.valHooks[ this.nodeName.toLowerCase() ];
+
+				// If set returns undefined, fall back to normal setting
+				if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
+					if($(this).hasClass('F-float')){
+						val = Tools.thousandPoint(val);
+					}
+					this.value = val;
+				}
+			});
+		}
+	});
+
 	/****
 		Tools
 	*****/
@@ -1277,7 +1362,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 			Tools.justifyTab();
 		}
-
+		html = Tools.filterCount(html);
+		html = Tools.filterMoney(html);
+		html = Tools.filterUnPoint(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -1376,19 +1463,23 @@ Tools.getTabKey = function(id) {
 Tools.inputCtrolFloat=function($inputCtrol){
 	if (jQuery.isArray($inputCtrol)) {
 		for (var i = 0, len = $inputCtrol.length; i < len; i++) {
-			$inputCtrol[i].on('keyup', function (event) {
+			$inputCtrol[i].on('input', function (event) {
 			    var $amountInput = $(this);
 			    //响应鼠标事件，允许左右方向键移动 
 			    event = window.event || event;
 			    if (event.keyCode == 37 | event.keyCode == 39) {
 			        return;
 			    }
-			    //先把非数字的都替换掉，除了数字和. 
-			    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-			        //只允许一个小数点              
-			        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-			        //只能输入小数点后两位
-			        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    };
 		    });
 			$inputCtrol[i].on('blur', function () {
 			    var $amountInput = $(this);
@@ -1397,19 +1488,23 @@ Tools.inputCtrolFloat=function($inputCtrol){
 			});
 		}
 	}else{
-		$inputCtrol.on('keyup', function (event) {
+		$inputCtrol.on('input', function (event) {
 		    var $amountInput = $(this);
 		    //响应鼠标事件，允许左右方向键移动 
 		    event = window.event || event;
 		    if (event.keyCode == 37 | event.keyCode == 39) {
 		        return;
 		    }
-		    //先把非数字的都替换掉，除了数字和. 
-		    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-		        //只允许一个小数点              
-		        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-		        //只能输入小数点后两位
-		        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+		     if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    }; 
 	    });
 		$inputCtrol.on('blur', function () {
 		    var $amountInput = $(this);
@@ -1445,6 +1540,84 @@ Tools.toFixed = function(data, length) {
 	}
 
 	return data;
+};
+/**
+ * 过滤金额精度为2位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterMoney = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-money").each(function(){
+		var $taht = $(this);
+		if(!$taht.is(':not("input")')){
+			$taht.val(Tools.toFixed($taht.val(), 2))
+		}else{
+			$taht.text(Tools.toFixed($taht.text(), 2));
+		}
+	});
+	return $obj;
+};
+/**
+ * 过滤数量精度为1位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterCount = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-count").each(function(){
+		if(!$(this).is(':not("input")')){
+			$(this).val(Tools.toFixed($(this).val(), 1));
+		}else{
+			$(this).text(Tools.toFixed($(this).text(), 1));
+		}
+	});
+	return $obj;
+};
+/**
+ * 添加千分位
+ * @param  {float} num   数据
+ * @return {string}      返回添加千分位后的数据
+ */
+Tools.thousandPoint = function(num, length){
+	if(!!length){
+		mun = Tools.toFixed(num, length);
+	}
+	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+};
+/**
+ * 过滤千分位
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterUnPoint = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-float").each(function(){
+		if(!$(this).is(':not("input")')){
+			$(this).val(Tools.thousandPoint($(this).val()));
+			$(this).on('input', function(event){
+				event.preventDefault();
+				var value = $(this).val();
+				if(!isNaN(value)){
+					$(this).val(value);
+				}
+			});
+		}else{
+			$(this).text(Tools.thousandPoint($(this).text()));
+		}
+	});
+	return $obj;
+};
+/**
+ * 把千分位转换为数字
+ * @param  {string} data [description]
+ * @return {[type]}      [description]
+ */
+Tools.formatQuantile = function(data){
+	return data.replace(/,/g, '');
 };
 
 /**
