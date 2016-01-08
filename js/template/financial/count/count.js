@@ -414,7 +414,10 @@ define(function(require, exports){
 		});
 		//商品选择
 		var $shopPolicyObj = $shopObj.find('input[name=shopPolicyName]');
-		Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
+		if($shopPolicyObj.length>0){
+			Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
+		};
+		
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
 		$selfObj.find('input[type=text]').off('change').on('change',function(){
@@ -426,7 +429,10 @@ define(function(require, exports){
 				Count.autoSelfSum($(this),$obj);
 			}
 		});
-		Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+
+		if($selfObj.find('input[name=selfPayItemName]')>0){
+			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+		};
 		//新增自费安排
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
 			Count.addSelf($selfObj,$obj);
@@ -658,7 +664,9 @@ define(function(require, exports){
 		});
 		//商品选择
 		var $shopPolicyObj = $shopObj.find('input[name=shopPolicyName]');
-		Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
+		if($shopPolicyObj>0){
+			Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
+		};
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
 		$selfObj.find('input[type=text]').off('change').on('change',function(){
@@ -674,7 +682,9 @@ define(function(require, exports){
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
 			Count.addSelf($selfObj,$obj);
 		});
-		Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+		if($selfObj.find('input[name=selfPayItemName]')>0){
+			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+		};
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
 		$otherIn.find('input[type=text]').off('change').on('change',function(){
@@ -2316,12 +2326,12 @@ define(function(require, exports){
 								var consumeMoney = $(this).closest('tr').find('input[name=consumeMoney]').val() || 0;
 								var date =$parentObj.find('.tripPlanStartTime').val();
 								Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
-								//$obj.find('input[name=consumeMoney]').val('');
 							}
 						}
 						}).off('click').on('click',function(){
-							$shopPolicyObj.autocomplete('option','source', shopPolicyList);
-							$shopPolicyObj.autocomplete('search', '');
+							var obj = $(this);
+							obj.autocomplete('option','source', shopPolicyList);
+							obj.autocomplete('search', '');
 						});
 					}else{
 						layer.tips('没有内容。', shopObj, {
@@ -2417,6 +2427,7 @@ define(function(require, exports){
 				}
 			}
 		}).off('click').on('click', function() {
+			var obj = $(this);
 			$.ajax({
 				url:KingServices.build_url('selfpay','findSelfPayItemBySelfPayId'),
 				data:{
@@ -2433,8 +2444,8 @@ define(function(require, exports){
 						for(var i=0; i < selfpay.length; i++){
 							selfpay[i].value = selfpay[i].name;
 						};
-						$selfPayItemObj.autocomplete('option','source', selfpay);
-						$selfPayItemObj.autocomplete('search', '');
+						obj.autocomplete('option','source', selfpay);
+						obj.autocomplete('search', '');
 					};
 				}
 			});
