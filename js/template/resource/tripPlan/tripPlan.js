@@ -329,6 +329,8 @@ define(function(require, exports) {
 			tripPlan.submitTripPlan($tab,0,id);
 		});
 
+		tripPlan.addResource($tab);
+
 		var validator = rule.listTripPlanCheckor($tab);  
 		$tab.find('.tab-content').on('click', '.T-addResource', function() {
 			var $that = $(this);
@@ -518,7 +520,7 @@ define(function(require, exports) {
 		var $price = $tab.find('.price');
 		Tools.inputCtrolFloat($price);
 		//添加资源
-		tripPlan.addResource();
+		tripPlan.addBusResource($tab);
 		//第N天
 		tripPlan.setChooseDays();
 		//删除操作
@@ -1031,10 +1033,10 @@ define(function(require, exports) {
 					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
 					+ '<td><input type="text" name="needSeatCount" class="col-sm-12 F-float F-count" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="brand" class="col-sm-12"></td>'
-					+ '<td><input type="text" name="licenseNumber"  class="col-sm-12"><input type="hidden" name="busId"></td>'
-					+ '<td><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"></td>'
+					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
+					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"></td>'
-					+ '<td><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"></td>'
+					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"><span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="driverMobileNumber" readonly="readonly" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="contractNumber" maxlength="20" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"><input type="hidden" name="memberCount" value="1"></td>'
@@ -1052,6 +1054,7 @@ define(function(require, exports) {
 		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
+		tripPlan.addBusResource($tab);
 		tripPlan.calculatePrice($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
@@ -3175,6 +3178,27 @@ define(function(require, exports) {
 			tripPlan.updateTripPlanArrange(tripPlanId, '', target)
 		}
 	}
+
+	/**
+	 * 实时添加车辆安排
+	 * @param {[type]} $tab [description]
+	 */
+	tripPlan.addBusResource = function($tab){
+		$tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany, name: 'companyName', id: 'busCompanyId', mobileNumber: 'mobileNumber', type: 'tr'}, KingServices.addResourceFunction);
+		$tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+			function : KingServices.addBusDriver,
+			busCompanyName : "companyName",
+			busCompanyId : "busCompanyId",
+			busLicenseNumberId : "busId",
+			busLicenseNumber : "licenseNumber",
+			busbrand : "brand",
+			seatCount : "needSeatCount",
+			driverName : "driverName",
+			driverId : "driverId",
+			driverMobileNumber : "driverMobileNumber",
+			type : "tr"
+		}, KingServices.addBusDriverFunction);
+	};
 
 	exports.init = tripPlan.initModule;
 	exports.updatePlanInfo = tripPlan.updatePlanInfo;

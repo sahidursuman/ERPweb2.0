@@ -75,7 +75,7 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4 F-float F-money">现收:</span>{{basicInfo.guideAllNowMoney}}
+                    <span class="fix-w-4">现收:</span>{{basicInfo.guideAllNowMoney}}
                 </div>
                 <div class="col-md-3">
                     <span class="fix-w-4 F-float F-money">现付:</span><span class="T-guidePayedMoney">{{basicInfo.guideAllPayMoney}}</span>
@@ -360,14 +360,38 @@
                                         <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#busCompany.taskType || getTaskSelect}}</td>
                                         <td><input type="text" name="needSeatCount" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
-                                        <td><input type="text" name="brand" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
-                                        <td><input type="text" name="licenseNumber" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-sm-12"/><input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId"/></td>
+                                        <td><input type="text" name="brand" {{if !!busCompany.offerId}}readonly="readonly"{{/if}}  value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
+                                        <td>
+                                            <div class="col-xs-12 feild-relative">
+                                                <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class=""/>
+                                                <input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId"/>
+                                                <span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </span>
+                                            </div>
+                                        </td>
 
-                                        <td><input type="text" name="companyName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="col-sm-12 chooseBusCompany"/><input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/></td>
+                                        <td>
+                                            <div class="col-xs-12 feild-relative">
+                                                <input type="text" name="companyName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany"/>
+                                                <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/>
+                                                <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </span>
+                                            </div>
+                                        </td>
 
                                         <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
 
-                                        <td><input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-sm-12"/><input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}"></td>
+                                        <td>
+                                            <div class="col-xs-12 feild-relative">
+                                                <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class=""/>
+                                                <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
+                                                <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </span>
+                                            </div>
+                                        </td>
                                         <td><input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
 
                                         <td><input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12"/></td>

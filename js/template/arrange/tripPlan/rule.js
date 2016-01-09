@@ -23,8 +23,8 @@ define(function(require, exports) {
                         errMsg: '大人数量不能为空'
                     },
                     {
-                        type: 'NoNumber',
-                        errMsg: '大人数量必须大于0'
+                        type: 'nonnegative-int',
+                        errMsg: '小孩数必须正整数'
                     }
                 ]
             },
@@ -33,7 +33,7 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="childCount"]'),
                 rules : [
                     {
-                        type: 'NoNumber',
+                        type: 'nonnegative-int',
                         errMsg: '小孩数必须正整数'
                     }
                 ]
@@ -134,13 +134,18 @@ define(function(require, exports) {
             },
             {
                 $ele: $obj.find('input[name="mobileNumber"]'),
-                rules: [{
-                    type: 'null',
-                    errMsg: '手机号码不能为空'
-                },
+                rules: [
                 {
                     type: 'mobile-phone',
-                    errMsg: '手机号码不能为空'
+                    errMsg: '请输入正确的手机号码'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="idCardNumber"]'),
+                rules: [
+                {
+                    type: 'id',
+                    errMsg: '请输入正确的身份证号码'
                 }]
             },
             {
