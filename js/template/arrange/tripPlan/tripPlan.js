@@ -423,7 +423,7 @@ define(function(require, exports) {
     		if($that.hasClass('T-count') || $that.hasClass('T-price')){
     			var count = $tr.find('[name="count"]').val() || 0,
     				price = $tr.find('[name="price"]').val() || 0;
-    			$tr.find('[name="money"]').val(count * price);
+    			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
     	});
@@ -469,8 +469,8 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id)
-            	.closest('.T-tab').find('[name="contactRealname"]').val("").trigger('change')
+            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id).trigger('change')
+            	.closest('.T-tab').find('[name="contactRealname"]').val("")
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
         })
@@ -708,8 +708,16 @@ define(function(require, exports) {
 		
 		//游客成员json包
 		arge.touristGroupMemberJson = [];
+		if($tab.find('.T-tourists-list tr').length === 0){
+			showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
+			return ;
+		}
+		var isSetContact = 0;
 		$tab.find('.T-tourists-list tr').each(function(index) {
 			var $that = $(this);
+			if($that.find('[name="isContactUser"]').is(":checked")){
+				isSetContact = 1;
+			}
 			arge.touristGroupMemberJson.push({
 				id : $that.data("id") || "",
 			    idCardNumber : $that.find('[name="idCardNumber"]').val(),
@@ -719,6 +727,11 @@ define(function(require, exports) {
 			    name : $that.find('[name="name"]').val()
 			});
 		});
+		if(!isSetContact){
+			showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
+			return ;
+
+		}
 		//团计划要求json包
 		arge.tripPlanRequireJson = tripPlan.getTripPlanRequest($tab);
 		
@@ -864,7 +877,7 @@ define(function(require, exports) {
 		var validate = tripPlan.bindCommonEvent($tab, 0);
         //搜索线路
     	$tab.find(".T-search-line").on('click', function(){
-    		tripPlan.initLineProductSearch($tab, 0);
+    		tripPlan.initLineProductSearch($tab, 0, 1);
     	});
 
     	//绑定添加游客小组事件
@@ -1066,6 +1079,7 @@ define(function(require, exports) {
 				var groupData = JSON.parse(data.touristGroup);
 				data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
 				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+				data.isGuest = 1;
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
 				console.log(groupData.quote)
@@ -1084,8 +1098,8 @@ define(function(require, exports) {
 					$tab.find('[name="lineProductName"]').val("");
 					$tab.find('[name="lineProductId"]').val("");
 				}
-				$tab.find('[name="adultCount"]').val(groupData.adultCount);
-				$tab.find('[name="childCount"]').val(groupData.childCount);
+				$tab.find('[name="adultCount"]').val(groupData.adultCount).attr('readonly', 'readonly');
+				$tab.find('[name="childCount"]').val(groupData.childCount).attr('readonly', 'readonly');
 				$tab.find('[name="startTime"]').val(groupData.startTime ? groupData.startTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
 				$tab.find('[name="endTime"]').val(groupData.endTime ? groupData.endTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
 				$tab.find('[name="travelAgencyName"]').val(groupData.partnerAgency ? groupData.partnerAgency.travelAgencyName : "");
@@ -1177,7 +1191,7 @@ define(function(require, exports) {
 				var money = $(this).find('[name="money"]').val() * 1;
 				countMoney += money;
 			});
-			return countMoney;
+			return Tools.toFixed(countMoney);
 		},
 		//换算行程安排日期
 		arrangeDate : function($tab){
@@ -1429,8 +1443,10 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				var group = JSON.parse(data.touristGroupJson);
 				var html = "";
+				console.log(group);
 				for(var i=0; i<group.length; i++){
-					html += '<tr><td></td><td>'+
+					html += '<tr data-id="'+group[i].id+'"><td>'+
+					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
 					group[i].contactMember.name+'</td><td>'+
@@ -1438,9 +1454,9 @@ define(function(require, exports) {
 					group[i].areaData+'</td><td>'+
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
-					group[i].partnerAgency.currentNeedPayMoney+'</td><td>'+
-					group[i].partnerAgency.hotelLevel+'</td><td>'+
-					group[i].partnerAgency.includeSelfPay == "1" ? 包含 : 不包含+'</td><td>'+
+					group[i].currentNeedPayMoney+'</td><td>'+
+					group[i].hotelLevel+'</td><td>'+
+					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
 					group[i].partnerAgency.remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
@@ -1453,7 +1469,7 @@ define(function(require, exports) {
 	//删除小组成员
 	tripPlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
 		showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
-			if(!!id){
+			if(!!id && !!tripPlanId){
 				$.ajax({
 					url:KingServices.build_url("touristGroup","removeTouristGroup"),
 					data:{ 
@@ -1660,7 +1676,7 @@ define(function(require, exports) {
 	/**
 	 * 初始化选择线路的对话框
 	 */
-	tripPlan.initLineProductSearch = function($tab, type) {
+	tripPlan.initLineProductSearch = function($tab, type, isSingle) {
 		var html = searchTemplate({}),
 			title = '选择线路产品';
 		if(type == 1){
@@ -1680,7 +1696,7 @@ define(function(require, exports) {
 		if(type == 1){
 			tripPlan.getLineProductList($dialog, type);
 		}else{
-			tripPlan.getLineProductList($dialog, type);
+			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
 
 		// 选择线路产品
@@ -1696,15 +1712,17 @@ define(function(require, exports) {
 			}
 			var lineId = $tr.data('id');
 			if(type == 1){
-				quoteId = $tr.data('id');
+				quoteId = $tr.data('quote-id');
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
+				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 				lineId = $tr.data('line-id');
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 			}
+			console.log(quoteId);
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
@@ -1720,15 +1738,17 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	tripPlan.getLineProductList = function($dialog, type, page, name) {
+	tripPlan.getLineProductList = function($dialog, type, isSingle, page) {
 		page = page || 0;
 		var url = KingServices.build_url('lineProduct', 'findAll'),
 			$tbody = $dialog.find('.T-normal-list'),
 			args = {
 				pageNo: page,
-				name: name,
 				customerType : 1
 			};
+		if(isSingle){
+			delete args.customerType;
+		}
 		if (type) {
 			url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
 			$tbody = $dialog.find('.T-quote-list');
@@ -1756,7 +1776,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							tripPlan.getLineProductList($dialog, type, obj.curr -1,$dialog.find('input[name=lineProduct_name]').val());
+							tripPlan.getLineProductList($dialog, type, isSingle, obj.curr -1);
 				    	}
 				    }
 				});	
@@ -1769,9 +1789,10 @@ define(function(require, exports) {
 
 	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type) {
 		if (!!pId) {
-			args = {
+			var args = {
 				lineProductId : pId
 			}
+			console.log(type, quoteId);
 			if(type == 1){
 				args.quoteId = quoteId;
 			}

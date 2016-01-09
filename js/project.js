@@ -1589,7 +1589,10 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		mun = Tools.toFixed(num, length);
 	}
-	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+	num = (num + '');
+	var folatNum = num.replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/(\d+)(\.\d*)?$/, '$1');
+	return intNum.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
  * 过滤千分位
