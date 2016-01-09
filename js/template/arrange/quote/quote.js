@@ -509,27 +509,35 @@ define(function(require, exports) {
 						for (var i = 0, len = whichDays.length; i < len; i++) {
 							var whichDay = whichDays[i].whichDay-1,
 								hasHotelDiv = '0';
-							if ($container.find("#dayListAdd-"+ whichDay +" .T-resourceHotelList")) {
-								hasHotelDiv = '1';
-							}
-							var html = quote.hotelHtml(hotelList,hasHotelDiv)
 							if ($a.tag == 'add') {
+								if (!!$container.find("#dayListAdd-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
 								if (hasHotelDiv == 0) {
 									$container.find("#dayListAdd-"+ whichDay +" .T-timeline-detail-container").append(html);
 								}else{
 									$container.find("#dayListAdd-"+ whichDay +" .T-resourceHotelList tbody").append(html);
 								}
 							}else if($a.tag == 'update') {
+								if (!!$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
 								if (hasHotelDiv == 0) {
 									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
 								}else{
-									$container.find("#dayList"+$a.tag+"-"+ whichDay +" ..T-resourceHotelList tbody").append(html);
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList tbody").append(html);
 								}
 							}else if($a.tag == 'copy') {
+								if (!!$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
 								if (hasHotelDiv == 0) {
 									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
 								}else{
-									$container.find("#dayList"+$a.tag+"-"+ whichDay +" ..T-resourceHotelList tbody").append(html);
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList tbody").append(html);
 								}
 							}
 						}
