@@ -3206,4 +3206,5 @@ define(function(require, exports) {
 
 	exports.init = tripPlan.initModule;
 	exports.updatePlanInfo = tripPlan.updatePlanInfo;
+	exports.viewTripPlan = tripPlan.viewTripPlan;//报账审核跳转查看页面
 });
