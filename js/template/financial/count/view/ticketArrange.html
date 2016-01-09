@@ -62,7 +62,7 @@
             {{/if}}
         </td>
         <td><span class="difference"></span></td>
-        <td>{{arrange.billRemark}}</td>
+        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text"></td>
         {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
     </tr>
     {{/each}}
