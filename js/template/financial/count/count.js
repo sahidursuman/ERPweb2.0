@@ -651,7 +651,7 @@ define(function(require, exports){
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
-			var id = $obj.find('.tripPlanId').val();
+			var id = $obj.find('.financial-tripPlanId').val();
 			KingServices.viewFeeDetail(id);
 		});
 		//导游数据处理
