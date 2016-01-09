@@ -147,6 +147,52 @@ define(function(require, exports) {
 			} else if($that.hasClass('T-cancel')){
 				// 取消
                 tripPlan.cancelTripPlan(id, $that);
+			}else if($that.hasClass('T-showLineInfo')){
+				var $tr = $that.closest('tr');
+					$nextTr = $tr.nextAll('tr'),
+					$icon = $that.find('i.fa'),
+					isHide = 1,
+					count = 0;
+				if($icon.hasClass('fa-plus')){
+					$icon.removeClass('fa-plus').addClass('fa-minus');
+					isHide = 0;
+				}else{
+					$icon.removeClass('fa-minus').addClass('fa-plus');
+					isHide = 1;
+				}
+				for(var i=0; i<$nextTr.length; i++){
+					if(!!$nextTr.eq(i).data('id')){
+						break;
+					}else{
+						if(isHide === 1){
+							$nextTr.eq(i).addClass('hidden');
+						}else{
+							$nextTr.eq(i).removeClass('hidden');
+						}
+					}
+					count++;
+				}
+				/*for(var i=0; i<$nextTr.length; i++){
+					if(!!$nextTr.eq(i).data('id')){
+						break;
+					}else{
+						if(isHide === 1){
+							$nextTr.eq(i).addClass('hidden');
+						}else{
+							$nextTr.eq(i).removeClass('hidden');
+						}
+					}
+					count++;
+				}
+				for(var j=0; j<$tr.find('td').length; j++){
+					if(j!=1&&j!=2&&j!=3&&j!=4){
+						if(isHide === 1){
+							$tr.find('td').eq(j).removeAttr('rowspan');
+						}else{
+							$tr.find('td').eq(j).attr('rowspan', count+1);
+						}
+					}
+				}*/
 			}
 		});
 
@@ -1222,7 +1268,7 @@ define(function(require, exports) {
 						whichDate = Tools.addDay(startTime, $days.data("which-day") - 1);
 					$days.text(whichDate);
 					if(endTime.val() != whichDate && index == $tr.length-1){
-						endTime.val(whichDate);
+						//endTime.val(whichDate);
 					}
 				});
 			}
