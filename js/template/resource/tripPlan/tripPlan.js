@@ -1740,8 +1740,7 @@ define(function(require, exports) {
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
 					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-			
+					parents.find("input[name=CompanyName]").val("");			
 				}
 			},
 			select :function(event, ui){
@@ -1750,17 +1749,17 @@ define(function(require, exports) {
 					parents.find("input[name=driverName]").val('');
 					parents.find("input[name=driverMobileNumber]").val('');
 					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-					var searchJson = {
-						seatCount:parents.find('input[name=needSeatCount]').val(),
-						brand:parents.find('input[name=brand]').val(),
-						licenseNumber:parents.find('input[name=licenseNumber]').val()
-					};
+					// var searchJson = {
+					// 	seatCount:parents.find('input[name=needSeatCount]').val(),
+					// 	brand:parents.find('input[name=brand]').val(),
+					// 	licenseNumber:parents.find('input[name=licenseNumber]').val()
+					// };
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					url: KingServices.build_url('busCompany', 'findBusCompanyById'),
 					type: 'post',
 					dataType: 'json',
 					data: {
-						searchJson:JSON.stringify(searchJson)
+						id: ui.item.id
 					},
 				})
 				.done(function(data) {
