@@ -23,30 +23,30 @@
     <div class="form-inline">
         <div class="form-group">
             <label>账面应付合计：</label>
-            <label>{{sumNeedPayMoney}}</label>
+            <label class="F-float F-money">{{sumNeedPayMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>已付金额合计：</label>
-            <label>{{sumPayedMoney}}</label>
+            <label class="F-float F-money">{{sumPayedMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>结算金额合计：</label>
-            <label>{{sumSettlementMoney}}</label>
+            <label class="F-float F-money">{{sumSettlementMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未付金额合计：</label>
-            <label>{{sumUnPayedMoney}}</label>
+            <label class="F-float F-money">{{sumUnPayedMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未付金额合计(已对账)：</label>
-            <label class="T-unpayMoney">{{checkedUnPayedMoney}}</label>
+            <label class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</label>
         </div>
     </div>
     <div class="form-inline globalAdd" style="padding-top: 10px;">
         <div class="form-group">
             <label class="control-label">本次付款金额合计：</label>
             <label class="control-label">
-                <input type="text" class="form-control money T-sumReciveMoney" name="sumPayMoney" {{if source}}disabled="disabled"{{/if}} >
+                <input type="text" class="form-control money T-sumReciveMoney F-float F-money" name="sumPayMoney" {{if source}}disabled="disabled"{{/if}} >
             </label>
         </div>
 

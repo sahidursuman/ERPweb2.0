@@ -161,7 +161,7 @@ template.helper("getRestaurantDesc", function(status) {
         status = status.split(',');
         
         for (var i = 0; i < 3; i ++) {
-            res += '<label>&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>';
+            res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
         }
     }
     

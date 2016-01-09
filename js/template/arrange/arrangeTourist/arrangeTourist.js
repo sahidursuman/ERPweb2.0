@@ -3,9 +3,6 @@ define(function(require, exports) {
         tabId = "tab-" + menuKey + "-content",
         tabIdInner = "tab-" + menuKey + "-innerTransfer-content",
         tabIdOut = "tab-" + menuKey + "-outTransfer-content",
-        addTripPlanTabId = "tab-" + menuKey + "-addTripPlan-content",
-        addMergePlanTabId = "tab-" + menuKey + "-mergeAddTripPlan-content",
-        updateTripPlanTabId = "tab-" + menuKey + "-updateTripPlan-content",
         rule = require("./rule"),
         listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list"),
@@ -15,11 +12,8 @@ define(function(require, exports) {
         innerEditFeeTemplate = require("./view/innerEditFee"),
         outEditFeeTemplate = require("./view/outEditFee"),
         outTransferTemplate = require("./view/outTransfer"),
-        addGroupTemplate = require("./view/addGroup"),
         chooseMergeTemplate = require("./view/chooseMerge"),
         chosenTripPlanTemplate = require("./view/chooseTriPlan"),
-        addMergePlanTemplate = require("./view/addMergePlan"),
-        updateTripPlanTemplate = require("./view/updateTripPlan"),
         chosenMergenTripPlanTemplate = require("./view/chosenMergenTripPlan");
 
     var arrangeTourist = {

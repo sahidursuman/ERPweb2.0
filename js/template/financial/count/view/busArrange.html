@@ -34,9 +34,23 @@
     {{each busCompanyArrange as busCompany}}
     {{if busCompany != null}}
     <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
-        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
-        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
-        <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+        <td>{{if busCompany.busCompany != null}}
+            {{ if busCompany.taskType == 0}}
+                    全程
+                {{else if busCompany.taskType == 1}}
+                    接机
+                {{else if busCompany.taskType == 2}}
+                    送机
+                {{else if busCompany.taskType == 3}}
+                    前段
+                {{else if busCompany.taskType == 4}}
+                    中段
+                {{else if busCompany.taskType == 5}}
+                    后段
+            {{/if}}
+        {{/if}}</td>
         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
         <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>

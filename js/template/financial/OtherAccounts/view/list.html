@@ -39,10 +39,10 @@
                 {{each financialOtherList as other}}
                 <tr data-id="{{other.id}}" data-name="{{other.name}}">
                     <td>{{other.name}}</td>
-                    <td>{{other.sumNeedPayMoney}}</td>
-                    <td>{{other.sumSettlementMoney }}</td>
-                    <td>{{other.sumPayedMoney }}</td>
-                    <td>{{other.sumUnPayedMoney }}</td>
+                    <td class="F-float F-money">{{other.sumNeedPayMoney}}</td>
+                    <td class="F-float F-money">{{other.sumSettlementMoney }}</td>
+                    <td class="F-float F-money">{{other.sumPayedMoney }}</td>
+                    <td class="F-float F-money">{{other.sumUnPayedMoney }}</td>
                     <td>
                         {{if other.count == other.confirmedCount }}
                         <span style="color:green">{{other.confirmedCount}}{{"/"}}{{other.count}}</span> {{else}}

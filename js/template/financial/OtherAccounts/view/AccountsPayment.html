@@ -31,11 +31,11 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count">
-                <label class=" control-label pull-left">账面应付合计：{{statistics.sumNeedPayMoney}}</label>
-                <label class=" control-label marginLeft-30">已付金额合计：{{statistics.sumPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">结算金额合计：{{statistics.sumSettlementMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：{{statistics.sumUnPayedMoney}}</label>
-                 <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney ">{{statistics.confirmedMoney}}</span></label>
+                <label class=" control-label pull-left">账面应付合计：<span class="F-float F-money">{{statistics.sumNeedPayMoney}}</span></label>
+                <label class=" control-label marginLeft-30">已付金额合计：<span class="F-float F-money">{{statistics.sumPayedMoney}}</span></label>
+                <label class=" control-label marginLeft-30">结算金额合计：<span class="F-float F-money">{{statistics.sumSettlementMoney}}</span></label>
+                <label class=" control-label marginLeft-30">未付金额合计：<span class="F-float F-money">{{statistics.sumUnPayedMoney}}</span></label>
+                 <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{statistics.confirmedMoney}}</span></label>
             </div>
         </form>
 
@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label class="control-label">本次付款金额：</label>
                 <label class="control-label">
-                    <input name="sumPayMoney" type="text" class="T-btn-autofill" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
+                    <input name="sumPayMoney" type="text" class="T-btn-autofill F-float F-money" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
                 </label>
             </div>
                 
@@ -117,21 +117,21 @@
             <tr data-id="{{Checking.id}}" data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-checkRemark="{{Checking.checkRemark}}" data-entity-settlementMoney="{{Checking.settlementMoney}}">
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
-                <td>{{Checking.adultCount}}{{"大人"}}{{Checking.childCount}}{{"小孩"}}</td>
-                <td>{{Checking.price}}</td>
-                <td>{{Checking.memberCount}}</td>
-                <td>{{Checking.reduceMoney}}</td>
-                <td>{{Checking.needPayMoney}}</td>
-                <td><a class="T-action T-lookPay">{{"社付："}}{{Checking.agencyPayedMoney}}{{";导付："}}{{Checking.guidePayedMoney}}</a></td>
+                <td><span class="F-float F-count">{{Checking.adultCount}}</span>{{"大人"}}<span class="F-float F-count">{{Checking.childCount}}</span>{{"小孩"}}</td>
+                <td class="F-float F-money">{{Checking.price}}</td>
+                <td class="F-float F-count">{{Checking.memberCount}}</td>
+                <td class="F-float F-money">{{Checking.reduceMoney}}</td>
+                <td class="F-float F-money">{{Checking.needPayMoney}}</td>
+                <td><a class="T-action T-lookPay">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span></a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>
+                <td class="F-float F-money">
                     {{Checking.settlementMoney}} 
                 </td>
-                <td>
+                <td class="F-float F-money">
                     {{Checking.unPayedMoney}}
                 </td>
-                <td>
-                    <input type="text" name="payMoney" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
+                <td >
+                    <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
                 </td>
                 <td>
                     <input type="text" value="{{Checking.payRemark}}" name="payRemark" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>

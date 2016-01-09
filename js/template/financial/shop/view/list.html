@@ -38,12 +38,12 @@
         {{each shopAccountList as rs}}
             <tr data-id="{{rs.shopId}}" data-name="{{rs.shopName}}">
                 <td>{{rs.shopName}}</td>
-                <td>{{rs.sumCount}}</td>
-                <td>{{rs.shopMoney}}</td>
-                <td>{{rs.backMoney}}</td>
-                <td>{{rs.settlementMoney}}</td>
-                <td>{{rs.reciveMoney}}</td>
-                <td><span {{if rs.unReciveMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReciveMoney}}</span></td>
+                <td><span class="F-float F-count">{{rs.sumCount}}</span></td>
+                <td><span class="F-float F-money">{{rs.shopMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.reciveMoney}}</span></td>
+                <td><span class="F-float F-money" {{if rs.unReciveMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReciveMoney}}</span></td>
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>

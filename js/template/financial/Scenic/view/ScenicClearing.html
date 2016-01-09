@@ -22,17 +22,17 @@
             </div>
         </form>
         <form class="form-horizontal clearfix" role="form" onsubmit="return false">
-            <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
-            <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
-            <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
+            <label class="control-label pull-left">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span>元 </label>
+            <label class="control-label pull-left marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}} </span></label>
+            <label class="control-label pull-left marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
             <label class="control-label pull-left marginLeft-30">未付金额合计：<span>{{sumUnPayedMoney}}</span></label>
-            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
+            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
         </form>
         <div class="form-inline globalAdd T-summary" style="padding-top: 10px;">
             <div class="form-group">
                 <label class="control-label">本次付款金额：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money" value="{{sumPayMoney}}" {{if isOuter}} disabled="disabled" {{/if}}>
+                    <input type="text" name="sumPayMoney" class="money F-float F-money" value="{{sumPayMoney}}" {{if isOuter}} disabled="disabled" {{/if}}>
                 </label>
             </div>
             {{if (!isOuter)}}
