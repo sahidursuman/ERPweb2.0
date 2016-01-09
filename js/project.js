@@ -2014,6 +2014,12 @@ KingServices.viewPayMentDetail = function(id,num){
 		module.init(id,num);
 	});
 };
+//报账审核--跳转发团安排的查看页面
+KingServices.viewTripDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_all,function(module){
+		module.viewTripPlan(id);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
