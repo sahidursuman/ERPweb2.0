@@ -719,9 +719,13 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
 			return ;
 		}
-		var isSetContact = 0;
+		var isSetContact = 0, isMobileNumber = 1;
 		$tab.find('.T-tourists-list tr').each(function(index) {
 			var $that = $(this);
+			
+			if(!$that.find('[name="mobileNumber"]').val() && !$that.find('[name="idCardNumber"]').val()){
+				isMobileNumber = 0;
+			}
 			if($that.find('[name="isContactUser"]').is(":checked")){
 				isSetContact = 1;
 			}
@@ -734,6 +738,10 @@ define(function(require, exports) {
 			    name : $that.find('[name="name"]').val()
 			});
 		});
+		if(!isMobileNumber){
+			showMessageDialog($( "#confirm-dialog-message" ), "手机号码和身份证号码必须选填一个！");
+			return ;
+		}
 		if(!isSetContact){
 			showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
 			return ;
