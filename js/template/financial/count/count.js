@@ -247,6 +247,13 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+		//导游金额计算
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=hidden]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
+		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -388,6 +395,13 @@ define(function(require, exports){
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
+		});
+		//导游金额计算
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=text]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -639,6 +653,13 @@ define(function(require, exports){
 		$guideAccount.off('click').on('click',function(){
 			var id = $obj.find('.tripPlanId').val();
 			KingServices.viewFeeDetail(id);
+		});
+		//导游数据处理
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=text]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -1465,6 +1486,21 @@ define(function(require, exports){
 		transfetCost =Count.changeTwoDecimal(transfetCost);
 		transfetCost = Tools.toFixed(transfetCost,2);
 		tripTransitCost.text(transfetCost);
+	};
+	//导游金额计算
+	Count.autoGuideSum = function($obj,$parentObj){
+		var $tr = $obj.closest('tr');
+		var price = $tr.find('input[name=price]').val();
+		var manageFee = $tr.find('input[name=manageFee]').val();
+		//规范数据
+		price = Count.changeTwoDecimal(price);
+		manageFee = Count.changeTwoDecimal(manageFee);
+		var priceSum = $parentObj.find('.tripIncome-guideManageMoney').text(price);
+		var manageFeeSum = $parentObj.find('.tripCost-guideArrangePrice').text(manageFee);
+		//计算团收入
+		Count.tripIncome($parentObj);
+		//计算团成本
+		Count.tripCost($parentObj);
 	};
 	//自费金额计算
 	Count.autoSelfSum = function($obj,$parentObj){
