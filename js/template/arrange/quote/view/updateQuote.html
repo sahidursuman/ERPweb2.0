@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right quoteInprodactName">线路产品名称:</label>
                         <div class="col-sm-2">
-                            <label class="control-label T-lineProductName"style="position: absolute;">{{quote.lineProduct.name}}</label>
+                            <label class="control-label T-lineProductName"style="text-align: left">{{quote.lineProduct.name}}</label>
                             <input type="hidden" value="{{quote.lineProduct.id}}" name="lineProductId">
 							<input type="hidden" value="{{if isCopy != '1'}}{{quote.id}}{{/if}}" name="quoteId">
                         </div>
@@ -269,18 +269,18 @@
 														</tr>
 														{{/each}}
 														{{else}}
-														<tr>
+														<!-- <tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /></td>
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="" /><input type="hidden" name="insuranceItemId" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
-	                                                        <td>
-	                                                            <a data-entity-id="" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
-	                                                                删除
-	                                                            </a>
-	                                                        </td>
-														</tr>
+															                                                        <td>
+															                                                            <a data-entity-id="" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+															                                                                删除
+															                                                            </a>
+															                                                        </td>
+														</tr> -->
 														{{/if}}
 													</tbody>
 												</table>
@@ -340,7 +340,7 @@
 	                                                            </a>
 	                                                        </td>
 														</tr>{{/each}}{{else}}
-														<tr>
+														<!-- <tr>
 															<td><input class="col-xs-12 bind-change T-chooseSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="" /></td>
 															<td><input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
@@ -349,12 +349,12 @@
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
-	                                                        <td>
-	                                                            <a data-entity-id=""  data-entity-type="3"data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
-	                                                                删除
-	                                                            </a>
-	                                                        </td>
-														</tr>
+															                                                        <td>
+															                                                            <a data-entity-id=""  data-entity-type="3"data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+															                                                                删除
+															                                                            </a>
+															                                                        </td>
+														</tr> -->
 														{{/if}}
 													</tbody>
 												</table>

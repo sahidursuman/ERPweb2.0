@@ -11,7 +11,7 @@
                 <p class="share-agency-name"><span>{{quote.partnerAgency.travelAgency.name}}</span>
                     <span style="margin-left: 8px;">{{quote.user.realName}}</span>
                     <span style="margin-left: 8px;">{{quote.user.mobileNumber}}</span></p>
-                <p style="margin-left:560px;color: #444;margin-top: -5px;">{{quote.startTime}}</p>
+                <p style="margin-left:560px;color: #444;margin-top: -5px;">{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</p>
                 <div class="share-quote-offerdetails">
                     <p class="share-dividing">线路报价</p>
                     <p>{{quote.lineProduct.name}}</p>

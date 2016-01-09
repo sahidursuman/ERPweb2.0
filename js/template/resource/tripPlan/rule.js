@@ -201,16 +201,6 @@ define(function(require, exports) {
 								errMsg: '购物店不能为空'
 							}
 						]
-					},
-					{//商品
-						$ele: $tr.find('input[name="goodsPolicy"]'),
-						$valObj: $tr.find('input[name="shopPolicyId"]'),
-						rules: [
-							{
-								type: 'null',
-								errMsg: '商品不能为空'
-							}
-						]
 					}
 				);
 			}

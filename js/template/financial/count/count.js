@@ -324,9 +324,9 @@ define(function(require, exports){
 		Count.tripIncome($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
@@ -651,7 +651,7 @@ define(function(require, exports){
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
-			var id = $obj.find('.tripPlanId').val();
+			var id = $obj.find('.financial-tripPlanId').val();
 			KingServices.viewFeeDetail(id);
 		});
 		//导游数据处理
@@ -820,9 +820,10 @@ define(function(require, exports){
 		});
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
@@ -2574,14 +2575,12 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					licenseNumber:parents.find('input[name=licenseNumber]').val()
+					busId: parents.find('input[name="busId"]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
 				showLoading:false,
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				success:function(data){
 					if(showDialog(data)){
 						var busCompanyList = JSON.parse(data.busCompanyList);
@@ -2628,13 +2627,10 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				showLoading:false,
 				type:'POST',
 				success:function(data){
@@ -2675,15 +2671,12 @@ define(function(require, exports){
 			parents = $(obj).closest('tr');
 
 			var searchJson = {
-					licenseNumber:parents.find('input[name=licenseNumber]').val(),
 					brand:"",
 					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('bookingOrder','getSeatCountList'),
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				showLoading:false,
 				type:'POST',
 				success:function(data){

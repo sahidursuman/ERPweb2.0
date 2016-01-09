@@ -48,13 +48,13 @@
     <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = {{arrange.whichDay}}>
             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.selfPay.name}}</td>{{/if}}
-            <td><input name="selfPayItemName" value="{{arrange.selfPayItem}}" type="text"><input name="selfPayItemId" type="hidden"></td>
+            <td>{{if arrange.selfPayItem != null}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.name}}{{/if}}{{else}}<input name="selfPayItemName" value="" type="text"><input name="selfPayItemId" type="hidden">{{/if}}</td>
             <td>
             {{if arrange.badStatus == 1}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{else}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{/if}}
             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
             <td>{{if arrange.badStatus == 1}}<span class="price F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}
             <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-            <td>{{if arrange.badStatus == 1}}<span class="customerRebateMoney F-float F-money">{{arrange.customerRebateMoney}}</span>{{else}}<span class="customerRebateMoney">{{arrange.customerRebateMoney}}</span>{{/if}}</td>
+            <td>{{if arrange.badStatus == 1}}<span class="customerRebateMoney F-float F-money">{{arrange.customerRebateMoney}}</span>{{else}}<span class="customerRebateMoney">{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.customerRebateMoney}}{{else}}0{{/if}}</span>{{/if}}</td>
             <td>{{if arrange.badStatus == 1}}
             <span class='F-floatF-count'>{{arrange.memberCount}}</span>{{else}}<input style="width:60px;" type="text" name="realCount" class="F-floatF-count" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value=0{{/if}} maxlength="5"/>{{/if}}<input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
             <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realrealReduceMoney" class="F-float F-money" value="{{arrange.realrealReduceMoney}}" style="width:60px;"/>{{/if}}
@@ -89,7 +89,7 @@
                 <span class="guideRate">{{arrange.customerRebateMoney}}</span>
                 <input type="hidden" name="guideRate" value="{{arrange.customerRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.customerRebateMoney * tripPlan.touristAdultCount}}</td>{{/if}} -->
-            <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</td>
+            <td>{{if editStatus == 1}}<input name="billRemark" value="{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}" maxlength="1000" />{{else}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</td>
             {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}                              
     </tr>
     {{/if}}

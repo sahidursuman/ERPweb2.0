@@ -193,9 +193,6 @@ define(function(require, exports) {
 					ResTravelLine.update_id = id;
 					data.id = id;
 					data.travelLine = JSON.parse(data.travelLine);
-					for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
-						data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
-					}
 					if (Tools.addTab(menuKey + '-update', '修改线路模板', updateTemplate(data))) {
 						ResTravelLine.CU_event($('#tab-' + menuKey + '-update-content'));
 					}
@@ -227,9 +224,6 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					ResTravelLine.copy_id = id;
 					data.travelLine = JSON.parse(data.travelLine);
-					for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
-						data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
-					}
 					if (Tools.addTab(menuKey + '-copy', '复制线路模板', updateTemplate(data))) {
 						ResTravelLine.CU_event($('#tab-' + menuKey + '-copy-content'));
 					}
@@ -270,12 +264,6 @@ define(function(require, exports) {
 				success:function(data){
 					if(showDialog(data)){
 						data.travelLine = JSON.parse(data.travelLine);
-						for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
-							if (!!data.travelLine.travelLineDayList[i].repastDetail) {
-								data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail);
-								//data.travelLine.travelLineDayList[i].detail = decodeURIComponent(data.travelLine.travelLineDayList[i].detail);
-							}
-						};
 						Tools.addTab(viewTab,"查看线路模板", scanDetailTemplate(data));
 						var $viewTab = $('#tab-'+viewTab+'-content');
 						$viewTab.find(".T-btn-viewCancel").click(function() {
@@ -737,13 +725,15 @@ define(function(require, exports) {
 						BriefTrip: $tr.find("input[name=BriefTrip]").val(),
 						LodgingPlace: $tr.find("input[name=LodgingPlace]").val(),
 						detail: $tr.find(".T-details").data('entity-content'),
-						breakfast: $tr.find("input[name=breakfast]").is(':checked')? 1 : 0,
-						lunch: $tr.find("input[name=lunch]").is(':checked')? 1 : 0,
-						dinner: $tr.find("input[name=dinner]").is(':checked')? 1 : 0,
 						roadScenic: $tr.find("input[name=chooseScenic]").val(),
 						scenicItemIds: ResTravelLine.jsonToString($tr.find('input[name=chooseScenic]').data('propover'))
-					};
-					// var schedule = JSON.stringify(schedule);
+					}, repastDetail = [];
+					
+					$tr.find('input[type="checkbox"]').each(function(index) {
+						repastDetail[index] = this.checked?1:0;
+					})
+
+					schedule.repastDetail = repastDetail.join(',');
 					  
 				if (!!id)  {
 					schedule.id = id;

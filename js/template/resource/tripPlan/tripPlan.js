@@ -945,6 +945,7 @@ define(function(require, exports) {
 
 	//添加资源 
 	tripPlan.addResource = function(){
+		$("#tripPlan_addPlan_guide .T-addGuideResource").off('click').on("click",{function : KingServices.addGuide , type : "tr" , name : "guideName" , id : "guideId", mobileNumber: "mobileNumber"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, type : "tr" , name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, type : "tr" , name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
@@ -990,7 +991,7 @@ define(function(require, exports) {
 			+'<td class="feild-relative"><input type="text" name="startTime" class="datepicker"></td>'
 			+'<td><input type="text" name="endTime" class="datepicker"></td>'
 			+'<td><select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
-			+'<td><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"></td> '
+			+'<td><div class="col-sm-12 feild-relative"><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"><span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td> '
 			+'<!-- <td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"/></td> -->'
 			+'<td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"></td>'
 			+'<td><input type="text" name="price" class="col-sm-12 price input-success F-float F-money" maxlength="9"></td>'
@@ -1304,23 +1305,37 @@ define(function(require, exports) {
 	                    success: function(data) {
 							if(showDialog(data)){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
-									$this.closest('tr').remove();
-									tripPlan.moneyTripPlan($tab);
-									tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+									removeItem();
 								})
 							}
 	                    }
 	                });
 				})
 			} else {
-				$this.closest('tr').remove();
-				tripPlan.moneyTripPlan($tab);
-				tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+				removeItem();
 			}
 		}else{
+			removeItem();
+		}
+
+		function removeItem() {
+			var $tbody = $this.closest('tbody');
+
 			$this.closest('tr').remove();
 			tripPlan.moneyTripPlan($tab);
-			tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+			tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'));
+
+			var $radio = $tbody.find('input[name="isAccountGuide"]'), res = true;
+			$radio.each(function() {
+				if (this.checked) {
+					res = false;
+					return false;
+				}
+			});
+
+			if (res) {
+				$radio.eq(0).trigger('click');
+			}
 		}
 	};
 
@@ -1552,61 +1567,84 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	tripPlan.bindBusCompanyChoose = function($tab){
+		function clearData($tr, start) {
+			switch(start) {
+				case 'brand':
+					$tr.find('input[name="brand"]').val('');
+				case 'licenseNumber':
+					$tr.find('input[name="licenseNumber"]').val('');
+					$tr.find('input[name="busId"]').val('');
+				case 'CompanyName':
+					$tr.find('input[name="CompanyName"]').val('');
+					$tr.find('input[name="CompanyId"]').val('');
+					$tr.find('input[name="mobileNumber"]').val('');
+				case 'driverName':
+					$tr.find('input[name="driverName"]').val('');
+					$tr.find('input[name="driverId"]').val('');
+					$tr.find('input[name="driverMobileNumber"]').val('');
+				default: break;
+			}
+		}
+
+		function checkBusCompay($tr, start) {
+			setTimeout(function() {
+				var searchJson = {
+					seatCount:$tr.find('input[name=needSeatCount]').val(),
+					brand: $tr.find('input[name=brand]').val(),
+					busId: $tr.find('input[name=busId]').val(),
+					busCompanyId:$tr.find('input[name=busCompanyId]').val()
+				};
+				$.ajax({
+					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					showLoading:false,
+					type: 'post',
+					data: searchJson,
+				})
+				.done(function(data) {
+					if(showDialog(data)){
+						data.busCompanyList = JSON.parse(data.busCompanyList);
+						if (!data.busCompanyList || !data.busCompanyList.length) {
+							clearData($tr, start);
+						}
+					}
+				});
+			}, 10);
+		}
+
 		//选择车座位数
 		var chooseSeatCount = $tab.find('input[name="needSeatCount"]');
 		chooseSeatCount.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=brand]").val("");
-					parents.find("input[name=licenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=CompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'brand');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-				parents.find("input[name=brand]").val("");
-				parents.find("input[name=LicenseNumber]").val("");
-				parents.find("input[name=busId]").val("");
-				parents.find("input[name=CompanyName]").val("");
-				parents.find("input[name=CompanyId]").val("");
-				parents.find("input[name=driverName]").val("");
-				parents.find("input[name=driverId]").val("");
-				parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'brand');
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var searchJson = {
-					brand:$(this).closest('tr').find("input[name=brand]").val(),
-					licenseNumber:$(this).closest('tr').find("input[name=licenseNumber]").val(),
-					busCompanyId:$(this).closest('tr').find("input[name=needSeatCount]").val()
-				};
+			var $that = $(this), $tr = $that.closest('tr');
 			$.ajax({
 				url: KingServices.build_url('bookingOrder','getSeatCountList'),
 				showLoading: false,
 				data:{
-					searchJson:JSON.stringify(searchJson)
+					brand:$tr.find("input[name=brand]").val(),
+					busCompanyId:$tr.find("input[name=busCompanyId]").val()
 				},
 				success:function(data){
 					if(showDialog(data)){
 						var seatCountListJson = [];
-						var seatCountList = data.seatCountList;
-						if(seatCountList && seatCountList.length > 0){
-							for(var i=0; i < seatCountList.length; i++){
-								var seatCount = {
-									value : seatCountList[i]
+						if(data.seatCountList && data.seatCountList.length > 0){
+							for(var i=0, seatCount; i < data.seatCountList.length; i++){
+								seatCount = {
+									value : data.seatCountList[i]
 								}
 								seatCountListJson.push(seatCount);
 							}
-							$(obj).autocomplete('option','source', seatCountListJson);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', seatCountListJson);
+							$that.autocomplete('search', '');
 						}else{
 							layer.tips('无数据', obj, {
 							    tips: [1, '#3595CC'],
@@ -1623,116 +1661,88 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=LicenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'LicenseNumber');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=LicenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var seatCount = $(this).closest('tr').find("[name=needSeatCount]").val();
-			var searchJson = {
-						seatCount:seatCount,
-						licenseNumber:$(this).closest('tr').find("[name=licenseNumber]").val(),
-						busCompanyId:$(this).closest('tr').find("[name=busCompanyId]").val()
-					};
-				$.ajax({
-					url: KingServices.build_url('bookingOrder','getBusBrandList'),
-					data:{
-						searchJson:JSON.stringify(searchJson)
-					},
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						if(showDialog(data)){
-							var busBrandListJson = [];
-							var busBrandList = data.busBrandList;
-							if(busBrandList && busBrandList.length > 0){
-								for(var i=0; i < busBrandList.length; i++){
-									var busBrand = {
-										value : busBrandList[i]
-									}
-									busBrandListJson.push(busBrand);
+			var $that = $(this), $tr = $that.closest('tr');
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getBusBrandList'),
+				data:{
+					seatCount:$tr.find("[name=needSeatCount]").val(),
+					busCompanyId:$tr.find("[name=busCompanyId]").val()
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					if(showDialog(data)){
+						var busBrandListJson = [];
+						if(data.busBrandList && data.busBrandList.length > 0){
+							for(var i=0; i < data.busBrandList.length; i++){
+								var busBrand = {
+									value : data.busBrandList[i]
 								}
-								$(obj).autocomplete('option','source', busBrandListJson);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+								busBrandListJson.push(busBrand);
 							}
+							$that.autocomplete('option','source', busBrandListJson);
+							$that.autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
+				}
+			})
 		});
-		//选择车辆
+		//选择车辆（车牌号）
 		var chooseLicense = $tab.find('input[name="licenseNumber"]');
 		chooseLicense.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'companyName');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=driverMobileNumber]").val("");
-					parents.find("input[name=busId]").val(ui.item.id).trigger('change');
+				var $tr = $(this).blur().closest('tr');
+				$tr.find("input[name=busId]").val(ui.item.id).trigger('change');
+				checkBusCompay($tr, 'companyName');
 			}
 		}).unbind("click").click(function(){
-			var obj = this,parents = $(obj).closest('tr'),
-				seatCount = parents.find("[name=needSeatCount]").val(),
-				busBrand = parents.find("[name=brand]").val();
-				var searchJson = {
-						seatCount:seatCount,
-						brand:busBrand,
-						busCompanyId:parents.find("input[name=busCompanyId]").val()
-					};
-				$.ajax({
-					url: KingServices.build_url('busCompany','getLicenseNumbers'),
-					data: {
-						searchJson:JSON.stringify(searchJson)
-					},
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						if(showDialog(data)){
-							var licenseList = JSON.parse(data.busList);
-							if(licenseList && licenseList.length > 0){
-								for(var i=0; i < licenseList.length; i++){
-									licenseList[i].value = licenseList[i].licenseNumber;
-								}
-								$(obj).autocomplete('option','source', licenseList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+			var $that = $(this), $tr = $that.closest('tr');
+			$.ajax({
+				url: KingServices.build_url('busCompany','getLicenseNumbers'),
+				data: {
+					seatCount:$tr.find("[name=needSeatCount]").val(),
+					brand:$tr.find("[name=brand]").val()
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					if(showDialog(data)){
+						var licenseList = JSON.parse(data.busList);
+						if(licenseList && licenseList.length > 0){
+							for(var i=0; i < licenseList.length; i++){
+								licenseList[i].value = licenseList[i].licenseNumber;
 							}
+							$that.autocomplete('option','source', licenseList);
+							$that.autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
+				}
+			})
 		});
 		// 选择车队
 		var chooseLicense = $tab.find('input[name="companyName"]');
@@ -1740,30 +1750,22 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-			
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'CompanyName');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=CompanyName]").val(ui.item.busCompanyName);
-					parents.find("input[name=driverName]").val('');
-					parents.find("input[name=driverMobileNumber]").val('');
-					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-					var searchJson = {
-						seatCount:parents.find('input[name=needSeatCount]').val(),
-						brand:parents.find('input[name=brand]').val(),
-						licenseNumber:parents.find('input[name=licenseNumber]').val()
-					};
+				var $tr = $(this).blur().closest('tr');
+				checkBusCompay($tr, 'driverName');
+				$tr.find("input[name=CompanyName]").val(ui.item.busCompanyName);
+				$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					url: KingServices.build_url('busCompany', 'findBusCompanyById'),
 					type: 'post',
 					dataType: 'json',
+					showLoading: false,
 					data: {
-						searchJson:JSON.stringify(searchJson)
+						id: ui.item.id
 					},
 				})
 				.done(function(data) {
@@ -1771,27 +1773,22 @@ define(function(require, exports) {
 						data.busCompany = JSON.parse(data.busCompany || false);
 
 						if (!!data.busCompany)
-							parents.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
+							$tr.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
 						else {
-							parents.find("input[name=mobileNumber]").val('');
+							$tr.find("input[name=mobileNumber]").val('');
 						}
 					}
 				});
-				
 			}
 		}).unbind("click").click(function(){
-			var obj = this,parents = $(obj).closest('tr'),
-				seatCount = parents.find("[name=needSeatCount]").val(),
-				busBrand = parents.find("[name=brand]").val();
-				var searchJson = {
-					seatCount:parents.find('input[name=seatCount]').val(),
-					brand:"",
-					licenseNumber:parents.find('input[name=licenseNumber]').val()
-				};
+			var $that = $(this), $tr = $that.closest('tr');
+
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
-				data: {
-					searchJson:JSON.stringify(searchJson)
+				data:  {
+					seatCount: $tr.find("[name=needSeatCount]").val(),
+					brand: $tr.find("[name=brand]").val(),
+					busId: $tr.find('input[name="busId"]').val()
 				},
 				showLoading:false,
 				type:"POST",
@@ -1803,8 +1800,8 @@ define(function(require, exports) {
 							for(var i=0; i < busCompanyList.length; i++){
 								busCompanyList[i].value = busCompanyList[i].companyName;
 							}
-							$(obj).autocomplete('option','source', busCompanyList);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', busCompanyList);
+							$that.autocomplete('search', '');
 						}else{
 							layer.tips('无数据', obj, {
 							    tips: [1, '#3595CC'],
@@ -3206,4 +3203,5 @@ define(function(require, exports) {
 
 	exports.init = tripPlan.initModule;
 	exports.updatePlanInfo = tripPlan.updatePlanInfo;
+	exports.viewTripPlan = tripPlan.viewTripPlan;//报账审核跳转查看页面
 });

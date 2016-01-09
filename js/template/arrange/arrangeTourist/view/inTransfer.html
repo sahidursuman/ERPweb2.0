@@ -34,7 +34,7 @@
 								<td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
-								<td><span class="T-viewTouristGroup T-action F-float F-count" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
+								<td><span class="T-viewTouristGroup T-action" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
 								<td>{{touristGroup.areaData}}</td>
 								<td class="F-float F-count">{{touristGroup.ageData}}</td>
 								<td><label name="label_needPay" class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</label></td>
