@@ -1,87 +1,87 @@
 <div class="globalAdd">
     <div class="baseinfo">
         <!-- 缓存数据 -->
-        <input type="hidden" name="tripPlanId" value="{{basicInfo.id}}"  />
-        <input type="hidden" id="isArranged" value="{{basicInfo.isArranged}}">
+        <input type="hidden" name="tripPlanId" value="{{if !!basicInfo}}{{basicInfo.id}}{{/if}}"  />
+        <input type="hidden" id="isArranged" value="{{if !!basicInfo}}{{basicInfo.isArranged}}{{/if}}">
         <span class="T-days hidden">{{days}}</span>
-        <span class="T-status hidden">{{basicInfo.status}}</span>
+        <span class="T-status hidden">{{if !!basicInfo}}{{basicInfo.status}}{{/if}}</span>
 
         <h5 class="base-title">基本信息</h5>
         <div class="info">
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4">线路产品:</span>{{basicInfo.lineProduct.name}}
+                    <span class="fix-w-4">线路产品:</span>{{if !!basicInfo && !!basicInfo.lineProduct}}{{basicInfo.lineProduct.name}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">针对客源:</span>{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}
+                    <span class="fix-w-4">针对客源:</span>{{if !!basicInfo}}{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4 T-touristCount F-float F-count" data-count="{{basicInfo.touristCount}}">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
+                    <span class="fix-w-4 T-touristCount F-float F-count" data-count="{{basicInfo.touristCount}}">人数:</span>{{if !!basicInfo}}{{basicInfo.touristAdultCount}}{{/if}}大人&nbsp;{{if !!basicInfo}}{{basicInfo.touristChildCount}}{{/if}}小孩
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">团号:</span>{{basicInfo.tripNumber}}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">出游日期:</span><span class="T-startTime">{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">完团日期:</span>{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}
+                    <span class="fix-w-4">团号:</span>{{if !!basicInfo}}{{basicInfo.tripNumber}}{{/if}}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4">购物商家:</span>{{basicInfo.shopNames}}
+                    <span class="fix-w-4">出游日期:</span><span class="T-startTime">{{if !!basicInfo}}{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">自费商家:</span>{{basicInfo.selfPayItemNames}}
+                    <span class="fix-w-4">完团日期:</span>{{if !!basicInfo}}{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <span class="fix-w-4">购物商家:</span>{{if !!basicInfo}}{{basicInfo.shopNames}}{{/if}}
+                </div>
+                <div class="col-md-3">
+                    <span class="fix-w-4">自费商家:</span>{{if !!basicInfo}}{{basicInfo.selfPayItemNames}}{{/if}}
                 </div>
                 <div class="col-md-3">
                     <div class="checkbox checkbox-inline mar-0">
                         <label>
-                            <input type="checkbox" class="ace" disabled="disabled" type="checkbox" name="isContainSelfPay" {{if basicInfo.isContainSelfPay == 1}}checked{{/if}}>
+                            <input type="checkbox" class="ace" disabled="disabled" type="checkbox" name="isContainSelfPay" {{if !!basicInfo}}{{if basicInfo.isContainSelfPay == 1}}checked{{/if}}{{/if}}>
                             <span class="lbl"> 包含自费</span>
                         </label>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">接站牌:</span>{{basicInfo.welcomeBoard}}
+                    <span class="fix-w-4">接站牌:</span>{{if !!basicInfo}}{{basicInfo.welcomeBoard}}{{/if}}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4">全陪:</span>{{basicInfo.accompanyGuideName}}
+                    <span class="fix-w-4">全陪:</span>{{if !!basicInfo}}{{basicInfo.accompanyGuideName}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">全陪电话:</span>{{basicInfo.accompanyGuideMobile}}
+                    <span class="fix-w-4">全陪电话:</span>{{if !!basicInfo}}{{basicInfo.accompanyGuideMobile}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">责任计调:</span>{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}
+                    <span class="fix-w-4">责任计调:</span>{{if !!basicInfo}}{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">责任部门:</span>{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}
+                    <span class="fix-w-4">责任部门:</span>{{if !!basicInfo}}{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}{{/if}}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <span class="fix-w-4">备注:</span>{{basicInfo.remark}}
+                    <span class="fix-w-4">备注:</span>{{if !!basicInfo}}{{basicInfo.remark}}{{/if}}
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4 F-float F-money">现收:</span>{{basicInfo.guideAllNowMoney}}
+                    <span class="fix-w-4 F-float F-money">现收:</span>{{if !!basicInfo}}{{basicInfo.guideAllNowMoney}}{{/if}}
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4 F-float F-money">现付:</span><span class="T-guidePayedMoney">{{basicInfo.guideAllPayMoney}}</span>
+                    <span class="fix-w-4 F-float F-money">现付:</span><span class="T-guidePayedMoney">{{if !!basicInfo}}{{basicInfo.guideAllPayMoney}}{{/if}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4 F-float F-money">预支款:</span><input type="text" name="guideAllPreMoney" value="{{basicInfo.guideAllPreMoney}}">
+                    <span class="fix-w-4 F-float F-money">预支款:</span><input type="text" name="guideAllPreMoney" value="{{if !!basicInfo}}{{basicInfo.guideAllPreMoney}}{{/if}}">
                 </div>
             </div>
         </div>
