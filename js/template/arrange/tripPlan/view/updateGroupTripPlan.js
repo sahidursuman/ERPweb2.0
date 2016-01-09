@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":46,"md5":"8c363a7da6d854cbdb71b1d87ff45d33"}*/
+/*TMODJS:{"debug":true,"version":47,"md5":"8c363a7da6d854cbdb71b1d87ff45d33"}*/
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/updateGroupTripPlan", function($data, $filename) {
         try {

@@ -473,7 +473,8 @@ define(function(require, exports) {
             	.closest('.T-tab').find('[name="contactRealname"]').val("").trigger('change')
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
-        }).off('click').on('click', function() {
+        })
+        $that.off('click').on('click', function() {
             var $that = $(this);
             $.ajax({
                 url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
@@ -1291,8 +1292,7 @@ define(function(require, exports) {
 					.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(item.businessGroup.name);
 				}
 			}
-		})
-		.one('click', function(event) {
+		}).one('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			$.ajax({
@@ -1317,7 +1317,7 @@ define(function(require, exports) {
 							userList[i].value = userList[i].realName;
 						}
 
-						$target.autocomplete('option', 'source', userList).data('ajax', true);
+						$target.autocomplete('option', 'source', userList).data('ajax', true);;
 					}
 				}
 			});
@@ -1327,7 +1327,7 @@ define(function(require, exports) {
 			if ($target.data('ajax')) {
 				$target.autocomplete('search', '');
 			}
-		});
+		})
 	};
 
 	//添加游客小组
