@@ -2575,14 +2575,12 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					licenseNumber:parents.find('input[name=licenseNumber]').val()
+					busId: parents.find('input[name="busId"]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
 				showLoading:false,
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				success:function(data){
 					if(showDialog(data)){
 						var busCompanyList = JSON.parse(data.busCompanyList);
@@ -2629,13 +2627,10 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				showLoading:false,
 				type:'POST',
 				success:function(data){
@@ -2676,15 +2671,12 @@ define(function(require, exports){
 			parents = $(obj).closest('tr');
 
 			var searchJson = {
-					licenseNumber:parents.find('input[name=licenseNumber]').val(),
 					brand:"",
 					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('bookingOrder','getSeatCountList'),
-				data:{
-					searchJson:JSON.stringify(searchJson)
-				},
+				data:searchJson,
 				showLoading:false,
 				type:'POST',
 				success:function(data){
