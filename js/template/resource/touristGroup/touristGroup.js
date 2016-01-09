@@ -583,6 +583,8 @@ define(function(require, exports) {
                 
         });
 
+        
+
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -619,6 +621,16 @@ define(function(require, exports) {
                     })
                     touristGroup.autoSumNeedPay($obj);
                 };
+            });
+        }else{
+            $obj.find('.T-addCostTbody').on('click',".T-delete",function(event) {
+            event.preventDefault();
+            /* Act on the event */
+              var $that = $(this),$tr = $that.closest('tr');
+                  $tr.fadeOut(function() {
+                        $(this).hide();
+                        touristGroup.autoSumNeedPay($obj);
+                  })
             });
         };
         //计算应收，未收
