@@ -1307,7 +1307,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					if($target.attr("name") === "outOPUserName"){
 						$target.val('')
-						.nextAll('input[name="dutyOPUserId"]').val('')
+						.nextAll('input[name="outOPUserId"]').val('')
 					}else{
 						$target.val('')
 						.nextAll('input[name="dutyOPUserId"]').val('')
@@ -1336,6 +1336,9 @@ define(function(require, exports) {
 			.done(function(data) {
 				if (showDialog(data)) {
 					if($target.val() == ""){
+						if($target.attr("name") === "outOPUserName"){
+							$target.nextAll('input[name="outOPUserId"]').val(data.userId);
+						}
 						$target.val(data.realName)
 						.nextAll('input[name="dutyOPUserId"]').val(data.userId)
 						.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
