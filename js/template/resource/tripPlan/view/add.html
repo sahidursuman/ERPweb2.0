@@ -293,8 +293,15 @@
                                         <td><input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#guide.taskType | getTaskSelect}}</td>
-                                        <td><input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" readonly="readonly" class="col-sm-12 chooseGuide"/>
-                                        <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" /></td>
+                                        <td>
+                                            <div class="col-sm-12 feild-relative">
+                                                <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" readonly="readonly" class="col-sm-12 chooseGuide"/>
+                                                <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" />
+                                                <span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </span>
+                                            </div>
+                                        </td>
                                         <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                         <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
                                         <td><input type="text" name="price" {{if guide.isAccountGuide == 1}} value="{{guide.price}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
