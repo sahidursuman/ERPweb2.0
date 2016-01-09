@@ -14,7 +14,6 @@ define(function(require, exports) {
         outTransferTemplate = require("./view/outTransfer"),
         chooseMergeTemplate = require("./view/chooseMerge"),
         chosenTripPlanTemplate = require("./view/chooseTriPlan"),
-        addMergePlanTemplate = require("./view/addMergePlan"),
         chosenMergenTripPlanTemplate = require("./view/chosenMergenTripPlan");
 
     var arrangeTourist = {
