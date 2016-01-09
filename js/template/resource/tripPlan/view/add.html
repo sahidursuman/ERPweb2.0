@@ -353,7 +353,7 @@
                             <tbody>
                                 {{each busCompanyList as busCompany}}
                                 {{if busCompany != "[]" || busCompany != null}}
-                                    <tr data-entity-arrangeid={{busCompany.id}} data-entity-busCompanyId={{busCompany.busCompany.id}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
+                                    <tr data-entity-arrangeid={{busCompany.id}} data-entity-busCompanyId={{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#busCompany.taskType || getTaskSelect}}</td>
