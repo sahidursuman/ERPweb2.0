@@ -147,6 +147,52 @@ define(function(require, exports) {
 			} else if($that.hasClass('T-cancel')){
 				// 取消
                 tripPlan.cancelTripPlan(id, $that);
+			}else if($that.hasClass('T-showLineInfo')){
+				var $tr = $that.closest('tr');
+					$nextTr = $tr.nextAll('tr'),
+					$icon = $that.find('i.fa'),
+					isHide = 1,
+					count = 0;
+				if($icon.hasClass('fa-plus')){
+					$icon.removeClass('fa-plus').addClass('fa-minus');
+					isHide = 0;
+				}else{
+					$icon.removeClass('fa-minus').addClass('fa-plus');
+					isHide = 1;
+				}
+				for(var i=0; i<$nextTr.length; i++){
+					if(!!$nextTr.eq(i).data('id')){
+						break;
+					}else{
+						if(isHide === 1){
+							$nextTr.eq(i).addClass('hidden');
+						}else{
+							$nextTr.eq(i).removeClass('hidden');
+						}
+					}
+					count++;
+				}
+				/*for(var i=0; i<$nextTr.length; i++){
+					if(!!$nextTr.eq(i).data('id')){
+						break;
+					}else{
+						if(isHide === 1){
+							$nextTr.eq(i).addClass('hidden');
+						}else{
+							$nextTr.eq(i).removeClass('hidden');
+						}
+					}
+					count++;
+				}
+				for(var j=0; j<$tr.find('td').length; j++){
+					if(j!=1&&j!=2&&j!=3&&j!=4){
+						if(isHide === 1){
+							$tr.find('td').eq(j).removeAttr('rowspan');
+						}else{
+							$tr.find('td').eq(j).attr('rowspan', count+1);
+						}
+					}
+				}*/
 			}
 		});
 
@@ -324,6 +370,8 @@ define(function(require, exports) {
             	KingServices.addPartnerAgency(function(data){
             		$tab.find('[name="travelAgencyName"]').val(data.name);
             		$tab.find('[name="fromPartnerAgencyId"]').val(data.id);
+            		$tab.find('[name="contactRealname"]').val('');
+            		$tab.find('[name="fromPartnerAgencyContactId"]').val('');
             	})
             },
             type: ".form-group",
@@ -349,12 +397,15 @@ define(function(require, exports) {
     		}*/
     		//$tab.find('.T-tourists-list').append('<tr data-index='+index+'><td>'+index+'</td><td><input type="text" class="col-xs-12"></td><td><input type="text" class="col-xs-12"></td><td><select class="col-xs-12"><option value="0">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td><td><input type="text" class="col-xs-12"></td><td><label class="control-label"><input type="checkbox" class="ace"><span class="lbl"></span></label></td><td><a class="cursor T-action T-delete" title="删除">删除</a></td></tr>');
     		$tab.find('.T-tourists-list').append(T.touristsList({touristGroupMemberList:[{}]}));
+    		tripPlan.MenberNumber($tab, 1);
     		validate = rule.update(validate);
     	});
     	//批量添加游客小组
     	$tab.find('.T-add-tourists-batch').on('click', function(event){
     		event.preventDefault();
-    		F.batchAddTourists($tab.find('.T-tourists-list'));
+    		F.batchAddTourists($tab.find('.T-tourists-list'), function(){
+	            tripPlan.MenberNumber($tab, 1);
+    		});
     		validate = rule.update(validate);
     	});
     	//删除游客小组
@@ -374,6 +425,7 @@ define(function(require, exports) {
 							if(result){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 				    				$tr.remove();
+	            					tripPlan.MenberNumber($tab, 1);
 								});
 							}
 						}
@@ -381,6 +433,7 @@ define(function(require, exports) {
 				});
     		}else{
     			$tr.remove();
+	            tripPlan.MenberNumber($tab, 1);
     		}
     	});
     	//删除账单
@@ -465,11 +518,11 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                	$(this).val("").next('[name="fromPartnerAgencyId"]').val("");
+                	$(this).val("").nextAll('[name="fromPartnerAgencyId"]').val("");
                 }
             },
             select: function(event, ui) {
-            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id).trigger('change')
+            	$(this).trigger('change').nextAll('[name="fromPartnerAgencyId"]').val(ui.item.id)
             	.closest('.T-tab').find('[name="contactRealname"]').val("")
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
@@ -504,11 +557,11 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    $(this).val("").next('[name="fromPartnerAgencyContactId"]').val("");
+                    $(this).val("").nextAll('[name="fromPartnerAgencyContactId"]').val("");
                 }
             },
             select: function(event, ui) {
-                $(this).next('[name="fromPartnerAgencyContactId"]').val(ui.item.id);
+                $(this).trigger('change').nextAll('[name="fromPartnerAgencyContactId"]').val(ui.item.id);
             }
         }).off('click').on('click', function() {
             var objM = this;
@@ -712,9 +765,13 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
 			return ;
 		}
-		var isSetContact = 0;
+		var isSetContact = 0, isMobileNumber = 1;
 		$tab.find('.T-tourists-list tr').each(function(index) {
 			var $that = $(this);
+			
+			if(!$that.find('[name="mobileNumber"]').val() && !$that.find('[name="idCardNumber"]').val()){
+				isMobileNumber = 0;
+			}
 			if($that.find('[name="isContactUser"]').is(":checked")){
 				isSetContact = 1;
 			}
@@ -727,6 +784,10 @@ define(function(require, exports) {
 			    name : $that.find('[name="name"]').val()
 			});
 		});
+		if(!isMobileNumber){
+			showMessageDialog($( "#confirm-dialog-message" ), "手机号码和身份证号码必须选填一个！");
+			return ;
+		}
 		if(!isSetContact){
 			showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
 			return ;
@@ -1082,7 +1143,7 @@ define(function(require, exports) {
 				data.isGuest = 1;
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
-				console.log(groupData.quote)
+				$tab.find('[name="partnerAgencyName"]').val(groupData.orderNumber).data("id", groupData.id);
 				if(!!groupData.quote){
 					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
@@ -1111,6 +1172,8 @@ define(function(require, exports) {
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
+				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
+				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 			}
 		});
@@ -1205,12 +1268,12 @@ define(function(require, exports) {
 						whichDate = Tools.addDay(startTime, $days.data("which-day") - 1);
 					$days.text(whichDate);
 					if(endTime.val() != whichDate && index == $tr.length-1){
-						endTime.val(whichDate);
+						//endTime.val(whichDate);
 					}
 				});
 			}
 		},
-		batchAddTourists : function($obj){
+		batchAddTourists : function($obj, fn){
 			var addVisotorMoreLayer = layer.open({
 	            type: 1,
 	            title: '批量添加游客',
@@ -1221,7 +1284,7 @@ define(function(require, exports) {
 	            success: function() {
 	                var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
 	                $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-	                    F.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj);
+	                    F.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj, fn);
 	                });
 	            }
 	        });
@@ -1239,7 +1302,7 @@ define(function(require, exports) {
 			var idCard = str.match(/(^|\s)\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)(\s|$)/ig);
 			return trim(idCard ? idCard[0] : " ");
 		},
-		saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj){
+		saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
 			var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
 			if (data != "") {
             	var dataArray = data.split(/\r?\n/);
@@ -1254,6 +1317,9 @@ define(function(require, exports) {
 		                    }]}));
 		                    layer.close(addVisotorMoreLayer);
 	                	}
+	                }
+	                if(fn){
+	                	fn();
 	                }
 	            }
         	}else{
@@ -1287,7 +1353,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					if($target.attr("name") === "outOPUserName"){
 						$target.val('')
-						.nextAll('input[name="dutyOPUserId"]').val('')
+						.nextAll('input[name="outOPUserId"]').val('')
 					}else{
 						$target.val('')
 						.nextAll('input[name="dutyOPUserId"]').val('')
@@ -1316,6 +1382,9 @@ define(function(require, exports) {
 			.done(function(data) {
 				if (showDialog(data)) {
 					if($target.val() == ""){
+						if($target.attr("name") === "outOPUserName"){
+							$target.nextAll('input[name="outOPUserId"]').val(data.userId);
+						}
 						$target.val(data.realName)
 						.nextAll('input[name="dutyOPUserId"]').val(data.userId)
 						.closest('.T-tab').find('input[name="dutyOPDepartment"]').val(data.businessGroupName);
@@ -1713,6 +1782,9 @@ define(function(require, exports) {
 			var lineId = $tr.data('id');
 			if(type == 1){
 				quoteId = $tr.data('quote-id');
+				$tab.find(".T-days").html("");
+				$tab.find(".T-tourists-list").html("");
+				$tab.find(".T-fee-list").html("");
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
@@ -1722,7 +1794,6 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteOrderName"]').val("");
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 			}
-			console.log(quoteId);
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
@@ -1792,7 +1863,6 @@ define(function(require, exports) {
 			var args = {
 				lineProductId : pId
 			}
-			console.log(type, quoteId);
 			if(type == 1){
 				args.quoteId = quoteId;
 			}
@@ -1806,7 +1876,12 @@ define(function(require, exports) {
 					if(result){
 						if(!!data.touristGroupId){
 							tripPlan.getTouristsList($tab, data.touristGroupId);
-							$tab.find('[name="partnerAgencyName"]').val(data.quoteId).data('id', data.touristGroupId);
+						}else if(type == 1){
+							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
+							$tab.find('[name="currentNeedPayMoney"]').removeAttr('readonly');
+							$tab.find('[name="adultCount"]').removeAttr('readonly');
+							$tab.find('[name="childCount"]').removeAttr('readonly');
+							
 						}
 						for(var i=0; i<data.lineProductDayList.length; i++){
 							var repastDetail = data.lineProductDayList[i].repastDetail;
@@ -1938,8 +2013,12 @@ define(function(require, exports) {
 	};
 
 	//游客名单成员添加自动序号函数  tripPlan.MenberNumber(oClass);
-	tripPlan.MenberNumber = function($tab){
-		$tab.find(".T-tourist-list tr").each(function(i){
+	tripPlan.MenberNumber = function($tab, isGroup){
+		var $tr = $tab.find(".T-tourist-list tr");
+		if(isGroup){
+			$tr = $tab.find(".T-tourists-list tr");
+		}
+		$tr.each(function(i){
 			$(this).children().eq(0).text(i+1);
 		});
 	};

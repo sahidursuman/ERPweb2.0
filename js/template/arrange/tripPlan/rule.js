@@ -49,6 +49,20 @@ define(function(require, exports) {
                 ]
             },
             { 
+                //计划人数
+                $ele: $obj.find('input[name="planTouristCount"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '计划人数不能为空'
+                    },
+                    {
+                        type: 'nonnegative-int',
+                        errMsg: '计划人数只能为正整数'
+                    }
+                ]
+            },
+            { 
                 //完团日期
                 $ele: $obj.find('input[name="endTime"]'),
                 rules : [
@@ -61,6 +75,7 @@ define(function(require, exports) {
             { 
                 //客户
                 $ele: $obj.find('input[name="travelAgencyName"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
                 rules : [
                     {
                         type: 'null',
@@ -71,6 +86,7 @@ define(function(require, exports) {
             { 
                 //客户联系人
                 $ele: $obj.find('input[name="contactRealname"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyContactId"]'),
                 rules : [
                     {
                         type: 'null',

@@ -286,6 +286,22 @@ input.datepicker {
 .par-r-15{
 	padding-right: 15px!important;
 }
+.hct-absolute-group{
+	position: relative;
+}
+.hct-absolute-group .hct-span-left{
+	padding-right: 40px;
+}
+.hct-button-right{
+	position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -12px;
+}
+.tripplan-area .btn .fa-minus{
+	color: #81a87b;
+	line-height: 1.5;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

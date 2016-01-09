@@ -216,7 +216,7 @@
 					</tr>
 				</thead>
 				<tbody class="T-touristGroup-list">
-					{{each touristGroup as group}}
+					{{each touristGroupList as group}}
 					<tr data-id="{{group.id}}">
 						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
 						<td name="lineProductName">{{group.lineProduct.name}}</td>
