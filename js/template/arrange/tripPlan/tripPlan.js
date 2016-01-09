@@ -1087,7 +1087,7 @@ define(function(require, exports) {
 				data.isGuest = 1;
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
-				console.log(groupData.quote)
+				$tab.find('[name="partnerAgencyName"]').val(groupData.orderNumber).data("id", groupData.id);
 				if(!!groupData.quote){
 					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
@@ -1116,6 +1116,8 @@ define(function(require, exports) {
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
+				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
+				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 			}
 		});
@@ -1721,6 +1723,9 @@ define(function(require, exports) {
 			var lineId = $tr.data('id');
 			if(type == 1){
 				quoteId = $tr.data('quote-id');
+				$tab.find(".T-days").html("");
+				$tab.find(".T-tourists-list").html("");
+				$tab.find(".T-fee-list").html("");
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
@@ -1730,7 +1735,6 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteOrderName"]').val("");
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 			}
-			console.log(quoteId);
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
@@ -1800,7 +1804,6 @@ define(function(require, exports) {
 			var args = {
 				lineProductId : pId
 			}
-			console.log(type, quoteId);
 			if(type == 1){
 				args.quoteId = quoteId;
 			}
@@ -1814,7 +1817,12 @@ define(function(require, exports) {
 					if(result){
 						if(!!data.touristGroupId){
 							tripPlan.getTouristsList($tab, data.touristGroupId);
-							$tab.find('[name="partnerAgencyName"]').val(data.quoteId).data('id', data.touristGroupId);
+						}else if(type == 1){
+							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
+							$tab.find('[name="currentNeedPayMoney"]').removeAttr('readonly');
+							$tab.find('[name="adultCount"]').removeAttr('readonly');
+							$tab.find('[name="childCount"]').removeAttr('readonly');
+							
 						}
 						for(var i=0; i<data.lineProductDayList.length; i++){
 							var repastDetail = data.lineProductDayList[i].repastDetail;
