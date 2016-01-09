@@ -1067,14 +1067,21 @@ define(function(require, exports) {
 				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
+				console.log(groupData.quote)
 				if(!!groupData.quote){
-					$tab.find('[name="quoteOrderName"]').val(groupData.quote.name);
+					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
+				}else{
+					$tab.find('[name="quoteOrderName"]').val("");
+					$tab.find('[name="quoteId"]').val("");
 				}
 				if(!!groupData.lineProduct){
 					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
 					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
 					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+				}else{
+					$tab.find('[name="lineProductName"]').val("");
+					$tab.find('[name="lineProductId"]').val("");
 				}
 				$tab.find('[name="adultCount"]').val(groupData.adultCount);
 				$tab.find('[name="childCount"]').val(groupData.childCount);
