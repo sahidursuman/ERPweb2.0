@@ -1438,9 +1438,9 @@ define(function(require, exports) {
 					group[i].areaData+'</td><td>'+
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
-					group[i].partnerAgency.travelAgencyName+'</td><td>'+
-					group[i].partnerAgency.travelAgencyName+'</td><td>'+
-					group[i].partnerAgency.travelAgencyName+'</td><td>'+
+					group[i].partnerAgency.currentNeedPayMoney+'</td><td>'+
+					group[i].partnerAgency.hotelLevel+'</td><td>'+
+					group[i].partnerAgency.includeSelfPay == "1" ? 包含 : 不包含+'</td><td>'+
 					group[i].partnerAgency.remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
@@ -1703,6 +1703,7 @@ define(function(require, exports) {
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
+				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
@@ -1766,34 +1767,6 @@ define(function(require, exports) {
 		});			
 	};
 
-	/**
-	 * 用报价产品信息，初始化小组页面
-	 * @param  {object} $mainForm   对应小组页面容器
-	 * @param  {int} lineId 报价产品的索引
-	 * @return {[type]}        [description]
-	 */
-	tripPlan.initQuoteData = function($mainForm, quoteId) {
-		if (!!quoteId) {
-			$.ajax({
-				url: KingServices.build_url('lineProduct', 'listQuoteLinePorduct'),
-				type: 'post',
-				showLoading: false,
-				data: {id: quoteId},
-			})
-			.done(function(data) {
-				if (showDialog(data)) {
-					data.lineProductList = JSON.parse(data.lineProductList);
-
-					/*data.quoteLinePorduct = JSON.parse(data.quoteLinePorduct || false);
-					data.busCompany = JSON.parse(data.busCompany || false);
-					data.busCompanyArrange = JSON.parse(data.busCompanyArrange || false);*/
-					//tripPlan.setQuoteData($mainForm, data);
-				}
-			});
-			
-		}
-	}
-
 	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type) {
 		if (!!pId) {
 			args = {
@@ -1810,7 +1783,6 @@ define(function(require, exports) {
 					data.lineProductDayList = JSON.parse(data.lineProductDayList);
                 	var result =showDialog(data);
 					if(result){
-						//tripPlan.setTripPlanLineValue(data);
 						if(!!data.touristGroupId){
 							tripPlan.getTouristsList($tab, data.touristGroupId);
 							$tab.find('[name="partnerAgencyName"]').val(data.quoteId).data('id', data.touristGroupId);
