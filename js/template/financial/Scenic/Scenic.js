@@ -195,7 +195,7 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         scenic.$checkSearchArea.find(".T-btn-export").click(function(){
             var args = {
-                    scenicId: id, 
+                    scenicId: scenic.$checkSearchArea.find("input[name=scenicId]").val(), 
                     accountInfo : scenic.$checkSearchArea.find("input[name=accountInfo]").val(),
                     startDate: scenic.$checkSearchArea.find('input[name=startDate]').val(),
                     endDate: scenic.$checkSearchArea.find('input[name=endDate]').val()
