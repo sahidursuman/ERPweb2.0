@@ -36,10 +36,10 @@
 									</label>
 								</td>
 								<td name="creatorName">{{touristGroup.creatorName}}</td>
-								<td name="lineProductName">{{touristGroup.lineProduct.name}}</td>
-								<td name="travelAgencyName">{{touristGroup.partnerAgency.travelAgencyName}}</td>
-								<td name="contactMemberName">{{touristGroup.contactMember.name}}</td>
-								<td name="contactMemberMobileNumber">{{touristGroup.contactMember.mobileNumber}}</td>
+								<td name="lineProductName">{{if touristGroup.lineProduct}}{{touristGroup.lineProduct.name}}{{/if}}</td>
+								<td name="travelAgencyName">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+								<td name="contactMemberName">{{if touristGroup.contactMember}}{{touristGroup.contactMember.name}}{{/if}}</td>
+								<td name="contactMemberMobileNumber">{{if touristGroup.contactMember}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td name="areaData">{{touristGroup.areaData}}</td>
 								<td name="ageData">{{touristGroup.ageData}}</td>
 								<td name="peopleCount" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">{{touristGroup.adultCount+touristGroup.childCount}}</td>

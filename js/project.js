@@ -1569,9 +1569,13 @@ Tools.filterCount = function(obj){
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
-			$(this).val(Tools.toFixed($(this).val(), 1));
+			var value = $(this).val();
+			value = /\d+\./.test(value) ? Tools.toFixed(value, 1) : value;
+			$(this).val(value);
 		}else{
-			$(this).text(Tools.toFixed($(this).text(), 1));
+			var text = $(this).text();
+			text = /\d+\./.test(value) ? Tools.toFixed(text, 1) : text;
+			$(this).text(text);
 		}
 	});
 	return $obj;
@@ -1585,7 +1589,10 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		mun = Tools.toFixed(num, length);
 	}
-	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+	num = (num + '');
+	var folatNum = num.replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/(\d+)(\.\d*)?$/, '$1');
+	return intNum.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
  * 过滤千分位
