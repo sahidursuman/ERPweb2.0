@@ -46,7 +46,7 @@ define(function(require, exports) {
 
 	   //导游业绩列表请求Ajax
 	 	$.ajax({
-			url : tourguidPerObj.url("sumListPerformance","view"),
+	 		url : KingServices.build_url("Performance","sumListPerformance"),
 			type : "POST",
 			data : {
 				startTime:startTime,
@@ -86,7 +86,7 @@ define(function(require, exports) {
 
 	//autocomplete
 	$.ajax({
-			url: tourguidPerObj.url("getQueryTerms","view"),
+		    url : KingServices.build_url("Performance","getQueryTerms"),
 			type: "POST",
 			success:function(data){
 				var result = showDialog(data);
@@ -136,9 +136,6 @@ define(function(require, exports) {
 		})
 	};
 
- 
-
-
 	//时间控件初始化
 	tourguidPerObj.datepicker = function($obj){
 		$obj.find(".datepicker").datepicker({
@@ -153,11 +150,6 @@ define(function(require, exports) {
 		var value = $obj.find("[name="+name+"]").val();
 		return value;
 	};
-	//ajax中的url
-	tourguidPerObj.url = function(method,operation){
-		var url = ''+APP_ROOT+' back/Performance.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	}
 
 	exports.init = tourguidPerObj.initModule;
 

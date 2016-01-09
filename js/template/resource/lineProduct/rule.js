@@ -40,7 +40,7 @@ define(function(require, exports) {
 				rules: [
 					{
 						type: 'null',
-						errMsg: '线路产品名称不能为空'
+						errMsg: '线路类型不能为空'
 					}
 				]
 			}

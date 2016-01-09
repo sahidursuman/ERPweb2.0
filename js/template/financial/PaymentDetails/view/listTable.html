@@ -1,0 +1,21 @@
+{{each result as rs}}
+    <tr><td>{{rs.accountTime}}</td>
+        <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{/if}}</td>
+        <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>
+        <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
+        <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>
+        <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>
+        <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
+        {{if rs.moneyType == 0}}
+        <td>{{rs.incomeDifferenceMoney}}</td>
+        <td>-</td>
+        {{else}}
+        <td>-</td>
+        <td>{{rs.payDifferenceMoney}}</td>
+        {{/if}}
+        <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>
+        <td>{{rs.remark}}</td>
+        <td>{{rs.user.realName}}</td>
+        <td>{{rs.createTime}}</td>
+    </tr>
+{{/each}}

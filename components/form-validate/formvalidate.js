@@ -73,13 +73,17 @@
 		}
 	};
 
+	// 日期校验回调，用于触发校验效果
+	function changeDateCallBack(event) {
+		$(this).trigger(FOCUS_OUT_EVENT);
+	}
+
 	Validate.prototype.activeOnEle = function(setting)  {
 		var that = this;
 		if (setting.$ele)  {
 			$(setting.$ele).unbind(FOCUS_OUT_EVENT)
 				.bind(FOCUS_OUT_EVENT, '', function(event) {
 					var $that = $(this), data = $that.val(), res;
-					
 					if (!!setting.$valObj && setting.$valObj.length)  {
 						setTimeout(function() {
 							// 为了让设置值之后再读取
@@ -87,11 +91,14 @@
 							dataTask();
 						}, 0);
 					} else {
-						dataTask();
+						setTimeout(function(){
+							data = $that.val();
+							dataTask();
+						}, 0);
 					}
 					
 					function dataTask() {						
-						var res = that.task(data, setting.rules);
+						var res = that.task(data, setting.rules, $that);
 
 						if (res !== true)  {
 							that.setMessage($that, res);
@@ -104,17 +111,16 @@
 			if (setting.$ele.hasClass('datepicker'))  {
 				// 时间插件触发处理
 				setting.$ele
-				.off('changeDate')
-				.on('changeDate', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
-					}
-				);
+				.off('changeDate', changeDateCallBack)
+				.on('changeDate', changeDateCallBack);
 			} else if (setting.$ele.hasClass('ui-autocomplete-input') || setting.$ele.hasClass('bind-change'))  {
 				// 自动填充处理
 				setting.$ele
 				.off('change.form-validation.api')
 				.on('change.form-validation.api', function(){ 
-					$(this).trigger(FOCUS_OUT_EVENT);
+						setTimeout(function() {
+							$(this).trigger(FOCUS_OUT_EVENT);
+						}, 0);
 					}
 				);
 			}
@@ -131,6 +137,7 @@
 					}
 				});
 			}
+
 		}
 		
 	};
@@ -145,11 +152,11 @@
 		}
 	}
 
-	Validate.prototype.task = function(data, rules) {
+	Validate.prototype.task = function(data, rules, $elem) {
 		var len = rules.length;
 
 		if (len) {
-			for (var i = 0, canNull, res; i < len; i ++)  {
+			for (var i = 0, canNull, res, cmpVal; i < len; i ++)  {
 				res = false;
 				canNull = true;  //暂无意义
 
@@ -185,14 +192,74 @@
 							res = rules[i].errMsg;
 						}
 						break;
-
+					case 'positive-int': 	// 正整数
+						if (!!data && !/^[1-9]\d*$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'nonnegative-int': 	// 非负整数
+						if (!!data && !/^\d+$/.test( data )) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'float':	// 浮点型
 						if (!!data && !/^-?(\d*\.)?\d+$/.test( data )) {
 							res = rules[i].errMsg;
 						}
 						break;
+					case 'positive-float2':	// 正浮点型
+					case 'nonnegative-float': 	// 非负数
+						if (!!data && (isNaN( data ) || data < 0)) {
+							res = rules[i].errMsg;
+						}
+						break;
 					case 'positive-float':	// 正浮点型
-						if (!!data && !/^(\d*\.)?\d+$/.test( data )) {
+						if (!!data && (isNaN( data ) || data <= 0)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'eq': 			// 等于
+						cmpVal = $elem.data('eq');
+
+						if (!!data && data !== cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'ne': 			// 不等于
+						cmpVal = $elem.data('ne');
+
+						if (!!data && data === cmpVal) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'gt': 			// 大于（仅数字）
+						cmpVal = $elem.data('gt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data <= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'ge': 			// 大于等于（仅数字）
+						cmpVal = $elem.data('ge');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data < cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+					case 'lt': 			// 小于（仅数字）
+						cmpVal = $elem.data('lt');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data >= cmpVal)) {
+							res = rules[i].errMsg;
+						}
+						break;
+
+					case 'le': 			// 小于等于（仅数字）
+						cmpVal = $elem.data('le');
+
+						if (!!data && (isNaN(cmpVal) || isNaN(data) || data > cmpVal)) {
 							res = rules[i].errMsg;
 						}
 						break;
@@ -293,11 +360,19 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ($jTmp.is(':visible') && this.task(data, tmp.rules) !== true) {
+				if ((this.validateHiddenObject || (!this.validateHiddenObject && $jTmp.is(':visible')))
+				  && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素
 					 */
-					$jTmp.trigger(FOCUS_OUT_EVENT).focus();
+					
+					if (this.validateHiddenObject && typeof this.hiddenFun === 'function')  {
+						this.hiddenFun($jTmp);
+					}
+
+					setTimeout(function() {
+						$jTmp.trigger(FOCUS_OUT_EVENT).focus();
+					}, 200);
 					res = false;
 					break;
 				}
@@ -311,8 +386,21 @@
 		return res;
 	};
 
+	/**
+	 * 设置校验隐藏元素及校验后调用的方法
+	 * @param  {Boolean} enable    true: 要校验隐藏的元素，false：不校验
+	 * @param  {function} hiddenFun 校验失败之后需要调用的方法
+	 * @return {object}           校验对象
+	 */
+	Validate.prototype.validateHidden = function(enable, hiddenFun) {
+		this.validateHiddenObject = !!enable;
+		this.hiddenFun = hiddenFun;
+		return this;
+	};
+
 	$.fn.formValidate = function(settings)  {
 		var validate = new Validate(settings);
+		validate.validateHiddenObject = false;
 		validate.active();
 
 		return validate;

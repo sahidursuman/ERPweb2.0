@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":174,"md5":"1ad06b60e3806d9d703dbc167966ede6"}*/
+define(function(require) {
+    return require("../../../template")("financial/PaymentDetails/view/list", '<div class="row T-search-area guideAdd"> </div> <div class="row"> <table class="table table-striped table-bordered table-hover T-showHighLight"> <thead> <tr class="bg-blur"> <th>记账日期</th> <th>业务类别</th> <th>对方单位</th> <th>主营业务收付类别</th> <th>会计科目</th> <th>凭证编号</th> <th>支付方式</th> <th>收款</th> <th>付款</th> <th>银行账号</th> <th>备注</th> <th>操作人</th> <th>操作时间</th> </tr> </thead> <tbody class="T-list"> </tbody> </table> <div class="row pageMode"> <div class="col-xs-6"> <small class="T-sumItem">没有查询到相关记录</small> </div> <div class="col-xs-6"> <div class="dataTables_paginate paging_simple_numbers T-pagenation"> </div> </div> </div> </div>');
+});

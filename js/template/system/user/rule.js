@@ -24,15 +24,6 @@ define(function(require, exports) {
 						}
 
 					]
-				},
-				{	//姓名
-					$ele: $obj.find('input[name="realName"]'),
-					rules: [
-						{
-							type: 'null',
-							errMsg: '密码不能为空'
-						}
-					]
 				}
 
                 ]);

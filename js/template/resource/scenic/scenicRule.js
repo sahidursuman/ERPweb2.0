@@ -87,7 +87,20 @@ define(function(require, exports) {
 				        	errMsg: '请输入数字'
 				        }
 				    ]
-				}   
+				},
+				{	//单价
+					$ele: $obj.find('input[name="normalInnerPrice"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '市场价不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
+				}     
                 ]);
 			return itemValidator
 		}

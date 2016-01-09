@@ -11,7 +11,7 @@
 		this.init_event();
 		
 		// 设置对话框的最大高度
-		$('body').append('<style id="layer-style">.layui-layer-page .layui-layer-content { max-height:' + (window.screen.availHeight - 315) + 'px; overflow-y: auto; }</style>');
+		$('body').append('<style id="layer-style">.layui-layer-page .layui-layer-content { max-height:' + (window.screen.availHeight - 350) + 'px; overflow-y: auto; }</style>');
 	};
 
 	/**
@@ -68,7 +68,7 @@
 	 */
 	IndexFun.checkLogin = function() {
 		$.ajax({
-			url:""+APP_ROOT+"base.do?method=checkLogin",
+			url: APP_ROOT+"base.do?method=checkLogin",
 			type:"GET",
 			success:function(data){
 				IndexData.userInfo = data;
@@ -133,10 +133,41 @@
 				$that.data('prev-tab', $prev);
 			}
 			Tools.justifyTab();
-		});
+		})
+		.contextmenu({
+			before: function (e) {
+				var $item = $(e.target).closest('li');
+				$tabList.data('menu-item', $item)
+				$('#tab-menu').find('.T-close').toggleClass('hidden', !$item.find('.tab-close').length);
+				return !!$item.length;
+			},
+			onItem: function (context, e) {
+			  	var $menuItem = $(e.target), $item = $tabList.data('menu-item');
+
+			  	if ($menuItem.hasClass('T-close')) {
+			  		IndexFun.closeTab($item);
+			  	} else if ($menuItem.hasClass('T-close-other')) {
+			  		IndexFun.closeTab($item.siblings('li'));
+			  	} else if ($menuItem.hasClass('T-close-right')) {
+			  		IndexFun.closeTab($item.nextAll('li'));
+			  		
+			  	}
+			}
+		})
 	};
 
-	
+	/**
+	 * 传入tab页头，如果允许关闭，就关闭它
+	 * @param  {object} $tabItem 页头列表
+	 * @return {[type]}          [description]
+	 */
+	IndexFun.closeTab = function($tabItem) {
+		if (!!$tabItem)  {
+			$tabItem.each(function(index, el) {
+				$(this).find('.tab-close').trigger('click');
+			});
+		}
+	}
 	// 初始哈
 	jQuery(document).ready(function($) {
 		IndexFun.init();

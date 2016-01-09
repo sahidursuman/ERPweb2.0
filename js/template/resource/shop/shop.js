@@ -23,7 +23,7 @@ define(function(require, exports) {
 		    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/>'+
 		    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
 		    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
-		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"float:right\">'+
+		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"margin-left:10px;\">'+
 		    	'<button class=\"btn btn-success btn-sm btn-white T-action T-add add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 
 		    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" maxlength=\"5\" type="text" class="form-control"/>'+
@@ -84,7 +84,7 @@ define(function(require, exports) {
 					shopList = JSON.parse(shopList);
 					data.shopList = shopList;
 					var html = listTemplate(data);
-					addTab(menuKey,"商家管理",html);
+					Tools.addTab(menuKey,"商家管理",html);
 					
 					// 初始化页面对象
 					shop.$tab = $("#tab-"+menuKey+"-content");
@@ -246,53 +246,24 @@ define(function(require, exports) {
 	 * @param  {int} id     shop id
 	 * @return {[type]}        [description]
 	 */
+	
+
 	shop.deleteShop = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
+		if(!!id){
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
 							url:""+APP_ROOT+"back/shop.do?method=deleteShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									shop.$tab.find('.T-shop-list').find(".shop-"+id).fadeOut(function(){
-										shop.listShop(shop.currentPage);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该条记录？");
-			}
-		});
-		
-	};
+	 						type:"POST",
+	 						data:"id="+id+"",
+					}).done(function(data){
+						if(showDialog(data)){
+							shop.listShop(0);
+						}
+					})
+			});
+		}
+	}	
+
 
 	/**
 	 * view this shop
@@ -529,8 +500,8 @@ define(function(require, exports) {
 				var numberArea = [];
 				var boolNumber = false;
 				for(var j = 0; j < $divList.length; j++){
-					var costMoneyStart = $divList.eq(j).find('input[name=costMoneyStart]').val();
-					var costMoneyEnd = $divList.eq(j).find('input[name=costMoneyEnd]').val();
+					var costMoneyStart = ($divList.eq(j).find('input[name=costMoneyStart]').val() || 0)*1;
+					var costMoneyEnd = ($divList.eq(j).find('input[name=costMoneyEnd]').val() || 0)*1;
 					var pMoney = shop.compare(costMoneyStart, costMoneyEnd);
 					var isRepeat = false;
 					if(costMoneyStart == costMoneyEnd){
@@ -582,12 +553,19 @@ define(function(require, exports) {
 		    area: '800px', 
 		    zIndex:1029,
 		    content: html,
+		    scrollbar: false, // 推荐禁用浏览器外部滚动条
 		    success:function(){
 		    	var $form = $(".T-policyForm"),
 		    		$tbody = $form.find('.T-list'),
 		    		modiPolicyValidator = rule.checkShopItem($form);		    	
 		    	
 		    	shop.datePicter($tbody.find(".T-date"));
+
+		       var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
+		   		   $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
+
+				Tools.inputCtrolFloat($costMoneyStart);
+				Tools.inputCtrolFloat($costMoneyEnd);
 
 		    	// 绑定事件处理
 		    	$form.on('click', '.T-item-add', function(event) {
@@ -633,7 +611,7 @@ define(function(require, exports) {
 		    		var result = shop.submitShopPolicy(obj);
 			    	if(result){
 			    		layer.close(policyLayer);
-			    		showMessageDialog($( "#confirm-dialog-message" ), "成功更新购物政策");
+			    		//showMessageDialog($( "#confirm-dialog-message" ), "成功更新购物政策");
 			    	}
 		    	});
 
@@ -661,14 +639,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopTimeArea&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
@@ -705,10 +683,18 @@ define(function(require, exports) {
 		var td = obj.closest('td');
 		var index = td.find("div").length;
 		// var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"shopPolicyPriceList clearfix div-"+(index+1)+"\" style=\"margin-bottom:2px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
-		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" style="width:100px"><label class="priceArea" style="float:right"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
+		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" style="width:100px"><label class="priceArea" style="margin-left:10px;"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
 		var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\" class='form-control'/></div>";
 		var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"  class='form-control'/></div>";
 		td.append(priceAreaDiv);
+
+		var $form = $(".T-policyForm"),$tbody = $form.find('.T-list');
+		var $costMoneyStart=$tbody.find('input[name=costMoneyStart]'),
+		    $costMoneyEnd=$tbody.find('input[name=costMoneyEnd]');
+
+		Tools.inputCtrolFloat($costMoneyStart);
+		Tools.inputCtrolFloat($costMoneyEnd);
+
 		td.next().append(guideRateInput);
 		td.next().next().append(travelAgencyRateInput);
 	};
@@ -730,14 +716,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:""+APP_ROOT+"back/shop.do?method=deleteShopCostRebate&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
@@ -769,13 +755,14 @@ define(function(require, exports) {
 				}
 			});
 		}else{
+			index = div.closest('td').find("div:not(.delete)").index(div);
 			div.fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
-			div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+			div.parent().next().next().children('div').eq(index).fadeOut(function(){
 				$(this).remove();
 			});
 		}

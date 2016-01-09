@@ -104,7 +104,7 @@ define(function(require, exports) {
 	
 	    	if (type==1) {
 	    		$.ajax({
-					url : employeePerforObj.url("findTotal","view"),
+	    			url : KingServices.build_url("performanceOfUser","findTotal"),
 					type : "POST",
 					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
 					success : function(data){
@@ -130,7 +130,7 @@ define(function(require, exports) {
 	    	}
 	    	if(type==2){
 	    		$.ajax({
-					url : employeePerforObj.url("findTotalByBusinessGroup","view"),
+	    			url : KingServices.build_url("performanceOfUser","findTotalByBusinessGroup"),
 					type : "POST",
 					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
 					success : function(data){
@@ -138,7 +138,6 @@ define(function(require, exports) {
 						if(result){
 						   var html=listDeptTemplate(data);
 						   employeePerforObj.$tab.find('.T-deptPerfor-list').html(html);
-						   console.info('=========='+data.searchParam.totalPage+"**********"+employeePerforObj.$tab.find('.T-listDept-pagenation'));
 
 						   // 绑定翻页组件
 							laypage({
@@ -170,11 +169,6 @@ define(function(require, exports) {
 		})
 	};
 
-	//ajax中的url
-	employeePerforObj.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/performanceOfUser.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	}
  
 	exports.init = employeePerforObj.initModule;
 

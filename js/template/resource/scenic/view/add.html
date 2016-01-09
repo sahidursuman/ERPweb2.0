@@ -44,7 +44,7 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">景区所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-8">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -60,14 +60,14 @@
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">季节政策:</label>
 						<div class="col-sm-6">
-							<input type="text" name="seasonPolicy" class="col-sm-12 addressMinute" placeholder="季节政策"/>
+							<input type="text" name="seasonPolicy" class="col-sm-12 addressMinute" placeholder="季节政策" maxlength="300"/>
 						</div>
 					</div>
 
 					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">景区简介:</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" ></textarea>
+							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>
 						</div>
 					</div>
 				</div>
@@ -81,7 +81,7 @@
 						<h5 >
 							<span class="badge badge-primary">2</span>
 							<label class="title-size middle">项目列表</label>
-							<a href="javascript:void(0)" class="T-btn-scenic-add">
+							<a href="javascript:void(0)" class="T-scenic-standard-add">
 							<button class="btn btn-sm btn-success" style="margin-left: 20px;">
 								<i class="ace-icon fa fa-plus"></i>
 								新增
@@ -94,7 +94,7 @@
 								<thead>
 									<tr>
 										<th class="table-border"><span class="necessary">*</span>收费项目</th>
-										<th class="table-border" style="width: 270px"><span class="necessary">*</span>时间范围</th>
+										<th class="table-border col-sm-3"><span class="necessary">*</span>时间范围</th>
 										<th class="table-border" width="120"><span class="necessary">*</span>单价(元)</th>
 										<th class="table-border">备注</th>
 										<th class="table-border" width="80">操作</th>

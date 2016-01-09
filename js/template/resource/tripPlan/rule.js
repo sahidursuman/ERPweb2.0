@@ -18,7 +18,12 @@ define(function(require, exports) {
 
 		var settings = this.getListTripPlanCheckorSettings($container);
 
-		return $container.formValidate(settings);
+		return $container.formValidate(settings)
+			.validateHidden(true, 
+				function($obj) {
+					$obj.closest('.tabbable').find('[href="#'+ $obj.closest('.tab-pane').prop('id') +'"]').trigger('click')
+				}
+			);
 	};
 
 
@@ -54,6 +59,14 @@ define(function(require, exports) {
 	  	    	        	errMsg:'管理费不能是非法数字'       
 	  	    	        }
 	  	    	        ]    
+	  			    },{//其它项目校验
+	  			    	$ele: $container.find('input.T-other-name'),
+	  	    	    	rules: [
+	  	    	        {
+	  	    	        	type:'null', 
+	  	    	        	errMsg:'其他项目不能为空'       
+	  	    	        }
+	  	    	        ]    
 	  			    }
 		];
 
@@ -72,8 +85,8 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="memberCount"]'),
 						rules: [
 							{
-								type: 'positive-float',
-								errMsg: '必须为正数'
+								type: 'nonnegative-float',
+								errMsg: '请输入非负数'
 							}
 						]
 					},{//已付  
@@ -100,9 +113,52 @@ define(function(require, exports) {
 								errMsg: '不能是非法字符'
 							}
 						]
+					},{//房型
+						$ele: $that.find('input[name="hotelRoom"]'),
+						$valObj: $that.find('input[name="hotelRoomId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '房型不能为空'
+							}
+						]
+					},{//房型
+						$ele: $that.find('input[name="startTime"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '日期不能为空'
+							}
+						]
 					}
 				);
-		});  
+		});  		
+
+		// 景区校验
+		$container.find('#tripPlan_addPlan_scenic').find('tbody').children('tr').each(function() {
+			var $tr = $(this);
+			settings.push(
+					{//景区
+						$ele: $tr.find('input[name="name"]'),
+						$valObj: $tr.find('input[name="scenicId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '景区不能为空'
+							}
+						]
+					},{//收费项目
+						$ele: $tr.find('input[name="chargingProjects"]'),
+						$valObj: $tr.find('input[name="chargingId"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '收费项目不能为空'
+							}
+						]
+					}
+				);
+		});
 
 		return settings;   
 	};

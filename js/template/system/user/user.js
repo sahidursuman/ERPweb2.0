@@ -16,7 +16,7 @@ define(function(require, exports) {
 	};
 
 	user.initModule = function() {
-		user.listUser(0,"","");
+		user.listUser(0,"",1);
 	};
 
 	user.listUser = function(page,realname,status){
@@ -44,7 +44,7 @@ define(function(require, exports) {
 					userList = JSON.parse(userList);
 					data.userList = userList;
 					var html = listTemplate(data);
-					addTab(menuKey,"人员管理",html);
+					Tools.addTab(menuKey,"人员管理",html);
 
 					user.initList();
 
@@ -133,6 +133,7 @@ define(function(require, exports) {
 					    content: html,
 					    scrollbar: false,
 					    success:function(){
+							var validator=rule.check($(".T-addUser-form"));
 							$(".T-addUser-form .T-addUser").click(function(){
 								user.saveAdd();
 							});
@@ -153,7 +154,12 @@ define(function(require, exports) {
 		if($(".T-user-status").is(":checked") == true){
 			status = 1;
 		}
+		var isOpenOP = 0;
+		if($(".T-addUser-form .T-open-meter").is(":checked") == true){
+			isOpenOP = 1;
+		}
 		var form = $form.serialize()+"&status="+status;
+		
 		$.ajax({
 			url:KingServices.build_url("user","addUser"),
 			type:"POST",
@@ -161,6 +167,9 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+					if(isOpenOP){
+						user.openOP(data.userId, 10);
+					}
 					layer.close(user.$addUserLayer);
 					user.listUser(0, "", 1);
 					user.updateAuth(data.userId,true);
@@ -169,6 +178,17 @@ define(function(require, exports) {
 		});
 	};
 
+	user.openOP = function(userId, type){
+		$.ajax({
+			url: KingServices.build_url("user","openApp"),
+			type: 'POST',
+			data: {id: userId, type : type},
+		})
+		.done(function() {
+			var result = showDialog(data);
+		});
+	};
+	
 	user.viewUser = function(id){
 		$.ajax({
 			url:KingServices.build_url("user","getUserById"),
@@ -186,7 +206,7 @@ define(function(require, exports) {
 					    type: 1,
 					    title:"系统人员信息",
 					    skin: 'layui-layer-rim', 
-					    area: ['700px', '400px'], 
+					    area: '700px', 
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
@@ -291,11 +311,6 @@ define(function(require, exports) {
     			tr = $this.closest('tr'),
     			funcs = tr.find(".T-function"),
     			index = funcs.index($this);
-    		if(index == 0 && $this.data("descript") == "对账" && !$this.is(":checked")){//取消“对账”权限
-    			funcs.eq(2).prop("checked",false);
-    		} else if(index == 2 && $this.data("descript") == "取消对账" && $this.is(":checked")){//勾选“取消对账”权限
-    			funcs.eq(0).prop("checked",true);
-    		}
     		
     		if($this.is(":checked")){
     			tr.find('.T-submenu-check').prop("checked",true);
@@ -361,7 +376,10 @@ define(function(require, exports) {
 
     	//保存按钮事件绑定
     	$container.find(".T-saveAuth").click(function(){
-    		user.saveAuth(data.user.id,data.user.userName);
+    		if(!$(this).data("click")){
+    			$(this).data("click",true);
+    			user.saveAuth(data.user.id,data.user.userName);
+    		}
     	});
 	};
 
@@ -448,6 +466,10 @@ define(function(require, exports) {
 								if($form.find(".T-user-status").is(":checked") == true){
 									status = 1;
 								}
+								var isOpenOP = 0;
+								if($(".T-updateUser-form .T-open-meter").is(":checked") == true){
+									isOpenOP = 1;
+								}
 								var form = "id="+id+"&"+$form.serialize()+"&status="+status;
 								$.ajax({
 									url:KingServices.build_url("user","updateUser"),
@@ -456,6 +478,9 @@ define(function(require, exports) {
 									success:function(data){
 										var result = showDialog(data);
 										if(result){
+											if(isOpenOP){
+												user.openOP(id, 10);
+											}
 											layer.close(updateUserLayer);
 											showMessageDialog($("#confirm-dialog-message"),data.message);
 											user.listUser(0, "", 1);

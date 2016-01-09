@@ -1,0 +1,84 @@
+<div class="col-xs-12">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr class="bg-blur">  
+				<th>线路产品</th>
+				<th>出游日期</th>
+				<th>需求内容</th>               
+				<th>车队</th>
+				<th>车费报价</th>
+				<th>反馈内容</th>
+				<th>资源保留期</th>
+				<th>询价截止期</th>
+				<th>询价状态</th>
+				<th width="130">操作</th>
+			</tr>
+		</thead>
+	
+		<tbody>
+			{{each data as rs}}
+				<tr>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.lineProductName}}</td>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td rowspan="{{rs.busCompanyOfferList.length}}">{{rs.condition}}</td>
+					{{each rs.busCompanyOfferList as offer index}}
+						{{if index == 0}}
+							<td>{{offer.busCompanyName}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
+							<td>{{offer.remark}}</td>
+							<td>{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
+							<td>{{offer.expiryTime}}</td>
+							<td class="T-status">{{offer.status}}</td>
+							<td data-id="{{offer.id}}">
+								{{if offer.status == "已同意"}}
+									<a class="T-bus-add">加入</a><span> | </span>
+								{{/if}}
+									<a class="T-bus-delete">删除</a>
+							</td>
+						{{/if}}
+					{{/each}}
+				</tr>
+				{{each rs.busCompanyOfferList as offer index}}
+					{{if index > 0}}
+						<tr>
+							<td>{{offer.busCompanyName}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
+							<td>{{offer.remark}}</td>
+							<td>{{if offer.reserveMinutes == -1}}
+									{{if offer.status == "已拒绝"}}
+									-
+									{{else}}
+									一直保留
+									{{/if}}
+								{{else if offer.reserveMinutes == 0}}
+									{{if offer.status == "已同意"}}已到期{{else}}-{{/if}}
+								{{else}}
+									{{offer.reserveTime}}
+								{{/if}}
+							</td>
+							<td>{{offer.expiryTime}}</td>
+							<td class="T-status">{{offer.status}}</td>
+							<td data-id="{{offer.id}}">
+								{{if offer.status == "已同意"}}
+									<a class="T-bus-add">加入</a><span> | </span>
+								{{/if}}
+									<a class="T-bus-delete">删除</a>
+							</td>
+						</tr>
+					{{/if}}
+				{{/each}}
+			{{/each}}
+		</tbody>
+	</table>
+</div>

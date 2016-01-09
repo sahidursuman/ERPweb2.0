@@ -1,16 +1,16 @@
-<table class="table table-striped  table-hover">
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th class="th-border">餐厅</th>
 			<th class="th-border">用餐类型</th>
-			<th class="th-border">餐标</th>
+			<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 			<th class="th-border">菜单</th>
 			<th class="th-border">操作</th>
 		</tr>
 	</thead>
 	<tbody>{{each restaurantList as restaurant}}
 		<tr data-entity-id="{{restaurant.id}}" data-entity-name="{{restaurant.name}}" data-entity-managerName= "{{restaurant.managerName}}" data-entity-mobileNumber="{{restaurant.mobileNumber}}">
-			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle">{{restaurant.name}}</td>
+			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle">{{restaurant.name}}</td>
 			{{if restaurant.restaurantStandardList.length == 0}}<td></td><td></td><td></td>{{/if}}
 			{{each restaurant.restaurantStandardList as standard index}}
 			{{if index == 0}}
@@ -19,7 +19,7 @@
 			<td>{{standard.menuList}}</td>
 			{{/if}}
 			{{/each}}
-			<td rowspan="{{restaurant.restaurantStandardList.length}}" style="vertical-align:middle"><a class="T-add">添加</a></td>
+			<td {{if restaurant.restaurantStandardList.length > 1}}rowspan="{{restaurant.restaurantStandardList.length}}"{{/if}} style="vertical-align:middle"><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span> </label></td>
 		</tr>
 		{{each restaurant.restaurantStandardList as standard index}}
 		{{if index > 0}}

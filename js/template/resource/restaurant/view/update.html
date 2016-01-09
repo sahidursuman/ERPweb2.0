@@ -48,7 +48,7 @@
 					</div>
 
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">餐厅所在省市:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
 						<div class="col-sm-8">
 							<select class="col-sm-2" name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -62,17 +62,18 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
-						<div class="col-sm-6">
-							<input type="text" name="facility" maxlength="500" value="{{restaurant.facility}}" class="col-sm-12 addressMinute">
-						</div>
-					</div>
-					<div class="form-group guideInterval">
 						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
 						<div class="col-sm-6">
 							<input type="text" name="street" class="col-sm-12 addressMinute" value="{{restaurant.street}}" placeholder="请输入街道地址" maxlength="100"/>
 						</div>
 					</div>  
+					
+					<div class="form-group guideInterval">
+						<label class="col-sm-2 control-label no-padding-right">餐厅设施:</label>
+						<div class="col-sm-6">
+							<input type="text" name="facility" maxlength="500" value="{{restaurant.facility}}" class="col-sm-12 addressMinute">
+						</div>
+					</div>
 					<!--<div class="form-group guideInterval">-->
 						<!-- -->
 					<!--</div>    -->
@@ -107,7 +108,7 @@
 								<thead>
 									<tr>
 										<th class="table-border">用餐类型</th>
-										<th width="200" class="table-border"><span class="necessary">*</span>餐标</th>
+										<th width="200" class="table-border"><span class="necessary">*</span>餐标<span style="font-size:12px;">(元/人)</span></th>
 										<th width="200" class="table-border">菜单</th>
 										<th class="table-border">备注</th>
 										<th class="table-border" style="width: 60px">操作</th>

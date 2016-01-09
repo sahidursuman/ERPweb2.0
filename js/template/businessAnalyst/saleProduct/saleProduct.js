@@ -38,7 +38,7 @@ define(function(require, exports) {
 
 			//产品销量列表查询
 			$.ajax({
-				url : SaleProductObj.url("listLineProductSales","view"),
+				url : KingServices.build_url("lineProductSales","listLineProductSales"),
 				type:"POST",
 				data:{
 					startDate:startDate,
@@ -97,12 +97,6 @@ define(function(require, exports) {
 				language: 'zh-CN'
 			})
 		};
-	
-		//ajax中的url
-		SaleProductObj.url = function(method,operation){
-			var url = ''+APP_ROOT+'back/lineProductSales.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-			return url;
-		}
 
 		exports.init = SaleProductObj.initModule;
 

@@ -28,7 +28,7 @@
 			</tr>
 
 			<tr>
-				<td class="style-myself">景区所在省市：</td>
+				<td class="style-myself">所在地区：</td>
 				<td class="styleOne-self" colspan="3">{{if scenic.province != null}}
 					{{scenic.province.name}}
 					{{/if}}
@@ -64,6 +64,9 @@
 			<tr data-entity-id="{{item.id}}">
 				<td colspan="">{{item.name}}</td>
 				<td class="rangeTimeWidth">
+					<div>
+						日常价格
+					</div>
 					{{each item.priceList as price}}
 					<div>
 						{{price.startTime | dateFormat:'yyyy-MM-dd'}}至{{price.endTime | dateFormat:'yyyy-MM-dd'}}
@@ -71,6 +74,9 @@
 					{{/each}}
 				</td>
 				<td>
+					<div>
+						{{item.normalInnerPrice}}
+					</div>
 					{{each item.priceList as price}}
 					<div>
 						{{price.contractPrice}}

@@ -37,7 +37,7 @@ define(function(require, exports) {
 
 		   //客源分布列表查询
 			$.ajax({
-				url : sourDstributionObj.url("listGroupMemberDistribution","view"),
+				url : KingServices.build_url("groupMemberDistribution","listGroupMemberDistribution"),
 				type:"POST",
 				data:{
 					startDate:startDate,
@@ -146,11 +146,7 @@ define(function(require, exports) {
 		var value = $obj.find("[name="+name+"]").val();
 		return value;
 	};
-	//ajax中的url
-	sourDstributionObj.url = function(method,operation){
-		var url = ''+APP_ROOT+' back/groupMemberDistribution.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	}
+
 
 	exports.init = sourDstributionObj.initModule;
 

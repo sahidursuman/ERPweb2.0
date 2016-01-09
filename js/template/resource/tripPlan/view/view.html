@@ -20,7 +20,7 @@
 			<td class="style-myself">团队人数：</td>
 			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
 			<td class="style-myself">导游：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" >{{tripPlan.guide.realname}}</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" >{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</td>
 			<td class="style-myself">全陪：</td>
 			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideName}}</td>
 		</tr>
@@ -34,6 +34,11 @@
 
 			<td class="style-myself">导游预支金额</td>
 			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllPreMoney}}</td>
+		</tr>
+
+		<tr>
+			<td  class="style-myself">备注</td>
+			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="9">{{tripPlan.remark}}</td>
 		</tr>
 	</table>
 </div>
@@ -55,7 +60,6 @@
 						<th class="th-border">车辆品牌</th>
 						<th class="th-border">合同号</th>
 						<th class="th-border">导付</th>
-						<th class="th-border">付款方式</th>
 						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 					</tr>
 				</thead>
@@ -68,7 +72,6 @@
 						<td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
 						<td>{{busCompany.contractNumber}}</td>
 						<td>{{busCompany.guidePayMoney}}</td>
-						<td>{{if busCompany.payType == 0}}现付{{else if busCompany.payType==1}}签单{{else if busCompany.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{busCompany.remark}}</td>
 					</tr>
 				{{/each}}
@@ -89,17 +92,16 @@
 						<th class="th-border">餐厅</th>
 						<th class="th-border">联系电话</th>
 						<th class="th-border">类型</th>
-						<th class="th-border">餐标</th>
+						<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 						<th class="th-border">人数</th>
 						<th class="th-border">导付</th>
-						<th class="th-border">付款方式</th>
 						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 					</tr>
 				</thead>
 				<tbody> 
 				{{each restaurantList as restaurant}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{restaurant.whichDay}}">第{{restaurant.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{restaurant.whichDay}}">第{{restaurant.whichDay}}天</td>
 						<td>{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}</td>
 						<td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 						<td>
@@ -112,7 +114,6 @@
 						<td>{{restaurant.price}}</td>
 						<td>{{restaurant.memberCount}}</td>
 						<td>{{restaurant.guidePayMoney}}</td>
-						<td>{{if restaurant.payType == 0}}现付{{else if restaurant.payType==1}}签单{{else if restaurant.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{restaurant.remark}}</td>
 					</tr>
                 {{/each}}
@@ -136,21 +137,19 @@
 					<th class="th-border">房型</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
 				<tbody>
 				{{each hotelList as hotel}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{hotel.whichDay}}">第{{hotel.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{hotel.whichDay}}">第{{hotel.whichDay}}天</td>
 						<td>{{if hotel.hotel.level == 1}}三星以下{{else if hotel.hotel.level == 2}}三星{{else if hotel.hotel.level == 3}}准四星{{else if hotel.hotel.level == 4}}四星{{else if hotel.hotel.level == 5}}准五星{{else if hotel.hotel.level == 6}}五星{{else if hotel.hotel.level == 7}}五星以上{{/if}}</td>
 						<td>{{hotel.hotel.name}}</td>
 						<td>{{hotel.hotel.mobileNumber}}</td>
 						<td>{{hotel.hotelRoom.type}}</td>
 						<td>{{hotel.memberCount}}</td>
 						<td>{{hotel.guidePayMoney}}</td>
-						<td>{{if hotel.payType == 0}}现付{{else if hotel.payType==1}}签单{{else if hotel.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{hotel.remark}}</td>
 					</tr>
 				{{/each}}
@@ -176,14 +175,13 @@
 					<th class="th-border">数量</th>
 					<th class="th-border">订单号</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
 				<tbody>
                 {{each scenicList as scenic}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{scenic.whichDay}}">第{{scenic.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{scenic.whichDay}}">第{{scenic.whichDay}}天</td>
 						<td>{{scenic.tourTime}}</td>
 						<td>{{scenic.scenic.name}}</td>
 						<td>{{scenic.scenicItem.name}}</td>
@@ -192,7 +190,6 @@
 						<td>{{scenic.memberCount}}</td>
 						<td>{{scenic.orderNumber}}</td>
 						<td>{{scenic.guidePayMoney}}</td>
-						<td>{{if scenic.payType == 0}}现付{{else if scenic.payType==1}}签单{{else if scenic.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{scenic.remark}}</td>
 					</tr>
 				{{/each}}
@@ -219,7 +216,7 @@
 				<tbody>
 				{{each shopList as shop}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{shop.whichDay}}">第{{shop.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{shop.whichDay}}">第{{shop.whichDay}}天</td>
 						<td>{{shop.shop.name}}</td>
 						<td>{{shop.shopPolicy.name}}</td>
 						<td>{{shop.shop.mobileNumber}}</td>
@@ -247,14 +244,13 @@
 					<th class="th-border">底价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
 				<tbody>
 				{{each selfPayList as selfPay}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{selfPay.whichDay}}">第{{selfPay.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{selfPay.whichDay}}">第{{selfPay.whichDay}}天</td>
 						<td>{{selfPay.selfPay.name}}</td>
 						<td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}</td>
 						<td>{{selfPay.selfPay.mobileNumber}}</td>
@@ -262,7 +258,6 @@
 						<td>{{selfPay.price}}</td>
 						<td>{{selfPay.memberCount}}</td>
 						<td>{{selfPay.guidePayMoney}}</td>
-						<td>{{if selfPay.payType == 0}}现付{{else if selfPay.payType==1}}签单{{else if selfPay.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{selfPay.remark}}</td>
 					</tr>
 				{{/each}}
@@ -289,7 +284,6 @@
 					<th class="th-border">单价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
@@ -316,7 +310,6 @@
 						<td>{{ticket.price}}</td>
 						<td>{{ticket.memberCount}}</td>
 						<td>{{ticket.guidePayMoney}}</td>
-						<td>{{if ticket.payType == 0}}现付{{else if ticket.payType==1}}签单{{else if ticket.payType==2}}转账{{else}}网付{{/if}}</td>
 						<td>{{ticket.remark}}</td>
 					</tr>
 				{{/each}}
@@ -340,21 +333,19 @@
 					<th class="th-border">单价</th>
 					<th class="th-border">数量</th>
 					<th class="th-border">导付</th>
-					<th class="th-border">付款方式</th>
 					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
 				</tr>
 				</thead>
 				<tbody>
 				{{each otherList as other}}
 					<tr>
-						<td class="viewWhichDaysContainer" whichDay="{{other.whichDay}}">第{{other.whichDay}}天</td>
+						<td class="T-viewWhichDaysContainer" whichDay="{{other.whichDay}}">第{{other.whichDay}}天</td>
 						<td>{{other.name}}</td>
 						<td>{{other.managerName}}</td>
 						<td>{{other.mobileNumber}}</td>
 						<td>{{other.price}}</td>
 						<td>{{other.memberCount}}</td>
 						<td>{{other.guidePayMoney}}</td>
-						<td>{{if other.payType == 0}}现付{{else if other.payType==1}}签单{{else if other.payType==1}}转账{{else}}网付{{/if}}</td>
 						<td>{{other.remark}}</td>
 					</tr>
 				{{/each}}

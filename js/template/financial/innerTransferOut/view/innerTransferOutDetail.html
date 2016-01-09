@@ -1,0 +1,27 @@
+<div style="form-group">
+	<table class="table table-striped table-bordered table-hover" >
+		<thead>
+			<tr>
+				<th class="th-border">应付类别</th>
+				<th class="th-border">发生业务</th>
+				<th class="th-border">金额</th>
+				<th class="th-border">备注</th>
+				<th class="th-border">操作人</th>
+				<th class="th-border">操作时间</th>
+			</tr>
+		</thead>
+		<tbody>
+		{{each checkRecordList as record}}
+			<tr>
+				<td>{{record.receivableType}}</td>
+				<td>{{record.businessType}}</td>
+				<td>{{record.payDifferenceMoney}}</td>
+				<td>{{record.remark}}</td>
+				<td>{{record.checkRealname}}</td>
+				<td>{{record.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+</div> 
+

@@ -21,5 +21,3 @@
 	打开node.js command prompt  粘贴 tmod E:\workspace\huochaitou\src\main\webapp\app\js\template  --output E:\workspace\huochaitou\src\main\webapp\app\js\template  --type cmd --debug  
 
 	其中  E:\workspace\huochaitou\src\main\webapp\app\js\template  路径为clone目标文件中的的template文件地址
-
-

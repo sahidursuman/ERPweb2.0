@@ -9,13 +9,16 @@ define(function(require, exports) {
 		menuKey = "resource_lineProduct",
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
+		addLineProductTemplate = require("./view/addLineProduct"),
 		viewDetailTemplate = require("./view/viewDetail"),
 		addQouteTemplate = require("./view/addQoute"),
 		updateLineProductTemplate = require("./view/updateLineProduct"),
-	
+		tabId = "tab-"+menuKey+"-content";
 		// 主体对象
-		ResLineProduct = {};
-
+	var ResLineProduct = {
+		autocompleteDate:{}
+	};
+		
 	// 声明全局变量
 	ResLineProduct.$tab = false;
 	ResLineProduct.updateLineProductIndex = 0;
@@ -26,7 +29,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResLineProduct.initModule = function() {
-		ResLineProduct.getProductList(0, '', 1);
+		ResLineProduct.getProductList(0,'','','', 1);
 	};
 
 	/**
@@ -36,9 +39,11 @@ define(function(require, exports) {
 	 * @param  {[type]} status [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.getProductList = function(page,name,status){
+	ResLineProduct.getProductList = function(page,name,type,customerType,status){
 		if (ResLineProduct.$tab && arguments.length === 1) {
 			name = ResLineProduct.$tab.find('.T-lineproduct-name').val();
+			type = ResLineProduct.$tab.find('.T-lineproduct-type').val();
+			customerType = ResLineProduct.$tab.find('select[name=customerType]').val();
 			status = ResLineProduct.$tab.find('.T-status').children('button').data('value');
 		}
 
@@ -53,6 +58,8 @@ define(function(require, exports) {
 			data: {
 				pageNo: page,
 				name: name,
+				type: type,
+				customerType:customerType,
 				status: status,
 				sortType: 'auto'
 			},
@@ -65,13 +72,15 @@ define(function(require, exports) {
 					lineProductList = JSON.parse(lineProductList);
 					data.lineProductList = lineProductList;
 					var html = listTemplate(data);
+					ResLineProduct.getQueryTerms();
 					Tools.addTab(menuKey,"线路产品管理",html);
 
 					// init $tab
 					ResLineProduct.$tab = $("#tab-"+menuKey+"-content");
+					ResLineProduct.lineProductType(ResLineProduct.$tab);
+					ResLineProduct.needSeatCountS(ResLineProduct.$tab);
 					// init event
 					ResLineProduct.init_event();
-
 					// 绑定翻页组件
 					laypage({
 					    cont: ResLineProduct.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -86,7 +95,80 @@ define(function(require, exports) {
 				}
 			}
 		});
+
 	};
+// 线路类型
+	ResLineProduct.lineProductType  = function($obj){
+			var lineProductType = $obj.find(".T-lineproduct-type");
+			lineProductType.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).click(function(){
+				var objM = this;
+				var lineObj = ResLineProduct.autocompleteDate.typeList;
+				for(var i = 0;i<lineObj.length;i++){
+					// typeKey赋给value
+					lineObj[i].value = lineObj[i].typeKey;
+				}
+				console.log(lineObj);
+				if(lineObj !=null) {
+					$(objM).autocomplete('option','source', lineObj);
+					$(objM).autocomplete('search', '');
+				}else{
+					layer.tips('无数据', objM, {
+						tips: [1, '#3595CC'],
+						time: 2000
+					});
+				}
+
+			})
+		};
+
+
+		ResLineProduct.needSeatCountS  = function($obj){
+			var needSeatCountS = $obj.find(".T-needSeatCount");
+			needSeatCountS.autocomplete({
+				minLength:0,
+				select:function(event,ui){
+					
+				},
+				change:function(event,ui){
+					
+				}
+			}).unbind("click").click(function(){
+			var obj = this;
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getSeatCountList'),
+				showLoading: false,
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			})
+		})
+		};
 
 	/**
 	 * 初始化列表页面的绑定
@@ -129,6 +211,9 @@ define(function(require, exports) {
 			} else if ($that.hasClass('T-edit'))  {
 				// 编辑
 				ResLineProduct.updateLineProduct(id,false);
+			} else if ($that.hasClass('T-quote'))  {
+				// 报价
+				ResLineProduct.quoteLineProduct(id);
 			} else if ($that.hasClass('T-copy'))  {
 				// 复制
 				ResLineProduct.updateLineProduct(id,true);
@@ -180,7 +265,34 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 添加、编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
+	 * 使用模板增加线路产品
+	 * @param {[type]} templateId [description]
+	 */
+	ResLineProduct.addLineProduct = function(templateId) {
+		var tab_id = menuKey + '-add';
+
+		if (ResLineProduct.add_id === templateId) {
+			$('.tab-' + tab_id).children('a').trigger('click');
+			return;
+		}
+		$.ajax({
+			url: KingServices.build_url('travelLine', 'getTravelLineById'),
+			type: 'post',
+			data: {id: templateId},
+		})
+		.done(function(data) {
+			if (showDialog(data))  {
+				data.travelLine = JSON.parse(data.travelLine);
+				if (Tools.addTab(tab_id, '新建线路产品', addLineProductTemplate(data))) {
+					ResLineProduct.tmpData.type = true;  // 新增模式
+					ResLineProduct.init_updata_tab(tab_id);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 编辑、复制线路模板。其中编辑和添加功能将提供给其他模块调用
 	 * @param  {id} id            编辑或者复制的线路产品的id
 	 * @param  {Boolean} clipboardMode true表示复制、false表示编辑
 	 * @return {[type]}               [description]
@@ -188,6 +300,18 @@ define(function(require, exports) {
 	ResLineProduct.updateLineProduct = function(id,clipboardMode){
 		if (!!id) {
 			// 编辑或者复制
+			var title = "修改线路产品", tab_id = menuKey + '-update';
+			if(clipboardMode){
+				title = "复制线路产品";
+				tab_id = menuKey + '-copy';
+			}
+
+			var $tab = $('#tab-'+ tab_id + '-content');
+			if ($tab.length && $tab.find('.T-btn-submit').data('id') == id) {	// 如果打开的是相同产品，则不替换
+				$('.tab-' + tab_id).children('a').trigger('click');
+				return;
+			}
+
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
@@ -210,12 +334,7 @@ define(function(require, exports) {
 								daysList : daysList
 						};
 						
-						data.viewLineProduct.clipboardMode = clipboardMode;
-						var title = "修改线路产品", tab_id = menuKey + '-update';
-						if(clipboardMode){
-							title = "复制线路产品";
-							tab_id = menuKey + '-copy';
-						}
+						data.viewLineProduct.clipboardMode = clipboardMode;				
 
 						ResLineProduct.tmpData.productId = id;
 						ResLineProduct.tmpData.type = clipboardMode;
@@ -227,13 +346,31 @@ define(function(require, exports) {
 							ResLineProduct.init_updata_tab(tab_id);							
 						}
 						// 绑定autocomplete
-						var $tab = $('#tab-'+ tab_id + '-content'),$dayListArea = $tab.find('.T-timeline-container');
+						$tab = $('#tab-'+ tab_id + '-content');
+						//Input控件精度的限制
+						var $guideFee= $tab.find('input[name=guideFee]'),
+						    $price= $tab.find('input[name=price]'),
+						    $seatPrice= $tab.find('input[name=seatPrice]');
+						    Tools.inputCtrolFloat($guideFee);
+						    Tools.inputCtrolFloat($price);
+						    Tools.inputCtrolFloat($seatPrice);
+
+						var $dayListArea = $tab.find('.T-timeline-container');
 						ResLineProduct.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'));
 						ResLineProduct.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'));
 						ResLineProduct.bindScenicEvent($dayListArea.find('.T-choose-scenicName'));
 						ResLineProduct.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'));
 						ResLineProduct.bindSelfPay($dayListArea.find('.T-choose-ticketCompanyName'));
 						ResLineProduct.bindTicketEvent($dayListArea.find('.chooseTicketName'));
+
+						//修改用餐类型后清空餐标和菜单
+						$tab.find(".T-restauranType").on("change", function(){
+							var typeParent = $(this).parent().parent();
+							typeParent.find("input[name=typeName]").val("");
+							typeParent.find("input[name=menuList]").val("");
+							typeParent.find("input[name=pricePerPerson]").val("");
+							typeParent.find("input[name=remark]").val("");
+						});
 					}
 				}
 			});
@@ -262,8 +399,11 @@ define(function(require, exports) {
 		if(!clipboardMode) {
 			$tab.find('.T-btn-submit').data('id', id);
 		}
+
+		
+		
 		// 以下待修改
-		ResLineProduct.mousedownBlur();
+		ResLineProduct.mousedownBlur($tab);
 
 		var updateList =$tab.find(".T-dailyArrangeList");
 		if(updateList.length > 0){
@@ -283,8 +423,10 @@ define(function(require, exports) {
 					updateDays.html(arr.join(""));
 				}
 			}
-			var daysDetailList = $tab.find(".T-timeline-item");
-			ResLineProduct.updateLineProductIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			var daysDetailList = $tab.find(".T-timeline-item"),
+			daysDetailListIndex = parseInt(daysDetailList.eq(daysDetailList.length-1).attr("data-entity-index")) + 1;
+			ResLineProduct.updateLineProductIndex = isNaN(daysDetailListIndex) ? 0 : daysDetailListIndex;
+
 		}
 	}
 
@@ -300,7 +442,8 @@ define(function(require, exports) {
 			var validator = rule.lineProductCheckor($tab);
 
 			// 监听修改
-			$tab.on('change', function(event) {
+			$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+			.on('change', function(event) {
 				event.preventDefault();
 				$tab.data('isEdited', true);
 			})
@@ -308,6 +451,10 @@ define(function(require, exports) {
 			.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 				event.preventDefault();
 				ResLineProduct.saveProductData($tab, validator, [tab_id, title, html]);
+			})
+			.on(SWITCH_TAB_BIND_EVENT, function(event) {
+				event.preventDefault();
+				ResLineProduct.init_CRU_event($tab.find('.T-btn-submit').data('id'), $tab);
 			})
 			// 保存后关闭
 			.on(CLOSE_TAB_SAVE, function(event) {
@@ -319,8 +466,6 @@ define(function(require, exports) {
 			$tab.find('.T-daylist').children('.tab-pane').each(function(index, el) {
 				init_editor($(this).find('.T-editor').prop('id'));
 			});
-
-
 			
 			//添加具体行程安排相应事件
 			$tab.find('.T-daylist').on('click', '.T-add', function(event) {
@@ -345,16 +490,18 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-addTraffic')) {
 					// 添加交通
 					ResLineProduct.addResourceTraffic($that, validator);
+				} else if ($that.hasClass('T-addOther')) {
+					// 添加交通
+					ResLineProduct.addOther($that, validator);
 				}
 			})
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
 
 			// 绑定安排的拖动事件				
-			$tab.find('.T-timeline-container').sortable({
+			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
-				handle: ace.vars['touch'] ? '.table-bordered thead' : false,
-				forceHelperSize:true,
-				forcePlaceholderSize:true,
+				axis: "y",
+				handle: '.table-bordered thead',
 				tolerance:'pointer',
 				update: function(event, ui) {
 					ResLineProduct.updateRouteIndex($tab);
@@ -366,7 +513,8 @@ define(function(require, exports) {
 			 */
 			// 导游
 			ResLineProduct.bindGuideChosen($tab.find('.T-guide-name'), validator);
-			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), validator);
+			ResLineProduct.bindInsuranceChosen($tab.find('.T-insurance-name'), $tab.find('.T-chooseInsuranceItem'), validator);
+			ResLineProduct.bindSeatCount($tab.find('.T-needSeatCount'), validator);
 			ResLineProduct.bindBusCompanyChosen($tab.find('.T-buscompany-name'), validator);
 			ResLineProduct.bindBusDetailChosen($tab.find('.T-licenseNumber'), validator);
 
@@ -383,11 +531,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindGuideChosen = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定导游的autocomplete，主体Dom为空!');
-			return;
-		}
-
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -470,7 +613,7 @@ define(function(require, exports) {
 	 * @param  {object} $input 绑定的Dom
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.bindInsuranceChosen = function($input, validator) {
+	ResLineProduct.bindInsuranceChosen = function($input, $item, validator) {
 		if (!$input || !$input.length) {
 			console.error('绑定保险的autocomplete，主体Dom为空!');
 			return;
@@ -482,6 +625,7 @@ define(function(require, exports) {
 					var $tr = $(this).val("").closest('tr');
 					$tr.find("input[name=insuranceId]").val("");
 					$tr.find("input[name=type]").val("");
+					$tr.find("input[name=typeId]").val("");
 					$tr.find("input[name=price]").val("");
 					$tr.find("input[name=telNumber]").val("");
 					$tr.find("input[name=managerName]").val("");
@@ -502,6 +646,9 @@ define(function(require, exports) {
 						if(result){
 							var insurance = JSON.parse(data.insurance), $tr = $that.closest('tr');
 							$tr.find("input[name=insuranceId]").val(insurance.id).trigger('change');
+							$tr.find("input[name=type]").val("");
+							$tr.find("input[name=typeId]").val("");
+							$tr.find("input[name=price]").val("");
 							$tr.find("input[name=telNumber]").val(insurance.telNumber);
 							$tr.find("input[name=managerName]").val(insurance.managerName);
 							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
@@ -532,8 +679,126 @@ define(function(require, exports) {
 				}
 			});
 		});
+
+		$item.autocomplete({
+			minLength: 0,
+			change: function(event, ui) {
+					if(ui.item == null){
+					var $this = $(this), $parents = $this.closest('tr');
+					$this.val('')
+					$parents.find('[name=typeId]').val('');
+					$parents.find('[name=price]').val('');
+				}
+			},
+			select: function(event, ui) {
+				var $this = $(this), $parents = $this.closest('tr');
+				$parents.find('[name=typeId]').val(ui.item.id).trigger('click');
+				$parents.find('[name=price]').val(ui.item.price);
+			}
+		}).off('click').on('click', function() {
+			var $this = $(this), $parents =$this.closest('tr'),
+				$id = $parents.find('[name=insuranceId]').val();
+			if (!!$id) {
+				$.ajax({
+					url: KingServices.build_url('insurance','selectInsuranceItem'),
+					type: 'POST',
+					showLoading:false,
+					data: {id: $id},
+					success: function(data) {
+						if (showDialog(data)) {
+							var $list = JSON.parse(data.insuranceItem);
+							if ($list != null && $list.length > 0) {
+								for (var i = 0; i < $list.length; i++) {
+									$list[i].value = $list[i].name;
+								}
+							}else{
+								layer.tips('没有内容', obj, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
+							}
+							$this.autocomplete('option','source', $list);
+							$this.autocomplete('search', '');
+						}
+					}
+				})
+			}else{
+				layer.tips('请选择保险公司', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
 	};
 
+	/**
+	 * 选择车座数
+	 * @param  {object} $input    车座数选择框
+	 * @param  {object} validator 校验对象
+	 * @return {[type]}           [description]
+	 */
+	ResLineProduct.bindSeatCount = function($input, validator) {
+		if (!$input || !$input.length) {
+			console.error('绑定车队的autocomplete，主体Dom为空!');
+			return;
+		}
+		$input.autocomplete({
+			minLength:0,
+			change :function(event, ui){
+				if(ui.item == null){
+					var $this = $(this),parents = $(this).closest('tr');
+					$this.val("");
+					parents.find("input[name=companyName]").val("");
+					parents.find("input[name=busCompanyId]").val("");
+					parents.find("input[name=licenseNumber]").val("");
+					parents.find("input[name=seatPrice]").val("");
+					parents.find("input[name=seatCount]").val("");
+					parents.find("input[name=charteredPrice]").val("");
+					parents.find("input[name=mobileNumber]").val("");
+				}
+				validator = rule.lineProductUpdate(validator);
+			},
+			select :function(event, ui){
+				var $this = $(this),parents = $(this).closest('tr');
+				parents.find("input[name=companyName]").val("");
+				parents.find("input[name=busCompanyId]").val("");
+				parents.find("input[name=licenseNumber]").val("");
+				parents.find("input[name=seatPrice]").val("");
+				parents.find("input[name=seatCount]").val("");
+				parents.find("input[name=charteredPrice]").val("");
+				parents.find("input[name=mobileNumber]").val("");
+
+				validator = rule.lineProductUpdate(validator);
+			}
+		}).unbind("click").click(function(){
+			var obj = this;
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getSeatCountList'),
+				showLoading: false,
+				success:function(data){
+					if(showDialog(data)){
+						var seatCountListJson = [];
+						var seatCountList = data.seatCountList;
+						if(seatCountList && seatCountList.length > 0){
+							for(var i=0; i < seatCountList.length; i++){
+								var seatCount = {
+									value : seatCountList[i]
+								}
+								seatCountListJson.push(seatCount);
+							}
+							$(obj).autocomplete('option','source', seatCountListJson);
+							$(obj).autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+					}
+				}
+			})
+		})
+	};
 	/**
 	 * 绑定车队选择
 	 * @param  {[type]} $input [description]
@@ -575,7 +840,6 @@ define(function(require, exports) {
 			}
 		}).click(function(){
 			var obj = this;
-			console.log(obj)
 			var needSeatCount = $(obj).parent().parent().find("input[name=needSeatCount]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'findBusCompanyBySeat'),
@@ -720,62 +984,37 @@ define(function(require, exports) {
 			ResLineProduct.updateRouteIndex($obj.closest('.T-updateLineProductContainer'));
 		}
 	};
-	ResLineProduct.deleteLineProduct = function(id){
-		if (!!id) {
-			$("#confirm-dialog-message").removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({							
-								url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
-								type:"POST",
-								showLoading:false,
-								data:"id="+id+"",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										ResLineProduct.$tab.find('.lineProduct-' + id).fadeOut(function() {
-											var len = ResLineProduct.$tab.find('.T-list').children('tr').length
 
-											ResLineProduct.getProductList(len <= 1? (ResLineProduct.pageNo - 1): ResLineProduct.pageNo);
-										});
-									}
-								}
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+	// 删除线路产品
+		ResLineProduct.deleteLineProduct = function(id){
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+				 $.ajax({
+				 	url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
+				 	type:"POST",
+				 	data:"id="+id+"",
+				 })
+				 .done(function(data) {
+				 	if(showDialog(data)){
+				 		ResLineProduct.getProductList(0);
+				 	}
+				 })
+				 		
+				});
+			}
+
 		}
-	};
-	
+
 	ResLineProduct.addRestaurant = function($btn, validator){
 		//添加行程安排餐饮
 		var scheduleDetails = '<div class="T-timeline-item timeline-item clearfix updateRestaurantList updateLineProductDaysDetail T-RestaurantList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info " style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span>餐饮</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标</th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th  class="th-border">餐厅名称</th><th class="th-border">餐厅电话</th><th class="th-border">用餐类型</th><th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>	<th class="th-border">菜单</th><th  class="th-border">备注</th>	<th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseRestaurantName bind-change"/><input type="hidden" name="restaurantId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><select name="type" class="col-xs-12 restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
-		'<td><input type="text" name="price" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
+		'<td><select name="type" class="col-xs-12 T-restauranType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>'+
+		'<td><input type="text" name="typeName" class="col-xs-12 restaurantStandardsName bind-change"/><input type="hidden" name="typeId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="menuList"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td><td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr>'+
 		'</tbody></table></div></div></div></div>';
@@ -783,7 +1022,7 @@ define(function(require, exports) {
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scheduleDetails);
 		ResLineProduct.updateLineProductIndex += 1;
 
-		$(".updateRestaurantList .restauranType").on("change", function(){
+		$(".T-restauranType").on("change", function(){
 			var typeParent = $(this).parent().parent();
 			typeParent.find("input[name=typeName]").val("");
 			typeParent.find("input[name=menuList]").val("");
@@ -809,7 +1048,7 @@ define(function(require, exports) {
 					$tr.find("input[name=payType]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=pricePerPerson]").val("");
-					$tr.find("input[name=price]").val("");
+					$tr.find("input[name=typeName]").val("");
 					$tr.find("input[name=typeId]").val("");
 				}
 
@@ -822,7 +1061,7 @@ define(function(require, exports) {
 				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=menuList]").val("");
 				$tr.find("input[name=pricePerPerson]").val("");
-				$tr.find("input[name=price]").val("");
+				$tr.find("input[name=typeName]").val("");
 				$tr.find("input[name=typeId]").val("");
 				
 				$.ajax({
@@ -930,16 +1169,19 @@ define(function(require, exports) {
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
 		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">价格</th><th class="th-border">含餐</th><th class="th-border">电话</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
-		'<td><select class="col-xs-12 resourceHotelStar"><option selected="selected" value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+		'<td><select class="col-xs-12 resourceHotelStar"><option {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option><option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice" style="width:70px;"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice" /></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(hotelDetails);
+		var $contractPrice=$container.find("input[name=contractPrice]");
+		    Tools.inputCtrolFloat($contractPrice);
 
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
 		ResLineProduct.updateLineProductIndex += 1;
 		//绑定选择酒店名称事件
 		ResLineProduct.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), validator)
@@ -1044,7 +1286,7 @@ define(function(require, exports) {
 						if(result){
 							var hotelRoom = JSON.parse(data.hotelRoom);
 
-							$tr.find("input[name=contractPrice]").val(hotelRoom.contractPrice);
+							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
 							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
 						}
                     }
@@ -1104,11 +1346,15 @@ define(function(require, exports) {
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseScenicName bind-change"/><input type="hidden" name="scenicId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseChargingProjects bind-change" name="chargingProjects"/><input type="hidden" name="chargingId"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(scenicDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(scenicDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
+
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择景区名称事件
@@ -1195,7 +1441,7 @@ define(function(require, exports) {
 						if(result){
 							var scenicItem = JSON.parse(data.scenicItem);
 
-							thisParent.find("input[name=price]").val(scenicItem.contractPrice);
+							thisParent.find("input[name=price]").val(scenicItem.normalInnerPrice);
 						}
                     }
                 });
@@ -1256,8 +1502,8 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12 chooseVendorName bind-change"/><input type="hidden" name="shopId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseGoodsPolicy bind-change" name="goodsPolicy"/><input type="hidden" name="shopPolicyId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="parkingRebateMoney"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="customerRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="parkingRebateMoney"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="customerRebateMoney"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除 </a></td></tr></tbody></table></div></div></div></div>';
 		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
@@ -1398,16 +1644,19 @@ define(function(require, exports) {
 		//添加行程安排自费
 		var selfPayingDetails = '<div class="T-timeline-item timeline-item clearfix updateSelfPayList updateLineProductDaysDetail T-resourceSelfPayList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >自费</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">公司名称</th><th class="th-border">项目名称</th><th class="th-border">联系电话</th><th class="th-border">价格</th><th class="th-border">联系人</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseCompanyName bind-change"/><input type="hidden" name="companyId"/></td>'+
 		'<td><input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName"/><input type="hidden" name="selfPayItemId"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="contractPrice"/><input type="hidden" class="col-xs-12" readonly="readonly" name="marketPrice"/></td>'+
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="managerName"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother"> 删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(selfPayingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(selfPayingDetails);
+		var $contractPrice=$container.find('input[name=contractPrice]');
+		    Tools.inputCtrolFloat($contractPrice);
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
@@ -1499,10 +1748,10 @@ define(function(require, exports) {
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							var selfPayRebate = JSON.parse(data.selfPayRebate); 
+							var selfPayItem = JSON.parse(data.selfPayItem); 
 							$tr.find("input[name=selfPayItemId]").val(ui.item.id).trigger('change');
-							$tr.find("input[name=contractPrice]").val(selfPayRebate.price);
-							$tr.find("input[name=marketPrice]").val(selfPayRebate.marketPrice);
+							$tr.find("input[name=contractPrice]").val(selfPayItem.normalInnerPrice);
+							$tr.find("input[name=marketPrice]").val(selfPayItem.normalMarketPrice);
 						}
                     }
                 });
@@ -1510,7 +1759,7 @@ define(function(require, exports) {
 			change:function(event, ui){
 				if(ui.item == null){
 					var $tr = $(this).val("").closest('tr');
-					$tr.find("input[name=companyId]").val("");
+					// $tr.find("input[name=companyId]").val("");
 					$tr.find("input[name=selfPayItemId]").val("");
 					$tr.find("input[name=mobileNumber]").val("");
 					$tr.find("input[name=contractPrice]").val("");
@@ -1518,8 +1767,8 @@ define(function(require, exports) {
 				}
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var chooseCompanyNameId=$(obj).parent().parent().find("input[name='companyId']").val();
+			var $that = $(this);
+			var chooseCompanyNameId=$that.closest('tr').find("input[name='companyId']").val();
 			$.ajax({
 				url: KingServices.build_url('selfpay', 'findSelfPayItemBySelfPayId'),
 				data:"id="+chooseCompanyNameId,
@@ -1534,10 +1783,10 @@ define(function(require, exports) {
 								
 								selfPayItemList[i].value = selfPayItemList[i].name;
 							}
-							$(obj).autocomplete('option','source', selfPayItemList);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', selfPayItemList);
+							$that.autocomplete('search', '');
 						}else{
-							layer.tips('没有内容。', obj, {
+							layer.tips('没有内容。', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
@@ -1554,7 +1803,7 @@ define(function(require, exports) {
 		//添加行程安排交通
 		var shoppingDetails = '<div class="T-timeline-item timeline-item clearfix updateTicketList updateLineProductDaysDetail T-resourceTicketList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >交通</span></div>'+
 		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">价格</th><th class="th-border">负责人</th><th class="th-border">联系电话</th><th class="th-border">公司电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<thead><tr><th class="th-border">票务公司名称</th><th class="th-border">类型</th><th class="th-border">价格</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">公司电话</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
 		'<tbody><tr>'+
 		'<td><input type="text" class="col-xs-12 chooseTicketName bind-change"/><input type="hidden" name="tickeId"/></td>'+
 		'<td><select name="type" class="col-xs-12 form-control" style="font-size: 12px !important;"><option value="1">机票</option><option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
@@ -1564,7 +1813,10 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-xs-12" readonly="readonly" name="telNumber"/></td>'+
 		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
 		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(shoppingDetails);
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(shoppingDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
 		ResLineProduct.updateLineProductIndex += 1;
 		
 		//绑定选择自费名称事件
@@ -1635,6 +1887,24 @@ define(function(require, exports) {
 			});
 		});
 	};
+	//添加其他安排
+	ResLineProduct.addOther = function($btn, validator) {
+		var otherDetails = '<div class="T-timeline-item timeline-item clearfix updateOtherList updateLineProductDaysDetail T-resourceOtherList ui-sortable-handle" data-entity-index='+ResLineProduct.updateLineProductIndex+'><div class="timeline-info" style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >其他</span></div>'+
+		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+		'<thead><tr><th class="th-border">项目名称</th><th class="th-border">联系人</th><th class="th-border">联系电话</th><th class="th-border">单价</th><th class="th-border">备注</th><th class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+		'<tbody><tr>'+
+		'<td><input type="text" class="col-xs-12 otherName bind-change" name="name"/><input type="hidden" name="otherId"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="managerName"/></td>'+
+        '<td><input type="text" class="col-xs-12" name="mobileNumber" value=""></td>'+
+		'<td><input type="text" class="col-xs-12" name="price"/></td>'+
+		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除</a></td></tr></tbody></table></div></div></div></div>';
+		var $container=$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container");
+		    $container.append(otherDetails);
+		var $price=$container.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
+		ResLineProduct.updateLineProductIndex += 1;
+	};
 
 	/**
 	 * 保存数据。若需要切换tab，就调用切换tab操作
@@ -1646,7 +1916,7 @@ define(function(require, exports) {
 	ResLineProduct.saveProductData = function($tab, validator, tabArgs){
 		if (!validator.form())   return;
 
-		var $form = $tab.find('.T-mainForm'), travelLineData = {};
+		var $form = $tab.find('.T-mainForm'), travelLineData = {},isAjax = true,$middleForm = $tab.find('.T-middleForm');
 		function getValue(obj, name){
 			var thisObj = obj.find("[name="+name+"]"), objValue;
 			if(thisObj.attr("type") == "checkbox"){
@@ -1660,11 +1930,16 @@ define(function(require, exports) {
          { 
              return str.replace(/(^\s*)|(\s*$)/g, ""); 
          }
-		var name = getValue($form.eq(0), "name");
+		var name = getValue($form.eq(0), "name"),
+			type = getValue($form.eq(0), "type");
 		if(trim(name) == ""){
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路产品名称");
 			return false;
+		} else if(trim(type) == ""){
+			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
+			return false;
 		}
+
 
 		// 获取表单的数据
 		travelLineData.lineProduct = 
@@ -1675,6 +1950,10 @@ define(function(require, exports) {
 				remark : getValue($form, "remark"),
 				type : getValue($form, "type"),
 				customerType : getValue($form, "customerType"),
+				includeFee  : getValue($middleForm, "includeFee"),
+				excludeFee  : getValue($middleForm, "excludeFee"),
+				lineFeature : getValue($middleForm, "lineFeature"),
+				lineNotice  : getValue($middleForm, "lineNotice"),
 				status : getValue($form, "status")
 			}];
 		
@@ -1691,6 +1970,7 @@ define(function(require, exports) {
 		travelLineData.insurance = [{
 				id : getValue($form, "templateId"),
 				insuranceId : getValue($form, "insuranceId"),
+				typeId: getValue($form, "typeId"),
 				type : getValue($form, "type"),
 				price : getValue($form, "price"),
 				remark : getValue($form, "remark")
@@ -1719,7 +1999,8 @@ define(function(require, exports) {
 				scenic : [],
 				shop : [],
 				selfPay : [],
-				ticket : []
+				ticket : [],
+				other: []
 			}
 			//获取餐饮
 			$list= $that.find(".T-RestaurantList");
@@ -1732,13 +2013,14 @@ define(function(require, exports) {
 						var standardId = $item.find("[name=typeId]").val();
 						if(!standardId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
+							isAjax = false;
 							return false;
 						}
 						var restaurantJson = {
 							id : $item.find("[name=templateId]").val(),
 							restaurantId : restaurantId,
 							standardId : standardId,
-							price : $item.find("[name=price]").val(),
+							price : $item.find("[name=typeName]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
@@ -1756,6 +2038,7 @@ define(function(require, exports) {
 						var hotelRoomId = $item.find("[name=hotelRoomId]").val();
 						if(!hotelRoomId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+							isAjax = false;
 							return false;
 						}
 						var hotelJson = {
@@ -1779,7 +2062,8 @@ define(function(require, exports) {
 					if(scenicId){
 						var itemId = $item.find("[name=chargingId]").val();
 						if(!itemId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费房型！");
+							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费项目！");
+							isAjax = false;
 							return false;
 						}
 						var scenicJson= {
@@ -1806,6 +2090,7 @@ define(function(require, exports) {
 						var policyId = $item.find("[name=shopPolicyId]").val();
 						if(!policyId){
 							showMessageDialog($( "#confirm-dialog-message" ), "请选择商品政策！");
+							isAjax = false;
 							return false;
 						}
 						var shopJson = {
@@ -1824,12 +2109,17 @@ define(function(require, exports) {
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
-					var selfPayId = $item.find("[name=companyId]").val();
-					if(selfPayId){
+					var companyId = $item.find("[name=companyId]").val();
+					if(!companyId){
+						showMessageDialog($( "#confirm-dialog-message" ), "请选择自费项目！");
+						isAjax = false;
+						return false;
+					}
+					if(companyId){
 						var selfPayJson = {
 							id : $item.find("[name=templateId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
-							selfPayId : selfPayId,
+							selfPayId : companyId,
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice : $item.find("[name=marketPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
@@ -1859,6 +2149,25 @@ define(function(require, exports) {
 					}
 				}
 			} 
+			//获取其他
+			$list = $that.find(".T-resourceOtherList");
+			if($list.length > 0){
+				for(var j=0; j<$list.length;j++){
+					$item = $list.eq(j);
+					var otherName = $item.find("[name=name]").val();
+					if(otherName){
+						otherJson = {
+							id: $item.find("[name=arrangeId]").val(),
+							name : $item.find("[name=name]").val(),
+							managerName : $item.find("[name=managerName]").val(),
+							mobileNumber : $item.find("[name=mobileNumber]").val(),
+							price: $item.find("[name=price]").val(),
+							remark: $item.find("[name=remark]").val()
+						}
+						travelLineData.lineDayList[index].other.push(otherJson);
+					}
+				}
+			}
 		});
 		
 		var lineDataJson = JSON.stringify(travelLineData);
@@ -1871,7 +2180,9 @@ define(function(require, exports) {
 			url = KingServices.build_url('lineProduct', 'updateLineProduct');
 			submitData = "id="+id+"&LineProductJsonUpdate="+encodeURIComponent(lineDataJson);
 		}
-		
+		if(!isAjax){
+			return false;
+		}
 		$.ajax({
 			url:url,
 			type:"POST",
@@ -2008,12 +2319,35 @@ define(function(require, exports) {
 		});
 	};
 
+	ResLineProduct.getQueryTerms = function(){
+			$.ajax({
+				url: KingServices.build_url('lineProduct', 'getQueryTerms'),
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						ResLineProduct.autocompleteDate.typeList = data.typeList;
 
-	ResLineProduct.mousedownBlur = function(){
-		$("#tab-resource_lineProduct-update-content .T-timeline-detail-container ").mousedown(function() {
+					}
+				}
+			})
+		};
+	/**
+	 * 解决autocomplete点击sortable区域无法收起的问题
+	 * @param  {object} $tab 区域容器
+	 * @return {[type]}      [description]
+	 */
+	ResLineProduct.mousedownBlur = function($tab){
+		$tab.find('.T-timeline-detail-container').mousedown(function() {
 			$(this).find(":focus").blur();
 		});
 	};
 
+	ResLineProduct.quoteLineProduct = function(id) {
+		KingServices.addQuote(id);
+	};
 	exports.init = ResLineProduct.initModule;  
+	exports.addLineProduct = ResLineProduct.addLineProduct;  
+	exports.viewLineProduct = ResLineProduct.viewLineProductDetail;
 });

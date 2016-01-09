@@ -28,7 +28,7 @@ define(function(require,exports){
 	 * @return {[type]} [description]
 	 */
 	ScenicResource.initModule=function(){
-		ScenicResource.listScenic(0,"",status);
+		ScenicResource.listScenic(0,"",1);
 	};
 
 	/**
@@ -70,7 +70,7 @@ define(function(require,exports){
 					data.scenicList = scenicList;
 
 					var html=listTemplate(data);
-	                addTab(menuKey,"景区管理",html);
+	                Tools.addTab(menuKey,"景区管理",html);
 	                //初始化JQuery对象
 	                ScenicResource.$tab = $('#'+tabId);
 	                ScenicResource.$searchArea = ScenicResource.$tab.find('.T-search-area'); //搜索模块区域
@@ -167,23 +167,34 @@ define(function(require,exports){
 			    	var itemValidator;
 			    	//初始化地区
 		    	    KingServices.provinceCity($container);
+
+		    	    //景区Input控件输入
+	    	    	var $normalMPrice=$container.find('input[name=contractPrice]'),
+					   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
+						Tools.inputCtrolFloat($normalMPrice);
+						Tools.inputCtrolFloat($normalInPrice);
 			    	//给项目列表新增按钮绑定事件
 			    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
-			    	$project.find(".T-btn-scenic-add").click(function(){
+			    	$project.find(".T-scenic-standard-add").click(function(){
 			    		var html = "<tr>" +
 			    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-			    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-			    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:0px\"><input name=\"contractPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
+			    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-success btn-sm btn-white T-add addScenice\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+			    				"<td><div class=\"clearfix\" style=\"margin-top:0px\"><input name=\"normalInnerPrice\" style='margin-top: 2px' class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 			    				"<td><input name=\"remark\" class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
-			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\" T-btn-scenic--delete\">删除</a></td>" +
+			    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
 			    				"</tr>";
 			    		$scenicItemObj.find("tbody").append(html);
+
+			    	   var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
+					   	   $normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
+						   Tools.inputCtrolFloat($normalMPrice);
+						   Tools.inputCtrolFloat($normalInPrice);
 						// 再调整对话框的高度
 						$(window).trigger('resize');
 			    		//对景区管理的项目列表校验
 			    		itemValidator = rule.checkItems($project);
 			    		//给对景区管理的项目列表绑定事件
-			    		$scenicItemObj.find("tbody .T-btn-scenic--delete").click(function(){
+			    		$scenicItemObj.find("tbody .T-scenic-standard-delete").click(function(){
 				    		$(this).parent().parent().fadeOut(function(){
 				    			$(this).remove();
 				    		});
@@ -200,8 +211,8 @@ define(function(require,exports){
 				    	$scenicItemObj.find(".timeArea button.T-add").unbind().click(function(){
 				    		var $that=$(this),$td=$that.closest('td'),
 							    index =$td.find("div").length;
-							var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px;\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white T-del\" style='margin-top: -3px;'><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
+							var timeLimitDiv = "<div data-index=\""+(index)+"\" class=\"clearfix T-appendDiv div-"+(index)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px;\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white T-del\" style='margin-top: -3px;'><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
+							var contractPriceInput = "<div data-index=\""+(index)+"\" class=\"clearfix appendDiv div-"+(index)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 							$td.next().append(contractPriceInput);
 							$td.append(timeLimitDiv);
 							itemValidator = rule.checkItems($project);
@@ -212,15 +223,7 @@ define(function(require,exports){
 								language: 'zh-CN'
 							});
 							$scenicItemObj.find(".timeArea button.T-del").click(function(){
-								var $_that=$(this),
-								    $divObj=$_that.closest('div'),
-								    divIndex = $divObj.attr("data-index");
-								$divObj.fadeOut(function(){
-									$(this).remove();
-								});
-								$divObj.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-									$(this).remove();
-								});
+								ScenicResource.deleteTimeArea($(this));
 							});
 						});
 				    })
@@ -265,6 +268,11 @@ define(function(require,exports){
 			    		            $project = $(".T-updateScenicContainer .T-scenicProjectForm");
 				    		 	var validator = rule.check($container);
 						    	var itemsValidator;
+						    	var $normalMPrice=$container.find('input[name=contractPrice]'),
+								   	$normalInPrice=$container.find('input[name=normalInnerPrice]');
+									Tools.inputCtrolFloat($normalMPrice);
+									Tools.inputCtrolFloat($normalInPrice);
+
 						    	//初始化地区
 							    KingServices.provinceCity($container,provinceId,cityId,districtId);						    	
 						    	var $scenicItemObj=$project.find(".T-scenicItemStandardList");
@@ -275,8 +283,8 @@ define(function(require,exports){
 						    	});
 						    	
 						    	// 修改时删除原来的standard，
-						    	$scenicItemObj.find(".timeArea button.T-delete").click(function(){
-						    		ScenicResource.deleteOriginalRecord($(this));
+						    	$scenicItemObj.find(".timeArea button.T-del").click(function(){
+						    		ScenicResource.deleteTimeArea($(this));
 								});
 						    	
 						    	$scenicItemObj.find(".T-scenic-standard-delete").click(function(){
@@ -302,12 +310,17 @@ define(function(require,exports){
 						    	$project.find(".T-scenic-standard-add").click(function(){
 						    		var html = "<tr>" +
 						    				"<td><input name=\"name\" class='col-sm-12' type=\"text\" maxlength=\"100\"/></td>" +
-						    				"<td class=\"time\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
-						    				"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
+						    				"<td class=\"time\"><div class=\"clearfix\" style=\"margin-top:1px\">日常价格<label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-success btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div></td>" +
+						    				"<td><div class=\"clearfix\" style=\"margin-top:2px\"><input name=\"normalInnerPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div></td>" +
 						    				"<td><input name=\"remark\"  class='col-sm-12' type=\"text\" maxlength=\"1000\"/></td>" +
 						    				"<td style=\"width:70px\"><a data-entity-id=\"\" class=\"T-scenic-standard-delete\">删除</a></td>" +
 						    				"</tr>";
 						    		$scenicItemObj.find("tbody").append(html);
+
+						    		var $normalMPrice=$scenicItemObj.find('input[name=contractPrice]'),
+									   	$normalInPrice=$scenicItemObj.find('input[name=normalInnerPrice]');
+										Tools.inputCtrolFloat($normalMPrice);
+										Tools.inputCtrolFloat($normalInPrice);
 									// 再调整对话框的高度
 									$(window).trigger('resize');
 						    		//项目列表表单验证
@@ -315,7 +328,7 @@ define(function(require,exports){
 							    	//删除按钮绑定事件
 						    		$scenicItemObj.find("tbody .T-scenic-standard-delete").click(function(){
 								    		var tr = $(this).parent().parent();
-								    		var scenicStandardId = tr.attr("data-entity-id");
+								    		var scenicStandardId = tr.data("entity-id");
 								    		if (!(scenicStandardId != null && scenicStandardId != "")) {
 									    		$(this).parent().parent().fadeOut(function(){
 									    			$(this).remove();
@@ -380,10 +393,11 @@ define(function(require,exports){
 		scenicItemJsonAddTr.each(function(i){
 			var scenicItemJson = {
 				name : scenicItemJsonAddTr.eq(i).find("input[name=name]").val(),
+				normalInnerPrice : scenicItemJsonAddTr.eq(i).find("input[name=normalInnerPrice]").val(),
 				remark : scenicItemJsonAddTr.eq(i).find("input[name=remark]").val(),
 				priceJsonAddList : []
 			};
-			var priceJsonAddTr = scenicItemJsonAddTr.eq(i).find("td.time div");
+			var priceJsonAddTr = scenicItemJsonAddTr.eq(i).find("td.time .T-appendDiv");
 			priceJsonAddTr.each(function(j){
 				var divIndex = priceJsonAddTr.eq(j).attr("data-index");
 				var priceJson = {
@@ -445,33 +459,33 @@ define(function(require,exports){
 			scenicItemJsonAddTr.each(function(i){
 				var scenicItemJson = {
 					id : scenicItemJsonAddTr.eq(i).attr("data-entity-id"),
+					normalInnerPrice : scenicItemJsonAddTr.eq(i).find("input[name=normalInnerPrice]").val(),
 					name : scenicItemJsonAddTr.eq(i).find("input[name=name]").val(),
 					remark : scenicItemJsonAddTr.eq(i).find("input[name=remark]").val(),
 					priceJsonAddList : [],
 					priceJsonDelList : []
 				};
 				//添加、修改
-				var priceJsonAddTr = scenicItemJsonAddTr.eq(i).find("td.time div:not(.deleted)");
-				priceJsonAddTr.each(function(j){
-					var divIndex = priceJsonAddTr.eq(j).attr("data-index");
-					var priceJsonAdd = {
-						id : priceJsonAddTr.eq(j).attr("data-entity-id"),
-						divIndex : divIndex,
-						startTime : priceJsonAddTr.eq(j).find("input[name=startTime]").val(),
-						endTime : priceJsonAddTr.eq(j).find("input[name=endTime]").val(),
-						contractPrice : priceJsonAddTr.eq(j).parent().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val()
-					};
-					scenicItemJson.priceJsonAddList.push(priceJsonAdd);
-				});
-				//删除
-				var priceJsonDelTr = scenicItemJsonAddTr.eq(i).find("td.time div.deleted");
-				priceJsonDelTr.each(function(j){
-					var id = priceJsonDelTr.eq(j).attr("data-entity-id");
-					var priceJsonDel = {
-						id : id
-					};
-					if(id){
-						scenicItemJson.priceJsonDelList.push(priceJsonDel);
+				var priceJsonTr = scenicItemJsonAddTr.eq(i).find("td.time .T-appendDiv");
+				priceJsonTr.each(function(j){
+					if($(this).hasClass('deleted')){
+						var id = $(this).data("entity-id");
+						var priceJsonDel = {
+							id : id
+						};
+						if(id){
+							scenicItemJson.priceJsonDelList.push(priceJsonDel);
+						}
+					} else{
+						var divIndex = $(this).attr("data-index");
+						var priceJsonAdd = {
+							id : $(this).data("entity-id"),
+							divIndex : divIndex,
+							startTime : $(this).find("input[name=startTime]").val(),
+							endTime : $(this).find("input[name=endTime]").val(),
+							contractPrice : $(this).parent().next().find(".div-"+divIndex+"").find("input[name=contractPrice]").val()
+						};
+						scenicItemJson.priceJsonAddList.push(priceJsonAdd);
 					}
 				});
 				scenicItemJsonAdd.push(scenicItemJson);
@@ -541,57 +555,29 @@ define(function(require,exports){
 	};
 
 	//删除景区信息
+	
 	ScenicResource.deleteScenic=function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal:true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons:[
-				{
-					text :'取消',
-					"class" : "btn btn-minier",
-					click: function() {
-							$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
-							type:"POST",
-							data:"id="+id+"",
-							dataType:"json",
-							beforeSend:function(){
-								globalLoadingLayer = openLoadingLayer();
-							},
-							success:function(data){
-								layer.close(globalLoadingLayer);
-								var result = showDialog(data);
-								if(result){
-									ScenicResource.$tab.find(".scenic-"+id).fadeOut(function(){
-										ScenicResource.listScenic(ScenicResource.searchData.pageNo);
-									});
-								}
-							}
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
+			if(!!id){
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+					$.ajax({
+						url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+						type:"POST",
+	 					data:"id="+id+"",	
+					}).done(function(data){
+						if(showDialog(data)){
+							ScenicResource.listScenic(0);
+						}
+					});
+				});
 			}
-		});
-	};
+
+	}	
+
 	//添加时间区间
 	ScenicResource.modifyOriginalRecord=function(obj,$scenicItemObj){
     	var $td = obj.closest('td'), 
 			index = $td.find("div").length,
-			timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white T-delete\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
+			timeLimitDiv = "<div data-index=\""+(index+1)+"\" data-entity-id=\"\" class=\"clearfix T-appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white T-del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only\"></i></button></label></div>",
 			contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-top:7px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
 		$td.append(timeLimitDiv);
 		$td.next().append(contractPriceInput);
@@ -601,29 +587,20 @@ define(function(require,exports){
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN'
 		});
-		$scenicItemObj.find(".timeArea button.T-delete").click(function(){
-				var $div = $(this).closest('div'),
-				    entityId = $div.attr("data-entity-id"),
-				    divIndex = $div.attr("data-index");
-				if (entityId != null && entityId != "") {
-					$div.addClass("deleted");
-					$div.fadeOut(function(){
-						$(this).hide();
-					});
-				}else{
-					$div.fadeOut(function(){
-						$(this).remove();
-					});
-				}
-				$div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-					$(this).remove();
-				});
+		$scenicItemObj.find(".timeArea button.T-del").click(function(){
+			ScenicResource.deleteTimeArea($(this));
 		});
 	};
-	ScenicResource.deleteOriginalRecord=function($obj){
+	ScenicResource.deleteTimeArea = function($obj){
+		if (!$obj.data('deleted')) {
+			$obj.data('deleted', true);
 			var $div = $obj.closest('div'),
 			    entityId = $div.attr("data-entity-id"),
-			    divIndex = $div.attr("data-index");
+			    divIndex = $div.attr("data-index"),
+			    index = $obj.closest('td').find('div:not(.deleted)').index($div);
+			$div.parent().next().children('div').eq(index).fadeOut(function(){
+				$(this).remove();
+			});
 			if (entityId != null && entityId != "") {
 				$div.addClass("deleted");
 				$div.fadeOut(function(){
@@ -634,9 +611,7 @@ define(function(require,exports){
 					$(this).remove();
 				});
 			}
-			$div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-				$(this).remove();
-			});
+		}
 	};
 	exports.init=ScenicResource.initModule;
 	exports.addScenic = ScenicResource.addScenic;

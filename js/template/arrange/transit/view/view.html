@@ -11,7 +11,7 @@
 				<td class="style-myself">出游日期：</td>
 				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td class="style-myself">人数合计：</td>
-				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</td>
+				<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
 			</tr>
 		</table>
 		<div class="form-group" style="margin-left: 23px;margin-top: 10px">
@@ -64,7 +64,7 @@
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
-										<table class="table table-striped table-bordered table-hover busListTable margin-top row" >
+										<table class="table table-striped table-bordered table-hover busListTable margin-top" >
 											<thead>
 												<tr>
 													<th class="th-border">车队</th>
@@ -77,13 +77,12 @@
 													<th class="th-border">车费</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each receiveGroup.outBusList as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -95,8 +94,7 @@
 													<td>{{outBus.fee}}</td>
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td  hidden="hidden">{{outBus.payedMoney}}</td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -128,8 +126,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -161,8 +158,7 @@
 													<td>{{outHotel.memberCount}}</td>
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
-													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td  hidden="hidden">{{outHotel.payedMoney}}</td>
 													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -195,8 +191,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" width="100px">备注</th>
 												</tr>
 											</thead>
@@ -221,8 +216,7 @@
 													<td>{{outTicket.memberCount}}</td>
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
-													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td  hidden="hidden">{{outTicket.payedMoney}}</td>
 													<td>{{outTicket.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -249,12 +243,11 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border">备注</th>
 												</tr>
 											</thead>
@@ -270,8 +263,7 @@
 													<td>{{outRestaurant.memberCount}}</td>
 													<td>{{outRestaurant.reduceMoney}}</td>
 													<td>{{outRestaurant.needPayMoney}}</td>
-													<td>{{outRestaurant.payedMoney}}</td>
-													<td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td  hidden="hidden">{{outRestaurant.payedMoney}}</td>
 													<td>{{outRestaurant.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -301,8 +293,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -317,8 +308,7 @@
 													<td>{{outOther.memberCount}}</td>
 													<td>{{outOther.reduceMoney}}</td>
 													<td>{{outOther.needPayMoney}}</td>
-													<td>{{outOther.payedMoney}}</td>
-													<td>{{if outOther.payType == 0}}现付{{else if outOther.payType == 1}}签单{{else if outOther.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td  hidden="hidden">{{outOther.payedMoney}}</td>
 													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -355,13 +345,12 @@
 													<th class="th-border">车费</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each bus as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -373,8 +362,7 @@
 													<td>{{outBus.fee}}</td>
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outBus.payedMoney}}</td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -411,13 +399,12 @@
 													<th class="th-border">车费</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
 											<tbody>{{each sendGroup.outBusList as outBus}}
-													{{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
+													{{if outBus.id != null && outBus.busCompany != null}}
 												<tr>
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
@@ -429,8 +416,7 @@
 													<td>{{outBus.fee}}</td>
 													<td>{{outBus.reduceMoney}}</td>
 													<td>{{outBus.needPayMoney}}</td>
-													<td>{{outBus.payedMoney}}</td>
-													<td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outBus.payedMoney}}</td>
 													<td>{{outBus.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -462,8 +448,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -495,8 +480,7 @@
 													<td>{{outHotel.memberCount}}</td>
 													<td>{{outHotel.reduceMoney}}</td>
 													<td>{{outHotel.needPayMoney}}</td>
-													<td>{{outHotel.payedMoney}}</td>
-													<td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outHotel.payedMoney}}</td>
 													<td>{{outHotel.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -529,8 +513,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -555,8 +538,7 @@
 													<td>{{outTicket.memberCount}}</td>
 													<td>{{outTicket.reduceMoney}}</td>
 													<td>{{outTicket.needPayMoney}}</td>
-													<td>{{outTicket.payedMoney}}</td>
-													<td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outTicket.payedMoney}}</td>
 													<td>{{outTicket.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -583,12 +565,11 @@
 													<th class="th-border">联系人</th>
 													<th class="th-border">联系电话</th>
 													<th class="th-border">类型</th>
-													<th class="th-border">餐标</th>
+													<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
 													<th class="th-border">人数</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -604,8 +585,7 @@
 													<td>{{outRestaurant.memberCount}}</td>
 													<td>{{outRestaurant.reduceMoney}}</td>
 													<td>{{outRestaurant.needPayMoney}}</td>
-													<td>{{outRestaurant.payedMoney}}</td>
-													<td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outRestaurant.payedMoney}}</td>
 													<td>{{outRestaurant.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>
@@ -635,8 +615,7 @@
 													<th class="th-border">数量</th>
 													<th class="th-border">优惠</th>
 													<th class="th-border">应付款</th>
-													<th class="th-border">已付款</th>
-													<th class="th-border">付款方式</th>
+													<th class="th-border" hidden="hidden">预付款</th>
 													<th class="th-border" style="width: 100px">备注</th>
 												</tr>
 											</thead>
@@ -651,8 +630,7 @@
 													<td>{{outOther.memberCount}}</td>
 													<td>{{outOther.reduceMoney}}</td>
 													<td>{{outOther.needPayMoney}}</td>
-													<td>{{outOther.payedMoney}}</td>
-													<td>{{if outOther.payType == 0}}现付{{else if outOther.payType == 1}}签单{{else if outOther.payType == 2}}转账{{else}}网付{{/if}}</td>
+													<td hidden="hidden">{{outOther.payedMoney}}</td>
 													<td>{{outOther.remark}}</td>
 												</tr>{{/if}}{{/each}}
 											</tbody>

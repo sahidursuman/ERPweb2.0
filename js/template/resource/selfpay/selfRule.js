@@ -152,6 +152,66 @@ define(function(require, exports) {
 				        	errMsg: '请输入数字'
 				        }
 				    ]
+				},
+				{	//内部价
+					$ele: $obj.find('input[name="normalInnerPrice"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '内部价不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
+				},
+				{	//市场价
+					$ele: $obj.find('input[name="normalMarketPrice"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '市场价不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
+				} ,
+				{	//导游返佣
+					$ele: $obj.find('input[name="normalGuideRate"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '导游返佣不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
+				},{	//人数返佣
+					$ele: $obj.find('input[name="customerRebateMoney"]'),
+					rules: [
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
+				},
+				{	//旅行社返佣
+					$ele: $obj.find('input[name="normalTravelAgencyRate"]'),
+					rules: [
+						{
+							type: 'null', 
+							errMsg: '旅行社返佣不能为空'
+						},
+				        {
+				        	type: 'float', 
+				        	errMsg: '请输入数字'
+				        }
+				    ]
 				}
                 ]);
 			return itemValidator

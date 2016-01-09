@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":10,"md5":"42729aff75833d3bbde2b81fde1ea338"}*/
+define(function(require) {
+    return require("../../../template")("resource/touristGroup/view/addVisitorMore", '<div class="col-xs-12 T-batchAddTouristGroupMemberContainer" style="margin-top:10px"> <div> <div class="red">批量添加格式为：游客姓名 手机号码 证件号(用空格隔开，一行一条)</div> <div> 举例：<br/> 张三 &nbsp;&nbsp;&nbsp;&nbsp;138****8888&nbsp;&nbsp;&nbsp;&nbsp; 510***19891002****<br/> 李四 &nbsp;&nbsp;&nbsp;&nbsp;137****7777&nbsp;&nbsp;&nbsp;&nbsp; 510***19881003**** </div> <div class="space-10"> </div> <div><textarea class="form-control" name="batchTouristGroupMember" style="height:200px"></textarea></div> <div class="space-10"> </div> <button class="btn btn-block btn-primary T-submit-batchTouristGroupMember"> <i class="ace-icon fa fa-check"></i>提交信息 </button> </div> </div>');
+});

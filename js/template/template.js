@@ -101,5 +101,73 @@
         return data.toFixed(2);
     }), template.helper("stringify", function(data) {
         return JSON.stringify(data);
+    }), template.helper("getCardText", function(idCardType) {
+        switch (1 * idCardType) {
+          case 0:
+            return "身份证";
+
+          case 1:
+            return "护照";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getTicketText", function(ticketType) {
+        switch (1 * ticketType) {
+          case 1:
+            return "机票";
+
+          case 2:
+            return "汽车票";
+
+          case 3:
+            return "火车票";
+
+          case 4:
+            return "轮船票";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getPayTypeText", function(payType) {
+        switch (1 * payType) {
+          case 0:
+            return "现金";
+
+          case 1:
+            return "银行转账";
+
+          case 2:
+            return "网上支付";
+
+          case 3:
+            return "支票";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
+        switch (1 * billStatus) {
+          case -1:
+            return -1 == tripPlanStatus ? "该发团计划已经被取消" : "编辑计划";
+
+          case 0:
+            return "导游已经报账，若需编辑，需要计调退回";
+
+          case 1:
+            return "计调已审核，若需编辑，需要财务和计调退回";
+
+          case 2:
+            return "财务已审核，若需编辑，需要管理员、财务和计调同时操作退回";
+
+          default:
+            return "";
+        }
+    }), template.helper("getPayTypeOptions", function(payType) {
+        var options = "", start = 0;
+        return options += '<option value="0" ' + (start++ == payType ? "selected" : "") + ">现金</option>", 
+        options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
+        start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
+        options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>";
     });
 }();

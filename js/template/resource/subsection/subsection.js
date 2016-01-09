@@ -33,7 +33,7 @@ define(function(require, exports) {
 
 	subsection.listMainSubsection = function() {
 		$.ajax({
-			url: subsection.url("getSearchCondition","view"),
+			url: KingServices.build_url('innerTransferOperation', "getSearchCondition"),
 			type: 'POST',
 			success:function(data){
 				var result = showDialog(data);
@@ -100,7 +100,7 @@ define(function(require, exports) {
 		page = page || 0;
 
 		$.ajax({
-			url: subsection.url("listTransitSubTgroup","view"),
+			url: KingServices.build_url('innerTransferOperation', "listTransitSubTgroup"),
 			type: 'POST',
 			data: {
 				pageNo: page,
@@ -141,7 +141,7 @@ define(function(require, exports) {
 
 		//计算人数合计 和 现收款合计
 		$.ajax({
-			url: subsection.url("getTransitSubCount","view"),
+			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
 			type: 'POST',
 			data: {
 				lineProduct: lineProduct,
@@ -214,14 +214,13 @@ define(function(require, exports) {
 	 */
 	subsection.subsection = function(id) {
 		$.ajax({
-			url: subsection.url("getTouristGroup","view"),
+			url: KingServices.build_url('innerTransferOperation', "getTouristGroup"),
 			type: "POST",
-			data:"id="+id+"",
+			data:{id: id},
 			success:function(data){
 				data.ptGroup = JSON.parse(data.ptGroup);
 				data.subtGroupList = JSON.parse(data.subtGroupList);
-				var result = showDialog(data);
-				if(result){
+				if(showDialog(data)){
 					var html = operationTemplate(data);
 					Tools.addTab(menuKey+"-operation","分段操作",html);
 
@@ -238,13 +237,11 @@ define(function(require, exports) {
 	subsection.init_section_event = function() {
 		subsection.$tabSub.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
 		.on('change', function(event) {
-			subsection.$tabSub('isEdited', true);
+			subsection.$tabSub.data('isEdited', true);
 		})
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, tab_name, html) {  // 选择保存
 			event.preventDefault();
 			subsection.operationSave([tab_id, tab_name, html]);
-			Tools.addTab(tab_id, tab_name, html);
-			subsection.init_section_event();
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			subsection.init_section_event();
@@ -262,13 +259,21 @@ define(function(require, exports) {
 		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
 			var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
 			subsection.deleteOperation(id,$this);
-			subsection.$tabSub('isEdited', true);
+			subsection.$tabSub.data('isEdited', true);
 		});
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
+			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
+			     isHasTr = 0,
+			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
+			     startTimeS = $tbody.find('tr:last-child').find('input[name=startTime]').val();
+
+			if ($tbody.find('tr').length > 0) {
+				isHasTr = 1;
+			}
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
-			if (data.mark != 0) {
+			if ($(this).data('mark') != 0) {
 					radio = '-';
 			}
 			var html = ''
@@ -277,21 +282,43 @@ define(function(require, exports) {
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
+			+ '<td><input type="text" name="needPayAllMoney"></td>'
 			+ '<td>' + radio + '</td>'
 			+ '<td>-</td>'
 			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
-			subsection.$tabSub.find(".T-subsectionOperationTbody").append(html);
+			$tbody.append(html);
 
+            //获取新增tr后前一个TR
+			var preDays = $tbody.find('tr:last-child').prev('tr').find('input[name=days]').val();
+
+			// 判断是不是第一个tr
+			 if(isHasTr == 0){
+				startTime = subsection.$tabSub.find('.T-startTime').text();
+				$tbody.find('tr:last-child').find('.T-startTime').val(startTime)
+		     }else{
+				if(preDays!=""){
+					$tbody.find('tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+				}
+			}
 			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
 				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
 				subsection.deleteOperation(id,$this);
 			})
 			subsection.datePicker("T-startTime");
 			subsection.lineProductChoose();
-			validator = rule.checkdSaveSubsection(subsection.$tabSub);
-			subsection.$tabSub('isEdited', true);
+			validator = rule.checkdSaveSubsection($tbody);
+			$tbody.data('isEdited', true);
 		});
+		subsection.startIntime = function(whichDay,startTime){
+			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
+			var timer = date.getTime()+(whichDay)*24*60*60*1000;
+			date.setTime(timer);
+			var startIntime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+			return startIntime;
+			// $container.find('input[name=startTime]').val(subsection.startIntime("2","5012-55-08"))
+		}
+
 
 		// 取消
 		subsection.$tabSub.find(".T-btn-operation-close").click(function(){
@@ -312,37 +339,14 @@ define(function(require, exports) {
 	subsection.deleteOperation = function(id,$this) {
 		var $parents = $this.closest("tr");
 		if (!!id) {
+			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要删除该分段？",function(){
+				$(this).dialog( "close" );
+				$parents.addClass("del");
+				$parents.fadeOut(function(){
+					$parents.hide();
+				})
+			})
 			//deleteSubTGroup
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$(this).dialog( "close" );
-							$parents.addClass("del");
-							$parents.fadeOut(function(){
-								$parents.hide();
-							})
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该分段？");
-				}
-			});
 		}else{
 			$parents.fadeOut(function(){
 				$parents.remove();
@@ -359,60 +363,70 @@ define(function(require, exports) {
 
 		var $btn = subsection.$tabSub.find(".T-btn-operation-save"),
 			days = $btn.data('days'),
-			isCheckNeedPayMoney = 0;
-			
-		function getValue(obj,name){
-			var value = $(obj).find("[name="+name+"]").val();
-			return value;
-		}
-		var subTouristGroup = {
-			id : getValue(subsection.$tabSub, "touristGroupId")+"",
-			startTime : getValue(subsection.$tabSub, "touristGroupStartTime"),
-			days : getValue(subsection.$tabSub, "touristGroupDays"),
-			subTouristGroupList : [],
-			delSubTouristGroupIdList : []
-		}
-		var tr = subsection.$tabSub.find(".T-subsectionOperationTbody tr:not(.del)");
-		tr.each(function(){
-			var $this = $(this),
-				NeedPayMoney = "0";
-			if($this.find("input[name=operateCurrentNeedPayMoney]").is(":checked")){
-				NeedPayMoney = "1";
-				isCheckNeedPayMoney = 1;
+			currentNeedPayMoney = $btn.data('currentNeedPayMoney'),
+			isCheckNeedPayMoney = false,
+			subTouristGroup = {
+				id : getValue(subsection.$tabSub, "touristGroupId")+"",
+				startTime : getValue(subsection.$tabSub, "touristGroupStartTime"),
+				days : getValue(subsection.$tabSub, "touristGroupDays"),
+				subTouristGroupList : [],
+				delSubTouristGroupIdList : []
+			}, 
+			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
+			receivables = 0, tmp;
+
+		// get table data
+		$tbody.children('tr').each(function() {
+			var $tr = $(this), id = $tr.data('entity-id');
+
+			if ($tr.hasClass('del')) {
+				subTouristGroup.delSubTouristGroupIdList.push({id: id});
+			} else {
+				tmp = 0;
+				if ($tr.find("input[name=operateCurrentNeedPayMoney]").is(":checked")) {
+					tmp = 1;
+					isCheckNeedPayMoney = true;
+				}
+
+				subTouristGroup.subTouristGroupList.push(
+					{
+						id : id,
+						lineProductId : getValue($tr,"lineProductId"),
+						startTime : getValue($tr,"startTime"),
+						operateCurrentNeedPayMoney : tmp,
+						needPayAllMoney: getValue($tr,"needPayAllMoney"),
+						days : getValue($tr,"days")
+					}
+				);
+
+				receivables += getValue($tr,"needPayAllMoney")*1;
 			}
-			var subTourist ={
-				id : $this.data("entity-id")+"",
-				lineProductId : getValue($this,"lineProductId"),
-				startTime : getValue($this,"startTime"),
-				operateCurrentNeedPayMoney : NeedPayMoney,
-				days : getValue($this,"days")
-			}
-			subTouristGroup.subTouristGroupList.push(subTourist);
-		})
-		var trDel = subsection.$tabSub.find(".T-subsectionOperationTbody tr.del");
-		trDel.each(function(){
-			var $this = $(this);
-			var idList = {
-				id : $this.data("entity-id")+""
-			}
-			subTouristGroup.delSubTouristGroupIdList.push(idList);
-		})
-		subTouristGroup = JSON.stringify(subTouristGroup);
+		});
+
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
 		}
-		if(isCheckNeedPayMoney == 0 && e.data.currentNeedPayMoney > 0){
+		if(isCheckNeedPayMoney == 0 && currentNeedPayMoney > 0){
 			showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
 			return;
 		}
+
+		if ($tbody.data('neepayallmoney') != receivables) {
+			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
+			return;
+		}
+
+		subTouristGroup = JSON.stringify(subTouristGroup);
+
 		$.ajax({
-			url:subsection.url("saveSubTgroup","view"),
+			url:KingServices.build_url('innerTransferOperation', "saveSubTgroup"),
 			type:"POST",
 			data:"subTouristGroup="+encodeURIComponent(subTouristGroup)+"",
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					subsection.$tabSub.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 						if (!!tabArgs) {
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 							subsection.init_section_event();
@@ -424,7 +438,12 @@ define(function(require, exports) {
 					});
 				}
 			}
-		})
+		});
+
+		function getValue(obj,name){
+			var value = $(obj).find("[name="+name+"]").val();
+			return value;
+		}
 	};
 	/**
 	 * 线路产品选择
@@ -453,13 +472,22 @@ define(function(require, exports) {
 					$parents.find("input[name=customerType]").val("团体");
 				}
 				$parents.find("input[name=days]").val(ui.item.days);
+				var currentDays = ui.item.days;
+				    currentTime = $parents.find('.T-startTime').val();
+				if ($parents.next('tr').length > 0 && !!currentTime && !!currentDays) {
+					$parents.next('tr').find('.T-startTime').val(subsection.startIntime(currentDays,currentTime));
+				};
 				validator = rule.updateCheckdSaveSubsection(validator);
-				return false;
+
+				var sum = 0;
+				$parents.siblings('tr').each(function() {
+					sum += ($(this).find('[name="needPayAllMoney"]').val() || 0)*1;
+				});
 			}
 		}).unbind("click").click(function(){
 			var obj =this;
 			$.ajax({
-				url:subsection.url("getLineProductList","view"),
+				url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
 				type: 'POST',
                 showLoading: false,
                 success: function(data) {
@@ -487,45 +515,22 @@ define(function(require, exports) {
 	 * 撤销分段操作
 	 * @return {[type]} id [id]
 	 */
-	subsection.subsectionRevoke = function(id) {
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-						$.ajax({
-							url: subsection.url("revokeSubTouristGroup","view"),
+
+     subsection.subsectionRevoke = function(id) {
+		if(!!id){
+			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要撤销该分段？",function(){
+					$.ajax({
+							url: KingServices.build_url('innerTransferOperation', "revokeSubTouristGroup"),
 							type:"POST",
 							data:"id="+id+"",
-							success:function(data){
-								var result = showDialog(data);
-								if(result){
-									subsection.subsectionList(0);
-								}
+						}).done(function(data){
+							if (showDialog(data)) {
+								subsection.listMainSubsection(0);
 							}
-						})
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要撤销该小组分段？");
-			}
-		});
-	};
+						})	
+						});
+		}
+	}
 
 	//来源
 	subsection.getPartnerAgencyList = function(){
@@ -610,12 +615,6 @@ define(function(require, exports) {
 			$(obj).autocomplete('search', '');
 		});
 	}
-
-	//ajaxUrl方法
-	subsection.url = function(method,operation){
-		var url = ''+APP_ROOT+'back/innerTransferOperation.do?method='+method+'&token='+$.cookie('token')+'&menuKey='+menuKey+'&operation='+operation+'';
-		return url;
-	};
 
 	//时间控件 datePicker
 	subsection.datePicker = function(name){

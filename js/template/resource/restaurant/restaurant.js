@@ -47,7 +47,7 @@ define(function(require, exports) {
                     restaurantList = JSON.parse(restaurantList);
                     data.restaurantList = restaurantList;
                     var html = listTemplate(data);
-                    addTab(menuKey, "餐厅管理", html);
+                    Tools.addTab(menuKey, "餐厅管理", html);
 
                     restaurant.initList();
                     // 绑定翻页组件
