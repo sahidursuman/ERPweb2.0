@@ -32,12 +32,12 @@
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count">
-                <label class=" control-label pull-left" style="margin-left: 15px">人数合计:<span class="sumTransCount"></span><label>
-                <label class=" control-label " style="margin-left:30px;">内转转入金额合计:<span class="sumTransNeedPayMoney"></span></label>
-                <label class=" control-label " style="margin-left:30px;">已收金额合计:<span class="sumPayedMoney"></span></label>
-                <label class=" control-label " style="margin-left:30px;">返款金额合计:<span class="sumPunishMoney"></span></label>
-                <label class=" control-label " style="margin-left:30px;">结算金额合计:<span class="sumSettlementMoney"></span></label>
-                <label class=" control-label " style="margin-left:30px;">未收金额合计：<span class="unIncomeMoney"></span></label>
+                <label class=" control-label pull-left" style="margin-left: 15px">人数合计:<span class="sumTransCount F-float F-count"></span><label>
+                <label class=" control-label " style="margin-left:30px;">内转转入金额合计:<span class="sumTransNeedPayMoney F-float F-money"></span></label>
+                <label class=" control-label " style="margin-left:30px;">已收金额合计:<span class="sumPayedMoney F-float F-money"></span></label>
+                <label class=" control-label " style="margin-left:30px;">返款金额合计:<span class="sumPunishMoney F-float F-money"></span></label>
+                <label class=" control-label " style="margin-left:30px;">结算金额合计:<span class="sumSettlementMoney F-float F-money"></span></label>
+                <label class=" control-label " style="margin-left:30px;">未收金额合计：<span class="unIncomeMoney F-float F-money"></span></label>
             </div>
         </form>
     </div>
@@ -69,25 +69,33 @@
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.contactUserName}}</td>
-                <td>{{checking.adultCount}}大{{checking.childCount}}小<a href="#" class="T-seeGroup" style="margin-left:5px">展开</a></td>
+                <td><span class="F-float F-count">{{checking.adultCount}}</span>大
+                    <span class="F-float F-count">{{checking.childCount}}</span>小
+                    <a href="#" class="T-seeGroup" style="margin-left:5px">展开</a>
+                </td>
                 <td>{{checking.receiveUserName}}</td>
                 <td>{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
-                <td><span class="transInMoney">{{checking.transInMoney}}</span></td>
+                <td><span class="transInMoney F-float F-money">{{checking.transInMoney}}</span></td>
                 <td>
-                    大人:{{checking.transAdultPrice}}*{{checking.transAdultCount}}={{checking.transAdultPrice*checking.transAdultCount}}<br>
-                    小孩:{{checking.transChildPrice}}*{{checking.transChildCount}}={{checking.transChildPrice*checking.transChildCount}}<br>
+                    大人:<span class="F-float F-money">{{checking.transAdultPrice}}</span>*
+                         <span class="F-float F-count">{{checking.transAdultCount}}</span>=
+                         <span class="F-float F-money">{{checking.transAdultPrice*checking.transAdultCount}}</span><br>
+                    小孩:<span class="F-float F-money">{{checking.transChildPrice}}</span>*
+                         <span class="F-float F-count">{{checking.transChildCount}}</span>=
+                         <span class="F-float F-money">{{checking.transChildPrice*checking.transChildCount}}</span><br>
                     {{if checking.transferFeeList.length>0}}
                         {{each checking.transferFeeList as detail}}
-                            {{detail.discribe}}：{{detail.count}}*{{detail.price}}={{detail.count*detail.price}}<br> 
-                        {{/each}} 
-                        {{else}}
-                        -
+                            {{detail.discribe}}：
+                            <span class="F-float F-money">{{detail.price}}</span>*
+                            <span class="F-float F-count">{{detail.count}}</span>=
+                            <span class="F-float F-money">{{detail.count*detail.price}}</span><br> 
+                        {{/each}}
                     {{/if}} 
                 </td>
-                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney">{{checking.transGetedMoney}},导游现收：{{checking.currentNeedPayMoney}}</span></a></td>
-                <td>{{if checking.isConfirmAccount == 1}}<input type="text" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="money" class="backMoney" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
-                <td><span class="settlementMoney">{{checking.settlementMoney}}</span></td>
-                <td><span class="unIncomeMoney">{{checking.unIncomeMoney}}</span></td>
+                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>,导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td>{{if checking.isConfirmAccount == 1}}<input type="text" class="F-float F-money" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="money" class="backMoney F-float F-money" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
+                <td><span class="settlementMoney F-float F-money">{{checking.settlementMoney}}</span></td>
+                <td><span class="unIncomeMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
                 <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>

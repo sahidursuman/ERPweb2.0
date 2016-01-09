@@ -403,7 +403,7 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).attr('policyId');
+			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
@@ -653,7 +653,7 @@ define(function(require, exports){
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).attr('policyid');
+			var shopPolicyId = $(this).attr('policyid') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
@@ -1725,10 +1725,19 @@ define(function(require, exports){
 	//新增车费--这个版本对于车队没有新增
 	Count.addBus = function($obj,$parentObj){
 		var html = '<tr>'+
-		'<td></td>'+
-		'<td></td>'+
-		'<td></td>'+
-		'<td><input type="text" name="companyName" style="width:200px;"/><input type="hidden" name="companyId"></td>'+
+		'<td><input name="startTime" type="text" class="datepicker"></td>'+
+		'<td><input name="endTime" type="text" class="datepicker"></td>'+
+		'<td>'+
+		'<select name="taskType">'+
+		'<option value="0">全程</option>'+
+		'<option value="1">接机</option>'+
+		'<option value="2">送机</option>'+
+		'<option value="3">前段</option>'+
+		'<option value="4">中段</option>'+
+		'<option value="5">后段</option>'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
@@ -1741,6 +1750,8 @@ define(function(require, exports){
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
+		//格式化时间
+		Count.formatDate($obj);
 		//获取车队数据
 		Count.getBusData($obj,$parentObj);
 		//获取车牌
@@ -3493,6 +3504,7 @@ define(function(require, exports){
 			"addSelfPayArrangeList":[],
 			"otherInList":[],
 			"busCompanyArrangeList":[],
+			"addBusCompanyArrangeList":[],
 			"restaurantArrangeList":[],
 			"addRestArrangeList":[],
 			"hotelArrangeList":[],
@@ -3685,6 +3697,8 @@ define(function(require, exports){
 						"ngm":busCompanyArrange.realGuidePayMoney
 				}
 				saveJson.log.busLog.push(log);
+			}else{
+				var busArrange = false
 			}
 		});
 		//餐费数据
