@@ -61,6 +61,7 @@ define(function(require, exports) {
             { 
                 //客户
                 $ele: $obj.find('input[name="travelAgencyName"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
                 rules : [
                     {
                         type: 'null',
@@ -71,6 +72,7 @@ define(function(require, exports) {
             { 
                 //客户联系人
                 $ele: $obj.find('input[name="contactRealname"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyContactId"]'),
                 rules : [
                     {
                         type: 'null',

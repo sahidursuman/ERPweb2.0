@@ -349,12 +349,15 @@ define(function(require, exports) {
     		}*/
     		//$tab.find('.T-tourists-list').append('<tr data-index='+index+'><td>'+index+'</td><td><input type="text" class="col-xs-12"></td><td><input type="text" class="col-xs-12"></td><td><select class="col-xs-12"><option value="0">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td><td><input type="text" class="col-xs-12"></td><td><label class="control-label"><input type="checkbox" class="ace"><span class="lbl"></span></label></td><td><a class="cursor T-action T-delete" title="删除">删除</a></td></tr>');
     		$tab.find('.T-tourists-list').append(T.touristsList({touristGroupMemberList:[{}]}));
+    		tripPlan.MenberNumber($tab, 1);
     		validate = rule.update(validate);
     	});
     	//批量添加游客小组
     	$tab.find('.T-add-tourists-batch').on('click', function(event){
     		event.preventDefault();
-    		F.batchAddTourists($tab.find('.T-tourists-list'));
+    		F.batchAddTourists($tab.find('.T-tourists-list'), function(){
+	            tripPlan.MenberNumber($tab, 1);
+    		});
     		validate = rule.update(validate);
     	});
     	//删除游客小组
@@ -374,6 +377,7 @@ define(function(require, exports) {
 							if(result){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 				    				$tr.remove();
+	            					tripPlan.MenberNumber($tab, 1);
 								});
 							}
 						}
@@ -381,6 +385,7 @@ define(function(require, exports) {
 				});
     		}else{
     			$tr.remove();
+	            tripPlan.MenberNumber($tab, 1);
     		}
     	});
     	//删除账单
@@ -465,11 +470,11 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                	$(this).val("").next('[name="fromPartnerAgencyId"]').val("");
+                	$(this).val("").nextAll('[name="fromPartnerAgencyId"]').val("");
                 }
             },
             select: function(event, ui) {
-            	$(this).next('[name="fromPartnerAgencyId"]').val(ui.item.id).trigger('change')
+            	$(this).trigger('change').nextAll('[name="fromPartnerAgencyId"]').val(ui.item.id)
             	.closest('.T-tab').find('[name="contactRealname"]').val("")
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
             }
@@ -504,11 +509,11 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    $(this).val("").next('[name="fromPartnerAgencyContactId"]').val("");
+                    $(this).val("").nextAll('[name="fromPartnerAgencyContactId"]').val("");
                 }
             },
             select: function(event, ui) {
-                $(this).next('[name="fromPartnerAgencyContactId"]').val(ui.item.id);
+                $(this).trigger('change').nextAll('[name="fromPartnerAgencyContactId"]').val(ui.item.id);
             }
         }).off('click').on('click', function() {
             var objM = this;
@@ -1210,7 +1215,7 @@ define(function(require, exports) {
 				});
 			}
 		},
-		batchAddTourists : function($obj){
+		batchAddTourists : function($obj, fn){
 			var addVisotorMoreLayer = layer.open({
 	            type: 1,
 	            title: '批量添加游客',
@@ -1221,7 +1226,7 @@ define(function(require, exports) {
 	            success: function() {
 	                var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
 	                $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-	                    F.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj);
+	                    F.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj, fn);
 	                });
 	            }
 	        });
@@ -1239,7 +1244,7 @@ define(function(require, exports) {
 			var idCard = str.match(/(^|\s)\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)(\s|$)/ig);
 			return trim(idCard ? idCard[0] : " ");
 		},
-		saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj){
+		saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
 			var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
 			if (data != "") {
             	var dataArray = data.split(/\r?\n/);
@@ -1254,6 +1259,9 @@ define(function(require, exports) {
 		                    }]}));
 		                    layer.close(addVisotorMoreLayer);
 	                	}
+	                }
+	                if(fn){
+	                	fn();
 	                }
 	            }
         	}else{
@@ -1938,8 +1946,12 @@ define(function(require, exports) {
 	};
 
 	//游客名单成员添加自动序号函数  tripPlan.MenberNumber(oClass);
-	tripPlan.MenberNumber = function($tab){
-		$tab.find(".T-tourist-list tr").each(function(i){
+	tripPlan.MenberNumber = function($tab, isGroup){
+		var $tr = $tab.find(".T-tourist-list tr");
+		if(isGroup){
+			$tr = $tab.find(".T-tourists-list tr");
+		}
+		$tr.each(function(i){
 			$(this).children().eq(0).text(i+1);
 		});
 	};
