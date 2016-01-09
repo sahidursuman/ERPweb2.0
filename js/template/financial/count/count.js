@@ -247,6 +247,13 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+		//导游金额计算
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=hidden]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
+		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -388,6 +395,13 @@ define(function(require, exports){
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
+		});
+		//导游金额计算
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=text]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -639,6 +653,13 @@ define(function(require, exports){
 		$guideAccount.off('click').on('click',function(){
 			var id = $obj.find('.tripPlanId').val();
 			KingServices.viewFeeDetail(id);
+		});
+		//导游数据处理
+		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input[type=text]').off('change').on('change',function(){
+			Count.calculateCost($(this));
+			//计算金额
+			Count.autoGuideSum($(this),$obj);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -1466,6 +1487,21 @@ define(function(require, exports){
 		transfetCost = Tools.toFixed(transfetCost,2);
 		tripTransitCost.text(transfetCost);
 	};
+	//导游金额计算
+	Count.autoGuideSum = function($obj,$parentObj){
+		var $tr = $obj.closest('tr');
+		var price = $tr.find('input[name=price]').val();
+		var manageFee = $tr.find('input[name=manageFee]').val();
+		//规范数据
+		price = Count.changeTwoDecimal(price);
+		manageFee = Count.changeTwoDecimal(manageFee);
+		var priceSum = $parentObj.find('.tripIncome-guideManageMoney').text(price);
+		var manageFeeSum = $parentObj.find('.tripCost-guideArrangePrice').text(manageFee);
+		//计算团收入
+		Count.tripIncome($parentObj);
+		//计算团成本
+		Count.tripCost($parentObj);
+	};
 	//自费金额计算
 	Count.autoSelfSum = function($obj,$parentObj){
 			
@@ -1738,7 +1774,7 @@ define(function(require, exports){
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
-		'<td><input type="text" name="licenseNumber" style="width:90px;"/></td>'+
+		'<td><input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
@@ -1761,7 +1797,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark"){
+			if($nameFlag !="startTime" && $nameFlag !="endTime" && $nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoBusSum($(this),$parentObj);
@@ -2528,6 +2564,9 @@ define(function(require, exports){
 			select:function(event,ui){
 				console.log(ui);
 				$(this).closest('tr').find('input[name=companyId]').val(ui.item.id);
+				$(this).closest('tr').find('input[name=licenseNumber]').val('');
+				$(this).closest('tr').find('input[name=busId]').val('');
+				$(this).closest('tr').find('input[name=seatCount]').val('');
 			}
 		}).off('click').on('click',function(){
 			var obj = this,
@@ -2580,9 +2619,8 @@ define(function(require, exports){
 			select:function(event,ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
+					parents.find('input[name=busId]').val(ui.item.id);
 					parents.find("input[name=seatCount]").val("");
-					parents.find("input[name=companyId]").val("");
-					parents.find("input[name=companyName]").val("");
 			}
 		}).off('click').on('click',function(){
 			var obj = this,
@@ -2628,16 +2666,9 @@ define(function(require, exports){
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					parents.find("input[name=licenseNumber]").val("");
-					parents.find("input[name=companyName]").val("");
-					parents.find("input[name=companyId]").val("");
 				};
 			},
 			select:function(event,ui){
-				var $this = $(this),parents = $(this).closest('tr');
-				parents.find("input[name=companyName]").val("");
-				parents.find("input[name=LicenseNumber]").val("");
-				parents.find("input[name=companyId]").val("");
 			}
 		}).off('click').on('click',function(){
 			var obj = this,
@@ -3504,7 +3535,7 @@ define(function(require, exports){
 			"addSelfPayArrangeList":[],
 			"otherInList":[],
 			"busCompanyArrangeList":[],
-			"addBusCompanyArrangeList":[],
+			"addBusArrangeList":[],
 			"restaurantArrangeList":[],
 			"addRestArrangeList":[],
 			"hotelArrangeList":[],
@@ -3686,7 +3717,7 @@ define(function(require, exports){
 						"price":Count.changeToString($(this).find('input[name=price]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.busCompanyArrangeList.push(busCompanyArrange);
@@ -3698,7 +3729,23 @@ define(function(require, exports){
 				}
 				saveJson.log.busLog.push(log);
 			}else{
-				var busArrange = false
+				var obj = $(this);
+				var busArrange = {
+					startTime:obj.find('input[name=startTime]').val(),
+					endTime:obj.find('input[name=endTime]').val(),
+					busCompanyId:obj.find('input[name=companyId]').val(),
+					taskType:obj.find('select[name=taskType]').val(),
+					licenseNumber:obj.find('input[name=licenseNumber]').val(),
+					brand:'',
+					busId:obj.find('input[name=busId]').val(),
+					needSeatCount:obj.find('input[name=seatCount]').val(),
+					payedMoney:obj.find('input[name=payedMoney]').val(),
+					price:obj.find('input[name=price]').val(),
+					realGuidePayMoney:obj.find('input[name=guidePayMoney]').val(),
+					realReduceMoney:obj.find('input[name=realReduceMoney]').val(),
+					billRemark:obj.find('input[name=billRemark]').val()
+				};
+				saveJson.addBusArrangeList.push(busArrange);
 			}
 		});
 		//餐费数据
@@ -3896,6 +3943,7 @@ define(function(require, exports){
 		$tr.each(function(){
 			if($(this).attr('isAccountGuide') == 1){
 				var guideJson = {
+					id:$(this).attr('arrangeid'),
 					price:$(this).find('input[name=price]').val(),
 					manageFee:$(this).find('input[name=manageFee]').val()
 				};
