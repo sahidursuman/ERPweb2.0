@@ -103,23 +103,24 @@
         <div class="form-group T-isChooseService">
             <div style="width: 500px;margin-left: 13px;">
                 <label style="padding-right: 50px;">
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeSelfpay"{{if quoteDetailJson.isContainGuideFee==1}}checked="checked"{{/if}}>
+                    <span class="lbl">
+                        含导服费
+                    </span>
+                </label>
+                <label style="padding-right: 50px;">
                     <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="childNeedBed" {{if quoteDetailJson.isChildNeedRoom==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						小孩占床
 					</span>
                 </label>
-                <label style="padding-right: 50px;">
-                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeSelfpay"{{if quoteDetailJson.isContainGuideFee==1}}checked="checked"{{/if}}>
+                <label>
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeGuideFee"{{if quoteDetailJson.isContainSelfPay==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						包含自费
 					</span>
                 </label>
-                <label>
-                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeGuideFee"{{if quoteDetailJson.isContainSelfPay==1}}checked="checked"{{/if}}>
-                    <span class="lbl">
-						含导服费
-					</span>
-                </label>
+                <label>按床位计算单房差，默认2人/间房（不论房型）</label>
             </div>
         </div>
         <div class="col-xs-12">
