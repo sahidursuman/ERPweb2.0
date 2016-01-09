@@ -1569,9 +1569,13 @@ Tools.filterCount = function(obj){
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
-			$(this).val(Tools.toFixed($(this).val(), 1));
+			var value = $(this).val();
+			value = /\d+\./.test(value) ? Tools.toFixed(value, 1) : value;
+			$(this).val(value);
 		}else{
-			$(this).text(Tools.toFixed($(this).text(), 1));
+			var text = $(this).text();
+			text = /\d+\./.test(value) ? Tools.toFixed(text, 1) : text;
+			$(this).text(text);
 		}
 	});
 	return $obj;
@@ -1585,7 +1589,10 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		mun = Tools.toFixed(num, length);
 	}
-	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+	num = (num + '');
+	var folatNum = num.replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/(\d+)(\.\d*)?$/, '$1');
+	return intNum.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
  * 过滤千分位
@@ -2005,6 +2012,12 @@ KingServices.viewTransit = function(id){
 KingServices.viewPayMentDetail = function(id,num){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
 		module.init(id,num);
+	});
+};
+//报账审核--跳转发团安排的查看页面
+KingServices.viewTripDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_all,function(module){
+		module.viewTripPlan(id);
 	});
 };
 //报价  修改

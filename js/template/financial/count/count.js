@@ -324,9 +324,9 @@ define(function(require, exports){
 		Count.tripIncome($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
@@ -651,7 +651,7 @@ define(function(require, exports){
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
-			var id = $obj.find('.tripPlanId').val();
+			var id = $obj.find('.financial-tripPlanId').val();
 			KingServices.viewFeeDetail(id);
 		});
 		//导游数据处理
@@ -820,9 +820,10 @@ define(function(require, exports){
 		});
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){

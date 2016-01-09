@@ -65,6 +65,8 @@
     white-space: nowrap!important;
     overflow: auto!important;
     height: auto!important;
+    width: auto!important;
+    max-width: 500px;
     z-index: 9999;
 }
 
