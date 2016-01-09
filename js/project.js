@@ -1569,9 +1569,13 @@ Tools.filterCount = function(obj){
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
-			$(this).val(Tools.toFixed($(this).val(), 1));
+			var value = $(this).val();
+			value = /\d+\./.test(value) ? Tools.toFixed(value, 1) : value;
+			$(this).val(value);
 		}else{
-			$(this).text(Tools.toFixed($(this).text(), 1));
+			var text = $(this).text();
+			text = /\d+\./.test(value) ? Tools.toFixed(text, 1) : text;
+			$(this).text(text);
 		}
 	});
 	return $obj;
@@ -1585,7 +1589,10 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		mun = Tools.toFixed(num, length);
 	}
-	return (num + '').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
+	num = (num + '');
+	var folatNum = num.replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/(\d+)(\.\d*)?$/, '$1');
+	return intNum.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
  * 过滤千分位
@@ -2078,6 +2085,7 @@ KingServices.addResourceFunction = function(e){
 			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
+			if (!!data.companyName && !!name) {$parents.find('input[name='+name+']').val(data.companyName).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
@@ -2090,8 +2098,8 @@ KingServices.addResourceFunction = function(e){
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
 		$parents = $(this).closest(e.data.type),
-		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
-		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		$busCompany = $parents.find('[name=' + e.data.busCompanyName + ']').val() || "",
+		$busCompanyId = $parents.find('[name=' + e.data.busCompanyId + ']').val() || "",
 		busCompanyName = e.data.busCompanyName,
 		busCompanyId = e.data.busCompanyId,
 		licenseNumberId = e.data.busLicenseNumberId,

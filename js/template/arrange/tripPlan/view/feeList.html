@@ -1,10 +1,10 @@
 {{each touristGroupFeeList as rs}}
 <tr data-id="{{rs.id}}">
-	<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"></td>
-	<td><input type="text" class="col-xs-12 T-calculate T-count" name="count" value="{{rs.count}}"></td>
-	<td><input type="text" class="col-xs-12 T-calculate T-price" name="price" value="{{rs.price}}"></td>
-	<td><input type="text" class="col-xs-12" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
-	<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+	<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}></td>
+	<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}" {{if isGuest == 1}}readonly{{/if}}></td>
+	<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}" {{if isGuest == 1}}readonly{{/if}}></td>
+	<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
+	<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" {{if isGuest == 1}}readonly{{/if}}></td>
 	<td><a class="cursor T-action T-delete" title="删除">删除</a></td>
 </tr>
 {{/each}}
