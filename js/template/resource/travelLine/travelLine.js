@@ -194,7 +194,15 @@ define(function(require, exports) {
 					data.id = id;
 					data.travelLine = JSON.parse(data.travelLine);
 					for (var i = 0, len = data.travelLine.travelLineDayList.length; i < len; i++) {
-						data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
+						try {
+							data.travelLine.travelLineDayList[i].repastDetail = JSON.parse(data.travelLine.travelLineDayList[i].repastDetail)
+						} catch(e) {
+							data.travelLine.travelLineDayList[i].repastDetail = {
+															breakfast: 0,
+															lunch: 0,
+															dinner: 0
+														}
+						}
 					}
 					if (Tools.addTab(menuKey + '-update', '修改线路模板', updateTemplate(data))) {
 						ResTravelLine.CU_event($('#tab-' + menuKey + '-update-content'));
