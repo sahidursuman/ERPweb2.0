@@ -61,7 +61,7 @@
 			    <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.price}}</span></td>
 			    <td><span class="F-float F-count">{{rs.memberCount}}</span></td>
-			    <td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
+			    <td><span class="F-float F-money">{{rs.realGuidePayMoney}}</span></td>
 			    <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
 			    <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span>{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span>{{/if}}</a></td> 
 			    <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
