@@ -820,9 +820,10 @@ define(function(require, exports){
 		});
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
