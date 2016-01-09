@@ -945,6 +945,7 @@ define(function(require, exports) {
 
 	//添加资源 
 	tripPlan.addResource = function(){
+		$("#tripPlan_addPlan_guide .T-addGuideResource").off('click').on("click",{function : KingServices.addGuide , type : "tr" , name : "guideName" , id : "guideId", mobileNumber: "mobileNumber"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_insurance .T-addInsuranceResource").off('click').on("click",{function : KingServices.addInsurance , type : "tr" , name : "insuranceName" , id : "insuranceId"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_restaurant .T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant, type : "tr" , name : "restaurantName" , id : "restaurantId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
 		$("#tripPlan_addPlan_hotel .T-addHotelResource").off('click').on("click",{function : KingServices.addHotel, type : "tr" , name : "name" , id : "hotelId" , managerName : "managerName" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
@@ -990,7 +991,7 @@ define(function(require, exports) {
 			+'<td class="feild-relative"><input type="text" name="startTime" class="datepicker"></td>'
 			+'<td><input type="text" name="endTime" class="datepicker"></td>'
 			+'<td><select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
-			+'<td><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"></td> '
+			+'<td><div class="col-sm-12 feild-relative"><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"><span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td> '
 			+'<!-- <td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"/></td> -->'
 			+'<td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"></td>'
 			+'<td><input type="text" name="price" class="col-sm-12 price input-success F-float F-money" maxlength="9"></td>'
