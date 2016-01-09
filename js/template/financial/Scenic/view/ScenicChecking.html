@@ -70,7 +70,7 @@
 				<td class="F-float F-money">{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}，{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td> 
 				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-				<td class="F-float F-money"><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+				<td ><input type="text" name="settlementMoney" class="F-float F-money" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><input type="text" name="checkRemark" class="F-float F-money" value="{{rs.checkRemark}}" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}/></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
