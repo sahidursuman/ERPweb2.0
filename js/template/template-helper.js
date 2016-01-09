@@ -154,7 +154,7 @@ template.helper("getArrangeIcon", function(status) {
             return 'fa-minus';
     }
 });
-template.helper("getRestaurantDesc", function(status) {
+template.helper("getRestaurantDesc", function(status, canEdit) {
     var res = '', i = 0, txt = ['早餐', '中餐', '晚餐'];
 
     if (!!status) {
@@ -163,6 +163,10 @@ template.helper("getRestaurantDesc", function(status) {
         for (var i = 0; i < 3; i ++) {
             res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
         }
+    }
+
+    if (canEdit) {
+        res = res.split('disabled="disabled"').join('');
     }
     
     return res;
