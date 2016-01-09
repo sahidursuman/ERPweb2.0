@@ -324,9 +324,9 @@ define(function(require, exports){
 		Count.tripIncome($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			var id = $obj.find('.financial-tripPlanId').val();
+			
+			KingServices.viewTripDetail(id);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
