@@ -1301,23 +1301,37 @@ define(function(require, exports) {
 	                    success: function(data) {
 							if(showDialog(data)){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
-									$this.closest('tr').remove();
-									tripPlan.moneyTripPlan($tab);
-									tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+									removeItem();
 								})
 							}
 	                    }
 	                });
 				})
 			} else {
-				$this.closest('tr').remove();
-				tripPlan.moneyTripPlan($tab);
-				tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+				removeItem();
 			}
 		}else{
+			removeItem();
+		}
+
+		function removeItem() {
+			var $tbody = $this.closest('tbody');
+
 			$this.closest('tr').remove();
 			tripPlan.moneyTripPlan($tab);
-			tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'))
+			tripPlan.viewCloseOneClick($tab.find('#tripPlan_addPlan_hotel'));
+
+			var $radio = $tbody.find('input[name="isAccountGuide"]'), res = true;
+			$radio.each(function() {
+				if (this.checked) {
+					res = false;
+					return false;
+				}
+			});
+
+			if (res) {
+				$radio.eq(0).trigger('click');
+			}
 		}
 	};
 

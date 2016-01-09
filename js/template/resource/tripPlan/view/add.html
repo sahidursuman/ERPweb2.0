@@ -301,7 +301,7 @@
                                         <td><input type="text" name="manageFee"  {{if guide.isAccountGuide == 1}} value="{{guide.manageFee}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
                                         <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                         <td>
-                                            {{if basicInfo.status != 0 && guide.isAccountGuide == 1}}
+                                            {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除">
                                                 删除
                                             </a>
