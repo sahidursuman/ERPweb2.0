@@ -46,9 +46,9 @@
 				<td class="T-ctrl-tip" title="{{touristGroupList.lineProduct.name}}"><span style="height: 35px">{{touristGroupList.lineProduct.name}}</span></td>
 				<td>{{touristGroupList.lineProduct.type}}</td>
 				<td>
-					{{if touristGroupList.lineProduct.customerType == 0}}散拼
-					    {{else if touristGroupList.lineProduct.customerType == 1}}团体
-					    {{else if touristGroupList.lineProduct.customerType == 2}}转客
+					{{if touristGroupList.customerType == 0}}散拼
+					    {{else if touristGroupList.customerType == 1}}团体
+					    {{else if touristGroupList.customerType == 2}}转客
 					{{/if}} 
 				</td>
 				<td class="F-float F-count">{{touristGroupList.lineProduct.days}}</td>

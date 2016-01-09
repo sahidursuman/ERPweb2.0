@@ -2085,6 +2085,7 @@ KingServices.addResourceFunction = function(e){
 			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
+			if (!!data.companyName && !!name) {$parents.find('input[name='+name+']').val(data.companyName).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
@@ -2097,8 +2098,8 @@ KingServices.addResourceFunction = function(e){
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
 		$parents = $(this).closest(e.data.type),
-		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
-		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		$busCompany = $parents.find('[name=' + e.data.busCompanyName + ']').val() || "",
+		$busCompanyId = $parents.find('[name=' + e.data.busCompanyId + ']').val() || "",
 		busCompanyName = e.data.busCompanyName,
 		busCompanyId = e.data.busCompanyId,
 		licenseNumberId = e.data.busLicenseNumberId,
