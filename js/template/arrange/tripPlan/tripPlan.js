@@ -324,6 +324,8 @@ define(function(require, exports) {
             	KingServices.addPartnerAgency(function(data){
             		$tab.find('[name="travelAgencyName"]').val(data.name);
             		$tab.find('[name="fromPartnerAgencyId"]').val(data.id);
+            		$tab.find('[name="contactRealname"]').val('');
+            		$tab.find('[name="fromPartnerAgencyContactId"]').val('');
             	})
             },
             type: ".form-group",
