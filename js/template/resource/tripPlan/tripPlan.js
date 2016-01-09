@@ -1549,61 +1549,84 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	tripPlan.bindBusCompanyChoose = function($tab){
+		function clearData($tr, start) {
+			switch(start) {
+				case 'brand':
+					$tr.find('input[name="brand"]').val('');
+				case 'licenseNumber':
+					$tr.find('input[name="licenseNumber"]').val('');
+					$tr.find('input[name="busId"]').val('');
+				case 'CompanyName':
+					$tr.find('input[name="CompanyName"]').val('');
+					$tr.find('input[name="CompanyId"]').val('');
+					$tr.find('input[name="mobileNumber"]').val('');
+				case 'driverName':
+					$tr.find('input[name="driverName"]').val('');
+					$tr.find('input[name="driverId"]').val('');
+					$tr.find('input[name="driverMobileNumber"]').val('');
+				default: break;
+			}
+		}
+
+		function checkBusCompay($tr, start) {
+			setTimeout(function() {
+				var searchJson = {
+					seatCount:$tr.find('input[name=needSeatCount]').val(),
+					brand: $tr.find('input[name=brand]').val(),
+					busId: $tr.find('input[name=busId]').val(),
+					busCompanyId:$tr.find('input[name=busCompanyId]').val()
+				};
+				$.ajax({
+					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					showLoading:false,
+					type: 'post',
+					data: searchJson,
+				})
+				.done(function(data) {
+					if(showDialog(data)){
+						data.busCompanyList = JSON.parse(data.busCompanyList);
+						if (!data.busCompanyList || !data.busCompanyList.length) {
+							clearData($tr, start);
+						}
+					}
+				});
+			}, 10);
+		}
+
 		//选择车座位数
 		var chooseSeatCount = $tab.find('input[name="needSeatCount"]');
 		chooseSeatCount.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=brand]").val("");
-					parents.find("input[name=licenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=CompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'brand');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-				parents.find("input[name=brand]").val("");
-				parents.find("input[name=LicenseNumber]").val("");
-				parents.find("input[name=busId]").val("");
-				parents.find("input[name=CompanyName]").val("");
-				parents.find("input[name=CompanyId]").val("");
-				parents.find("input[name=driverName]").val("");
-				parents.find("input[name=driverId]").val("");
-				parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'brand');
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var searchJson = {
-					brand:$(this).closest('tr').find("input[name=brand]").val(),
-					licenseNumber:$(this).closest('tr').find("input[name=licenseNumber]").val(),
-					busCompanyId:$(this).closest('tr').find("input[name=needSeatCount]").val()
-				};
+			var $that = $(this), $tr = $that.closest('tr');
 			$.ajax({
 				url: KingServices.build_url('bookingOrder','getSeatCountList'),
 				showLoading: false,
 				data:{
-					searchJson:JSON.stringify(searchJson)
+					brand:$tr.find("input[name=brand]").val(),
+					busCompanyId:$tr.find("input[name=busCompanyId]").val()
 				},
 				success:function(data){
 					if(showDialog(data)){
 						var seatCountListJson = [];
-						var seatCountList = data.seatCountList;
-						if(seatCountList && seatCountList.length > 0){
-							for(var i=0; i < seatCountList.length; i++){
-								var seatCount = {
-									value : seatCountList[i]
+						if(data.seatCountList && data.seatCountList.length > 0){
+							for(var i=0, seatCount; i < data.seatCountList.length; i++){
+								seatCount = {
+									value : data.seatCountList[i]
 								}
 								seatCountListJson.push(seatCount);
 							}
-							$(obj).autocomplete('option','source', seatCountListJson);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', seatCountListJson);
+							$that.autocomplete('search', '');
 						}else{
 							layer.tips('无数据', obj, {
 							    tips: [1, '#3595CC'],
@@ -1620,116 +1643,88 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=LicenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'LicenseNumber');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=LicenseNumber]").val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=CompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var seatCount = $(this).closest('tr').find("[name=needSeatCount]").val();
-			var searchJson = {
-						seatCount:seatCount,
-						licenseNumber:$(this).closest('tr').find("[name=licenseNumber]").val(),
-						busCompanyId:$(this).closest('tr').find("[name=busCompanyId]").val()
-					};
-				$.ajax({
-					url: KingServices.build_url('bookingOrder','getBusBrandList'),
-					data:{
-						searchJson:JSON.stringify(searchJson)
-					},
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						if(showDialog(data)){
-							var busBrandListJson = [];
-							var busBrandList = data.busBrandList;
-							if(busBrandList && busBrandList.length > 0){
-								for(var i=0; i < busBrandList.length; i++){
-									var busBrand = {
-										value : busBrandList[i]
-									}
-									busBrandListJson.push(busBrand);
+			var $that = $(this), $tr = $that.closest('tr');
+			$.ajax({
+				url: KingServices.build_url('bookingOrder','getBusBrandList'),
+				data:{
+					seatCount:$tr.find("[name=needSeatCount]").val(),
+					busCompanyId:$tr.find("[name=busCompanyId]").val()
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					if(showDialog(data)){
+						var busBrandListJson = [];
+						if(data.busBrandList && data.busBrandList.length > 0){
+							for(var i=0; i < data.busBrandList.length; i++){
+								var busBrand = {
+									value : data.busBrandList[i]
 								}
-								$(obj).autocomplete('option','source', busBrandListJson);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+								busBrandListJson.push(busBrand);
 							}
+							$that.autocomplete('option','source', busBrandListJson);
+							$that.autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
+				}
+			})
 		});
-		//选择车辆
+		//选择车辆（车牌号）
 		var chooseLicense = $tab.find('input[name="licenseNumber"]');
 		chooseLicense.autocomplete({
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=busId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'companyName');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=driverMobileNumber]").val("");
-					parents.find("input[name=busId]").val(ui.item.id).trigger('change');
+				var $tr = $(this).blur().closest('tr');
+				$tr.find("input[name=busId]").val(ui.item.id).trigger('change');
+				checkBusCompay($tr, 'companyName');
 			}
 		}).unbind("click").click(function(){
-			var obj = this,parents = $(obj).closest('tr'),
-				seatCount = parents.find("[name=needSeatCount]").val(),
-				busBrand = parents.find("[name=brand]").val();
-				var searchJson = {
-						seatCount:seatCount,
-						brand:busBrand,
-						busCompanyId:parents.find("input[name=busCompanyId]").val()
-					};
-				$.ajax({
-					url: KingServices.build_url('busCompany','getLicenseNumbers'),
-					data: {
-						searchJson:JSON.stringify(searchJson)
-					},
-					showLoading:false,
-					type:"POST",
-					success:function(data){
-						if(showDialog(data)){
-							var licenseList = JSON.parse(data.busList);
-							if(licenseList && licenseList.length > 0){
-								for(var i=0; i < licenseList.length; i++){
-									licenseList[i].value = licenseList[i].licenseNumber;
-								}
-								$(obj).autocomplete('option','source', licenseList);
-								$(obj).autocomplete('search', '');
-							}else{
-								layer.tips('无数据', obj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
+			var $that = $(this), $tr = $that.closest('tr');
+			$.ajax({
+				url: KingServices.build_url('busCompany','getLicenseNumbers'),
+				data: {
+					seatCount:$tr.find("[name=needSeatCount]").val(),
+					brand:$tr.find("[name=brand]").val()
+				},
+				showLoading:false,
+				type:"POST",
+				success:function(data){
+					if(showDialog(data)){
+						var licenseList = JSON.parse(data.busList);
+						if(licenseList && licenseList.length > 0){
+							for(var i=0; i < licenseList.length; i++){
+								licenseList[i].value = licenseList[i].licenseNumber;
 							}
+							$that.autocomplete('option','source', licenseList);
+							$that.autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
 						}
 					}
-				})
+				}
+			})
 		});
 		// 选择车队
 		var chooseLicense = $tab.find('input[name="companyName"]');
@@ -1737,27 +1732,20 @@ define(function(require, exports) {
 			minLength:0,
 			change :function(event, ui){
 				if(ui.item == null){
-					var $this = $(this),parents = $(this).closest('tr');
-					$this.val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=CompanyName]").val("");			
+					var $that = $(this).val("");
+					clearData($that.closest('tr'), 'CompanyName');
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=CompanyName]").val(ui.item.busCompanyName);
-					parents.find("input[name=driverName]").val('');
-					parents.find("input[name=driverMobileNumber]").val('');
-					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
-					// var searchJson = {
-					// 	seatCount:parents.find('input[name=needSeatCount]').val(),
-					// 	brand:parents.find('input[name=brand]').val(),
-					// 	licenseNumber:parents.find('input[name=licenseNumber]').val()
-					// };
+				var $tr = $(this).blur().closest('tr');
+				checkBusCompay($tr, 'driverName');
+				$tr.find("input[name=CompanyName]").val(ui.item.busCompanyName);
+				$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 				$.ajax({
 					url: KingServices.build_url('busCompany', 'findBusCompanyById'),
 					type: 'post',
 					dataType: 'json',
+					showLoading: false,
 					data: {
 						id: ui.item.id
 					},
@@ -1767,27 +1755,22 @@ define(function(require, exports) {
 						data.busCompany = JSON.parse(data.busCompany || false);
 
 						if (!!data.busCompany)
-							parents.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
+							$tr.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
 						else {
-							parents.find("input[name=mobileNumber]").val('');
+							$tr.find("input[name=mobileNumber]").val('');
 						}
 					}
 				});
-				
 			}
 		}).unbind("click").click(function(){
-			var obj = this,parents = $(obj).closest('tr'),
-				seatCount = parents.find("[name=needSeatCount]").val(),
-				busBrand = parents.find("[name=brand]").val();
-				var searchJson = {
-					seatCount:parents.find('input[name=seatCount]').val(),
-					brand:"",
-					licenseNumber:parents.find('input[name=licenseNumber]').val()
-				};
+			var $that = $(this), $tr = $that.closest('tr');
+
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
-				data: {
-					searchJson:JSON.stringify(searchJson)
+				data:  {
+					seatCount: $tr.find("[name=needSeatCount]").val(),
+					brand: $tr.find("[name=brand]").val(),
+					busId: $tr.find('input[name="busId"]').val()
 				},
 				showLoading:false,
 				type:"POST",
@@ -1799,8 +1782,8 @@ define(function(require, exports) {
 							for(var i=0; i < busCompanyList.length; i++){
 								busCompanyList[i].value = busCompanyList[i].companyName;
 							}
-							$(obj).autocomplete('option','source', busCompanyList);
-							$(obj).autocomplete('search', '');
+							$that.autocomplete('option','source', busCompanyList);
+							$that.autocomplete('search', '');
 						}else{
 							layer.tips('无数据', obj, {
 							    tips: [1, '#3595CC'],
