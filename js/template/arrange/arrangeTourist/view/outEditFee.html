@@ -76,15 +76,15 @@
 										</td>   
 										
 										<td>
-											<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc" />
+											<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count" />
 										</td>
 										<td>
-											<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc" />
+											<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc F-float F-money" />
 										</td>
 								
 
 										<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right {{if subsection==0}}T-payMoney{{/if}}" />
+										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right {{if subsection==0}}T-payMoney{{/if}} F-float F-money" />
 										</td>
 										<td>
 											<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-12  no-padding-right" />
@@ -104,14 +104,14 @@
 									</td>
 									
 									<td>
-										<input name="count" value="{{transferOtherFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc" />
+										<input name="count" value="{{transferOtherFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count" />
 									</td>
 									<td>
-										<input name="price" value="{{transferOtherFee.price}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc" />
+										<input name="price" value="{{transferOtherFee.otherPrice}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money" />
 									</td>
 
 									<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney" />
+										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money" />
 									</td>
 									<td>
 										<input name="remark" value="{{transferOtherFee.remark}}" type="text" class="col-sm-12  no-padding-right" />
@@ -184,20 +184,20 @@
 									</tr>
 								</thead>   
 								<tbody>
-								   {{each touristGroupFeeList as touristGroupFlist}}    	                                           
+								   {{each touristGroupFeeList as touristGroupFlist}}   	                                           
 												 <tr>       
 													<td>    
 														<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
 													</td>   
 									
 													<td>
-														<input  value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount" />
+														<input  value="{{touristGroupFlist.count}}" readonly="readonly"  type="text" class="col-sm-12  no-padding-right costCount F-float F-count" />
 													</td>
 													<td>
-														<input  value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+														<input  value="{{touristGroupFlist.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice F-float F-money" />   
 													</td>
 													<td>
-														<input  value="{{touristGroupFlist.price*touristGroupFlist.count}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
+														<input  value="{{touristGroupFlist.price*touristGroupFlist.count}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice F-float F-money" />
 													</td>
 													<td>
 														<input  value="{{touristGroupFlist.remark}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right costPrice" />   
