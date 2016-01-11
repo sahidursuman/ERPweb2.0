@@ -1004,13 +1004,21 @@ var _statusText = {
 		//重写jquery的text方法
 		text : function( value ){
 			return jQuery.access( this, function( value ) {
+				var $that = $(this);
 				if(value === undefined){
 					value = jQuery.text( this )
-					if($(this).hasClass('F-float')){
+					if($that.hasClass('F-float')){
 						value = Tools.formatQuantile(value);
 					}
 				}else{
-					if($(this).hasClass('F-float')){
+					if($that.hasClass('F-float')){
+						// 精度控制
+						if ($that.hasClass('F-money')) {
+							value = Tools.toFixed(value, 2);
+						} else if ($that.hasClass('F-count')) {
+							value = Tools.toFixed(value, 1, false);
+						}
+
 						value = Tools.thousandPoint(value);
 					}
 					value = this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) )
@@ -1022,7 +1030,8 @@ var _statusText = {
 		//重写jquery的val方法
 		val : function( value ){
 			var ret, hooks, isFunction,rreturn = /\r/g,
-			elem = this[0];
+			elem = this[0]
+				$that = $(this);
 
 			if ( !arguments.length ) {
 				if ( elem ) {
@@ -1033,7 +1042,7 @@ var _statusText = {
 					}
 
 					ret = elem.value;
-					if($(this).hasClass('F-float') && ret !== ""){
+					if($that.hasClass('F-float') && ret !== ""){						
 						ret = Tools.formatQuantile(ret);
 					}
 					return typeof ret === "string" ?
@@ -1074,8 +1083,14 @@ var _statusText = {
 
 				// If set returns undefined, fall back to normal setting
 				if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
-					if($(this).hasClass('F-float')){
-						val = Tools.thousandPoint(val);
+					if($that.hasClass('F-float')){
+						// 精度控制
+						if ($that.hasClass('F-money')) {
+							value = Tools.toFixed(value, 2);
+						} else if ($that.hasClass('F-count')) {
+							value = Tools.toFixed(value, 1, false);
+						}
+						val = Tools.thousandPoint(val);						
 					}
 					this.value = val;
 				}
@@ -1568,20 +1583,38 @@ Tools.addZero2Two = function(num)  {
  * 控制精度
  * @param  {string/float} data   数据
  * @param  {float} length 精度的长度
+ * @param  {boolean} fixed 是否固定长度，默认是:true
  * @return {float}        返回修正后的数据
  */
-Tools.toFixed = function(data, length) {
+Tools.toFixed = function(data, length, fixed) {
+	if (typeof fixed !== 'boolean') {
+		fixed = true;
+	}
 	if (!!Number.prototype.toFixed && data != "") {
 		if (isNaN(length) || !length) {
 			length = 2;
 		}
 
 		if (!isNaN(data)) {
-			data = (data * 1).toFixed(length);
+			if (!(fixed === false && length >= checkPrecisionLength(data))) {
+				data = (data * 1).toFixed(length);
+			}
 		}
 	}
 
 	return data;
+
+	function checkPrecisionLength(data) {
+		var len = 0;
+		if (!!data) {
+			data = (data + '').split('.');
+			if (data.length === 2) {
+				len = data[1].length;
+			}
+		}
+
+		return len;
+	}
 };
 /**
  * 过滤金额精度为2位小数

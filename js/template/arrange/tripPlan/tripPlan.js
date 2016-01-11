@@ -452,7 +452,6 @@ define(function(require, exports) {
     				}else{
     					deleteIds = [{id : id}]
     				}
-    				console.log(deleteIds, 2);
     				$fee.data('deleteIds', JSON.stringify(deleteIds));
     			});
     		}else{
@@ -464,6 +463,7 @@ define(function(require, exports) {
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
     		$tab.find('.T-fee-list').append(T.feeList({touristGroupFeeList:[{}]}));
+    		validate = rule.update(validate);
     	});
     	//绑定账单表内事件
     	$tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
@@ -1736,7 +1736,6 @@ define(function(require, exports) {
 		}else{
 			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
-
 		// 选择线路产品
 		$dialog.find('.T-btn-submit').on('click', function(event) {
 			event.preventDefault();
@@ -1762,6 +1761,8 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('.T-tourists-list').html('');
+				$tab.find('.T-fee-list').html('');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');

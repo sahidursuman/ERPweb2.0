@@ -695,10 +695,10 @@ define(function(require, exports) {
 		var args = $tab.find('.T-main-form').serializeJson();
 
 		// // 启用标志
-		// args.status = 0;
-		// if ($tab.find('.T-status').prop('checked')) {
-		// 	args.status = 1;
-		// }
+		args.status = 0;
+		if ($tab.find('.T-status').prop('checked')) {
+			args.status = 1;
+		}
 
 		// 获取日程数据
 		var addJson = [], delJson = [],scenicListJson;

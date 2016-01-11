@@ -548,11 +548,11 @@ define(function(require, exports) {
             .on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
-                /*if (typeFlag == 2) {
+                if (typeFlag == 2) {
                     touristGroup.updateEvents(typeInner);
                 }else{
                     touristGroup.addEvents();
-                }*/
+                }
                 touristGroup.init_CRU_event($tab , $tab.find('.T-submit-updateTouristGroup').data('id'),typeFlag ,typeInner );
 
             })
@@ -579,7 +579,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var $that = $(this),startTime = $that.val(),$row = $that.closest('.form-inline');
-                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days));
+                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days-1));
                 
         });
 
@@ -654,7 +654,8 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);
+                    payMoney=payMoney.toFixed(2);       
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
@@ -663,7 +664,8 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);
+                    payMoney=payMoney.toFixed(2);               
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
