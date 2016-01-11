@@ -1086,9 +1086,9 @@ var _statusText = {
 					if($that.hasClass('F-float')){
 						// 精度控制
 						if ($that.hasClass('F-money')) {
-							value = Tools.toFixed(value, 2);
+							val = Tools.toFixed(val, 2);
 						} else if ($that.hasClass('F-count')) {
-							value = Tools.toFixed(value, 1, false);
+							val = Tools.toFixed(val, 1, false);
 						}
 						val = Tools.thousandPoint(val);						
 					}
