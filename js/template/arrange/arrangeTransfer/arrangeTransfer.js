@@ -465,11 +465,14 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-							var type="1",
+							showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+								var type="1",
  							    divId="Transfer-Out";
 								transfer.getSearchParam(divId,type);
 								transfer.findPager(divId,type,0);
 								transfer.listMainHead(0);
+							})
+							
 						}
 					})
 					
@@ -851,11 +854,13 @@ define(function(require, exports) {
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
+				type: 'post',
 				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
-				success:function(data){
-					var result = showDialog(data);  
-					if(result){
-					    $tab.data('isEdited', false);
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+						$tab.data('isEdited', false);
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
@@ -867,10 +872,9 @@ define(function(require, exports) {
 							    transfer.findPager(divId,type,0);	
 							Tools.closeTab(Tools.getTabKey($tab.prop('id')));						
 						}
-						
-					}
-				}
-			});
+					})
+				};
+			})
 		};
 
 		/**

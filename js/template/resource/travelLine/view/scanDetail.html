@@ -48,7 +48,7 @@
 		{{each travelLine.travelLineDayList as line}}
 		<tr>
 			<td rowspan="2" style="vertical-align: middle;">第{{line.whichDay}}天</td>
-			<td>{{line.repastDetail | getRepastDetail }}</td>
+			<td>{{#line.repastDetail | getRestaurantDesc }}</td>
 			<td>{{line.restPosition}}</td>
 			<td>{{line.roadScenic}}</td>
 			<td>{{line.title}}</td>

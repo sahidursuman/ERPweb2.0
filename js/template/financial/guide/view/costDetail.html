@@ -547,7 +547,7 @@
                             <td><span class="F-float F-money">{{item.sumParkingRebateMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.sumBuyRebateMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.sumGuideRebateMoney}}</span></td>
-                            <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImages }} 查看 {{/if}}</a></td>
+                            <td>{{if item.billImage != null && item.billImage !=""}}<a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                         </tr>
                         {{/each}}
                         </tbody>

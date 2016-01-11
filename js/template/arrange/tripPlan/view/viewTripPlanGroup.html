@@ -1,13 +1,16 @@
 <div class="container-fluid hct-view-plan">
 	<div class="row border">
 		<div class="col-xs-12 hd">
-			<h3>基本信息</h3>
+			<h3 class="pull-left">基本信息</h3>
+			<div class="pull-right">
+				<label class="control-label">团号：{{tripPlan.tripNumber}}</label>
+			</div>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">报价单号：</label>
-			<span class="col-xs-8">{{tripPlan}}</span>
+			<span class="col-xs-8">{{if touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">线路产品：</label>
@@ -33,11 +36,11 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客户：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客户联系人：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</span>
 		</div>
 	</div>
 	<div class="row border">
@@ -51,21 +54,21 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">获得方式：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{touristGroup.getType | getWayTypeText}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">组团单号：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{touristGroup.otaOrderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">外联销售：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.outOPUser}}{{touristGroup.outOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客源类型：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.memberType == "1"}}内宾{{else}}外宾{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">责任计调：</label>
@@ -285,31 +288,17 @@
 					<div id="planDayListViewSingle-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
 						<div class="row">
 							<div class="col-xs-3">
-								<label class="control-label">简要行程：</label>
-								<label class="control-label">{{days.dayInfo.title}}</label>
+								<label class="control-label hct-label-overflow">简要行程：<span title="{{days.dayInfo.title}}">{{days.dayInfo.title}}</span></label>
 							</div>
 							<div class="col-xs-3 checkbox" style="margin-top: 0;">
 								<label class="control-label">含餐：</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[0] | checked}}{{/if}}>
-									<span class="lbl">早餐</span>
-								</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[2] | checked}}{{/if}}>
-									<span class="lbl">午餐</span>
-								</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[4] | checked}}{{/if}}>
-									<span class="lbl">晚餐</span>
-								</label>
+								{{#days.dayInfo.repastDetail | getRestaurantDesc}}
 							</div>
 							<div class="col-xs-3">
-								<label class="control-label">住宿地点：</label>
-								<label class="control-label">{{days.dayInfo.repastDetail}}</label>
+								<label class="control-label hct-label-overflow">住宿地点：<span title="{{days.dayInfo.restPosition}}">{{days.dayInfo.restPosition}}</span></label>
 							</div>
 							<div class="col-xs-3">
-								<label class="control-label">景点：</label>
-								<label class="control-label">{{days.dayInfo.scenicItemNames}}</label>
+								<label class="control-label hct-label-overflow">景点：<span title="{{days.dayInfo.scenicItemNames}}">{{days.dayInfo.scenicItemNames}}</span></label>
 							</div>
 						</div>
 						<div class="timeline-container">
@@ -677,6 +666,16 @@
 					</tr>
 				</thead>
 				<tbody>
+				{{each touristGroupMembers as rs index}}
+					<tr>
+						<td>{{index + 1}}</td>
+						<td>{{rs.name}}</td>
+						<td>{{rs.mobileNumber}}</td>
+						<td>{{rs.idCardType | getCardText}}</td>
+						<td>{{rs.idCardNumber}}</td>
+						<td>{{if rs.isContactUser}}是{{else}}-{{/if}}</td>
+					</tr>
+				{{/each}}
 				</tbody>
 			</table>
 		</div>
@@ -691,19 +690,19 @@
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">应收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">预收款：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.preIncomeMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">已收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">计划现收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 		</div>
 	</div>
 	<div class="row border">
@@ -719,7 +718,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+					{{each touristGroupFeeList as rs}}
+					<tr>
+						<td>{{rs.describeInfo}}</td>
+						<td>{{rs.count}}</td>
+						<td>{{rs.price}}</td>
+						<td>金额</td>
+						<td>{{rs.remark}}</td>
+					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>

@@ -30,7 +30,13 @@ template.helper("encode", function(data) {
     return encodeURIComponent(data);
 });
 template.helper("decode", function(data) {
-    return decodeURIComponent(data);
+    try {
+        data = decodeURIComponent(data);
+    } catch(e) {
+
+    }
+
+    return data;
 });
 template.helper("parseInt", function(data) {
     return parseInt(data);
@@ -68,6 +74,11 @@ template.helper("getWayType", function(status) {
     res += '<option value="6" '+(status == 6?'selected':'')+'>微信</option>';
     res += '<option value="7" '+(status == 7?'selected':'')+'>线上渠道</option>';
     return res;
+});
+template.helper("getWayTypeText", function(status) {
+    var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
+    status = status || 1;
+    return res[status];
 });
 template.helper("checked", function(status) {
     status = status || 0;    
@@ -154,15 +165,22 @@ template.helper("getArrangeIcon", function(status) {
             return 'fa-minus';
     }
 });
-template.helper("getRestaurantDesc", function(status) {
+template.helper("getRestaurantDesc", function(status, canEdit) {
     var res = '', i = 0, txt = ['早餐', '中餐', '晚餐'];
 
-    if (!!status) {
-        status = status.split(',');
-        
-        for (var i = 0; i < 3; i ++) {
-            res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
-        }
+    status = status || '0,0,0';
+
+    status = status.split(',');
+    if (status.length != 3) {
+        status = [0, 0, 0];
+    }
+    
+    for (var i = 0; i < 3; i ++) {
+        res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
+    }
+
+    if (canEdit) {
+        res = res.split('disabled="disabled"').join('');
     }
     
     return res;

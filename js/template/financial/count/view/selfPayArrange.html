@@ -54,10 +54,10 @@
             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
             <td>{{if arrange.badStatus == 1}}<span class="price F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}
             <input type="hidden" name="price" value="{{arrange.price}}" /></td>
-            <td>{{if arrange.badStatus == 1}}<span class="customerRebateMoney F-float F-money">{{arrange.customerRebateMoney}}</span>{{else}}<span class="customerRebateMoney">{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.customerRebateMoney}}{{else}}{{arrange.customerRebateMoney}}{{/if}}</span>{{/if}}</td>
+            <td>{{if arrange.badStatus == 1}}<span class="customerRebateMoney F-float F-money">{{arrange.customerRebateMoney}}</span>{{else}}<span class="customerRebateMoney">{{arrange.customerRebateMoney}}</span>{{/if}}</td>
             <td>{{if arrange.badStatus == 1}}
             <span class='F-floatF-count'>{{arrange.memberCount}}</span>{{else}}<input style="width:60px;" type="text" name="realCount" class="F-floatF-count" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value=0{{/if}} maxlength="5"/>{{/if}}<input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
-            <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realrealReduceMoney" class="F-float F-money" value="{{arrange.realrealReduceMoney}}" style="width:60px;"/>{{/if}}
+            <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realrealReduceMoney" class="F-float F-money" value="{{arrange.realReduceMoney}}" style="width:60px;"/>{{/if}}
             </td>
             <td>{{if arrange.badStatus == 1}}<span class="needIncome F-float F-money"></span>{{else}}<span class="needIncome F-float F-money"></span>{{/if}}
             </td>
@@ -104,10 +104,10 @@
     <div style="width:60%;">
         <div> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[2] != null}}{{remarkArrangeList[2].opCheckRemark}}{{/if}}" />
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{remarkArrangeList.selfRemark[0].opCheckRemark}}" />
         
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[2] != null}}{{remarkArrangeList[2].financeCheckRemark}}{{/if}}" />
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{remarkArrangeList.selfRemark[0].financeCheckRemark}}" />
         </div>
     </div>
 {{/if}}

@@ -60,7 +60,9 @@
 							<tr><td>{{tripPlanDetails.lineProductName}}</td></tr>
 						{{/each}}
 						{{else}}
+						{{if !!tripPlan.lineProduct}}
 						 {{tripPlan.lineProduct.name}}
+						{{/if}}
 					{{/if}}
 				</table>	
 			</td>

@@ -49,6 +49,20 @@ define(function(require, exports) {
                 ]
             },
             { 
+                //计划人数
+                $ele: $obj.find('input[name="planTouristCount"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '计划人数不能为空'
+                    },
+                    {
+                        type: 'nonnegative-int',
+                        errMsg: '计划人数只能为正整数'
+                    }
+                ]
+            },
+            { 
                 //完团日期
                 $ele: $obj.find('input[name="endTime"]'),
                 rules : [
@@ -61,6 +75,7 @@ define(function(require, exports) {
             { 
                 //客户
                 $ele: $obj.find('input[name="travelAgencyName"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyId"]'),
                 rules : [
                     {
                         type: 'null',
@@ -71,6 +86,7 @@ define(function(require, exports) {
             { 
                 //客户联系人
                 $ele: $obj.find('input[name="contactRealname"]'),
+                $valObj: $obj.find('input[name="fromPartnerAgencyContactId"]'),
                 rules : [
                     {
                         type: 'null',
@@ -141,14 +157,6 @@ define(function(require, exports) {
                 }]
             },
             {
-                $ele: $obj.find('input[name="idCardNumber"]'),
-                rules: [
-                {
-                    type: 'id',
-                    errMsg: '请输入正确的身份证号码'
-                }]
-            },
-            {
                 $ele: $obj.find('input[name="requireContent"]'),
                 rules: [{
                     type: 'null',
@@ -164,14 +172,24 @@ define(function(require, exports) {
             },
             {
                 $ele: $obj.find('input[name="count"]'),
-                rules: [{
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '数量不能为空'
+                },
+                {
                     type: 'NoNumber',
                     errMsg: '数量必须为正整数'
                 }]
             },
             {
                 $ele: $obj.find('input[name="price"]'),
-                rules: [{
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '单价不能为空'
+                },
+                {
                     type: 'nonnegative-float',
                     errMsg: '单价必须为数字'
                 }]
@@ -194,7 +212,20 @@ define(function(require, exports) {
             }else{
                 timeSettings = [];
             }
-            return settings.concat(timeSettings);
+            var idCard = [];
+            if($obj.find('[name="idCardType"]').val() == 0){
+                idCard[0] = {//校验身份证号码
+                    $ele: $obj.find('input[name="idCardNumber"]'),
+                    rules: [
+                    {
+                        type: 'id',
+                        errMsg: '请输入正确的身份证号码'
+                    }]
+                }
+            }else{
+                idCard = [];
+            }
+            return settings.concat(timeSettings, idCard);
         }
     };
     rule.checkPlan = function($container) {

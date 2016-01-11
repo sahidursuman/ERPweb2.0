@@ -78,7 +78,7 @@
 								<thead>
 									<tr>
 										<th class="th-border">日期</th>
-                                        <th class="th-border">简要行程</th>
+                                        <th class="th-border"><span class="necessary">*</span>简要行程</th>
                                         <th class="th-border">含餐情况</th>
                                         <th class="th-border">住宿地点</th>
                                         <th class="th-border">景点</th>
@@ -91,9 +91,7 @@
 										<td>第{{line.whichDay}}天<input name="whichDay" value="{{line.whichDay}}" type="hidden"/></td>
 										<td><input class="col-xs-12" name='BriefTrip' type="text" value="{{line.title}}"></td>
 										<td style="width: 205px;">
-										<label><input type="checkbox" class="ace T-breakfast" value="1" name="breakfast"  {{if line.repastDetail.breakfast ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;早餐</span></label>
-										<label><input type="checkbox" class="ace T-lunch" value="1" name="lunch"   {{if line.repastDetail.lunch ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;午餐</span></label>
-										<label><input type="checkbox" class="ace T-dinner" value="1" name="dinner"   {{if line.repastDetail.dinner ==1}}checked="checked"{{/if}}/><span class="lbl">&nbsp;晚餐</span></label>
+										{{#line.repastDetail | getRestaurantDesc:true}}
 										</td>
 										<td><input class="col-xs-12" name="LodgingPlace" type="text" value="{{line.restPosition}}"></td>
 										
