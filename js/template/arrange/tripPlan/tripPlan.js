@@ -834,8 +834,8 @@ define(function(require, exports) {
 			});
 		});
 		//购物&自费商家ID集
-		arge.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
-		arge.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
+		arge.shopIds = tripPlan.jsonToString($tab.find('[name="shopNames"]').data("propover"));
+		arge.selfPayItemIds = tripPlan.jsonToString($tab.find('[name="selfPayItemNames"]').data("propover"));
 		//应收&预收款&计划现收
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
@@ -1000,7 +1000,12 @@ define(function(require, exports) {
     		tripPlan.saveSinglePlan($tab, validate);
     	});
 	};
-
+	tripPlan.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
+	}
 	/**
 	 * 保存散客计划
 	 * @param  {object} $tab 父容器
@@ -1093,7 +1098,7 @@ define(function(require, exports) {
 					detail: encodeURIComponent($that.find('.T-update-detail').data('detail')),
 				    repastDetail : repastDetail,
 				    restPosition : $that.find('[name="restPosition"]').val(),
-				    scenicItemIds : $that.find('[name="scenicItemNames"]').data("propover") || "",
+				    scenicItemIds : tripPlan.jsonToString($that.find('[name="scenicItemNames"]').data("propover")),
 				    scenicItemNames : $that.find('[name="scenicItemNames"]').val(),
 				    whichDay : $that.find('[name="dateDays"]').data('which-day')
 				});
