@@ -254,7 +254,17 @@ define(function(require, exports) {
 			data : {searchParam : JSON.stringify(arge)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.result = JSON.parse(data.result);
+				var rs = JSON.parse(data.result);
+				data.result = rs;
+				for (var i = rs.length - 1; i >= 0; i--) {
+					if(rs[i].tripPlanTouristList.length > 0 && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
+						rs[i].lineProduct && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
+						rs[i].tripPlanTouristList.splice(0, 1);
+					}
+				};
+
 				var singleHrml = singleListTemplate(data);
 				$tab.find('.T-tripPlan-singleList').html(singleHrml);
 				// 绑定翻页组件
