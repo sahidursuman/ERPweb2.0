@@ -1793,10 +1793,6 @@ define(function(require, exports) {
 	};
 	//保险选择
 	quote.bindInsuranceChosen = function($input, $item, validator, $container) {
-		if (!$input || !$input.length) {
-			console.error('绑定保险的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -3441,9 +3437,9 @@ define(function(require, exports) {
 			excludeFee: quote.getValue($container,'excludeFee'),
 			lineFeature: quote.getValue($container,'lineFeature'),
 			lineNotice: quote.getValue($container,'lineNotice'),
-			shopNames: quote.getValue($container,'T-shopMultiselect'),
+			shopNames: $container.find('.T-shopMultiselect').val(),
 			shopIds: $container.find('.T-shopMultiselect').data('propover'), 
-			selfPayItemNames: quote.getValue($container,'T-selfPayMultiselect'),
+			selfPayItemNames: $container.find('.T-selfPayMultiselect').val(),
 			selfPayItemIds: $container.find('.T-selfPayMultiselect').data('propover'),
 			startTime: quote.getValue($container,'startTime'),
 			adultCount: quote.getValue($container,'adultCount'),

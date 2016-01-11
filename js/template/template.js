@@ -97,7 +97,10 @@
     }), template.helper("encode", function(data) {
         return encodeURIComponent(data);
     }), template.helper("decode", function(data) {
-        return decodeURIComponent(data);
+        try {
+            data = decodeURIComponent(data);
+        } catch (e) {}
+        return data;
     }), template.helper("parseInt", function(data) {
         return parseInt(data);
     }), template.helper("interceptStr", function(data) {
@@ -126,6 +129,9 @@
         res += '<option value="5" ' + (5 == status ? "selected" : "") + ">QQ </option>", 
         res += '<option value="6" ' + (6 == status ? "selected" : "") + ">微信</option>", 
         res += '<option value="7" ' + (7 == status ? "selected" : "") + ">线上渠道</option>";
+    }), template.helper("getWayTypeText", function(status) {
+        var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
+        return status = status || 1, res[status];
     }), template.helper("checked", function(status) {
         return status = status || 0, 1 == status ? "checked" : "";
     }), template.helper("getCardOption", function(status) {
@@ -209,10 +215,8 @@
         }
     }), template.helper("getRestaurantDesc", function(status, canEdit) {
         var res = "", i = 0, txt = [ "早餐", "中餐", "晚餐" ];
-        if (status) {
-            status = status.split(",");
-            for (var i = 0; 3 > i; i++) res += '<label><input type="checkbox" class="ace" disabled="disabled" ' + (1 == status[i] ? "checked" : "") + '><span class="lbl"> ' + txt[i] + "</span></label>&nbsp;&nbsp;&nbsp;";
-        }
+        status = status || "0,0,0", status = status.split(","), 3 != status.length && (status = [ 0, 0, 0 ]);
+        for (var i = 0; 3 > i; i++) res += '<label><input type="checkbox" class="ace" disabled="disabled" ' + (1 == status[i] ? "checked" : "") + '><span class="lbl"> ' + txt[i] + "</span></label>&nbsp;&nbsp;&nbsp;";
         return canEdit && (res = res.split('disabled="disabled"').join("")), res;
     }), template.helper("getTaskDesc", function(status) {
         switch (1 * status) {

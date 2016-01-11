@@ -8,7 +8,6 @@
         <th style="min-width:40px">人数</th>
         <th style="min-width:80px">团队人数</th>
         <th style="min-width:50px">导游</th>
-        <th style="min-width:40px">车牌号</th>
         <th style="min-width:40pxpx">收入</th>
         <th style="min-width:40pxpx">成本</th>
         <th style="min-width:40pxpx">毛利</th>
@@ -40,7 +39,7 @@
         {{/if}}
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.guide != null}}{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</td>
-        <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.bus != null}}{{financialTripPlan.tripPlan.bus.licenseNumber}}{{/if}}</td>
+        
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}><span class="F-float F-money">{{financialTripPlan.getAllMoney}}</span></td>
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}><span class="F-float F-money">{{financialTripPlan.payAllMoney}}</span></td>
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}><span class="F-float F-money">{{financialTripPlan.grossProfitMoney}}</span></td>
