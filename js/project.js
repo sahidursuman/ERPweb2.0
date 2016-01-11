@@ -1646,10 +1646,23 @@ Tools.filterUnPoint = function(obj){
 			/*curPos = $(this).cursorPosition(),*/
 			
 		if(!isNaN(value)){
-			$(this).val(value);
+			$(this).val(value).trigger('change');
 		}
-		//$(this).cursorPosition(curPos)
 	});
+	// .on('focusin', 'input.F-float', function(event) {
+	// 	event.preventDefault();
+		
+	// 	$(this).data('oldData', $(this).val());
+	// })
+	// .on('focusout', 'input.F-float', function(event) {
+	// 	event.preventDefault();
+	// 	var $that = $(this), value = $that.val(),
+	// 		oldValue = $that.data('oldData');
+
+	// 	if (value !== oldValue) {
+	// 		$that.trigger('change').data('oldData', value);
+	// 	}
+	// });	
 	return $obj;
 };
 /**
