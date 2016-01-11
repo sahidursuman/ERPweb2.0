@@ -12,7 +12,8 @@ var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
-	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
+	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
+	REFRESH_TAB_EVENT = 'refresh.tab.event';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -1419,6 +1420,17 @@ Tools.closeTab = function(tab_id) {
 
 	Tools.justifyTab();
 };
+
+/**
+ * 刷新tab
+ * @param  {string} id 需要刷新的tab的Id
+ * @return {[type]}    [description]
+ */
+Tools.refreshTab = function(id) {
+	if (!!id) {
+		$('#' + id).trigger(REFRESH_TAB_EVENT);
+	}
+}
 
 /**
  * 调整tab的位置
