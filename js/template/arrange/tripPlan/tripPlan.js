@@ -621,6 +621,10 @@ define(function(require, exports) {
 
 		var validate = rule.checkPlan($tab); 
 		tripPlan.init_edit_event($tab, validate, type);
+		$tab.find('.T-tourists-list').on('change', '[name="idCardType"]', function(event) {
+			event.preventDefault();
+			rule.update(validate);
+		});
         $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
             // 发送短信效果
             var $that = $(this);
