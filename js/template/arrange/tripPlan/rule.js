@@ -156,14 +156,14 @@ define(function(require, exports) {
                     errMsg: '请输入正确的手机号码'
                 }]
             },
-            {
+            /*{
                 $ele: $obj.find('input[name="idCardNumber"]'),
                 rules: [
                 {
                     type: 'id',
                     errMsg: '请输入正确的身份证号码'
                 }]
-            },
+            },*/
             {
                 $ele: $obj.find('input[name="requireContent"]'),
                 rules: [{
