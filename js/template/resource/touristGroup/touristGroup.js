@@ -548,11 +548,11 @@ define(function(require, exports) {
             .on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
-                /*if (typeFlag == 2) {
+                if (typeFlag == 2) {
                     touristGroup.updateEvents(typeInner);
                 }else{
                     touristGroup.addEvents();
-                }*/
+                }
                 touristGroup.init_CRU_event($tab , $tab.find('.T-submit-updateTouristGroup').data('id'),typeFlag ,typeInner );
 
             })
