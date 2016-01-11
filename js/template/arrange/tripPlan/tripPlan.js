@@ -1736,7 +1736,6 @@ define(function(require, exports) {
 		}else{
 			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
-
 		// 选择线路产品
 		$dialog.find('.T-btn-submit').on('click', function(event) {
 			event.preventDefault();
@@ -1762,6 +1761,8 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('.T-tourists-list').html('');
+				$tab.find('.T-fee-list').html('');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
