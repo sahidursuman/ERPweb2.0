@@ -356,7 +356,7 @@
                                 <th class="th-border">导付</th>
                                 <th class="th-border">备注</th>
                                 <th class="th-border">状态</th>
-                                <th class="th-border" width="140px;">操作</th>
+                                <th class="th-border" width="160px;">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -421,6 +421,7 @@
                                         <td>
                                             <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
                                             <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1 && busCompany.orderStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus != 1 || busCompany.orderStatus == 2 || busCompany.orderStatus == 3 || busCompany.orderStatus == 0}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
+                                            <a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a>
                                         </td>
                                         {{if busCompany.offerId!=null}}
                                         <!-- <td>
