@@ -174,13 +174,17 @@ define(function(require, exports) {
 				}
 			}
 		});
+		
+		$tab.off(REFRESH_TAB_EVENT).on(REFRESH_TAB_EVENT, function() {
+        	$tab.find('.tab-pane.active').find('.T-btn-tripPlan-search').trigger('click');
+        });
 
 		$tab.find('[class*="T-tripPlan-"]').on('click', '.ace-icon', function(event){
 			event.preventDefault();
 			var $that = $(this);
 			if(!$that.hasClass('fa-minus')){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
-					module.updatePlanInfo($that.closest('tr').data("id"), $that.closest('td').data("target"));
+					module.updatePlanInfo($that.closest('tr').data("id"), $that.closest('td').data("target"), $tab.prop('id'));
 				});
 			}
 		});

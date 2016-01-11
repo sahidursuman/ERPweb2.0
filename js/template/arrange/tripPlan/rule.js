@@ -200,32 +200,32 @@ define(function(require, exports) {
                     errMsg: '计划人数必须为正整数'
                 }]
             }];
-            var timeSettings = [];
+
             if ($obj.find('.T-timed').prop('checked')) {
-                timeSettings[0] = { //定时发送时间不能为空
+                settings.push({ //定时发送时间不能为空
                     $ele: $obj.find('input[name="executeTime"]'),
                     rules: [{
                         type: 'null',
                         errMsg: '定时发送时间不能为空'
                     }]
-                };
-            }else{
-                timeSettings = [];
+                });
             }
-            var idCard = [];
-            if($obj.find('[name="idCardType"]').val() == 0){
-                idCard[0] = {//校验身份证号码
-                    $ele: $obj.find('input[name="idCardNumber"]'),
-                    rules: [
-                    {
-                        type: 'id',
-                        errMsg: '请输入正确的身份证号码'
-                    }]
+
+            $obj.find('.T-tourists-list').children('tr').each(function(index, el) {
+                var $that = $(this);
+                if($that.find('[name="idCardType"]').val() == 0){
+                    settings.push({//校验身份证号码
+                        $ele: $that.find('input[name="idCardNumber"]'),
+                        rules: [
+                        {
+                            type: 'id',
+                            errMsg: '请输入正确的身份证号码'
+                        }]
+                    });
                 }
-            }else{
-                idCard = [];
-            }
-            return settings.concat(timeSettings, idCard);
+            });
+            
+            return settings;
         }
     };
     rule.checkPlan = function($container) {
