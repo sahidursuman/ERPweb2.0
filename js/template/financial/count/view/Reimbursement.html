@@ -111,9 +111,7 @@
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-reimbursement-other-incoming" aria-expanded="true">其它收入</a>
             </li>
-            <li class="col-sm-1 no-padding align-center" style="width:100px;">
-                <a data-toggle="tab" href="#financial-count-reimbursement-other-insurance" aria-expanded="true">保险</a>
-            </li>
+            
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-reimbursement-buspay" aria-expanded="true">车费</a>
             </li>
@@ -137,6 +135,9 @@
                 <a data-toggle="tab" href="#financial-count-reimbursement-outarrangepay" aria-expanded="true">中转</a>
             </li>
             {{/if}}
+            <li class="col-sm-1 no-padding align-center" style="width:100px;">
+                <a data-toggle="tab" href="#financial-count-reimbursement-other-insurance" aria-expanded="true">保险</a>
+            </li>
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-reimbursement-guide" aria-expanded="true">导游</a>
             </li>
@@ -179,16 +180,6 @@
                     {{/each}}
                     </tbody>
                 </table>
-
-                {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;"><div> 
-                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].opCheckRemark}}{{/if}}" />
-                
-                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].financeCheckRemark}}{{/if}}" />
-                </div>
-                </div>{{/if}}
             </div>
             <!-- 购物 -->
             <div id="financial-count-reimbursement-shop" class="tab-pane fade T-shop-add">
@@ -206,8 +197,6 @@
 
             <!-- 保险 -->
             <div id="financial-count-reimbursement-other-insurance" class="tab-pane fade T-insurance">
-                
-                
             </div>
             <!-- 车费 -->
             <div id="financial-count-reimbursement-buspay" class="tab-pane fade T-bus">
@@ -272,18 +261,11 @@
                     {{/each}}
                     </tbody>
                 </table>
-
-                {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[10] != null}}{{remarkArrangeList[10].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[10] != null}}{{remarkArrangeList[10].financeCheckRemark}}{{/if}}" />
-                    </div>
-                </div>{{/if}}
             </div>
             {{/if}}
+             <!-- 保险 -->
+            <div id="financial-count-reimbursement-other-insurance" class="tab-pane fade T-insurance">
+            </div>
             <!-- 导游 -->
             <div id="financial-count-reimbursement-guide" class="tab-pane fade T-guide">
             </div>
