@@ -308,6 +308,9 @@ input.datepicker {
     overflow: hidden;
     width: 100%;
 }
+.col-xs-12.datepicker{
+	width: 100%;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;
