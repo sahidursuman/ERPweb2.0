@@ -583,8 +583,6 @@ define(function(require, exports) {
                 
         });
 
-        
-
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -629,6 +627,7 @@ define(function(require, exports) {
               var $that = $(this),$tr = $that.closest('tr');
                   $tr.fadeOut(function() {
                         $(this).hide();
+                         $tr.addClass("deleted");
                         touristGroup.autoSumNeedPay($obj);
                   })
             });
@@ -647,7 +646,7 @@ define(function(require, exports) {
         //根据单价数量计算金额
         touristGroup.calcPayMoney($obj);
         //数量、单价改变
-        $obj.find('.T-calc').trigger('change',touristGroup.calcPayMoney($obj));
+        $obj.find('.T-calc').trigger('change');
     };
 
 
@@ -666,6 +665,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($tab);
                 };
 
             }else if($that.hasClass('T-price')){ //若价格改变
@@ -674,6 +674,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($tab);
                 };
             };
         });
@@ -2000,7 +2001,7 @@ define(function(require, exports) {
         if (typeFlag == 2) {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         } else {
-            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr");
+            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
         var isReturn = false;
         $addFeeItemTr.each(function(i) {
@@ -2009,22 +2010,20 @@ define(function(require, exports) {
                     price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
                     remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
 
+                if (count == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
+                    isReturn = true;
+                }
+                if (describeInfo == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
+                    isReturn = true;
+                }
+                if (price == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
+                    isReturn = true;
+                };
+
                 if ((describeInfo != "") || (count != "") || (price != "")) {
-                    if (count == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
-                        isReturn = true;
-                        return false;
-                    }
-                    if (describeInfo == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
-                        isReturn = true;
-                        return false;
-                    }
-                    if (price == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
-                        isReturn = true;
-                        return false;
-                    };
                     var touristGroupFeeJson = {};
                     if (typeFlag == 2) {
                         var id = $addFeeItemTr.eq(i).data("entity-id");
