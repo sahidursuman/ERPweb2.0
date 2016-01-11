@@ -30,7 +30,13 @@ template.helper("encode", function(data) {
     return encodeURIComponent(data);
 });
 template.helper("decode", function(data) {
-    return decodeURIComponent(data);
+    try {
+        data = decodeURIComponent(data);
+    } catch(e) {
+
+    }
+
+    return data;
 });
 template.helper("parseInt", function(data) {
     return parseInt(data);
@@ -162,12 +168,15 @@ template.helper("getArrangeIcon", function(status) {
 template.helper("getRestaurantDesc", function(status, canEdit) {
     var res = '', i = 0, txt = ['早餐', '中餐', '晚餐'];
 
-    if (!!status) {
-        status = status.split(',');
-        
-        for (var i = 0; i < 3; i ++) {
-            res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
-        }
+    status = status || '0,0,0';
+
+    status = status.split(',');
+    if (status.length != 3) {
+        status = [0, 0, 0];
+    }
+    
+    for (var i = 0; i < 3; i ++) {
+        res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
     }
 
     if (canEdit) {
