@@ -226,6 +226,7 @@ define(function(require, exports){
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
+	                tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
