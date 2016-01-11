@@ -533,36 +533,36 @@ define(function(require, exports) {
     touristGroup.init_CRU_event = function($tab, id, typeFlag, typeInner) {
         if (!!$tab && $tab.length === 1) {
             // 监听修改
-            $tab.on('change', function(event) {
-                    event.preventDefault();
-                    $tab.data('isEdited', true);
-                })
-                // 监听保存，并切换tab
-                .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
+            $tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+            .on('change', function(event) {
+                event.preventDefault();
+                $tab.data('isEdited', true);
+            })
+            // 监听保存，并切换tab
+            .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+                event.preventDefault();
+                if (!touristGroup.validator.form()) {
                         return;
-                    }
-                    touristGroup.installData($tab, id, typeFlag, [tab_id, title, html], typeInner);
-                })
-                .on(SWITCH_TAB_BIND_EVENT, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    Tools.addTab(tab_id, title, html);
-                    //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
-                    if (typeFlag == 2) {
-                        touristGroup.updateEvents(typeInner);
-                    } else {
-                        touristGroup.addEvents();
-                    }
-                })
-                // 保存后关闭
-                .on(CLOSE_TAB_SAVE, function(event) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
-                        return;
-                    }
-                    touristGroup.installData($tab, id, tabArgs, typeFlag, typeInner);
-                });
+                }
+                touristGroup.installData($tab, id, typeFlag, [tab_id, title, html], typeInner);
+            })
+            .on(SWITCH_TAB_BIND_EVENT, function(event) {
+                event.preventDefault();
+                //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
+                if (typeFlag == 2) {
+                    touristGroup.updateEvents(typeInner);
+                }else{
+                    touristGroup.addEvents();
+                }
+            })
+            // 保存后关闭
+            .on(CLOSE_TAB_SAVE, function(event) {
+                event.preventDefault();
+                if (!touristGroup.validator.form()) {
+                    return;
+                }
+                touristGroup.installData($tab, id, tabArgs, typeFlag, typeInner);
+            });
         }
     };
     //处理小组信息
