@@ -264,7 +264,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $billStatus [description]
 	 * @return {[type]}             [description]
 	 */
-	tripPlan.updateTripPlanArrange = function(id, $billStatus, target) {
+	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tarId) {
 		if($billStatus == '1' || $billStatus == '2'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团已审核，无法编辑')
 		}else if($billStatus == '0'){
@@ -291,6 +291,7 @@ define(function(require, exports) {
 						data.ticketList = JSON.parse(data.arrangeItems.ticketList);
 						data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 						data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
+						data.tarId = tabId;
 
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', addTemplate(data))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
@@ -3100,6 +3101,8 @@ define(function(require, exports) {
 						tripPlan.listTripPlan(0);
 					}
 
+					Tools.refreshTab($tab.find('.T-tab-id').text());
+
 					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
@@ -3155,9 +3158,10 @@ define(function(require, exports) {
 	 * 消息接口
 	 * @param  {[type]} tripPlanId [发团安排Id]
 	 * @param  {[type]} target     [bus hotel]
+	 * @param  {string} tabId     来自其他模块，传入模块的Tab id，用于刷新
 	 * @return {[type]}            [description]
 	 */
-	tripPlan.updatePlanInfo = function(tripPlanId,target) {
+	tripPlan.updatePlanInfo = function(tripPlanId,target, tabId) {
 		var quoteContent = $(document).find('#tab-arrange_all-update-content'), isThere = 0;
 		quoteContent.each(function(i){
 			var menukeyId = quoteContent.eq(i).attr("id");
@@ -3176,7 +3180,7 @@ define(function(require, exports) {
 			}
 		})
 		if (isThere == 0) {
-			tripPlan.updateTripPlanArrange(tripPlanId, '', target)
+			tripPlan.updateTripPlanArrange(tripPlanId, '', target, tabId)
 		}
 	}
 
