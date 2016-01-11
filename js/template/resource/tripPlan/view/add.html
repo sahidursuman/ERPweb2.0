@@ -295,7 +295,7 @@
                                         <td>{{#guide.taskType | getTaskSelect}}</td>
                                         <td>
                                             <div class="col-sm-12 feild-relative">
-                                                <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" readonly="readonly" class="col-sm-12 chooseGuide"/>
+                                                <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isAccountGuide == 1 && basicInfo.status != 0}} readonly="readonly" {{/if}} class="col-sm-12 chooseGuide"/>
                                                 <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" />
                                                 <span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
