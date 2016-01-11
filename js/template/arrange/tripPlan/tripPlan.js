@@ -328,7 +328,7 @@ define(function(require, exports) {
 	        }else{
 	        	args.endTime = Tools.addDay(args.startTime, args.days);
 	        }
-	        console.log(args);
+
 	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
 	        	var $tab = $("#tab-" + tabKey + "-content");
 	            tripPlan.initSigleEvent($tab) 
@@ -1039,6 +1039,10 @@ define(function(require, exports) {
 			adultcount += $countTd.data('adultcount')*1;
 			childcount += $countTd.data('childcount')*1;
 		});
+		if(args.touristGroupIdJson.length === 0){
+			showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个游客名单。");
+			return;
+		}
 		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
 		args.touristAdultCount = adultcount;
 		args.touristChildCount = childcount;
