@@ -302,6 +302,12 @@ input.datepicker {
 	color: #81a87b;
 	line-height: 1.5;
 }
+.hct-label-overflow {
+	text-overflow: ellipsis; 
+	white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

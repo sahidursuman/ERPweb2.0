@@ -326,6 +326,7 @@ define(function(require, exports) {
 	        if(!args){
 	        	args = {}
 	        }
+	        console.log(args);
 	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
 	        	var $tab = $("#tab-" + tabKey + "-content");
 	            tripPlan.initSigleEvent($tab) 
@@ -891,7 +892,7 @@ define(function(require, exports) {
 	 * @param  {int} id 计划ID
 	 * @return {[type]}    [description]
 	 */
-	tripPlan.updateSingleTripPlan = function(id) {
+	tripPlan.updateSingleTripPlan = function(id, groupIds) {
 		if (!!id) {
 			$.ajax({
 				url: KingServices.build_url('tripController', 'editTripPlan'),
@@ -910,9 +911,13 @@ define(function(require, exports) {
 
 					data.hasData = tripPlan.hasTripPlan(data.require);
 					tripPlan.processRepastDetail(data.tripPlanDay);
-					console.info(data)
+					
 					if (Tools.addTab(tabKey, '编辑计划', updateSingleTripPlanTemplate(data))) {
-						tripPlan.initSigleEvent($("#tab-" + tabKey + "-content"));
+						var $tab = $("#tab-" + tabKey + "-content");
+	            		tripPlan.initSigleEvent($tab) 
+			            if(!$.isEmptyObject(groupIds)) {
+			            	tripPlan.getTouristGroup({mergeTouristGroupIdJson:groupIds}, $tab);
+			            }
 					}
 				}
 			});			
@@ -1193,6 +1198,8 @@ define(function(require, exports) {
 					$tab.find('[name="lineProductName"]').val("");
 					$tab.find('[name="lineProductId"]').val("");
 				}
+				$tab.find('[name="accompanyGuideName"]').val(groupData.accompanyGuideName);
+				$tab.find('[name="accompanyGuideMobile"]').val(groupData.accompanyGuideMobile);
 				$tab.find('[name="adultCount"]').val(groupData.adultCount).attr('readonly', 'readonly');
 				$tab.find('[name="childCount"]').val(groupData.childCount).attr('readonly', 'readonly');
 				$tab.find('[name="startTime"]').val(groupData.startTime ? groupData.startTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
@@ -1555,7 +1562,6 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				var group = JSON.parse(data.touristGroupJson);
 				var html = "";
-				console.log(group);
 				for(var i=0; i<group.length; i++){
 					html += '<tr data-id="'+group[i].id+'"><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
@@ -1574,7 +1580,7 @@ define(function(require, exports) {
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
 				}
-				$tab.find('.T-touristGroup-list').html(html);
+				$tab.find('.T-touristGroup-list').append(html);
 			}
 		});
 	};
