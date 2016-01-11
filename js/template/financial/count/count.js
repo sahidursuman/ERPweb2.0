@@ -628,9 +628,7 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
-                    console.log(tmp);
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
-                    console.log(tmp.remarkArrangeList.tripDetailRemark[0].financeCheckRemark);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
@@ -3968,64 +3966,89 @@ define(function(require, exports){
 	//报账备注处理
 	Count.handleRemark = function(data){
 		var remarkList = {
-			tripDetailRemark:[],
-			shopReamrk:[],
-			selfRemark:[],
-			otherInRemark:[],
-			insuranceRemark:[],
-			busRemark:[],
-			restRemark:[],
-			hotelRemark:[],
-			scenicRemark:[],
-			ticketRemark:[],
-			otherOutRemark:[],
-			transferRemark:[],
-			guideRemark:[]
-		};
-		for(var i = 0;i<data.length;i++){
-			var remarkType = data[i].type;
-			switch(remarkType){
-				case 0 :
-					remarkList.tripDetailRemark.push(data[i]);
-					break;
-				case 1 :
-					remarkList.shopReamrk.push(data[i]);
-					break;
-				case 2 :
-					remarkList.selfRemark.push(data[i]);
-					break;
-				case 3 :
-					remarkList.otherInRemark.push(data[i]);
-					break;
-				case 4 :
-					remarkList.busRemark.push(data[i]);
-					break;
-				case 5 :
-					remarkList.restRemark.push(data[i]);
-					break;
-				case 6 :
-					remarkList.hotelRemark.push(data[i]);
-					break;
-				case 7 :
-					remarkList.scenicRemark.push(data[i]);
-					break;
-				case 8 :
-					remarkList.ticketRemark.push(data[i]);
-					break;
-				case 9 :
-					remarkList.otherOutRemark.push(data[i]);
-					break;
-				case 10 :
-					remarkList.transferRemark.push(data[i]);
-					break;
-				case 11 :
-					remarkList.insuranceRemark.push(data[i]);
-					break;
-				case 12:
-					remarkList.guideRemark.push(data[i]);
+				tripDetailRemark:[],
+				shopReamrk:[],
+				selfRemark:[],
+				otherInRemark:[],
+				insuranceRemark:[],
+				busRemark:[],
+				restRemark:[],
+				hotelRemark:[],
+				scenicRemark:[],
+				ticketRemark:[],
+				otherOutRemark:[],
+				transferRemark:[],
+				guideRemark:[]
 			};
-		};
-		console.log(remarkList);
+		if(data.length>0){
+			for(var i = 0;i<data.length;i++){
+				if(data[i].length>0){
+
+				}else{
+
+				}
+				var remarkType = data[i].type;
+				switch(remarkType){
+					case 0 :
+						remarkList.tripDetailRemark.push(data[i]);
+						break;
+					case 1 :
+						remarkList.shopReamrk.push(data[i]);
+						break;
+					case 2 :
+						remarkList.selfRemark.push(data[i]);
+						break;
+					case 3 :
+						remarkList.otherInRemark.push(data[i]);
+						break;
+					case 4 :
+						remarkList.busRemark.push(data[i]);
+						break;
+					case 5 :
+						remarkList.restRemark.push(data[i]);
+						break;
+					case 6 :
+						remarkList.hotelRemark.push(data[i]);
+						break;
+					case 7 :
+						remarkList.scenicRemark.push(data[i]);
+						break;
+					case 8 :
+						remarkList.ticketRemark.push(data[i]);
+						break;
+					case 9 :
+						remarkList.otherOutRemark.push(data[i]);
+						break;
+					case 10 :
+						remarkList.transferRemark.push(data[i]);
+						break;
+					case 11 :
+						remarkList.insuranceRemark.push(data[i]);
+						break;
+					case 12:
+						remarkList.guideRemark.push(data[i]);
+				};
+			};
+		}else{
+			var remarkInfo = {
+				opCheckRemark:"",
+				financeCheckRemark:""
+			};
+			remarkList.tripDetailRemark.push(remarkInfo);
+			remarkList.shopReamrk.push(remarkInfo);
+			remarkList.selfRemark.push(remarkInfo);
+			remarkList.otherInRemark.push(remarkInfo);
+			remarkList.busRemark.push(remarkInfo);
+			remarkList.restRemark.push(remarkInfo);
+			remarkList.hotelRemark.push(remarkInfo);
+			remarkList.scenicRemark.push(remarkInfo);
+			remarkList.ticketRemark.push(remarkInfo);
+			remarkList.otherOutRemark.push(remarkInfo);
+			remarkList.transferRemark.push(remarkInfo);
+			remarkList.insuranceRemark.push(remarkInfo);
+			remarkList.guideRemark.push(remarkInfo);
+		}
+		
 		return remarkList;
 	};
 	exports.init = Count.initModule;
