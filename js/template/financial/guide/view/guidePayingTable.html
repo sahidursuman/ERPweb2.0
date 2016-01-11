@@ -15,7 +15,7 @@
     <td><span class="F-float F-money">{{guide.settlementMoney}}</span></td>
     <td><a href="javascript:void(0);" class="T-action T-viewPayedMoney F-float F-money">{{guide.payedMoney}}</a></td>
     <td><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>
-    <td><input type="text" name="payMoney" class="F-float F-money"> {{if !isOuter}}data-le="{{guide.unPayedMoney}}" {{if guide.unPayedMoney <= 0}} disabled {{/if}}{{/if}} value="{{guide.payMoney}}" class="money"></td>
+    <td><input type="text" name="payMoney" class="F-float F-money money" {{if !isOuter}} data-le="{{guide.unPayedMoney}}" {{if guide.unPayedMoney <= 0}} disabled {{/if}}{{/if}} value="{{guide.payMoney}}" ></td>
     <td><input type="text" name="payRemark" {{if !isOuter && guide.unPayedMoney <= 0}} disabled {{/if}} value="{{guide.payRemark}}"></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
