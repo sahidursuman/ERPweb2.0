@@ -6,7 +6,7 @@
 		<td class="style-myself">针对客源：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
 		<td class="style-myself">人数：</td>
-		<td style="text-align: left;padding: 0px 0px 0px 10px" class="F-float F-count">{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px"><span  class="F-float F-count">{{basicInfo.touristAdultCount}}</span>大人&nbsp;<span  class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</td>
 		<td class="style-myself">团号：</td>
 		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripNumber}}</td>
 	</tr>
@@ -59,9 +59,9 @@
 <table class="table table-bordered">
     <tbody>
         <tr>
-            <td class="F-float F-money">现收：{{basicInfo.guideAllNowMoney}}</td>
-            <td class="F-float F-money">现付：{{basicInfo.guideAllPayMoney}}</td>
-            <td class="F-float F-money">预付款：{{basicInfo.guideAllPreMoney}}</td>
+            <td class="F-money">现收：{{basicInfo.guideAllNowMoney}}</td>
+            <td class="F-money">现付：{{basicInfo.guideAllPayMoney}}</td>
+            <td class="F-money">预付款：{{basicInfo.guideAllPreMoney}}</td>
         </tr>
     </tbody>
 </table>
