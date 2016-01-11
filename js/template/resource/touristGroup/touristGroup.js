@@ -583,8 +583,6 @@ define(function(require, exports) {
                 
         });
 
-        
-
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -647,7 +645,7 @@ define(function(require, exports) {
         //根据单价数量计算金额
         touristGroup.calcPayMoney($obj);
         //数量、单价改变
-        $obj.find('.T-calc').trigger('change',touristGroup.calcPayMoney($obj));
+        $obj.find('.T-calc').trigger('change');
     };
 
 
@@ -666,7 +664,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
-                    touristGroup.autoSumNeedPay($obj);
+                    touristGroup.autoSumNeedPay($tab);
                 };
 
             }else if($that.hasClass('T-price')){ //若价格改变
@@ -675,7 +673,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
-                    touristGroup.autoSumNeedPay($obj);
+                    touristGroup.autoSumNeedPay($tab);
                 };
             };
         });
