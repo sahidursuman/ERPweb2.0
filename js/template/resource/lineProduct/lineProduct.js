@@ -2581,16 +2581,12 @@ define(function(require, exports) {
 					var restaurantId = $item.find("input[name=restaurantId]").val();
 					if(restaurantId){
 						var standardId = $item.find("[name=typeId]").val();
-						if(!standardId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择餐标名称！");
-							isAjax = false;
-							return false;
-						}
 						var restaurantJson = {
 							id : $item.find("[name=templateId]").val(),
 							restaurantId : restaurantId,
 							standardId : standardId,
 							price : $item.find("[name=typeName]").val(),
+							type : $item.find("[name=type]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
