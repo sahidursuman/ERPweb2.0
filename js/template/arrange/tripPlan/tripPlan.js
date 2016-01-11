@@ -322,7 +322,7 @@ define(function(require, exports) {
 			// 团队
 	        var tabKey = menuKey + "_group_add";
 
-	        if (Tools.addTab(tabKey, "新增计划", addTripPlanTemplate())) {
+	        if (Tools.addTab(tabKey, "新增团队计划", addTripPlanTemplate())) {
 	            tripPlan.initEdit($("#tab-" + tabKey + "-content"));
 	        }
 		} else {
@@ -333,7 +333,7 @@ define(function(require, exports) {
 	        	args.endTime = Tools.addDay(args.startTime, args.days);
 	        }
 
-	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
+	        if (Tools.addTab(tabKey, "新增散客计划", addSingleTripPlanTemplate(args))) {
 	        	var $tab = $("#tab-" + tabKey + "-content");
 	            tripPlan.initSigleEvent($tab) 
 	            if(!$.isEmptyObject(args)) {
@@ -1053,8 +1053,8 @@ define(function(require, exports) {
 			return;
 		}
 		args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
-		args.touristAdultCount = adultcount;
-		args.touristChildCount = childcount;
+		/*args.touristAdultCount = adultcount;
+		args.touristChildCount = childcount;*/
 		
 		$.ajax({
 			url: KingServices.build_url('tripController', 'saveRetailClient'),
