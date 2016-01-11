@@ -827,9 +827,14 @@ define(function(require, exports) {
 			}
 		}).unbind("click").click(function(){
 			var obj = this;
+			var $tr = $(this).closest('tr');
 			$.ajax({
 				url: KingServices.build_url('bookingOrder','getSeatCountList'),
 				showLoading: false,
+				data:{
+					brand:$tr.find("input[name=busbrand]").val(),
+					busCompanyId:$tr.find("input[name=busCompanyId]").val()
+				},
 				success:function(data){
 					if(showDialog(data)){
 						var seatCountListJson = [];
@@ -882,10 +887,14 @@ define(function(require, exports) {
 			}
 		}).unbind("click").click(function(){
 			var obj = this;
-			var seatCount = $(this).closest('tr').find("[name=seatCount]").val();
+			var $tr = $(this).closest('tr');
+			var seatCount = $tr.find("[name=seatCount]").val();
 				$.ajax({
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
-					data:"seatCount="+seatCount+"",
+					data:{
+						seatCount:$tr.find("[name=seatCount]").val(),
+						busCompanyId:$tr.find("[name=busCompanyId]").val()
+					},
 					showLoading:false,
 					type:"POST",
 					success:function(data){
@@ -985,9 +994,10 @@ define(function(require, exports) {
 				busBrand = parents.find("[name=busbrand]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
-				data: {
-					seatCount: seatCount,
-					brand: busBrand
+				data:  {
+					seatCount: parents.find("[name=seatCount]").val(),
+					brand: parents.find("[name=busbrand]").val(),
+					busId: parents.find('input[name="busLicenseNumberId"]').val()
 				},
 				showLoading:false,
 				type:"POST",
