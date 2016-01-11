@@ -632,21 +632,12 @@ define(function(require, exports) {
                   })
             });
         };
-        //计算应收，未收
-        $obj.find('.T-price').on('change', function() {
-            touristGroup.calcPayMoney($obj);
-            touristGroup.autoSumNeedPay($obj);
-        });
-
-        $obj.find('.T-count').on('change', function() {
-            touristGroup.calcPayMoney($obj);
-            touristGroup.autoSumNeedPay($obj);
-        });
 
         //根据单价数量计算金额
         touristGroup.calcPayMoney($obj);
         //数量、单价改变
-        $obj.find('.T-calc').trigger('change');
+        $obj.find('.T-count').trigger('change',touristGroup.calcPayMoney($obj));
+        $obj.find('.T-price').trigger('change',touristGroup.calcPayMoney($obj));
     };
 
 
