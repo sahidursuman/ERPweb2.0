@@ -629,6 +629,7 @@ define(function(require, exports){
                         tmp.isFinance = true;
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
+                    console.log(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
@@ -3982,11 +3983,6 @@ define(function(require, exports){
 			};
 		if(data.length>0){
 			for(var i = 0;i<data.length;i++){
-				if(data[i].length>0){
-
-				}else{
-
-				}
 				var remarkType = data[i].type;
 				switch(remarkType){
 					case 0 :
@@ -4029,26 +4025,7 @@ define(function(require, exports){
 						remarkList.guideRemark.push(data[i]);
 				};
 			};
-		}else{
-			var remarkInfo = {
-				opCheckRemark:"",
-				financeCheckRemark:""
-			};
-			remarkList.tripDetailRemark.push(remarkInfo);
-			remarkList.shopReamrk.push(remarkInfo);
-			remarkList.selfRemark.push(remarkInfo);
-			remarkList.otherInRemark.push(remarkInfo);
-			remarkList.busRemark.push(remarkInfo);
-			remarkList.restRemark.push(remarkInfo);
-			remarkList.hotelRemark.push(remarkInfo);
-			remarkList.scenicRemark.push(remarkInfo);
-			remarkList.ticketRemark.push(remarkInfo);
-			remarkList.otherOutRemark.push(remarkInfo);
-			remarkList.transferRemark.push(remarkInfo);
-			remarkList.insuranceRemark.push(remarkInfo);
-			remarkList.guideRemark.push(remarkInfo);
 		}
-		
 		return remarkList;
 	};
 	exports.init = Count.initModule;
