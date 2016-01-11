@@ -209,7 +209,6 @@ define(function(require, exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data.insurancePrice);
 					var tmp = {
 	                    "busCompanyArrange":JSON.parse(data.busCompanyArrange),
 	                    "tripPlan":JSON.parse(data.tripPlan),
@@ -227,7 +226,6 @@ define(function(require, exports){
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
-	                console.log(tmp);
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
@@ -376,7 +374,6 @@ define(function(require, exports){
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
 	                var html = Reimbursement(tmp);
-	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -628,9 +625,7 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
-                    console.log(tmp);
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
-                    console.log(tmp.remarkArrangeList.tripDetailRemark[0].financeCheckRemark);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
@@ -1026,7 +1021,6 @@ define(function(require, exports){
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                	console.log(data);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message);
                 	if(billStatus == 0) {
                 		Tools.closeTab(updateTabId);
@@ -1155,7 +1149,6 @@ define(function(require, exports){
                 success:function(data){
                     if(showDialog(data)){
                         data.tripPlan = JSON.parse(data.tripPlan);
-                        console.log(data);
                         var html = qualityTempLate(data);
                         Tools.addTab(qualityId,"质量跟踪",html);                    
                     }
@@ -2494,9 +2487,7 @@ define(function(require, exports){
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.log(data);
 						var selfpay = JSON.parse(data.selfPayItemList);
-						console.log(selfpay);
 						for(var i=0; i < selfpay.length; i++){
 							selfpay[i].value = selfpay[i].name;
 						};
@@ -2565,7 +2556,6 @@ define(function(require, exports){
 
 			},
 			select:function(event,ui){
-				console.log(ui);
 				$(this).closest('tr').find('input[name=companyId]').val(ui.item.id);
 				$(this).closest('tr').find('input[name=licenseNumber]').val('');
 				$(this).closest('tr').find('input[name=busId]').val('');
@@ -2830,7 +2820,6 @@ define(function(require, exports){
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.log(data);
 						var hotelList = JSON.parse(data.hotelList);
 						if(hotelList && hotelList.length > 0){
 							for(var i=0; i < hotelList.length; i++){
@@ -2935,7 +2924,6 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					var scenicList = JSON.parse(data.scenicList);
-					console.log(scenicList);
 					scenicObj.autocomplete({
 						minLength:0,
 						change:function(event,ui){
@@ -3128,7 +3116,6 @@ define(function(require, exports){
                 type: "POST",
                 showLoading:false,
                 success: function(data) {
-                	console.log(data);
 					var result = showDialog(data);
 					if(result){
 						var lineProductList = JSON.parse(data.lineProductList);
@@ -3155,7 +3142,6 @@ define(function(require, exports){
 				},
 				select:function(event,ui){
 					$(this).blur();
-					console.log(ui);
 					$(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
 				}
 			}).off("click").on("click", function(){
@@ -3320,7 +3306,6 @@ define(function(require, exports){
 		var method = typeFlag == 1?'update':'webGuideAccountUpdate';
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		console.log(saveJsonStr);
 			saveJsonStr.log.type = "1";
 
 		var addShopList = saveJsonStr.addShopArrangeList;
@@ -3968,64 +3953,65 @@ define(function(require, exports){
 	//报账备注处理
 	Count.handleRemark = function(data){
 		var remarkList = {
-			tripDetailRemark:[],
-			shopReamrk:[],
-			selfRemark:[],
-			otherInRemark:[],
-			insuranceRemark:[],
-			busRemark:[],
-			restRemark:[],
-			hotelRemark:[],
-			scenicRemark:[],
-			ticketRemark:[],
-			otherOutRemark:[],
-			transferRemark:[],
-			guideRemark:[]
-		};
-		for(var i = 0;i<data.length;i++){
-			var remarkType = data[i].type;
-			switch(remarkType){
-				case 0 :
-					remarkList.tripDetailRemark.push(data[i]);
-					break;
-				case 1 :
-					remarkList.shopReamrk.push(data[i]);
-					break;
-				case 2 :
-					remarkList.selfRemark.push(data[i]);
-					break;
-				case 3 :
-					remarkList.otherInRemark.push(data[i]);
-					break;
-				case 4 :
-					remarkList.busRemark.push(data[i]);
-					break;
-				case 5 :
-					remarkList.restRemark.push(data[i]);
-					break;
-				case 6 :
-					remarkList.hotelRemark.push(data[i]);
-					break;
-				case 7 :
-					remarkList.scenicRemark.push(data[i]);
-					break;
-				case 8 :
-					remarkList.ticketRemark.push(data[i]);
-					break;
-				case 9 :
-					remarkList.otherOutRemark.push(data[i]);
-					break;
-				case 10 :
-					remarkList.transferRemark.push(data[i]);
-					break;
-				case 11 :
-					remarkList.insuranceRemark.push(data[i]);
-					break;
-				case 12:
-					remarkList.guideRemark.push(data[i]);
+				tripDetailRemark:[],
+				shopReamrk:[],
+				selfRemark:[],
+				otherInRemark:[],
+				insuranceRemark:[],
+				busRemark:[],
+				restRemark:[],
+				hotelRemark:[],
+				scenicRemark:[],
+				ticketRemark:[],
+				otherOutRemark:[],
+				transferRemark:[],
+				guideRemark:[]
 			};
-		};
-		console.log(remarkList);
+		if(data.length>0){
+			for(var i = 0;i<data.length;i++){
+				var remarkType = data[i].type;
+				switch(remarkType){
+					case 0 :
+						remarkList.tripDetailRemark.push(data[i]);
+						break;
+					case 1 :
+						remarkList.shopReamrk.push(data[i]);
+						break;
+					case 2 :
+						remarkList.selfRemark.push(data[i]);
+						break;
+					case 3 :
+						remarkList.otherInRemark.push(data[i]);
+						break;
+					case 4 :
+						remarkList.busRemark.push(data[i]);
+						break;
+					case 5 :
+						remarkList.restRemark.push(data[i]);
+						break;
+					case 6 :
+						remarkList.hotelRemark.push(data[i]);
+						break;
+					case 7 :
+						remarkList.scenicRemark.push(data[i]);
+						break;
+					case 8 :
+						remarkList.ticketRemark.push(data[i]);
+						break;
+					case 9 :
+						remarkList.otherOutRemark.push(data[i]);
+						break;
+					case 10 :
+						remarkList.transferRemark.push(data[i]);
+						break;
+					case 11 :
+						remarkList.insuranceRemark.push(data[i]);
+						break;
+					case 12:
+						remarkList.guideRemark.push(data[i]);
+				};
+			};
+		}
 		return remarkList;
 	};
 	exports.init = Count.initModule;
