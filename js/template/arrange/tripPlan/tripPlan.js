@@ -172,27 +172,6 @@ define(function(require, exports) {
 					}
 					count++;
 				}
-				/*for(var i=0; i<$nextTr.length; i++){
-					if(!!$nextTr.eq(i).data('id')){
-						break;
-					}else{
-						if(isHide === 1){
-							$nextTr.eq(i).addClass('hidden');
-						}else{
-							$nextTr.eq(i).removeClass('hidden');
-						}
-					}
-					count++;
-				}
-				for(var j=0; j<$tr.find('td').length; j++){
-					if(j!=1&&j!=2&&j!=3&&j!=4){
-						if(isHide === 1){
-							$tr.find('td').eq(j).removeAttr('rowspan');
-						}else{
-							$tr.find('td').eq(j).attr('rowspan', count+1);
-						}
-					}
-				}*/
 			}
 		});
 
@@ -275,7 +254,17 @@ define(function(require, exports) {
 			data : {searchParam : JSON.stringify(arge)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.result = JSON.parse(data.result);
+				var rs = JSON.parse(data.result);
+				data.result = rs;
+				for (var i = rs.length - 1; i >= 0; i--) {
+					if(rs[i].tripPlanTouristList.length > 0 && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
+						rs[i].lineProduct && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
+						rs[i].tripPlanTouristList.splice(0, 1);
+					}
+				};
+
 				var singleHrml = singleListTemplate(data);
 				$tab.find('.T-tripPlan-singleList').html(singleHrml);
 				// 绑定翻页组件
@@ -470,12 +459,13 @@ define(function(require, exports) {
     		$tab.find('.T-fee-list').append(T.feeList({touristGroupFeeList:[{}]}));
     	});
     	//绑定账单表内事件
-    	$tab.find('.T-fee-list').on('change', '.T-calculate', function(event){
+    	$tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
     		event.preventDefault();
     		var $that = $(this), $tr = $that.closest('tr');
     		if($that.hasClass('T-count') || $that.hasClass('T-price')){
     			var count = $tr.find('[name="count"]').val() || 0,
     				price = $tr.find('[name="price"]').val() || 0;
+    			console.log(count, price);
     			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
@@ -631,6 +621,10 @@ define(function(require, exports) {
 
 		var validate = rule.checkPlan($tab); 
 		tripPlan.init_edit_event($tab, validate, type);
+		$tab.find('.T-tourists-list').on('change', '[name="idCardType"]', function(event) {
+			event.preventDefault();
+			rule.update(validate);
+		});
         $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
             // 发送短信效果
             var $that = $(this);
@@ -664,12 +658,50 @@ define(function(require, exports) {
         });
 
         //绑定操作计划新增事件
-        $tab.find('.T-action-plan').on('click', '.T-add-action', function(event){
+        $tab.find('.T-action-plan .T-add-action').on('change', 'input[type="checkbox"]', function(event){
             event.preventDefault();
-            var $that = $(this).prop('disabled', true), 
-                type = $that.data('type');
-
-            tripPlan.addActionPlan($tab, $that.text(), type);
+            var $that = $(this), 
+                $label = $that.closest('label.T-add-action'),
+                type = $label.data('type');
+                
+            if($that.is(":checked")){
+                tripPlan.addActionPlan($tab, $label.text(), type);
+            }else{
+            	removeRequire();
+            }
+            function removeRequire() {
+				var $require = $tab.find('.T-action-plan-list .hct-plan-ask');
+				if($require.length > 0){
+					$require.each(function(index, el) {
+						var $obj = $(this),
+							thisType = $obj.data('type'),
+							title = $obj.find('.hct-plan-ask-title').text(),
+							id = $obj.data('id');
+						if(type === thisType){
+							if(!!id){
+								showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
+									$.ajax({
+										url: KingServices.build_url('tripPlan', 'deleteTripPlanRequire'),
+										type: 'post',
+										data: {requireId: id},
+									})
+									.done(function(data) {
+										if (showDialog(data)) {
+											showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+												$obj.remove();
+											});
+										}
+									});
+								},function(){
+									$label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>')
+								});
+							}else{
+								$obj.remove();
+							}
+						}
+					});
+				}
+			}
             validate = rule.update(validate);
         });
         //绑定操作计划删除事件
@@ -870,7 +902,9 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					var tabKey = menuKey + "_single_add";
 					data.require = JSON.parse(data.require);
-					data.touristGroupList = JSON.parse(data.touristGroupList);
+					if(data.touristGroupList){
+						data.touristGroupList = JSON.parse(data.touristGroupList);
+					}
 					data.tripPlan = JSON.parse(data.tripPlan);
 					data.tripPlanDay = JSON.parse(data.tripPlanDay);
 
@@ -1174,6 +1208,13 @@ define(function(require, exports) {
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
 				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
 				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
+				if(!!groupData.buyInsurance){
+					$tab.find('[name="buyInsurance"]').attr('checked', 'checked');
+				}
+				if(!!groupData.isContainSelfPay){
+					$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
+				}
+				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 			}
 		});
@@ -1199,7 +1240,7 @@ define(function(require, exports) {
 		});
 	};
 	tripPlan.addActionPlan = function($tab, title, type){
-		var list = '<div class="col-xs-12 hct-plan-ask" data-type="'+type+'"><div class="pull-left hct-plan-ask-title">'+$.trim(title)+'计划要求</div><div class="pull-left hct-plan-ask-input"><input type="text" class="col-xs-12" name="requireContent"></div><div class="pull-left hct-plan-ask-operate"><a class="cursor T-action T-delete" title="删除">删除</a></div></div>';
+		var list = '<div class="col-xs-12 hct-plan-ask" data-type="'+type+'"><div class="pull-left hct-plan-ask-title">'+$.trim(title)+'计划要求</div><div class="pull-left hct-plan-ask-input"><input type="text" class="col-xs-12" name="requireContent"></div></div>';
 		$tab.find('.T-action-plan-list').append(list);
 	}
 	tripPlan.viewTripPlan = function(id, planType){

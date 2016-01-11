@@ -1053,10 +1053,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindInsuranceChosen = function($input, $item, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定保险的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -1177,10 +1173,6 @@ define(function(require, exports) {
 	 * @return {[type]}           [description]
 	 */
 	ResLineProduct.bindSeatCount = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定车队的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change :function(event, ui){
@@ -1295,10 +1287,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindBusCompanyChosen = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定车队的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -1358,11 +1346,6 @@ define(function(require, exports) {
 	 * @return {[type]}        [description]
 	 */
 	ResLineProduct.bindBusDetailChosen = function($input, validator) {
-		if (!$input || !$input.length) {
-			console.error('绑定保险的autocomplete，主体Dom为空!');
-			return;
-		}
-
 		$input.autocomplete({
 			minLength:0,
 			select:function(event,ui){
