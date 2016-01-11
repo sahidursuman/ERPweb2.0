@@ -254,7 +254,17 @@ define(function(require, exports) {
 			data : {searchParam : JSON.stringify(arge)}
 		}).done(function(data){
 			if(showDialog(data)){
-				data.result = JSON.parse(data.result);
+				var rs = JSON.parse(data.result);
+				data.result = rs;
+				for (var i = rs.length - 1; i >= 0; i--) {
+					if(rs[i].tripPlanTouristList.length > 0 && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
+						rs[i].lineProduct && 
+						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
+						rs[i].tripPlanTouristList.splice(0, 1);
+					}
+				};
+
 				var singleHrml = singleListTemplate(data);
 				$tab.find('.T-tripPlan-singleList').html(singleHrml);
 				// 绑定翻页组件
@@ -611,6 +621,10 @@ define(function(require, exports) {
 
 		var validate = rule.checkPlan($tab); 
 		tripPlan.init_edit_event($tab, validate, type);
+		$tab.find('.T-tourists-list').on('change', '[name="idCardType"]', function(event) {
+			event.preventDefault();
+			rule.update(validate);
+		});
         $tab.find('.T-executeTime').on('click', 'input[name="executeTimeType"]', function(event) {
             // 发送短信效果
             var $that = $(this);
@@ -1194,6 +1208,13 @@ define(function(require, exports) {
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
 				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
 				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
+				if(!!groupData.buyInsurance){
+					$tab.find('[name="buyInsurance"]').attr('checked', 'checked');
+				}
+				if(!!groupData.isContainSelfPay){
+					$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
+				}
+				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 			}
 		});
