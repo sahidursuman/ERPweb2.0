@@ -1231,6 +1231,8 @@ define(function(require, exports) {
 				data.insuranceArrange = JSON.parse(data.insuranceArrange);
 				if (planType == 1) {
 					data.touristGroup = JSON.parse(data.touristGroup);
+					data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+					data.touristGroupMembers = JSON.parse(data.touristGroupMembers);
 				} else {
 					data.touristGroupList = JSON.parse(data.touristGroupList);
 					

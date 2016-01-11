@@ -1590,9 +1590,9 @@ Tools.thousandPoint = function(num, length){
 		mun = Tools.toFixed(num, length);
 	}
 	num = (num + '');
-	var folatNum = num.replace(/(\d+)(\.\d*)?$/, '$2'),
-		intNum = num.replace(/(\d+)(\.\d*)?$/, '$1');
-	return intNum.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
+	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
+	return intNum.replace(/(-)?\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
  * 过滤千分位

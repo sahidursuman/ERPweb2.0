@@ -69,6 +69,11 @@ template.helper("getWayType", function(status) {
     res += '<option value="7" '+(status == 7?'selected':'')+'>线上渠道</option>';
     return res;
 });
+template.helper("getWayTypeText", function(status) {
+    var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
+    status = status || 1;
+    return res[status];
+});
 template.helper("checked", function(status) {
     status = status || 0;    
     return status == 1 ? "checked" : "";
