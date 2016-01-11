@@ -654,7 +654,8 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);
+                    payMoney=payMoney.toFixed(2);       
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
@@ -663,7 +664,8 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);
+                    payMoney=payMoney.toFixed(2);               
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
