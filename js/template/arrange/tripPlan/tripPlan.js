@@ -452,7 +452,6 @@ define(function(require, exports) {
     				}else{
     					deleteIds = [{id : id}]
     				}
-    				console.log(deleteIds, 2);
     				$fee.data('deleteIds', JSON.stringify(deleteIds));
     			});
     		}else{
@@ -464,6 +463,7 @@ define(function(require, exports) {
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
     		$tab.find('.T-fee-list').append(T.feeList({touristGroupFeeList:[{}]}));
+    		validate = rule.update(validate);
     	});
     	//绑定账单表内事件
     	$tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
