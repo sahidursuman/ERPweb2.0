@@ -504,7 +504,7 @@ define(function(require, exports) {
 	        	data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
 	        	data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
 	        	tripPlan.processRepastDetail(data.tripPlanDayList);
-	        	if(Tools.addTab(tabKey, "编辑计划", T.updateGroupTripPlan(data))){
+	        	if(Tools.addTab(tabKey, "编辑团队计划", T.updateGroupTripPlan(data))){
 	        		tripPlan.initEdit($("#tab-"+tabKey+"-content"));
 	        	};
 			}
@@ -908,7 +908,7 @@ define(function(require, exports) {
 					data.hasData = tripPlan.hasTripPlan(data.require);
 					tripPlan.processRepastDetail(data.tripPlanDay);
 					
-					if (Tools.addTab(tabKey, '编辑计划', updateSingleTripPlanTemplate(data))) {
+					if (Tools.addTab(tabKey, '编辑散客计划', updateSingleTripPlanTemplate(data))) {
 						var $tab = $("#tab-" + tabKey + "-content");
 	            		tripPlan.initSigleEvent($tab) 
 			            if(!$.isEmptyObject(groupIds)) {
