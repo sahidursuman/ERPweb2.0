@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -126,6 +126,9 @@
         res += '<option value="5" ' + (5 == status ? "selected" : "") + ">QQ </option>", 
         res += '<option value="6" ' + (6 == status ? "selected" : "") + ">微信</option>", 
         res += '<option value="7" ' + (7 == status ? "selected" : "") + ">线上渠道</option>";
+    }), template.helper("getWayTypeText", function(status) {
+        var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
+        return status = status || 1, res[status];
     }), template.helper("checked", function(status) {
         return status = status || 0, 1 == status ? "checked" : "";
     }), template.helper("getCardOption", function(status) {
