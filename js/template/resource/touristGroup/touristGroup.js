@@ -336,6 +336,7 @@ define(function(require, exports) {
 
         //外联计调默认是当前登录账号
         $groupInfoForm.find('.T-choose-opUserList').val(IndexData.userInfo.realName);
+        $groupInfoForm.find('input[name=outOPUserId]').val(IndexData.userInfo.userId);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -654,8 +655,7 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                    payMoney=parseFloat(price*count);
-                    payMoney=payMoney.toFixed(2);       
+                    payMoney=parseFloat(price*count);   
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
@@ -664,8 +664,7 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                    payMoney=parseFloat(price*count);
-                    payMoney=payMoney.toFixed(2);               
+                    payMoney=parseFloat(price*count);           
                     $tr.find('.T-payMoney').val(payMoney);
                     touristGroup.autoSumNeedPay($tab);
                 };
