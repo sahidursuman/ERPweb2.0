@@ -325,12 +325,14 @@ define(function(require, exports) {
 			var tabKey = menuKey + "_single_add";
 	        if(!args){
 	        	args = {}
+	        }else{
+	        	args.endTime = Tools.addDay(args.startTime, args.days);
 	        }
 	        console.log(args);
 	        if (Tools.addTab(tabKey, "新增计划", addSingleTripPlanTemplate(args))) {
 	        	var $tab = $("#tab-" + tabKey + "-content");
 	            tripPlan.initSigleEvent($tab) 
-	            if(!$.isEmptyObject(args)) {//id, name, GroupIds
+	            if(!$.isEmptyObject(args)) {
 	            	args.mergeTouristGroupIdJson = groupIds;
 	            	tripPlan.initNormalLineProduct($tab, args.id);
 	            	tripPlan.getTouristGroup(args, $tab);
