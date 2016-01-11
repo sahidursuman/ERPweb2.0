@@ -2562,6 +2562,7 @@ define(function(require, exports) {
 			var $that = $(this), $list, $item;
 
 			travelLineData.lineDayList[index] = {
+				whichDay: index+1,
 				detailEditor : encodeURIComponent(UE.getEditor($that.find('.T-editor').prop('id')).getContent()),
 				restaurant : [],
 				hotel : [],
