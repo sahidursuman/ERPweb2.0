@@ -634,24 +634,20 @@ define(function(require, exports) {
             });
         };
         //计算应收，未收
-        $obj.find('input[name=payedMoney]').on('change', function() {
+        $obj.find('.T-price').on('change', function() {
+            touristGroup.calcPayMoney($obj);
             touristGroup.autoSumNeedPay($obj);
         });
-        $obj.find('input[name=currentNeedPayMoney]').on('change', function() {
+
+        $obj.find('.T-count').on('change', function() {
+            touristGroup.calcPayMoney($obj);
             touristGroup.autoSumNeedPay($obj);
-        });
-        $obj.find(".T-addCostTbody").on('change', 'input', function() {
-            touristGroup.autoSumNeedPay($obj);
-        });
-        $obj.find('.T-count').on('change', '.selector', function(event) {
-            event.preventDefault();
-            /* Act on the event */
         });
 
         //根据单价数量计算金额
         touristGroup.calcPayMoney($obj);
         //数量、单价改变
-        $obj.find('.T-calc').trigger('change');
+        $obj.find('.T-calc').trigger('change',touristGroup.calcPayMoney($obj));
     };
 
 
@@ -1994,7 +1990,6 @@ define(function(require, exports) {
         if (!!typeInner && typeInner=='inner') {
             form = form+'&customerType='+touristGroup.getVal($lineInfoForm, "customerType") + "&getType="+touristGroup.getVal($lineInfoForm, "getType")+"&memberType="+touristGroup.getVal($lineInfoForm,"memberType");
         };
-        console.info(form);
 
         //消除输入的空格          
         function trim(str) {
