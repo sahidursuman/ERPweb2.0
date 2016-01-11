@@ -345,7 +345,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 		}
 	});
 }
-function showConfirmDialog(dialogObj,message, fn){
+function showConfirmDialog(dialogObj,message, fn, closeFn){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -357,6 +357,9 @@ function showConfirmDialog(dialogObj,message, fn){
 				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
+					if(closeFn){
+						closeFn();
+					}
 				}
 			},
 			{
@@ -1076,7 +1079,34 @@ var _statusText = {
 					this.value = val;
 				}
 			});
-		}
+		},
+
+		//获取或设置光标位置
+		cursorPosition : function( value ){
+			var oThat = $(this)[0], CaretPos = -1;
+			if(!!value && typeof value === "number"){
+				if(oThat.setSelectionRange){
+			        oThat.setSelectionRange(value,value);
+			    }
+			    else if (oThat.createTextRange) {
+			        var range = oThat.createTextRange();
+			        range.collapse(true);
+			        range.moveEnd('character', value);
+			        range.moveStart('character', value);
+			        range.select();
+			    }
+			}else{
+				if(document.selection){
+					var Sel = document.selection.createRange();
+			        Sel.moveStart ('character', -oThat.value.length);
+			        CaretPos = Sel.text.length;
+				}
+				else if (oThat.selectionStart || oThat.selectionStart == '0'){
+	        		CaretPos = oThat.selectionStart;
+				}
+			}
+		    return CaretPos;
+        }
 	});
 
 	/****
@@ -1529,7 +1559,7 @@ Tools.addZero2Two = function(num)  {
  * @return {float}        返回修正后的数据
  */
 Tools.toFixed = function(data, length) {
-	if (!!Number.prototype.toFixed) {
+	if (!!Number.prototype.toFixed && data != "") {
 		if (isNaN(length) || !length) {
 			length = 2;
 		}
@@ -1605,17 +1635,34 @@ Tools.filterUnPoint = function(obj){
 	$obj.find(".F-float").each(function(){
 		if(!$(this).is(':not("input")')){
 			$(this).val(Tools.thousandPoint($(this).val()));
-			$(this).on('input', function(event){
-				event.preventDefault();
-				var value = $(this).val();
-				if(!isNaN(value)){
-					$(this).val(value);
-				}
-			});
 		}else{
 			$(this).text(Tools.thousandPoint($(this).text()));
 		}
 	});
+	$('body').on('input', '.F-float', function(event){
+		event.preventDefault();
+		$(this).focus();
+		var value = $(this).val();
+			/*curPos = $(this).cursorPosition(),*/
+			
+		if(!isNaN(value)){
+			$(this).val(value).trigger('change');
+		}
+	});
+	// .on('focusin', 'input.F-float', function(event) {
+	// 	event.preventDefault();
+		
+	// 	$(this).data('oldData', $(this).val());
+	// })
+	// .on('focusout', 'input.F-float', function(event) {
+	// 	event.preventDefault();
+	// 	var $that = $(this), value = $that.val(),
+	// 		oldValue = $that.data('oldData');
+
+	// 	if (value !== oldValue) {
+	// 		$that.trigger('change').data('oldData', value);
+	// 	}
+	// });	
 	return $obj;
 };
 /**
