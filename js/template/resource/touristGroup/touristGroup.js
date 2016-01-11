@@ -666,6 +666,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($obj);
                 };
 
             }else if($that.hasClass('T-price')){ //若价格改变
@@ -674,6 +675,7 @@ define(function(require, exports) {
                 if (!isNaN(price) && !isNaN(count)) {
                      payMoney=parseFloat(price*count);        
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($obj);
                 };
             };
         });
