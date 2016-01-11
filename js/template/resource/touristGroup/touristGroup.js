@@ -579,7 +579,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var $that = $(this),startTime = $that.val(),$row = $that.closest('.form-inline');
-                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days));
+                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days-1));
                 
         });
 
