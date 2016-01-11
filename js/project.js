@@ -1684,30 +1684,15 @@ Tools.filterUnPoint = function(obj){
 			$(this).text(Tools.thousandPoint($(this).text()));
 		}
 	});
-	$('body').on('input', '.F-float', function(event){
+	$('body').on('focusin', 'input.F-float', function(event) {
 		event.preventDefault();
-		$(this).focus();
-		var value = $(this).val();
-			/*curPos = $(this).cursorPosition(),*/
-			
-		if(!isNaN(value)){
-			$(this).val(value).trigger('change');
-		}
-	});
-	// .on('focusin', 'input.F-float', function(event) {
-	// 	event.preventDefault();
-		
-	// 	$(this).data('oldData', $(this).val());
-	// })
-	// .on('focusout', 'input.F-float', function(event) {
-	// 	event.preventDefault();
-	// 	var $that = $(this), value = $that.val(),
-	// 		oldValue = $that.data('oldData');
-
-	// 	if (value !== oldValue) {
-	// 		$that.trigger('change').data('oldData', value);
-	// 	}
-	// });	
+		this.value = $(this).val();
+	})
+	.on('focusout', 'input.F-float', function(event) {
+		event.preventDefault();
+		$(this).val(this.value);
+	});	
+	
 	return $obj;
 };
 /**
