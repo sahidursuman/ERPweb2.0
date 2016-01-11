@@ -352,17 +352,17 @@
                                                                                                         <!-- <td><input type="text" readonly="readonly" name="payType" value="{{restaurantList.restaurant.payType}}"/></td> -->
                                                                                                         <td>
                                                                                                             <select name="type" class="T-restauranType col-xs-12">
-                                                                                                                <option value="早餐" {{if restaurantList.restaurantStandard.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
-                                                                                                                <option value="午餐" {{if restaurantList.restaurantStandard.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
-                                                                                                                <option value="晚餐" {{if restaurantList.restaurantStandard.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
+                                                                                                                <option value="早餐" {{if restaurantList.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
+                                                                                                                <option value="午餐" {{if restaurantList.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
+                                                                                                                <option value="晚餐" {{if restaurantList.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change F-float F-money" value="{{restaurantList.restaurantStandard.price}}" />
-                                                                                                            <input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}" />
+                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change F-float F-money" value="{{restaurantList.price}}" />
+                                                                                                            <input type="hidden" name="typeId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" name="remark" value="{{restaurantList.remark}}" />
