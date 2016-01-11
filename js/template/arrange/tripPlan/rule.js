@@ -156,14 +156,6 @@ define(function(require, exports) {
                     errMsg: '请输入正确的手机号码'
                 }]
             },
-            /*{
-                $ele: $obj.find('input[name="idCardNumber"]'),
-                rules: [
-                {
-                    type: 'id',
-                    errMsg: '请输入正确的身份证号码'
-                }]
-            },*/
             {
                 $ele: $obj.find('input[name="requireContent"]'),
                 rules: [{
@@ -180,14 +172,24 @@ define(function(require, exports) {
             },
             {
                 $ele: $obj.find('input[name="count"]'),
-                rules: [{
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '数量不能为空'
+                },
+                {
                     type: 'NoNumber',
                     errMsg: '数量必须为正整数'
                 }]
             },
             {
                 $ele: $obj.find('input[name="price"]'),
-                rules: [{
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '单价不能为空'
+                },
+                {
                     type: 'nonnegative-float',
                     errMsg: '单价必须为数字'
                 }]
@@ -198,19 +200,32 @@ define(function(require, exports) {
                     errMsg: '计划人数必须为正整数'
                 }]
             }];
-            var timeSettings = [];
+
             if ($obj.find('.T-timed').prop('checked')) {
-                timeSettings[0] = { //定时发送时间不能为空
+                settings.push({ //定时发送时间不能为空
                     $ele: $obj.find('input[name="executeTime"]'),
                     rules: [{
                         type: 'null',
                         errMsg: '定时发送时间不能为空'
                     }]
-                };
-            }else{
-                timeSettings = [];
+                });
             }
-            return settings.concat(timeSettings);
+
+            $obj.find('.T-tourists-list').children('tr').each(function(index, el) {
+                var $that = $(this);
+                if($that.find('[name="idCardType"]').val() == 0){
+                    settings.push({//校验身份证号码
+                        $ele: $that.find('input[name="idCardNumber"]'),
+                        rules: [
+                        {
+                            type: 'id',
+                            errMsg: '请输入正确的身份证号码'
+                        }]
+                    });
+                }
+            });
+            
+            return settings;
         }
     };
     rule.checkPlan = function($container) {

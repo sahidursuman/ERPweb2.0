@@ -1,7 +1,10 @@
 <div class="container-fluid hct-view-plan">
 	<div class="row border">
 		<div class="col-xs-12 hd">
-			<h3>基本信息</h3>
+			<h3 class="pull-left">基本信息</h3>
+			<div class="pull-right">
+				<label class="control-label">团号：{{tripPlan.tripNumber}}</label>
+			</div>
 		</div>
 	</div>
 	<div class="row border">
@@ -285,31 +288,17 @@
 					<div id="planDayListViewSingle-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
 						<div class="row">
 							<div class="col-xs-3">
-								<label class="control-label">简要行程：</label>
-								<label class="control-label">{{days.dayInfo.title}}</label>
+								<label class="control-label hct-label-overflow">简要行程：<span title="{{days.dayInfo.title}}">{{days.dayInfo.title}}</span></label>
 							</div>
 							<div class="col-xs-3 checkbox" style="margin-top: 0;">
 								<label class="control-label">含餐：</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[0] | checked}}{{/if}}>
-									<span class="lbl">早餐</span>
-								</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[2] | checked}}{{/if}}>
-									<span class="lbl">午餐</span>
-								</label>
-								<label class="control-label">
-									<input type="checkbox" class="ace" disabled {{if days.dayInfo.restPosition}}{{days.dayInfo.restPosition[4] | checked}}{{/if}}>
-									<span class="lbl">晚餐</span>
-								</label>
+								{{#days.dayInfo.repastDetail | getRestaurantDesc}}
 							</div>
 							<div class="col-xs-3">
-								<label class="control-label">住宿地点：</label>
-								<label class="control-label">{{days.dayInfo.repastDetail}}</label>
+								<label class="control-label hct-label-overflow">住宿地点：<span title="{{days.dayInfo.restPosition}}">{{days.dayInfo.restPosition}}</span></label>
 							</div>
 							<div class="col-xs-3">
-								<label class="control-label">景点：</label>
-								<label class="control-label">{{days.dayInfo.scenicItemNames}}</label>
+								<label class="control-label hct-label-overflow">景点：<span title="{{days.dayInfo.scenicItemNames}}">{{days.dayInfo.scenicItemNames}}</span></label>
 							</div>
 						</div>
 						<div class="timeline-container">
@@ -677,7 +666,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				{{each touristGroupMemberList as rs index}}
+				{{each touristGroupMembers as rs index}}
 					<tr>
 						<td>{{index + 1}}</td>
 						<td>{{rs.name}}</td>
@@ -701,19 +690,19 @@
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">应收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">预收款：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.preIncomeMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">已收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">计划现收：</label>
-			<span class="col-xs-8 F-float F-money">3000</span>
+			<span class="col-xs-8 F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 		</div>
 	</div>
 	<div class="row border">

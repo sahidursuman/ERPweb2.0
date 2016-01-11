@@ -1793,10 +1793,6 @@ define(function(require, exports) {
 	};
 	//保险选择
 	quote.bindInsuranceChosen = function($input, $item, validator, $container) {
-		if (!$input || !$input.length) {
-			console.error('绑定保险的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -3441,10 +3437,10 @@ define(function(require, exports) {
 			excludeFee: quote.getValue($container,'excludeFee'),
 			lineFeature: quote.getValue($container,'lineFeature'),
 			lineNotice: quote.getValue($container,'lineNotice'),
-			shopNames: quote.getValue($container,'T-shopMultiselect'),
-			shopIds: $container.find('.T-shopMultiselect').data('propover'), 
-			selfPayItemNames: quote.getValue($container,'T-selfPayMultiselect'),
-			selfPayItemIds: $container.find('.T-selfPayMultiselect').data('propover'),
+			shopNames: $container.find('.T-shopMultiselect').val(),
+			shopIds: quote.jsonToString($container.find('.T-shopMultiselect').data('propover')), 
+			selfPayItemNames: $container.find('.T-selfPayMultiselect').val(),
+			selfPayItemIds: quote.jsonToString($container.find('.T-selfPayMultiselect').data('propover')),
 			startTime: quote.getValue($container,'startTime'),
 			adultCount: quote.getValue($container,'adultCount'),
 			childCount: quote.getValue($container,'childCount'),
@@ -3848,6 +3844,12 @@ define(function(require, exports) {
 			format: 'L',
 			language: 'zh-CN'
 		});
+	}
+	quote.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
 	}
 	quote.updateQuoteToOffer = function(id,target) {
 		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content,#tab-arrange_quote-copy-content'), isThere = 0;
