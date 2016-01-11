@@ -7,7 +7,7 @@
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">报价单号：</label>
-			<span class="col-xs-8">{{tripPlan}}</span>
+			<span class="col-xs-8">{{if touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">线路产品：</label>
@@ -33,11 +33,11 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客户：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客户联系人：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</span>
 		</div>
 	</div>
 	<div class="row border">
@@ -51,21 +51,21 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">获得方式：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{touristGroup.getType | getWayTypeText}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">组团单号：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{touristGroup.otaOrderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">外联销售：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.outOPUser}}{{touristGroup.outOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">客源类型：</label>
-			<span class="col-xs-8"></span>
+			<span class="col-xs-8">{{if touristGroup.memberType == "1"}}内宾{{else}}外宾{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">责任计调：</label>
@@ -677,6 +677,16 @@
 					</tr>
 				</thead>
 				<tbody>
+				{{each touristGroupMemberList as rs index}}
+					<tr>
+						<td>{{index + 1}}</td>
+						<td>{{rs.name}}</td>
+						<td>{{rs.mobileNumber}}</td>
+						<td>{{rs.idCardType | getCardText}}</td>
+						<td>{{rs.idCardNumber}}</td>
+						<td>{{if rs.isContactUser}}是{{else}}-{{/if}}</td>
+					</tr>
+				{{/each}}
 				</tbody>
 			</table>
 		</div>
@@ -719,7 +729,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+					{{each touristGroupFeeList as rs}}
+					<tr>
+						<td>{{rs.describeInfo}}</td>
+						<td>{{rs.count}}</td>
+						<td>{{rs.price}}</td>
+						<td>金额</td>
+						<td>{{rs.remark}}</td>
+					</tr>
+					{{/each}}
 				</tbody>
 			</table>
 		</div>
