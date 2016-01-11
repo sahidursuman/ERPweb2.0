@@ -264,7 +264,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $billStatus [description]
 	 * @return {[type]}             [description]
 	 */
-	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tarId) {
+	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tabId) {
 		if($billStatus == '1' || $billStatus == '2'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团已审核，无法编辑')
 		}else if($billStatus == '0'){

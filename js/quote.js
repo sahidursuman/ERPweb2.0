@@ -12,8 +12,8 @@ define(function(require, exports) {
 				data.quote = JSON.parse(data.quote);
 				data.daysList = JSON.parse(data.daysList);
 				data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
-				data.guideQuote = JSON.parse(data.guideQuote);
-				data.insuranceQuote = JSON.parse(data.insuranceQuote);
+				// data.guideQuote = JSON.parse(data.guideQuote);
+				// data.insuranceQuote = JSON.parse(data.insuranceQuote);
 				//var shareQuoteHtml = template("shareQuoteTemplate",data);
 				var startTime = data.quote.startTime;
 				for (var i = 0, len = data.daysList.length; i < len; i++) {
