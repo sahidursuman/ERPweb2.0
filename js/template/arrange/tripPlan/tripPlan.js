@@ -1208,6 +1208,13 @@ define(function(require, exports) {
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
 				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
 				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
+				if(!!groupData.buyInsurance){
+					$tab.find('[name="buyInsurance"]').attr('checked', 'checked');
+				}
+				if(!!groupData.isContainSelfPay){
+					$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
+				}
+				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 			}
 		});
