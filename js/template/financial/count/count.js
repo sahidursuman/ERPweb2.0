@@ -565,9 +565,8 @@ define(function(require, exports){
 		});
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
-			var id = $(this).attr('data-entity-id');
-			id = $obj.find('.financial-tripPlanId').val();
-			Count.arrangeDetail(id);
+			var id = $obj.find('.financial-tripPlanId').val();
+			KingServices.viewTripDetail(id);
 		});
 		//报账完成事件
 		$obj.find('.T-fanishAccount').off('click').on('click',function(){
@@ -3618,7 +3617,7 @@ define(function(require, exports){
 				var shopId = $(this).attr('shopid');
 				var selfPayArrange = {
 						"id":Count.changeToString($(this).attr('selfPayArrangeId')),
-						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val(),
+						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val() || '',
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
