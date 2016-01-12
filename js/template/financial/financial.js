@@ -284,11 +284,7 @@ FinancialService.isClearSave = function($tab,rule){
     if(sumPayMoney != sumListMoney){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
-    }
-    if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
-        return false;
-    }
+    };
 
     var $saveBtn = $tab.find('.T-saveClear'),
         saveZero = $saveBtn.data('save-zero');

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":6,"md5":"5bf60e7b102a88fa69118476dc9a2b36"}*/
+/*TMODJS:{"debug":true,"version":15,"md5":"6a12484aa6eee0dfa08ce8ef0b3c8383"}*/
 define(function(require) {
     return require("../../../template")("financial/finIncome/view/listTable", function($data, $filename) {
         try {
@@ -8,7 +8,7 @@ define(function(require) {
                 $out += " <tr data-id='", $line = 2, $out += $escape(rs.id), $out += "'> <td>", 
                 $line = 3, $out += $escape(rs.orgName), $out += '</td> <td class="F-float F-money">', 
                 $line = 4, $out += $escape(rs.needPayMoney), $out += '</td> <td class="F-float F-money">', 
-                $line = 5, $out += $escape(rs.payedMoney), $out += '</td> <td><span class="F-float F-money">', 
+                $line = 5, $out += $escape(rs.payedMoney), $out += '</td> <td><span class="F-float F-money" ', 
                 $line = 6, rs.needPayMoney != rs.payedMoney && ($out += ' style="color: #f00;"', 
                 $line = 6), $out += ">", $line = 6, $out += $escape(rs.unPayedMoney), $out += '</span></td> <td> <a class="cursor T-action T-income-task R-right" data-right="1290002">收款</a> </td> </tr> ', 
                 $line = 11;
@@ -19,7 +19,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each list as rs}}\r\n    <tr data-id=\'{{rs.id}}\'>\r\n        <td>{{rs.orgName}}</td>\r\n        <td class="F-float F-money">{{rs.needPayMoney}}</td>\r\n        <td class="F-float F-money">{{rs.payedMoney}}</td>\r\n        <td><span class="F-float F-money">{{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>\r\n        <td>\r\n            <a class="cursor T-action T-income-task R-right" data-right="1290002">收款</a>\r\n        </td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each list as rs}}\r\n    <tr data-id=\'{{rs.id}}\'>\r\n        <td>{{rs.orgName}}</td>\r\n        <td class="F-float F-money">{{rs.needPayMoney}}</td>\r\n        <td class="F-float F-money">{{rs.payedMoney}}</td>\r\n        <td><span class="F-float F-money" {{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>\r\n        <td>\r\n            <a class="cursor T-action T-income-task R-right" data-right="1290002">收款</a>\r\n        </td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
