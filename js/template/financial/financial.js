@@ -561,7 +561,7 @@ FinRule.prototype.check = function($obj) {
                         }
                     ]
                 }]);
-                case 5: // 银行账号
+                case 5: // 银行账号、记账日期
             return $obj.formValidate([
                 {   
                     $ele: $obj.find('input[name=card-number]'),
@@ -571,7 +571,17 @@ FinRule.prototype.check = function($obj) {
                             errMsg: '银行账号不能为空'
                         },
                     ]
-                }]);
+                },
+                {   
+                    $ele: $obj.find('input[name=tally-date]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '记账日期不能为空'
+                        },
+                    ]
+                }
+            ]);
         default:
             return false;
     }
