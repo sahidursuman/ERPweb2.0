@@ -547,7 +547,7 @@ define(function(require, exports) {
 		tripPlan.bindAutocomplete($tab);
 		//查看浮动自选餐厅
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
-		//计算导付
+		//计算计划导付
 		tripPlan.calculatePrice($tab);
 		//时间控件
 		tripPlan.dateTimePicker($tab);
@@ -2720,7 +2720,7 @@ define(function(require, exports) {
 		})
 	}
 
-	//计算 应付 导付
+	//计算 应付 计划导付
 	tripPlan.calculatePrice = function($tab){
 		$tab.find("input[name=guidePayMoney]").off("blur").on("blur", function() {
 			tripPlan.moneyTripPlan($tab);
@@ -2770,7 +2770,7 @@ define(function(require, exports) {
 		tripPlan.moneyTripPlan($tab);
 	};
 	tripPlan.moneyTripPlan = function($tab) {
-		var guideAllPayMoney = 0.0;	//总导付
+		var guideAllPayMoney = 0.0;	//总计划导付
 		var guideAllNowMoney = 0.0;	//现收款
 		
 		var inputs = $tab.find('.tab-content').find("input[name=guidePayMoney]");
