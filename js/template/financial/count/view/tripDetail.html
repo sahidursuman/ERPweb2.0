@@ -908,7 +908,7 @@
                     {{each insuranceArrangeList as insuranceArrange}}
                     <tr>
                     <td>{{insuranceArrange.insurance.name}}</td>
-                    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insurance.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
+                    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insuranceItem.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
                     <td>{{insuranceArrange.price}}</td>
                     <td>{{insuranceArrange.memberCount}}</td>
                     <td>{{insuranceArrange.needPayMoney}}</td>
