@@ -86,7 +86,9 @@
 										      {{if transferFee1 != null}}
 											      <tr  data-entity-id="{{transferFee1.id}}">
 											      		<td>
-															<input name="describe" value="{{transferFee1.discribe}}" type="text" class="col-sm-10 col-sm-offset-1   no-padding-right" />
+															<select name="describeInfo" class="col-sm-10 col-sm-offset-1">
+															   {{#getPayType | getFeeItemType: true}}
+															</select>
 														</td>
 														<td>
 														 <input type="text" name="count" value="{{transferFee1.count}}"  class="col-sm-10 col-sm-offset-1 count T-count T-calc F-float F-count"/></td>	
