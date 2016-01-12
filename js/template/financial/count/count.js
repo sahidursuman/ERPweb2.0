@@ -3618,7 +3618,7 @@ define(function(require, exports){
 				var shopId = $(this).attr('shopid');
 				var selfPayArrange = {
 						"id":Count.changeToString($(this).attr('selfPayArrangeId')),
-						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val(),
+						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val() || '',
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
