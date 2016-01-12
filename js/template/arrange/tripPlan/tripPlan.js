@@ -834,7 +834,7 @@ define(function(require, exports) {
 			    describeInfo : $that.find('[name="describeInfo"]').val(),
 			    id : $that.data("id") || "",
 			    price : $that.find('[name="price"]').val(),
-			    remark : $that.find('[name="remark"]').val()
+			    remark : $that.find('[name="feeRemark"]').val()
 			});
 		});
 		//购物&自费商家ID集
