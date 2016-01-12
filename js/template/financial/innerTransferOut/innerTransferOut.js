@@ -421,6 +421,8 @@ define(function(require,exports) {
 		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
+        	var check =  new FinRule(5).check($obj);
+    		if(!check.form()){ return false; }
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
         	var allMoney = $obj.find('input[name=sumPayMoney]').val();
         	if(allMoney == 0){
