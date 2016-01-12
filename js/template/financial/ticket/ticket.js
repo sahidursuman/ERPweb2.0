@@ -621,6 +621,8 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
+		var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
 		if ($tab.find('.T-saveClear').data('type') == 1) {
 	        var reciveValidtor = (new FinRule(2)).check($tab);
 	        if(!reciveValidtor.form()){

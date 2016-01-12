@@ -269,6 +269,8 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 
 //付款-保存前校验
 FinancialService.isClearSave = function($tab,rule){
+    var check =  new FinRule(5).check($tab);
+    if(!check.form()){ return false; }
     var validator = rule.check($tab);
     if(!validator.form()){return false;}
 
@@ -313,8 +315,6 @@ FinancialService.isClearSave = function($tab,rule){
  * @return {[type]}      [description]
  */
 FinancialService.autoPayJson = function(id,$tab,rule, type){
-    var check =  new FinRule(5).check($tab);
-    if(!check.form()){ return false; }
     var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
