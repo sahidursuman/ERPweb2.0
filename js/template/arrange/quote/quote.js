@@ -3438,9 +3438,9 @@ define(function(require, exports) {
 			lineFeature: quote.getValue($container,'lineFeature'),
 			lineNotice: quote.getValue($container,'lineNotice'),
 			shopNames: $container.find('.T-shopMultiselect').val(),
-			shopIds: $container.find('.T-shopMultiselect').data('propover'), 
+			shopIds: quote.jsonToString($container.find('.T-shopMultiselect').data('propover')), 
 			selfPayItemNames: $container.find('.T-selfPayMultiselect').val(),
-			selfPayItemIds: $container.find('.T-selfPayMultiselect').data('propover'),
+			selfPayItemIds: quote.jsonToString($container.find('.T-selfPayMultiselect').data('propover')),
 			startTime: quote.getValue($container,'startTime'),
 			adultCount: quote.getValue($container,'adultCount'),
 			childCount: quote.getValue($container,'childCount'),
@@ -3844,6 +3844,12 @@ define(function(require, exports) {
 			format: 'L',
 			language: 'zh-CN'
 		});
+	}
+	quote.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
 	}
 	quote.updateQuoteToOffer = function(id,target) {
 		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content,#tab-arrange_quote-copy-content'), isThere = 0;

@@ -336,6 +336,7 @@ define(function(require, exports) {
 
         //外联计调默认是当前登录账号
         $groupInfoForm.find('.T-choose-opUserList').val(IndexData.userInfo.realName);
+        $groupInfoForm.find('input[name=outOPUserId]').val(IndexData.userInfo.userId);
 
         //添加表单验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -431,6 +432,8 @@ define(function(require, exports) {
             }
             touristGroup.installData($updateTabId, id, 2, "", typeInner);
         });
+
+        $updateTabId.data('isEdited', false);
     };
     //查看小组信息
     touristGroup.viewTouristGroupDetails = function(id) {
@@ -533,36 +536,34 @@ define(function(require, exports) {
     touristGroup.init_CRU_event = function($tab, id, typeFlag, typeInner) {
         if (!!$tab && $tab.length === 1) {
             // 监听修改
-            $tab.on('change', function(event) {
-                    event.preventDefault();
-                    $tab.data('isEdited', true);
-                })
-                // 监听保存，并切换tab
-                .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
-                        return;
-                    }
-                    touristGroup.installData($tab, id, typeFlag, [tab_id, title, html], typeInner);
-                })
-                .on(SWITCH_TAB_BIND_EVENT, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    Tools.addTab(tab_id, title, html);
-                    //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
-                    if (typeFlag == 2) {
-                        touristGroup.updateEvents(typeInner);
-                    } else {
-                        touristGroup.addEvents();
-                    }
-                })
-                // 保存后关闭
-                .on(CLOSE_TAB_SAVE, function(event) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
-                        return;
-                    }
-                    touristGroup.installData($tab, id, tabArgs, typeFlag, typeInner);
-                });
+            $tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
+            .on('change', function(event) {
+                event.preventDefault();
+                $tab.data('isEdited', true);
+            })
+            // 监听保存，并切换tab
+            .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+                event.preventDefault();
+                touristGroup.installData($tab, id, typeFlag, [tab_id, title, html], typeInner);
+            })
+            .on(SWITCH_TAB_BIND_EVENT, function(event) {
+                event.preventDefault();
+                //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
+                if (typeFlag == 2) {
+                    touristGroup.updateEvents(typeInner);
+                }else{
+                    touristGroup.addEvents();
+                }
+                touristGroup.init_CRU_event($tab , $tab.find('.T-submit-updateTouristGroup').data('id'),typeFlag ,typeInner );
+
+            })
+            // 保存后关闭
+            .on(CLOSE_TAB_SAVE, function(event) {
+                event.preventDefault();
+                touristGroup.installData($tab, id, tabArgs, typeFlag, typeInner);
+            });
+
+
         }
     };
     //处理小组信息
@@ -579,11 +580,9 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var $that = $(this),startTime = $that.val(),$row = $that.closest('.form-inline');
-                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days));
+                $row.find('.T-endTime').val(Tools.addDay(startTime,touristGroup.days-1));
                 
         });
-
-        
 
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
@@ -629,25 +628,17 @@ define(function(require, exports) {
               var $that = $(this),$tr = $that.closest('tr');
                   $tr.fadeOut(function() {
                         $(this).hide();
+                         $tr.addClass("deleted");
                         touristGroup.autoSumNeedPay($obj);
                   })
             });
         };
-        //计算应收，未收
-        $obj.find('.T-price').on('change', function() {
-            touristGroup.calcPayMoney($obj);
-            touristGroup.autoSumNeedPay($obj);
-        });
-
-        $obj.find('.T-count').on('change', function() {
-            touristGroup.calcPayMoney($obj);
-            touristGroup.autoSumNeedPay($obj);
-        });
 
         //根据单价数量计算金额
         touristGroup.calcPayMoney($obj);
         //数量、单价改变
-        $obj.find('.T-calc').trigger('change',touristGroup.calcPayMoney($obj));
+        $obj.find('.T-count').trigger('change',touristGroup.calcPayMoney($obj));
+        $obj.find('.T-price').trigger('change',touristGroup.calcPayMoney($obj));
     };
 
 
@@ -664,16 +655,18 @@ define(function(require, exports) {
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);   
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($tab);
                 };
 
             }else if($that.hasClass('T-price')){ //若价格改变
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),payMoney;
                 if (!isNaN(price) && !isNaN(count)) {
-                     payMoney=parseFloat(price*count);        
+                    payMoney=parseFloat(price*count);           
                     $tr.find('.T-payMoney').val(payMoney);
+                    touristGroup.autoSumNeedPay($tab);
                 };
             };
         });
@@ -1058,41 +1051,7 @@ define(function(require, exports) {
         });
     };
     //切换tab页面自动提示
-    touristGroup.init_CRU_event = function($tab, id, typeFlag) {
-        if (!!$tab && $tab.length === 1) {
-            // 监听修改
-            $tab.on('change', function(event) {
-                    event.preventDefault();
-                    $tab.data('isEdited', true);
-                })
-                // 监听保存，并切换tab
-                .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
-                        return;
-                    }
-                    touristGroup.installData($tab, id, typeFlag, [tab_id, title, html]);
-                })
-                .on(SWITCH_TAB_BIND_EVENT, function(event, tab_id, title, html) {
-                    event.preventDefault();
-                    Tools.addTab(tab_id, title, html);
-                    //通过typeFlag来判断；1--新增的事件绑定；2--修改的事件绑定
-                    if (typeFlag == 2) {
-                        touristGroup.updateEvents();
-                    } else {
-                        touristGroup.addEvents();
-                    }
-                })
-                // 保存后关闭
-                .on(CLOSE_TAB_SAVE, function(event) {
-                    event.preventDefault();
-                    if (!touristGroup.validator.form()) {
-                        return;
-                    }
-                    touristGroup.installData($tab, id, typeFlag);
-                });
-        }
-    };
+   
 
     //处理游客名单
     touristGroup.groupMemberDispose = function($obj, typeFlag) {
@@ -2000,7 +1959,7 @@ define(function(require, exports) {
         if (typeFlag == 2) {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         } else {
-            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr");
+            $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
         var isReturn = false;
         $addFeeItemTr.each(function(i) {
@@ -2009,22 +1968,20 @@ define(function(require, exports) {
                     price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
                     remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
 
+                if (count == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
+                    isReturn = true;
+                }
+                if (describeInfo == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
+                    isReturn = true;
+                }
+                if (price == "") {
+                    showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
+                    isReturn = true;
+                };
+
                 if ((describeInfo != "") || (count != "") || (price != "")) {
-                    if (count == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
-                        isReturn = true;
-                        return false;
-                    }
-                    if (describeInfo == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
-                        isReturn = true;
-                        return false;
-                    }
-                    if (price == "") {
-                        showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
-                        isReturn = true;
-                        return false;
-                    };
                     var touristGroupFeeJson = {};
                     if (typeFlag == 2) {
                         var id = $addFeeItemTr.eq(i).data("entity-id");

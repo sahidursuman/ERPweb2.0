@@ -16,8 +16,8 @@
         <th class="th-border"><span class="necessary">*</span>结束时间</th>
         <th class="th-border"><span class="necessary">*</span>任务</th>
         <th class="th-border"><span class="necessary">*</span>所属车队</th>
-        <th class="th-border"><span class="necessary">*</span>车牌号</th>
-        <th class="th-border"><span class="necessary">*</span>座位数</th>
+        <th class="th-border">车牌号</th>
+        <th class="th-border">座位数</th>
         <th class="th-border"><span class="necessary">*</span>车费</th>
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
@@ -81,10 +81,10 @@
     <div style="width:60%;">
         <div> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].opCheckRemark}}{{/if}}" />
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
         
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].financeCheckRemark}}{{/if}}" />
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].financeCheckRemark}}{{/if}}" />
         </div>
     </div>
 {{/if}}

@@ -7,7 +7,7 @@
 				<h3 class="pull-left">基本信息</h3>
 				<div class="pull-right" style="width:280px;">
 					<label class="col-xs-4 control-label text-right par-r-15">团号</label>
-					<input type="text" readonly class="col-xs-8" value="系统自动生成">
+					<input type="text" readonly class="col-xs-8" value="{{tripPlan.tripNumber}}">
 				</div>
 			</div>
 		</div>
@@ -152,7 +152,7 @@
 				<tbody class="T-days">
 				{{each tripPlanDay as rs}}
 				<tr data-id={{rs.id}}>
-					<td name="dateDays" data-which-day={{rs.whichDay}}></td>
+					<td name="dateDays" data-which-day={{rs.whichDay}}><input type="text" class="col-xs-12 datepicker" name="whichDayDate" value=""></td>
 					<td><input type="text" class="col-xs-12" name="title" value="{{rs.title}}"></td>
 					<td>
 						<label class="control-label">
@@ -268,43 +268,43 @@
 			<h3 class="pull-left">操作计划</h3>
 			<div class="pull-left mar-l-15 T-action-plan">
 				<label data-type="insurance" class="control-label T-add-action">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.insurance}}checked="true"{{/if}}>
 					<span class="lbl">保险</span>
 				</label>
 				<label data-type="guide" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.guide}}checked="true"{{/if}}>
 					<span class="lbl">导游</span>
 				</label>
 				<label data-type="bus" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.bus}}checked="true"{{/if}}>
 					<span class="lbl">车辆</span>
 				</label>
 				<label data-type="restaurant" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.restaurant}}checked="true"{{/if}}>
 					<span class="lbl">餐饮</span>
 				</label>
 				<label data-type="hotel" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.hotel}}checked="true"{{/if}}>
 					<span class="lbl">酒店</span>
 				</label>
 				<label data-type="scenic" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.scenic}}checked="true"{{/if}}>
 					<span class="lbl">景区</span>
 				</label>
 				<label data-type="ticket" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.ticket}}checked="true"{{/if}}>
 					<span class="lbl">票务</span>
 				</label>
 				<label data-type="shop" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.shop}}checked="true"{{/if}}>
 					<span class="lbl">购物</span>
 				</label>
 				<label data-type="selfPay" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.selfPay}}checked="true"{{/if}}>
 					<span class="lbl">自费</span>
 				</label>
 				<label data-type="other" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
+					<input type="checkbox" class="ace" {{if hasData.other}}checked="true"{{/if}}>
 					<span class="lbl">其它</span>
 				</label>
 			</div>
