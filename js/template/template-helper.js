@@ -75,6 +75,27 @@ template.helper("getWayType", function(status) {
     res += '<option value="7" '+(status == 7?'selected':'')+'>线上渠道</option>';
     return res;
 });
+
+template.helper("getFeeItemType", function(type,isTransfer) {
+    var res = '';
+    type = type || 1;
+    res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
+    res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
+    if(isTransfer){
+      res += '<option value="3" '+(type == 3?'selected':'')+'>中转结算价</option>';  
+    }
+    res += '<option value="4" '+(type == 4?'selected':'')+'>保险结算价</option>';
+    res += '<option value="5" '+(type == 5?'selected':'')+'>车费结算价</option>';
+    res += '<option value="6" '+(type == 6?'selected':'')+'>餐饮结算价</option>';
+    res += '<option value="7" '+(type == 7?'selected':'')+'>导服费</option>';
+    res += '<option value="4" '+(type == 8?'selected':'')+'>酒店费用</option>';
+    res += '<option value="5" '+(type == 9?'selected':'')+'>景区费用</option>';
+    res += '<option value="6" '+(type == 10?'selected':'')+'>自费费用</option>';
+    res += '<option value="7" '+(type == 11?'selected':'')+'>票务费用</option>';
+    res += '<option value="7" '+(type == 12?'selected':'')+'>其他费用</option>';
+    return res;
+});
+
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
     status = status || 1;
