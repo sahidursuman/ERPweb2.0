@@ -626,7 +626,6 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
-			console.log($value)
 			var inputValue = '',
 				html = '';
 
