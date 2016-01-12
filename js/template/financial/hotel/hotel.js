@@ -338,7 +338,7 @@ define(function(require, exports) {
             hotel.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 hotel.$clearTab.data('isEdited',true);
-                hotel.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // hotel.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 hotel.$clearTab.find(".T-cancel-auto").hide();
             }

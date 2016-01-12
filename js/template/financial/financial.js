@@ -279,8 +279,12 @@ FinancialService.isClearSave = function($tab,rule){
         return false;
     };
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money")),
+        sumListMoney = $tab.find('input[name=sumPayMoney]').data("money"),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
+
+        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
     if(sumPayMoney != sumListMoney){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
@@ -561,7 +565,7 @@ FinRule.prototype.check = function($obj) {
                         }
                     ]
                 }]);
-                case 5: // 银行账号、记账日期
+        case 5: // 银行账号、记账日期
             return $obj.formValidate([
                 {   
                     $ele: $obj.find('input[name=card-number]'),

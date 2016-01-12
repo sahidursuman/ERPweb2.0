@@ -348,7 +348,7 @@ define(function(require, exports) {
             busCompany.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 busCompany.$clearTab.data('isEdited',true);
-                busCompany.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // busCompany.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 busCompany.$clearTab.find(".T-cancel-auto").hide();
             }

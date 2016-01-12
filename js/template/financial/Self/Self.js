@@ -276,7 +276,7 @@ define(function(require, exports) {
                         Self.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Self.$clearTab.data('isEdited',true);
-                            Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Self.$clearTab.find(".T-cancel-auto").hide();
                         }
