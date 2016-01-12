@@ -771,9 +771,6 @@ define(function(require, exports) {
 						Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 						ResTravelLine.getList(ResTravelLine.listPageNo);
 					}
-
-					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-					ResTravelLine.getList();
 					$tab.data('isEdited', false);
 				});
 			}
