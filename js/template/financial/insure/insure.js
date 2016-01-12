@@ -302,7 +302,7 @@ define(function(require, exports) {
                         Insure.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Insure.$clearTab.data('isEdited',true);
-                            Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Insure.$clearTab.find(".T-cancel-auto").hide();
                         }
