@@ -139,6 +139,14 @@
          <div style="margin-top:5px;float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-guideAccount">导游报账表</a>
         </div>
+        {{if isFinance && tripPlan.billStatus > 0}}
+        <div style="margin-top:5px;float:left;margin-left:30px;">
+            <label class="pos-rel">
+                <input type="checkbox" class="ace T-edit" {{if tripPlan.isEdit == 1}}checked="checked"{{/if}}/> 
+                <span class="lbl"> 财务审核后不可修改数据</span>
+            </label>
+        </div>
+        {{/if}}
     </div>
 
     <div class="tabbable">

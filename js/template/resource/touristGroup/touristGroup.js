@@ -168,6 +168,7 @@ define(function(require, exports) {
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
+        $listObj.find(".T-tooltip").tooltip();
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),

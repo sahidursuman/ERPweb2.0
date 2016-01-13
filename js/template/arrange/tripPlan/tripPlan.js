@@ -219,6 +219,7 @@ define(function(require, exports) {
 				data.result = JSON.parse(data.result);
 				var groupHtml = listTemplate(data);
 				$tab.find('.T-tripPlan-groupList').html(groupHtml);
+				$tab.find(".T-tooltip").tooltip();
 				// 绑定翻页组件
 				laypage({
 				    cont: $tab.find('.T-tripPlan-groupList').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -271,6 +272,7 @@ define(function(require, exports) {
 
 				var singleHrml = singleListTemplate(data);
 				$tab.find('.T-tripPlan-singleList').html(singleHrml);
+				$tab.find(".T-tooltip").tooltip();
 				// 绑定翻页组件
 				laypage({
 				    cont: $tab.find('.T-tripPlan-singleList').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
