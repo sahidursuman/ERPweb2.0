@@ -214,7 +214,7 @@ define(function(require, exports){
 	                    "tripPlan":JSON.parse(data.tripPlan),
 	                    "dayList":JSON.parse(data.dayList),
 	                    "guideArrange":data.guideArranges,
-	                    "guideArranges":JSON.parse(data.guideArranges.guideArranges),
+                    	"guideArranges":JSON.parse(data.guideArranges.guideArranges),
 	                    "insuranceArrangeList":JSON.parse(data.insuranceArrangeList),
 	                    "ticketArrangeList":JSON.parse(data.ticketArrangeList),
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
@@ -226,6 +226,7 @@ define(function(require, exports){
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
+	                console.log(tmp.guideArrange.price);
 	                tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
@@ -248,11 +249,6 @@ define(function(require, exports){
 		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
-		$guideObj.find('input[type=hidden]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			//计算金额
-			Count.autoGuideSum($(this),$obj);
-		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -485,7 +481,7 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark"){
+			if($nameFlag != "billRemark" && $nameFlag !="price"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额
@@ -1499,8 +1495,8 @@ define(function(require, exports){
 		//规范数据
 		price = Count.changeTwoDecimal(price);
 		manageFee = Count.changeTwoDecimal(manageFee);
-		var priceSum = $parentObj.find('.tripIncome-guideManageMoney').text(price);
-		var manageFeeSum = $parentObj.find('.tripCost-guideArrangePrice').text(manageFee);
+		var priceSum = $parentObj.find('.tripCost-guideArrangePrice').text(price);
+		var manageFeeSum = $parentObj.find('.tripIncome-guideManageMoney').text(manageFee);
 		//计算团收入
 		Count.tripIncome($parentObj);
 		//计算团成本
