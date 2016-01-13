@@ -245,7 +245,7 @@ define(function(require, exports) {
                     });
 
                 // 绑定查看事件
-                var $tip = Tools.$descContainer;
+                var $tip = Tools.$descContainer2;
 
                 if ($tip.length) {
                     $tip.on('click', '.T-view-quote', function(event) {
