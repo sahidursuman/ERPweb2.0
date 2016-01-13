@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":11,"md5":"fd9d2ae6f71067c0fd2a919dacc757f4"}*/
+/*TMODJS:{"debug":true,"version":12,"md5":"4077513455661ba745924b0a3a970f5d"}*/
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/feeList", function($data, $filename) {
         try {
@@ -13,7 +13,7 @@ define(function(require) {
                 $line = 5, $out += $escape(rs.price), $out += '" ', $line = 5, 1 == isGuest && ($out += "readonly", 
                 $line = 5), $out += '></td> <td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="', 
                 $line = 6, rs.count && rs.price && ($line = 6, $out += $escape(rs.count * rs.price), 
-                $line = 6), $out += '"></td> <td><input type="text" class="col-xs-12" name="remark" maxlength="100" value="', 
+                $line = 6), $out += '"></td> <td><input type="text" class="col-xs-12" name="feeRemark" maxlength="100" value="', 
                 $line = 7, $out += $escape(rs.remark), $out += '" ', $line = 7, 1 == isGuest && ($out += "readonly", 
                 $line = 7), $out += '></td> <td><a class="cursor T-action T-delete" title="删除">删除</a></td> </tr> ', 
                 $line = 10;
@@ -24,7 +24,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each touristGroupFeeList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>\r\n	<td><input type="text" class="col-xs-12" name="remark" maxlength="100" value="{{rs.remark}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><a class="cursor T-action T-delete" title="删除">删除</a></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each touristGroupFeeList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>\r\n	<td><input type="text" class="col-xs-12" name="feeRemark" maxlength="100" value="{{rs.remark}}" {{if isGuest == 1}}readonly{{/if}}></td>\r\n	<td><a class="cursor T-action T-delete" title="删除">删除</a></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
