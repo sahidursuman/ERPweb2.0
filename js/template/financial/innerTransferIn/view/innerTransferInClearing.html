@@ -128,20 +128,14 @@
                 <td>{{checking.receiveUserName}}</td>
                 <td>{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
                 <td><span class="F-float F-money">{{checking.transInMoney}}</span></td>
-                <td>
-                    大人:<span class="F-float F-money">{{checking.transAdultPrice}}</span>*
-                         <span class="F-float F-count">{{checking.transAdultCount}}</span>=
-                         <span class="F-float F-money">{{checking.transAdultPrice*checking.transAdultCount}}</span><br>
-                    小孩:<span class="F-float F-money">{{checking.transChildPrice}}</span>*
-                         <span class="F-float F-count">{{checking.transChildCount}}</span>=
-                         <span class="F-float F-money">{{checking.transChildPrice*checking.transChildCount}}</span><br>
-                    {{if checking.transferFeeList.length>0}}
+                <td>{{if checking.transferFeeList.length>0}}
                         {{each checking.transferFeeList as detail}}
                             {{detail.discribe}}：
                             <span class="F-float F-count">{{detail.count}}</span>*
                             <span class="F-float F-money">{{detail.price}}</span>=
                             <span class="F-float F-money">{{detail.count*detail.price}}</span><br> 
                         {{/each}}
+                    {{else}}-
                     {{/if}} 
                 </td>
                 <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
