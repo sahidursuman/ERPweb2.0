@@ -2770,7 +2770,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					var restaurantStandardList = data.restaurantStandardList || [];
-					
+
 					for(var i=0; i < restaurantStandardList.length; i++){
 						restaurantStandardList[i].value = restaurantStandardList[i].price;
 					}
@@ -3747,9 +3747,10 @@ define(function(require, exports){
 						"id":Count.changeToString($(this).attr('restaurantArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"restaurantId":Count.changeToString($(this).find('select[name=chooseRest]').val()) || "",
+						"restaurantStandardId":$(this).find('input[name=standardId]').val() || "",
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.restaurantArrangeList.push(restaurantArrange);
