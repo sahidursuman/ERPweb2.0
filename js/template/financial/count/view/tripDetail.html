@@ -55,7 +55,7 @@
         <tr >
             <td><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.needPayAllMoney}}</span></label></td>
             <td><label>自费返佣：<span class="F-float F-money tripIncome-selfPayTravelAgencyRebateMoney">0</span></label></td>
-            <td><label>导服费：<span class="F-float F-money tripCost-guideArrangePrice">{{guideArrange.price}}</span></label></td>
+            <td><label>导服费：<span class="tripCost-guideArrangePrice F-float F-money">{{guideArrange.price}}</span></label></td>
             <td><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
             <td><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
             <td><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">{{guideArrange.manageFee}}</span></label></td>
@@ -73,7 +73,7 @@
             <td><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{touristGroup.outOtherMoney}}</span></label></td>
         </tr>
         <tr>
-            <td><label>导游管理费：<span class="F-float F-money tripIncome-guideManageMoney">{{guideArrange.manageFee}}</span></label></td>
+            <td><label>导游管理费：<span class="tripIncome-guideManageMoney F-float F-money">{{guideArrange.manageFee}}</span></label></td>
             <td></td>
             <td><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
             <td><label>其它费用：<span class="F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
@@ -463,7 +463,7 @@
                         <input type="hidden" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/></td>
                         <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}</td>
                         <td>{{busCompany.payedMoney}}</td>
-                        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realGuidePayMoney}}</span>{{else}}<span>{{busCompany.realGuidePayMoney}}</span>{{/if}}  
+                        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realGuidePayMoney}}</span>{{else}}<span>{{busCompany.guidePayMoney}}</span>{{/if}}  
                             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
                          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
@@ -908,7 +908,7 @@
                     {{each insuranceArrangeList as insuranceArrange}}
                     <tr>
                     <td>{{insuranceArrange.insurance.name}}</td>
-                    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insuranceItem.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
+                    <td>{{if insuranceArrange.type == null}}{{if insuranceArrange.insuranceItem != null}}{{insuranceArrange.insuranceItem.name}}{{/if}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
                     <td>{{insuranceArrange.price}}</td>
                     <td>{{insuranceArrange.memberCount}}</td>
                     <td>{{insuranceArrange.needPayMoney}}</td>

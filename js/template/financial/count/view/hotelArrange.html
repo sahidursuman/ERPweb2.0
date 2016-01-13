@@ -46,7 +46,7 @@
                 <td>{{if arrange.badStatus == 1}}<span class="hotelneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="hotelneedPayMoney"></span><input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}">{{/if}}
                 </td>
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
-                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null }} value="{{arrange.realGuidePayMoney}}"{{else}}value=0 {{/if}} oid="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if arrange.billUpdateTime != null }} value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} oid="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                     <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                     <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                 <td>{{if arrange.billImage != null && arrange.billImage != ""}}

@@ -59,7 +59,7 @@
         <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney F-float F-money">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney F-float F-money"></span>{{/if}}
         <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
         <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
-        <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value=0 {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
+        <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}

@@ -23,7 +23,7 @@
 			<td name="partnerAgencyName">{{rs.fromPartnerAgencyName}}</td> 
 			<td>{{rs.lineProductName}}</td> 
 			<td>{{if rs.customerType == 1}}团体{{else}}散客{{/if}}</td> 
-			<td>{{rs.startTime}}</td> 
+			<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td> 
 			<td>{{rs.quoteNumber}}</td> 
 			<td>{{rs.contactMemberName}}</td> 
 			<td><span class="F-float F-count">{{rs.adultCount}}{{if rs.childCount != 0}}</span>大 <span>{{rs.childCount}}{{/if}}</span>小</td> 

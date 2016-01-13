@@ -18,7 +18,7 @@
 		<td class="F-float F-count">{{rs.createTime}}</td>
 		<td>{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
 		<td>{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}</td>
-		<td>{{rs.startTime}}</td>
+		<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 		<td>
 			<label class="T-quote-line">
 				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
