@@ -266,7 +266,7 @@ define(function(require, exports) {
 				var rs = JSON.parse(data.result);
 				data.result = rs;
 				for (var i = rs.length - 1; i >= 0; i--) {
-					if(rs[i].tripPlanTouristList.length > 0 && 
+					if(rs[i].tripPlanTouristList.length === 1 && 
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
 						rs[i].lineProduct && 
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
