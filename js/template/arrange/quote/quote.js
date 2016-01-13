@@ -1160,7 +1160,7 @@ define(function(require, exports) {
 								    }
 								});	
 								//提交
-								$layerContent.find(".T-searchtravelLine").on('click', function() {
+								$layerContent.find(".T-searchtravelLine").off('click').on('click', function() {
 									var $tr = $layerContent.find('.T-normal-list tr'), id ='';
 									$tr.each(function(i){
 										var $selectFlag = $(this).find('input[name=choice-TravelLine]').is(":checked");
