@@ -1761,6 +1761,9 @@ define(function(require, exports) {
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('input[name="needPayAllMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('');
+				$tab.find('input[name="currentNeedPayMoney"]').val('');
 				lineId = $tr.data('line-id');
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
@@ -1768,6 +1771,9 @@ define(function(require, exports) {
 				$tab.find('input[name="partnerAgencyName"]').val('').data('');
 				$tab.find('.T-tourists-list').html('');
 				$tab.find('.T-fee-list').html('');
+				$tab.find('input[name="needPayAllMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('');
+				$tab.find('input[name="currentNeedPayMoney"]').val('');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
