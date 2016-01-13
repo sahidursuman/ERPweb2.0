@@ -836,7 +836,7 @@ define(function(require, exports) {
 			var $that = $(this);
 			arge.touristGroupFeeJson.push({
 				count : $that.find('[name="count"]').val(),
-			    describeInfo : $that.find('[name="describeInfo"]').val(),
+			    type: $that.find('[name="type"]').val(),
 			    id : $that.data("id") || "",
 			    price : $that.find('[name="price"]').val(),
 			    remark : $that.find('[name="feeRemark"]').val()
