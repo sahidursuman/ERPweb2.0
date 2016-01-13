@@ -336,6 +336,8 @@ define(function(require, exports){
 
 		//绑定确定事件
 		$tab.find('.T-saveClear').on('click', function(event){
+			var check =  new FinRule(5).check($tab);
+    		if(!check.form()){ return false; }
 			event.preventDefault();
 			if(!type){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
@@ -479,6 +481,8 @@ define(function(require, exports){
 	};
 
 	FinShop.saveChecking = function($tab, tabArgs){
+		var check =  new FinRule(5).check($tab);
+   		if(!check.form()){ return false; }
 		// 表单校验
 		var json = FinancialService.checkSaveJson($tab, new FinRule(0));
 		if(JSON.parse(json).length > 0){
@@ -607,6 +611,7 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
+		
 		var bankId = $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
 		var billTime = $tab.find('input[name=tally-date]').val();		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
