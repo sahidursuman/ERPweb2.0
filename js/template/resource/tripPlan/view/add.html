@@ -216,7 +216,7 @@
                             <tbody>
                                 {{each insuranceList as insurance index}}
                                 {{if insurance != "[]" || insurance != null}}
-                                <tr data-entity-arrangeid="{{insurance.id}}">
+                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{insurance.id}}{{/if}}">
                                     <td>
                                         <div class="col-sm-12">
                                             <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 T-chooseInsurance bind-change"/>
@@ -289,7 +289,7 @@
                             <tbody>
                                 {{each guideList as guide}}
                                 {{if guide != "[]" || guide != null}}
-                                    <tr data-entity-arrangeid={{guide.id}} >
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}" >
                                         <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
@@ -363,7 +363,7 @@
                             <tbody>
                                 {{each busCompanyList as busCompany}}
                                 {{if busCompany != "[]" || busCompany != null}}
-                                    <tr data-entity-arrangeid={{busCompany.id}} data-entity-busCompanyId={{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId={{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#busCompany.taskType | getTaskSelect}}</td>
@@ -488,7 +488,7 @@
                             <tbody>
                                 {{each restaurantList as restaurant}}
                                     {{if restaurant != "[]" || restaurant != null}}
-                                    <tr data-entity-arrangeid="{{restaurant.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{restaurant.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{restaurant.whichDay}}"></td>
                                         <td>
                                         <select name="type" class="col-sm-12 T-restauranType" maxlength="9" style="width:80px;">
@@ -597,7 +597,7 @@
                             <tbody>
                                 {{each hotelList as hotel}}
                                 {{if hotel != "[]" || hotel != null}}
-                                    <tr data-entity-arrangeid={{hotel.id}} data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
                                         <td class="T-whichDaysContainer T-whichDays"  value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
                                         <td>
                                             <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled"{{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
@@ -710,7 +710,7 @@
                             <tbody>
                                 {{each scenicList as scenic}}
                                 {{if scenic != "[]" || scenic != null}}
-                                    <tr data-entity-arrangeid="{{scenic.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{scenic.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{scenic.whichDay}}"></td>
                                         <td>
                                             <select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;">
@@ -811,7 +811,7 @@
                             <tbody>
                                 {{each shopList as shop}}
                                 {{if shop != "[]" || shop != null}}
-                                    <tr data-entity-arrangeid="{{shop.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{shop.whichDay}}"></td>
                                         <td>
                                             <div class="col-sm-12">
@@ -891,7 +891,7 @@
                             <tbody>
                                 {{each selfPayList as selfPay}}
                                 {{if selfPay != "[]" || selfPay != null}}
-                                    <tr data-entity-arrangeid="{{selfPay.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{selfPay.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}"></td>
                                         <td>
                                             <div class="col-sm-12">
@@ -980,7 +980,7 @@
                             <tbody>
                                 {{each ticketList as ticket}}
                                 {{if ticket != "[]" || ticket != null}}
-                                    <tr data-entity-arrangeid="{{ticket.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}">
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="id" value="{{ticket.id}}" />
@@ -1073,7 +1073,7 @@
                             <tbody>
                                 {{each otherList as other}}
                                 {{if other != "[]" || other != null}}
-                                    <tr data-entity-arrangeid="{{other.id}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{other.whichDay}}"></td>
                                         <td><input type="hidden" name="id" value="{{other.id}}" /><input type="text" maxlength="32" name="name" class="col-sm-12  T-other-name" value="{{other.name}}" /></td>
                                         <td><input type="text" name="managerName" maxlength="332" class="col-sm-12" value="{{other.managerName}}" /></td>
