@@ -1196,6 +1196,7 @@ define(function(require, exports) {
 				if(!!groupData.quote){
 					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
+					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id, groupData.quote.id, 1, 1);
 				}else{
 					$tab.find('[name="quoteOrderName"]').val("");
 					$tab.find('[name="quoteId"]').val("");
@@ -1203,7 +1204,9 @@ define(function(require, exports) {
 				if(!!groupData.lineProduct){
 					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
 					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
-					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+					if(!groupData.quote){
+						tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+					}
 				}else{
 					$tab.find('[name="lineProductName"]').val("");
 					$tab.find('[name="lineProductId"]').val("");
@@ -1490,6 +1493,7 @@ define(function(require, exports) {
 				for(var i=0; i<group.length; i++){
 					html += '<tr data-id="'+group[i].id+'"><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
+					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
 					group[i].contactMember.name+'</td><td>'+
@@ -1499,6 +1503,9 @@ define(function(require, exports) {
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
 					group[i].hotelLevel+'</td><td>'+
+					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
+					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
+					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
 					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
 					group[i].partnerAgency.remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
@@ -1760,20 +1767,20 @@ define(function(require, exports) {
 				$tab.find(".T-fee-list").html("");
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
-				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
 				$tab.find('input[name="needPayAllMoney"]').val('');
-				$tab.find('input[name="preIncomeMoney"]').val('');
-				$tab.find('input[name="currentNeedPayMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('').removeAttr('readonly');
+				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 				lineId = $tr.data('line-id');
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
-				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
 				$tab.find('.T-tourists-list').html('');
 				$tab.find('.T-fee-list').html('');
 				$tab.find('input[name="needPayAllMoney"]').val('');
-				$tab.find('input[name="preIncomeMoney"]').val('');
-				$tab.find('input[name="currentNeedPayMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('').removeAttr('readonly');
+				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
@@ -1839,7 +1846,7 @@ define(function(require, exports) {
 		});			
 	};
 
-	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type) {
+	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type, isGroup) {
 		if (!!pId) {
 			var args = {
 				lineProductId : pId
@@ -1855,7 +1862,7 @@ define(function(require, exports) {
 					data.lineProductDayList = JSON.parse(data.lineProductDayList);
                 	var result =showDialog(data);
 					if(result){
-						if(!!data.touristGroupId){
+						if(!!data.touristGroupId && !isGroup){
 							tripPlan.getTouristsList($tab, data.touristGroupId);
 						}else if(type == 1){
 							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
@@ -1869,12 +1876,12 @@ define(function(require, exports) {
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
-							$tab.find('[name="selfPayItemNames"]').val(quote.isContainSelfPay).data('propover', quote.selfPayItemIds);
-							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.selfPayItemNames == 1 ? true : false);
+							$tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
+							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
 						}else if(!$.isEmptyObject(data.lineProduct)){
 							var line = data.lineProduct;
 							$tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
-							$tab.find('[name="selfPayItemNames"]').val(line.isContainSelfPay).data('propover', line.selfPayItemIds);
+							$tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
 						}
 						for(var i=0; i<data.lineProductDayList.length; i++){
 							var repastDetail = data.lineProductDayList[i].repastDetail;

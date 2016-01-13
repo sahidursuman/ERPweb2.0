@@ -139,8 +139,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											{{if arrangeItems}}
-											{{each arrangeItems.guideList as guideList}}
+											{{if guideArrange}}
+											{{each guideArrange as guideList}}
 											<tr>
 												<td>{{guideList.startTime}}</td>
 												<td>{{guideList.endTime}}</td>
@@ -180,8 +180,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											{{if arrangeItems}}
-											{{each arrangeItems.insuranceList as insuranceList}}
+											{{if insuranceArrange}}
+											{{each insuranceArrange as insuranceList}}
 											<tr>
 												<td>{{if insuranceList.insurance}}{{insuranceList.insurance.name}}{{/if}}</td>
 												<td>{{if insuranceList.insuranceItem}}{{insuranceList.insuranceItem.name}}{{/if}}</td>
@@ -230,8 +230,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											{{if arrangeItems}}
-											{{each arrangeItems.busCompanyList as busCompanyList}}
+											{{if busCompanyArrange}}
+											{{each busCompanyArrange as busCompanyList}}
 											<tr>
 												<td>{{busCompanyList.startTime}}</td>
 												<td>{{busCompanyList.endTime}}</td>
@@ -277,7 +277,7 @@
 				<ul class="nav nav-tabs">
 				{{each dayList as days index}}
                     <li {{if index == 0}}class="active"{{/if}}>
-                        <a aria-expanded="true" data-toggle="tab" href="#planDayListViewSingle-{{days.dayInfo.whichDay}}" style="text-align:center;width:140px;"> 
+                        <a aria-expanded="true" data-toggle="tab" href="#planDayListViewGroup-{{days.dayInfo.whichDay}}" style="text-align:center;width:140px;"> 
 							第{{days.dayInfo.whichDay}}天
 						</a>
                     </li>
@@ -285,7 +285,7 @@
                 </ul>
                 <div class="tab-content" style="border: none;">
                 {{each dayList as days index}}
-					<div id="planDayListViewSingle-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
+					<div id="planDayListViewGroup-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
 						<div class="row">
 							<div class="col-xs-3">
 								<label class="control-label hct-label-overflow">简要行程：<span title="{{days.dayInfo.title}}">{{days.dayInfo.title}}</span></label>
