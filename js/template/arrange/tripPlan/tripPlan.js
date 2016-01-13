@@ -102,7 +102,8 @@ define(function(require, exports) {
     			$(this).next('[name="status"]').removeClass('hide');
     		}
     	});
-    	$tab.on('click', '.T-btn-tripPlan-add', function(event) {
+    	$tab.off('click')
+    	.on('click', '.T-btn-tripPlan-add', function(event) {
     		event.preventDefault();
     		tripPlan.addTripPlan($(this).data('type'));
     	});
