@@ -1782,7 +1782,7 @@ define(function(require, exports){
 		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="difference" style="width:90px;"/></td>'+
+		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
