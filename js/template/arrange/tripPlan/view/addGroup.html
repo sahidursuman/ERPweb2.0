@@ -39,7 +39,7 @@
 										<span class="lbl"></span>
 									</label>
 								</td>
-								<td>收客单号</td>
+								<td>{{touristGroup.orderNumber}}</td>
 								<td name="creatorName">{{touristGroup.creatorName}}</td>
 								<td name="lineProductName">{{if touristGroup.lineProduct}}{{touristGroup.lineProduct.name}}{{/if}}</td>
 								<td name="travelAgencyName">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
@@ -66,9 +66,9 @@
 								   {{/if}}
 								</td>
 								<td name="includeSelfPay">{{touristGroup.includeSelfPay}}</td>
-								<td>全陪</td>
-								<td>全陪电话</td>
-								<td>接站牌</td>
+								<td>{{touristGroup.accompanyGuideName}}</td>
+								<td>{{touristGroup.accompanyGuideMobile}}</td>
+								<td>{{touristGroup.welcomeBoard}}</td>
 								<td name="remark">{{touristGroup.remark}}</td>
 								<td>
 									<a class="cursor T-groupView">
