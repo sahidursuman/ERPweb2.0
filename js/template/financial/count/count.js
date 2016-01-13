@@ -402,7 +402,7 @@ define(function(require, exports){
 
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -430,7 +430,7 @@ define(function(require, exports){
 		var $selfObj = $listObj.find('.T-count-selfPay');
 		$selfObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName"){
+			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName" && $nameFlag !="selfPayItem"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算自费金额
@@ -1901,7 +1901,7 @@ define(function(require, exports){
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark"){
-				Count.calculateCost($(this));
+				//Count.calculateCost($(this));
 				//计算金额
 				Count.autoRestaurantSum($(this),$parentObj);
 			}
@@ -1989,7 +1989,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName"  && $nameFlag != "billRemark"){
+			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoHotelSum($(this),$parentObj);
@@ -2079,7 +2079,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "scenicName"  && $nameFlag != "billRemark"){
+			if($nameFlag != "scenicName"  && $nameFlag != "billRemark" && $nameFlag !='scenicItem'){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoScenicSum($(this),$parentObj);
@@ -2306,6 +2306,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							if(ui.item == null){
 								var $tr = $(this).closest('tr');
+								$(this).val('');
 								$tr.find('input[name=shopId]').val('');
 								$tr.find('input[name=shopPolicy]').val('');
 								$tr.find('input[name=shopPolicyId]').val('');
@@ -2369,6 +2370,7 @@ define(function(require, exports){
 							minLength:0,
 							change:function(event,ui){
 							if(ui.item == null){
+								$(this).val('');
 								$obj.find('input[name=shopPolicyId]').val('');
 							}
 						},
@@ -2558,7 +2560,9 @@ define(function(require, exports){
 		$busObj.autocomplete({
 			minLength:0,
 			change:function(event,ui){
-
+				if(ui.item == null){
+					$(this).val('');
+				}
 			},
 			select:function(event,ui){
 				$(this).closest('tr').find('input[name=companyId]').val(ui.item.id);
@@ -2721,6 +2725,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							if(ui.item == null){
 								var $tr = $(this).closest('tr');
+								$(this).val('');
 								$tr.find('input[name=price]').val('');
 								$tr.find('input[name=standardId]').val(ui.item.id);
 
@@ -2773,6 +2778,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							 if(ui.item == null){
 							 	var $tr = $(this).closest('tr');
+							 	$(this).val('');
 							 	$tr.find('input[name=standardId]').val('');
 							 }
 							 Count.autoRestaurantSum($(this),$parentObj);
@@ -2801,6 +2807,7 @@ define(function(require, exports){
 			change:function(event,ui){
 				if(ui.item == null){
 					var $tr = $(this).closest('tr');
+					$(this).val('');
 					$tr.find('input[name=hotelName]').val();
 					$tr.find('input[name=hotelId]').val();
 					$tr.find('input[name=price]').val();
@@ -2933,6 +2940,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							var $tr = $(this).closest('tr');
 							if(ui.item == null){
+								$(this).val('');
 								$tr.find('input[name=scenicId]').val('');
 								$tr.find('input[name=scenicItemId]').val('');
 								$tr.find('input[name=scenicItemName]').val('');
@@ -2984,6 +2992,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							var $tr = $(this).closest('tr');
 							if(ui.item == null){
+								$(this).val('');
 								$tr.find('input[name=price]').val('');
 								$tr.find('input[name=scenicItemId]').val('');
 							}
