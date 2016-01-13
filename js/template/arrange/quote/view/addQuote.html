@@ -211,17 +211,20 @@
 													<thead>
 														<tr>
 															<th width="220" class="th-border">导服费</th>
+															<th width="220" class="th-border">市场价</th>
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
 													<tbody>{{if insuranceTemplate != null}}
 														<tr>
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" value="{{insuranceTemplate.price}}" name="guideFee" type="text" maxlength="9" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" value="{{insuranceTemplate.price}}" name="marketPrice" type="text" maxlength="9" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
 														</tr>
 														{{else}}
 														<tr>
-															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" value="" name="marketPrice" type="text" maxlength="9" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
 														</tr>
 														{{/if}}
@@ -458,18 +461,18 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <select name="type" class="restauranType col-xs-12">
-                                                                                                        <option value="早餐" {{if restaurantList.restaurantStandard.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
-                                                                                                        <option value="午餐" {{if restaurantList.restaurantStandard.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
-                                                                                                        <option value="晚餐" {{if restaurantList.restaurantStandard.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
+                                                                                                        <option value="早餐" {{if restaurantList.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
+                                                                                                        <option value="午餐" {{if restaurantList.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
+                                                                                                        <option value="晚餐" {{if restaurantList.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
                                                                                                     </select>
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.restaurantStandard.price}}" />
-                                                                                                    <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard.id}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
+                                                                                                    <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.price}}" />
+                                                                                                    <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
                                                                                                 </td>
-                                                                                                <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.restaurantStandard.price}}"></td>
+                                                                                                <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.price}}"></td>
                                                                                                 <td>
-                                                                                                    <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
+                                                                                                    <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="{{restaurantList.restaurant.mobileNumber}}" />
