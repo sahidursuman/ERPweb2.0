@@ -225,28 +225,14 @@
 						<td>{{group.orderNumber}}</td>
 						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
 						<td name="lineProductName">{{group.lineProduct.name}}</td>
-						<td name="travelAgencyName">{{group.partnerAgency.travelAgencyName}}</td>
+						<td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td name="contactMemberName">{{group.contactMember.name}}</td>
 						<td name="contactMemberMobileNumber">{{group.contactMember.mobileNumber}}</td>
 						<td name="areaData">{{group.areaData}}</td>
 						<td name="ageData" class="F-float F-count">{{group.ageData}}</td>
 						<td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount+group.childCount}}</td>
 						<td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
-						<td name="hotelLevel">{{if group.hotelLevel==1 }}
-						   三星以下
-						   {{else if group.hotelLevel==2 }}
-						   三星
-						   {{else if group.hotelLevel==3 }}
-						   准四星
-						   {{else if group.hotelLevel==4 }}
-						   四星
-						   {{else if group.hotelLevel==5 }}
-						   准五星
-						   {{else if group.hotelLevel==6 }}
-						   五星
-						   {{else if group.hotelLevel==7 }}
-						   五星以上
-						   {{/if}}
+						<td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
 						</td>
 						<td name="includeSelfPay">{{group.includeSelfPay}}</td>
 						<td>{{group.accompanyGuideName}}</td>

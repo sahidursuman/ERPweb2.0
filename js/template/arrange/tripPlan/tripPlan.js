@@ -1873,14 +1873,16 @@ define(function(require, exports) {
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
 						}
-						console.log(data);
-						console.log(data.lineProduct)
-						console.log(!$.isEmptyObject(data.quote),!$.isEmptyObject(data.lineProduct) )
+						
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
 							$tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
 							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
+							$tab.find('[name="adultCount"]').val(quote.adultCount).attr('readonly', 'readonly');
+							$tab.find('[name="childCount"]').val(quote.childCount).attr('readonly', 'readonly');
+							$tab.find('[name="startTime"]').val(quote.startTime);
+							$tab.find('[name="endTime"]').val(quote.endTime);
 						}else if(!$.isEmptyObject(data.lineProduct)){
 							var line = data.lineProduct;
 							$tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
