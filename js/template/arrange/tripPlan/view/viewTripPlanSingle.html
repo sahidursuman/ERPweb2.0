@@ -143,7 +143,7 @@
 											{{each insuranceArrange as insuranceList}}
 											<tr>
 												<td>{{if insuranceList.insurance}}{{insuranceList.insurance.name}}{{/if}}</td>
-												<td>{{insuranceList.type}}</td>
+												<td>{{if insuranceList.insuranceItem}}{{insuranceList.insuranceItem.name}}{{/if}}</td>
 												<td class="F-float F-money">{{insuranceList.price}}</td>
 												<td class="F-float F-count">{{insuranceList.memberCount}}</td>
 												<td class="F-float F-money">{{insuranceList.needPayMoney}}</td>

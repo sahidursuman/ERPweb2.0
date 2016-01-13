@@ -142,11 +142,11 @@
 											{{if guideArrange}}
 											{{each guideArrange as guideList}}
 											<tr>
-												<td>{{guideList.startTime}}</td>
-												<td>{{guideList.endTime}}</td>
-												<td>{{guideList.taskType}}</td>
+												<td>{{guideList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+												<td>{{guideList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+												<td>{{guideList.taskType | getTaskDesc}}</td>
 												<td>{{if guideList.guide}}{{guideList.guide.realname}}{{/if}}</td>
-												<td>{{guideList.mobileNumber}}</td>
+												<td>{{if guideList.guide}}{{guideList.guide.mobileNumber}}{{/if}}</td>
 												<td class="F-float F-money">{{guideList.price}}</td>
 												<td class="F-float F-money">{{guideList.manageFee}}</td>
 												<td>{{guideList.remark}}</td>
@@ -233,14 +233,14 @@
 											{{if busCompanyArrange}}
 											{{each busCompanyArrange as busCompanyList}}
 											<tr>
-												<td>{{busCompanyList.startTime}}</td>
-												<td>{{busCompanyList.endTime}}</td>
-												<td>{{busCompanyList.taskType}}</td>
+												<td>{{busCompanyList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+												<td>{{busCompanyList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+												<td>{{busCompanyList.taskType | getTaskDesc}}</td>
 												<td class="F-float F-count">{{busCompanyList.needSeatCount}}</td>
 												<td>{{busCompanyList.brand}}</td>
 												<td>{{if busCompanyList.bus}}{{busCompanyList.bus.licenseNumber}}{{/if}}</td>
 												<td>{{if busCompanyList.busCompany}}{{busCompanyList.busCompany.companyName}}{{/if}}</td>
-												<td>{{busCompanyList.mobileNumber}}</td>
+												<td>{{if busCompanyList.busCompany}}{{busCompanyList.busCompany.mobileNumber}}{{/if}}</td>
 												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.name}}{{/if}}</td>
 												<td>{{if busCompanyList.driver}}{{busCompanyList.driver.mobileNumber}}{{/if}}</td>
 												<td>{{busCompanyList.contractNumber}}</td>
