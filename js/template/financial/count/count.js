@@ -643,6 +643,8 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -3272,6 +3274,13 @@ define(function(require, exports){
                 $(this).html(selectText);
             });
         }
+	};
+	//将天数转化为日期
+	Count.formatDays = function($obj,$parentObj){
+		var days = $obj.closest('tr').attr('whichDay')-1;
+		var startTime = $parentObj.find('.tripPlanStartTime').val();
+		var date = Tools.addDay(startTime, days);
+		$obj.text(date)
 	};
 	//获取社佣比例、导佣比例
 	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){

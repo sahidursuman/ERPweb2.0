@@ -33,8 +33,8 @@
     {{each day.restaurantArrange as arrangeList}}
     {{each arrangeList.restaurantArrangeList as arrange index}}
     {{if arrange != null}}
-    <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
-        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+    <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
+        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
         {{if tripPlan.billStatus == -1}}
             {{if arrange.isChoose == 1}}
