@@ -435,6 +435,9 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
+                        <th class="th-border">开始日期</th>
+                        <th class="th-border">结束日期</th>
+                        <th class="th-border">任务</th>
                         <th class="th-border">所属车队</th>
                         <th class="th-border">车牌号</th>
                         <th class="th-border">座位数</th>
@@ -454,6 +457,23 @@
                     {{each busCompanyArrange as busCompany}}
                     {{if busCompany != null}}
                     <tr badStatus = "{{busCompany.badStatus}}" busCompanyArrangeId="{{busCompany.id}}" >
+                        <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                        <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                        <td>{{if busCompany.busCompany != null}}
+                            {{ if busCompany.taskType == 0}}
+                                    全程
+                                {{else if busCompany.taskType == 1}}
+                                    接机
+                                {{else if busCompany.taskType == 2}}
+                                    送机
+                                {{else if busCompany.taskType == 3}}
+                                    前段
+                                {{else if busCompany.taskType == 4}}
+                                    中段
+                                {{else if busCompany.taskType == 5}}
+                                    后段
+                            {{/if}}
+                        {{/if}}</td>
                         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
