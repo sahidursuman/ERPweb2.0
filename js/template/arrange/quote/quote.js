@@ -985,7 +985,7 @@ define(function(require, exports) {
 			}
 		});
 		//保存报价
-		$container.find('.T-btn-submit-quote').on('click',function(){
+		$container.find('.T-btn-submit-quote').off('click').on('click',function(){
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container, $a);
