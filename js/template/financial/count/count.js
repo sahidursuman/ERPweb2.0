@@ -1404,12 +1404,12 @@ define(function(require, exports){
 		tripIncome.text(tripSum);
 		//计算毛利
 		var grossProfi = tripSum-tripCost-tripTransitCost;
-		grossProfi = Count.changeTwoDecimal(grossProfi);
+		//grossProfi = Count.changeTwoDecimal(grossProfi);
 		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
-		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		//perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
 		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
@@ -1459,12 +1459,12 @@ define(function(require, exports){
 		tripCost.text(allSum);
 		//计算毛利
 		var grossProfi = tripIncome-allSum-tripTransitCost;
-		grossProfi = Count.changeTwoDecimal(grossProfi);
+		//grossProfi = Count.changeTwoDecimal(grossProfi);
 		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
-		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		//perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
 		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
