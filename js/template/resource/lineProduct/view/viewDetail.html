@@ -235,9 +235,9 @@
                                                                                         <tr>
                                                                                             <td>{{restaurantList.restaurant.name}}</td>
                                                                                             <td>{{restaurantList.restaurant.mobileNumber}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.type}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.price}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.menuList}}</td>
+                                                                                            <td>{{restaurantList.type}}</td>
+                                                                                            <td>{{restaurantList.price}}</td>
+                                                                                            <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}</td>
                                                                                             <td>{{restaurantList.remark}}</td>
                                                                                         </tr>
                                                                                     </tbody>
