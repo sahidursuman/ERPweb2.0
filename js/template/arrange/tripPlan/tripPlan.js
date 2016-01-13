@@ -118,7 +118,7 @@ define(function(require, exports) {
                 var statusValue = $that.data("status-value"),
 					billStatus = $that.data("bill-status");
 
-                tripPlan.confirmTripPlan(id, statusValue, billStatus);
+                tripPlan.confirmTripPlan(id, statusValue, billStatus, $that);
 			} else if($that.hasClass('T-update')){
 				// 编辑
                 tripPlan.updateGroupTripPlan(id);
@@ -142,7 +142,7 @@ define(function(require, exports) {
                 var statusValue = $that.data("status-value"),
 					billStatus = $that.data("bill-status");
 					
-                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+                tripPlan.confirmTripPlan(id,statusValue,billStatus, $that);
 			} else if($that.hasClass('T-update')){
 				// 编辑
                 tripPlan.updateSingleTripPlan(id);
@@ -1606,7 +1606,7 @@ define(function(require, exports) {
         });
     };
 
-    tripPlan.confirmTripPlan = function(id,statusValue,billStatus){
+    tripPlan.confirmTripPlan = function(id,statusValue,billStatus, $that){
 		if(billStatus != -1){
 			showMessageDialog($( "#confirm-dialog-message" ),"该团已审核，无法确认");
 		}else{
@@ -1619,7 +1619,7 @@ define(function(require, exports) {
 		            	var dataD = data;
 						if(result){
 							showMessageDialog($("#confirm-dialog-message" ),data.message, function(){
-								tripPlan.$tab.find('.tab-pane.acitve').find('.T-btn-tripPlan-search').trigger('click');
+								$that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
 							});
 						}
 					}
@@ -1634,7 +1634,7 @@ define(function(require, exports) {
 							var dataD = data;
 							if(result){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-									tripPlan.$tab.find('.tab-pane.acitve').find('.T-btn-tripPlan-search').trigger('click');
+									$that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
 								});
 							}
 						}
