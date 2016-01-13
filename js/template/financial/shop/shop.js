@@ -611,7 +611,12 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		
+		var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+	        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+	    if(sumPayMoney != sumListMoney){
+	        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+	        return false;
+	    }
 		var bankId = $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
 		var billTime = $tab.find('input[name=tally-date]').val();		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));

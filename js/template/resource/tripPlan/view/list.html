@@ -90,10 +90,13 @@
 		{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
 		{{if index >= 1}}
 		<tr class="hidden">
+			{{if index == 1}}
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
+			{{/if}}
 			<td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 			<td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 			<td>{{tripPlanDetails.lineProductName}}</td>
+			{{if index == 1}}
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
@@ -109,6 +112,7 @@
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
 			<td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
+			{{/if}}
 		</tr>
 		{{/if}}
 		{{/each}}
