@@ -1222,6 +1222,8 @@ define(function(require, exports) {
 				$tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
 				$tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
 				$tab.find('[name="getType"]').val(groupData.getType);
+				$tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
+				$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());
 				$tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
@@ -1503,7 +1505,7 @@ define(function(require, exports) {
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
-					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 : group[i].hotelLevel - 1 : 0)]+'</td><td>'+
+					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
 					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
 					group[i].accompanyGuideName+'</td><td>'+
 					group[i].accompanyGuideMobile+'</td><td>'+
