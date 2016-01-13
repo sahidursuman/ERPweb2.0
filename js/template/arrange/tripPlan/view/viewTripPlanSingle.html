@@ -290,9 +290,9 @@
 														{{each days.arrangeData.restaurantArrangeList as rs}}
 														<tr>
 															<td>{{rs.type}}</td>
-															<td>{{if rs.isGuide == "1"}}导游任选{{else}}{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}{{/if}}</td>
-															<td>{{if rs.isGuide == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}{{/if}}</td>
-															<td>{{if rs.isGuide == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}导游任选{{else}}{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 															<td class="F-float F-money">{{rs.price}}</td>
 															<td class="F-float F-count">{{rs.memberCount}}</td>
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
@@ -640,7 +640,7 @@
 						<td>{{if rs.contactMember}}{{rs.contactMember.mobileNumber}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.area}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.age}}{{/if}}</td>
-						<td><span class="F-float F-count">{{if rs.lineProduct}}{{rs.lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{rs.lineProduct.childCount}}</span>小{{/if}}</td>
+						<td><span class="F-float F-count">{{rs.adultCount}}</span> 大 <span class="F-float F-count">{{rs.childCount}}</span>小</td>
 						<td class="F-float F-money">{{rs.payedMoney}}</td>
 						<td>{{rs.hotelLevel | getHotelLevelDesc}}</td>
 						<td>{{rs.includeSelfPay}}</td>
