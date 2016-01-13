@@ -269,24 +269,26 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 
 //付款-保存前校验
 FinancialService.isClearSave = function($tab,rule){
+    var check =  new FinRule(5).check($tab);
+    if(!check.form()){ return false; }
     var validator = rule.check($tab);
     if(!validator.form()){return false;}
 
     if(!$tab.data('isEdited')){
         showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
         return false;
-    }
+    };
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money")),
-        unpayMoney = parseFloat($tab.find('.T-unpayMoney').val());
+        sumListMoney = $tab.find('input[name=sumPayMoney]').data("money"),
+        unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
+
+        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
     if(sumPayMoney != sumListMoney){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
-    }
-    if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"付款金额不能大于已对账未付总额！");
-        return false;
-    }
+    };
 
     var $saveBtn = $tab.find('.T-saveClear'),
         saveZero = $saveBtn.data('save-zero');
@@ -313,8 +315,6 @@ FinancialService.isClearSave = function($tab,rule){
  * @return {[type]}      [description]
  */
 FinancialService.autoPayJson = function(id,$tab,rule, type){
-    var check =  new FinRule(5).check($tab);
-    if(!check.form()){ return false; }
     var validator = rule.check($tab), key = !!type?'收': '付';
     if(!validator.form()){ return false; }
 
@@ -565,7 +565,7 @@ FinRule.prototype.check = function($obj) {
                         }
                     ]
                 }]);
-                case 5: // 银行账号
+        case 5: // 银行账号、记账日期
             return $obj.formValidate([
                 {   
                     $ele: $obj.find('input[name=card-number]'),
@@ -575,7 +575,17 @@ FinRule.prototype.check = function($obj) {
                             errMsg: '银行账号不能为空'
                         },
                     ]
-                }]);
+                },
+                {   
+                    $ele: $obj.find('input[name=tally-date]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '记账日期不能为空'
+                        },
+                    ]
+                }
+            ]);
         default:
             return false;
     }

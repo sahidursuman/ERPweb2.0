@@ -1600,7 +1600,7 @@ define(function(require, exports) {
 			minLength:0,
 			change:function(event,ui){
 				if(ui.item == null){
-					var $tr = $(this).val("").closest('tr');
+					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
 					$tr.find("input[name=typeId]").val("");

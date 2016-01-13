@@ -108,9 +108,7 @@
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-tripdetail-other-incoming" aria-expanded="true">其它收入</a>
             </li>
-            <li class="col-sm-1 no-padding align-center" style="width:100px;">
-                <a data-toggle="tab" href="#financial-count-tripdetail-insurance" aria-expanded="true">保险</a>
-            </li>
+            
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-tripdetail-buspay" aria-expanded="true">车费</a>
             </li>
@@ -134,6 +132,9 @@
                 <a data-toggle="tab" href="#financial-count-tripdetail-outarrangepay" aria-expanded="true">中转</a>
             </li>
             {{/if}}
+            <li class="col-sm-1 no-padding align-center" style="width:100px;">
+                <a data-toggle="tab" href="#financial-count-tripdetail-insurance" aria-expanded="true">保险</a>
+            </li>
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-tripdetail-guide" aria-expanded="true">导游</a>
             </li>
@@ -180,10 +181,10 @@
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;"><div> 
                     <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].opCheckRemark}}{{/if}}" />
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.tripDetailRemark.length>0}}{{remarkArrangeList.tripDetailRemark[0].opCheckRemark}}{{/if}}" />
                 
                     <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[0] != null}}{{remarkArrangeList[0].financeCheckRemark}}{{/if}}" />
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.tripDetailRemark.length>0}}{{remarkArrangeList.tripDetailRemark[0].financeCheckRemark}}{{/if}}"/>
                 </div>
                 </div>{{/if}}
             </div>
@@ -260,13 +261,13 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[1] != null}}{{remarkArrangeList[1].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[1] != null}}{{remarkArrangeList[1].financeCheckRemark}}{{/if}}" />
-                    </div>
+                <div style="width:60%;"><div> 
+                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].opCheckRemark}}{{/if}}" />
+                
+                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].financeCheckRemark}}{{/if}}" />
+                </div>
                 </div>{{/if}}
             </div>
             <!-- 自费 -->
@@ -366,14 +367,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[2] != null}}{{remarkArrangeList[2].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[2] != null}}{{remarkArrangeList[2].financeCheckRemark}}{{/if}}" />
+                    <div style="width:60%;">
+                        <div> 
+                            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].opCheckRemark}}{{/if}}" />
+                        
+                            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].financeCheckRemark}}{{/if}}" />
+                        </div>
                     </div>
-                </div>{{/if}}
+                {{/if}}
             </div>
             <!-- 其它收入 -->
             <div id="financial-count-tripdetail-other-incoming" class="tab-pane fade">
@@ -417,56 +420,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[3] != null}}{{remarkArrangeList[3].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[3] != null}}{{remarkArrangeList[3].financeCheckRemark}}{{/if}}" />
-                    </div>
-                </div>{{/if}}
-            </div>
-             <!-- 保险 -->
-            <div id="financial-count-tripdetail-insurance" class="tab-pane fade T-insurance">
-                
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th class="th-border">保险公司</th>
-                        <th class="th-border">险种</th>
-                        <th class="th-border">单价</th>
-                        <th class="th-border">数量</th>
-                        <th class="th-border">应付</th>
-                        <th class="th-border">已付</th>
-                        <th class="th-border">导游报账备注</th>
-                        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
-                    </tr>
-                    </thead>
-                    <tbody class="T-count-insurance">
-                    {{each insuranceArrangeList as insuranceArrange}}
-                    <tr>
-                    <td>{{insuranceArrange.insurance.name}}</td>
-                    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insurance.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
-                    <td>{{insuranceArrange.price}}</td>
-                    <td>{{insuranceArrange.memberCount}}</td>
-                    <td>{{insuranceArrange.needPayMoney}}</td>
-                    <td>{{insuranceArrange.payedMoney}}</td>
-                    <td></td>
-                    </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-
-                {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;"><div> 
                     <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[11] != null}}{{remarkArrangeList[11].opCheckRemark}}{{/if}}" />
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherInRemark.length>0}}{{remarkArrangeList.otherInRemark[0].opCheckRemark}}{{/if}}" />
                 
                     <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[11] != null}}{{remarkArrangeList[11].financeCheckRemark}}{{/if}}" />
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherInRemark.length>0}}{{remarkArrangeList.otherInRemark[0].financeCheckRemark}}{{/if}}" />
                 </div>
                 </div>{{/if}}
             </div>
+            
             <!-- 车费 -->
             <div id="financial-count-tripdetail-buspay" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
@@ -518,14 +481,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[4] != null}}{{remarkArrangeList[4].financeCheckRemark}}{{/if}}" />
+                    <div style="width:60%;">
+                        <div> 
+                            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
+                        
+                            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].financeCheckRemark}}{{/if}}" />
+                        </div>
                     </div>
-                </div>{{/if}}
+                {{/if}}
             </div>
             <!-- 餐费 -->
             <div id="financial-count-tripdetail-restaurantpay" class="tab-pane fade">
@@ -588,14 +553,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[5] != null}}{{remarkArrangeList[5].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[5] != null}}{{remarkArrangeList[5].financeCheckRemark}}{{/if}}" />
+                    <div style="width:60%;">
+                        <div> 
+                            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.restRemark.length>0}}{{remarkArrangeList.restRemark[0].opCheckRemark}}{{/if}}" />
+                        
+                            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.restRemark.length>0}}{{remarkArrangeList.restRemark[0].financeCheckRemark}}{{/if}}" />
+                        </div>
                     </div>
-                </div>{{/if}}
+                {{/if}}
             </div>
             <!-- 房费 -->
             <div id="financial-count-tripdetail-hotelpay" class="tab-pane fade">
@@ -658,13 +625,15 @@
                 </table>
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;">
-                    <div>
+                    <div> 
                         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[6] != null}}{{remarkArrangeList[6].opCheckRemark}}{{/if}}" />
+                        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].opCheckRemark}}{{/if}}" />
+                    
                         <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[6] != null}}{{remarkArrangeList[6].financeCheckRemark}}{{/if}}" />
+                        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].financeCheckRemark}}{{/if}}" />
                     </div>
-                </div>{{/if}}
+                </div>
+                {{/if}}
             </div>
             <!-- 景区 -->
             <div id="financial-count-tripdetail-scenicpay" class="tab-pane fade">
@@ -727,13 +696,13 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[7] != null}}{{remarkArrangeList[7].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[7] != null}}{{remarkArrangeList[7].financeCheckRemark}}{{/if}}" />
-                    </div>
+                <div style="width:60%;"><div> 
+                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.scenicRemark.length>0}}{{remarkArrangeList.scenicRemark[0].opCheckRemark}}{{/if}}" />
+                
+                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.scenicRemark.length>0}}{{remarkArrangeList.scenicRemark[0].financeCheckRemark}}{{/if}}" />
+                </div>
                 </div>{{/if}}
             </div>
             <!-- 票务 -->
@@ -797,14 +766,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].financeCheckRemark}}{{/if}}" />
+                    <div style="width:60%;">
+                        <div> 
+                            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.ticketRemark.length>0}}{{remarkArrangeList.ticketRemark[0].opCheckRemark}}{{/if}}" />
+                        
+                            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.ticketRemark.length>0}}{{remarkArrangeList.ticketRemark[0].financeCheckRemark}}{{/if}}" />
+                        </div>
                     </div>
-                </div>{{/if}}
+                {{/if}}
             </div>
             <!-- 其它支出 -->
             <div id="financial-count-tripdetail-otherpay" class="tab-pane fade">
@@ -862,14 +833,16 @@
                     </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[9] != null}}{{remarkArrangeList[9].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[9] != null}}{{remarkArrangeList[9].financeCheckRemark}}{{/if}}" />
+                    <div style="width:60%;">
+                        <div> 
+                            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherOutRemark.length>0}}{{remarkArrangeList.otherOutRemark[0].opCheckRemark}}{{/if}}" />
+                        
+                            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherOutRemark.length>0}}{{remarkArrangeList.otherOutRemark[0].financeCheckRemark}}{{/if}}" />
+                        </div>
                     </div>
-                </div>{{/if}}
+                {{/if}}
             </div>
             {{if touristGroup != null}}
             <!-- 中转 -->
@@ -906,16 +879,58 @@
                 </table>
 
                 {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;">
-                    <div>
-                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[10] != null}}{{remarkArrangeList[10].opCheckRemark}}{{/if}}" />
-                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                        <input readonly="readonly" type="text" style="width:30%;" value="{{if remarkArrangeList[10] != null}}{{remarkArrangeList[10].financeCheckRemark}}{{/if}}" />
-                    </div>
+                <div style="width:60%;"><div> 
+                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].opCheckRemark}}{{/if}}" />
+                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].financeCheckRemark}}{{/if}}" />
+                </div>
                 </div>{{/if}}
             </div>
             {{/if}}
+             <!-- 保险 -->
+            <div id="financial-count-tripdetail-insurance" class="tab-pane fade T-insurance">
+                
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="th-border">保险公司</th>
+                        <th class="th-border">险种</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">已付</th>
+                        <th class="th-border">导游报账备注</th>
+                        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+                    </tr>
+                    </thead>
+                    <tbody class="T-count-insurance">
+                    {{each insuranceArrangeList as insuranceArrange}}
+                    <tr>
+                    <td>{{insuranceArrange.insurance.name}}</td>
+                    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insuranceItem.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
+                    <td>{{insuranceArrange.price}}</td>
+                    <td>{{insuranceArrange.memberCount}}</td>
+                    <td>{{insuranceArrange.needPayMoney}}</td>
+                    <td>{{insuranceArrange.payedMoney}}</td>
+                    <td></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+
+                {{if tripPlan.billStatus > -1}}
+                <div style="width:60%;">
+                    <div> 
+                        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+                        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.insuranceRemark.length>0}}{{remarkArrangeList.insuranceRemark[0].opCheckRemark}}{{/if}}" />
+                    
+                        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+                        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.insuranceRemark.length>0}}{{remarkArrangeList.insuranceRemark[0].financeCheckRemark}}{{/if}}" />
+                    </div>
+                </div>
+                {{/if}}
+            </div>
             <!-- 导游 -->
             <div id="financial-count-tripdetail-guide" class="tab-pane fade">
                 <table class="table table-striped table-bordered table-hover">
@@ -935,7 +950,7 @@
                     <tbody class="T-count-guide">
                     {{each guideArranges as rs index}}
                         <tr guideid = "{{rs.guide.id}}">
-                            <td><input type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
+                            <td><input disabled="disabled" type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
                             <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                             <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                             <td>
@@ -967,10 +982,10 @@
                     <div style="width:60%;">
                         <div> 
                             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].opCheckRemark}}{{/if}}" />
+                            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.guideRemark.length>0}}{{remarkArrangeList.guideRemark[0].opCheckRemark}}{{/if}}" />
                         
                             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList[8] != null}}{{remarkArrangeList[8].financeCheckRemark}}{{/if}}" />
+                            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.guideRemark.length>0}}{{remarkArrangeList.guideRemark[0].financeCheckRemark}}{{/if}}" />
                         </div>
                     </div>
                 {{/if}}

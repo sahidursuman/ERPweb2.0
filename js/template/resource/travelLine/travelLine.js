@@ -626,7 +626,6 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
-			console.log($value)
 			var inputValue = '',
 				html = '';
 
@@ -695,10 +694,10 @@ define(function(require, exports) {
 		var args = $tab.find('.T-main-form').serializeJson();
 
 		// // 启用标志
-		// args.status = 0;
-		// if ($tab.find('.T-status').prop('checked')) {
-		// 	args.status = 1;
-		// }
+		args.status = 0;
+		if ($tab.find('.T-status').prop('checked')) {
+			args.status = 1;
+		}
 
 		// 获取日程数据
 		var addJson = [], delJson = [],scenicListJson;
@@ -771,9 +770,6 @@ define(function(require, exports) {
 						Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 						ResTravelLine.getList(ResTravelLine.listPageNo);
 					}
-
-					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-					ResTravelLine.getList();
 					$tab.data('isEdited', false);
 				});
 			}

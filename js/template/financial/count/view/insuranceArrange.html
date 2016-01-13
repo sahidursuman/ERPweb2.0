@@ -15,7 +15,7 @@
     {{each insuranceArrangeList as insuranceArrange}}
     <tr>
     <td>{{insuranceArrange.insurance.name}}</td>
-    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insurance.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
+    <td>{{if insuranceArrange.type == null}}{{insuranceArrange.insuranceItem.name}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
     <td><span class="F-float F-money">{{insuranceArrange.price}}</span></td>
     <td><span class="F-float F-count">{{insuranceArrange.memberCount}}</span></td>
     <td><span class="F-float F-money">{{insuranceArrange.needPayMoney}}</span></td>
@@ -30,10 +30,10 @@
 <div style="width:60%;">
     <div> 
         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{remarkArrangeList.insuranceRemark[0].opCheckRemark}}" />
+        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.insuranceRemark.length>0}}{{remarkArrangeList.insuranceRemark[0].opCheckRemark}}{{/if}}" />
     
         <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{remarkArrangeList.insuranceRemark[0].financeCheckRemark}}" />
+        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.insuranceRemark.length>0}}{{remarkArrangeList.insuranceRemark[0].financeCheckRemark}}{{/if}}" />
     </div>
 </div>
 {{/if}}

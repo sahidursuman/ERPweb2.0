@@ -112,7 +112,7 @@
                 <td class="F-float F-count">{{rs.realCount}}</td>
                 <td class="F-float F-money">{{rs.reduceMoney}}</td>
                 <td class="F-float F-money">{{rs.needPayMoney}}</td>
-                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}{{"，"}}</span>{{"导付："}}<span class="F-float F-money">{{rs.guidePayMoney}}</span></a></td>
+                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.guidePayMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span>{{"，"}}{{"导付："}}<span class="F-float F-money">{{rs.guidePayMoney}}</span></a></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a class="T-option T-selfPayImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td class="F-float F-money">{{rs.settlementMoney}}</td>
                 <td class="F-float F-money">{{rs.unPayedMoney}}</td>
