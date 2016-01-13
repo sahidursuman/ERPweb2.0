@@ -887,7 +887,11 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time, $a);
+					if (!!$time) {
+						quote.changeStartTime($container, $time, $a);
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+					}
 				})
 			}
 		})
