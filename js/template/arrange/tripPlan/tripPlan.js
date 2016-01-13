@@ -1861,12 +1861,12 @@ define(function(require, exports) {
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
 						}
-						if($.isEmptyObject(data.quote)){
+						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
 							$tab.find('[name="selfPayItemNames"]').val(quote.isContainSelfPay).data('propover', quote.selfPayItemIds);
 							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.selfPayItemNames == 1 ? true : false);
-						}else if($.isEmptyObject(data.lineProduct)){
+						}else if(!$.isEmptyObject(data.lineProduct)){
 							var line = data.lineProduct;
 							$tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
 							$tab.find('[name="selfPayItemNames"]').val(line.isContainSelfPay).data('propover', line.selfPayItemIds);
