@@ -240,7 +240,8 @@ define(function(require, exports){
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -383,7 +384,8 @@ define(function(require, exports){
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -643,6 +645,8 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -3273,6 +3277,13 @@ define(function(require, exports){
             });
         }
 	};
+	//将天数转化为日期
+	Count.formatDays = function($obj,$parentObj){
+		var days = $obj.closest('tr').attr('whichDay')-1;
+		var startTime = $parentObj.find('.tripPlanStartTime').val();
+		var date = Tools.addDay(startTime, days);
+		$obj.text(date)
+	};
 	//获取社佣比例、导佣比例
 	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){
 		$.ajax({
@@ -3522,6 +3533,7 @@ define(function(require, exports){
 	Count.installData = function(id,$obj){
 		var saveJson = {
 			"financialTripPlan":{},
+			"touristGroupList":[],
 			"shopArrangeList":[],
 			"addShopArrangeList":[],
 			"selfPayArrangeList":[],
@@ -3571,6 +3583,17 @@ define(function(require, exports){
             tripPlan.financialCheckRemark = "";
         }
 		saveJson.financialTripPlan = tripPlan;
+		//团款现收
+		var $tripDetail = $obj.find('.T-tripDetail'),
+		$tr = $tripDetail.find('tr');
+		$tr.each(function(){
+			var data = {
+				id:$(this).attr('id'),
+				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val()
+			}
+			saveJson.touristGroupList.push(data);
+		});
+		console.log(saveJson.touristGroupList);
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
 		$tr = $shopObj.find('tr');
