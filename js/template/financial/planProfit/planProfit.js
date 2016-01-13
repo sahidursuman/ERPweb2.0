@@ -20,20 +20,22 @@ define(function(require, exports) {
             lineProductId : "",
             guideName : "",
             guideId : "",
+            tripPlanType : "",
             start : dateJson.startDate,
             end : dateJson.endDate,
             billStatus : "",
+            operateCalculteOut : 1,
             sortType: 'auto'
         };
         var data = {};
         data.searchParam = plan.searchData;
         var html = listMainTemplate(data);
-        Tools.addTab(menuKey,"发团利润",html);
+        Tools.addTab(menuKey,"单团利润",html);
         
-        plan.listMain("","","","","",dateJson.startDate,dateJson.endDate,"");
+        plan.listMain("","","","","","",dateJson.startDate,dateJson.endDate,"",plan.searchData.operateCalculteOut);
     };
 
-    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
+    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus,operateCalculteOut){
         plan.searchData = {
             pageNo : 0,
             tripNumber : tripNumber,
@@ -41,9 +43,11 @@ define(function(require, exports) {
             lineProductId : lineProductId,
             guideName : guideName,
             guideId : guideId,
+            tripPlanType : tripPlanType,
             start : startTime,
             end : endTime,
             billStatus : billStatus,
+            operateCalculteOut : operateCalculteOut,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(plan.searchData);
@@ -99,14 +103,19 @@ define(function(require, exports) {
         });
     };
 
-    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
+    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus,operateCalculteOut){
         if (plan.$searchArea && arguments.length === 1) {
+            operateCalculteOut = 1;
+            if(!plan.$tab.find(".T-checkTurn").is(":checked")){
+                operateCalculteOut = 0;
+            }
             // 初始化页面后，可以获取页面的参数
             tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
             lineProductName = plan.$searchArea.find("input[name=lineProductName]").val(),
             lineProductId = plan.$searchArea.find("input[name=lineProductId]").val(),
             guideName = plan.$searchArea.find("input[name=guideName]").val(),
             guideId = plan.$searchArea.find("input[name=guideId]").val(),
+            tripPlanType = plan.$searchArea.find("select[name=tripPlanType]").val(),
             startTime = plan.$searchArea.find("input[name=startTime]").val(),
             endTime = plan.$searchArea.find("input[name=endTime]").val(),
             billStatus = plan.$searchArea.find(".T-status button").data("value")
@@ -128,9 +137,11 @@ define(function(require, exports) {
             lineProductId : lineProductId,
             guideName : guideName,
             guideId : guideId,
+            tripPlanType : tripPlanType,
             start : startTime,
             end : endTime,
             billStatus : billStatus,
+            operateCalculteOut : operateCalculteOut,
             sortType: 'auto'
         };
 
@@ -142,8 +153,14 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    data.isTurn = operateCalculteOut;
                 	var html = listTemplate(data);
 			    	$("#tab-" + menuKey + "-content").find(".T-planProfit-list").html(html);
+                    if(operateCalculteOut == 0){
+                        plan.$tab.find(".T-turn").hide();
+                    } else{
+                        plan.$tab.find(".T-turn").show();
+                    }
                     plan.$tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
 			    	plan.getSumData();
@@ -152,6 +169,11 @@ define(function(require, exports) {
                     plan.$tab.find(".T-tripDetail").on("click",function(){
                         var id = $(this).closest('tr').data("id");
                         KingServices.tripDetail(id);
+                    });
+
+                    //核算中转
+                    plan.$tab.find(".T-checkTurn").on("click",function(){
+                        plan.listPlan(0); 
                     });
 
 			    	// 绑定翻页组件
