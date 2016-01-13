@@ -161,7 +161,7 @@
                     </thead>
                     <tbody class="T-tripDetail">
                    {{each touristGroups as touristGroup index}}
-                        <tr>
+                        <tr id="{{touristGroup.id}}">
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                             <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
