@@ -3411,7 +3411,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id, $container, $a) {
+	quote.saveQuote = function(id, $container, $a,tab_id, title, html) {
 		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
@@ -3712,9 +3712,9 @@ define(function(require, exports) {
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
 							}else if (idString == "tab-arrange_quote-update-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','','update');
 							}else if (idString == "tab-arrange_quote-copy-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','1','copy');
 							}
                         }
 					});
