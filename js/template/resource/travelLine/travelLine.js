@@ -626,7 +626,6 @@ define(function(require, exports) {
 			if (!!$value && typeof $value === "string") {
 				$value = JSON.parse($value);
 			}
-			console.log($value)
 			var inputValue = '',
 				html = '';
 
@@ -771,9 +770,6 @@ define(function(require, exports) {
 						Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 						ResTravelLine.getList(ResTravelLine.listPageNo);
 					}
-
-					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-					ResTravelLine.getList();
 					$tab.data('isEdited', false);
 				});
 			}

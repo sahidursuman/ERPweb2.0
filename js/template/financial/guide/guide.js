@@ -412,6 +412,8 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
+        var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
         var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
             sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
         if(sumPayMoney != sumListMoney){
