@@ -739,7 +739,6 @@ define(function(require, exports) {
 
 	//报价详情页事件绑定
 	quote.init_event =function($container,id,$a,htmlT,target) {
-		var validator = rule.quoteCheckor($container);
 
 		addQuoteInit($container,htmlT,$a);
 		function addQuoteInit($container,htmlT,$a){
@@ -753,6 +752,7 @@ define(function(require, exports) {
 				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
 			});	
 		}
+		var validator = rule.quoteCheckor($container);
 
 		//自费和购物 浮动显示 和 多选
 		var $shop = $container.find('.T-shopMultiselect');
