@@ -480,6 +480,7 @@ define(function(require, exports){
 		$listObj.find('.T-buspay-add').off('click').on('click',function(){
 			Count.addBus($busObj,$obj);
 		});
+		
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
@@ -491,6 +492,13 @@ define(function(require, exports){
 				Count.autoRestaurantSum($(this),$obj);
 			}
 			
+		});
+		//自选餐厅的时候获取餐标
+		var $tr = $restObj.find('input[name=price]').closest('tr');
+		$tr.find('select[name=chooseRest]').off('change').on('change',function(){
+				var tr = $(this).closest("tr");
+				tr.find('input[name=price]').val(0);
+				Count.getRestPrice($tr,$obj);
 		});
 		//新增餐费安排
 		$listObj.find('.T-restaurantpay-add').off('click').on('click',function(){
@@ -1396,12 +1404,12 @@ define(function(require, exports){
 		tripIncome.text(tripSum);
 		//计算毛利
 		var grossProfi = tripSum-tripCost-tripTransitCost;
-		grossProfi = Count.changeTwoDecimal(grossProfi);
+		//grossProfi = Count.changeTwoDecimal(grossProfi);
 		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
-		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		//perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
 		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
@@ -1451,12 +1459,12 @@ define(function(require, exports){
 		tripCost.text(allSum);
 		//计算毛利
 		var grossProfi = tripIncome-allSum-tripTransitCost;
-		grossProfi = Count.changeTwoDecimal(grossProfi);
+		//grossProfi = Count.changeTwoDecimal(grossProfi);
 		grossProfi = Tools.toFixed(grossProfi,2);
 		grossProfitMoney.text(grossProfi);
 		//计算人均毛利
 		var perGrossProfit = (grossProfi/allPerson);
-		perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
+		//perGrossProfit = Count.changeTwoDecimal(perGrossProfit);
 		perGrossProfit = Tools.toFixed(perGrossProfit,2);
 		perGrossProfitMoney.text(perGrossProfit);
 	};
@@ -1882,7 +1890,7 @@ define(function(require, exports){
 		//获取餐厅数据
 		Count.getRestData($obj,$parentObj);
 		//下拉框事件
-		$obj.find('select').off('click').on('click',function(){
+		$obj.find('select').off('change').on('change',function(){
 			var $tr = $(this).closest('tr');
 			var restaurantId = $tr.find('input[name=restaurantId]').val();
 			if(restaurantId != null && restaurantId != ""){
@@ -2412,6 +2420,7 @@ define(function(require, exports){
 							change:function(event,ui){
 								if(ui.item == null){
 									var $tr = $(this).closest('tr');
+									$(this).val('');
 									$tr.find('input[name=selfPayId]').val('');
 									$tr.find('input[name=selfPayItem]').val('');
 									$tr.find('input[name=selfPayItemId]').val('');
@@ -2744,9 +2753,9 @@ define(function(require, exports){
 	};
 	//获取餐标
 	Count.getRestPrice = function($obj,$parentObj){
-		var id = $obj.find('input[name=restaurantId]').val(),
+		var id = $obj.find('input[name=restaurantId]').val() || $obj.find('select[name=chooseRest]').val(),
 			standardObj = $obj.find('input[name=price]'),
-			type = $obj.find('select[name=type]').val();
+			type = $obj.find('select[name=type]').val() || $obj.find('input[name=type]').val();
 		$.ajax({
 			url:KingServices.build_url('restaurant','getRestaurantStandardByType'),
 			data:{
@@ -2758,32 +2767,31 @@ define(function(require, exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					var restaurantStandardList = data.restaurantStandardList;
-					if(restaurantStandardList && restaurantStandardList.length > 0){
-						for(var i=0; i < restaurantStandardList.length; i++){
-							restaurantStandardList[i].value = restaurantStandardList[i].price;
-						}
-						standardObj.autocomplete({
-							minLength:0,
-							change:function(event,ui){
-								 if(ui.item == null){
-								 	var $tr = $(this).closest('tr');
-								 	$tr.find('input[name=standardId]').val('');
-								 }
-								 Count.autoRestaurantSum($(this),$parentObj);
-							},
-							select:function(event,ui){
-								if(ui.item !=null){
-									var $tr = $(this).closest('tr');
-								 	$tr.find('input[name=standardId]').val(ui.item.id);
-								}
-							}
-						}).off('click').on('click',function(){
-							var obj = $(this);
-							obj.autocomplete('option','source', restaurantStandardList);
-							obj.autocomplete('search', '');
-						});
+					var restaurantStandardList = data.restaurantStandardList || [];
+
+					for(var i=0; i < restaurantStandardList.length; i++){
+						restaurantStandardList[i].value = restaurantStandardList[i].price;
 					}
+					standardObj.autocomplete({
+						minLength:0,
+						change:function(event,ui){
+							 if(ui.item == null){
+							 	var $tr = $(this).closest('tr');
+							 	$tr.find('input[name=standardId]').val('');
+							 }
+							 Count.autoRestaurantSum($(this),$parentObj);
+						},
+						select:function(event,ui){
+							if(ui.item !=null){
+								var $tr = $(this).closest('tr');
+							 	$tr.find('input[name=standardId]').val(ui.item.id);
+							}
+						}
+					}).off('click').on('click',function(){
+						var obj = $(this);
+						obj.autocomplete('option','source', restaurantStandardList);
+						obj.autocomplete('search', '');
+					});
 					
 				}
 			}
@@ -3736,9 +3744,11 @@ define(function(require, exports){
 				var restaurantArrange = {
 						"id":Count.changeToString($(this).attr('restaurantArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"restaurantId":Count.changeToString($(this).find('select[name=chooseRest]').val()) || "",
+						"restaurantStandardId":$(this).find('input[name=standardId]').val() || "",
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.restaurantArrangeList.push(restaurantArrange);
@@ -3768,6 +3778,7 @@ define(function(require, exports){
 				saveJson.addRestArrangeList.push(addRestArrange);
 			}
 		});
+		console.log(saveJson.restaurantArrangeList);
 		//房费数据
 		var $hotelObj = $obj.find('.T-count-hotel'),
 		$tr = $hotelObj.find('tr');

@@ -478,9 +478,7 @@ define(function(require, exports) {
 
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
-        if (!FinancialService.isClearSave(Transfer.$checkTab, new FinRule(0))) {
-            return;
-        }
+        
         var argumentsLen = arguments.length;
 
 	    var $list = Transfer.$checkTab.find(".T-checkList"),

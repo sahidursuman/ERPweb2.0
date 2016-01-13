@@ -284,9 +284,13 @@ define(function(require, exports) {
 						};
 						data.viewLineProduct.editorName = menukey + '-ueditor'
 						var htmlT = data.viewLineProduct;
+						var addHtml = addQuoteTemplate(htmlT);
+						$a.mainId = id;
+						$a.mainHtml = addHtml;
 						var html = mainQuoteTemplate($a);
 						if(Tools.addTab(menukey+'-add',"新增报价",html)){
-							addQuoteInit(htmlT);
+							var $container = $("#tab-arrange_quote-add-content");
+							quote.init_event($container,id,$a,addHtml);
 						}
 					}
 				}
@@ -295,25 +299,10 @@ define(function(require, exports) {
 			var htmlT = '';
 			var html = mainQuoteTemplate($a);
 			if(Tools.addTab(menukey+'-add',"新增报价",html)){
-				addQuoteInit(htmlT);
+				var $container = $("#tab-arrange_quote-add-content");
+				var addHtml = addQuoteTemplate(htmlT);
+				quote.init_event($container,id,$a,addHtml);
 			}
-		}
-
-		function addQuoteInit(htmlT){
-			var $container = $("#tab-arrange_quote-add-content");
-
-			var addHtml = addQuoteTemplate(htmlT);
-			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(addHtml)
-
-			$container.find('.inquiryContent').on("click",function(){
-				var quoteId = $container.find('[name=quoteId]').val();
-				if(!!quoteId == false){
-					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-					return false;
-				} 
-				quote.quoteStatus(quoteId,$container,'add','add');
-			});	
-			quote.init_event($container,id,$a);
 		}
 	};
 
@@ -728,50 +717,20 @@ define(function(require, exports) {
 						a: 'update',
 						tag: tag
 					}
-					var html = mainQuoteTemplate($a);
 					var title = (!!isCopy)? '复制报价' : '修改报价';
 					data.isCopy = (!!isCopy)? '1' : '';
 					$a.isCopy = (!!isCopy)? '1' : '';
 					data.tag = tag;
+					var updateHtml = updateQuoteTemplate(data);
+					$a.mainHtml = updateHtml;
+					$a.mainId = id;
+					var html = mainQuoteTemplate($a);
 					if(Tools.addTab(menukey+'-'+tag,title,html)){
 						var $container = $("#tab-arrange_quote-"+$a.tag+"-content");
-
-						var updateHtml = updateQuoteTemplate(data);
+						quote.init_event($container,id,$a,updateHtml,target);
 						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
-						$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
+						//$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
 
-						//精度控制
-						var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
-						    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
-						    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
-						    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
-						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
-						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
-						Tools.inputCtrolFloat($guideFee);
-				        Tools.inputCtrolFloat($price);
-				        Tools.inputCtrolFloat($seatCount);
-				        Tools.inputCtrolFloat($contractPrice);
-				        Tools.inputCtrolFloat($parkingRebateMoney);
-				        Tools.inputCtrolFloat($customerRebateMoney);
-
-						$container.find('.inquiryContent').on("click",function(){
-							var quoteId = $container.find('[name=quoteId]').val();
-							if(!quoteId){
-								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-								return false;
-							} 
-							quote.quoteStatus(quoteId,$container,'update',$a.tag);
-						});	
-
-						quote.init_event($container,id,$a);
-						if (!!target) {
-							$container.find('.inquiryContent').trigger('click');
-							if (target == "T-hotel") {
-								$container.find('.hotelInquiryContent').trigger('click');
-							}else if (target == "T-bus") {
-								$container.find('.busInquiryResult').trigger('click');
-							}
-						}
 					}
 				}
 			}
@@ -779,8 +738,21 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container,id,$a) {
+	quote.init_event =function($container,id,$a,htmlT,target) {
 		var validator = rule.quoteCheckor($container);
+
+		addQuoteInit($container,htmlT,$a);
+		function addQuoteInit($container,htmlT,$a){
+			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(htmlT)
+			$container.find('.inquiryContent').on("click",function(){
+				var quoteId = $container.find('[name=quoteId]').val();
+				if(!!quoteId == false){
+					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+					return false;
+				} 
+				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
+			});	
+		}
 
 		//自费和购物 浮动显示 和 多选
 		var $shop = $container.find('.T-shopMultiselect');
@@ -811,13 +783,36 @@ define(function(require, exports) {
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			event.preventDefault();
-			quote.init_event($container,id);
+			quote.init_event($container,$container.find('[name=mainId]').val(),$a,$container.find('[name=mainHtml]').val());
 		})
 		// 保存后关闭
 		.on(CLOSE_TAB_SAVE, function(event) {
 			event.preventDefault();
 			quote.saveQuote(id,$container,'');
 		});
+
+		//精度控制
+		var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
+		    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
+		    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
+		    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
+		    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
+		    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
+		Tools.inputCtrolFloat($guideFee);
+        Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($seatCount);
+        Tools.inputCtrolFloat($contractPrice);
+        Tools.inputCtrolFloat($parkingRebateMoney);
+        Tools.inputCtrolFloat($customerRebateMoney);
+
+		if (!!target) {
+			$container.find('.inquiryContent').trigger('click');
+			if (target == "T-hotel") {
+				$container.find('.hotelInquiryContent').trigger('click');
+			}else if (target == "T-bus") {
+				$container.find('.busInquiryResult').trigger('click');
+			}
+		}
 
 		//下拉
 		quote.autocomplete($container);
@@ -2205,7 +2200,7 @@ define(function(require, exports) {
 					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
-					$tr.find("input[name=standardId]").val(0);
+					$tr.find("input[name=standardId]").val("");
 					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
