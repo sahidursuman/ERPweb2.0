@@ -47,6 +47,7 @@ define(function(require, exports) {
     tripPlan.listMainTripPlan = function(){
 		Tools.addTab(menuKey, "发团计划", listMainTemplate(FinancialService.getInitDate()));
 		tripPlan.$tab = $('#tab-'+menuKey+'-content');
+		tripPlan.init_eventMain(tripPlan.$tab);
 		
     	tripPlan.getAutocompleteData(1);
     	tripPlan.getAutocompleteData(0);
@@ -76,8 +77,6 @@ define(function(require, exports) {
 				if(type === 0){
 					tripPlan.listTripPlanGroup(0, tripPlan.$tab);
 					tripPlan.listTripPlanSingle(0, tripPlan.$tab);
-
-					tripPlan.init_eventMain(tripPlan.$tab);
 				}
 			}
     	})
