@@ -336,6 +336,8 @@ define(function(require, exports){
 
 		//绑定确定事件
 		$tab.find('.T-saveClear').on('click', function(event){
+			var check =  new FinRule(5).check($tab);
+    		if(!check.form()){ return false; }
 			event.preventDefault();
 			if(!type){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){

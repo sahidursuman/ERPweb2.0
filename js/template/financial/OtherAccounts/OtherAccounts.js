@@ -524,6 +524,8 @@ define(function(require, exports) {
         });
         //保存付款事件
         $PaymentTabId.find(".T-saveClear").click(function() {
+            var check =  new FinRule(5).check($PaymentTabId);
+            if(!check.form()){ return false; }
             if(!payValidator.form()){return;}
             var allMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
             if(allMoney == 0){
