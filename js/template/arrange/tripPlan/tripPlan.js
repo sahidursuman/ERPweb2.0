@@ -1873,6 +1873,9 @@ define(function(require, exports) {
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
 						}
+						console.log(data);
+						console.log(data.lineProduct)
+						console.log(!$.isEmptyObject(data.quote),!$.isEmptyObject(data.lineProduct) )
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
