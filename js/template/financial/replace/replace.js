@@ -375,6 +375,7 @@ define(function(require, exports) {
 
 	            if ($that.hasClass('btn-primary')) {
 	                if (validatorCheck.form()) {
+
                     	Replace.autoFillData($tab);
 	                }
 	            } else {
@@ -439,6 +440,7 @@ define(function(require, exports) {
 	                    Replace.payingJson.bankNumber = bankNumber;
 						$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
 	                    Replace.setAutoFillEdit($tab, true);
+	                    $tab.data('isEdited', true);
 	                }
 	            });
             });
