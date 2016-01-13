@@ -1086,7 +1086,7 @@ define(function(require, exports) {
 							$tr.find("input[name=price]").val("");
 							$tr.find("input[name=telNumber]").val(insurance.telNumber);
 							$tr.find("input[name=managerName]").val(insurance.managerName);
-							$tr.find("input[name=mobileNumber]").val(insurance.telNumber);
+							$tr.find("input[name=mobileNumber]").val(insurance.mobileNumber);
 
 							// 更新表单验证的配置
 							validator = rule.lineProductUpdate(validator);
@@ -2422,9 +2422,9 @@ define(function(require, exports) {
 		+'<input type="hidden" name="typeId" value="">'
 		+'</td>'
 		+'<td><input class="col-xs-12 F-float F-money" name="price" type="text" maxlength="6" /></td>'
-		+'<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>'
 		+'<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>'
 		+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>'
+		+'<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>'
 		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>'
 		+'<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>'
 		+'</tr>';
