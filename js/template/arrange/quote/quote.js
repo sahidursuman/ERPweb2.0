@@ -2205,7 +2205,7 @@ define(function(require, exports) {
 					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
-					$tr.find("input[name=standardId]").val(0);
+					$tr.find("input[name=standardId]").val("");
 					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
