@@ -311,7 +311,7 @@ define(function(require, exports) {
                             scenic.$clearTab.find(".T-clear-auto").hide(); 
                             scenic.$clearTab.find(".T-cancel-auto").show();
                             scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
-                            scenic.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // scenic.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else {
                             scenic.$clearTab.find(".T-clear-auto").show(); 
                             scenic.$clearTab.find(".T-cancel-auto").hide();

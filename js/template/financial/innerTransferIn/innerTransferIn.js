@@ -455,6 +455,8 @@ define(function(require,exports) {
         });
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
+        	var check =  new FinRule(5).check($obj);
+            if(!check.form()){ return false; }
         	if(!settleCheck.form()){return;}
         	var sumMoney = $obj.find('input[name=sumPayMoney]').val();
         	if(sumMoney == 0){
