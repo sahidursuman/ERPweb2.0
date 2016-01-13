@@ -271,7 +271,13 @@ define(function(require, exports) {
 				Replace.balanceList();
 			}
 		});
-		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
+		if (!isCheck) {
+        	var $list = $tab.find('.T-clearList');
+        	Tools.descToolTip($list.find(".T-ctrl-tip"),1);
+        }else{
+        	Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
+        };
+		
 
 		// 监听修改
         $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
@@ -730,7 +736,7 @@ define(function(require, exports) {
 
 				html = payingTableTemplate(data);
 				Replace.$balanceTab.find('.T-clearList').html(html);
-
+				//Tools.descToolTip(Replace.$balanceTab.find('.T-clearList').find(".T-ctrl-tip"),1);
 				Replace.CM_event(Replace.$balanceTab, false);
 
 				var payingCheck = new FinRule(2).check(Replace.$balanceTab);
@@ -752,13 +758,11 @@ define(function(require, exports) {
 	Replace.savePayingData = function($tab, tabArgs){
 		var check =  new FinRule(5).check($tab);
     	if(!check.form()){ return false; }
-		var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-	        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
-	    if(sumPayMoney != sumListMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-	        return false;
-	    }
+		
 		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
+		if(!FinancialService.isClearSave(Replace.$balanceTab,validator)){
+            return false;
+        };
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 		var bankId = $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
