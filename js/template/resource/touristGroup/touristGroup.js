@@ -91,6 +91,7 @@ define(function(require, exports) {
                 statusSearch: touristGroup.$searchArea.find('.T-select-status').find("button").data("value"),
                 customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
+                orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
                 sortType: 'auto'
             }
         }
