@@ -37,8 +37,8 @@
 								<td><span class="T-viewTouristGroup T-action" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
 								<td>{{touristGroup.areaData}}</td>
 								<td class="F-float F-count">{{touristGroup.ageData}}</td>
-								<td><label name="label_needPay" class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</label></td>
-								<td><label name="label_payed" class="F-float F-money">{{touristGroup.transPayedMoney}}</label></td>
+								<td class="F-float F-money T-needPay">{{touristGroup.transNeedPayAllMoney}}</td>
+								<td class="F-float F-money T-payed">{{touristGroup.transPayedMoney}}</td>
 								<td class="transferFeeStatus">{{if touristGroup.transferFeeStatus == 1}}
 									<i class ="ace-icon fa fa-check green"></i>
 									已填写
