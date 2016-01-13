@@ -210,7 +210,7 @@
             <tr>
                 <td>{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{#busCompany.taskType || getTaskDesc}}</td>
+                <td>{{#busCompany.taskType | getTaskDesc}}</td>
                 <td class="F-float F-mcount">{{busCompany.needSeatCount}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
