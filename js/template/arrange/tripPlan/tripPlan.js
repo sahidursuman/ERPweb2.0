@@ -1031,7 +1031,7 @@ define(function(require, exports) {
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
 			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
 			return;
-		} else {
+		} else if(args.executeTimeType == 0) {
 			delete(args.executeTime);
 		}
 

@@ -116,7 +116,7 @@
 					<input type="radio" class="ace T-timed" name="executeTimeType" {{if tripPlan.executeTimeType == 1}}checked{{/if}}>
 					<span class="lbl">定时发送</span>
 				</label>
-				<input type="text" class="datetimepicker {{if tripPlan.executeTimeType == 0}}hidden{{/if}}" name="executeTime"  value="{{tripPlan.datetimepicker}}">
+				<input type="text" class="datetimepicker {{if tripPlan.executeTimeType == 0}}hidden{{/if}}" name="executeTime"  value="{{tripPlan.executeTime}}">
 			</div>
 			<div class="col-xs-6">
 				<label class="col-xs-4 control-label text-right">短信签名</label>
