@@ -1488,11 +1488,12 @@ define(function(require, exports) {
 			}
 		}).done(function(data){
 			if(showDialog(data)){
-				var group = JSON.parse(data.touristGroupJson);
+				var group = JSON.parse(data.touristGroupJson),
+					hotelLevel = ['三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上'];
 				var html = "";
 				for(var i=0; i<group.length; i++){
 					html += '<tr data-id="'+group[i].id+'"><td>'+
-					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
+					group[i].orderNumber+'</td><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
@@ -1502,11 +1503,11 @@ define(function(require, exports) {
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
-					group[i].hotelLevel+'</td><td>'+
+					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 : group[i].hotelLevel - 1 : 0)]+'</td><td>'+
 					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
+					group[i].accompanyGuideName+'</td><td>'+
+					group[i].accompanyGuideMobile+'</td><td>'+
+					group[i].welcomeBoard+'</td><td>'+
 					group[i].partnerAgency.remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
