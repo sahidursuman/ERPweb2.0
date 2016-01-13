@@ -495,14 +495,11 @@ define(function(require, exports){
 		});
 		//自选餐厅的时候获取餐标
 		var $tr = $restObj.find('input[name=price]').closest('tr');
-		if($tr.attr('isChoose') == 1){
-			var i = 0;
-			$tr.find('select[name=chooseRest]').off('change').on('change',function(){
+		$tr.find('select[name=chooseRest]').off('change').on('change',function(){
 				var tr = $(this).closest("tr");
 				tr.find('input[name=price]').val(0);
 				Count.getRestPrice($tr,$obj);
-			});
-		};
+		});
 		//新增餐费安排
 		$listObj.find('.T-restaurantpay-add').off('click').on('click',function(){
 			Count.addRest($restObj,$obj);
@@ -2423,6 +2420,7 @@ define(function(require, exports){
 							change:function(event,ui){
 								if(ui.item == null){
 									var $tr = $(this).closest('tr');
+									$(this).val('');
 									$tr.find('input[name=selfPayId]').val('');
 									$tr.find('input[name=selfPayItem]').val('');
 									$tr.find('input[name=selfPayItemId]').val('');
