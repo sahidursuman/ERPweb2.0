@@ -290,9 +290,9 @@
 														{{each days.arrangeData.restaurantArrangeList as rs}}
 														<tr>
 															<td>{{rs.type}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}</td>
+															<td>{{if rs.isGuide == "1"}}导游任选{{else}}{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isGuide == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isGuide == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 															<td class="F-float F-money">{{rs.price}}</td>
 															<td class="F-float F-count">{{rs.memberCount}}</td>
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
@@ -343,13 +343,13 @@
 															<td>{{if rs.hotel}}{{rs.hotel.managerName}}{{/if}}</td>
 															<td>{{if rs.hotel}}{{rs.hotel.mobileNumber}}{{/if}}</td>
 															<td>{{if rs.hotelRoom}}{{rs.hotelRoom.type}}{{/if}}</td>
-															<td class="F-float F-money">{{if rs.hotelRoom}}{{rs.hotelRoom.price}}{{/if}}</td>
-															<td class="F-float F-count">{{if rs.hotelRoom}}{{rs.hotelRoom.memberCount}}{{/if}}</td>
-															<td class="F-float F-money">{{if rs.hotelRoom}}{{rs.hotelRoom.reduceMoney}}{{/if}}</td>
-															<td class="F-float F-money">{{if rs.hotelRoom}}{{rs.hotelRoom.needPayMoney}}{{/if}}</td>
-															<td class="F-float F-money">{{if rs.hotelRoom}}{{rs.hotelRoom.prePayMoney}}{{/if}}</td>
+															<td class="F-float F-money">{{rs.price}}</td>
+															<td class="F-float F-count">{{rs.memberCount}}</td>
+															<td class="F-float F-money">{{rs.reduceMoney}}</td>
+															<td class="F-float F-money">{{rs.needPayMoney}}</td>
+															<td class="F-float F-money">{{rs.prePayMoney}}</td>
 															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
-															<td>{{if rs.hotelRoom}}{{rs.hotelRoom.remark}}{{/if}}</td>
+															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
 													</tbody>
@@ -631,7 +631,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				{{each touristGroup as rs index}}
+				{{each touristGroupList as rs index}}
 					<tr>
 						<td>{{index + 1}}</td>
 						<td>{{if rs.outOPUser}}{{rs.outOPUser.realname}}{{/if}}</td>
