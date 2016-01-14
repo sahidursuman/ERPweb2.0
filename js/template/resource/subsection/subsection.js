@@ -265,7 +265,6 @@ define(function(require, exports) {
 		});
 
 
-
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
@@ -286,12 +285,12 @@ define(function(require, exports) {
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><input  type="text" name="name" value=""><label class="T-name" style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="count" class="F-float F-money T-count T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="price" class="F-float F-money T-price T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:1px"><input data-index="0" type="text" name="name" value=" " class="T-type" ><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc"></div></td>'
 			+ '<td>' + radio + '</td>'
-			+ '<td><input type="radio" name="operateCalculteOut" {{if subList.operateCalculteOut==1 }}checked="checked" {{/if}} /></td>'
+			+ '<td><input type="radio" name="operateCalculteOut" checked /></td>'
 			+ '<td>-</td>'
 			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
@@ -334,10 +333,11 @@ define(function(require, exports) {
 		 * @param {[type]} $tbody [description]
 		 */
 		subsection.addFeeItem = function($that, $tbody){
-		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '';
-		       name = '<div class="clearfix" style="margin-top:1px"><input  type="text" name="name" value=""><label class="T-name" style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-               count = '<div class="clearfix" style="margin-top:6px"><input type="text" name="count" class="F-float F-count T-count T-calc"></div>',
-           	   price = '<div class="clearfix" style="margin-top:6px"><input type="text" name="price" class="F-float F-money  T-price T-calc"></div>';
+		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
+		       index  = $td.find('div').length;
+		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="" class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
+           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
                $td.append(name);
     	       $td.next().append(count);
     	       $td.next().next().append(price);
@@ -531,7 +531,7 @@ define(function(require, exports) {
 
 		// get table data
 		$tbody.children('tr').each(function() {
-			var $tr = $(this), id = $tr.data('entity-id');
+			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type');
 
 			if ($tr.hasClass('del')) {
 				subTouristGroup.delSubTouristGroupIdList.push({id: id});
@@ -553,6 +553,30 @@ define(function(require, exports) {
 					}
 				);
 
+				console.log('feeItemTr-------------'+$feeItemTr.length);
+
+				$feeItemTr.each(function() {
+					if($(this).hasClass('delete')){
+						console.log("has");
+						var $_that = $(this),
+							priceJsonDel = {
+								id : $_that.data("id")
+							};
+					} else {
+						console.log("no");
+						var $that = $(this),touristGroupFeeList=[],
+							divIndex = $(this).data('index'), 
+							touristGroupFee = {
+								id : $(this).data("id"),
+								count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
+								price : $(this).closest('tr').find(".T-price-" + divIndex).val()
+							};
+						touristGroupFeeList.push(touristGroupFee);
+						console.log('divIndex'+divIndex);
+						subTouristGroup.subTouristGroupList.push(touristGroupFeeList);
+					}
+				});
+
 				receivables += getValue($tr,"needPayAllMoney")*1;
 			}
 		});
@@ -561,7 +585,7 @@ define(function(require, exports) {
 		 * touristGroupFeeList 组装
 		 * @type {Array}
 		 */
-		var touristGroupFee =[];
+/*		var touristGroupFee =[];
 		    console.log($tbody.find('tr').find('div').children('input.T-htc'));
 			$tbody.find('tr').find('div').children('input.T-htc').each(function(index) {
 				var $that = $(this).closest('tr').closest('div');
@@ -575,7 +599,7 @@ define(function(require, exports) {
 				}
 				touristGroupFee.push(touristGroupFeeList);
 			});
-		subTouristGroup.subTouristGroupList.push(touristGroupFee);
+		subTouristGroup.subTouristGroupList.push(touristGroupFee);*/
 
 
 

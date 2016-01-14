@@ -100,7 +100,7 @@
 
                     <td>
                         <div class="clearfix" style="margin-top:1px">
-                            <input class="F-float F-money T-htc" type="text" name="name" value="{{subList.subsectionNeedPayAllMoney}}">
+                            <input data-index="0" class="F-float F-money T-type" type="text" name="name" value="">
                             <label class="timeArea" style="float:right;padding-top:0px;">
                                 <button class="btn btn-success btn-sm btn-white T-add">
                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -109,14 +109,14 @@
                         </div>
                     </td>
                      <td>
-                        <div class="clearfix" style="margin-top:1px" data-id='0'><input class=" F-float F-count T-count T-calc T-htc" type="text" name="count"  value=""></div>
+                        <div class="clearfix" style="margin-top:1px" data-id='0'><input data-index="0" class=" F-float F-count T-count T-calc T-count-0 " type="text" name="count"  value=""></div>
                     </td>
                      <td>
-                        <div class="clearfix" style="margin-top:1px" data-id=''><input class="F-float F-count T-price T-calc T-htc"  type="text" name="price" value=""></div>
+                        <div class="clearfix" style="margin-top:1px" data-id=''><input  data-index="0" class="F-float F-count T-price T-calc T-price-0"  type="text" name="price" value=""></div>
                     </td>
 
                      <td>
-                        <div class="clearfix" style="margin-top:1px" data-id=''><input class="F-float F-money  T-payedMoney T-calc" type="text" name="payMoney" value=""></div>
+                        <div class="clearfix" style="margin-top:1px" data-id=''><input class="F-float F-money  T-payedMoney T-calc" value="{{subList.subsectionNeedPayAllMoney}}" type="text" name="needPayAllMoney" value=""></div>
                     </td>
 
                     <td>
