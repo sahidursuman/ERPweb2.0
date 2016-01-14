@@ -634,14 +634,14 @@
 				{{each touristGroupList as rs index}}
 					<tr>
 						<td>{{index + 1}}</td>
-						<td>{{if rs.outOPUser}}{{rs.outOPUser.realname}}{{/if}}</td>
+						<td>{{if rs.outOPUser}}{{rs.outOPUser.realName}}{{/if}}</td>
 						<td>{{if rs.lineProduct}}{{rs.lineProduct.name}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.name}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.mobileNumber}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.area}}{{/if}}</td>
 						<td>{{if rs.contactMember}}{{rs.contactMember.age}}{{/if}}</td>
 						<td><span class="F-float F-count">{{rs.adultCount}}</span> 大 <span class="F-float F-count">{{rs.childCount}}</span>小</td>
-						<td class="F-float F-money">{{rs.payedMoney}}</td>
+						<td class="F-float F-money">{{rs.currentNeedPayMoney}}</td>
 						<td>{{rs.hotelLevel | getHotelLevelDesc}}</td>
 						<td>{{rs.includeSelfPay}}</td>
 						<td>{{rs.remark}}</td>
