@@ -180,7 +180,7 @@ define(function(require, exports) {
                 data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
-
+                
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
@@ -269,12 +269,13 @@ define(function(require, exports) {
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
 
+        FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
         $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
@@ -290,11 +291,6 @@ define(function(require, exports) {
                 $that.closest('tr').data('change', true);
             }
             $tab.data('isEdited', true);
-
-            if ($that.hasClass('T-refund')) {
-                // 反算金额
-                Client.CalcCheckor($that);
-            }
         });
 
         //确认对账按钮事件
@@ -312,53 +308,32 @@ define(function(require, exports) {
 
     };
 
-    /**
-     * 通过返款计算当前行和合计的结算、未收
-     * @param {object} $obj 返款输入框
-     */
-    Client.CalcCheckor = function($obj) {
-        if ('undefined' === $obj || $obj.length != 1 || isNaN($obj.val())) {
-            return;
+    Client.viewGroup = function(id){
+        if ('undefined' === id)  {
+            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
         }
 
-        var $tr = $obj.closest('tr').data('change', true),
-            refundMoney = $obj.val(),  // 返款金额
-            settlementMoney = $tr.find('.T-settlementMoney').text() *1,   // 结算金额
-            unReceivedMoney = $tr.find('.T-unReceivedMoney').text() *1,   // 未收金额
-            spread = $tr.find('.T-contractMoney').text() *1 - settlementMoney - refundMoney;
-
-        $tr.find('.T-settlementMoney').text(settlementMoney + spread);
-        $tr.find('.T-unReceivedMoney').text(unReceivedMoney + spread);
-        Client.$checkSumBackMoney.text(Client.$checkSumBackMoney.text()*1 - spread);
-        Client.$checksumSettlementMoney.text(Client.$checksumSettlementMoney.text()*1 + spread);
-        Client.$checksumUnReceivedMoney.text(Client.$checksumUnReceivedMoney.text()*1 + spread);
-    }
-
-    Client.unfoldGroup = function($that){
-        if ('undefined' === $that)  {
-            return;
-        }
-
-        var $next = $that.closest('tr').next();
-
-        if ($that.data('ajax')) {
-            $that.text('收起' === $that.text()? '展开': '收起');
-            $next.fadeToggle();
-        } else {
-            $.ajax({
-                url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
-                type: 'post',
-                data: {touristGroupId: $that.closest('tr').data('gid')},
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    data.memberList = JSON.parse(data.memberList || false) || [];
-
-                    $next.find('.T-group-list').html(touristsTemplate(data));
-                    $that.data('ajax', true).trigger('click');
-                }
-            });            
-        }
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
+            type: 'post',
+            data: {touristGroupId: id},
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                data.memberList = JSON.parse(data.memberList || false) || [];
+                var html = touristsTemplate(data);
+                var addGuide = layer.open({
+                    type: 1,
+                    title:"查看小组",
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '850px', //宽高
+                    zIndex:1028,
+                    content: html,
+                    scrollbar: false
+                });
+            }
+        });
     };
 
     Client.viewReceive = function(id){
@@ -521,8 +496,8 @@ define(function(require, exports) {
         var $body = $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id)
             }else if($that.hasClass('T-view')){

@@ -1,10 +1,26 @@
-{{each memberList as member index}}
-<tr>
-    <td>{{index + 1}}</td>
-    <td>{{member.name}}</td>
-    <td>{{member.mobileNumber}}</td>
-    <td>{{member.idCardType == 0? '身份证': (member.idCardType == 1? '护照': '其他')}}</td>
-    <td>{{member.idCardNumber}}</td>
-    <td>{{member.isContactUser?'是': '否'}}</td>
-</tr>
-{{/each}}
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>联系电话</th>
+                <th>证件类型</th>
+                <th>证件号</th>
+                <th>联系人</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each memberList as member index}}
+			<tr>
+			    <td>{{index + 1}}</td>
+			    <td>{{member.name}}</td>
+			    <td>{{member.mobileNumber}}</td>
+			    <td>{{member.idCardType == 0? '身份证': (member.idCardType == 1? '护照': '其他')}}</td>
+			    <td>{{member.idCardNumber}}</td>
+			    <td>{{member.isContactUser?'是': '否'}}</td>
+			</tr>
+			{{/each}}
+        </tbody>
+    </table>
+</div>

@@ -5,7 +5,8 @@ define(function(require, exports) {
 	    transferChecking = require("./view/transferChecking"),
 	    transferClearing = require("./view/transferClearing"),
 	    payedDetailTempLate = require("./view/viewPayedDetail"),
-        needPayDetailTempLate = require("./view/viewNeedPayDetail");
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
+        viewGroupTemplate = require("./view/viewTouristGroup");
 
     var Transfer = {
     	searchData : false,
@@ -146,6 +147,9 @@ define(function(require, exports) {
                 if(result){
                     var ftList = data.financialTransferList;
                     data.partnerAgencyName = partnerAgencyName;
+                    for(var i = 0; i < data.financialTransferList.length; i++){
+                        data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
+                    }
                     var html = transferChecking(data);
                     
                     var validator;
@@ -215,6 +219,8 @@ define(function(require, exports) {
 
         //报表内的操作
         Transfer.listOption(Transfer.$checkTab);
+
+        FinancialService.updateMoney_checking(Transfer.$checkTab,3);
 
         //复选框事件初始化
         var checkboxList = Transfer.$checkTab.find(".T-checkList tr .T-checkbox"),
@@ -296,6 +302,9 @@ define(function(require, exports) {
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
                     data.isAutoPay = isAutoPay;
+                    for(var i = 0; i < data.financialTransferList.length; i++){
+                        data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
+                    }
                     var html = transferClearing(data);
                     console.log(data);
                     var validator;
@@ -750,15 +759,7 @@ define(function(require, exports) {
                 Transfer.needPayDetail(id);
             } else if ($that.hasClass('T-viewGroup')) {
                 // 游客明细
-                var text = $that.text(),
-                	$next = $that.closest('tr').next();
-                if(text == "展开"){
-                	$that.text("收起");
-                	$next.removeClass('hide');
-                } else if (text == "收起"){
-                	$that.text("展开");
-                	$next.addClass('hide');
-                }
+                Transfer.viewGroup($(this));
             }
         });
     };
@@ -789,6 +790,28 @@ define(function(require, exports) {
 	        $unpay.text($unpay.text()*1 - spread);
 	    });
 	};
+
+    //查看小组
+    Transfer.viewGroup = function($obj){
+        var data = {
+            memberList : $obj.data("list")
+        };
+
+        if(!data){
+            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
+        }
+        var html = viewGroupTemplate(data);
+        layer.open({
+            type : 1,
+            title :"查看小组",
+            skin : 'layui-layer-rim',
+            area : "850px", 
+            zIndex : 1028,
+            content : html,
+            scrollbar: false 
+        });
+    };
 
     Transfer.initPay = function(options){
         Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate); 
