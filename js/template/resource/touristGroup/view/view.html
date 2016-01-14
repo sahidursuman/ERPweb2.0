@@ -68,7 +68,12 @@
 					<tr>
 						
 						<td class="style-myself">完团日期</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="7">{{touristGroupDetail.endTime | dateFormat: 'yyyy-MM-dd'}}
+						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{touristGroupDetail.endTime | dateFormat: 'yyyy-MM-dd'}}
+						</td>
+
+						<td class="style-myself">针对客源</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">
+						{{if touristGroupDetail.customerType == 0}}散客{{/if}}{{if touristGroupDetail.customerType == 1}}团体{{/if}}
 						</td>
 
 					</tr>

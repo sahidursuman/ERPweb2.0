@@ -80,8 +80,8 @@
                     </td>
                     <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td> 
                     <td><input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.punishMoney}}" style="text-align:center"></td>
-                    <td name="settlementMoney"><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                    <td name="unPayedMoney"><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
+                    <td name="settlementMoney" class="F-float F-money">{{rs.settlementMoney}}</td>
+                    <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
     	            <td><input type="text" maxlength="1000"  name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"></td>
     				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
     	            <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>

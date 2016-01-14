@@ -99,6 +99,8 @@ define(function(require, exports) {
 				break;
 			case 3:  //酒店账务
 				options.url = KingServices.build_url('account/financialHotel', 'listSumFinancialHotel');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate
 				resArgs.hotelName = args.name;
 				break;
 			case 4:  //车队账务
