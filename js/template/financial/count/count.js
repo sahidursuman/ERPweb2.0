@@ -2631,6 +2631,7 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
+					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -2676,6 +2677,7 @@ define(function(require, exports){
 
 			var searchJson = {
 					brand:"",
+					busId:parents.find('input[name=busId]').val(),
 					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
