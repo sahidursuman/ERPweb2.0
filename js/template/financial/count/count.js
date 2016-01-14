@@ -226,7 +226,6 @@ define(function(require, exports){
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
-	                console.log(tmp.guideArrange.price);
 	                tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
@@ -2632,6 +2631,7 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
+					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -2677,6 +2677,7 @@ define(function(require, exports){
 
 			var searchJson = {
 					brand:"",
+					busId:parents.find('input[name=busId]').val(),
 					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
@@ -3593,7 +3594,6 @@ define(function(require, exports){
 			}
 			saveJson.touristGroupList.push(data);
 		});
-		console.log(saveJson.touristGroupList);
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
 		$tr = $shopObj.find('tr');
@@ -3806,7 +3806,6 @@ define(function(require, exports){
 				saveJson.addRestArrangeList.push(addRestArrange);
 			}
 		});
-		console.log(saveJson.restaurantArrangeList);
 		//房费数据
 		var $hotelObj = $obj.find('.T-count-hotel'),
 		$tr = $hotelObj.find('tr');
