@@ -137,7 +137,6 @@ define(function(require, exports) {
 
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
-					transit.$tab.find(".T-tooltip").tooltip();
 					transit.$tab.on('click', '.T-action', function() {
 						var $this = $(this),id = $this.closest('tr').data('entity-id');
 						if ($this.hasClass('T-send')) {

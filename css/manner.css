@@ -2133,16 +2133,6 @@ p#back-top a span {
     text-align: right;
 }
 
-
-/*tooltip*/
-.tooltip-error+.tooltip>.tooltip-inner{
-    background-color:#fff;
-    border:1px #c94d32 solid;
-    text-shadow: none;
-}
-.tooltip-inner{
-    color:#c94d32;
-}
 a.gray,a.gray span{
     color:#bbb;
 }

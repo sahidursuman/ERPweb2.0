@@ -194,7 +194,6 @@ define(function(require, exports) {
 		show();
 		hid();
 
-		subsection.$tab.find(".T-tooltip").tooltip();
 		//分段分段
 		subsection.$tab.find(".T-btn-subsection").on('click', function() {
 			var $this = $(this), $parents = $this.closest("tr");
