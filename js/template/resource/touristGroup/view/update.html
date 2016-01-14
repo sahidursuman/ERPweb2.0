@@ -330,106 +330,133 @@
 						<span class="badge badge-primary">4</span>
 						<label class="middle title-size">中转</label>
 					</h5>
-					<div class="widget-body">
-						<div class="widget-main">
-							<div class="form-group">
-								<div class="col-sm-3">
-									<label class="col-sm-2 control-label no-padding-right">接：</label>
-									<div class="clo-sm-1 checkbox">
-										<label>
-											<input type="checkbox" class="ace reception-check T-touristReception" {{if touristGroupDetail.isNeedArriveService==1}}checked="checked"{{/if}} value="0" name="touristReception">
-											<span class="lbl margin-topF5">
 
-											</span>
-										</label>
-									</div>
-									<div class="col-sm-12 T-reception-div hide" style="padding-top:25px;">
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">接待日期:</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<input type="text" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}" name="receptionTime" class="col-sm-12 date-picker datepicker" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">地点：</label>
-											<div class="col-sm-9">
-												<input name="receptionAddress" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arrivePosition}}{{/if}}{{/if}}" type="text" class="col-sm-8" />
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次：</label>
-											<div class="col-sm-9">
-												<input name="arriveShift" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}" />
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<input type="text" value="{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}" name="arriveShiftTime" class="col-sm-12 date-picker ShiftDatepicker" />
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-3">
-									<label class="col-sm-3 control-label no-padding-right">小车：</label>
-									<div class="clo-sm-1 checkbox">
-										<label>
-											<input type="checkbox" {{if touristGroupDetail.isNeedBus==1}}checked="checked"{{/if}} class="ace smallCar T-smallCar" value="0" name="smallCar">
-											<span class="lbl margin-topF5">
+					<div class="form-inline col-sm-12"> 
+                        <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+                            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+                            <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">车辆</span>
+                            </label>
+                            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">酒店</span>
+                            </label>
+                            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">餐饮</span>
+                            </label>
+                            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">票务</span>
+                            </label>
+                            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">其他</span>
+                            </label>
 
-											</span>
-										</label>
-									</div>
+                            <div class="col-xs-12 T-action-require-list T-receive-list">
+
+                            	 <div class="require-commons">
+								    <div class="form-inline" style="padding:14px 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>时间：</label>
+								            <input type="text" name="arriveTime" class="form-control date-picker datepicker" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>地点：</label>
+								            <input type="text" name="arrivePosition" class="form-control" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务班次：</label>
+								            <input type="text" name="arriveShift" class="form-control" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务时间：</label>
+								            <input type="text" name="arriveShiftTime" class="form-control date-picker datepicker" />
+								        </div>
+								    </div>
 								</div>
 
-								<div class="col-sm-3">
-									<label class="col-sm-2 control-label no-padding-right">送：</label>
-									<div class="clo-sm-1 checkbox">
-										<label>
-											<input type="checkbox" {{if touristGroupDetail.isNeedLeaveService==1}}checked="checked"{{/if}} class="T-touristSend ace send-check" value="0" name="touristSend">
-											<span class="lbl margin-topF5">
-
-											</span>
-										</label>
-									</div>
-									<div class="col-sm-12 T-send-div hide" style="padding-top:25px;">
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">送离日期:</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<input type="text" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}" name="sendTime" class="col-sm-12 date-picker datepicker" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">地点：</label>
-											<div class="col-sm-9">
-												<input name="sendAddress" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leavePosition}}{{/if}}{{/if}}" type="text" class="col-sm-8" />
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次：</label>
-											<div class="col-sm-9">
-												<input name="leaveShift" type="text" class="col-sm-8" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShift}}{{/if}}{{/if}}" />
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<input name="leaveShiftTime" type="text" class="col-sm-12  date-picker ShiftDatepicker" value="{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}" />
-												</div>
-											</div>
-										</div>
-									</div>
+								<div class="col-xs-10 hct-plan-ask">
+								    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;"> 要求：</div>
+								    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;">
+								        <input type="text" class="col-xs-8" name="requireContent">
+								    </div>
 								</div>
-							</div>
-						</div>
-					</div>
+                              
+                            </div>
+                        </div>
+
+                        <div class="form-group fixed-width T-send col-sm-6">
+                            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
+                            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">车辆</span>
+                            </label>
+                            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">酒店</span>
+                            </label>
+                            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">餐饮</span>
+                            </label>
+                            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">票务</span>
+                            </label>
+                            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+                                <input type="checkbox" class="ace">
+                                <span class="lbl">其他</span>
+                            </label>
+
+                            <div class="col-xs-12 T-action-require-list T-leave-list">
+
+	                            <div class="require-commons">
+								    <div class="form-inline" style="padding:14px 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>时间：</label>
+								            <input type="text" name="arriveTime" class="form-control date-picker datepicker" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>地点：</label>
+								            <input type="text" name="arrivePosition" class="form-control" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务班次：</label>
+								            <input type="text" name="arriveShift" class="form-control" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务时间：</label>
+								            <input type="text" name="arriveShiftTime" class="form-control date-picker datepicker" />
+								        </div>
+								    </div>
+								</div>
+
+								<div class="col-xs-10 hct-plan-ask">
+								    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;"> 要求：</div>
+								    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;">
+								        <input type="text" class="col-xs-8" name="requireContent">
+								    </div>
+								</div>
+
+                            </div>
+                        </div>
+                    </div>
+
 				</div> 
 			</div>
 		</div>
