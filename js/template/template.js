@@ -129,6 +129,19 @@
         res += '<option value="5" ' + (5 == status ? "selected" : "") + ">QQ </option>", 
         res += '<option value="6" ' + (6 == status ? "selected" : "") + ">微信</option>", 
         res += '<option value="7" ' + (7 == status ? "selected" : "") + ">线上渠道</option>";
+    }), template.helper("getFeeItemType", function(type, isTransfer) {
+        var res = "";
+        return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
+        res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
+        isTransfer && (res += '<option value="3" ' + (3 == type ? "selected" : "") + ">中转结算价</option>"), 
+        res += '<option value="4" ' + (4 == type ? "selected" : "") + ">保险结算价</option>", 
+        res += '<option value="5" ' + (5 == type ? "selected" : "") + ">车费结算价</option>", 
+        res += '<option value="6" ' + (6 == type ? "selected" : "") + ">餐饮结算价</option>", 
+        res += '<option value="7" ' + (7 == type ? "selected" : "") + ">导服费</option>", res += '<option value="4" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", 
+        res += '<option value="5" ' + (9 == type ? "selected" : "") + ">景区费用</option>", 
+        res += '<option value="6" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
+        res += '<option value="7" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
+        res += '<option value="7" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
     }), template.helper("getWayTypeText", function(status) {
         var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
         return status = status || 1, res[status];

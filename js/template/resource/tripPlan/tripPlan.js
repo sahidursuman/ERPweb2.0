@@ -18,7 +18,8 @@ define(function(require, exports) {
 		hotelInquiryResultTemplate = require("./view/hotelInquiryResult"),
 		hotelbookingViewTemplate = require("./view/hotelbookingView"),
 		busInquiryResultTemplate = require("./view/busInquiryResult"),
-		busbookingViewTemplate = require("./view/busbookingView");
+		busbookingViewTemplate = require("./view/busbookingView"),
+		selectTouristTemplate = require("./view/selectTourist");
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -402,6 +403,12 @@ define(function(require, exports) {
 			event.preventDefault();
 			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
 		});
+
+		//车辆安排通知游客
+		$tab.find('#tripPlan_addPlan_bus').off('click.noticeTourists').on('click.noticeTourists', '.T-noticeTourists', function() {
+			var $this = $(this);
+			tripPlan.noticeTourists($this);
+		})
 		
 		// 激活第一个菜单
 		if (!!target) {
@@ -590,6 +597,55 @@ define(function(require, exports) {
 		});  
 	};
 
+	/**
+	 * 车队通知游客操作
+	 * @param  {[type]} $this [按钮对象]
+	 * @return {[type]}       [description]
+	 */
+	tripPlan.noticeTourists = function($that) {
+		var touristGroupIds = $that.data('entity-touristGroup');
+		if (typeof touristGroupIds == 'string') {
+			touristGroupIds = JSON.parse(touristGroupIds);
+		}
+		var noticeTouristsLayer = layer.open({
+			type: 1,
+		    title:"选择游客小组",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '1190px', //宽高
+		    zIndex:1028,
+		    content: selectTouristTemplate(),
+		    scrollbar: false,
+		    success:function(){
+		    	var $container = $(".T-addtourist-TripPlanBus")
+
+		    	tripPlan.dateTimePicker($container);
+		    	$container.find(".T-checkAll").click(function(){
+					if($(this).is(":checked")){
+						$container.find(".T-tourist-check").prop("checked",true);
+					} else{
+						$container.find(".T-tourist-check").prop("checked",false);
+					}
+				});
+
+				//提交操作
+				$container.find('.T-saveGroup').off('click.submit').on('click.submit', function() {
+					var $checkbox = $container.find('.T-tourist-check:checked'),touristGroupJson = [];
+					$checkbox.each(function(i) {
+						var $this = $checkbox.eq(i),
+							$parents = $this.closest('tr');
+						var json = {
+							id: $parents.data('entity-id'),
+							setPlaceTime: $parnets.find('[name=setPlaceTime]').val(),
+							setPlacePosition: $parents.find('[name=setPlacePosition]').val()
+						}
+						touristGroupJson.push(json);
+						touristGroupJson = JSON.stringify(touristGroupJson);
+					})
+					$that.data('entity-touristGroup',touristGroupJson);
+				})
+		    }
+		})
+	};
 
 	/**
 	 * 车队询价操作
@@ -1063,6 +1119,9 @@ define(function(require, exports) {
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"></td>'
+					+ '<td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>'
+                    + '<td><input type="text" name="setPlacePosition" class="col-xs-12"></td>'
+                    + '<td><a class="T-noticeTourists">点击设置</a></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"><span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="driverMobileNumber" readonly="readonly" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="contractNumber" maxlength="20" class="col-sm-12"></td>'
