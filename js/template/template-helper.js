@@ -219,7 +219,7 @@ template.helper("getTaskDesc", function(status) {
 });
 template.helper("getTaskSelect", function(status) {
     var str = ['<select name="taskType">'],
-        desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
+        desc = ['全程', '接机', '送机', '前段', '中段', '后段','小车接客'];
    
     for (var i = 0, len = desc.length;i < len; i ++) {
         str.push('<option value="'+ i + '" '+ (status == i?'selected': '')+'>'+ desc[i] +'</option>');
