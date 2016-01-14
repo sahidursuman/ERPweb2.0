@@ -66,7 +66,7 @@
                 <td>{{rs.orderNumber}}</td>
 				<td class="F-float F-money">{{rs.price}}</td>
 				<td class="F-float F-float F-count">{{rs.memberCount}}</td>  
-				<td class="F-float F-money">{{if reduceMoney==null || reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
+				<td class="F-float F-money">{{if rs.reduceMoney==null || rs.reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
 				<td class="F-float F-money">{{rs.needPayMoney}}</td>
 				<td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}，{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td> 
 				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>

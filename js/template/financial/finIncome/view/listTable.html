@@ -3,7 +3,7 @@
         <td>{{rs.orgName}}</td>
         <td class="F-float F-money">{{rs.needPayMoney}}</td>
         <td class="F-float F-money">{{rs.payedMoney}}</td>
-        <td><span class="F-float F-money">{{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>
+        <td><span class="F-float F-money" {{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>
         <td>
             <a class="cursor T-action T-income-task R-right" data-right="1290002">收款</a>
         </td>

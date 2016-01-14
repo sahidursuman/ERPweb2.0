@@ -21,7 +21,7 @@
                 </div>
                 <label class="pull-left text-right">团信息:</label>
                 <div class="col-sm-1">
-                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="" autocomplete="off">
+                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="{{searchParam.info}}" autocomplete="off">
                     <input type="hidden" name="creatorId" value="">
                 </div>
                 <div class="col-sm-1">
@@ -41,7 +41,7 @@
 
         <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
             <div class="form-group">
-                <label class="control-label">本次付款金额：</label>
+                <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
                     <input name="sumPayMoney" type="text" class="T-btn-autofill F-float F-money" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
                 </label>

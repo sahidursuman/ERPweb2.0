@@ -37,11 +37,11 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.shopNames}}" name="" maxlength="80" data-propover="{{quote.shopIds}}">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.shopNames}}" name="" maxlength="80" data-propover='{{quote.shopIds}}'>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
                         <div class="col-sm-2">
-                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.selfPayItemNames}}" name="" maxlength="80" data-propover="{{quote.selfPayItemIds}}">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.selfPayItemNames}}" name="" maxlength="80" data-propover='{{quote.selfPayItemIds}}'>
                         </div>
                     </div>
                 </div>
@@ -466,7 +466,7 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote F-float F-money" value="{{restaurantList.price}}" />
-                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
+                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
                                                                                                         <td>

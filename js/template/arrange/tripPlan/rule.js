@@ -190,7 +190,7 @@ define(function(require, exports) {
                     errMsg: '单价不能为空'
                 },
                 {
-                    type: 'nonnegative-float',
+                    type: 'float',
                     errMsg: '单价必须为数字'
                 }]
             },{

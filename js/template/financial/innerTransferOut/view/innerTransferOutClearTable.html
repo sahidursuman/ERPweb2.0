@@ -10,14 +10,7 @@
         <td>{{checking.operateTransRealname}}</td>
         <td>{{checking.operateTransTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td><span class="F-float F-money">{{checking.transNeedPayMoney}}</span></td>
-        <td>
-            大人:<span class="F-float F-money">{{checking.transAdultPrice}}</span>(元)*
-                 <span class="F-float F-count">{{checking.transAdultCount}}</span>=
-                 <span class="F-float F-money">{{checking.transAdultPrice*checking.transAdultCount}}</span><br>
-            小孩:<span class="F-float F-money">{{checking.transChildPrice}}</span>(元)*
-                 <span class="F-float F-count">{{checking.transChildCount}}</span>=
-                 <span class="F-float F-money">{{checking.transChildPrice*checking.transChildCount}}</span><br>
-            {{if checking.innerTransferFeeList.length != 0}}
+        <td>{{if checking.innerTransferFeeList.length != 0}}
                 {{each checking.innerTransferFeeList as otherFee}}
                     {{otherFee.discribe}}:
                     <span class="F-float F-money">{{otherFee.price}}</span>(元)*
