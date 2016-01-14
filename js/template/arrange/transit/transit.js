@@ -13,7 +13,8 @@ define(function(require, exports) {
 		arrangeTemplate = require("./view/arrange"),
 		viewTemplate = require("./view/view"),
 		financiaListTemplate = require("./view/financiaList")
-		financialNoticeTemplate = require("./view/FinancialNotice");
+		financialNoticeTemplate = require("./view/FinancialNotice"),
+		noticeTemplate = require("./view/notice");
 	/**
 	 * 自定义中转对象
 	 * @type {Object}
@@ -230,7 +231,82 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	transit.sendTransit = function(id) {
-		showConfirmDialog($( "#confirm-dialog-message" ),'是否发送通知？', function() {
+		var noticeLayer = layer.open({
+			type: 1,
+			title: '通知设置',
+			skin: 'layui-layer-rim', //加上边框
+			area: '630px', //宽高
+			zIndex:1028,
+			content: noticeTemplate(),
+			success:function(){
+				var $container = $('.T-transitNotice'),
+					$checkbox = $container.find('.T-checked'),
+					$touristDiv = $container.find(".T-touristCheckedShow");
+				$container.find("[name=tourist]").click(function(){
+					if($(this).is(":checked")){
+						$touristDiv.removeClass('hidden');
+					} else{
+						$touristDiv.addClass('hidden');
+						$touristDiv.find('[name=rightNow]').trigger('click');
+						$touristDiv.find('[name=smsSign]').val('');
+					}
+				});
+				transit.dateTimePicker($container);
+				var $timeCheck = $touristDiv.find('.T-checked')
+				$timeCheck.click(function() {
+					var $this = $(this);
+					$timeCheck.prop('checked',false);
+					$this.prop('checked',true);
+
+					if($touristDiv.find('[name=timing]').is(":checked")){
+						$touristDiv.find('[name=sendDateTime]').removeClass('hidden');
+					} else{
+						$touristDiv.find('[name=sendDateTime]').addClass('hidden');
+						$touristDiv.find('[name=sendDateTime]').val('');
+					}
+				})
+				$container.find('.T-cancel').on('click', function() {
+					layer.close(noticeLayer);
+				})
+				$container.find('.T-btn-submit-notice').on('click', function() {
+					var noticeItems = {
+						bus: getValue('bus'),
+						hotel: getValue('hotel'),
+						other: getValue('other'),
+						restaurant: getValue('restaurant'),
+						ticket: getValue('ticket'),
+						timing: getValue('timing'),
+						tourist: getValue('tourist'),
+						sendDateTime: getValue('sendDateTime'),
+						touristGroupId: id,
+						smsSign: getValue('smsSign')
+					}
+					$.ajax({
+						url: KingServices.build_url('touristGroup','noticeTouristGroupTransitArrange'), 	
+						type: 'POST',
+						data: {
+							noticeItems: JSON.stringify(noticeItems)
+						},
+						success: function(data) {
+							if (showDialog(data)) {
+								showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+									layer.close(noticeLayer);
+								})
+							}
+						}
+					})
+				})
+				function getValue(name){
+					var $this = $container.find('[name='+name+']');
+					if ($this.attr('type') == 'checkbox') {
+						return $this.is(':checked') ? 1 : 0;
+					}else if ($this.attr('type') == 'text') {
+						return $this.val();
+					}
+				}
+			}
+		})
+		/*showConfirmDialog($( "#confirm-dialog-message" ),'是否发送通知？', function() {
 			$.ajax({
 				url: KingServices.build_url('touristGroup','noticeTouristInfo'),
 				type:"POST",
@@ -243,7 +319,7 @@ define(function(require, exports) {
 					}
 				}
 			})
-		})
+		})*/
 	};
 
 	/**
