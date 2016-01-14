@@ -441,13 +441,25 @@ FinancialService.autoPayConfirm = function(startDate,endDate,fn){
 
 //设置数据来源标识（中转、代订）
 FinancialService.isGuidePay = function(dataList){
+
     for(var i = 0; i < dataList.length; i++){
-        var tripNumber = trim(dataList[i].tripNumber),
+        if(!!dataList[i].tripNumber){
+            var tripNumber = trim(dataList[i].tripNumber),
             strLen = tripNumber.length;
             tripType = tripNumber.substring(strLen-2,strLen);
-        if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
-            dataList[i].isGuidePay = 1;
+            if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
+                dataList[i].isGuidePay = 1;
+            }
+        }else if(!!dataList[i].info){
+                var tripNumData = dataList[i].info;
+                var tripNum = tripNumData.split(',');
+                if(/ZZ$/.test(tripNum[0] )|| /zz$/.test(tripNum[0]) || /DD$/.test(tripNum[0]) || /dd$/.test(tripNum[0])){
+                    dataList[i].isGuidePay = 1;
+                }else{
+                    dataList[i].isGuidePay = 0;
+                };
         }
+        
     }
     return dataList;
 };

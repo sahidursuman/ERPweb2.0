@@ -1507,11 +1507,11 @@ define(function(require, exports) {
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
 					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
+					group[i].includeSelfPay+'</td><td>'+
 					group[i].accompanyGuideName+'</td><td>'+
 					group[i].accompanyGuideMobile+'</td><td>'+
 					group[i].welcomeBoard+'</td><td>'+
-					group[i].partnerAgency.remark+'</td><td>'+
+					group[i].remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
