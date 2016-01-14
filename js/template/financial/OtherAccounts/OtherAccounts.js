@@ -140,6 +140,7 @@ define(function(require, exports) {
                         data: OtherAccounts.CheckingData,
                         success: function(data) {
                             dataTable.statistics = data.statistics;
+                            dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                             if (showDialog(data)) {
                                 // 切换tab内容成功
                                 if (Tools.addTab(checkTabId, "其它对账", AccountsCheckingTemplate(dataTable))) {
@@ -411,7 +412,7 @@ define(function(require, exports) {
                             if (showDialog(data)) {
 
                                 dataTable.statistics = data.statistics;
-
+                                dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                                 if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
