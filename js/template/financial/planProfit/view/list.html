@@ -51,7 +51,7 @@
 	<tr data-id="{{rs.financialId}}">
 		<td><a class="T-tripDetail">{{rs.tripNumber}}</a></td>
 		<td>{{rs.lineProductName}}</td>
-		<td>{{if rs.tripPlanType == 0}}团队{{else if rs.tripPlanType == 1}}散客{{/if}}</td>
+		<td>{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</td>
 		<td>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 		<td><span class="F-float F-count">{{rs.adultCount}}</span> 大 <span class="F-float F-count">{{rs.childCount}}</span> 小</td>
 		<td>{{rs.guideName}}</td>
