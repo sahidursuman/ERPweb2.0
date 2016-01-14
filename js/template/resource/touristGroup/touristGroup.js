@@ -2139,42 +2139,35 @@ define(function(require, exports) {
             })
         }
 
-        //接送事件点json
-        var outArrangeRemarkJson = {};
-        var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
-            $smallCarChecked = $arrangeForm.find('.T-smallCar').is(':checked'),
-            $tourSendChecked = $arrangeForm.find('.T-touristSend').is(':checked');
-        if ($touristReChecked || $smallCarChecked || $tourSendChecked) {
-            outArrangeRemarkJson = touristGroup.installArrangeJson($arrangeForm)
-        }
+      
 
+        //接送JSON包
+        var  reciveTrip  = {
+            param : {},
+            require : []
+        },sendTrip ={
+            param : {},
+            require : []
+        };
+        //接团
+        reciveTrip.require = touristGroup.getTransitPlanRequest($obj,0);
+        //送团
+        sendTrip.require = touristGroup.getTransitPlanRequest($obj,1);
 
-        //接送团json组装
-        var arriveJson , leaveJson ,arriveComJson,leaveComJson;
-            //接团
-            arriveJson = touristGroup.getTransitPlanRequest($obj,0);
-            //送团
-            leaveJson = touristGroup.getTransitPlanRequest($obj,1);
-
-            //接团共用json
-            arriveComJson = {
-                reciveTime : $obj.find('[name="arriveTime"]').val(),
-                recivePlace : $obj.find('[name="arrivePosition"]').val(),
-                ticketShift : $obj.find('[name="arriveShift"]').val(),
-                ticketTime : $obj.find('[name="arriveShiftTime"]').val()
-            };
-            //送团共用json
-            leaveComJson = {
-                reciveTime : $obj.find('[name="leaveTime"]').val(),
-                recivePlace : $obj.find('[name="leavePosition"]').val(),
-                ticketShift : $obj.find('[name="leaveShift"]').val(),
-                ticketTime : $obj.find('[name="leaveShiftTime"]').val()
-            };
-
-        console.info('接团json组装reciveJson'+JSON.stringify(arriveJson));
-        console.info('需求公用对象json组装reciveJson'+JSON.stringify(leaveJson));
-        console.info('arriveComJson'+JSON.stringify(arriveComJson));
-        console.info('需求公用对象json组装leaveComJson'+JSON.stringify(leaveComJson));
+        //接团共用json
+        reciveTrip.param = {
+            reciveTime : $obj.find('[name="arriveTime"]').val(),
+            recivePlace : $obj.find('[name="arrivePosition"]').val(),
+            ticketShift : $obj.find('[name="arriveShift"]').val(),
+            ticketTime : $obj.find('[name="arriveShiftTime"]').val()
+        };
+        //送团共用json
+        sendTrip.param = {
+            reciveTime : $obj.find('[name="leaveTime"]').val(),
+            recivePlace : $obj.find('[name="leavePosition"]').val(),
+            ticketShift : $obj.find('[name="leaveShift"]').val(),
+            ticketTime : $obj.find('[name="leaveShiftTime"]').val()
+        };
 
         //预收款、计划现收不能大于应收
         var preIncomeMoney = touristGroup.getVal($lineInfoForm, "preIncomeMoney"),
@@ -2202,13 +2195,15 @@ define(function(require, exports) {
         //将json对象转换成字符串
         touristGroupFeeJsonAdd = JSON.stringify(touristGroupFeeJsonAdd);
         touristGroupMemberJsonAdd = JSON.stringify(touristGroupMemberJsonAdd);
-        outArrangeRemarkJson = JSON.stringify(outArrangeRemarkJson);
+        reciveTrip = JSON.stringify(reciveTrip);
+        sendTrip = JSON.stringify(sendTrip);
+
         var url, data, tabId;
         if (typeFlag == 2) {
             touristGroupMemberJsonDel = JSON.stringify(touristGroupMemberJsonDel);
             touristGroupFeeJsonDel = JSON.stringify(touristGroupFeeJsonDel);
             url = touristGroup.url("updateTouristGroup", "update");
-            data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&outArrangeRemarkJson=" + outArrangeRemarkJson
+            data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip
             tabId = updateTabId
         } else {
             //提交数据
@@ -2217,7 +2212,7 @@ define(function(require, exports) {
                 innerStatus = true;
             }
             url = touristGroup.url("saveTouristGroup", "add");
-            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&outArrangeRemarkJson=" + outArrangeRemarkJson;
+            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip;
             var tabId = addTabId;
         };
 
@@ -2319,7 +2314,7 @@ define(function(require, exports) {
                 };
             }
 
-            touristGroupMemberJsonAdd.push(touristGroupMemberJson);
+            touristGroupMemberJsonAdd.push(touristGroupMemberJson); 
         });
         if (erroFlag == 0) {
             return touristGroupMemberJsonAdd;
@@ -2327,20 +2322,8 @@ define(function(require, exports) {
             return erroFlag;
         }
     };
-    //拼接安排json
-    touristGroup.installArrangeJson = function($outArrange) {
-        var outArrangeRemarkJson = {
-            arriveTime: touristGroup.getVal($outArrange, "receptionTime"),
-            arrivePosition: touristGroup.getVal($outArrange, "receptionAddress"),
-            arriveShift: touristGroup.getVal($outArrange, "arriveShift"),
-            arriveShiftTime: touristGroup.getVal($outArrange, "arriveShiftTime"),
-            leaveTime: touristGroup.getVal($outArrange, "sendTime"),
-            leavePosition: touristGroup.getVal($outArrange, "sendAddress"),
-            leaveShift: touristGroup.getVal($outArrange, "leaveShift"),
-            leaveShiftTime: touristGroup.getVal($outArrange, "leaveShiftTime")
-        };
-        return outArrangeRemarkJson;
-    };
+
+
     //拼接url
     touristGroup.url = function(method, operation) {
         var url = APP_ROOT + "back/touristGroup.do?method=" + method + "&token=" + $.cookie("token") + "&menuKey=" + menuKey + "&operation=" + operation;
