@@ -169,7 +169,7 @@
                             <td><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</td>
                             <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}"></td>
+                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
                                 {{if touristGroup.touristGroupFeeList.length > 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
