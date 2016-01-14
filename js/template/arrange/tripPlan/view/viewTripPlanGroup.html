@@ -331,9 +331,10 @@
 														{{each days.arrangeData.restaurantArrangeList as rs}}
 														<tr>
 															<td>{{rs.type}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}</td>
+															
+															<td>{{if rs.isChoose == "1"}}导游任选{{else}}{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 															<td>{{rs.price}}</td>
 															<td>{{rs.memberCount}}</td>
 															<td>{{rs.reduceMoney}}</td>

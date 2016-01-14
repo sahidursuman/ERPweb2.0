@@ -205,7 +205,6 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
-					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(!!InnerTransferIn.saveJson.autoPayList && InnerTransferIn.saveJson.autoPayList.length>0){
@@ -909,7 +908,8 @@ define(function(require,exports) {
 				receiveUserName:'',
 				startAccountTime:options.startDate,
 				endAccountTime:options.endDate,
-				btnShowStatus:true
+				btnShowStatus:true,
+				payType:0
 			}
         InnerTransferIn.chenking(args,2); 
     };
