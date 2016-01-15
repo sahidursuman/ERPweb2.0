@@ -533,6 +533,8 @@ define(function(require, exports) {
         });
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
+            var check =  new FinRule(5).check($tab);
+            if(!check.form()){ return false; }
             if (!validator.form()) { return; }
             var allMoney = $tab.find('input[name=sumPayMoney]').val();
             if(allMoney == 0){

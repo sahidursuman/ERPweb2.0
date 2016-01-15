@@ -39,6 +39,10 @@ define(function(require, exports) {
 
     };
 
+    var getFeeItemPayTypeOptions =  {
+            payType : 1
+    };
+
     /**
      * [initModule description]
      * @return {[type]} [description]
@@ -835,11 +839,7 @@ define(function(require, exports) {
             arrangeTourist.checkTransferAll($outTransfer, $that, "tbody");
 
         });
-
     };
-
-
-
 
     /** 
      * saveOutTransfer 外转保存
@@ -923,12 +923,12 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var touristGroupInfo = JSON.parse(data.touristGroup);
-                        data.touristGroup = touristGroupInfo;
-                        var touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
-                        data.touristGroupFeeList = touristGroupFeeList;
-                        var innerTransferFeeList = JSON.parse(data.innerTransferFeeList);
-                        data.innerTransferFeeList = innerTransferFeeList;
+                        var data = {
+                            touristGroup : JSON.parse(data.touristGroup),
+                            touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
+                            innerTransferFeeList : JSON.parse(data.innerTransferFeeList),
+                            getPayType : getFeeItemPayTypeOptions.payType
+                        };
                         var html = innerEditFeeTemplate(data);
                         arrangeTourist.editFeeLayer = layer.open({
                             type: 1,
@@ -955,10 +955,11 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var touristGroupInfo = JSON.parse(data.touristGroup);
-                        data.touristGroup = touristGroupInfo;
-                        var touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
-                        data.touristGroupFeeList = touristGroupFeeList;
+                        var data = {
+                             touristGroup : JSON.parse(data.touristGroup),
+                             touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
+                             getPayType : getFeeItemPayTypeOptions.payType
+                        };
                         var html = outEditFeeTemplate(data);
                         arrangeTourist.editFeeLayer = layer.open({
                             type: 1,
@@ -1128,7 +1129,10 @@ define(function(require, exports) {
      * @return {[type]}           [description]
      */
     arrangeTourist.newAddFee = function($tab, type) {
-        var html = "<tr><td><input  name=\"describeInfo\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>" +
+        var html = "<tr><td><select name=\"describeInfo\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+            "<option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
+            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>" +
             "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count T-calc F-float F-count\" /></td>" +
             "<td><input  name=\"price\" type=\"text\" class=\"col-sm-12  no-padding-right price T-price T-calc F-float F-money\" /></td>" +
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-12  no-padding-right T-payMoney F-float F-money\" readonly=\"readonly\" /></td>" +

@@ -37,6 +37,9 @@ define(function(require, exports) {
 	    	$divIdInObj:"",
 	    	allData : {}
 	    };
+		var getFeeItemPayTypeOptions =  {
+	         payType : 1
+	    };
 
 	    /**
 	     * 初始化转客数据
@@ -492,8 +495,13 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){	
-						data.touristGroupTransfer=JSON.parse(data.touristGroupTransfer);
-						data.parentTouristGroup=JSON.parse(data.parentTouristGroup);
+						var data = {
+						    touristGroupTransfer : JSON.parse(data.touristGroupTransfer),
+						    parentTouristGroup : JSON.parse(data.parentTouristGroup),
+						    getPayType : getFeeItemPayTypeOptions.getPayType
+						    
+						};
+						
 						var html = updateTransferOutTemplate(data),
 						    title="编辑我社转出",
 						    tab_id=menuKey+"-updateTransferOut";
@@ -630,7 +638,10 @@ define(function(require, exports) {
 		 */
 		transfer.newAddFee=function($tab,validator){
 			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
-		    "<td><input  name=\"describe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
+		    "<td><select name=\"describeInfo\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+            "<option value=\"3\">中转结算价</option><option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
+            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\"readonly=\"readonly\" /></td>"+

@@ -23,7 +23,7 @@
     <div class="form-inline" style="padding-top:10px;">
         <div class="form-group">
             <label>人数合计：</label>
-            <label class="F-float F-count">{{totalList.sumCount}}</label>
+            <label>{{totalList.sumCount}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>购物金额合计：</label>
@@ -39,7 +39,7 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>人数返佣合计：</label>
-            <label class="F-float F-money">{{totalList.sumCustomerRebateMoney}}</label>
+            <label>{{totalList.sumCustomerRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>停车返佣合计：</label>
@@ -148,7 +148,7 @@
             <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
                 <td>{{rs.tripMessage}}</td>
                 <td>{{rs.accountTime}}</td>
-                <td><span class="F-float F-count">{{rs.count}}</span></td>
+                <td><span>{{rs.count}}</span></td>
                 <td>{{if rs.shopItem.length >0}}{{rs.shopItem[0].itemName}}{{if rs.shopItem.length >1}}...{{/if}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.travelAgencyRebateMoney}}</span></td>

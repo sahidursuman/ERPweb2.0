@@ -12,6 +12,7 @@
 										<span class="lbl"></span>
 									</label>
 								</th>
+								<th class="th-border">收客单号</th>
 								<th class="th-border">外联销售</th>
 								<th class="th-border">线路产品</th>
 								<th class="th-border">来源</th>
@@ -23,7 +24,10 @@
 								<th class="th-border">现收团款</th>
 								<th class="th-border">住宿标准</th>
 								<th class="th-border">包含自费</th>
-								<th class="th-border" style="width: 300px">备注</th>
+								<th class="th-border">全陪</th>
+								<th class="th-border">全陪电话</th>
+								<th class="th-border">接站牌</th>
+								<th class="th-border">备注</th>
 								<th class="th-border" style="width: 50px">操作</th>
 							</tr>
 						</thead>
@@ -35,6 +39,7 @@
 										<span class="lbl"></span>
 									</label>
 								</td>
+								<td>收客单号</td>
 								<td name="creatorName">{{touristGroup.creatorName}}</td>
 								<td name="lineProductName">{{if touristGroup.lineProduct}}{{touristGroup.lineProduct.name}}{{/if}}</td>
 								<td name="travelAgencyName">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
@@ -61,6 +66,9 @@
 								   {{/if}}
 								</td>
 								<td name="includeSelfPay">{{touristGroup.includeSelfPay}}</td>
+								<td>全陪</td>
+								<td>全陪电话</td>
+								<td>接站牌</td>
 								<td name="remark">{{touristGroup.remark}}</td>
 								<td>
 									<a class="cursor T-groupView">

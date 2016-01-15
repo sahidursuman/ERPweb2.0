@@ -61,7 +61,7 @@
         <tr>
             <td>现收：<span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span></td>
             <td>现付：<span class="F-float F-money">{{basicInfo.guideAllPayMoney}}</span></td>
-            <td>预付款：<span class="F-float F-money">{{basicInfo.guideAllPreMoney}}</span></td>
+            <td>预支款：<span class="F-float F-money">{{basicInfo.guideAllPreMoney}}</span></td>
         </tr>
     </tbody>
 </table>
@@ -71,11 +71,11 @@
     <table class="table table-bordered">
         <tbody>
             <tr>
-                <th>日期</th>
-                <th>行程简要</th>
-                <th>含餐情况</th>
-                <th>住宿地点</th>
-                <th>景点</th>
+                <th class="th-border">日期</th>
+                <th class="th-border">行程简要</th>
+                <th class="th-border">含餐情况</th>
+                <th class="th-border">住宿地点</th>
+                <th class="th-border">景点</th>
             </tr>
             {{each tripPlanDayList as day}}
             <tr>
@@ -200,7 +200,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
-        <th class="th-border">导付</th>
+        <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -210,7 +210,7 @@
             <tr>
                 <td>{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}</td>
                 <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{#busCompany.taskType || getTaskDesc}}</td>
+                <td>{{#busCompany.taskType | getTaskDesc}}</td>
                 <td class="F-float F-mcount">{{busCompany.needSeatCount}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
@@ -245,7 +245,7 @@
         <col style="width:60px;"> 
         <col style="width:60px;"> 
         <col style="width:60px;">
-        <col style="width:60px;">
+        <col style="width:80px;">
         <col style="width:60px;">
         <col> 
     </colgroup>
@@ -261,7 +261,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
-        <th class="th-border">导付</th>
+        <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -303,7 +303,7 @@
         <col style="width:60px;">
         <col style="width:60px;">
         <col style="width:60px;">
-        <col style="width:60px;">
+        <col style="width:80px;">
         <col>
         <col style="width:80px;"> 
       </colgroup>
@@ -320,7 +320,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
-        <th class="th-border">导付</th>
+        <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
         <th class="th-border">状态</th>
     </tr>
@@ -364,7 +364,7 @@
        <col style="width:60px;"> 
        <col style="width:110px;">
        <col style="width:60px;">
-       <col style="width:60px;">
+       <col style="width:80px;">
        <col style="width:60px;">
        <col>
     </colgroup>
@@ -381,7 +381,7 @@
         <th class="th-border">订单号</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
-        <th class="th-border">导付</th>
+        <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -482,7 +482,7 @@
         <th style="width: 77px;">优惠</th>
         <th style="width: 77px;">应付</th>
         <th style="width: 77px;">预付款</th>
-        <th style="width: 77px;">导付</th>
+        <th style="width: 77px;">计划导付</th>
         <th>备注</th>
     </tr>
     </thead>
@@ -543,7 +543,7 @@
         <th class="th-border" style="width: 77px;">优惠</th>
         <th class="th-border" style="width: 77px;">应付</th>
         <th class="th-border" style="width: 77px;">预付款</th>
-        <th class="th-border" style="width: 77px;">导付</th>
+        <th class="th-border" style="width: 77px;">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -599,7 +599,7 @@
         <th class="th-border" style="width: 77px;">优惠</th>
         <th class="th-border" style="width: 77px;">应付</th>
         <th class="th-border" style="width: 77px;">预付款</th>
-        <th class="th-border" style="width: 77px;">导付</th>
+        <th class="th-border" style="width: 77px;">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -626,7 +626,7 @@
 {{/if}}   
 
 <div class="text-center mar-t-20">
-    <button class="btn btn-xs T-close w100"> 关闭 </button>
+    <button class="btn btn-xs T-close btn-primary w100"> 关闭 </button>
 </div>
 
 
