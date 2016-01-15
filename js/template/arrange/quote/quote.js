@@ -3475,7 +3475,7 @@ define(function(require, exports) {
 			"guideQuote": {
 				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
 			}
 		}
