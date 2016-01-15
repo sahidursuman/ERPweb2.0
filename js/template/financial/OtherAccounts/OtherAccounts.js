@@ -140,6 +140,7 @@ define(function(require, exports) {
                         data: OtherAccounts.CheckingData,
                         success: function(data) {
                             dataTable.statistics = data.statistics;
+                            dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                             if (showDialog(data)) {
                                 // 切换tab内容成功
                                 if (Tools.addTab(checkTabId, "其它对账", AccountsCheckingTemplate(dataTable))) {
@@ -411,7 +412,7 @@ define(function(require, exports) {
                             if (showDialog(data)) {
 
                                 dataTable.statistics = data.statistics;
-
+                                dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                                 if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
@@ -594,7 +595,10 @@ define(function(require, exports) {
     OtherAccounts.paysave = function(data, tabid, title, html) {
         var $PaymentTabId = $("#tab-" + PaymentTabId + "-content"),
             sumPayMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val()),
-            sumListMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').data("money"));
+            sumListMoney = $PaymentTabId.find('input[name=sumPayMoney]').data("money");
+        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+            sumListMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val());
+        };
         if(sumPayMoney != sumListMoney){
             showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
             return false;

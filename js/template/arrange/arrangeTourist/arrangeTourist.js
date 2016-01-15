@@ -594,18 +594,18 @@ define(function(require, exports) {
         //内转
         $transferObj.find('.T-arrageTransfer-inner').on('click', function(event) {
             event.preventDefault();
-            var type = 1;
+            var type = 1,action = 'innerTransfer';
             /* Act on the event */
-            arrangeTourist.inOutTransferTourist($transferObj, type);
+            arrangeTourist.inOutTransferTourist($transferObj, type,action);
 
         });
 
         //外转
         $transferObj.find('.T-arrageTransfer-out').on('click', function(event) {
             event.preventDefault();
-            var type = 2;
+            var type = 2,action ='outTransfer';   
             /* Act on the event */
-            arrangeTourist.inOutTransferTourist($transferObj, type);
+            arrangeTourist.inOutTransferTourist($transferObj, type ,action);
 
         });
 
@@ -698,13 +698,13 @@ define(function(require, exports) {
      * @param  {[type]} $transferObj 内转转客Dom对象
      * @return {[type]}              内外转标识
      */
-    arrangeTourist.inOutTransferTourist = function($transferObj, type) {
+    arrangeTourist.inOutTransferTourist = function($transferObj, type ,action) {
         if (!!arrangeTourist.transferId && arrangeTourist.transferId.length > 0) {
             var ids = JSON.stringify(arrangeTourist.transferId);
             $.ajax({
                 url: KingServices.build_url("touristGroup", "getTouristGroupByIdsForTransit"),
                 type: "POST",
-                data: "ids=" + encodeURIComponent(ids),
+                data: "ids=" + encodeURIComponent(ids)+ "&action=" + action,
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
@@ -1347,8 +1347,8 @@ define(function(require, exports) {
                                     var id = inTransferTr.eq(i).data("value");
                                     if (id == data.touristGroupId) {
                                         inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
-                                        inTransferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
-                                        inTransferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+                                        inTransferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
+                                        inTransferTr.eq(i).find(".T-payed").html(data.transPayedMoney);
                                     }
                                 })
 
@@ -1373,8 +1373,8 @@ define(function(require, exports) {
                                     var id = transferTr.eq(i).data("value");
                                     if (id == data.id) {
                                         transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
-                                        transferTr.eq(i).find("[name=label_payed]").html(data.transPayedMoney);
-                                        transferTr.eq(i).find("[name=label_needPay]").html(data.transNeedPayAllMoney);
+                                        transferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
+                                        transferTr.eq(i).find(".T-payed").html(data.transPayedMoney);
 
 
                                     }

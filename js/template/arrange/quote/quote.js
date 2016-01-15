@@ -739,7 +739,6 @@ define(function(require, exports) {
 
 	//报价详情页事件绑定
 	quote.init_event =function($container,id,$a,htmlT,target) {
-		var validator = rule.quoteCheckor($container);
 
 		addQuoteInit($container,htmlT,$a);
 		function addQuoteInit($container,htmlT,$a){
@@ -753,6 +752,7 @@ define(function(require, exports) {
 				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
 			});	
 		}
+		var validator = rule.quoteCheckor($container);
 
 		//自费和购物 浮动显示 和 多选
 		var $shop = $container.find('.T-shopMultiselect');
@@ -887,7 +887,11 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time, $a);
+					if (!!$time) {
+						quote.changeStartTime($container, $time, $a);
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+					}
 				})
 			}
 		})
@@ -981,7 +985,7 @@ define(function(require, exports) {
 			}
 		});
 		//保存报价
-		$container.find('.T-btn-submit-quote').on('click',function(){
+		$container.find('.T-btn-submit-quote').off('click').on('click',function(){
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container, $a);
@@ -3407,7 +3411,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id, $container, $a) {
+	quote.saveQuote = function(id, $container, $a,tab_id, title, html) {
 		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
@@ -3708,9 +3712,9 @@ define(function(require, exports) {
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
 							}else if (idString == "tab-arrange_quote-update-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','','update');
 							}else if (idString == "tab-arrange_quote-copy-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','1','copy');
 							}
                         }
 					});
