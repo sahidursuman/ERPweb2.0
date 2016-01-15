@@ -39,6 +39,7 @@
         {{if tripPlan.billStatus == -1}}
             {{if arrange.isChoose == 1}}
                 <select name="chooseRest">
+                    <option value="">导游自选</option>
                     {{each arrange.restaurantChooseArrangeList as rs}}
                         <option value="{{rs.restaurantId}}">{{rs.name}}</option>
                     {{/each}}
