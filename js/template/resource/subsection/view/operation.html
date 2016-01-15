@@ -34,16 +34,33 @@
                     </tr>
                 </thead>
                 <tbody class="T-innerOutEditFeeTbody">
+                    <tr  data-entity-id="1" data-type="3">
+                        <td class="T-name">
+                            FEE
+                        </td>   
+                        <td class="T-count">
+                            100
+                        </td>
+                        <td  class="T-price">
+                            2
+                        </td>
+                        <td>200</td>
+
+                        <td>
+                            RMARK
+                        </td>
+                    </tr>
+
                     <!--游客小组费用start-->
                     {{each ptGroup.touristGroupFeeList as transferList}}
                         <tr  data-entity-id="{{transferList.id}}" data-type="{{transferList.type}}">
-                            <td>
+                            <td class="T-name">
                                 {{transferList.name}}
                             </td>   
-                            <td>
+                            <td class="T-count">
                                 {{transferList.count}}
                             </td>
-                            <td>
+                            <td class="T-price">
                                 {{transferList.price}}
                             </td>
                             <td>{{transferList.price*transferList.count}}</td>
@@ -53,6 +70,10 @@
                             </td>
                         </tr>
                     {{/each}}
+
+
+                   
+
                    
                 </tbody>
             </table>
@@ -122,7 +143,7 @@
                     <td>
                         <input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney==1 }}checked="checked" {{/if}} />
                     </td>
-                    <td><input type="radio" name="operateCalculteOut" {{if subList.operateCalculteOut==1 }}checked="checked" {{/if}} /></td>
+                    <td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" {{if subList.operateCalculteOut==1 }}checked="checked" {{/if}} /></td>
                     <td>
                         {{if subList.status == 0}} 已发团 {{else if subList.status == 1}} 未分团 {{else if subList.status == 2}} 已分团 {{else if subList.status == 3}} 已转客 {{else if subList.status == 4}} 已取消 {{else if subList.status == 5}} 已分段 {{else if subList.status == 6}} 已内转 {{/if}}
                     </td>

@@ -332,12 +332,17 @@ define(function(require, exports) {
 		 * @param {[type]} $that  [description]
 		 * @param {[type]} $tbody [description]
 		 */
-		subsection.addFeeItem = function($that, $tbody){
+		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){   
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="" class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"    class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
+           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		       if(!!type){
+		       		name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"   readonly class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
+           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		        } 
                $td.append(name);
     	       $td.next().append(count);
     	       $td.next().next().append(price);
@@ -358,8 +363,8 @@ define(function(require, exports) {
 				$this.data('deleted', true);
 				var $div = $this.closest('div'),
 					divIndex = $div.index(),
+					index = $div.children('input').data('index'),
 					entityId = $div.data("id");
-				console.info('divIndex.....'+divIndex);
 				$div.closest('tr').find('div:not(.delete)').find('.T-count').eq(divIndex).fadeOut(function(){
 					$(this).closest('div').remove();
 				});
@@ -374,6 +379,8 @@ define(function(require, exports) {
 					});
 				}else{
 					$div.fadeOut(function(){
+						var payMoney = subsection.totalPayMoney($this.closest('tr'),index);
+						$div.closest('tr').find('.T-payedMoney').val(payMoney);
 						$(this).remove();
 					});
 				}
@@ -381,82 +388,61 @@ define(function(require, exports) {
 		};
 
 		//费用项目的计算
-	    //subsection.calcPayMoney(subsection.$tabSub);
 		subsection.$tbody.on('change', '.T-calc', function(event) {
             /* Act on the event */
            var $that=$(this),divIndex = $that.closest('div').index(), $tr = $that.closest('tr');
 	            if ($that.hasClass('T-count')) {  //若数量改变
-	                var count = $tr.find('.T-count').eq(divIndex).val(),
-	                    price = $tr.find('.T-price').eq(divIndex).val(),payMoney=0;
-	                if (!isNaN(price) && !isNaN(count)) {
-	                     payMoney=parseFloat(price*count);        
-	                    $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	                };
-
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                 console.log('count....');
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var count = $tr.find('.T-count').eq(divIndex).val(),
-	                    price = $tr.find('.T-price').eq(divIndex).val(),payMoney=0;
-	                if (!isNaN(price) && !isNaN(count)) {
-	                     payMoney=parseFloat(price*count);        
-	                    $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	                };
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                console.log('price....');
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	            };
         });
 
 
-
-
-
-
 	    /**
-	     * calcPayMoney 根据费用【单价、数量】项目计算金额
-	     * @param  {[type]} $tab [description]
-	     * @return {[type]}      [description]
-	     
-	    subsection.calcPayMoney = function($tab){
-	        $tab.find('.T-subsectionOperationTbody').on('change', '.T-calc', function(event) {
-	            /* Act on the event 
-	            var $that=$(this),divIndex = $that.closest('div').index(), $tr = $that.closest('tr');
-	            if ($that.hasClass('T-count')) {  //若数量改变
-	                var count = $tr.find('.T-count').eq(divIndex).val(),
-	                    price = $tr.find('.T-price').eq(divIndex).val(),payMoney;
-	                console.log(count+'---------'+price);
-	                if (!isNaN(price) && !isNaN(count)) {
-	                     payMoney=parseFloat(price*count);        
-	                    $tr.find('.T-payMoney').eq(0).val(payMoney);
-	                };
-
-	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var count = $tr.find('.T-count').eq(divIndex).val(),
-	                    price = $tr.find('.T-price').eq(divIndex).val(),payMoney;
-	                if (!isNaN(price) && !isNaN(count)) {
-	                     payMoney=parseFloat(price*count);        
-	                    $tr.find('.T-payMoney').eq(0).val(payMoney);
-	                };
-	            };
-	        });
-	    };*/
-
-	    /**
-	     * calcPayMoney总金额计算
-	     * @param  {[type]} $tbody [description]
-	     * @return {[type]}        [description]
+	     * [totalPayMoney 金额的计算
+	     * @param  {[type]} $tr  当前改变Tr
+	     * @param  {[type]} tdIndex 当前修改后的index
+	     * @return {[type]} 
 	     */
-	    subsection.totalPayMoney =function($tbody){
-	    	var $payTr = $tbody.find('tr'),totalPayMoney=0;
-	    	    $payTr.each(function(index) {
-	    	    	var $that = $(this),
-	    	    	    count = $that.find('.T-count').eq(index).val(),
-	    	    	    price = $that.find('.T-price').eq(index).val();
-	    	    	    if (!isNaN(count) && !isNaN(price)) {
-	    	    	    	totalPayMoney+=count*price;
-	    	    	    };
-	    	    });
+	    subsection.totalPayMoney =function($tr,tdIndex){
+	    	var totalPayMoney = 0;
+		    	$tr.each(function() {
+		    		var $_that = $(this),$countTr = $_that.find('.T-count'),payMoney=0;
+		    		$countTr.each(function(index) {
+		    			if(index <= tdIndex ){
+		    				var count = $(this).closest('tr').find(".T-count-" + index).val(),
+						        price = $(this).closest('tr').find(".T-price-" + index).val();
+						    totalPayMoney +=count*price;
+		    			}
+					    
+				    });
+		    	});
 	    	return totalPayMoney;
 	    };
 
+	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
+		subsection.$tbody.find('tr').find('.T-operateCalculteOut').on('click', function(event) {
+    	 	  if ( $(this).is(':checked')) {
+    	 	  	 var nameText='',countText='',priceText='';
+				     subsection.$tabSub.find('.T-innerOutEditFeeTbody').find('tr').each(function(i) {
+				    	var $that = $(this),type = $that.eq(i).data('type');
+				    	    if (!!type && type== 3) {  
+				    	    	nameText = $that.eq(i).find('.T-name').text();
+				    	    	countText = $that.eq(i).find('.T-count').text();
+				    	    	priceText = $that.eq(i).find('.T-price').text();
+				    	    };
+				      });
+				console.log('nameText'+nameText+',countText'+countText+','+'priceText'+priceText);
 
-
+    	 	  	 var $fistItem = $(this).closest('tr').find('.T-type').first();
+    		     subsection.addFeeItem($fistItem,subsection.$tbody,nameText,countText,priceText,3);
+    	    };
+    	 });	
 
 		/**
 		 * [startIntime 中转分段初日期
