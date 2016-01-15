@@ -3559,6 +3559,11 @@ define(function(require, exports){
 				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
 				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text()))
 		};
+		var isEdit = 0;
+		if($obj.find('.T-edit').is(":checked")){
+			isEdit = 1;
+		}
+		tripPlan.isEdit = isEdit;
 		if(typeof tripPlan.opCheckRemark == "undefined") {
             tripPlan.opCheckRemark = "";
         }

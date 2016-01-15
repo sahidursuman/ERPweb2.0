@@ -58,7 +58,7 @@
         </tr>
     </thead>
     <tbody>{{each outRemarkArrangeList as transit}}
-        <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}">
+        <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" data-isEdit="{{transit.touristGroupOutRemark.isEdit}}">
             <td>{{transit.orderNumber}}</td>
             <td>{{transit.partnerAgencyName}}</td>
             <td>{{transit.lineProductName}}</td>
@@ -92,9 +92,9 @@
                     <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action T-send R-right" data-right="1160004" title="通知">
 							通知
 						</a>
-                    <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action T-edit R-right" data-right="1160002" title="中转安排">
+                    <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action {{if transit.touristGroupOutRemark.isEdit == 1}}gray{{else}}T-edit{{/if}} R-right" data-right="1160002" title="{{if transit.touristGroupOutRemark.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑中转安排{{/if}}">
                         <label class="padding-right20">|</label>
-                        编辑
+                        <span>编辑</span>
                         <label style="padding-left:10px;">|</label>
                     </a>
                     <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action T-view" title="查看安排">

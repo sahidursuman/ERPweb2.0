@@ -691,7 +691,10 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
-			data: {tripPlanId: id},
+			data: {
+				tripPlanId: id,
+				taskType: busData.taskType
+			},
 			success: function(data) {
 				if (showDialog(data)) {
 					data.touristGroupList = JSON.parse(data.touristGroupList);
