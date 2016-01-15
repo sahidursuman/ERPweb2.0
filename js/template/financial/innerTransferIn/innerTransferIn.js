@@ -209,13 +209,12 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
-					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
-				    	if(InnerTransferIn.saveJson.autoPayList){
-				    		if(data.innerTransferIncomeDetailsList.length != 0){
+				    	if(!!InnerTransferIn.saveJson.autoPayList && InnerTransferIn.saveJson.autoPayList.length>0){
+				    		if(data.innerTransferIncomeDetailsList.length > 0){
 				    			var saveJson = InnerTransferIn.saveJson.autoPayList
-					    		for(var i=0;i<saveJson.length;i++){
+					    		for(var i=0;i<data.innerTransferIncomeDetailsList.length;i++){
 					    			for(var j=0;j<saveJson.length;j++){
 					    				if(data.innerTransferIncomeDetailsList[i].id == saveJson[j].id){
 					    					data.innerTransferIncomeDetailsList[i].payMoney = saveJson[j].payMoney
@@ -223,7 +222,8 @@ define(function(require,exports) {
 					    			}
 					    		}
 				    		}
-				    	}
+				    	};
+				    	console.log(data.innerTransferIncomeDetailsList);
 				    	html = settlementTemplate(data);
 				    }else{
 				    	tabId = checkId;
@@ -361,6 +361,8 @@ define(function(require,exports) {
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
+			$obj.find('select[name=sumPayType]').val($listSearchData.payType);
+			FinancialService.initPayEvent($obj.find('.T-summary'));
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
@@ -537,6 +539,8 @@ define(function(require,exports) {
 						console.log(InnerTransferIn.saveJson);
 						$data.autoAccount = 1;
 						$obj.data('isEdited', false);
+						$data.payType = payType;
+						console.log($data);
 						InnerTransferIn.chenking($data,2,"settle");
 					});
 				}
@@ -894,7 +898,8 @@ define(function(require,exports) {
 				receiveUserName:'',
 				startAccountTime:options.startDate,
 				endAccountTime:options.endDate,
-				btnShowStatus:true
+				btnShowStatus:true,
+				payType:0
 			}
         InnerTransferIn.chenking(args,2); 
     };

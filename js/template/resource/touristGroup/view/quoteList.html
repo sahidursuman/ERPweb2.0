@@ -45,13 +45,13 @@
 
 					<td><span class="F-float F-count">{{lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{lineProduct.childCount}}</span> 小</td>
 					<td><span class="F-float F-count">{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}</span></td>
-					<td>{{lineProduct.startTime}}</td>
+					<td>{{lineProduct.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 
 					<td>{{if lineProduct.partnerAgency !=null }}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}</td>
 					<td>{{if lineProduct.partnerAgencyContact !=null }}{{lineProduct.partnerAgencyContact.contactRealname}}{{/if}}</td>
 					
 
-					<td>{{lineProduct.createTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td>{{lineProduct.createTime}}</td>
 					<td>
 					 	<label class="pos-rel"> <input type="radio" class="ace T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
 				    </td>

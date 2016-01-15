@@ -214,7 +214,7 @@ define(function(require, exports){
 	                    "tripPlan":JSON.parse(data.tripPlan),
 	                    "dayList":JSON.parse(data.dayList),
 	                    "guideArrange":data.guideArranges,
-	                    "guideArranges":JSON.parse(data.guideArranges.guideArranges),
+                    	"guideArranges":JSON.parse(data.guideArranges.guideArranges),
 	                    "insuranceArrangeList":JSON.parse(data.insuranceArrangeList),
 	                    "ticketArrangeList":JSON.parse(data.ticketArrangeList),
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
@@ -239,7 +239,8 @@ define(function(require, exports){
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -248,11 +249,6 @@ define(function(require, exports){
 		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
-		$guideObj.find('input[type=hidden]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			//计算金额
-			Count.autoGuideSum($(this),$obj);
-		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -387,7 +383,8 @@ define(function(require, exports){
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -406,7 +403,7 @@ define(function(require, exports){
 
 		$shopObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -434,7 +431,7 @@ define(function(require, exports){
 		var $selfObj = $listObj.find('.T-count-selfPay');
 		$selfObj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName"){
+			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName" && $nameFlag !="selfPayItem"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算自费金额
@@ -485,7 +482,7 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark"){
+			if($nameFlag != "billRemark" && $nameFlag !="price"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额
@@ -647,6 +644,8 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
+		var $whichDayObj = $listObj.find('.whichDay');
+		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -1499,8 +1498,8 @@ define(function(require, exports){
 		//规范数据
 		price = Count.changeTwoDecimal(price);
 		manageFee = Count.changeTwoDecimal(manageFee);
-		var priceSum = $parentObj.find('.tripIncome-guideManageMoney').text(price);
-		var manageFeeSum = $parentObj.find('.tripCost-guideArrangePrice').text(manageFee);
+		var priceSum = $parentObj.find('.tripCost-guideArrangePrice').text(price);
+		var manageFeeSum = $parentObj.find('.tripIncome-guideManageMoney').text(manageFee);
 		//计算团收入
 		Count.tripIncome($parentObj);
 		//计算团成本
@@ -1786,7 +1785,7 @@ define(function(require, exports){
 		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
 		'<td><input type="text" name="guidePayMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="difference" style="width:90px;"/></td>'+
+		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
@@ -1905,7 +1904,7 @@ define(function(require, exports){
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark"){
-				Count.calculateCost($(this));
+				//Count.calculateCost($(this));
 				//计算金额
 				Count.autoRestaurantSum($(this),$parentObj);
 			}
@@ -1993,7 +1992,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName"  && $nameFlag != "billRemark"){
+			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoHotelSum($(this),$parentObj);
@@ -2083,7 +2082,7 @@ define(function(require, exports){
 		//绑定事件
 		$obj.find('input[type=text]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "scenicName"  && $nameFlag != "billRemark"){
+			if($nameFlag != "scenicName"  && $nameFlag != "billRemark" && $nameFlag !='scenicItem'){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoScenicSum($(this),$parentObj);
@@ -2310,6 +2309,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							if(ui.item == null){
 								var $tr = $(this).closest('tr');
+								$(this).val('');
 								$tr.find('input[name=shopId]').val('');
 								$tr.find('input[name=shopPolicy]').val('');
 								$tr.find('input[name=shopPolicyId]').val('');
@@ -2373,6 +2373,7 @@ define(function(require, exports){
 							minLength:0,
 							change:function(event,ui){
 							if(ui.item == null){
+								$(this).val('');
 								$obj.find('input[name=shopPolicyId]').val('');
 							}
 						},
@@ -2562,7 +2563,9 @@ define(function(require, exports){
 		$busObj.autocomplete({
 			minLength:0,
 			change:function(event,ui){
-
+				if(ui.item == null){
+					$(this).val('');
+				}
 			},
 			select:function(event,ui){
 				$(this).closest('tr').find('input[name=companyId]').val(ui.item.id);
@@ -2628,6 +2631,7 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
+					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -2673,6 +2677,7 @@ define(function(require, exports){
 
 			var searchJson = {
 					brand:"",
+					busId:parents.find('input[name=busId]').val(),
 					busCompanyId:parents.find('input[name=companyId]').val()
 				};
 			$.ajax({
@@ -2725,6 +2730,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							if(ui.item == null){
 								var $tr = $(this).closest('tr');
+								$(this).val('');
 								$tr.find('input[name=price]').val('');
 								$tr.find('input[name=standardId]').val(ui.item.id);
 
@@ -2777,6 +2783,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							 if(ui.item == null){
 							 	var $tr = $(this).closest('tr');
+							 	$(this).val('');
 							 	$tr.find('input[name=standardId]').val('');
 							 }
 							 Count.autoRestaurantSum($(this),$parentObj);
@@ -2805,6 +2812,7 @@ define(function(require, exports){
 			change:function(event,ui){
 				if(ui.item == null){
 					var $tr = $(this).closest('tr');
+					$(this).val('');
 					$tr.find('input[name=hotelName]').val();
 					$tr.find('input[name=hotelId]').val();
 					$tr.find('input[name=price]').val();
@@ -2937,6 +2945,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							var $tr = $(this).closest('tr');
 							if(ui.item == null){
+								$(this).val('');
 								$tr.find('input[name=scenicId]').val('');
 								$tr.find('input[name=scenicItemId]').val('');
 								$tr.find('input[name=scenicItemName]').val('');
@@ -2988,6 +2997,7 @@ define(function(require, exports){
 						change:function(event,ui){
 							var $tr = $(this).closest('tr');
 							if(ui.item == null){
+								$(this).val('');
 								$tr.find('input[name=price]').val('');
 								$tr.find('input[name=scenicItemId]').val('');
 							}
@@ -3268,6 +3278,13 @@ define(function(require, exports){
             });
         }
 	};
+	//将天数转化为日期
+	Count.formatDays = function($obj,$parentObj){
+		var days = $obj.closest('tr').attr('whichDay')-1;
+		var startTime = $parentObj.find('.tripPlanStartTime').val();
+		var date = Tools.addDay(startTime, days);
+		$obj.text(date)
+	};
 	//获取社佣比例、导佣比例
 	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){
 		$.ajax({
@@ -3517,6 +3534,7 @@ define(function(require, exports){
 	Count.installData = function(id,$obj){
 		var saveJson = {
 			"financialTripPlan":{},
+			"touristGroupList":[],
 			"shopArrangeList":[],
 			"addShopArrangeList":[],
 			"selfPayArrangeList":[],
@@ -3571,6 +3589,16 @@ define(function(require, exports){
             tripPlan.financialCheckRemark = "";
         }
 		saveJson.financialTripPlan = tripPlan;
+		//团款现收
+		var $tripDetail = $obj.find('.T-tripDetail'),
+		$tr = $tripDetail.find('tr');
+		$tr.each(function(){
+			var data = {
+				id:$(this).attr('id'),
+				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val()
+			}
+			saveJson.touristGroupList.push(data);
+		});
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
 		$tr = $shopObj.find('tr');
@@ -3783,7 +3811,6 @@ define(function(require, exports){
 				saveJson.addRestArrangeList.push(addRestArrange);
 			}
 		});
-		console.log(saveJson.restaurantArrangeList);
 		//房费数据
 		var $hotelObj = $obj.find('.T-count-hotel'),
 		$tr = $hotelObj.find('tr');
