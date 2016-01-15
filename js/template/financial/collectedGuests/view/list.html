@@ -4,7 +4,7 @@
 	<td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-
 		{{else}}
 			<a class="cursor T-viewLine" data-lid="{{rs.lineProductId}}">{{rs.lineProductName}}</a>
-		{{/if}}
+		{{/if}} 
 	</td>
 	<td>{{if rs.customerType == 0}}散客{{else if rs.customerType == 1}}团队{{/if}}</td>
 	<td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
