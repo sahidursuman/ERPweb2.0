@@ -3031,7 +3031,7 @@ define(function(require, exports) {
 				tripPlan : {},
 				insuranceArrangeList : [],
 				guideArrange : {},
-				busCompanyArrange : {},
+				busCompanyArrange : [],
 				restaurantArrangeList : [],
 				hotelArrangeList : [],
 				scenicArrangeList : [],
