@@ -590,3 +590,42 @@ FinRule.prototype.check = function($obj) {
             return false;
     }
 }
+
+/**
+ * 客户账务、内转转入、转出、外转账务 对账及付款事件
+ */
+//对账-金额自动返算
+//minTdLen 子行td数量
+FinancialService.updateMoney_checking = function($tab,minTdLen){
+    $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
+        $(this).data("oldVal",$(this).val());
+    })
+    .on('change', 'input[name="settlementMoney"]', function(event) {
+        var $this = $(this),
+            $tr = $(this).closest('tr'),
+            $mainTr = $tr;
+        if(isNaN($this.val())){ return false;}
+
+        while($mainTr.children('td').length <= minTdLen){
+            $mainTr = $mainTr.prev();
+        }
+        $mainTr.data("change",true);
+
+        var backMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
+            settlementMoney = $tr.find('.T-settlementMoney').text() *1,
+            unReceivedMoney = $mainTr.find('.T-unReceivedMoney').text() *1;
+        //计算结算金额修改前后差值
+        var spread = backMoney - $this.data("oldVal")*1;
+
+        $tr.find('.T-settlementMoney').text(settlementMoney - spread);
+        $mainTr.find('.T-unReceivedMoney').text(unReceivedMoney - spread);
+
+        $tab.find(".T-sumBackMoney").text($tab.find(".T-sumBackMoney").text()*1 + spread);
+        $tab.find(".T-sumSettlementMoney").text($tab.find(".T-sumSettlementMoney").text()*1 - spread);
+        $tab.find(".T-sumUnReceivedMoney").text($tab.find(".T-sumUnReceivedMoney").text()*1 - spread);
+    });
+};
+
+//对账-保存json组装
+FinancialService.saveJson_checking = function($tab,rule){
+}
