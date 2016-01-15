@@ -119,7 +119,7 @@ define(function(require, exports) {
             endTime : endTime,
             sortType: 'auto'
         };
-
+        console.log(ColGuest.searchData);
         $.ajax({
             url:KingServices.build_url("receiveProfit","listReceiveProfit"),
             type: "POST",
@@ -130,7 +130,8 @@ define(function(require, exports) {
                     var html = listTemplate(data);
                     $("#tab-" + menuKey + "-content").find(".T-guest-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
-                    $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
+                    ColGuest.$searchArea = $tab.find('.T-search-area');
+                    $tab.find(".T-totalSize").text("共计   条记录");
 
                     ColGuest.getSumData(ColGuest.$tab);
                     ColGuest.getQuery($tab);
