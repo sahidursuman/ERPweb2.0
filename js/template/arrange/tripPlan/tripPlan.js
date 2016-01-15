@@ -481,6 +481,13 @@ define(function(require, exports) {
     			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
+			var money = 0;
+			$tab.find('.T-fee-list tr').each(function(index){
+				if ($(this).find('[name=type]').val() == 3) {
+				money += $(this).find('[name="money"]').val() * 1;
+				}
+			});
+			$tab.find('[name=transitNeedPayMoney]').val(money)
     	});
     	
     	//提交数据
@@ -836,7 +843,7 @@ define(function(require, exports) {
 			var $that = $(this);
 			arge.touristGroupFeeJson.push({
 				count : $that.find('[name="count"]').val(),
-			    describeInfo : $that.find('[name="describeInfo"]').val(),
+			    type: $that.find('[name="type"]').val(),
 			    id : $that.data("id") || "",
 			    price : $that.find('[name="price"]').val(),
 			    remark : $that.find('[name="feeRemark"]').val()
@@ -849,6 +856,7 @@ define(function(require, exports) {
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
+		arge.outTransferIncome = $tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;

@@ -252,7 +252,7 @@
             return "全程";
         }
     }), template.helper("getTaskSelect", function(status) {
-        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
+        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段", "小车接客" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
     }), template.helper("getHotelLevelDesc", function(level) {
         switch (1 * level) {

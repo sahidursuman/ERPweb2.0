@@ -198,6 +198,7 @@
 													<thead>
 														<tr>
 															<th width="220" class="th-border">导服费</th>
+															<th width="220" class="th-border">市场价</th>
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
@@ -206,13 +207,15 @@
 														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
 																<input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
+																<input class="col-xs-12 T-changeQuote F-float F-money" name="remarkPrice" type="text" maxlength="9" value="{{guideQuote.quotePrice}}" />
 																<input type="hidden" name="arrangeId" value="{{guideQuote.id}}">
 															</td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
 														</tr>
 														{{else}}
 														<tr data-entity-id="">
-															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 														</tr>
 														{{/if}}

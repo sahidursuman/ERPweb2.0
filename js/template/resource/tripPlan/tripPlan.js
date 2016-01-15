@@ -18,7 +18,9 @@ define(function(require, exports) {
 		hotelInquiryResultTemplate = require("./view/hotelInquiryResult"),
 		hotelbookingViewTemplate = require("./view/hotelbookingView"),
 		busInquiryResultTemplate = require("./view/busInquiryResult"),
-		busbookingViewTemplate = require("./view/busbookingView");
+		busbookingViewTemplate = require("./view/busbookingView"),
+		selectTouristTemplate = require("./view/selectTourist"),
+		noticeTemplate = require("./view/notice");
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -269,7 +271,81 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	tripPlan.sendTripPlanArrange = function(id) {
-		$.ajax({
+		var noticeLayer = layer.open({
+			type: 1,
+			title: '通知设置',
+			skin: 'layui-layer-rim', //加上边框
+			area: '630px', //宽高
+			zIndex:1028,
+			content: noticeTemplate(),
+			success:function(){
+				var $container = $('.T-tripPlanNotice'),
+					$checkbox = $container.find('.T-checked'),
+					$touristDiv = $container.find(".T-touristCheckedShow");
+				$container.find("[name=tourist]").click(function(){
+					if($(this).is(":checked")){
+						$touristDiv.removeClass('hidden');
+					} else{
+						$touristDiv.addClass('hidden');
+						$touristDiv.find('[name=rightNow]').trigger('click');
+						$touristDiv.find('[name=smsSign]').val('');
+					}
+				});
+				tripPlan.dateTimePicker($container);
+				var $timeCheck = $touristDiv.find('.T-checked')
+				$timeCheck.click(function() {
+					var $this = $(this);
+					$timeCheck.prop('checked',false);
+					$this.prop('checked',true);
+
+					if($touristDiv.find('[name=timing]').is(":checked")){
+						$touristDiv.find('[name=sendDateTime]').removeClass('hidden');
+					} else{
+						$touristDiv.find('[name=sendDateTime]').addClass('hidden');
+						$touristDiv.find('[name=sendDateTime]').val('');
+					}
+				})
+				$container.find('.T-cancel').on('click', function() {
+					layer.close(noticeLayer);
+				})
+				$container.find('.T-btn-submit-notice').on('click', function() {
+					var resourceType = '';
+					var $checkbox = $container.find('.T-arrangeNotice .T-checked');
+					$checkbox.each(function(i) {
+						var $this = $checkbox.eq(i);
+						if($this.is(':checked')) {
+							resourceType += ($this.val())+','
+						}
+					});
+					$.ajax({
+						url: KingServices.build_url('tripPlan','noticeTripPlanArrange'), 	
+						type: 'POST',
+						data: {
+							resourceType: resourceType,
+							executeTime: getValue('sendDateTime'),
+							executeTimeType: getValue('timing'),
+							travelAgencyTag: getValue('smsSign')
+						},
+						success: function(data) {
+							if (showDialog(data)) {
+								showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+									layer.close(noticeLayer);
+								})
+							}
+						}
+					})
+				})
+				function getValue(name){
+					var $this = $container.find('[name='+name+']');
+					if ($this.attr('type') == 'checkbox') {
+						return $this.is(':checked') ? 1 : 0;
+					}else if ($this.attr('type') == 'text') {
+						return $this.val();
+					}
+				}
+			}
+		})
+		/*$.ajax({
 			url: KingServices.build_url('tripPlan','noticeResourceArrange'),
 			type:"POST",
 			data:"id="+id,
@@ -280,7 +356,7 @@ define(function(require, exports) {
 					});
 				}
 			}
-		});
+		});*/
 	};
 
 	/**
@@ -402,6 +478,18 @@ define(function(require, exports) {
 			event.preventDefault();
 			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
 		});
+
+		//车辆安排通知游客
+		$tab.find('#tripPlan_addPlan_bus').off('click.noticeTourists').on('click.noticeTourists', '.T-noticeTourists', function() {
+			var $this = $(this), $parent = $this.closest('tr'),
+				busData = {
+					taskType: $parent.find('[name=taskType]').val(),
+					setPlaceTime: $parent.find('[name=setPlaceTime]').val(),
+					setPlacePosition: $parent.find('[name=setPlacePosition]').val()
+				}
+			tripPlan.noticeTourists($this,id,busData);
+		})
+		tripPlan.taskTypeOperation($tab);
 		
 		// 激活第一个菜单
 		if (!!target) {
@@ -590,6 +678,122 @@ define(function(require, exports) {
 		});  
 	};
 
+	/**
+	 * 车队通知游客操作
+	 * @param  {[type]} $this [按钮对象]
+	 * @return {[type]}       [description]
+	 */
+	tripPlan.noticeTourists = function($that,id,busData) {
+		var thatJson = $that.data('entity-touristGroup');
+		if (!!thatJson && typeof thatJson == 'string') {
+			thatJson = JSON.parse(thatJson);
+		}
+		$.ajax({
+			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
+			type: 'POST',
+			data: {
+				tripPlanId: id,
+				taskType: busData.taskType
+			},
+			success: function(data) {
+				if (showDialog(data)) {
+					data.touristGroupList = JSON.parse(data.touristGroupList);
+					data.busData = busData;
+					var noticeTouristsLayer = layer.open({
+						type: 1,
+					    title:"选择游客小组",
+					    skin: 'layui-layer-rim', //加上边框
+					    area: '1190px', //宽高
+					    zIndex:1028,
+					    content: selectTouristTemplate(data),
+					    scrollbar: false,
+					    success:function(){
+					    	var $container = $(".T-addtourist-TripPlanBus")
+
+					    	tripPlan.dateTimePicker($container);
+					    	$container.find(".T-checkAll").click(function(){
+								if($(this).is(":checked")){
+									$container.find(".T-tourist-check").prop("checked",true);
+								} else{
+									$container.find(".T-tourist-check").prop("checked",false);
+								}
+							});
+
+							//勾选回显
+							if (!!thatJson) {
+								var $tr = $container.find('.T-group-list tr');
+								$tr.each(function(j) {
+									var $this = $tr.eq(j), id = $this.data('entity-id');
+									for (var i = 0, len = thatJson.length; i < len; i++) {
+										if (thatJson[i].id == id) {
+											$this.find('.T-tourist-check').prop('checked',true)
+											if (busData.taskType == 6) {
+												$this.find('[name=setPlaceTime]').val(thatJson[i].setPlaceTime);
+												$this.find('[name=setPlacePosition]').val(thatJson[i].setPlacePosition);
+											}
+											break;
+										}
+									}
+								});
+							}
+
+
+							$container.find('.T-cancel').on('click', function() {
+								layer.close(noticeTouristsLayer);
+							})
+
+							//提交操作
+							$container.find('.T-saveGroup').off('click.submit').on('click.submit', function() {
+								var $checkbox = $container.find('.T-tourist-check:checked'),touristGroupJson = [],
+									taskType = $container.data('tasktype');
+								$checkbox.each(function(i) {
+									var $this = $checkbox.eq(i),
+										$parents = $this.closest('tr'),
+										json = {}
+									if (taskType == 6) {
+										json = {
+											id: $parents.data('entity-id'),
+											setPlaceTime: $parents.find('[name=setPlaceTime]').val(),
+											setPlacePosition: $parents.find('[name=setPlacePosition]').val()
+										}
+									}else {
+										json = {
+											id: $parents.data('entity-id')
+										}
+									}
+									touristGroupJson.push(json);
+									touristGroupJson = JSON.stringify(touristGroupJson);
+								})
+								$that.data('entity-touristGroup',touristGroupJson);
+								layer.close(noticeTouristsLayer);
+							})
+					    }
+					})
+				}
+			}
+		});
+	};
+
+	/**
+	 * 车辆任务选择操作
+	 * @param  {[type]} $tab [description]
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.taskTypeOperation = function($tab) {
+		$tab.find('#tripPlan_addPlan_bus').off('change.taskType').on('change.taskType', '[name=taskType]', function() {
+			var $this = $(this), $parent = $this.closest('tr'), value = $this.val();
+			if (value == 6) {
+				$parent.find('[name=setPlaceTime],[name=setPlacePosition]').val('').prop('disabled',true);
+			}else{
+				$parent.find('[name=setPlaceTime],[name=setPlacePosition]').prop('disabled',false);
+			}
+			$parent.find('.T-noticeTourists').data('entity-touristGroup','');
+			layer.tips('通知游客数据已被清空', $this, {
+			    tips: [1, '#3595CC'],
+			    time: 2000
+			});
+		})
+	}
 
 	/**
 	 * 车队询价操作
@@ -1057,12 +1261,15 @@ define(function(require, exports) {
 		var $tbody = $btn.closest('.ui-sortable-handle').find('tbody'),
 			html = '<tr> <td><input type="text" name="startTime" class="datepicker"></td>'
 					+ '<td><input type="text" name="endTime" class="datepicker"></td>'
-					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
+					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option><option value="6">小车接客</option></select></td>'
 					+ '<td><input type="text" name="needSeatCount" class="col-sm-12 F-float F-count" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="brand" class="col-sm-12"></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"></td>'
+					+ '<td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>'
+                    + '<td><input type="text" name="setPlacePosition" class="col-xs-12"></td>'
+                    + '<td><a class="T-noticeTourists">点击设置</a></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"><span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="driverMobileNumber" readonly="readonly" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="contractNumber" maxlength="20" class="col-sm-12"></td>'
@@ -1083,6 +1290,7 @@ define(function(require, exports) {
 		tripPlan.addResource();
 		tripPlan.addBusResource($tab);
 		tripPlan.calculatePrice($tab);
+		tripPlan.dateTimePicker($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindBusCompanyChoose($tr);
@@ -2875,19 +3083,32 @@ define(function(require, exports) {
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "id")){
+					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
+
 					var busJson = {
 						id : tripPlan.getVal(bus.eq(i), "id"),
-						price : tripPlan.getVal(bus.eq(i), "price"),
-						reduceMoney : tripPlan.getVal(bus.eq(i), "reduceMoney"),
+						startTime: tripPlan.getVal(bus.eq(i), "startTime"),
+						endTime: tripPlan.getVal(bus.eq(i), "endTime"),
+						taskType: tripPlan.getVal(bus.eq(i), "taskType"),
+						needSeatCount : tripPlan.getVal(bus.eq(i), "needSeatCount"),
+						brand : tripPlan.getVal(bus.eq(i), "brand"),
+						busId : tripPlan.getVal(bus.eq(i), "busId"),
+						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
+						setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
+						setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
+						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
-						needPayMoney : tripPlan.getVal(bus.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(bus.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(bus.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(bus.eq(i), "busOrder")
+						memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
+						reduceMoney: tripPlan.getVal(bus.eq(i), "reduceMoney"),
+						needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
+						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
+						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
+						remark: tripPlan.getVal(bus.eq(i), "remark"),
+						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
+						annouceTouristGroupIds: annouceTouristGroupIds
+
 					}
-					tripPlanJson.busCompanyArrange = busJson;
+					tripPlanJson.busCompanyArrange.push(busJson);
 					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 				}
 			}
@@ -2903,9 +3124,9 @@ define(function(require, exports) {
 						restaurantChooseArrangeListJson = JSON.parse(restaurant.eq(i).find('[name=restaurantName]').data('propover'))
 					}
 				}
-				if(!!tripPlan.getVal(restaurant.eq(i), "restaurantId") && tripPlan.getVal(restaurant.eq(i), "restaurantId") == -1){{
+				if(!!tripPlan.getVal(restaurant.eq(i), "restaurantId") && tripPlan.getVal(restaurant.eq(i), "restaurantId") == -1){
 					isChoose = "1";
-				}}
+				}
 				if(tripPlan.getVal(restaurant.eq(i), "restaurantId")){
 					var restaurantJson = {
 						id : restaurant.eq(i).data('entity-arrangeid'),
@@ -3090,7 +3311,8 @@ define(function(require, exports) {
 
 		tripPlanJson = {
 			guideList : Tools.getTableVal($tab.find('#tripPlan_addPlan_guide').find('tbody'), 'entity-arrangeid'),
-			busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
+			//busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
+			busCompanyList: tripPlanJson.busCompanyArrange,
 			hotelList : Tools.getTableVal($tab.find('#tripPlan_addPlan_hotel').find('tbody'), 'entity-arrangeid'),
 			insuranceList : Tools.getTableVal($tab.find('#tripPlan_addPlan_insurance').find('tbody'), 'entity-arrangeid'),
 			otherList : Tools.getTableVal($tab.find('#tripPlan_addPlan_other').find('tbody'), 'entity-arrangeid'),

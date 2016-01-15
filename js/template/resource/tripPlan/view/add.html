@@ -347,6 +347,9 @@
                                 <th class="th-border">车牌号</th>
                                 <th class="th-border"><span class="necessary">*</span>所属车队</th>
                                 <th class="th-border">联系电话</th>
+                                <th class="th-border">集合时间</th>
+                                <th class="th-border">集合地点</th>
+                                <th class="th-border" width="70">通知游客</th>
                                 <th class="th-border">司机</th>
                                 <th class="th-border">司机电话</th>
                                 <th class="th-border">合同号</th>
@@ -390,7 +393,9 @@
                                         </td>
 
                                         <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
-
+                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>
+                                        <td><input type="text" name="setPlacePosition" class="col-xs-12"></td>
+                                        <td><a class="T-noticeTourists">点击设置</a></td>
                                         <td>
                                             <div class="col-xs-12 feild-relative">
                                                 <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>
