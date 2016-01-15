@@ -242,7 +242,7 @@ define(function(require, exports) {
 				var $container = $('.T-transitNotice'),
 					$checkbox = $container.find('.T-checked'),
 					$touristDiv = $container.find(".T-touristCheckedShow");
-				$container.find("[name=tourist]").click(function(){
+				/*$container.find("[name=tourist]").click(function(){
 					if($(this).is(":checked")){
 						$touristDiv.removeClass('hidden');
 					} else{
@@ -250,7 +250,7 @@ define(function(require, exports) {
 						$touristDiv.find('[name=rightNow]').trigger('click');
 						$touristDiv.find('[name=smsSign]').val('');
 					}
-				});
+				});*/
 				transit.dateTimePicker($container);
 				var $timeCheck = $touristDiv.find('.T-checked')
 				$timeCheck.click(function() {
