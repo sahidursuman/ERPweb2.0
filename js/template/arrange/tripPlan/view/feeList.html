@@ -1,7 +1,7 @@
 {{each touristGroupFeeList as rs}}
 <tr data-id="{{rs.id}}">
 	<td><!-- <input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}> -->
-	<select class="col-xs-12" name="type" {{if isGuest == 1}}disabled{{/if}}>
+	<select class="col-xs-12 T-calculate" name="type" {{if isGuest == 1}}disabled{{/if}}>
 			<option value="1">大人结算价</option>
 			<option value="2">小孩结算价</option>
 			<option value="3">中转结算价</option>
