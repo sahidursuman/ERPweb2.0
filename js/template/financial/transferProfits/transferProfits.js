@@ -112,7 +112,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     data.results = JSON.parse(data.results);
-                    console.log(data.results);
                     var html = listTemplate(data);
 
                     $("#tab-" + menuKey + "-content").find(".T-transfer-list").html(html);
