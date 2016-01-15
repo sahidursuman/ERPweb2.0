@@ -17,11 +17,16 @@ define(function(require, exports) {
     };
 
     innerProfit.initModule = function() {
-        innerProfit.listInnerProfit(0,"","","","","","","","");
+        innerProfit.listInnerProfit(0,"","","","","","","","",true);
     };
 
-    innerProfit.listInnerProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,startTime,endTime) {
+    innerProfit.listInnerProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,startTime,endTime,isTurn) {
         if (innerProfit.$searchArea && arguments.length === 1) {
+            if(innerProfit.$tab.find(".T-checkTurn").is(":checked")){
+                isTurn = true;
+            } else {
+                isTurn = false;
+            }
             // 初始化页面后，可以获取页面的参数
             lineProductId = innerProfit.$searchArea.find("input[name=lineProductId]").val(),
             lineProductName = innerProfit.$searchArea.find("input[name=lineProductName]").val(),
@@ -55,6 +60,7 @@ define(function(require, exports) {
                     innerProfit.searchData = {
                         pageNo: page
                     };
+                    data.isTurn = isTurn;
                     var html = listTurnProfit(data);
                     addTab(menuKey,"内转利润",html);
                     innerProfit.initList();
@@ -83,6 +89,10 @@ define(function(require, exports) {
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
+            innerProfit.listInnerProfit(0);
+        });
+
+        innerProfit.$tab.find(".T-checkTurn").on("click",function(){
             innerProfit.listInnerProfit(0);
         });
 

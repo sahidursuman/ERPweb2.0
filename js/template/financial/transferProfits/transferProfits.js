@@ -58,6 +58,7 @@ define(function(require, exports) {
                     transfer.listTransfer(0);
                     //搜索事件
                     var  $tab = $("#tab-" + menuKey + "-content");
+                    Tools.setDatePicker($tab.find(".date-picker"),true);
                     $tab.find(".T-search").off().on('click', function(event) {
                         event.preventDefault();
                         transfer.listTransfer(0);
