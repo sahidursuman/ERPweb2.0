@@ -1129,7 +1129,7 @@ define(function(require, exports) {
      * @return {[type]}           [description]
      */
     arrangeTourist.newAddFee = function($tab, type) {
-        var html = "<tr><td><select name=\"describeInfo\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+        var html = "<tr><td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
             "<option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
             "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
             "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>" +
@@ -1300,7 +1300,7 @@ define(function(require, exports) {
         $trNotDelete.each(function(i) {
             var $that = $(this),
                 FeeJson = {
-                    discribe: arrangeTourist.getVal($that, "describeInfo"),
+                    type: arrangeTourist.getVal($that, "type"),
                     price: arrangeTourist.getVal($that, "price"),
                     count: arrangeTourist.getVal($that, "count"),
                     remark: arrangeTourist.getVal($that, "remark")

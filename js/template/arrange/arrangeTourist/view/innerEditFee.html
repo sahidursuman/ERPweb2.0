@@ -66,13 +66,12 @@
 								</tr>
 							</thead>
 							<tbody class="T-innerOutEditFeeTbody"> 
-								{{if touristGroup.transferFeeStatus == 0}}
 									<!--初始化游客小组费用start--> 
 									{{each touristGroupFeeList as transferList}}         
 										<tr  data-entity-id="{{transferList.id}}">
 											<td>
-												 <select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                                    {{#getPayType | getFeeItemType: false}}
+												 <select name="type" class="col-sm-10 col-sm-offset-1">
+				                                    {{#transferList.type | getFeeItemType: false}}
 				                                 </select>
 											</td>  
 											
@@ -93,13 +92,13 @@
 										</tr>
 									{{/each}}
 									<!--游客小组费end-->
-									{{else}}
+									
 									<!--转客其他费用start-->
 									{{each innerTransferFeeList as innerFee}}
 									<tr data-entity-id="{{innerFee.id}}">
 										<td>
-										    <select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                                {{#getPayType | getFeeItemType: false}}
+										    <select name="type" class="col-sm-10 col-sm-offset-1">
+				                                {{#innerFee.type | getFeeItemType: false}}
 				                            </select>
 										</td>
 										
@@ -120,8 +119,6 @@
 									</tr>
 									{{/each}}
 									<!--转客其他费用end-->
-
-								{{/if}}
 							</tbody>
 						</table>
 					</div>
@@ -194,7 +191,9 @@
 								{{each touristGroupFeeList as touristGroupFlist}}
 										<tr>         
 											<td>
-												{{touristGroupFlist.describeInfo}}
+											    <select name="type" class="col-sm-10 col-sm-offset-1" disabled>
+					                                {{#touristGroupFlist.type | getFeeItemType: false}}
+					                            </select>
 											</td>
 											<td class="F-float F-count">
 												{{touristGroupFlist.count}}

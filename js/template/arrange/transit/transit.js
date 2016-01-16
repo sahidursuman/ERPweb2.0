@@ -237,7 +237,7 @@ define(function(require, exports) {
 	 */
 	transit.updateTransit = function(id, isOuter,$tab) {
 		$.ajax({
-			url: KingServices.build_url('touristGroup','findTouristGroupArrangeById'),
+			url: KingServices.build_url('touristGroup','getTouristGroupTransitArrange'),
 			type:"POST",
 			data:"id="+id,
 			success:function(data){
