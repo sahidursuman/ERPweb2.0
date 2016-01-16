@@ -394,9 +394,9 @@
                                         </td>
 
                                         <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
-                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>
-                                        <td><input type="text" name="setPlacePosition" class="col-xs-12"></td>
-                                        <td><a class="T-noticeTourists">点击设置</a></td>
+                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
                                         <td>
                                             <div class="col-xs-12 feild-relative">
                                                 <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>

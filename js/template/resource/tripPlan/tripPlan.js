@@ -684,10 +684,11 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	tripPlan.noticeTourists = function($that,id,busData) {
-		var thatJson = $that.data('entity-touristGroup');
+		var thatJson = $that.data('entity-touristgroup');
 		if (!!thatJson && typeof thatJson == 'string') {
 			thatJson = JSON.parse(thatJson);
 		}
+		console.log(thatJson)
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
@@ -764,7 +765,7 @@ define(function(require, exports) {
 									touristGroupJson.push(json);
 									touristGroupJson = JSON.stringify(touristGroupJson);
 								})
-								$that.data('entity-touristGroup',touristGroupJson);
+								$that.data('entity-touristgroup',touristGroupJson);
 								layer.close(noticeTouristsLayer);
 							})
 					    }
