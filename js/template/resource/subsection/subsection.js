@@ -265,6 +265,15 @@ define(function(require, exports) {
 		});
 
 
+		 //删除费用项
+		subsection.$tbody.find('.T-del').on('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $this = $(this);
+			subsection.delFeeItem($this);
+		});
+
+
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
@@ -285,7 +294,9 @@ define(function(require, exports) {
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><input data-index="0" type="text" name="name" value=" " class="T-type" ><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+            +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
+            +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc"></div></td>'
@@ -335,11 +346,13 @@ define(function(require, exports) {
 		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"    class="T-type T-type-' + index + '"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+					  +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
+                      +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'" data-type="'+ type +'"   type="text" name="name" value="'+$.trim(nameText)+'"   readonly class="T-type T-type-' + index + '"><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                     count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		        }
@@ -372,11 +385,24 @@ define(function(require, exports) {
 					$(this).closest('div').remove();
 				});
 
+				//及时删除
 				if (entityId != null && entityId != "") {
-					$div.addClass("delete");
-					$div.fadeOut(function(){
-						$(this).hide();
-					});
+					showNndoConfirmDialog($("#confirm-dialog-message"),"你确定要删除费用项吗？",function(){
+						$.ajax({
+								url:KingServices.build_url("innerTransferOperation","deleteTouristGroupFee"),
+		 						type:"POST",
+			 					data:"id="+entityId + "",
+						})
+						.done(function(data) {
+							if(showDialog(data)){
+								showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+									$div.fadeOut(function(){
+										$(this).remove();
+									});
+								})	
+							}
+						})
+				});
 				}else{
 					$div.fadeOut(function(){
 						var payMoney = subsection.totalPayMoney($this.closest('tr'),index);
@@ -539,7 +565,8 @@ define(function(require, exports) {
 				startTime : getValue(subsection.$tabSub, "touristGroupStartTime"),
 				days : getValue(subsection.$tabSub, "touristGroupDays"),
 				subTouristGroupList : [],
-				delSubTouristGroupIdList : []
+				delSubTouristGroupIdList : [],
+				touristGroupFeeList : []
 			},
 			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
 			receivables = 0, tmp;
@@ -556,68 +583,34 @@ define(function(require, exports) {
 					tmp = 1;
 					isCheckNeedPayMoney = true;
 				}
+				var subTouristGroupJson = {
+					id : id,
+					lineProductId : getValue($tr,"lineProductId"),
+					startTime : getValue($tr,"startTime"),
+					operateCurrentNeedPayMoney : tmp,
+					operateCalculteOut : $tr.find("input[name=operateCalculteOut]").is(":checked") ? 1 : 0 ,
+					needPayAllMoney: getValue($tr,"needPayAllMoney"),
+					days : getValue($tr,"days"),
+					touristGroupFeeList : []
+				}
 
-				subTouristGroup.subTouristGroupList.push(
-					{
-						id : id,
-						lineProductId : getValue($tr,"lineProductId"),
-						startTime : getValue($tr,"startTime"),
-						operateCurrentNeedPayMoney : tmp,
-						needPayAllMoney: getValue($tr,"needPayAllMoney"),
-						days : getValue($tr,"days")
-					}
-				);
-
-				console.log('feeItemTr-------------'+$feeItemTr.length);
-
+				//费用项目$feeItemTr
 				$feeItemTr.each(function() {
-					if($(this).hasClass('delete')){
-						console.log("has");
-						var $_that = $(this),
-							priceJsonDel = {
-								id : $_that.data("id")
-							};
-					} else {
-						console.log("no");
-						var $that = $(this),touristGroupFeeList=[],
-							divIndex = $(this).data('index'), 
-							touristGroupFee = {
-								id : $(this).data("id"),
-								count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
-								price : $(this).closest('tr').find(".T-price-" + divIndex).val()
-							};
-						touristGroupFeeList.push(touristGroupFee);
-						console.log('divIndex'+divIndex);
-						subTouristGroup.subTouristGroupList.push(touristGroupFeeList);
-					}
+						var $that = $(this),divIndex = $(this).data('index');
+						var touristGroupFeeJson = {
+							id : $(this).data("id") || '',
+							type :   $(this).val(),     
+							count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
+						    price : $(this).closest('tr').find(".T-price-" + divIndex).val()
+						};
+					subTouristGroupJson.touristGroupFeeList.push(touristGroupFeeJson);
 				});
 
+				subTouristGroup.subTouristGroupList.push(subTouristGroupJson);
 				receivables += getValue($tr,"needPayAllMoney")*1;
 			}
 		});
-
-		/**
-		 * touristGroupFeeList 组装
-		 * @type {Array}
-		 */
-/*		var touristGroupFee =[];
-		    console.log($tbody.find('tr').find('div').children('input.T-htc'));
-			$tbody.find('tr').find('div').children('input.T-htc').each(function(index) {
-				var $that = $(this).closest('tr').closest('div');
-				console.log($that+'####-----------------');
-				var touristGroupFeeList = {
-					   id : getValue($that.eq(index),"id"), //	ID	number
-					   count : getValue($that.eq(index),"count"), //	数量	number	
-			           price : getValue($that.eq(index),"price"), //单价	number
-			           remark : getValue($that.eq(index),"remark"), //备注	string	
-			           type : getValue($that.eq(index),"type")
-				}
-				touristGroupFee.push(touristGroupFeeList);
-			});
-		subTouristGroup.subTouristGroupList.push(touristGroupFee);*/
-
-
-
+		console.log(subTouristGroup)
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
 		}
@@ -626,15 +619,15 @@ define(function(require, exports) {
 			return;
 		}
 
-		/*if ($tbody.data('neepayallmoney') != receivables) {
+		if ($tbody.data('neepayallmoney') != receivables) {
 			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
 			return;
-		}*/
+		}
 
 		subTouristGroup = JSON.stringify(subTouristGroup);
 
 		$.ajax({
-			url:KingServices.build_url('innerTransferOperation', "saveSubTgroup"),
+			url:KingServices.build_url('innerTransferOperation', "saveSubTouristGroup"),
 			type:"POST",
 			data:"subTouristGroup="+encodeURIComponent(subTouristGroup)+"",
 			success:function(data){

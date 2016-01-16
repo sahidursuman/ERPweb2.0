@@ -20,7 +20,7 @@ define(function(require, exports) {
 	    tabIdOut="tab-"+menuKey+"-updateTransferOut-content",
 	    transfer={
 	    	$searchParam : {
-	    		creator : "",	
+	    		creator : "",
 				startTime : "",
 				endTime	: "",
 				lineProductId : "",			
@@ -638,7 +638,7 @@ define(function(require, exports) {
 		 */
 		transfer.newAddFee=function($tab,validator){
 			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
-		    "<td><select name=\"describeInfo\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
             "<option value=\"3\">中转结算价</option><option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
             "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
             "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
@@ -825,23 +825,23 @@ define(function(require, exports) {
 			$tab.find(".T-addTransferCost tr").each(function(i){
 				var $that=$(this);
 				var id=$that.attr("data-entity-id"),
-				    discribe = $that.find("input[name=describe]").val(),
+				    type = $that.find("select[name=type]").val(),
 				    remark = $that.find("input[name=remark]").val(),
 				    count = $that.find("input[name=count]").val(),
 				    otherPrice = $that.find("input[name=otherPrice]").val();
 				    var otherFeeJson = {
-						"discribe":discribe,
+						"type":type,
 						"count":count,
 						"remark":remark,
-						"otherPrice" : otherPrice
+						"price" : otherPrice
 					}
 					if(!!id && id!=null ){
 				    	 otherFeeJson = {
 				    		"id":id,
-				    		"discribe":discribe,
+				    		"type":type,
 							"count":count,
 							"remark":remark,
-							"otherPrice" : otherPrice
+							"price" : otherPrice
 				          }
 				    }
 					otherFeeJsonAdd.push(otherFeeJson);
