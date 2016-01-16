@@ -18,7 +18,7 @@
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber"><span class="necessary">*</span> 线路产品：</label>
 	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName"  value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}" readonly="readonly"/>
-	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProductId}}" />
+	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProduct.id}}" />
 	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
 		</div>
 
@@ -26,7 +26,7 @@
 		<div class="form-group fixed-width-1" style="text-align:left;">
 			<label><span class="necessary">*</span>人数：</label>
             大人
-            <label><span class="necessary">*</span>   
+            <label><span class="necessary">*</span>
 			<input type="text" name="adultCount" value="{{touristGroupDetail.adultCount}}" class="form-control F-float F-count" style="width:35px" readonly="readonly" />
             小孩
             <input type="text" name="childCount" value="{{touristGroupDetail.childCount}}" class="form-control F-float F-count"  style="width:35px" readonly="readonly" />
@@ -181,7 +181,11 @@
                 <tbody class="T-addCostTbody">
                     {{each touristGroupDetail.touristGroupFeeList as feeList}}
 						<tr data-entity-id="{{feeList.id}}">
-							<td><input name="describeInfo" value="{{feeList.describeInfo}}" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" /></td>
+							<td>
+							   <select name="type" class="col-sm-10 col-sm-offset-1">
+							      {{#feeList.type | getFeeItemType: true}}
+							   </select>
+							</td>
 							
 							<td>
 								<input name="count" value="{{feeList.count}}" type="text" class="col-sm-10 col-sm-offset-1 no-padding-right T-costCount T-count T-calc F-float F-count" readonly="readonly" />
@@ -306,62 +310,249 @@
 						<label class="middle title-size">中转</label>
 					</h5>
 
-					<div class="form-inline col-sm-12"> 
-                        <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
-                            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
-                            <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">车辆</span>
-                            </label>
-                            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">酒店</span>
-                            </label>
-                            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">餐饮</span>
-                            </label>
-                            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">票务</span>
-                            </label>
-                            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">其他</span>
-                            </label>
+					<div class="form-inline col-sm-12">
+						{{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
+		                  <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+		                      <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+		                        {{each touristGroupDetail.outTransferRequire.reciveTrip as recive}}  
+		                         {{if recive.requireType =='receiveBus'}}
+			                        <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+			                            <input type="checkbox" class="ace"  checked>
+			                            <span class="lbl">车辆</span>
+			                        </label>
+			                        {{else if recive.requireType =='receiveHotel'}}
+			                        <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+			                            <input type="checkbox" class="ace"  checked>
+			                            <span class="lbl">酒店</span>
+			                        </label>
+			                        {{else if recive.requireType =='receiveRestaurant'}}
+			                        <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+			                            <input type="checkbox" class="ace" checked>
+			                            <span class="lbl">餐饮</span>
+			                        </label>
+			                        {{else if recive.requireType =='receiveTicket'}}
+			                        <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+			                            <input type="checkbox" class="ace"  checked>
+			                            <span class="lbl">票务</span>
+			                        </label>
+			                        {{else if recive.requireType =='receiveOther'}}
+			                        <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+			                            <input type="checkbox" class="ace"  checked>
+			                            <span class="lbl">其他</span>
+			                        </label>
+			                     {{/if}}
+		                        {{/each}}
 
-                            <div class="col-xs-12 T-action-require-list T-receive-list">
-                              
-                            </div>
-                        </div>
+		                        <div class="col-xs-12 T-action-require-list T-receive-list">
+		                        	 <div class="require-commons">
+									    <div class="form-inline" style="padding:14px 0 7px 14px;">
+									        <div class="fixed-width">
+									            <label>时间：</label>
+									            <input type="text" name="arriveTime" value="{{touristGroupDetail.outRemarkArrange.arriveTime}}" class="form-control date-picker datepicker" />
+									        </div>
+									    </div>
+									    <div class="form-inline" style="padding:0 0 7px 14px;">
+									        <div class="fixed-width">
+									            <label>地点：</label>
+									            <input type="text" name="arrivePosition" value="{{touristGroupDetail.outRemarkArrange.arrivePosition}}" class="form-control" />
+									        </div>
+									    </div>
+									    <div class="form-inline" style="padding:0 0 7px 14px;">
+									        <div class="fixed-width">
+									            <label>票务班次：</label>
+									            <input type="text" name="arriveShift" value="{{touristGroupDetail.outRemarkArrange.arriveShift}}" class="form-control" />
+									        </div>
+									    </div>
+									    <div class="form-inline" style="padding:0 0 7px 14px;">
+									        <div class="fixed-width">
+									            <label>票务时间：</label>
+									            <input type="text" name="arriveShiftTime" value="{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}" class="form-control date-picker datepicker" />
+									        </div>
+									    </div>
+									</div>
 
+	                                 {{each touristGroupDetail.outTransferRequire.reciveTrip as recive}}
+	                                    {{if recive.requireType =='receiveBus'}}
+		                                 <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">车辆要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveHotel'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">酒店要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveRestaurant'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">餐饮要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveTicket'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">票务要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveOther'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">其他要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
+					                    </div>
+					                    {{/if}}
+								     {{/each}}
+
+		                        </div>
+		                    </div>
+		                    {{else}}
+	                        <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+					            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+					            <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+					                <input type="checkbox" class="ace">
+					                <span class="lbl">车辆</span>
+					            </label>
+					            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+					                <input type="checkbox" class="ace">
+					                <span class="lbl">酒店</span>
+					            </label>
+					            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+					                <input type="checkbox" class="ace">
+					                <span class="lbl">餐饮</span>
+					            </label>
+					            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+					                <input type="checkbox" class="ace">
+					                <span class="lbl">票务</span>
+					            </label>
+					            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+					                <input type="checkbox" class="ace">
+					                <span class="lbl">其他</span>
+					            </label>
+					            <div class="col-xs-12 T-action-require-list T-receive-list">
+					            </div>
+							</div>
+						{{/if}}
+
+
+
+					  {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
                         <div class="form-group fixed-width T-send col-sm-6">
                             <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
-                            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">车辆</span>
-                            </label>
-                            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">酒店</span>
-                            </label>
-                            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">餐饮</span>
-                            </label>
-                            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">票务</span>
-                            </label>
-                            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
-                                <input type="checkbox" class="ace">
-                                <span class="lbl">其他</span>
-                            </label>
+                            {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
+                                {{if send.requireType =='sendBus'}}
+	                            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+	                                <input type="checkbox" class="ace" checked>
+	                                <span class="lbl">车辆</span>
+	                            </label>
+	                            {{else if send.requireType =='sendHotel'}}
+	                            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+	                                <input type="checkbox" class="ace" checked>
+	                                <span class="lbl">酒店</span>
+	                            </label>
+	                            {{else if send.requireType =='sendRestaurant'}}
+	                            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+	                                <input type="checkbox" class="ace" checked>
+	                                <span class="lbl">餐饮</span>
+	                            </label>
+	                            {{else if send.requireType =='sendTicket'}}
+	                            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+	                                <input type="checkbox" class="ace" checked>
+	                                <span class="lbl">票务</span>
+	                            </label>
+	                            {{else if send.requireType =='sendOther'}}
+	                            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+	                                <input type="checkbox" class="ace"  checked>
+	                                <span class="lbl">其他</span>
+	                            </label>
+	                            {{/if}}
+                            {{/each}}
+
 
                             <div class="col-xs-12 T-action-require-list T-leave-list">
+	                            <div class="require-commons">
+								    <div class="form-inline" style="padding:14px 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>时间：</label>
+								            <input type="text" name="leaveTime" value="{{touristGroupDetail.outRemarkArrange.leaveTime}}"  class="form-control date-picker datepicker" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>地点：</label>
+								            <input type="text" name="leavePosition" class="form-control"  value="{{touristGroupDetail.outRemarkArrange.leavePosition}}"/>
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务班次：</label>
+								            <input type="text" name="leaveShift" class="form-control" value="{{touristGroupDetail.outRemarkArrange.leaveShift}}" />
+								        </div>
+								    </div>
+								    <div class="form-inline" style="padding:0 0 7px 14px;">
+								        <div class="fixed-width">
+								            <label>票务时间：</label>
+								            <input type="text" name="leaveShiftTime" class="form-control date-picker datepicker" value="{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}" />
+								        </div>
+								    </div>
+								</div>
+
+                                {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
+                                    {{if send.requireType =='sendBus'}}
+	                                 <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+					                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">车辆要求：</div>
+					                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
+				                    </div>
+				                    {{else if send.requireType =='sendHotel'}}
+				                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+					                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">酒店要求：</div>
+					                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
+				                    </div>
+				                    {{else if send.requireType =='sendRestaurant'}}
+				                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+					                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">餐饮要求：</div>
+					                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
+				                    </div>
+				                    {{else if send.requireType =='sendTicket'}}
+				                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+					                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">票务要求：</div>
+					                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
+				                    </div>
+				                    {{else if send.requireType =='sendOther'}}
+				                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+					                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">其他要求：</div>
+					                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
+				                    </div>
+				                    {{/if}}
+							    {{/each}}
                             </div>
+
                         </div>
-                    </div>
+
+                        {{else}}
+                        <div class="form-group fixed-width T-send col-sm-6">
+				            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
+				            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+				                <input type="checkbox" class="ace">
+				                <span class="lbl">车辆</span>
+				            </label>
+				            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+				                <input type="checkbox" class="ace">
+				                <span class="lbl">酒店</span>
+				            </label>
+				            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+				                <input type="checkbox" class="ace">
+				                <span class="lbl">餐饮</span>
+				            </label>
+				            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+				                <input type="checkbox" class="ace">
+				                <span class="lbl">票务</span>
+				            </label>
+				            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+				                <input type="checkbox" class="ace">
+				                <span class="lbl">其他</span>
+				            </label>
+				            <div class="col-xs-12 T-action-require-list T-leave-list">
+				            </div>
+					    </div>
+                       {{/if}}
+				    </div> 
 
 				</div> 
 			</div>
