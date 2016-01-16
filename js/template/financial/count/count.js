@@ -3491,8 +3491,13 @@ define(function(require, exports){
 		}
 
 		saveJsonStr = JSON.stringify(saveJsonStr);
+
+		var url = KingServices.build_url('financialTripPlan',method);
+		if(typeFlag == 3){
+			url += "&category=category";
+		}
 		$.ajax({
-			url:KingServices.build_url('financialTripPlan',method),
+			url: url,
 			data:{
 				saveJson:saveJsonStr
 			},
