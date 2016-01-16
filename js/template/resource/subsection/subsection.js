@@ -525,11 +525,11 @@ define(function(require, exports) {
 		var $parents = $this.closest("tr");
 		if (!!id) {
 			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要删除该分段？",function(){
-				$(this).dialog( "close" );
 				$parents.addClass("del");
 				$parents.fadeOut(function(){
 					$parents.hide();
 				})
+				$(this).dialog( "close" );
 			})
 			//deleteSubTGroup
 		}else{
