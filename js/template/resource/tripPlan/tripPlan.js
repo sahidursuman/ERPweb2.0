@@ -321,6 +321,7 @@ define(function(require, exports) {
 						url: KingServices.build_url('tripPlan','noticeTripPlanArrange'), 	
 						type: 'POST',
 						data: {
+							tripPlanId: id,
 							resourceType: resourceType,
 							executeTime: getValue('sendDateTime'),
 							executeTimeType: getValue('timing'),
