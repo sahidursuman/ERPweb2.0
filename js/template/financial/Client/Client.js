@@ -180,6 +180,19 @@ define(function(require, exports) {
                 data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
+
+                var customerAccountList = data.customerAccountList;
+                for(var i = 0; i < customerAccountList.length; i++){
+                    var detailList = JSON.parse(customerAccountList[i].detailList);
+                    customerAccountList[i].detailList = detailList;
+                    if(customerAccountList[i].status == 5){
+                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + detailList.otherFee.otherFeeList.length;
+                    } else {
+                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + 1;
+                    }
+                    customerAccountList[i].rowLen = (customerAccountList[i].rowLen > 0) ? customerAccountList[i].rowLen : 1;
+                }
+                data.customerAccountList = customerAccountList; 
                 
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
@@ -430,6 +443,18 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+
+                var customerAccountList = data.customerAccountList;
+                for(var i = 0; i < customerAccountList.length; i++){
+                    var detailList = JSON.parse(customerAccountList[i].detailList);
+                    customerAccountList[i].detailList = detailList;
+                    if(customerAccountList[i].status == 5){
+                        customerAccountList[i].rowLen = 1 + detailList.otherFee.length;
+                    } else {
+                        customerAccountList[i].rowLen = 2;
+                    }
+                }
+                data.customerAccountList = customerAccountList; 
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
@@ -717,36 +742,8 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var JsonStr = [],
-            selectFlag = 0,
-            argLen = arguments.length,
-            checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-checkbox');
-        $tr.each(function(i){
-           var flag = $(this).is(":checked");
-           var tr = $(this).closest('tr');
-           if(flag){
-                if(tr.attr("data-confirm") == 0 ){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 1,
-                        id: tr.data('id')
-                    };
-                    JsonStr.push(checkData);
-                }
-           }else{
-                if(tr.attr("data-confirm") == 1){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 0,
-                        id: tr.data('id')
-                    };  
-                    JsonStr.push(checkData);
-                }
-           }
-        });
+        var argLen = arguments.length,
+            JsonStr = FinancialService.saveJson_checking($tab);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
