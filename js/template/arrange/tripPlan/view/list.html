@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             {{each result as rs}}
-            <tr data-id="{{rs.id}}">
+            <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td style="vertical-align:middle">{{rs.tripNumber}}</td>
                 <td style="vertical-align:middle">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
