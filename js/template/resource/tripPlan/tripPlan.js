@@ -942,6 +942,15 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					data.mapList = JSON.parse(data.mapList);
+					for(var i = 0 ; i < data.mapList.length; i++){
+						var trLen = 0;
+						for(var j = 0 ; j < data.mapList[i].hotelOffers.length; j++){
+							var roomOffers = data.mapList[i].hotelOffers[j].roomOffers;
+							data.mapList[i].hotelOffers[j].roomOffers = roomOffers;
+							trLen += roomOffers.length;
+						}
+						data.mapList[i].trLen = trLen;
+					}
 					var isAlert = 0;
 					if (!!type) {
 						if (data.mapList.length > 0) {
