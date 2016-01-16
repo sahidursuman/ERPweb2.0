@@ -693,6 +693,7 @@ FinancialService.saveJson_checking = function($tab){
                     var detailJosn = {
                         touristGroupId : $childTr.find(".T-touristGroupId").data("id"),
                         backMoney : $childTr.find('.T-refund').val(),
+                        flag : $childTr.find(".T-touristGroupId").data("status")
                     };
                     detailList.push(detailJosn);
                 }
@@ -708,6 +709,7 @@ FinancialService.saveJson_checking = function($tab){
                     isConfirmAccount : isCheck,
                     unPayedMoney : $this.find(".T-unReceivedMoney").text(),
                     checkRemark : $this.find(".T-remark").val(),
+                    status : $this.data("status"),
                     detailList : detailList
                 };
                 saveJson.push(checkRecord);
@@ -718,7 +720,6 @@ FinancialService.saveJson_checking = function($tab){
         showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
         return false;
     }
-    saveJson = JSON.stringify(saveJson);
-    console.log(saveJson);
+     
     return saveJson;
 };
