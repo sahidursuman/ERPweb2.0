@@ -3208,7 +3208,7 @@ define(function(require, exports) {
 	 * @param  {string} tabId     来自其他模块，传入模块的Tab id，用于刷新
 	 * @return {[type]}            [description]
 	 */
-	tripPlan.updatePlanInfo = function(tripPlanId,target, tabId) {
+	tripPlan.updatePlanInfo = function(tripPlanId, billStatus, target, tabId) {
 		var quoteContent = $(document).find('#tab-arrange_all-update-content'), isThere = 0;
 		quoteContent.each(function(i){
 			var menukeyId = quoteContent.eq(i).attr("id");
@@ -3227,7 +3227,7 @@ define(function(require, exports) {
 			}
 		})
 		if (isThere == 0) {
-			tripPlan.updateTripPlanArrange(tripPlanId, '', target, tabId)
+			tripPlan.updateTripPlanArrange(tripPlanId, billStatus, target, tabId)
 		}
 	}
 

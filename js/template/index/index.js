@@ -518,19 +518,18 @@ define(function(require, exports) {
                 $busCompanyId = $rs.busCompanyId;
             var tripPlanId = $tab.find('[name=tripPlanId]').val(),
                 $tr = $tab.find('#tripPlan_addPlan_bus tbody tr');
-                if (!!$tab && $tripPlanId == tripPlanId) {
-                    $tr.each(function(i) {
-                        var busCompanyId = $tr.eq(i).find('[name=busCompanyId]').val()
-                        if (busCompanyId == $busCompanyId) {
-                            if (type == 1) {
-                                $tr.eq(i).find('[name=busOrder]').val(3);
-                            }else{
-                                $tr.eq(i).find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','rgb(51, 122, 183)');
-                            }
+            if (!!$tab && $tripPlanId == tripPlanId) {
+                $tr.each(function(i) {
+                    var busCompanyId = $tr.eq(i).find('[name=busCompanyId]').val()
+                    if (busCompanyId == $busCompanyId) {
+                        if (type == 1) {
+                            $tr.eq(i).find('[name=busOrder]').val(3);
+                        }else{
+                            $tr.eq(i).find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','rgb(51, 122, 183)');
                         }
-                    })
-                }
-             }
+                    }
+                })
+            }
         }
     };
 
