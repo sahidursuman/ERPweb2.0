@@ -3082,35 +3082,33 @@ define(function(require, exports) {
 		var bus = $("#tripPlan_addPlan_bus tbody tr");
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
-				if(tripPlan.getVal(bus.eq(i), "id")){
-					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
+				var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
 
-					var busJson = {
-						id : tripPlan.getVal(bus.eq(i), "id"),
-						startTime: tripPlan.getVal(bus.eq(i), "startTime"),
-						endTime: tripPlan.getVal(bus.eq(i), "endTime"),
-						taskType: tripPlan.getVal(bus.eq(i), "taskType"),
-						needSeatCount : tripPlan.getVal(bus.eq(i), "needSeatCount"),
-						brand : tripPlan.getVal(bus.eq(i), "brand"),
-						busId : tripPlan.getVal(bus.eq(i), "busId"),
-						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
-						setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
-						setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
-						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
-						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
-						memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
-						reduceMoney: tripPlan.getVal(bus.eq(i), "reduceMoney"),
-						needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
-						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
-						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						remark: tripPlan.getVal(bus.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
-						annouceTouristGroupIds: annouceTouristGroupIds
+				var busJson = {
+					id : tripPlan.getVal(bus.eq(i), "id"),
+					startTime: tripPlan.getVal(bus.eq(i), "startTime"),
+					endTime: tripPlan.getVal(bus.eq(i), "endTime"),
+					taskType: tripPlan.getVal(bus.eq(i), "taskType"),
+					needSeatCount : tripPlan.getVal(bus.eq(i), "needSeatCount"),
+					brand : tripPlan.getVal(bus.eq(i), "brand"),
+					busId : tripPlan.getVal(bus.eq(i), "busId"),
+					busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
+					setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
+					setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
+					driverId : tripPlan.getVal(bus.eq(i), "driverId"),
+					contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
+					memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
+					reduceMoney: tripPlan.getVal(bus.eq(i), "reduceMoney"),
+					needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
+					prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
+					guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
+					remark: tripPlan.getVal(bus.eq(i), "remark"),
+					orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
+					annouceTouristGroupIds: annouceTouristGroupIds
 
-					}
-					tripPlanJson.busCompanyArrange.push(busJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 				}
+				tripPlanJson.busCompanyArrange.push(busJson);
+				guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 			}
 		}
 		//餐安排
