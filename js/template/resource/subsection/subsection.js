@@ -290,7 +290,7 @@ define(function(require, exports) {
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc"></div></td>'
 			+ '<td>' + radio + '</td>'
-			+ '<td><input type="radio" name="operateCalculteOut" checked /></td>'
+			+ '<td><input type="radio" name="operateCalculteOut" /></td>'
 			+ '<td>-</td>'
 			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
@@ -332,20 +332,20 @@ define(function(require, exports) {
 		 * @param {[type]} $that  [description]
 		 * @param {[type]} $tbody [description]
 		 */
-		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){   
+		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"    class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+		       name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"    class="T-type T-type-' + index + '"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'"  type="text" name="name" value="'+$.trim(nameText)+'"   readonly class="T-type"><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
-		        } 
-               $td.append(name);
-    	       $td.next().append(count);
-    	       $td.next().next().append(price);
+		       		name = '<div class="clearfix" style="margin-top:1px"><input  data-index="'+ index +'" data-type="'+ type +'"   type="text" name="name" value="'+$.trim(nameText)+'"   readonly class="T-type T-type-' + index + '"><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
+           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		        }
+               $td.append(name); 
+    	       $td.next().append(count); 
+    	       $td.next().next().append(price); 
     	    //删除时间区间
 			$tbody.find(".T-del").off().click(function(){
 				var $this = $(this);
@@ -390,8 +390,9 @@ define(function(require, exports) {
 		//费用项目的计算
 		subsection.$tbody.on('change', '.T-calc', function(event) {
             /* Act on the event */
-           var $that=$(this),divIndex = $that.closest('div').index(), $tr = $that.closest('tr');
+           var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
 	            if ($that.hasClass('T-count')) {  //若数量改变
+
 	                var payMoney = subsection.totalPayMoney($tr,divIndex);
 	                 console.log('count....');
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
@@ -426,23 +427,51 @@ define(function(require, exports) {
 	    };
 
 	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
-		subsection.$tbody.find('tr').find('.T-operateCalculteOut').on('click', function(event) {
-    	 	  if ( $(this).is(':checked')) {
-    	 	  	 var nameText='',countText='',priceText='';
-				     subsection.$tabSub.find('.T-innerOutEditFeeTbody').find('tr').each(function(i) {
-				    	var $that = $(this),type = $that.eq(i).data('type');
-				    	    if (!!type && type== 3) {  
-				    	    	nameText = $that.eq(i).find('.T-name').text();
-				    	    	countText = $that.eq(i).find('.T-count').text();
-				    	    	priceText = $that.eq(i).find('.T-price').text();
-				    	    };
-				      });
-				console.log('nameText'+nameText+',countText'+countText+','+'priceText'+priceText);
+	    subsection.$tbody.on('change', '.T-operateCalculteOut', function(event) {
+	    	event.preventDefault();
 
-    	 	  	 var $fistItem = $(this).closest('tr').find('.T-type').first();
-    		     subsection.addFeeItem($fistItem,subsection.$tbody,nameText,countText,priceText,3);
-    	    };
-    	 });	
+	    	var $FeeItems = subsection.$tabSub.find('.T-innerOutEditFeeTbody').find('[data-type=3]'),  // 中转费用的tr
+	    		$fistItem = $(this).closest('tr').find('.T-type').first(),			// 分段费用项的第一个费用名称
+	    		$FeeSubItems = subsection.$tabSub.find('.T-subsectionOperationTbody').find('[data-type="3"]'),  // 分段中的中转费用项的input
+	    		FeeSubItemLength = $FeeSubItems.length,  // 中转费用项input的数量
+	    		sum = 0; 								 // 金额统计
+
+	    	if ($FeeItems.length) {					// 存在中转费用项时
+				$FeeItems.each(function() {
+					var $tr = $(this);
+
+					if (!FeeSubItemLength) {		// 没有添加过中转费用时
+	    		     	subsection.addFeeItem($fistItem,subsection.$tbody,
+	    		     							$tr.find('.T-name').text(), 
+	    		     							$tr.find('.T-count').text(), 
+	    		     							$tr.find('.T-price').text(), 3);						
+					}
+					// 统计费用
+    		     	sum += $tr.find('.T-price').next().text()*1;
+				});	 
+
+				if (FeeSubItemLength)  {		// 处理中转费用的转移效果
+					var $money = $FeeSubItems.closest('tr').find('.T-payedMoney'),
+						money = ($money.val() || 0) * 1,
+						$tr = $(this).closest('tr'), 
+						$typeTd = $tr.find('.T-type').closest('td'),
+						$countTd = $typeTd.next(),
+						$priceTd = $countTd.next();
+					// 移走前先计算	
+					$money.val(money - sum);
+					// 移走中转费用项
+					$typeTd.append($FeeSubItems.filter('.T-type').closest('div'));
+					$countTd.append($FeeSubItems.filter('.T-count').closest('div'));
+					$priceTd.append($FeeSubItems.filter('.T-price').closest('div'));
+				}	
+
+				var $money = $(this).closest('tr').find('.T-payedMoney'),
+					money = ($money.val() || 0) * 1;
+				$money.val(money + sum);
+	    	}
+	    	
+	    });
+
 
 		/**
 		 * [startIntime 中转分段初日期
