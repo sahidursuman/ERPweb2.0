@@ -144,16 +144,43 @@ FinancialService.checkSaveJson = function($tab,rule){
 };
 
 //对账-修改但未勾选提醒
-FinancialService.changeUncheck = function(trList,fn){
-    var result = false,uncheckList = [];
+FinancialService.changeUncheck = function(trList,fn,minTdLen){
+    var result = false,
+        argLen = arguments.length;
+
     trList.each(function(){
-        var $this = $(this);
-        if($this.data('change') && $this.data("confirm") == 0 && !$this.find('.T-checkbox').is(":checked")){
-            $this.addClass('success');
-            uncheckList.push($this);
-            result = true;
+        var $tr = $(this),
+            $mainTr = $tr;
+        
+        if($tr.data('change')){
+            if(argLen === 3){
+                while($mainTr.children('td').length <= minTdLen){
+                    $mainTr = $mainTr.prev();
+                }
+            }
+
+            if($mainTr.data("confirm") == 0 && !$mainTr.find('.T-checkbox').is(":checked")){
+                if(argLen === 3){
+                    var $tempTr = $mainTr.next(),
+                        index = $mainTr.index();
+                    $mainTr.addClass('success');
+                    var end = false;
+                    while($tempTr.length > 0 && !end){
+                        if($tempTr.hasClass('T-checkTr')){
+                            end = true;
+                        } else {
+                            $tempTr.addClass('success');
+                            $tempTr = $tempTr.next();
+                        }
+                    }
+                } else{
+                    $tr.addClass('success');
+                }
+                result = true;
+            }
         }
     });
+
     if(result){
         var buttons = [
             {
@@ -470,7 +497,6 @@ FinancialService.exportReport = function(args,method){
     for(var i in args){
         str += "&" + i + "=" + args[i];
     }
-    console.log("exportReport");
     exportXLS(KingServices.build_url('export',method) + str);
 };
 
@@ -618,10 +644,10 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
             $mainTr = $tr;
         if(isNaN($this.val())){ return false;}
 
+        $tr.data("change",true);
         while($mainTr.children('td').length <= minTdLen){
             $mainTr = $mainTr.prev();
         }
-        $mainTr.data("change",true);
 
         var backMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
             settlementMoney = $tr.find('.T-settlementMoney').text() *1,

@@ -337,9 +337,11 @@ define(function(require,exports) {
         	InnerTransferOut.viewPayedDetail(id);
         });
         //确认对账事件
-        $obj.find(".T-checking").on('click',function(event){
+        $obj.find(".T-checking").off().on('click',function(event){
         	if(!InnerTransferOut.validatorCheck.form()){return;}
-			InnerTransferOut.saveCheckingData(0,$obj,"");
+        	FinancialService.changeUncheck($obj.find(".T-checkList tr"), function(){
+				InnerTransferOut.saveCheckingData(0,$obj,"");
+			},3);
         });
         //关闭事件
         $obj.find(".T-close").on('click',function(event){

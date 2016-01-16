@@ -406,8 +406,9 @@ define(function(require,exports) {
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
         	if(!validatorCheck.form()){return;}
-			InnerTransferIn.saveCheckingData(0,$obj,$listSearchData)
-        	
+        	FinancialService.changeUncheck($obj.find(".T-checkList tr"), function(){
+				InnerTransferIn.saveCheckingData(0,$obj,$listSearchData)
+        	},3);
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
