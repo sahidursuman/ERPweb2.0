@@ -70,11 +70,6 @@
                             </td>
                         </tr>
                     {{/each}}
-
-
-                   
-
-                   
                 </tbody>
             </table>
         </div>
@@ -119,9 +114,11 @@
                         <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker col-sm-12" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
                     </td>
 
+
+
                     <td>
                         <div class="clearfix" style="margin-top:1px">
-                            <input data-index="0" class="F-float F-money T-type" type="text" name="name" value="">
+                            <input data-index="0" class="T-type" type="text" name="name" value="">
                             <label class="timeArea" style="float:right;padding-top:0px;">
                                 <button class="btn btn-success btn-sm btn-white T-add">
                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -139,6 +136,9 @@
                      <td>
                         <div class="clearfix" style="margin-top:1px" data-id=''><input class="F-float F-money  T-payedMoney T-calc" value="{{subList.subsectionNeedPayAllMoney}}" type="text" name="needPayAllMoney" value=""></div>
                     </td>
+
+
+                    
 
                     <td>
                         <input type="radio" name="operateCurrentNeedPayMoney" {{if subList.operateCurrentNeedPayMoney==1 }}checked="checked" {{/if}} />

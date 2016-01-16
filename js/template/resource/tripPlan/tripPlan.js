@@ -2336,8 +2336,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)){
-	                    	$parents.find("input[name=fee]").val(data.price).trigger('change');
-	                    	$parents.find("input[name=price]").val(data.price);
+	                    	$parents.find("input[name=price]").val(data.price).trigger('change');
 						}
                     }
                 });
@@ -3029,100 +3028,46 @@ define(function(require, exports) {
 	 * 提交事件
 	 */
 	tripPlan.submitTripPlan = function($tab,isClose,id,tab_id,title,html) {
-		//记录统计数据  
-		var guideAllPayMoney = 0.0;
-		var guideAllNowMoney = 0.0;
-		var guideAllPreMoney = 0.0;
 		var argumentsLen = arguments.lengh;
-		
+		// 计算总额
 		tripPlan.moneyTripPlan($tab);
 		
-		var tripPlanJson = {
-				tripPlan : {},
-				insuranceArrangeList : [],
-				guideArrange : {},
-				busCompanyArrange : [],
-				restaurantArrangeList : [],
-				hotelArrangeList : [],
-				scenicArrangeList : [],
-				shopArrangeList : [],
-				selfPayArrangeList : [],
-				ticketArrangeList : [],
-				otherArrangeList : []
-		}
-		
-		var insur = $("#tripPlan_addPlan_insurance tbody tr");
-		//保险
-		if(insur.length > 0){
-			for(var i=0; i<insur.length; i++){
-				if(tripPlan.getVal(insur.eq(i), "insuranceId")){
-					var insurJosn = {
-						id : tripPlan.getVal(insur.eq(i), "id"),
-						insuranceId : tripPlan.getVal(insur.eq(i), "insuranceId"),
-						type : tripPlan.getVal(insur.eq(i), "type"),
-						typeId: tripPlan.getVal(insur.eq(i), "typeId"),
-						price : tripPlan.getVal(insur.eq(i), "price"),
-						memberCount : tripPlan.getVal(insur.eq(i), "memberCount"),
-						needPayMoney : tripPlan.getVal(insur.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(insur.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(insur.eq(i), "payType"),
-						remark : tripPlan.getVal(insur.eq(i), "remark")
-					}
-					tripPlanJson.insuranceArrangeList.push(insurJosn);
-				}
-			}
-		}
-		//导游安排
-		var guide = $("#tripPlan_addPlan_guide tbody tr");
-		if(guide.length > 0){
-			for(var i=0; i<guide.length; i++){
-				if(tripPlan.getVal(guide.eq(i), "id")){
-					var guideJosn = {
-						id : tripPlan.getVal(guide.eq(i), "id"),
-						price : tripPlan.getVal(guide.eq(i), "guideFee"),
-						manageFee : tripPlan.getVal(guide.eq(i), "manageFee"),
-						payType : tripPlan.getVal(guide.eq(i), "payType"),
-						remark : tripPlan.getVal(guide.eq(i), "remark"),
-					}
-					tripPlanJson.guideArrange = guideJosn;
-				}
-			}
-		}
-		//旅游车安排
-		var bus = $("#tripPlan_addPlan_bus tbody tr");
+		//组织旅游车安排数据
+		var bus = $("#tripPlan_addPlan_bus tbody tr"), busCompanyArrange = [];
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
-				var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
+				if(tripPlan.getVal(bus.eq(i), "id")){
+					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
 
-				var busJson = {
-					id : tripPlan.getVal(bus.eq(i), "id"),
-					startTime: tripPlan.getVal(bus.eq(i), "startTime"),
-					endTime: tripPlan.getVal(bus.eq(i), "endTime"),
-					taskType: tripPlan.getVal(bus.eq(i), "taskType"),
-					needSeatCount : tripPlan.getVal(bus.eq(i), "needSeatCount"),
-					brand : tripPlan.getVal(bus.eq(i), "brand"),
-					busId : tripPlan.getVal(bus.eq(i), "busId"),
-					busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
-					setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
-					setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
-					driverId : tripPlan.getVal(bus.eq(i), "driverId"),
-					contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
-					memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
-					reduceMoney: tripPlan.getVal(bus.eq(i), "reduceMoney"),
-					needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
-					prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
-					guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-					remark: tripPlan.getVal(bus.eq(i), "remark"),
-					orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
-					annouceTouristGroupIds: annouceTouristGroupIds
+					var busJson = {
+						id : tripPlan.getVal(bus.eq(i), "id"),
+						startTime: tripPlan.getVal(bus.eq(i), "startTime"),
+						endTime: tripPlan.getVal(bus.eq(i), "endTime"),
+						taskType: tripPlan.getVal(bus.eq(i), "taskType"),
+						needSeatCount : tripPlan.getVal(bus.eq(i), "needSeatCount"),
+						brand : tripPlan.getVal(bus.eq(i), "brand"),
+						busId : tripPlan.getVal(bus.eq(i), "busId"),
+						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
+						setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
+						setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
+						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
+						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
+						memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
+						reduceMoney: tripPlan.getVal(bus.eq(i), "reduceMoney"),
+						needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
+						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
+						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
+						remark: tripPlan.getVal(bus.eq(i), "remark"),
+						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
+						annouceTouristGroupIds: annouceTouristGroupIds
 
+					}
+					busCompanyArrange.push(busJson);
 				}
-				tripPlanJson.busCompanyArrange.push(busJson);
-				guideAllPayMoney += tripPlan.checkParamIsDouble(busJson.guidePayMoney);
 			}
 		}
-		//餐安排
-		var restaurant = $("#tripPlan_addPlan_restaurant tbody tr");
+		//组织餐安排数据
+		var restaurant = $("#tripPlan_addPlan_restaurant tbody tr"), restaurantArrangeList = [];
 		if(restaurant.length > 0){
 			for(var i=0; i<restaurant.length; i++){
 				var isChoose = "0",restaurantChooseArrangeListJson;
@@ -3152,186 +3097,33 @@ define(function(require, exports) {
 						isChoose : isChoose,
 						restaurantChooseArrangeList : restaurantChooseArrangeListJson
 					}
-					tripPlanJson.restaurantArrangeList.push(restaurantJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(restaurantJson.guidePayMoney);
+					restaurantArrangeList.push(restaurantJson);
 				}
 			}
 		}
-		//房安排
-		var hotel = $("#tripPlan_addPlan_hotel tbody tr");
-		if(hotel.length > 0){
-			for(var i=0; i<hotel.length; i++){
-				if(tripPlan.getVal(hotel.eq(i), "hotelId")){
-					var hotelJson = {
-						id : tripPlan.getVal(hotel.eq(i), "id"),
-						whichDay : tripPlan.getVal(hotel.eq(i), "whichDay"),
-						hotelId : tripPlan.getVal(hotel.eq(i), "hotelId"),
-						hotelRoomId : tripPlan.getVal(hotel.eq(i), "hotelRoomId"),
-						memberCount : tripPlan.getVal(hotel.eq(i), "memberCount"),
-						price : tripPlan.getVal(hotel.eq(i), "fee"),
-						reduceMoney : tripPlan.getVal(hotel.eq(i), "reduceMoney"),
-						needPayMoney : tripPlan.getVal(hotel.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(hotel.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(hotel.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(hotel.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(hotel.eq(i), "remark"),
-						orderStatus: tripPlan.getVal(hotel.eq(i), "hotelOrder")
-					}
-					tripPlanJson.hotelArrangeList.push(hotelJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(hotelJson.guidePayMoney);
-				}
-			}
-		}
-		//景点安排
-		var scenic = $("#tripPlan_addPlan_scenic tbody tr");
-		if(scenic.length > 0){
-			for(var i=0; i<scenic.length; i++){
-				if(tripPlan.getVal(scenic.eq(i), "scenicId")){
-					var scenicJson = {
-						id : tripPlan.getVal(scenic.eq(i), "id"),
-						whichDay : tripPlan.getVal(scenic.eq(i), "whichDay"),
-						scenicId : tripPlan.getVal(scenic.eq(i), "scenicId"),
-						scenicItemId : tripPlan.getVal(scenic.eq(i), "scenicItemId"),
-						tourTime : tripPlan.getVal(scenic.eq(i), "tourTime"),
-						tourDuration : tripPlan.getVal(scenic.eq(i), "tourDuration"),
-						orderNumber : tripPlan.getVal(scenic.eq(i), "orderNumber"),
-						price : tripPlan.getVal(scenic.eq(i), "fee"),
-						memberCount : tripPlan.getVal(scenic.eq(i), "memberCount"),
-						reduceMoney : tripPlan.getVal(scenic.eq(i), "reduceMoney"),
-						needPayMoney : tripPlan.getVal(scenic.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(scenic.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(scenic.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(scenic.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(scenic.eq(i), "remark"),
-					}
-					tripPlanJson.scenicArrangeList.push(scenicJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(scenicJson.guidePayMoney);
-				}
-			}
-		}
-		
-		//购物安排
-		var shop = $("#tripPlan_addPlan_shop tbody tr");
-		if(shop.length > 0){
-			for(var i=0; i<shop.length; i++){
-				if(tripPlan.getVal(shop.eq(i), "shopId")){
-					var shopJson = {
-						id : tripPlan.getVal(shop.eq(i), "id"),
-						whichDay : tripPlan.getVal(shop.eq(i), "whichDay"),
-						shopId : tripPlan.getVal(shop.eq(i), "shopId"),
-						shopPolicyId :tripPlan.getVal(shop.eq(i), "shopPolicyId"),
-						remark : tripPlan.getVal(shop.eq(i), "remark")
-					}
-					tripPlanJson.shopArrangeList.push(shopJson);
-				}
-			}
-		}
-		
-		//自费
-		var selfPay = $("#tripPlan_addPlan_selfPay tbody tr");
-		if(selfPay.length > 0){
-			for(var i=0; i<selfPay.length; i++){
-				if(tripPlan.getVal(selfPay.eq(i), "selfPayId")){
-					var selfPayJson = {
-						id : tripPlan.getVal(selfPay.eq(i), "id"),
-						whichDay : tripPlan.getVal(selfPay.eq(i), "whichDay"),
-						selfPayId : tripPlan.getVal(selfPay.eq(i), "selfPayId"),
-						selfPayItemId : tripPlan.getVal(selfPay.eq(i), "selfPayItemId"),
-						lowestPrice : tripPlan.getVal(selfPay.eq(i), "price"),
-						price : tripPlan.getVal(selfPay.eq(i), "oldPrice"),
-						memberCount : tripPlan.getVal(selfPay.eq(i), "memberCount"),
-						reduceMoney : tripPlan.getVal(selfPay.eq(i), "reduceMoney"),
-						needPayMoney : tripPlan.getVal(selfPay.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(selfPay.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(selfPay.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(selfPay.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(selfPay.eq(i), "remark")
-					}
-					tripPlanJson.selfPayArrangeList.push(selfPayJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(selfPayJson.guidePayMoney);
-				}
-			}
-		}
-		
-		//票务
-		var ticket = $("#tripPlan_addPlan_ticket tbody tr");
-		if(ticket.length > 0){
-			for(var i=0; i<ticket.length; i++){
-				if(tripPlan.getVal(ticket.eq(i), "ticketId")){
-					var ticketJson = {
-						id : tripPlan.getVal(ticket.eq(i), "id"),
-						whichDay : tripPlan.getVal(ticket.eq(i), "whichDay"),
-						ticketId : tripPlan.getVal(ticket.eq(i), "ticketId"),
-						type : tripPlan.getVal(ticket.eq(i), "type"),
-						shift : tripPlan.getVal(ticket.eq(i), "shift"),
-						startTime : tripPlan.getVal(ticket.eq(i), "startTime"),
-						startingCity : tripPlan.getVal(ticket.eq(i), "startingCity"),
-						arriveCity : tripPlan.getVal(ticket.eq(i), "arriveCity"),
-						seatLevel : tripPlan.getVal(ticket.eq(i), "seatLevel"),
-						memberCount : tripPlan.getVal(ticket.eq(i), "memberCount"),
-						price : tripPlan.getVal(ticket.eq(i), "fee"),
-						reduceMoney : tripPlan.getVal(ticket.eq(i), "reduceMoney"),
-						needPayMoney : tripPlan.getVal(ticket.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(ticket.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(ticket.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(ticket.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(ticket.eq(i), "remark"),
-					}
-					tripPlanJson.ticketArrangeList.push(ticketJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(ticketJson.guidePayMoney);
-				}
-			}
-		}
-		
-		//其它
-		var other = $("#tripPlan_addPlan_other tbody tr");
-		if(other.length > 0){
-			for(var i=0; i<other.length; i++){
-				if(tripPlan.getVal(other.eq(i), "whichDay")){
-					var otherJson = {
-						id : tripPlan.getVal(other.eq(i), "id"),
-						whichDay : tripPlan.getVal(other.eq(i), "whichDay"),
-						managerName : tripPlan.getVal(other.eq(i), "managerName"),
-						mobileNumber : tripPlan.getVal(other.eq(i), "mobileNumber"),
-						name : tripPlan.getVal(other.eq(i), "name"),
-						memberCount : tripPlan.getVal(other.eq(i), "memberCount"),
-						price : tripPlan.getVal(other.eq(i), "fee"),
-						reduceMoney : tripPlan.getVal(other.eq(i), "reduceMoney"),
-						needPayMoney : tripPlan.getVal(other.eq(i), "needPayMoney"),
-						payedMoney : tripPlan.getVal(other.eq(i), "payedMoney"),
-						payType : tripPlan.getVal(other.eq(i), "payType"),
-						guidePayMoney : tripPlan.getVal(other.eq(i), "guidePayMoney"),
-						remark : tripPlan.getVal(other.eq(i), "remark")
-					}
-					tripPlanJson.otherArrangeList.push(otherJson);
-					guideAllPayMoney += tripPlan.checkParamIsDouble(otherJson.guidePayMoney);
-				}
-			}
-		}
+	
 		
 		//获取tripPlan
-		var $addTripTab = $tab.find('.baseinfo');
-		var tmp = {
+		var $addTripTab = $tab.find('.baseinfo'),
+		tmp = {  // 基础数据
 			id : $addTripTab.find('input[name=tripPlanId]').val(),
 			guideAllPayMoney : $addTripTab.find('.T-guidePayedMoney').text(),
 			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val(),
-		}
-
-		tripPlanJson = {
+		},
+		tripPlanJson = {  // 安排数据
 			guideList : Tools.getTableVal($tab.find('#tripPlan_addPlan_guide').find('tbody'), 'entity-arrangeid'),
 			//busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
-			busCompanyList: tripPlanJson.busCompanyArrange,
+			busCompanyList: busCompanyArrange,
 			hotelList : Tools.getTableVal($tab.find('#tripPlan_addPlan_hotel').find('tbody'), 'entity-arrangeid'),
 			insuranceList : Tools.getTableVal($tab.find('#tripPlan_addPlan_insurance').find('tbody'), 'entity-arrangeid'),
 			otherList : Tools.getTableVal($tab.find('#tripPlan_addPlan_other').find('tbody'), 'entity-arrangeid'),
-			restaurantList : tripPlanJson.restaurantArrangeList,
+			restaurantList : restaurantArrangeList,
 			scenicList : Tools.getTableVal($tab.find('#tripPlan_addPlan_scenic').find('tbody'), 'entity-arrangeid'),
 			selfPayList : Tools.getTableVal($tab.find('#tripPlan_addPlan_selfPay').find('tbody'), 'entity-arrangeid'),
 			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
-		}
-		var json = JSON.stringify(tripPlanJson),
-			arrangeStatus = {};
+		},
+		json = JSON.stringify(tripPlanJson),arrangeStatus = {};
 
 		$tab.find('.T-finishedArrange').each(function() {
 			var $that = $(this);
@@ -3416,7 +3208,7 @@ define(function(require, exports) {
 	 * @param  {string} tabId     来自其他模块，传入模块的Tab id，用于刷新
 	 * @return {[type]}            [description]
 	 */
-	tripPlan.updatePlanInfo = function(tripPlanId, billStatus, target, tabId) {
+	tripPlan.updatePlanInfo = function(tripPlanId,target, tabId) {
 		var quoteContent = $(document).find('#tab-arrange_all-update-content'), isThere = 0;
 		quoteContent.each(function(i){
 			var menukeyId = quoteContent.eq(i).attr("id");
@@ -3435,7 +3227,7 @@ define(function(require, exports) {
 			}
 		})
 		if (isThere == 0) {
-			tripPlan.updateTripPlanArrange(tripPlanId, billStatus, target, tabId)
+			tripPlan.updateTripPlanArrange(tripPlanId, '', target, tabId)
 		}
 	}
 

@@ -326,6 +326,8 @@ define(function(require, exports) {
             }
         });
     };
+
+
     //添加小组事件绑定
     touristGroup.addEvents = function() {
         var $addTabId = $("#tab-resource_touristGroup-add-content"),
@@ -445,6 +447,10 @@ define(function(require, exports) {
             }
             touristGroup.installData($updateTabId, id, 2, "", typeInner);
         });
+
+        //格式化时间
+        touristGroup.formatTime($updateTabId);
+
 
         $updateTabId.data('isEdited', false);
     };
@@ -832,7 +838,7 @@ define(function(require, exports) {
                         if(!!id){
                             showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
                                 $.ajax({
-                                    url: KingServices.build_url('tripPlan', 'deleteTripPlanRequire'),
+                                    url: KingServices.build_url('touristGroup', 'deleteRequire'),
                                     type: 'post',
                                     data: {requireId: id},
                                 })
@@ -843,6 +849,8 @@ define(function(require, exports) {
                                         });
                                     }
                                 });
+                            },function(){
+                                $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>')
                             });
                         }else{
                             $inputParent.remove();
@@ -1553,7 +1561,7 @@ define(function(require, exports) {
     //新增其他费用项
     touristGroup.addOtherCost = function($obj) {
         var html = '<tr>' +
-            '<td><select name="describeInfo" class="col-sm-10 col-sm-offset-1"><option value="1">大人结算价</option><option value="2">小孩结算价</option>' +
+            '<td><select name="type" class="col-sm-10 col-sm-offset-1"><option value="1">大人结算价</option><option value="2">小孩结算价</option>' +
             '<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option>' +
             '<option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>' +
             '<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select></td>' +
@@ -2157,17 +2165,17 @@ define(function(require, exports) {
 
         //接团共用json
         reciveTrip.param = {
-            reciveTime : $obj.find('[name="arriveTime"]').val(),
-            recivePlace : $obj.find('[name="arrivePosition"]').val(),
-            ticketShift : $obj.find('[name="arriveShift"]').val(),
-            ticketTime : $obj.find('[name="arriveShiftTime"]').val()
+            arriveTime : $obj.find('[name="arriveTime"]').val(),
+            arrivePosition : $obj.find('[name="arrivePosition"]').val(),
+            arriveShift : $obj.find('[name="arriveShift"]').val(),
+            arriveShiftTime : $obj.find('[name="arriveShiftTime"]').val()
         };
         //送团共用json
         sendTrip.param = {
-            reciveTime : $obj.find('[name="leaveTime"]').val(),
-            recivePlace : $obj.find('[name="leavePosition"]').val(),
-            ticketShift : $obj.find('[name="leaveShift"]').val(),
-            ticketTime : $obj.find('[name="leaveShiftTime"]').val()
+            leaveTime : $obj.find('[name="leaveTime"]').val(),
+            leavePosition : $obj.find('[name="leavePosition"]').val(),
+            leaveShift : $obj.find('[name="leaveShift"]').val(),
+            leaveShiftTime : $obj.find('[name="leaveShiftTime"]').val()
         };
 
         //预收款、计划现收不能大于应收
@@ -2240,10 +2248,7 @@ define(function(require, exports) {
                             } else {
                                 Tools.closeTab(tabId);
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
-                                var $touristReChecked = $arrangeForm.find('.T-touristReception').is(':checked'),
-                                    $smallCar = $arrangeForm.find('.T-smallCar').is(':checked'),
-                                    $touristSend = $arrangeForm.find('.T-touristSend').is(':checked');
-                                if (!!typeInner && ($touristReChecked == true || $smallCar == true || $touristSend == true)) {
+                                if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
                                 } else {

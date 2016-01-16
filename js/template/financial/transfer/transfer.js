@@ -234,9 +234,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         Transfer.$checkTab.find(".T-saveCheck").click(function(){
             if(!validatorCheck.form()){return;}
-            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList").find('tr'), function(){
+            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList tr"), function(){
                 Transfer.saveChecking(id,name,page);
-            });
+            },3);
         });
     };
 

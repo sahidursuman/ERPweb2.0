@@ -296,9 +296,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
-            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+            FinancialService.changeUncheck($tab.find('.T-checkList tr'), function(){
                 Client.saveCheckingData($tab);
-            });
+            },3);
          });
 
         //关闭页面事件
