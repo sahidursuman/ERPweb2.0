@@ -684,10 +684,11 @@ define(function(require, exports) {
 	 * @return {[type]}       [description]
 	 */
 	tripPlan.noticeTourists = function($that,id,busData) {
-		var thatJson = $that.data('entity-touristGroup');
+		var thatJson = $that.data('entity-touristgroup');
 		if (!!thatJson && typeof thatJson == 'string') {
 			thatJson = JSON.parse(thatJson);
 		}
+		console.log(thatJson)
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
@@ -764,7 +765,7 @@ define(function(require, exports) {
 									touristGroupJson.push(json);
 									touristGroupJson = JSON.stringify(touristGroupJson);
 								})
-								$that.data('entity-touristGroup',touristGroupJson);
+								$that.data('entity-touristgroup',touristGroupJson);
 								layer.close(noticeTouristsLayer);
 							})
 					    }
@@ -941,6 +942,15 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					data.mapList = JSON.parse(data.mapList);
+					for(var i = 0 ; i < data.mapList.length; i++){
+						var trLen = 0;
+						for(var j = 0 ; j < data.mapList[i].hotelOffers.length; j++){
+							var roomOffers = data.mapList[i].hotelOffers[j].roomOffers;
+							data.mapList[i].hotelOffers[j].roomOffers = roomOffers;
+							trLen += roomOffers.length;
+						}
+						data.mapList[i].trLen = trLen;
+					}
 					var isAlert = 0;
 					if (!!type) {
 						if (data.mapList.length > 0) {
@@ -1198,7 +1208,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><a class="cursor T-btn-deleteTripPlanList"  data-entity-name="insurance" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
 		var $price = tableContainer.find('.price');
@@ -1280,7 +1290,7 @@ define(function(require, exports) {
 					+ '<td><input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
-					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="hotel">删除</a></td></tr>',
+					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
 
 			$tr = $(filterUnAuth(html)).appendTo($tbody),
 		//精度控件
@@ -1372,7 +1382,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
 		var $price=tableContainer.find('.price');
@@ -1416,7 +1426,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
 		var $price=tableContainer.find('.price');
@@ -1447,7 +1457,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
@@ -1476,7 +1486,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
-		'<td><a class="cursor T-btn-deleteTripPlanList" title="删除">删除</a></td></tr>';
+		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
 		tableContainer.append(html);
 		//精度控件
@@ -3198,7 +3208,7 @@ define(function(require, exports) {
 	 * @param  {string} tabId     来自其他模块，传入模块的Tab id，用于刷新
 	 * @return {[type]}            [description]
 	 */
-	tripPlan.updatePlanInfo = function(tripPlanId,target, tabId) {
+	tripPlan.updatePlanInfo = function(tripPlanId, billStatus, target, tabId) {
 		var quoteContent = $(document).find('#tab-arrange_all-update-content'), isThere = 0;
 		quoteContent.each(function(i){
 			var menukeyId = quoteContent.eq(i).attr("id");
@@ -3217,7 +3227,7 @@ define(function(require, exports) {
 			}
 		})
 		if (isThere == 0) {
-			tripPlan.updateTripPlanArrange(tripPlanId, '', target, tabId)
+			tripPlan.updateTripPlanArrange(tripPlanId, billStatus, target, tabId)
 		}
 	}
 

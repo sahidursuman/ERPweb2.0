@@ -394,9 +394,9 @@
                                         </td>
 
                                         <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
-                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>
-                                        <td><input type="text" name="setPlacePosition" class="col-xs-12"></td>
-                                        <td><a class="T-noticeTourists">点击设置</a></td>
+                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
                                         <td>
                                             <div class="col-xs-12 feild-relative">
                                                 <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>
@@ -649,7 +649,7 @@
                                         </td>
                                         <td>
                                             <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1 && hotel.orderStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1 || hotel.orderStatus == 2 || hotel.orderStatus == 3 || hotel.orderStatus == 0}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
                                         </td>
                                         <!-- <td>
                                             {{if hotel.offerId!=null}}
