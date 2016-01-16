@@ -273,6 +273,9 @@ define(function(require, exports) {
 			subsection.delFeeItem($this);
 		});
 
+        
+		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
+
 
 		// 新增
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
@@ -376,8 +379,8 @@ define(function(require, exports) {
 				$this.data('deleted', true);
 				var $div = $this.closest('div'),
 					divIndex = $div.index(),
-					index = $div.children('input').data('index'),
-					entityId = $div.data("id");
+					index = $div.length,
+					entityId = $this.closest('div').find('.T-type').data("id");
 				$div.closest('tr').find('div:not(.delete)').find('.T-count').eq(divIndex).fadeOut(function(){
 					$(this).closest('div').remove();
 				});
@@ -414,43 +417,8 @@ define(function(require, exports) {
 		};
 
 		//费用项目的计算
-		subsection.$tbody.on('change', '.T-calc', function(event) {
-            /* Act on the event */
-           var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
-	            if ($that.hasClass('T-count')) {  //若数量改变
-
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
-	                 console.log('count....');
-	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
-	                console.log('price....');
-	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	            };
-        });
-
-
-	    /**
-	     * [totalPayMoney 金额的计算
-	     * @param  {[type]} $tr  当前改变Tr
-	     * @param  {[type]} tdIndex 当前修改后的index
-	     * @return {[type]} 
-	     */
-	    subsection.totalPayMoney =function($tr,tdIndex){
-	    	var totalPayMoney = 0;
-		    	$tr.each(function() {
-		    		var $_that = $(this),$countTr = $_that.find('.T-count'),payMoney=0;
-		    		$countTr.each(function(index) {
-		    			if(index <= tdIndex ){
-		    				var count = $(this).closest('tr').find(".T-count-" + index).val(),
-						        price = $(this).closest('tr').find(".T-price-" + index).val();
-						    totalPayMoney +=count*price;
-		    			}
-					    
-				    });
-		    	});
-	    	return totalPayMoney;
-	    };
+		subsection.feeItemChange();
+		
 
 	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
 	    subsection.$tbody.on('change', '.T-operateCalculteOut', function(event) {
@@ -525,6 +493,28 @@ define(function(require, exports) {
 			subsection.operationSave();
 		});
 	};
+
+
+    /**
+     * 费用项目监听change
+     * @return {[type]} [description]
+     */
+	subsection.feeItemChange = function(){
+		subsection.$tbody.on('change', '.T-calc', function(event) {
+            /* Act on the event */
+           var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
+	            if ($that.hasClass('T-count')) {  //若数量改变
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                 console.log('count....');
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	            }else if($that.hasClass('T-price')){ //若价格改变
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                console.log('price....');
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	        };
+        });
+	};
+
 	/**
 	 * 删除分段
 	 * @param  {[type]} id    [id]
@@ -548,6 +538,30 @@ define(function(require, exports) {
 			})
 		}
 	};
+
+
+	/**
+     * [totalPayMoney 金额的计算
+     * @param  {[type]} $tr  当前改变Tr
+     * @param  {[type]} tdIndex 当前修改后的index
+     * @return {[type]} 
+     */
+    subsection.totalPayMoney =function($tr,tdIndex){
+    	var totalPayMoney = 0;
+	    	$tr.each(function() {
+	    		var $_that = $(this),$countTr = $_that.find('.T-count'),payMoney=0;
+	    		$countTr.each(function(index) {
+	    			if(index <= tdIndex ){
+	    				var count = $(this).closest('tr').find(".T-count-" + index).val(),
+					        price = $(this).closest('tr').find(".T-price-" + index).val();
+					    totalPayMoney +=count*price;
+	    			}
+				    
+			    });
+	    	});
+    	return totalPayMoney;
+    };
+
 	/**
 	 * 保存分段操作
 	 * @param  {[type]} e [description]
@@ -610,7 +624,6 @@ define(function(require, exports) {
 				receivables += getValue($tr,"needPayAllMoney")*1;
 			}
 		});
-		console.log(subTouristGroup)
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
 		}
