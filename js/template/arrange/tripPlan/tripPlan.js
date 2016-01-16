@@ -102,7 +102,8 @@ define(function(require, exports) {
     			$(this).next('[name="status"]').removeClass('hide');
     		}
     	});
-    	$tab.on('click', '.T-btn-tripPlan-add', function(event) {
+    	$tab.off('click')
+    	.on('click', '.T-btn-tripPlan-add', function(event) {
     		event.preventDefault();
     		tripPlan.addTripPlan($(this).data('type'));
     	});
@@ -118,7 +119,7 @@ define(function(require, exports) {
                 var statusValue = $that.data("status-value"),
 					billStatus = $that.data("bill-status");
 
-                tripPlan.confirmTripPlan(id, statusValue, billStatus);
+                tripPlan.confirmTripPlan(id, statusValue, billStatus, $that);
 			} else if($that.hasClass('T-update')){
 				// 编辑
                 tripPlan.updateGroupTripPlan(id);
@@ -142,7 +143,7 @@ define(function(require, exports) {
                 var statusValue = $that.data("status-value"),
 					billStatus = $that.data("bill-status");
 					
-                tripPlan.confirmTripPlan(id,statusValue,billStatus);
+                tripPlan.confirmTripPlan(id,statusValue,billStatus, $that);
 			} else if($that.hasClass('T-update')){
 				// 编辑
                 tripPlan.updateSingleTripPlan(id);
@@ -267,7 +268,7 @@ define(function(require, exports) {
 				var rs = JSON.parse(data.result);
 				data.result = rs;
 				for (var i = rs.length - 1; i >= 0; i--) {
-					if(rs[i].tripPlanTouristList.length > 0 && 
+					if(rs[i].tripPlanTouristList.length === 1 && 
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
 						rs[i].lineProduct && 
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
@@ -1032,7 +1033,7 @@ define(function(require, exports) {
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
 			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
 			return;
-		} else {
+		} else if(args.executeTimeType == 0) {
 			delete(args.executeTime);
 		}
 
@@ -1197,6 +1198,7 @@ define(function(require, exports) {
 				if(!!groupData.quote){
 					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
+					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id, groupData.quote.id, 1, 1);
 				}else{
 					$tab.find('[name="quoteOrderName"]').val("");
 					$tab.find('[name="quoteId"]').val("");
@@ -1204,7 +1206,9 @@ define(function(require, exports) {
 				if(!!groupData.lineProduct){
 					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
 					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
-					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+					if(!groupData.quote){
+						tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id);
+					}
 				}else{
 					$tab.find('[name="lineProductName"]').val("");
 					$tab.find('[name="lineProductId"]').val("");
@@ -1220,6 +1224,8 @@ define(function(require, exports) {
 				$tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
 				$tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
 				$tab.find('[name="getType"]').val(groupData.getType);
+				$tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
+				$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());
 				$tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
@@ -1486,10 +1492,12 @@ define(function(require, exports) {
 			}
 		}).done(function(data){
 			if(showDialog(data)){
-				var group = JSON.parse(data.touristGroupJson);
+				var group = JSON.parse(data.touristGroupJson),
+					hotelLevel = ['三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上'];
 				var html = "";
 				for(var i=0; i<group.length; i++){
 					html += '<tr data-id="'+group[i].id+'"><td>'+
+					group[i].orderNumber+'</td><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
@@ -1499,9 +1507,12 @@ define(function(require, exports) {
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
-					group[i].hotelLevel+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					group[i].partnerAgency.remark+'</td><td>'+
+					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
+					group[i].includeSelfPay+'</td><td>'+
+					group[i].accompanyGuideName+'</td><td>'+
+					group[i].accompanyGuideMobile+'</td><td>'+
+					group[i].welcomeBoard+'</td><td>'+
+					group[i].remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
@@ -1600,7 +1611,7 @@ define(function(require, exports) {
         });
     };
 
-    tripPlan.confirmTripPlan = function(id,statusValue,billStatus){
+    tripPlan.confirmTripPlan = function(id,statusValue,billStatus, $that){
 		if(billStatus != -1){
 			showMessageDialog($( "#confirm-dialog-message" ),"该团已审核，无法确认");
 		}else{
@@ -1613,7 +1624,7 @@ define(function(require, exports) {
 		            	var dataD = data;
 						if(result){
 							showMessageDialog($("#confirm-dialog-message" ),data.message, function(){
-								tripPlan.$tab.find('.tab-pane.acitve').find('.T-btn-tripPlan-search').trigger('click');
+								$that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
 							});
 						}
 					}
@@ -1628,7 +1639,7 @@ define(function(require, exports) {
 							var dataD = data;
 							if(result){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-									tripPlan.$tab.find('.tab-pane.acitve').find('.T-btn-tripPlan-search').trigger('click');
+									$that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
 								});
 							}
 						}
@@ -1761,14 +1772,20 @@ define(function(require, exports) {
 				$tab.find(".T-fee-list").html("");
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
-				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
+				$tab.find('input[name="needPayAllMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('').removeAttr('readonly');
+				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 				lineId = $tr.data('line-id');
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
-				$tab.find('input[name="partnerAgencyName"]').val('').data('');
+				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
 				$tab.find('.T-tourists-list').html('');
 				$tab.find('.T-fee-list').html('');
+				$tab.find('input[name="needPayAllMoney"]').val('');
+				$tab.find('input[name="preIncomeMoney"]').val('').removeAttr('readonly');
+				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
@@ -1834,7 +1851,7 @@ define(function(require, exports) {
 		});			
 	};
 
-	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type) {
+	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type, isGroup) {
 		if (!!pId) {
 			var args = {
 				lineProductId : pId
@@ -1850,7 +1867,7 @@ define(function(require, exports) {
 					data.lineProductDayList = JSON.parse(data.lineProductDayList);
                 	var result =showDialog(data);
 					if(result){
-						if(!!data.touristGroupId){
+						if(!!data.touristGroupId && !isGroup){
 							tripPlan.getTouristsList($tab, data.touristGroupId);
 						}else if(type == 1){
 							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
@@ -1861,15 +1878,20 @@ define(function(require, exports) {
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
 						}
+						
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
-							$tab.find('[name="selfPayItemNames"]').val(quote.isContainSelfPay).data('propover', quote.selfPayItemIds);
-							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.selfPayItemNames == 1 ? true : false);
+							$tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
+							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
+							$tab.find('[name="adultCount"]').val(quote.adultCount).attr('readonly', 'readonly');
+							$tab.find('[name="childCount"]').val(quote.childCount).attr('readonly', 'readonly');
+							$tab.find('[name="startTime"]').val(quote.startTime);
+							$tab.find('[name="endTime"]').val(quote.endTime);
 						}else if(!$.isEmptyObject(data.lineProduct)){
 							var line = data.lineProduct;
 							$tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
-							$tab.find('[name="selfPayItemNames"]').val(line.isContainSelfPay).data('propover', line.selfPayItemIds);
+							$tab.find('[name="selfPayItemNames"]').val(line.selfPayItemNames).data('propover', line.selfPayItemIds);
 						}
 						for(var i=0; i<data.lineProductDayList.length; i++){
 							var repastDetail = data.lineProductDayList[i].repastDetail;

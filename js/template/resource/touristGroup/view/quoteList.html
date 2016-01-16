@@ -20,7 +20,7 @@
 				<tr data-quoteId='{{lineProduct.id}}' data-quoteNumber='{{lineProduct.quoteNumber}}' 
 				 data-lineProductName= '{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}'
 				 data-lineProducId= '{{if !!lineProduct.lineProduct}}{{lineProduct.lineProduct.id}}{{/if}}'
-				 data-startTime='{{lineProduct.createTime}}'
+				 data-startTime='{{lineProduct.startTime}}'
 				 data-days='{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}'
 				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
 				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
@@ -45,11 +45,13 @@
 
 					<td><span class="F-float F-count">{{lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{lineProduct.childCount}}</span> 小</td>
 					<td><span class="F-float F-count">{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}</span></td>
-					<td>{{lineProduct.createTime}}</td>
+					<td>{{lineProduct.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 
 					<td>{{if lineProduct.partnerAgency !=null }}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}</td>
 					<td>{{if lineProduct.partnerAgencyContact !=null }}{{lineProduct.partnerAgencyContact.contactRealname}}{{/if}}</td>
-					<td>{{lineProduct.startTime  | dateFormat: 'yyyy-MM-dd'}}</td>
+					
+
+					<td>{{lineProduct.createTime}}</td>
 					<td>
 					 	<label class="pos-rel"> <input type="radio" class="ace T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
 				    </td>

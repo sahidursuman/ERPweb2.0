@@ -806,8 +806,12 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
+
         var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
-            sumList = parseFloat(Client.$sumUnReceivedMoney.data("money"));
+            sumList = Client.$sumUnReceivedMoney.data("money");
+        if (sumList === undefined) {  // 未修改付款的时候，直接读取
+            sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
         if(sum != sumList){
             showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
             return false;

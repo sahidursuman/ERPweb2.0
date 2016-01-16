@@ -47,7 +47,7 @@ define(function(require, exports) {
 								errMsg: '期初余额不能为空'
 							},
 	    	    	        {
-	    	    	        	type: 'positive-float',
+	    	    	        	type: 'float',
 	    	    	        	errMsg: '请输入数字'
 	    	    	        }
 	    	        ]
