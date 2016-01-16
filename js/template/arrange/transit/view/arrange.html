@@ -68,27 +68,27 @@
 				{{/if}}
 				{{if arrangeStatus.sendBusStatus != 0}}
 				<li class="col-sm-1 no-padding align-center">
-					<a data-toggle="tab" href="#transit_send_bus" aria-expanded="true">接团车辆</a>
+					<a data-toggle="tab" href="#transit_send_bus" aria-expanded="true">送团车辆</a>
 				</li>
 				{{/if}}
 				{{if arrangeStatus.sendHotelStatus != 0}}
 				<li class="col-sm-1 no-padding align-center">
-					<a data-toggle="tab" href="#transit_send_hotel" aria-expanded="false">接团酒店</a>
+					<a data-toggle="tab" href="#transit_send_hotel" aria-expanded="false">送团酒店</a>
 				</li>
 				{{/if}}
 				{{if arrangeStatus.sendRestaurantStatus != 0}}
 				<li class="col-sm-1 no-padding align-center">
-					<a data-toggle="tab" href="#transit_send_restaurant" aria-expanded="false">接团餐饮</a>
+					<a data-toggle="tab" href="#transit_send_restaurant" aria-expanded="false">送团餐饮</a>
 				</li>
 				{{/if}}
 				{{if arrangeStatus.sendTicketStatus != 0}}
 				<li class="col-sm-1 no-padding align-center">
-					<a data-toggle="tab" href="#transit_send_ticket" aria-expanded="false">接团票务</a>
+					<a data-toggle="tab" href="#transit_send_ticket" aria-expanded="false">送团票务</a>
 				</li>
 				{{/if}}
 				{{if arrangeStatus.sendOtherStatus != 0}}
 				<li class="col-sm-1 no-padding align-center">
-					<a data-toggle="tab" href="#transit_send_other" aria-expanded="false">接团其它</a>
+					<a data-toggle="tab" href="#transit_send_other" aria-expanded="false">送团其它</a>
 				</li>
 				{{/if}}
 			</ul>
@@ -109,8 +109,8 @@
 							<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>
 							<label class="mar-l-15">票务班次：{{arriveShift}}</label>
 						</div>
-                        <p>原车辆要求：</p>
-                        <p>现车辆要求：</p>
+                        <p>原车辆要求：{{receiveGroup.oldBusRequire}}</p>
+                        <p>现车辆要求：{{receiveGroup.nowBusRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
@@ -197,8 +197,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原酒店要求：</p>
-                        <p>现酒店要求：</p>
+                        <p>原酒店要求：{{receiveGroup.oldHotelRequire}}</p>
+                        <p>现酒店要求：{{receiveGroup.nowHotelRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
@@ -283,8 +283,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原餐厅要求：</p>
-                        <p>现餐厅要求：</p>
+                        <p>原餐厅要求：{{receiveGroup.oldRestaurantRequire}}</p>
+                        <p>现餐厅要求：{{receiveGroup.nowRestaurantRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
@@ -360,8 +360,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原票务要求：</p>
-                        <p>现票务要求：</p>
+                        <p>原票务要求：{{receiveGroup.oldTicketRequire}}</p>
+                        <p>现票务要求：{{receiveGroup.nowTicketRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
@@ -446,8 +446,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原其它要求：</p>
-                        <p>现其它要求：</p>
+                        <p>原其它要求：{{receiveGroup.oldOtherRequire}}</p>
+                        <p>现其它要求：{{receiveGroup.nowOtherRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
@@ -506,8 +506,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原车辆要求：</p>
-                        <p>现车辆要求：</p>
+                        <p>原车辆要求：{{sendGroup.oldBusRequire}}</p>
+                        <p>现车辆要求：{{sendGroup.nowBusRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
@@ -594,8 +594,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原酒店要求：</p>
-                        <p>现酒店要求：</p>
+                        <p>原酒店要求：{{sendGroup.oldHotelRequire}}</p>
+                        <p>现酒店要求：{{sendGroup.nowHotelRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
@@ -679,8 +679,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原餐厅要求：</p>
-                        <p>现餐厅要求：</p>
+                        <p>原餐厅要求：{{sendGroup.oldRestaurantRequire}}</p>
+                        <p>现餐厅要求：{{sendGroup.nowRestaurantRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
@@ -756,8 +756,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原票务要求：</p>
-                        <p>现票务要求：</p>
+                        <p>原票务要求：{{sendGroup.oldTicketRequire}}</p>
+                        <p>现票务要求：{{sendGroup.nowTicketRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
@@ -842,8 +842,8 @@
 								</button>
 							</a>
 						</h5>
-                        <p>原其他要求：</p>
-                        <p>现其他要求：</p>
+                        <p>原其他要求：{{sendGroup.oldOtherRequire}}</p>
+                        <p>现其他要求：{{sendGroup.nowOtherRequire}}</p>
 						<div class="widget-body">
 							<div class="widget-main no-padding">
 								<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
