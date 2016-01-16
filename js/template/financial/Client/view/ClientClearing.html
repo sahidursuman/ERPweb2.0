@@ -133,52 +133,49 @@
             </tr>
         </thead>
         <tbody class="T-list">
-            {{if customerAccountList != null}} {{each customerAccountList as rs index}}
+            {{if customerAccountList != null}} 
+            {{each customerAccountList as rs index}}
             <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
-                <td rowspan="{{rs.detailList.length}}">{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.lineProductName}}</td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.startTime}}</td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.contactName}}</td>
-                <td rowspan="{{rs.detailList.length}}" style="white-space: nowrap;">
+                <td rowspan="{{rs.rowLen}}">{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.startTime}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.contactName}}</td>
+                <td rowspan="{{rs.rowLen}}" style="white-space: nowrap;">
                     <a class="cursor T-action T-viewGroup" title="查看小组">
                         <span class="F-float F-count">{{rs.adultCount}}</span>大
                         <span class="F-float F-count">{{rs.childCount}}</span>小
                     </a>
                 </td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.creatorName}}</td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.createTime}}</td>
-                <td rowspan="{{rs.detailList.length}}"><span class="F-float F-money">{{rs.contractMoney}}</span></td>
-                <td>{{if rs.detailList.length > 0}}
-                        {{each rs.detailList as rsl index}}
-                            {{if index == 0}}
-                                {{each rs.detailList as rsl index}}
-                                    {{rsl.describeInfo}}：
-                                    <span class="F-float F-money">{{rsl.price}}</span>x
-                                    <span class="F-float F-count">{{rsl.count}}</span>=
-                                    <span class="F-float F-money">{{rsl.price * rsl.count}}</span><br>
-                                {{/each}}
-                            {{/if}}
+                <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.createTime}}</td>
+                <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.contractMoney}}</span></td>
+                <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
+                        {{each rs.detailList.transitFee.transitFeeList as tf}}
+                            {{tf.name}}：
+                                <span class="F-float F-money T-touristGroupId" data-id="{{tf.touristGroupId}}">{{tf.price}}</span> x
+                                <span class="F-float F-count">{{tf.count}}</span> =
+                                <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
                         {{/each}}
                     {{else}}-
                     {{/if}}
                 </td>
-                <td rowspan="{{rs.detailList.length}}"><a class="cursor T-action T-receive">
+                <td rowspan="{{rs.rowLen}}"><a class="cursor T-action T-receive">
                         社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>，
                         导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span>
                     </a>
                 </td>
                 <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                <td rowspan="{{rs.detailList.length}}"><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
-                <td rowspan="{{rs.detailList.length}}">
+                <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
+                <td rowspan="{{rs.rowLen}}">
                     <input type="text" name="payMoney" data-le="{{rs.unReceivedMoney}}" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}} class="col-sm-12 T-reciveMoney money F-float F-money">
                 </td>
-                <td rowspan="{{rs.detailList.length}}">
+                <td rowspan="{{rs.rowLen}}">
                     <input type="text" class="col-sm-12 T-remark" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}}>
                 </td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.checkTime}}</td>
-                <td rowspan="{{rs.detailList.length}}">{{rs.checkUserName}}</td>
-                <td rowspan="{{rs.detailList.length}}">
+                <td rowspan="{{rs.rowLen}}">{{rs.checkTime}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.checkUserName}}</td>
+                <td rowspan="{{rs.rowLen}}">
                     <label class="pos-rel">
                         {{if rs.isConfirmAccount}}已对账{{else}}未对账{{/if}}
                     </label>
@@ -186,23 +183,35 @@
                     <a class="cursor T-action T-view">查看</a>
                 </td>
             </tr>
-            {{if rs.detailList.length > 1}}
-                {{each rs.detailList as rsl index}}
-                    {{if index == 1}}
-                        <tr><td>{{each rs.detailList as rsl index}}
-                                    {{rsl.describeInfo}}：
-                                    <span class="F-float F-money">{{rsl.price}}</span>x
-                                    <span class="F-float F-count">{{rsl.count}}</span>=
-                                    <span class="F-float F-money">{{rsl.price * rsl.count}}</span><br>
-                                {{/each}}
-                            </td>
-                            <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
-                            <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                        </tr>
-                    {{/if}}
+            {{if rs.status == 5}}
+                {{each rs.detailList.otherFee as temp}}
+                    <tr><td>{{each temp.touristGroup as rsl}}
+                                {{rsl.name}}：
+                                <span class="F-float F-money T-touristGroupId" data-id="{{rsl.touristGroupId}}">{{rsl.price}}</span> x
+                                <span class="F-float F-count">{{rsl.count}}</span> =
+                                <span class="F-float F-money">{{rsl.price * rsl.count}}</span><br>
+                            {{/each}}
+                        </td>
+                        <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
+                        <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                    </tr>
                 {{/each}}
+            {{else}}
+                {{if rs.detailList.otherFee.otherFeeList.length > 0}}
+                    <tr><td>{{each rs.detailList.otherFee.otherFeeList as of}}
+                                {{of.name}}：
+                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                                <span class="F-float F-count">{{of.count}}</span> =
+                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                            {{/each}}
+                        </td>
+                        <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
+                        <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                    </tr>
+                {{/if}}
             {{/if}}
-            {{/each}} {{else}}
+            {{/each}} 
+            {{else}}
             <tr>
                 <td colspan="20">{{message}}</td>
             </tr>
