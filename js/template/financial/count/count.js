@@ -371,6 +371,7 @@ define(function(require, exports){
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
 	                var html = Reimbursement(tmp);
+	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -489,13 +490,6 @@ define(function(require, exports){
 				Count.autoRestaurantSum($(this),$obj);
 			}
 			
-		});
-		//自选餐厅的时候获取餐标
-		var $tr = $restObj.find('input[name=price]').closest('tr');
-		$tr.find('select[name=chooseRest]').off('change').on('change',function(){
-				var tr = $(this).closest("tr");
-				tr.find('input[name=price]').val(0);
-				Count.getRestPrice($tr,$obj);
 		});
 		//新增餐费安排
 		$listObj.find('.T-restaurantpay-add').off('click').on('click',function(){
@@ -3332,7 +3326,7 @@ define(function(require, exports){
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
 			saveJsonStr.log.type = "1";
-
+		console.log(saveJsonStr);
 		var addShopList = saveJsonStr.addShopArrangeList;
 		for(var i = 0;i<addShopList.length;i++){
 			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
@@ -3380,7 +3374,18 @@ define(function(require, exports){
 				return;
 			}
 		}
-
+		//导游自选餐厅
+		if(typeFlag == 3){
+			var restaurantList= saveJsonStr.restaurantArrangeList;
+			for(var i = 0;i<restaurantList.length;i++){
+				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
+					message = "请选择导游自选餐厅"
+					console.log(message);
+					showMessageDialog($("#confirm-dialog-message"),message);
+					return;
+				}
+			}
+		};
 		var addHotelList = saveJsonStr.addHotelArrangeList;
 		for(var i = 0;i<addHotelList.length;i++){
 			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
@@ -3776,9 +3781,11 @@ define(function(require, exports){
 			if($(this).attr('restaurantArrangeId')){
 				var restaurantArrange = {
 						"id":Count.changeToString($(this).attr('restaurantArrangeId')),
+						"isChoose":Count.changeToString($(this).attr('isChoose')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"restaurantId":Count.changeToString($(this).find('select[name=chooseRest]').val()) || "",
 						"restaurantStandardId":$(this).find('input[name=standardId]').val() || "",
+						"restaurantStandard":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
