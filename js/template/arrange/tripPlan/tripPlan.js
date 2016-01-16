@@ -187,10 +187,11 @@ define(function(require, exports) {
 
 		$tab.find('[class*="T-tripPlan-"]').on('click', '.ace-icon', function(event){
 			event.preventDefault();
-			var $that = $(this);
+			var $that = $(this), $parent = $that.closest('tr'),
+				billStatus = $parent.data("bill-status");
 			if(!$that.hasClass('fa-minus')){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
-					module.updatePlanInfo($that.closest('tr').data("id"), $that.closest('td').data("target"), $tab.prop('id'));
+					module.updatePlanInfo($that.closest('tr').data("id"), billStatus, $that.closest('td').data("target"), $tab.prop('id'));
 				});
 			}
 		});
