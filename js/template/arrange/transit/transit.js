@@ -539,7 +539,7 @@ define(function(require, exports) {
 		// transit.prePayMoneyChange($tab);
 
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tab.find('.T-number'));
+		Tools.inputCtrolFloat($tab.find('.F-float'));
 		//删除安排
 		$tab.on('click', '.T-arrange-delete', function(event) {
 			event.preventDefault();
@@ -602,12 +602,12 @@ define(function(require, exports) {
 	//新增团外安排接送车辆
 	transit.addOutBusList = function(id,type,validator){
 		var html = '<tr data-entity-id="">'+
-		'<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>'+
-		'<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
-		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 		'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
 		'<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />'+
 		'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+		'<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>'+
+		'<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
+		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 		'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="" /></td>'+
@@ -623,7 +623,7 @@ define(function(require, exports) {
 		var $tbody= $("#"+id+" tbody");
 		    $tbody.append(html);
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tbody.find('.T-number'));
+		Tools.inputCtrolFloat($tbody.find('.F-float'));
 		//表单验证
 		rule.update(validator);
 		//时间控件
@@ -662,7 +662,7 @@ define(function(require, exports) {
 		var $tbody=$("#"+id+" tbody");
 		    $tbody.append(html);
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tbody.find('.T-number'));
+		Tools.inputCtrolFloat($tbody.find('.F-float'));
 
 		//表单验证
 		rule.update(validator);
@@ -700,7 +700,7 @@ define(function(require, exports) {
 		var $tbody=$("#"+id+" tbody");
 		    $tbody.append(html);
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tbody.find('.T-number'));
+		Tools.inputCtrolFloat($tbody.find('.F-float'));
 
 		//表单验证
 		rule.update(validator);
@@ -736,7 +736,7 @@ define(function(require, exports) {
 		var $tbody=$("#"+id+" tbody");
 		    $tbody.append(html);
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tbody.find('.T-number'));
+		Tools.inputCtrolFloat($tbody.find('.F-float'));
 
 		//表单验证
 		rule.update(validator);
@@ -768,7 +768,7 @@ define(function(require, exports) {
 		var $tbody=$("#"+id+" tbody");
 		    $tbody.append(html);
 		//Input控件位数的输入
-		Tools.inputCtrolFloat($tbody.find('.T-number'));	
+		Tools.inputCtrolFloat($tbody.find('.F-float'));	
 		//表单验证
 		rule.update(validator);
 		//时间控件
