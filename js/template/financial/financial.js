@@ -667,10 +667,10 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
 
 //对账-保存json组装
 FinancialService.saveJson_checking = function($tab){
-    if(!$tab.data('isEdited')){
-        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-        return false;
-    }
+    // if(!$tab.data('isEdited')){
+    //     showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+    //     return false;
+    // }
 
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
