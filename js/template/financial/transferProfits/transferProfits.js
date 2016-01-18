@@ -2,7 +2,8 @@ define(function(require, exports) {
 	var menuKey = "financial_transferProfits",
         listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list"),
-        touristsTemplate = require("./view/viewTouristGroup");
+        touristsTemplate = require("./view/viewTouristGroup"),
+        costDetailTemplate = require("./view/viewCostDetail");
 
     var transfer = {
     	searchData : false,
@@ -186,8 +187,8 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                data.memberList = JSON.parse(data.memberList || false) || [];
-                var html = touristsTemplate(data);
+                data.financialNeedPays = JSON.parse(data.financialNeedPays);
+                var html = costDetailTemplate(data);
                 var addGuide = layer.open({
                     type: 1,
                     title:"中转成本明细",
