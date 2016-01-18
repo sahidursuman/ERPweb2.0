@@ -3,6 +3,7 @@ define(function(require, exports){
 	var menuKey = 'arrange_serviceStandards',
 		rule = require('./rule'),
 		listTemplate = require('./view/list'),
+		updateTemplate = require('./view/update'),
 		addTemplate = require('./view/add');
 	var ServiceStandards ={
 
@@ -80,6 +81,21 @@ define(function(require, exports){
 		$obj.find('.T-search-area').on('click','.T-service-add',function(){
 			ServiceStandards.addService();
 		});
+		// 报表内的操作
+		$obj.find('.T-service-list').on('click', '.T-action', function(event) {
+			//event.preventDefault();
+			var $that = $(this), id = $that.closest('tr').attr('serviceId');
+			if ($that.hasClass('T-edit'))  {
+				// 编辑账户信息
+				ServiceStandards.updateService(id);
+			} else if ($that.hasClass('T-delete'))  {
+				// 删除账户
+				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+					ServiceStandards.deleteService(id,args,$obj);
+				});
+				
+			}
+		});
 	};
 	//新增事件
 	ServiceStandards.addService = function(){
@@ -108,6 +124,31 @@ define(function(require, exports){
 		});
 	};
 	//编辑事件
+	ServiceStandards.updateService = function(){
+		var html = updateTemplate();
+		var updateServiceLayer = layer.open({
+			type: 1,
+			title:"修改服务标准",
+			skin: 'layui-layer-rim', //加上边框
+			area: '600px', //宽高
+			zIndex:1028,
+			content: html,
+			scrollbar: false,
+			success:function(){
+				var $updateTabObj = $('.T-service-container');
+
+				//表单验证
+				var validator = rule.check($updateTabObj);
+				
+				//保存事件
+				$updateTabObj.find('.T-submit').on('click',function(){
+					var args = ServiceStandards.installData ($updateTabObj,1);
+					if(!validator.form()){return;};
+					ServiceStandards.saveData(args,updateServiceLayer);
+				});
+			}
+		});
+	};
 	//保存事件
 	ServiceStandards.saveData = function(args,closeLayer){
 		console.log(args);
