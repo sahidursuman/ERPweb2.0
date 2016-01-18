@@ -203,6 +203,21 @@ define(function(require,exports) {
 				    for(var i = 0; i < data.innerTransferIncomeDetailsList.length; i++){
 				    	data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
 				    }
+				    //费用明细处理
+				    var resultList = data.innerTransferIncomeDetailsList;
+	                for(var i = 0; i < customerAccountList.length; i++){
+	                    var detailList = JSON.parse(resultList[i].detailList),
+	                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+	                    resultList[i].detailList = detailList;
+	                    if(resultList[i].status == 5){
+	                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
+	                    } else {
+	                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+	                    }
+	                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+	                }
+	                data.innerTransferIncomeDetailsList = resultList;
+
 				    if(typeFlag == 2 || tab =="settle" || args.autoAccount == 1){
 				    	data.bankNumber = InnerTransferIn.saveJson.bankNumber || '';
 					    data.voucher = InnerTransferIn.saveJson.voucher || '';
@@ -223,7 +238,6 @@ define(function(require,exports) {
 					    		}
 				    		}
 				    	};
-				    	console.log(data.innerTransferIncomeDetailsList);
 				    	html = settlementTemplate(data);
 				    }else{
 				    	tabId = checkId;
@@ -558,66 +572,35 @@ define(function(require,exports) {
 	};
 	//确认对账
 	InnerTransferIn.saveCheckingData = function(pageNo,$obj,$data,tab_id, title, html){
-    	var JsonStr = [],
-            selectFlag = 0,
-            argumentsLen = arguments.length,
-            checkList = $obj.find('.T-checkList'),
-			$tr = checkList.find('.innerTransferFinancial');
-		$tr.each(function(i){
- 		   var flag = $(this).is(":checked");
- 		   var tr = $(this).closest('tr');
-		   if(flag){
-		   	    if(tr.attr("data-confirm") == 0 ){
-		   	    	var checkData = {
-					    id:tr.attr("data-entity-id"),
-					    backMoney:tr.find('input[name=settlementMoney]').val(),
-					    checkRemark:tr.find('input[name=checkRemark]').val()
- 			    	}
-			    	JsonStr.push(checkData)
-		   	    }
- 		   }else{
- 			    if(tr.attr("data-confirm") == 1){
- 				    var checkData = {
- 					    id:tr.attr("data-entity-id"),
-				    	backMoney:tr.find('input[name=settlementMoney]').val(),
-				    	checkRemark:tr.find('input[name=checkRemark]').val()
-	     			    }
- 				    JsonStr.push(checkData)
- 			    }
- 		   }
-	    });
- 	   //判断用户是否操作
-	 	   if(JsonStr.length == 0){
-	 		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
-	 		   return
-	 	   }else{
-	 		   JsonStr = JSON.stringify(JsonStr);
-	     	   $.ajax({
-	     		    url:KingServices.build_url("account/innerTransferIn","saveReconciliation"),
-	                data:"reconciliation="+encodeURIComponent(JsonStr),
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							$obj.data('isEdited', false);
-							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-								if(argumentsLen == 2){
-		                            Tools.closeTab(checkId);
-		                            InnerTransferIn.listInnerTransfer(0);
-	                        	} else if(argumentsLen == 3){
-		                            InnerTransferIn.chenking($data,1,"check");
-	                        	} else {
-		                            Tools.addTab(tab_id, title, html);
-		                            var id = $obj.find('input[name=businessGroupId]').val();
-		                            var businessGroupName = $obj.find('input[name=businessGroupName]').val();
-		                            $data.businessGroupId = id;
-		                            $data.businessGroupName = businessGroupName;
-		                            InnerTransferIn.chenking($data,1,"check");
-	                        	}
-							});
-						}
-					}
-	     	   });
-	 	   }  	
+    	var JsonStr = FinancialService.saveJson_checking($obj),
+            argumentsLen = arguments.length;
+ 	    if(!JsonStr){ return false;}
+
+ 	   	$.ajax({
+ 		    url:KingServices.build_url("account/innerTransferIn","saveReconciliation"),
+            data:"reconciliation="+encodeURIComponent(JsonStr),
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					$obj.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						if(argumentsLen == 2){
+                            Tools.closeTab(checkId);
+                            InnerTransferIn.listInnerTransfer(0);
+                    	} else if(argumentsLen == 3){
+                            InnerTransferIn.chenking($data,1,"check");
+                    	} else {
+                            Tools.addTab(tab_id, title, html);
+                            var id = $obj.find('input[name=businessGroupId]').val();
+                            var businessGroupName = $obj.find('input[name=businessGroupName]').val();
+                            $data.businessGroupId = id;
+                            $data.businessGroupName = businessGroupName;
+                            InnerTransferIn.chenking($data,1,"check");
+                    	}
+					});
+				}
+			}
+ 	   	}); 	
 	};
 	//获取接收人--线路名称
 	InnerTransferIn.getReceiveUser = function($obj,args){
