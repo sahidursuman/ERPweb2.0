@@ -191,7 +191,7 @@ define(function(require, exports) {
 				billStatus = $parent.data("bill-status");
 			if(!$that.hasClass('fa-minus')){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
-					module.updatePlanInfo($that.closest('tr').data("id"), billStatus, $that.closest('td').data("target"), $tab.prop('id'));
+					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));
 				});
 			}
 		});

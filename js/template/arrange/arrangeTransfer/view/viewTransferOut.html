@@ -69,10 +69,10 @@
 								  {{each touristGroup.touristGroupTransferFeeSet as transferFee}}
 								    {{if transferFee!=null}}
 								      <tr>
-								            <td>{{transferFee.discribe}}</td>
+								            <td>{{transferFee.name}}</td>
 								            <td><span class="F-float F-count">{{transferFee.count}}</span></td>  
-								            <td><span class="F-float F-money">{{transferFee.otherPrice}}</span></td>
-								            <td><span class="F-float F-money">{{transferFee.count*transferFee.otherPrice}}</span></td>  
+								            <td><span class="F-float F-money">{{transferFee.price}}</span></td>
+								            <td><span class="F-float F-money">{{transferFee.count*transferFee.price}}</span></td>
 								            <td>{{transferFee.remark}}</td>
 								      </tr>
 								      {{/if}}  
@@ -189,7 +189,7 @@
 								  <tbody> 
 								      {{each touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
-											<td>{{transferFeeList.describeInfo}}</td>
+											<td>{{transferFeeList.name}}</td>
 											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
 											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>	
 											<td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
