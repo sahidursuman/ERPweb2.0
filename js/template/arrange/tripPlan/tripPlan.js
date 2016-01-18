@@ -858,7 +858,7 @@ define(function(require, exports) {
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
-		arge.outTransferIncome = $tab.find('[name="transitNeedPayMoney"]').val();
+		arge.outTransferIncome = 0;//$tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
