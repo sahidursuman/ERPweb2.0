@@ -110,10 +110,8 @@ define(function(require, exports){
 			scrollbar: false,
 			success:function(){
 				var $addTabObj = $('.T-service-container');
-
 				//表单验证
 				var validator = rule.check($addTabObj);
-				
 				//保存事件
 				$addTabObj.find('.T-submit').on('click',function(){
 					var args = ServiceStandards.installData ($addTabObj,1);
@@ -136,10 +134,8 @@ define(function(require, exports){
 			scrollbar: false,
 			success:function(){
 				var $updateTabObj = $('.T-service-container');
-
 				//表单验证
 				var validator = rule.check($updateTabObj);
-				
 				//保存事件
 				$updateTabObj.find('.T-submit').on('click',function(){
 					var args = ServiceStandards.installData ($updateTabObj,1);
