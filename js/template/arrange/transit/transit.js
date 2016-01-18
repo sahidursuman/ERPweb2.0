@@ -562,6 +562,9 @@ define(function(require, exports) {
 				isOuter = !!$this.data('isouter');
 			transit.submitUpdateTransit(id, !isOuter, $tab);
 		})
+		$tab.find('.T-cancel').on('click', function() {
+			Tools.closeTab(menuKey+'-update');
+		})
 		//change触发计算
 		$tab.on('change', '.count, .price, .discount', function(){
 			transit.calculation($(this));
