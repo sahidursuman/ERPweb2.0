@@ -257,7 +257,7 @@
 											<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" /></td>
 											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
 											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" /></td>
-											<input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td>
+											<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
 											<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}"  maxlength="1000"/></td>
 											<td>
 												<a class="cursor T-arrange-delete" data-catename="hotel">
@@ -710,9 +710,9 @@
 													<input class="col-sm-12 bind-change T-chooseRestaurant" name="restaurant" type="text" value="{{outRestaurant.restaurant.name}}" />
 													<input type="hidden" name="restaurantId" value="{{outRestaurant.restaurant.id}}" />
 													<span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
-					                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-				                                                    </span>
-				                                                </div>
+                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                                </span>
+	                                            </div>
 											</td>
 											<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="{{outRestaurant.restaurant.managerName}}" /></td>
 											<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="{{outRestaurant.restaurant.mobileNumber}}" /></td>
