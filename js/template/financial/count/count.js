@@ -3319,7 +3319,7 @@ define(function(require, exports){
                 		$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
                 		$obj.closest('tr').find("input[name=guideRate]").val(0);
                 		Count.autoShopSum($obj,$bodyObj);
-                	}jzhu
+                	}
 				}
 			}
 		});
