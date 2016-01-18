@@ -874,13 +874,13 @@ define(function(require, exports) {
 		function clearData($tr, start) {
 			switch(start) {
 				case 'brand':
-					$tr.find('input[name="brand"]').val('');
+					$tr.find('input[name="busbrand"]').val('');
 				case 'licenseNumber':
-					$tr.find('input[name="licenseNumber"]').val('');
-					$tr.find('input[name="busId"]').val('');
+					$tr.find('input[name="busLicenseNumber"]').val('');
+					$tr.find('input[name="busLicenseNumberId"]').val('');
 				case 'CompanyName':
-					$tr.find('input[name="CompanyName"]').val('');
-					$tr.find('input[name="CompanyId"]').val('');
+					$tr.find('input[name="busCompanyName"]').val('');
+					$tr.find('input[name="busCompanyId"]').val('');
 					$tr.find('input[name="mobileNumber"]').val('');
 				case 'driverName':
 					$tr.find('input[name="driverName"]').val('');
@@ -893,9 +893,9 @@ define(function(require, exports) {
 		function checkBusCompay($tr, start) {
 			setTimeout(function() {
 				var searchJson = {
-					seatCount:$tr.find('input[name=needSeatCount]').val(),
-					brand: $tr.find('input[name=brand]').val(),
-					busId: $tr.find('input[name=busId]').val(),
+					seatCount:$tr.find('input[name=seatCount]').val(),
+					brand: $tr.find('input[name=busbrand]').val(),
+					busId: $tr.find('input[name=busLicenseNumberId]').val(),
 					busCompanyId:$tr.find('input[name=busCompanyId]').val()
 				};
 				$.ajax({
