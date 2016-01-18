@@ -645,6 +645,7 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
         if(isNaN($this.val())){ return false;}
 
         $tr.data("change",true);
+        $tab.data("isEdited",true);
         while($mainTr.children('td').length <= minTdLen){
             $mainTr = $mainTr.prev();
         }
@@ -720,6 +721,6 @@ FinancialService.saveJson_checking = function($tab){
         showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
         return false;
     }
-     
+
     return saveJson;
 };

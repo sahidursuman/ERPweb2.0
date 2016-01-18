@@ -367,7 +367,7 @@ define(function(require, exports) {
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             sortType: 'auto'
-        }
+        };
 
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
@@ -377,7 +377,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     //暂存数据读取
-                    console.log(OtherAccounts.saveJson);
                     if(OtherAccounts.saveJson){
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
@@ -414,6 +413,9 @@ define(function(require, exports) {
                                 dataTable.statistics = data.statistics;
                                 dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                                 if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
+                                    if(OtherAccounts.saveJson.btnShowStatus){
+                                        OtherAccounts.$PaymentTabId.data("isEdited",true);
+                                    }
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
                                     OtherAccounts.$PaymentTabId.data('next', dataTable);
@@ -448,8 +450,10 @@ define(function(require, exports) {
             OtherAccounts.setAutoFillEdit($PaymentTabId, true);
         }
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                OtherAccounts.OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
+                OtherAccounts.saveJson = false;
+                OtherAccounts.saveJson.autoPayList = false;
+                OtherAccounts.$PaymentTabId.data("isEdited",false);
+                OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
             })
             // 监听保存，并切换tab
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -570,6 +574,7 @@ define(function(require, exports) {
                         success: function(data) {
                             var result = showDialog(data);
                             if (result) {
+                                OtherAccounts.$PaymentTabId.data("isEdited",false);
                                 OtherAccounts.saveJson = data;
                                 OtherAccounts.AccountsPayment(0);
                                 OtherAccounts.saveJson.btnShowStatus = true;
