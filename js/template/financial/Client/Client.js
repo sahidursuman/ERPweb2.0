@@ -274,7 +274,8 @@ define(function(require, exports) {
                     lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
-                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
                 };
             args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
             args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
