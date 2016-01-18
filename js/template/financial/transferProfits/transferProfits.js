@@ -209,7 +209,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find(".T-totalCount").text(data.countMap.adultCount + " 大" + data.countMap.childCount + " 小");
+                $tab.find(".T-totalCount").text((data.countMap.adultCount ? data.countMap.adultCount : 0) + " 大" + (data.countMap.childCount ? data.countMap.childCount : 0) + " 小");
                 $tab.find(".T-totalNeed").text(data.countMap.needIncomeMoney);
                 $tab.find(".T-totalCost").text(data.countMap.totalPayMoney);
                 $tab.find(".T-totalProfit").text(data.countMap.grossProfitMoney);
