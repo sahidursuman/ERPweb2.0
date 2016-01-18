@@ -3302,15 +3302,19 @@ define(function(require, exports){
                 		
                 		if(travelAgencyRate > 0) {
                 			$obj.closest('tr').find("input[name=travelAgencyRate]").val(travelAgencyRate);
+                			Count.autoShopSum($obj,$bodyObj);
                 		} else {
                 			$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+                			Count.autoShopSum($obj,$bodyObj);
                 		}
                 		if(guideRate > 0) {
                 			$obj.closest('tr').find("input[name=guideRate]").val(guideRate);
+                			Count.autoShopSum($obj,$bodyObj);
                 		} else {
                 			$obj.closest('tr').find("input[name=guideRate]").val(0);
+                			Count.autoShopSum($obj,$bodyObj);
                 		}
-                		Count.autoShopSum($obj,$bodyObj);
+                		
                 	}else{
                 		$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
                 		$obj.closest('tr').find("input[name=guideRate]").val(0);
@@ -3790,7 +3794,7 @@ define(function(require, exports){
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"restaurantId":Count.changeToString($(this).find('select[name=chooseRest]').val()) || "",
 						"restaurantStandardId":$(this).find('input[name=standardId]').val() || "",
-						"restaurantStandard":$(this).find('input[name=price]').val(),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),

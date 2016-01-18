@@ -276,62 +276,8 @@ define(function(require, exports) {
         
 		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
 
-
-		// 新增
-		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
-			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
-			     isHasTr = 0,
-			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
-			     startTimeS = $tbody.find('tr:last-child').find('input[name=startTime]').val();
-
-			if ($tbody.find('tr').length > 0) {
-				isHasTr = 1;
-			}
-			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
-			if ($(this).data('mark') != 0) {
-					radio = '-';
-			}
-			var html = ''
-			+ '<tr data-entity-id="">'
-			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
-			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
-			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
-			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
-            +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
-            +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc"></div></td>'
-			+ '<td>' + radio + '</td>'
-			+ '<td><input type="radio" name="operateCalculteOut" /></td>'
-			+ '<td>-</td>'
-			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
-			+ '</tr>';
-			$tbody.append(html);
-
-            //获取新增tr后前一个TR
-			var preDays = $tbody.find('tr:last-child').prev('tr').find('input[name=days]').val();
-
-			// 判断是不是第一个tr
-			 if(isHasTr == 0){
-				startTime = subsection.$tabSub.find('.T-startTime').text();
-				$tbody.find('tr:last-child').find('.T-startTime').val(startTime)
-		     }else{
-				if(preDays!=""){
-					$tbody.find('tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
-				}
-			}
-			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
-				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
-				subsection.deleteOperation(id,$this);
-			})
-			subsection.datePicker("T-startTime");
-			subsection.lineProductChoose();
-			validator = rule.checkdSaveSubsection($tbody);
-			$tbody.data('isEdited', true);
-
-		});
+        //新增中转分段
+		subsection.addOperation(subsection.$tabSub);
 
 		//新增费用项目
 		subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').on('click', function(event) {
@@ -369,12 +315,110 @@ define(function(require, exports) {
 			});
 		};
 
+
+	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
+	    subsection.checkedTransitFee(subsection.$tbody);
+
 		/**
-		 * delFeeItem 删除中转费用项目
-		 * @param  {[type]} $this 当前对象
-		 * @return {[type]}      [description]
+		 * [startIntime 中转分段初日期
+		 * @param  {[type]} whichDay  [description]
+		 * @param  {[type]} startTime [description]
+		 * @return {[type]}           [description]
 		 */
-		subsection.delFeeItem = function($this){
+		subsection.startIntime = function(whichDay,startTime){
+			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
+			var timer = date.getTime()+(whichDay)*24*60*60*1000;
+			date.setTime(timer);
+			var startIntime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+			return startIntime;
+		}
+
+		// 取消
+		subsection.$tabSub.find(".T-btn-operation-close").click(function(){
+			Tools.closeTab(menuKey+"-operation");
+		});
+
+		// 保存
+		subsection.$tabSub.find(".T-btn-operation-save").on("click", function(event) {
+			subsection.operationSave();
+		});
+	};
+
+	/**
+	 * addOperation 新增中转费用线路
+	 * @param {[type]} $tab [description]
+	 */
+	subsection.addOperation =function($tab){
+		$tab.find(".T-btn-operation-add").click(function(){
+			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
+			     isHasTr = 0,
+			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
+			     startTimeS = $tbody.find('tr:last-child').find('input[name=startTime]').val();
+
+			if ($tbody.find('tr').length > 0) {
+				isHasTr = 1;
+			}
+			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
+			if ($(this).data('mark') != 0) {
+					radio = '-';
+			}
+			var html = ''
+			+ '<tr data-entity-id="">'
+			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
+			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
+			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
+			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
+			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+            +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
+            +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc"></div></td>'
+			+ '<td>' + radio + '</td>'
+			+ '<td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" /></td>'
+			+ '<td>-</td>'
+			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
+			+ '</tr>';
+			$tbody.append(html);
+
+            //获取新增tr后前一个TR
+			var preDays = $tbody.find('tr:last-child').prev('tr').find('input[name=days]').val();
+
+			// 判断是不是第一个tr
+			 if(isHasTr == 0){
+				startTime = subsection.$tabSub.find('.T-startTime').text();
+				$tbody.find('tr:last-child').find('.T-startTime').val(startTime)
+		     }else{
+				if(preDays!=""){
+					$tbody.find('tr:last-child').find('.T-startTime').val(subsection.startIntime(days,startTimeS));
+				}
+			}
+			subsection.$tabSub.find(".T-btn-operation-delete").off("click").on("click",function(){
+				var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
+				subsection.deleteOperation(id,$this);
+			})
+			subsection.datePicker("T-startTime");
+			subsection.lineProductChoose();
+			validator = rule.checkdSaveSubsection($tbody);
+
+			//新增费用项目
+			subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').on('click', function(event) {
+				event.preventDefault();
+				var $that = $(this),$tbody =subsection.$tbody;
+				/* Act on the event */
+				subsection.addFeeItem($that, $tbody);
+			});
+			$tbody.data('isEdited', true);
+
+		});
+	};
+
+	/**
+	 * delFeeItem 删除中转费用项目
+	 * @param  {[type]} $this 当前对象
+	 * @return {[type]}      [description]
+	 */
+	subsection.delFeeItem = function($this){
 			if (!$this.data('deleted')) {
 				$this.data('deleted', true);
 				var $div = $this.closest('div'),
@@ -414,14 +458,17 @@ define(function(require, exports) {
 					});
 				}
 			}
-		};
+	};
 
-		//费用项目的计算
-		subsection.feeItemChange();
-		
 
-	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
-	    subsection.$tbody.on('change', '.T-operateCalculteOut', function(event) {
+
+	/**
+	 * [checkedTransitFee 将中转结算接待到费用项目中
+	 * @param  {[type]} $tbody [description]
+	 * @return {[type]}        [description]
+	 */
+	subsection.checkedTransitFee = function($tbody){
+		 $tbody.on('change', '.T-operateCalculteOut', function(event) {
 	    	event.preventDefault();
 
 	    	var $FeeItems = subsection.$tabSub.find('.T-innerOutEditFeeTbody').find('[data-type=3]'),  // 中转费用的tr
@@ -433,7 +480,6 @@ define(function(require, exports) {
 	    	if ($FeeItems.length) {					// 存在中转费用项时
 				$FeeItems.each(function() {
 					var $tr = $(this);
-
 					if (!FeeSubItemLength) {		// 没有添加过中转费用时
 	    		     	subsection.addFeeItem($fistItem,subsection.$tbody,
 	    		     							$tr.find('.T-name').text(), 
@@ -466,33 +512,10 @@ define(function(require, exports) {
 	    	
 	    });
 
-
-		/**
-		 * [startIntime 中转分段初日期
-		 * @param  {[type]} whichDay  [description]
-		 * @param  {[type]} startTime [description]
-		 * @return {[type]}           [description]
-		 */
-		subsection.startIntime = function(whichDay,startTime){
-			var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
-			var timer = date.getTime()+(whichDay)*24*60*60*1000;
-			date.setTime(timer);
-			var startIntime = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
-			return startIntime;
-			// $container.find('input[name=startTime]').val(subsection.startIntime("2","5012-55-08"))
-		}
-
-
-		// 取消
-		subsection.$tabSub.find(".T-btn-operation-close").click(function(){
-			Tools.closeTab(menuKey+"-operation");
-		});
-
-		// 保存
-		subsection.$tabSub.find(".T-btn-operation-save").on("click", function(event) {
-			subsection.operationSave();
-		});
 	};
+
+
+
 
 
     /**
@@ -525,11 +548,11 @@ define(function(require, exports) {
 		var $parents = $this.closest("tr");
 		if (!!id) {
 			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要删除该分段？",function(){
-				$(this).dialog( "close" );
 				$parents.addClass("del");
 				$parents.fadeOut(function(){
 					$parents.hide();
 				})
+				$(this).dialog( "close" );
 			})
 			//deleteSubTGroup
 		}else{

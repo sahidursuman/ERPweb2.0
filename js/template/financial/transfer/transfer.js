@@ -150,6 +150,22 @@ define(function(require, exports) {
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
+
+                    //费用明细处理
+                    var resultList = data.financialTransferList;
+                    for(var i = 0; i < resultList.length; i++){
+                        var detailList = JSON.parse(resultList[i].detailList),
+                            transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                        resultList[i].detailList = detailList;
+                        if(resultList[i].status == 5){
+                            resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                        } else {
+                            resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                        }
+                        resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                    }
+                    data.financialTransferList = resultList;
+
                     var html = transferChecking(data);
                     
                     var validator;
@@ -305,8 +321,23 @@ define(function(require, exports) {
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
+
+                    //费用明细处理
+                    var resultList = data.financialTransferList;
+                    for(var i = 0; i < resultList.length; i++){
+                        var detailList = JSON.parse(resultList[i].detailList),
+                            transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                        resultList[i].detailList = detailList;
+                        if(resultList[i].status == 5){
+                            resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                        } else {
+                            resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                        }
+                        resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                    }
+                    data.financialTransferList = resultList;
+
                     var html = transferClearing(data);
-                    console.log(data);
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "外转付款", html)) {
@@ -487,45 +518,9 @@ define(function(require, exports) {
 
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
-        
-        var argumentsLen = arguments.length;
-
-	    var $list = Transfer.$checkTab.find(".T-checkList"),
-	        $tr = $list.find(".T-checkTr"),
-	        saveJson = []; 
-
-	    function getValue($obj,name){
-		    var result = $obj.find("[name="+name+"]").val();
-		    if (result == "") {//所有空字符串变成0
-		        result = 0;
-		    }
-		    return result;
-		} 
-
-	    $tr.each(function(){
-	        var $this = $(this);
-	        if($this.data("change")){//遍历修改行
-	            var isConfirmAccount = "";
-	            if ($this.find(".T-checkbox").is(':checked')) {
-	                isConfirmAccount = 1;
-	            } else {
-	                isConfirmAccount = 0; 
-	            }
-	            //提交修改了对账状态或已对账行数据的行
-	            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
-	                var checkRecord = {
-	                    id : $this.data("id"),
-	                    punishMoney : getValue($this,"settlementMoney"),
-	                    settlementMoney : $this.find("td[name=settlementMoney]").text(),
-	                    unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
-	                    checkRemark : $this.find("[name=checkRemark]").val(),
-	                    isConfirmAccount : isConfirmAccount
-	                };
-	                saveJson.push(checkRecord);
-	            }
-	        }
-	    });
-	    saveJson = JSON.stringify(saveJson);
+        var argumentsLen = arguments.length,
+            saveJson = FinancialService.saveJson_checking(Transfer.$checkTab); 
+        if(!saveJson){return false;}
 
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","saveAccountChecking"),
