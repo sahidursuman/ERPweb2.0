@@ -181,18 +181,20 @@ define(function(require, exports) {
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
 
-                var customerAccountList = data.customerAccountList;
-                for(var i = 0; i < customerAccountList.length; i++){
-                    var detailList = JSON.parse(customerAccountList[i].detailList);
-                    customerAccountList[i].detailList = detailList;
-                    if(customerAccountList[i].status == 5){
-                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + detailList.otherFee.otherFeeList.length;
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = JSON.parse(resultList[i].detailList),
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
                     } else {
-                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + 1;
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
                     }
-                    customerAccountList[i].rowLen = (customerAccountList[i].rowLen > 0) ? customerAccountList[i].rowLen : 1;
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
-                data.customerAccountList = customerAccountList; 
+                data.customerAccountList = resultList; 
                 
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
@@ -272,7 +274,8 @@ define(function(require, exports) {
                     lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
-                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
                 };
             args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
             args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
@@ -444,17 +447,20 @@ define(function(require, exports) {
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
 
-                var customerAccountList = data.customerAccountList;
-                for(var i = 0; i < customerAccountList.length; i++){
-                    var detailList = JSON.parse(customerAccountList[i].detailList);
-                    customerAccountList[i].detailList = detailList;
-                    if(customerAccountList[i].status == 5){
-                        customerAccountList[i].rowLen = 1 + detailList.otherFee.length;
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = JSON.parse(resultList[i].detailList),
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
                     } else {
-                        customerAccountList[i].rowLen = 2;
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
                     }
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
-                data.customerAccountList = customerAccountList; 
+                data.customerAccountList = resultList; 
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
@@ -744,6 +750,8 @@ define(function(require, exports) {
     Client.saveCheckingData = function($tab, tabArgs){
         var argLen = arguments.length,
             JsonStr = FinancialService.saveJson_checking($tab);
+        if(!JsonStr){return false;}
+
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",

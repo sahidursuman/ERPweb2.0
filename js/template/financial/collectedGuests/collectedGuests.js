@@ -125,7 +125,8 @@ define(function(require, exports) {
             orderNumber : orderNumber,
             startDate : startTime,
             endDate : endTime,
-            sortType: 'auto'
+            order : "desc",
+            sortType: 'startTime'
         };
         $.ajax({
             url:KingServices.build_url("receiveProfit","listReceiveProfit"),

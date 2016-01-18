@@ -57,7 +57,7 @@
 
 			<tbody class="T-service-list">
 				{{each serviceStandardList as service}}
-					<tr >
+					<tr serviceId="{{service.id}}">
 					 	<td>{{service.serviceStandards}}</td>
 						
 						<td class="T-ctrl-tip" title="{{service.serviceContent}}">

@@ -131,8 +131,10 @@
                 <td class="F-float F-money">
                     {{Checking.unPayedMoney}}
                 </td>
-                <td >
-                    <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
+                <td>{{if !showBtnFlag && Checking.unPayedMoney <= 0}}<span class="F-float F-money">{{Checking.payMoney || 0.00}}</span>
+                    {{else}}
+                    <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}">
+                    {{/if}}
                 </td>
                 <td>
                     <input type="text" value="{{Checking.payRemark}}" name="payRemark" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
