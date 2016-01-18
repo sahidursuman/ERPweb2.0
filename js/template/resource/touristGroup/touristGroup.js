@@ -891,7 +891,7 @@ define(function(require, exports) {
                         '</div></div></div>'
             };
             list += '<div class="col-xs-10 hct-plan-ask" data-type="'+type+'">'+
-                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">'+$.trim(title)+'要求：</div>'+
+                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求：</div>'+
                     '<div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent"></div>'+
                     '</div>';
         $tab.find('.T-action-require-list').append(list);
