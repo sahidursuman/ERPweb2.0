@@ -106,7 +106,7 @@
 							</a>
 						</h5>
 						<div class="form-group">
-							<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>
+							<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 							<label class="mar-l-15">上车地点：{{arrivePosition}}</label>
 						</div>
                         <p>原车辆要求：{{receiveGroup.oldBusRequire}}</p>
@@ -507,7 +507,7 @@
 							</a>
 						</h5>
 						<div class="form-group">
-							<label>送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>
+							<label>送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 							<label class="mar-l-15">上车地点：{{leavePosition}}</label>
 						</div>
                         <p>原车辆要求：{{sendGroup.oldBusRequire}}</p>
