@@ -22,12 +22,12 @@
                 <th>责任计调</th>
                 <th>责任部门</th>
                 <th style="width:80px;">状态</th>
-                <th style="width:230px;">操作</th>
+                <th style="min-width:230px;">操作</th>
             </tr>
         </thead>
         <tbody>
             {{each result as rs}}
-            <tr data-id="{{rs.id}}">
+            <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td style="vertical-align:middle">{{rs.tripNumber}}</td>
                 <td style="vertical-align:middle">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
@@ -66,9 +66,9 @@
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a class="cursor T-action T-update" title="编辑">
+                    <a class="cursor {{if rs.isEdit == 1}}gray{{else}}T-action T-update{{/if}}" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}">
                         <label class="padding-right20">|</label>
-                        编辑
+                        <span>编辑</span>
                     </a>
                     <a class="cursor T-action T-export" title="导出">
                         <label class="padding-right20">|</label>

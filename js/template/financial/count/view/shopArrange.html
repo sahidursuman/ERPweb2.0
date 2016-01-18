@@ -46,7 +46,7 @@
         {{each shopArrangeList.shopArrangePolicy as arrange index}}
         {{if arrange != null}}
         <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}" shopArrid = "{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
-            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="whichDay"></span> </td>{{/if}}
             {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
             <td>{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.name}}{{else}}<input name="shopPolicyName" value="" type="text"><input name="shopPolicyId" type="hidden">{{/if}}</td>
             <td><input class="F-float F-money" policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 

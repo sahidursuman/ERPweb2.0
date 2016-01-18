@@ -2,7 +2,8 @@
 	<div class="col-xs-12">
 		<table class="table table-striped table-bordered table-hover T-showHighLight row">
 			<thead>
-				<tr class="bg-blur">  
+				<tr class="bg-blur"> 
+				    <th width="8%">收客单号</th>
 					<th >客户</th>
 					<th >线路产品</th>
 					<th>针对客源</th>               
@@ -28,6 +29,7 @@
 		
 			<tbody calss="T-touristGroup">{{each touristGroupList as touristGroup}}
 				<tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}">
+				    <td>{{touristGroup.orderNumber}}</td>
 					<td>
 						{{if touristGroup.partnerAgency != null}}
 							{{touristGroup.partnerAgency.travelAgencyName}}
@@ -111,9 +113,9 @@
 							<a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
 								查看
 							</a>
-							<a data-entity-id="{{touristGroup.id}}" class="{{if (touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 0 )}}T-action T-edit btn-touristGroup-edit  {{/if}} cursor  R-right" data-right="1120003" {{if !(touristGroup.isConfirmAccount == 0)}}style="color:#bbb;"{{/if}}>
+							<a data-entity-id="{{touristGroup.id}}" class="{{if touristGroup.isEdit == 1}}gray{{else if (touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 0 )}}T-action T-edit btn-touristGroup-edit{{else if !(touristGroup.isConfirmAccount == 0)}}gray{{/if}} cursor  R-right" data-right="1120003" title="{{if touristGroup.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{/if}}">
 								<label class="padding-right20">|</label>
-								编辑
+								<span>编辑</span>
 							</a>
 							<a data-entity-id="{{touristGroup.id}}" class="{{if touristGroup.status == 1 && touristGroup.isConfirmAccount == 0 && touristGroup.isInnerTransferConfirm == 0}}T-action T-del btn-touristGroup-delete {{/if}} cursor R-right" data-right="1120004" {{if !(touristGroup.status == 1  && touristGroup.isConfirmAccount == 0 && touristGroup.isInnerTransferConfirm == 0)}}style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>

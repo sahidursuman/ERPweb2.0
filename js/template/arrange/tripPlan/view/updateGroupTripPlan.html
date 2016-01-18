@@ -376,6 +376,12 @@
 					<input type="text" class="col-xs-12" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}">
 				</div>
 			</div>
+			<div class="col-xs-2">
+				<label class="col-xs-4 text-right">中转应收</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 F-float F-money" name="transitNeedPayMoney" value="{{touristGroup.outTransferIncome}}" readonly>
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-12">
 			<table class="table table-striped table-bordered table-hover">
@@ -392,7 +398,22 @@
 				<tbody class="T-fee-list">
 					{{each touristGroupFeeList as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"></td>
+						<td><!-- <input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"> -->
+							<select class="col-xs-12 T-calculate" name="type">
+								<option value="1" {{if rs.type == 1}}selected{{/if}}>大人结算价</option>
+								<option value="2" {{if rs.type == 2}}selected{{/if}}>小孩结算价</option>
+								<option value="3" {{if rs.type == 3}}selected{{/if}}>中转结算价</option>
+								<option value="4" {{if rs.type == 4}}selected{{/if}}>车辆费用</option>
+								<option value="5" {{if rs.type == 5}}selected{{/if}}>餐饮费用</option>
+								<option value="6" {{if rs.type == 6}}selected{{/if}}>保险费用</option>
+								<option value="7" {{if rs.type == 7}}selected{{/if}}>导服费</option>
+								<option value="8" {{if rs.type == 8}}selected{{/if}}>酒店费用</option>
+								<option value="9" {{if rs.type == 9}}selected{{/if}}>景区费用</option>
+								<option value="10" {{if rs.type == 10}}selected{{/if}}>自费费用</option>
+								<option value="11" {{if rs.type == 11}}selected{{/if}}>票务费用</option>
+								<option value="12" {{if rs.type == 12}}selected{{/if}}>其它费用</option>
+							</select>
+						</td>
 						<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>

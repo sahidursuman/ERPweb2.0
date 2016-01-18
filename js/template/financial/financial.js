@@ -144,16 +144,43 @@ FinancialService.checkSaveJson = function($tab,rule){
 };
 
 //对账-修改但未勾选提醒
-FinancialService.changeUncheck = function(trList,fn){
-    var result = false,uncheckList = [];
+FinancialService.changeUncheck = function(trList,fn,minTdLen){
+    var result = false,
+        argLen = arguments.length;
+
     trList.each(function(){
-        var $this = $(this);
-        if($this.data('change') && $this.data("confirm") == 0 && !$this.find('.T-checkbox').is(":checked")){
-            $this.addClass('success');
-            uncheckList.push($this);
-            result = true;
+        var $tr = $(this),
+            $mainTr = $tr;
+        
+        if($tr.data('change')){
+            if(argLen === 3){
+                while($mainTr.children('td').length <= minTdLen){
+                    $mainTr = $mainTr.prev();
+                }
+            }
+
+            if($mainTr.data("confirm") == 0 && !$mainTr.find('.T-checkbox').is(":checked")){
+                if(argLen === 3){
+                    var $tempTr = $mainTr.next(),
+                        index = $mainTr.index();
+                    $mainTr.addClass('success');
+                    var end = false;
+                    while($tempTr.length > 0 && !end){
+                        if($tempTr.hasClass('T-checkTr')){
+                            end = true;
+                        } else {
+                            $tempTr.addClass('success');
+                            $tempTr = $tempTr.next();
+                        }
+                    }
+                } else{
+                    $tr.addClass('success');
+                }
+                result = true;
+            }
         }
     });
+
     if(result){
         var buttons = [
             {
@@ -441,13 +468,25 @@ FinancialService.autoPayConfirm = function(startDate,endDate,fn){
 
 //设置数据来源标识（中转、代订）
 FinancialService.isGuidePay = function(dataList){
+
     for(var i = 0; i < dataList.length; i++){
-        var tripNumber = trim(dataList[i].tripNumber),
+        if(!!dataList[i].tripNumber){
+            var tripNumber = trim(dataList[i].tripNumber),
             strLen = tripNumber.length;
             tripType = tripNumber.substring(strLen-2,strLen);
-        if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
-            dataList[i].isGuidePay = 1;
+            if(tripType == "ZZ" ||　tripType == "zz" || tripType == "DD" || tripType == "dd"){
+                dataList[i].isGuidePay = 1;
+            }
+        }else if(!!dataList[i].info){
+            var tripNumData = dataList[i].info;
+            var tripNum = tripNumData.split(',');
+            if(/ZZ$/.test(tripNum[0] )|| /zz$/.test(tripNum[0]) || /DD$/.test(tripNum[0]) || /dd$/.test(tripNum[0])){
+                dataList[i].isGuidePay = 1;
+            }else{
+                dataList[i].isGuidePay = 0;
+            }
         }
+        
     }
     return dataList;
 };
@@ -458,7 +497,6 @@ FinancialService.exportReport = function(args,method){
     for(var i in args){
         str += "&" + i + "=" + args[i];
     }
-    console.log("exportReport");
     exportXLS(KingServices.build_url('export',method) + str);
 };
 
@@ -590,3 +628,98 @@ FinRule.prototype.check = function($obj) {
             return false;
     }
 }
+
+/**
+ * 客户账务、内转转入、转出、外转账务 对账及付款事件
+ */
+//对账-金额自动返算
+//minTdLen 子行td数量
+FinancialService.updateMoney_checking = function($tab,minTdLen){
+    $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
+        $(this).data("oldVal",$(this).val());
+    })
+    .on('change', 'input[name="settlementMoney"]', function(event) {
+        var $this = $(this),
+            $tr = $(this).closest('tr'),
+            $mainTr = $tr;
+        if(isNaN($this.val())){ return false;}
+
+        $tr.data("change",true);
+        while($mainTr.children('td').length <= minTdLen){
+            $mainTr = $mainTr.prev();
+        }
+
+        var backMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
+            settlementMoney = $tr.find('.T-settlementMoney').text() *1,
+            unReceivedMoney = $mainTr.find('.T-unReceivedMoney').text() *1;
+        //计算结算金额修改前后差值
+        var spread = backMoney - $this.data("oldVal")*1;
+
+        $tr.find('.T-settlementMoney').text(settlementMoney - spread);
+        $mainTr.find('.T-unReceivedMoney').text(unReceivedMoney - spread);
+
+        $tab.find(".T-sumBackMoney").text($tab.find(".T-sumBackMoney").text()*1 + spread);
+        $tab.find(".T-sumSettlementMoney").text($tab.find(".T-sumSettlementMoney").text()*1 - spread);
+        $tab.find(".T-sumUnReceivedMoney").text($tab.find(".T-sumUnReceivedMoney").text()*1 - spread);
+    });
+};
+
+//对账-保存json组装
+FinancialService.saveJson_checking = function($tab){
+    // if(!$tab.data('isEdited')){
+    //     showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+    //     return false;
+    // }
+
+    var $list = $tab.find(".T-checkList"),
+        $tr = $list.find(".T-checkTr"),
+        saveJson = []; 
+    $tr.each(function(){
+        var $this = $(this),
+            isConfirmAccount = $this.data("confirm"),
+            isCheck = "";
+        if ($this.find(".T-checkbox").is(':checked')) {
+            isCheck = 1;
+        } else {
+            isCheck = 0; 
+        }
+
+        if(isCheck != isConfirmAccount || isConfirmAccount == 1){//修改了对账状态
+            var $childTr = $this,
+                detailList = [],
+                end = false;
+            while(!end && $childTr.length > 0){
+                if($childTr.data("change")){
+                    var detailJosn = {
+                        touristGroupId : $childTr.find(".T-touristGroupId").data("id"),
+                        backMoney : $childTr.find('.T-refund').val(),
+                        flag : $childTr.find(".T-touristGroupId").data("status")
+                    };
+                    detailList.push(detailJosn);
+                }
+                $childTr = $childTr.next();
+                if($childTr.hasClass('T-checkTr')){
+                    end = true;
+                }
+            }
+
+            if(isCheck != isConfirmAccount || detailList.length > 0){
+                var checkRecord = {
+                    id : $this.data("id"),
+                    isConfirmAccount : isCheck,
+                    unPayedMoney : $this.find(".T-unReceivedMoney").text(),
+                    checkRemark : $this.find(".T-remark").val(),
+                    status : $this.data("status"),
+                    detailList : detailList
+                };
+                saveJson.push(checkRecord);
+            }
+        }
+    });
+    if(saveJson.length == 0){
+        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+        return false;
+    }
+     
+    return saveJson;
+};

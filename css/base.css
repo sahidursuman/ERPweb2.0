@@ -311,6 +311,10 @@ input.datepicker {
 .col-xs-12.datepicker{
 	width: 100%;
 }
+
+.hct_align_middle,.hct_align_middle td{
+	vertical-align:middle !important;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

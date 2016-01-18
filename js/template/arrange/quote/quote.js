@@ -605,8 +605,8 @@ define(function(require, exports) {
 					 html += " value='7'>五星以上</option></select></td>" +
 					 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 					 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-					 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-					 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 					 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 					 if (hotelList[i].containBreakfast==1){
 				 		html += "含早餐"; 
@@ -669,8 +669,8 @@ define(function(require, exports) {
 				 html += " value='7'>五星以上</option></select></td>" +
 				 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 				 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-				 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-				 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 				 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 				 if (hotelList[i].containBreakfast==1){
 			 		html += "含早餐"; 
@@ -739,7 +739,6 @@ define(function(require, exports) {
 
 	//报价详情页事件绑定
 	quote.init_event =function($container,id,$a,htmlT,target) {
-		var validator = rule.quoteCheckor($container);
 
 		addQuoteInit($container,htmlT,$a);
 		function addQuoteInit($container,htmlT,$a){
@@ -753,6 +752,7 @@ define(function(require, exports) {
 				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
 			});	
 		}
+		var validator = rule.quoteCheckor($container);
 
 		//自费和购物 浮动显示 和 多选
 		var $shop = $container.find('.T-shopMultiselect');
@@ -887,7 +887,11 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time, $a);
+					if (!!$time) {
+						quote.changeStartTime($container, $time, $a);
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+					}
 				})
 			}
 		})
@@ -981,7 +985,7 @@ define(function(require, exports) {
 			}
 		});
 		//保存报价
-		$container.find('.T-btn-submit-quote').on('click',function(){
+		$container.find('.T-btn-submit-quote').off('click').on('click',function(){
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container, $a);
@@ -3247,7 +3251,7 @@ define(function(require, exports) {
 		//seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
 		//seatCountMarketPrice = $container.find('.T-arrangeBusCompanyList [name=marketPrice]').val()-0 || 0;
 		guidePrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
-		guideMarketPrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
+		guideMarketPrice = $container.find('.T-arrangeGuideList [name=marketPrice]').val()-0 || 0;
 		adultCount = $container.find('[name=adultCount]').val()-0 || 0;
 		childCount = $container.find('[name=childCount]').val()-0 || 0;
 
@@ -3407,7 +3411,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id, $container, $a) {
+	quote.saveQuote = function(id, $container, $a,tab_id, title, html) {
 		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
@@ -3471,7 +3475,7 @@ define(function(require, exports) {
 			"guideQuote": {
 				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
 			}
 		}
@@ -3708,9 +3712,9 @@ define(function(require, exports) {
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
 							}else if (idString == "tab-arrange_quote-update-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','','update');
 							}else if (idString == "tab-arrange_quote-copy-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','1','copy');
 							}
                         }
 					});

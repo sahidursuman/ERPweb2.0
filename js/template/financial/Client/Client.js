@@ -181,6 +181,19 @@ define(function(require, exports) {
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
 
+                var customerAccountList = data.customerAccountList;
+                for(var i = 0; i < customerAccountList.length; i++){
+                    var detailList = JSON.parse(customerAccountList[i].detailList);
+                    customerAccountList[i].detailList = detailList;
+                    if(customerAccountList[i].status == 5){
+                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + detailList.otherFee.otherFeeList.length;
+                    } else {
+                        customerAccountList[i].rowLen = detailList.transitFee.transitFeeList.length + 1;
+                    }
+                    customerAccountList[i].rowLen = (customerAccountList[i].rowLen > 0) ? customerAccountList[i].rowLen : 1;
+                }
+                data.customerAccountList = customerAccountList; 
+                
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
@@ -269,12 +282,13 @@ define(function(require, exports) {
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
 
+        FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
         $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
@@ -290,19 +304,14 @@ define(function(require, exports) {
                 $that.closest('tr').data('change', true);
             }
             $tab.data('isEdited', true);
-
-            if ($that.hasClass('T-refund')) {
-                // 反算金额
-                Client.CalcCheckor($that);
-            }
         });
 
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
-            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+            FinancialService.changeUncheck($tab.find('.T-checkList tr'), function(){
                 Client.saveCheckingData($tab);
-            });
+            },3);
          });
 
         //关闭页面事件
@@ -312,53 +321,32 @@ define(function(require, exports) {
 
     };
 
-    /**
-     * 通过返款计算当前行和合计的结算、未收
-     * @param {object} $obj 返款输入框
-     */
-    Client.CalcCheckor = function($obj) {
-        if ('undefined' === $obj || $obj.length != 1 || isNaN($obj.val())) {
-            return;
+    Client.viewGroup = function(id){
+        if ('undefined' === id)  {
+            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
         }
 
-        var $tr = $obj.closest('tr').data('change', true),
-            refundMoney = $obj.val(),  // 返款金额
-            settlementMoney = $tr.find('.T-settlementMoney').text() *1,   // 结算金额
-            unReceivedMoney = $tr.find('.T-unReceivedMoney').text() *1,   // 未收金额
-            spread = $tr.find('.T-contractMoney').text() *1 - settlementMoney - refundMoney;
-
-        $tr.find('.T-settlementMoney').text(settlementMoney + spread);
-        $tr.find('.T-unReceivedMoney').text(unReceivedMoney + spread);
-        Client.$checkSumBackMoney.text(Client.$checkSumBackMoney.text()*1 - spread);
-        Client.$checksumSettlementMoney.text(Client.$checksumSettlementMoney.text()*1 + spread);
-        Client.$checksumUnReceivedMoney.text(Client.$checksumUnReceivedMoney.text()*1 + spread);
-    }
-
-    Client.unfoldGroup = function($that){
-        if ('undefined' === $that)  {
-            return;
-        }
-
-        var $next = $that.closest('tr').next();
-
-        if ($that.data('ajax')) {
-            $that.text('收起' === $that.text()? '展开': '收起');
-            $next.fadeToggle();
-        } else {
-            $.ajax({
-                url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
-                type: 'post',
-                data: {touristGroupId: $that.closest('tr').data('gid')},
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    data.memberList = JSON.parse(data.memberList || false) || [];
-
-                    $next.find('.T-group-list').html(touristsTemplate(data));
-                    $that.data('ajax', true).trigger('click');
-                }
-            });            
-        }
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
+            type: 'post',
+            data: {touristGroupId: id},
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                data.memberList = JSON.parse(data.memberList || false) || [];
+                var html = touristsTemplate(data);
+                var addGuide = layer.open({
+                    type: 1,
+                    title:"查看小组",
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '850px', //宽高
+                    zIndex:1028,
+                    content: html,
+                    scrollbar: false
+                });
+            }
+        });
     };
 
     Client.viewReceive = function(id){
@@ -455,6 +443,18 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+
+                var customerAccountList = data.customerAccountList;
+                for(var i = 0; i < customerAccountList.length; i++){
+                    var detailList = JSON.parse(customerAccountList[i].detailList);
+                    customerAccountList[i].detailList = detailList;
+                    if(customerAccountList[i].status == 5){
+                        customerAccountList[i].rowLen = 1 + detailList.otherFee.length;
+                    } else {
+                        customerAccountList[i].rowLen = 2;
+                    }
+                }
+                data.customerAccountList = customerAccountList; 
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
@@ -521,8 +521,8 @@ define(function(require, exports) {
         var $body = $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id)
             }else if($that.hasClass('T-view')){
@@ -742,36 +742,8 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var JsonStr = [],
-            selectFlag = 0,
-            argLen = arguments.length,
-            checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-checkbox');
-        $tr.each(function(i){
-           var flag = $(this).is(":checked");
-           var tr = $(this).closest('tr');
-           if(flag){
-                if(tr.attr("data-confirm") == 0 ){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 1,
-                        id: tr.data('id')
-                    };
-                    JsonStr.push(checkData);
-                }
-           }else{
-                if(tr.attr("data-confirm") == 1){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 0,
-                        id: tr.data('id')
-                    };  
-                    JsonStr.push(checkData);
-                }
-           }
-        });
+        var argLen = arguments.length,
+            JsonStr = FinancialService.saveJson_checking($tab);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
@@ -806,8 +778,12 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
+
         var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
-            sumList = parseFloat(Client.$sumUnReceivedMoney.data("money"));
+            sumList = Client.$sumUnReceivedMoney.data("money");
+        if (sumList === undefined) {  // 未修改付款的时候，直接读取
+            sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
         if(sum != sumList){
             showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
             return false;

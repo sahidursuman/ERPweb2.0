@@ -102,7 +102,8 @@ define(function(require, exports) {
     			$(this).next('[name="status"]').removeClass('hide');
     		}
     	});
-    	$tab.on('click', '.T-btn-tripPlan-add', function(event) {
+    	$tab.off('click')
+    	.on('click', '.T-btn-tripPlan-add', function(event) {
     		event.preventDefault();
     		tripPlan.addTripPlan($(this).data('type'));
     	});
@@ -186,10 +187,11 @@ define(function(require, exports) {
 
 		$tab.find('[class*="T-tripPlan-"]').on('click', '.ace-icon', function(event){
 			event.preventDefault();
-			var $that = $(this);
+			var $that = $(this), $parent = $that.closest('tr'),
+				billStatus = $parent.data("bill-status");
 			if(!$that.hasClass('fa-minus')){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
-					module.updatePlanInfo($that.closest('tr').data("id"), $that.closest('td').data("target"), $tab.prop('id'));
+					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));
 				});
 			}
 		});
@@ -481,6 +483,13 @@ define(function(require, exports) {
     			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
+			var money = 0;
+			$tab.find('.T-fee-list tr').each(function(index){
+				if ($(this).find('[name=type]').val() == 3) {
+				money += $(this).find('[name="money"]').val() * 1;
+				}
+			});
+			$tab.find('[name=transitNeedPayMoney]').val(money)
     	});
     	
     	//提交数据
@@ -836,7 +845,7 @@ define(function(require, exports) {
 			var $that = $(this);
 			arge.touristGroupFeeJson.push({
 				count : $that.find('[name="count"]').val(),
-			    describeInfo : $that.find('[name="describeInfo"]').val(),
+			    type: $that.find('[name="type"]').val(),
 			    id : $that.data("id") || "",
 			    price : $that.find('[name="price"]').val(),
 			    remark : $that.find('[name="feeRemark"]').val()
@@ -849,6 +858,7 @@ define(function(require, exports) {
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
+		arge.outTransferIncome = $tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
@@ -1031,7 +1041,7 @@ define(function(require, exports) {
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
 			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
 			return;
-		} else {
+		} else if(args.executeTimeType == 0) {
 			delete(args.executeTime);
 		}
 
@@ -1222,6 +1232,8 @@ define(function(require, exports) {
 				$tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
 				$tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
 				$tab.find('[name="getType"]').val(groupData.getType);
+				$tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
+				$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());
 				$tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
@@ -1488,11 +1500,12 @@ define(function(require, exports) {
 			}
 		}).done(function(data){
 			if(showDialog(data)){
-				var group = JSON.parse(data.touristGroupJson);
+				var group = JSON.parse(data.touristGroupJson),
+					hotelLevel = ['三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上'];
 				var html = "";
 				for(var i=0; i<group.length; i++){
 					html += '<tr data-id="'+group[i].id+'"><td>'+
-					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
+					group[i].orderNumber+'</td><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
@@ -1502,12 +1515,12 @@ define(function(require, exports) {
 					group[i].ageData+'</td><td>'+
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
-					group[i].hotelLevel+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					(group[i].includeSelfPay == "1" ? "包含" : "不包含")+'</td><td>'+
-					group[i].partnerAgency.remark+'</td><td>'+
+					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
+					group[i].includeSelfPay+'</td><td>'+
+					group[i].accompanyGuideName+'</td><td>'+
+					group[i].accompanyGuideMobile+'</td><td>'+
+					group[i].welcomeBoard+'</td><td>'+
+					group[i].remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
@@ -1873,14 +1886,16 @@ define(function(require, exports) {
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
 						}
-						console.log(data);
-						console.log(data.lineProduct)
-						console.log(!$.isEmptyObject(data.quote),!$.isEmptyObject(data.lineProduct) )
+						
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
 							$tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
 							$tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
 							$tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
+							$tab.find('[name="adultCount"]').val(quote.adultCount).attr('readonly', 'readonly');
+							$tab.find('[name="childCount"]').val(quote.childCount).attr('readonly', 'readonly');
+							$tab.find('[name="startTime"]').val(quote.startTime);
+							$tab.find('[name="endTime"]').val(quote.endTime);
 						}else if(!$.isEmptyObject(data.lineProduct)){
 							var line = data.lineProduct;
 							$tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);

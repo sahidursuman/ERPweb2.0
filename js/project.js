@@ -659,6 +659,7 @@ var modalScripts = {
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
+    'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -693,6 +694,8 @@ var modalScripts = {
     'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
     'financial_transfer': "js/template/financial/transfer/transfer.js",
 	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
+	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
+	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",

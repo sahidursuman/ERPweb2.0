@@ -331,9 +331,10 @@
 														{{each days.arrangeData.restaurantArrangeList as rs}}
 														<tr>
 															<td>{{rs.type}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}</td>
-															<td>{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}</td>
+															
+															<td>{{if rs.isChoose == "1"}}导游任选{{else}}{{if rs.restaurant}}{{rs.restaurant.name}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.managerName}}{{/if}}{{/if}}</td>
+															<td>{{if rs.isChoose == "1"}}-{{else}}{{if rs.restaurant}}{{rs.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
 															<td>{{rs.price}}</td>
 															<td>{{rs.memberCount}}</td>
 															<td>{{rs.reduceMoney}}</td>
@@ -720,7 +721,21 @@
 				<tbody>
 					{{each touristGroupFeeList as rs}}
 					<tr>
-						<td>{{rs.describeInfo}}</td>
+						<td>
+							{{if rs.type == 1}}大人结算价
+							{{else if rs.type == 2}}小孩结算价
+							{{else if rs.type == 3}}中转结算价
+							{{else if rs.type == 4}}车辆费用
+							{{else if rs.type == 5}}餐饮费用
+							{{else if rs.type == 6}}保险费用
+							{{else if rs.type == 7}}导服费
+							{{else if rs.type == 8}}酒店费用
+							{{else if rs.type == 9}}景区费用
+							{{else if rs.type == 10}}自费费用
+							{{else if rs.type == 11}}票务费用
+							{{else if rs.type == 12}}其他费用
+							{{/if}}
+						</td>
 						<td>{{rs.count}}</td>
 						<td>{{rs.price}}</td>
 						<td>{{rs.count*rs.price}}</td>

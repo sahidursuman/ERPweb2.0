@@ -2136,3 +2136,19 @@ p#back-top a span {
     width: 57px;
     text-align: right;
 }
+
+a.gray,a.gray span{
+    color:#bbb;
+}
+
+/*列表内部小列表*/
+.table-inner-list{
+    list-style-type: none;
+}
+.table-inner-list li{
+    border-top: 1px #ddd solid;
+    padding: 5px;
+}
+.table-inner-list li:first-child{
+    border:none;
+}
