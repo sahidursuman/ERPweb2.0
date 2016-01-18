@@ -107,7 +107,7 @@
 						</h5>
 						<div class="form-group">
 							<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>
-							<label class="mar-l-15">票务班次：{{arriveShift}}</label>
+							<label class="mar-l-15">上车地点：{{arrivePosition}}</label>
 						</div>
                         <p>原车辆要求：{{receiveGroup.oldBusRequire}}</p>
                         <p>现车辆要求：{{receiveGroup.nowBusRequire}}</p>
@@ -506,6 +506,10 @@
 								</button>
 							</a>
 						</h5>
+						<div class="form-group">
+							<label>送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>
+							<label class="mar-l-15">上车地点：{{leavePosition}}</label>
+						</div>
                         <p>原车辆要求：{{sendGroup.oldBusRequire}}</p>
                         <p>现车辆要求：{{sendGroup.nowBusRequire}}</p>
 						<div class="widget-body">
