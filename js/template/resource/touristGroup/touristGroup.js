@@ -875,18 +875,18 @@ define(function(require, exports) {
         var list = '';
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 0 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datepicker" /></div></div>'+
+                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datepicker" />'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 1 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datepicker" /></div></div>'+
+                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datepicker" />'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             list += '<div class="col-xs-10 hct-plan-ask" data-type="'+type+'">'+
@@ -1973,7 +1973,7 @@ define(function(require, exports) {
             format: 'yyyy-mm-dd',
             language: 'zh-CN'
         });
-        $obj.find(".ShiftDatepicker").datetimepicker({
+        $obj.find(".datetimepicker").datetimepicker({
             autoclose: true,
             todayHighlight: true,
             format: 'L',
