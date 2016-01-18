@@ -3037,7 +3037,7 @@ define(function(require, exports) {
 		var bus = $("#tripPlan_addPlan_bus tbody tr"), busCompanyArrange = [];
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
-				if(tripPlan.getVal(bus.eq(i), "id")){
+				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
 					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
 
 					var busJson = {
