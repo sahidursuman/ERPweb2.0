@@ -418,7 +418,7 @@ define(function(require, exports) {
      */
 	innerTransfer.innitAddFee=function($tab,validator){
 		var html="<tr class=\"transferFee1SelectId\">"+
-		    "<td><select name=\"describeInfo\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
             "<option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
             "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
             "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
@@ -555,7 +555,7 @@ define(function(require, exports) {
 		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
-			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+			innerTransferFeeSet : [],	//内转的其他费用	array<object>	
 			toBusinessGroupId :$tab.find("input[name=businessGroup_id]").data('group-id'),//	转给的部门ID	  	
 			transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
 			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
@@ -570,21 +570,19 @@ define(function(require, exports) {
 		var otherFeeJsonAdd = [];
 		var otherFeeJsonAddLength=$tab.find(".addTransferCost tr").length;
 		$tab.find(".addTransferCost tr").each(function(i){
-			var id=$(this).attr("data-entity-id");
-			var discribe = $(this).find("input[name=discribe]").val();
-			var count = $(this).find("input[name=count]").val();
-			var price = $(this).find("input[name=price]").val();
-			var remark = $(this).find("input[name=remark]").val();
-			if(i>1){
+			var id=$(this).attr("data-entity-id"),
+			    type = $(this).find("select[name=type]").val(),
+			    count = $(this).find("input[name=count]").val(),
+			    price = $(this).find("input[name=price]").val(),
+			    remark = $(this).find("input[name=remark]").val();
 				var otherFeeJson = { 
 					"id":id,
-					"discribe":discribe,
+					"type":type,
 					"count":count,
 					"price" : price,
 					"remark" : remark
 				}
 				otherFeeJsonAdd.push(otherFeeJson);
-			}
 		})
 		innerTransferJson.innerTransferFeeSet=otherFeeJsonAdd;
 		var innerTransferJson=JSON.stringify(innerTransferJson);

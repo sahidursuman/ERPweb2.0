@@ -385,6 +385,7 @@
                                         <td>
                                             <div class="col-xs-12 feild-relative">
                                                 <input type="text" name="companyName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12"/>
+                                                <input type="hidden" name="id" value="{{busCompany.id}}">
                                                 <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/>
                                                 <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -393,9 +394,9 @@
                                         </td>
 
                                         <td><input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12"/></td>
-                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>
-                                        <td><input type="text" name="setPlacePosition" class="col-xs-12"></td>
-                                        <td><a class="T-noticeTourists">点击设置</a></td>
+                                        <td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.taskType == 6}}disabled{{/if}}></td>
+                                        <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
                                         <td>
                                             <div class="col-xs-12 feild-relative">
                                                 <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>
@@ -634,7 +635,7 @@
                                         <td><input type="text" class="col-sm-12 price F-float F-money" name="price"  maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9"/></td>
                                         <td><input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" /></td>
                                         <td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
-                                        <td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
+                                        <td><input type="text" class="col-sm-12 F-float F-money" readonly="readonly" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
                                         <td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
@@ -648,7 +649,7 @@
                                         </td>
                                         <td>
                                             <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1 && hotel.orderStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1 || hotel.orderStatus == 2 || hotel.orderStatus == 3 || hotel.orderStatus == 0}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus != 1}}style="color: #bbb"{{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
                                         </td>
                                         <!-- <td>
                                             {{if hotel.offerId!=null}}
