@@ -456,12 +456,15 @@ define(function(require, exports) {
                     days = $mergenTrList.eq(i).attr("data-days");
                 }
             })
+
             if (!!id && mergeTouristGroupIdJson.length > 0) {
                  //关闭层
                 layer.close(arrangeTourist.chosenMergenTripPlanlayer);
                 KingServices.addTripPlan(args={id : id,lineProName : lineProName,startTime : startTime,days : days},mergeTouristGroupIdJson);
                 //清空游客小组Id
                 arrangeTourist.touristGroupId = [];
+                //在数组中移除选中生成计划记录
+                arrangeTourist.touristGroupMergeData.touristGroupMergeList.splice(0,arrangeTourist.touristGroupMergeData.touristGroupMergeList.length);
                 //数据刷新
                 var divId = "T-Visitor-list",
                     $VisitorObj = $('#' + divId),
@@ -522,11 +525,12 @@ define(function(require, exports) {
                     lineProductType: lineProductType
                 };
             arrangeTourist.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
+            console.log(arrangeTourist.touristGroupMergeData.touristGroupMergeList);
             arrangeTourist.touristGroupId.push(touristGroupIds);
 
         } else {
             //若取消选中状态---用于生成计划查询数组
-            arrangeTourist.removeTouristGroupMergeData($merge, lineProductId, startTime);
+            arrangeTourist.removeTouristGroupMergeData(lineProductId, startTime);
             //移除取消分页选中效果
             arrangeTourist.removeTouristGroupId(touristGroupId);
 
@@ -541,7 +545,7 @@ define(function(require, exports) {
      * @param  {[type]} startTime     [description]
      * @return {[type]}               [description]
      */
-    arrangeTourist.removeTouristGroupMergeData = function($merge, lineProductId, startTime) {
+    arrangeTourist.removeTouristGroupMergeData = function(lineProductId, startTime) {
         var touristGroupMergeList = arrangeTourist.touristGroupMergeData.touristGroupMergeList;
         if (touristGroupMergeList.length > 0) {
             for (var i = 0; i < touristGroupMergeList.length; i++) {
@@ -1020,6 +1024,7 @@ define(function(require, exports) {
         //提交编辑转客费用信息
         $editFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
+            var type=1;
             /* Act on the event */
             arrangeTourist.saveTransFee($editFeeObj, type);
         });
@@ -1085,6 +1090,7 @@ define(function(require, exports) {
         $outFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
+            var type=2;
             arrangeTourist.saveTransFee($outFeeObj, type);
         });
     };
