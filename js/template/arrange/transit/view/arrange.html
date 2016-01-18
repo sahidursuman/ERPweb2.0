@@ -132,7 +132,9 @@
 											<th class="th-border" style="width: 100px">操作</th>
 										</tr>
 									</thead>
-									<tbody>{{each receiveGroup.outBusList as outBus}}
+									<tbody>
+									{{if receiveGroup.outBusList != null && receiveGroup.outBusList.length > 0}}
+									{{each receiveGroup.outBusList as outBus}}
 										{{if outBus.id != null && outBus.busCompany != null}}
 										<tr data-entity-id="{{outBus.id}}">
 											<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
@@ -178,7 +180,52 @@
 													删除
 												</a>
 											</td>
-										</tr>{{/if}}{{/each}}
+										</tr>{{/if}}{{/each}}{{else}}
+										<tr data-entity-id="">
+											<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>
+											<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>
+											<td>
+												<div class="col-sm-12">
+													<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
+													<input type="hidden" name="busLicenseNumberId" value="" />
+													<span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td>
+												<div class="col-sm-12">
+													<input type="hidden" name="serviceType" value="0" />
+													<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />
+													<input type="hidden" name="busCompanyId" value="" />
+		                                            <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td>
+												<div class="col-sm-12">
+													<input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
+													<input type="hidden" name="driverId" value="" />
+													<span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
+											<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{arriveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" /></td>
+											<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{arrivePosition}}" /></td>
+											<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
+											<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
+											<td>
+												<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
+													删除
+												</a>
+											</td>
+										</tr>{{/if}}
 									</tbody>
 								</table>
 							</div>
@@ -360,6 +407,10 @@
 								</button>
 							</a>
 						</h5>
+						<div class="form-group">
+							<label>票务时间：{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
+							<label class="mar-l-15">票务班次：{{arriveShift}}</label>
+						</div>
                         <p>原票务要求：{{receiveGroup.oldTicketRequire}}</p>
                         <p>现票务要求：{{receiveGroup.nowTicketRequire}}</p>
 						<div class="widget-body">
@@ -383,7 +434,9 @@
 											<th class="th-border" style="width: 100px">操作</th>
 										</tr>
 									</thead>
-									<tbody>{{each receiveGroup.outTicketList as outTicket}}
+									<tbody>
+									{{if receiveGroup.outTicketList != null && receiveGroup.outTicketList.length > 0}}
+									{{each receiveGroup.outTicketList as outTicket}}
 										{{if outTicket.id != null && outTicket.ticket != null}}
 										<tr data-entity-id="{{outTicket.id}}">
 											<td>
@@ -427,7 +480,44 @@
 													删除
 												</a>
 											</td>
-										</tr>{{/if}}{{/each}}
+										</tr>{{/if}}{{/each}}{{else}}
+										<tr data-entity-id="">
+											<td>
+												<div class="col-sm-12">
+													<input type="hidden" name="serviceType" value="0" />
+													<input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
+													<input type="hidden" name="tickeId" value="" />
+													<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
+                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                    </span>
+                                                </div>
+											</td>
+											<td>
+												<select class="" name="ticketType">
+													<option value="1">机票</option>
+													<option value="2">汽车票</option>
+													<option value="3">火车票</option>
+													<option value="4">轮船票</option>
+												</select>
+											</td>
+											<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
+											<td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
+											<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
+											<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="" type="text" /></td>
+											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>
+											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="" type="text" /></td>
+												<input class="col-sm-12" name="ticketPayType" value="" type="text" /></td>
+											<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
+											<td>
+												<a class="cursor T-arrange-delete" data-catename="ticket">
+													删除
+												</a>
+											</td>
+										</tr>{{/if}}
 									</tbody>
 								</table>
 							</div>
@@ -533,7 +623,9 @@
 											<th class="th-border" style="width: 100px">操作</th>
 										</tr>
 									</thead>
-									<tbody>{{each sendGroup.outBusList as outBus}}
+									<tbody>
+									{{if sendGroup.outBusList != null && sendGroup.outBusList.length > 0}}
+									{{each sendGroup.outBusList as outBus}}
 										{{if outBus.id != null && outBus.busCompany != null}}
 										<tr data-entity-id="{{outBus.id}}">
 											<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
@@ -580,6 +672,52 @@
 												</a>
 											</td>
 										</tr>{{/if}}{{/each}}
+										{{else}}
+										<tr data-entity-id="">
+											<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>
+											<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>
+											<td>
+												<div class="col-sm-12">
+													<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
+													<input type="hidden" name="busLicenseNumberId" value="" />
+													<span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td>
+												<div class="col-sm-12">
+													<input type="hidden" name="serviceType" value="0" />
+													<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />
+													<input type="hidden" name="busCompanyId" value="" />
+		                                            <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td>
+												<div class="col-sm-12">
+													<input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
+													<input type="hidden" name="driverId" value="" />
+													<span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
+		                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+		                                            </span>
+		                                        </div>
+											</td>
+											<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
+											<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{leaveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" /></td>
+											<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{leavePosition}}" /></td>
+											<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
+											<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
+											<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
+											<td>
+												<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
+													删除
+												</a>
+											</td>
+										</tr>{{/if}}
 									</tbody>
 								</table>
 							</div>
@@ -783,7 +921,9 @@
 											<th class="th-border" style="width: 100px">操作</th>
 										</tr>
 									</thead>
-									<tbody>{{each sendGroup.outTicketList as outTicket}}
+									<tbody>
+									{{if sendGroup.outTicketList != null && sendGroup.outTicketList.length >0}}
+									{{each sendGroup.outTicketList as outTicket}}
 										{{if outTicket.id != null && outTicket.ticket != null}}
 										<tr data-entity-id="{{outTicket.id}}">
 											<td>
@@ -808,26 +948,55 @@
 											<td><input class="col-sm-12" name="ticketArriveCity"  maxlength="20" value="{{outTicket.arriveCity}}" type="text" /></td>
 											<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
 											<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" /></td>
-											<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" />
-												<!-- <select class="" name="ticketSeatLevel" >
-													<option value="0" {{if outTicket.seatLevel == 0}}selected="selected"{{/if}}>普通</option>
-													<option value="1" {{if outTicket.seatLevel == 1}}selected="selected"{{/if}}>高级</option>
-												</select> -->
-											<!-- <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" /> -->
-											</td>
+											<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" /></td>
 											<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
 											<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
 											<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
 											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
 											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
-												<!-- <input class="col-sm-12" name="ticketPayType" value="{{outTicket.payType}}" type="text" /></td> -->
 											<td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" /></td>
 											<td>
 												<a class="cursor T-arrange-delete" data-catename="ticket">
 													删除
 												</a>
 											</td>
-										</tr>{{/if}}{{/each}}
+										</tr>{{/if}}{{/each}}{{else}}
+										<tr data-entity-id="">
+											<td>
+												<div class="col-sm-12">
+													<input type="hidden" name="serviceType" value="0" />
+													<input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
+													<input type="hidden" name="tickeId" value="" />
+													<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
+                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                    </span>
+                                                </div>
+											</td>
+											<td>
+												<select class="" name="ticketType">
+													<option value="1">机票</option>
+													<option value="2">汽车票</option>
+													<option value="3">火车票</option>
+													<option value="4">轮船票</option>
+												</select>
+											</td>
+											<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
+											<td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
+											<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
+											<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
+											<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="" type="text" /></td>
+											<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>
+											<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="" type="text" /></td>
+											<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
+											<td>
+												<a class="cursor T-arrange-delete" data-catename="ticket">
+													删除
+												</a>
+											</td>
+										</tr>{{/if}}
 									</tbody>
 								</table>
 							</div>
