@@ -511,7 +511,7 @@ define(function(require,exports){
 					"</td>" +
 					"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" class=\" F-float F-money T-minPrice T-calc\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
 					"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs T-bus-delete\">删除</a></td></tr>";
-		$obj.find("tbody").append(html);
+		$obj.find(".T-busTbody-list").append(html);
 		validator = rule.update(validator);
 		$(window).trigger('resize');
 		BusCompany.bindTime($obj, "buyTime");
