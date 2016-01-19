@@ -56,9 +56,12 @@ define(function(require, exports) {
                     for(var i = 0; i < transfer.partnerAgencyList.length; i++){
                         transfer.partnerAgencyList[i].value = transfer.partnerAgencyList[i].travelAgencyName;
                     }
-                    transfer.listTransfer(0);
+
                     //搜索事件
                     var  $tab = $("#tab-" + menuKey + "-content");
+                    transfer.$searchArea = $tab.find('.T-search-area');
+                    transfer.listTransfer(0);
+                    
                     Tools.setDatePicker($tab.find(".date-picker"),true);
                     $tab.find(".T-search").off().on('click', function(event) {
                         event.preventDefault();
@@ -118,7 +121,6 @@ define(function(require, exports) {
                     $("#tab-" + menuKey + "-content").find(".T-transfer-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
                     $tab.find(".T-totalSize").text("共计 " + data.totalCount + " 条记录");
-                    transfer.$searchArea = $tab.find('.T-search-area');
 
                     transfer.getSumData($tab,transfer.searchData);
                     transfer.getQuery($tab);
