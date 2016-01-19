@@ -101,7 +101,7 @@
                     </a>
                 </td>
                 {{/if}}
-                <td>接收部门{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
+                <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                 <td><a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">
                         <span class="F-float F-money">{{innerTransferList.transNeedPayAllMoney}}</span>
                     </a>
