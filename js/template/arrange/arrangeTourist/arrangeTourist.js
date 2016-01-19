@@ -1362,7 +1362,7 @@ define(function(require, exports) {
                                     if (id == data.touristGroupId) {
                                         inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         inTransferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
-                                        inTransferTr.eq(i).find(".T-payed").html(data.transPayedMoney);
+                                       
                                     }
                                 })
 
@@ -1388,7 +1388,7 @@ define(function(require, exports) {
                                     if (id == data.id) {
                                         transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
                                         transferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
-                                        transferTr.eq(i).find(".T-payed").html(data.transPayedMoney);
+                                       
 
 
                                     }
