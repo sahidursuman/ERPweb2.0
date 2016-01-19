@@ -290,7 +290,7 @@
                                 {{each guideList as guide}}
                                 {{if guide != "[]" || guide != null}}
                                     <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}" >
-                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
+                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#guide.taskType | getTaskSelect}}</td>
@@ -305,8 +305,8 @@
                                         </td>
                                         <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                         <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
-                                        <td><input type="text" name="price" {{if guide.isAccountGuide == 1}} value="{{guide.price}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
-                                        <td><input type="text" name="manageFee"  {{if guide.isAccountGuide == 1}} value="{{guide.manageFee}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
+                                        <td><input type="text" name="price" {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} value="{{guide.price}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
+                                        <td><input type="text" name="manageFee"  {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} value="{{guide.manageFee}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
                                         <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                         <td>
                                             {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}

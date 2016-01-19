@@ -673,7 +673,7 @@ define(function(require, exports) {
 
 				$trPriceObj.filter('input[name="price"]').removeClass('hidden').val($price.val());
 				$trPriceObj.filter('input[name="manageFee"]').removeClass('hidden').val($manageFee.val());
-				$priceObj.addClass('hidden').val(0);
+				$that.closest('tbody').find('.price').filter('.hidden').val(0);
 			} else {
 				var $parents = $that.closest('tr'), id = $parents.data('entity-arrangeid'),
 					$name = $that.data('entity-name'), isBooking = $parents.data('entity-isbooking');
