@@ -2,7 +2,8 @@ define(function(require, exports) {
 	var menuKey = "financial_transferProfits",
         listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list"),
-        touristsTemplate = require("./view/viewTouristGroup");
+        touristsTemplate = require("./view/viewTouristGroup"),
+        costDetailTemplate = require("./view/viewCostDetail");
 
     var transfer = {
     	searchData : false,
@@ -55,9 +56,12 @@ define(function(require, exports) {
                     for(var i = 0; i < transfer.partnerAgencyList.length; i++){
                         transfer.partnerAgencyList[i].value = transfer.partnerAgencyList[i].travelAgencyName;
                     }
-                    transfer.listTransfer(0);
+
                     //搜索事件
                     var  $tab = $("#tab-" + menuKey + "-content");
+                    transfer.$searchArea = $tab.find('.T-search-area');
+                    transfer.listTransfer(0);
+                    
                     Tools.setDatePicker($tab.find(".date-picker"),true);
                     $tab.find(".T-search").off().on('click', function(event) {
                         event.preventDefault();
@@ -117,7 +121,6 @@ define(function(require, exports) {
                     $("#tab-" + menuKey + "-content").find(".T-transfer-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
                     $tab.find(".T-totalSize").text("共计 " + data.totalCount + " 条记录");
-                    transfer.$searchArea = $tab.find('.T-search-area');
 
                     transfer.getSumData($tab,transfer.searchData);
                     transfer.getQuery($tab);
@@ -186,8 +189,8 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                data.memberList = JSON.parse(data.memberList || false) || [];
-                var html = touristsTemplate(data);
+                data.financialNeedPays = JSON.parse(data.financialNeedPays);
+                var html = costDetailTemplate(data);
                 var addGuide = layer.open({
                     type: 1,
                     title:"中转成本明细",
@@ -209,7 +212,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find(".T-totalCount").text(data.countMap.adultCount + " 大" + data.countMap.childCount + " 小");
+                $tab.find(".T-totalCount").text((data.countMap.adultCount ? data.countMap.adultCount : 0) + " 大" + (data.countMap.childCount ? data.countMap.childCount : 0) + " 小");
                 $tab.find(".T-totalNeed").text(data.countMap.needIncomeMoney);
                 $tab.find(".T-totalCost").text(data.countMap.totalPayMoney);
                 $tab.find(".T-totalProfit").text(data.countMap.grossProfitMoney);
