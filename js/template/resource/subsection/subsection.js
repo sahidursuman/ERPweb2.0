@@ -273,11 +273,23 @@ define(function(require, exports) {
 			subsection.delFeeItem($this);
 		});
 
+		//初始化页面disabled--false
+		subsection.$tbody.find('.T-type').prop('disabled',false);
+		//费用项选中后不能编辑
+		subsection.$tbody.find('.T-type').on('change', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that = $(this);
+			    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
+		});
+
         
 		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
-
-        //新增中转分段
-		subsection.addOperation(subsection.$tabSub);
+		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
+			//新增中转分段
+		     subsection.addOperation();
+		});
+        
 
 		//新增费用项目
 		subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').on('click', function(event) {
@@ -295,8 +307,8 @@ define(function(require, exports) {
 		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
-					  +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
+		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" disabled="" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+					  +'<option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
                       +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
@@ -312,6 +324,15 @@ define(function(require, exports) {
 			$tbody.find(".T-del").off().click(function(){
 				var $this = $(this);
 				subsection.delFeeItem($this);
+			});
+
+			//初始化页面disabled--false
+		    $tbody.find('.T-type').prop('disabled',false);
+			$tbody.find('.T-type').on('change', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that = $(this);
+				    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
 			});
 		};
 
@@ -348,8 +369,7 @@ define(function(require, exports) {
 	 * addOperation 新增中转费用线路
 	 * @param {[type]} $tab [description]
 	 */
-	subsection.addOperation =function($tab){
-		$tab.find(".T-btn-operation-add").click(function(){
+	subsection.addOperation =function(){
 			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
 			     isHasTr = 0,
 			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
@@ -369,7 +389,7 @@ define(function(require, exports) {
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
 			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
-            +'<option value="3">中转结算价</option><option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
+            +'<option value="4">保险结算价</option><option value="5">车费结算价</option><option value="6">餐饮结算价</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
             +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
@@ -402,15 +422,21 @@ define(function(require, exports) {
 			validator = rule.checkdSaveSubsection($tbody);
 
 			//新增费用项目
-			subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').on('click', function(event) {
+			subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').off().on('click', function(event) {
 				event.preventDefault();
 				var $that = $(this),$tbody =subsection.$tbody;
 				/* Act on the event */
 				subsection.addFeeItem($that, $tbody);
 			});
-			$tbody.data('isEdited', true);
 
-		});
+			$tbody.find('.T-type').on('change', function(event) {
+				event.preventDefault();
+				/* Act on the event */
+				var $that = $(this);
+				    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
+		    });
+
+			$tbody.data('isEdited', true);
 	};
 
 	/**
