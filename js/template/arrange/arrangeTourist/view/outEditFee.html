@@ -13,17 +13,13 @@
 						<input name="remark" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transRemark}}{{/if}}{{/if}}" class="col-sm-12  no-padding-right" type="text" maxlength="500">  
 					</div>
 				</div>
-				---------------{{cashFlag}}-------------------------
 				<input type="hidden" name="transferFeeStatus" value="{{touristGroup.transferFeeStatus}}">
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
 						<div class="col-sm-2">
 							<input value="{{if touristGroup != null}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已付:</label>
-						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price F-float F-money" readonly="readonly" />
-						</div>
+						
 
 						<label class="col-sm-1 control-label no-padding-right">计划现收:</label>
 						<div class="col-xs-1">
@@ -41,6 +37,10 @@
 								<input type="hidden" name="isCurrent" value="{{cashFlag}}">
 						</label>
                         <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
+
+                        <div class="col-sm-2">
+							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="hidden" name="transPayedMoney" class="col-sm-12 price F-float F-money" readonly="readonly" />
+						</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-2"></div>
@@ -188,8 +188,8 @@
 								<tbody>
 								   {{each touristGroupFeeList as touristGroupFlist}}                                           
 												 <tr>       
-													<td>    
-														<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
+													<td>   
+														<input readonly="readonly" value="{{touristGroupFlist.name}}" type="text" class="col-sm-12  no-padding-right" />        
 													</td>   
 									
 													<td>
