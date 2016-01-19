@@ -169,7 +169,7 @@ define(function(require,exports) {
 				    //费用明细处理
 				    var list = data.list;
 	                for(var i = 0; i < list.length; i++){
-	                    var detailList = JSON.parse(list[i].detailList),
+	                    var detailList = list[i].detailList,
 	                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
 	                    list[i].detailList = detailList;
 	                    if(list[i].status == 5){
@@ -621,7 +621,7 @@ define(function(require,exports) {
 				    //费用明细处理
 				    var list = data.list;
 	                for(var i = 0; i < list.length; i++){
-	                    var detailList = JSON.parse(list[i].detailList),
+	                    var detailList = list[i].detailList,
 	                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
 	                    list[i].detailList = detailList;
 	                    if(list[i].status == 5){
