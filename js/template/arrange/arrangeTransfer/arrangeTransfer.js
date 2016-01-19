@@ -400,7 +400,7 @@ define(function(require, exports) {
 		    $("#" + divId).find('.T-listTransferOut').off('click').on('click', '.T-action', function(event) {
 	    		event.preventDefault();
 	    		/* Act on the event */
-	    		var $that=$(this),id=$that.closest('tr').data('value');
+	    		var $that=$(this),id=$that.closest('tr').data('value'),status=$that.closest('tr').data('status');
 	    		if ($that.hasClass('T-transfer-view'))  {
 					// 查看我社转出信息
 					transfer.viewTransferOut(id);
@@ -410,6 +410,9 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-transfer-delete'))  {
 					//撤销
 					transfer.deleteTransferOut(id);
+				} else if ($that.hasClass('T-transfer-confirm'))  {
+					//撤销
+					transfer.transferOutConfirm('confirmButton',id,status);
 				}
 		    });
 
@@ -514,6 +517,28 @@ define(function(require, exports) {
 					}
 				}
 			});
+		};
+
+
+		/**
+		 * transferOutConfirm 外转确认
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
+		transfer.transferOutConfirm = function(confirmButton,id,status){
+			$.ajax({
+				url: KingServices.build_url("transfer","findPager"),
+				dataType: 'id='+id+"&confirmButton="+confirmButton+"&status="+status,
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					var type="1",
+						divId="Transfer-Out";
+						transfer.getSearchParam(divId,type);
+						transfer.findPager(divId,type,0);
+						transfer.listMainHead(0);
+				})
+			})
 		};
 
 
@@ -992,49 +1017,18 @@ define(function(require, exports) {
 	 * @return {[type]}                [description]
 	 */
 	transfer.updateTransferIn=function(id){
-	  	   var dialogObj = $( "#confirm-dialog-message" );
-				dialogObj.removeClass('hide').dialog({
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-					title_html: true,
-					draggable:false,
-					buttons: [ 
-						{
-							text: "否",
-							"class" : "btn btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
-							}
-						},
-						{
-							text: "是",
-							"class" : "btn btn-primary btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
-								$.ajax({
-									url:KingServices.build_url("transfer","saveLine"),
-									data:"transferId="+id+"",
-									success:function(data){
-										var result = showDialog(data);
-										if(result){  	
-										   var touristGroupId = data.touristGroupId;
-										   //跳转游客小组新增页面
-										   KingServices.updateTransfer(touristGroupId);
-										   //外转确认后数据刷新--模拟Click
-										   transfer.$divIdInObj.find(".T-transferIn-search").off("click").on("click",{divId:"Transfer-In",type:"2"},transfer.getListPage);
-	    	                               transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
-								
-										}
-									}
-								});
-								
-							}
-						}
-					],
-					open:function(event,ui){
-						$(this).find("p").text("是否确认外转？");
-					}
-				});
+
+		$.ajax({
+			url:KingServices.build_url("transfer","saveLine"),
+			data:"transferId="+id+"",
+		})
+		.done(function(data) {
+			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+				var touristGroupId = data.touristGroupId;
+			    //跳转游客小组新增页面
+				KingServices.updateTransfer(touristGroupId);
+			})
+		})
 
 	};
 

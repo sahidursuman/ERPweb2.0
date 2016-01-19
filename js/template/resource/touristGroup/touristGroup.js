@@ -1994,7 +1994,15 @@ define(function(require, exports) {
         //判断购买保险状态
         var buyInsuranceS = 1;
         var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
-            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]');
+            $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
+            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
+            $touristSendObj = $arrangeForm.find('input[name=touristSend]'),
+            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]'),
+            //获取游客名单住宿、星级、自费、备注
+            $visiForm = $obj.find(".T-touristGroupMainFormMember"),
+            expectLevel = touristGroup.getVal($visiForm, "level"),
+            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
+
         if ($insuranceStatus.is(":checked") == true) {
             buyInsuranceS = 1;
         } else {
@@ -2042,26 +2050,15 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isReturn = false;
+        var isTransit=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
                 remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
-
-            if (count == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
-                isReturn = true;
+            if (type == 3 && count=="" || price=="") {
+                isTransit = true;
             }
-            if (type == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
-                isReturn = true;
-            }
-            if (price == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
-                isReturn = true;
-            };
-
             if ((type != "") || (count != "") || (price != "")) {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
@@ -2084,8 +2081,9 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
-        if (isReturn) {
-            return;
+        if (isTransit && $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0) {
+             showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
+             return;
         };
         //删除费用项
         if (typeFlag == 2) {
@@ -2099,17 +2097,6 @@ define(function(require, exports) {
                 touristGroupFeeJsonDel.push(touristGroupFeeJson);
             })
         };
-
-        //获取游客名单住宿、星级、自费、备注
-        var $visiForm = $obj.find(".T-touristGroupMainFormMember"),
-            expectLevel = touristGroup.getVal($visiForm, "level"),
-            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
-
-
-        //接团、小车、送团
-        var $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
-            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
-            $touristSendObj = $arrangeForm.find('input[name=touristSend]');
 
         if ($receptionObj.is(':checked') == true) {
             var isNeedArriveService = 1;
@@ -2147,9 +2134,6 @@ define(function(require, exports) {
                 touristGroupMemberJsonDel.push(touristGroupMemberJson);
             })
         }
-
-      
-
         //接送JSON包
         var  reciveTrip  = {
             param : {},
@@ -2217,9 +2201,12 @@ define(function(require, exports) {
         } else {
             //提交数据
             var innerStatus = false;
-            if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
+            /*if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
                 innerStatus = true;
-            }
+            }*/
+            if($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0){
+                innerStatus = true;
+            };
             url = touristGroup.url("saveTouristGroup", "add");
             data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip;
             var tabId = addTabId;
