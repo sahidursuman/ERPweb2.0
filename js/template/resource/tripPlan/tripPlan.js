@@ -491,6 +491,19 @@ define(function(require, exports) {
 			tripPlan.noticeTourists($this,id,busData);
 		})
 		tripPlan.taskTypeOperation($tab);
+
+
+		var noticeTourists = $tab.find('.T-noticeTourists')
+		noticeTourists.each(function(i) {
+			var $this = noticeTourists.eq(i),
+				noticeJson = $this.data('entity-touristgroup');
+			if (!!noticeJson && typeof noticeJson == 'string') {
+				noticeJson = JSON.parse(noticeJson);
+			}
+			if (noticeJson.length > 0) {
+				$this.text('已通知');
+			}
+		})
 		
 		// 激活第一个菜单
 		if (!!target) {
@@ -746,7 +759,7 @@ define(function(require, exports) {
 
 							//提交操作
 							$container.find('.T-saveGroup').off('click.submit').on('click.submit', function() {
-								var $checkbox = $container.find('.T-tourist-check:checked'),touristGroupJson = [],
+								var $checkbox = $container.find('.T-tourist-check:checked'),touristGroupJson = [], hasJson = 0,
 									taskType = $container.data('tasktype');
 								$checkbox.each(function(i) {
 									var $this = $checkbox.eq(i),
@@ -764,9 +777,17 @@ define(function(require, exports) {
 										}
 									}
 									touristGroupJson.push(json);
+									if (touristGroupJson.length > 0) {
+										hasJson = 1;
+									}
 									touristGroupJson = JSON.stringify(touristGroupJson);
 								})
 								$that.data('entity-touristgroup',touristGroupJson);
+								if (!!hasJson) {
+									$that.text('已设置');
+								}else{
+									$that.text('点击设置');
+								}
 								layer.close(noticeTouristsLayer);
 							})
 					    }
@@ -3038,7 +3059,7 @@ define(function(require, exports) {
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
-					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristGroup');
+					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup');
 
 					var busJson = {
 						id : tripPlan.getVal(bus.eq(i), "id"),
