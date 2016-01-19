@@ -60,12 +60,13 @@
 									<th class="th-border" width="20%">费用项</th>
 									<th class="th-border">数量</th>
 									<th class="th-border">单价</th>
-									<th class="th-border">金额</th>   
+									<th class="th-border">金额</th>
 									<th class="th-border">说明</th>
 									<th class="th-border" width="80px">操作</th>
 								</tr>
 							</thead>
 							<tbody class="T-innerOutEditFeeTbody"> 
+							    {{if touristGroup.transferFeeStatus==0}}
 									<!--初始化游客小组费用start--> 
 									{{each touristGroupFeeList as transferList}}         
 										<tr  data-entity-id="{{transferList.id}}">
@@ -92,7 +93,7 @@
 										</tr>
 									{{/each}}
 									<!--游客小组费end-->
-									
+								   {{else}}
 									<!--转客其他费用start-->
 									{{each innerTransferFeeList as innerFee}}
 									<tr data-entity-id="{{innerFee.id}}">
@@ -119,13 +120,14 @@
 									</tr>
 									{{/each}}
 									<!--转客其他费用end-->
+							    {{/if}}
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form> 
+	</form>
 
   {{if subsection==0}}
 	<!--收客信息 start-->

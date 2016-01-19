@@ -13,6 +13,7 @@
 						<input name="remark" value="{{if touristGroup != null}}{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transRemark}}{{/if}}{{/if}}" class="col-sm-12  no-padding-right" type="text" maxlength="500">  
 					</div>
 				</div>
+				---------------{{cashFlag}}-------------------------
 				<input type="hidden" name="transferFeeStatus" value="{{touristGroup.transferFeeStatus}}">
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
@@ -40,10 +41,7 @@
 								<input type="hidden" name="isCurrent" value="{{cashFlag}}">
 						</label>
                         <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
-						
-
 				</div>
-
 				<div class="form-group">
 					<div class="col-sm-2"></div>
 					<div class="col-sm-8">

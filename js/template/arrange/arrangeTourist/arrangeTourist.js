@@ -928,6 +928,8 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if (result) {
                         var data = {
+                            cashFlag : data.cashFlag,
+                            subsection : data.subsection,
                             touristGroup : JSON.parse(data.touristGroup),
                             touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
                             innerTransferFeeList : JSON.parse(data.innerTransferFeeList),
@@ -959,7 +961,9 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var data = {
+                        var data = {  
+                             cashFlag : data.cashFlag,
+                             subsection : data.subsection,
                              touristGroup : JSON.parse(data.touristGroup),
                              touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
                              getPayType : getFeeItemPayTypeOptions.payType
