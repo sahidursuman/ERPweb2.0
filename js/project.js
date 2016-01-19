@@ -1708,7 +1708,15 @@ Tools.filterUnPoint = function(obj){
 	return $obj;
 };
 
-$('body').on('keydown.format-float.api', 'input.F-float', function(event) {
+$('body').on('focusin.format-float.api', 'input.F-float', function(event) {
+	$(this).data('old-value-format-float.api', this.value);
+})
+.on('focusout.format-float.api', 'input.F-float', function(event) {
+	if ($(this).data('old-value-format-float.api') !== this.value) {
+		$(this).trigger('change');
+	}
+})
+.on('keydown.format-float.api', 'input.F-float', function(event) {
 	Tools.input_key = event.which;
 })
 .on('input.format-float.api', 'input.F-float', function(event) {
