@@ -618,6 +618,8 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
+                        console.log("Client.clearDataArray:");
+                        console.log(Client.clearDataArray);
                         var bankId = $tab.find('input[name=card-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
