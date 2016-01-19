@@ -27,7 +27,6 @@ define(function(require, exports) {
         autocompleteDate: {},
         typeFlag: 0,
         visitorId: 0,
-        days: 0,
         chooseQuoteProlayer: "",
         args: {
             pageNo: 0,
@@ -337,14 +336,12 @@ define(function(require, exports) {
         //精度控制
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $price = $groupInfoForm.find('.T-price'),
             $count = $groupInfoForm.find('.T-count'),
             $adultCount = $groupInfoForm.find('.T-adultCount'),
             $childCount = $groupInfoForm.find('.T-childCount');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
         Tools.inputCtrolFloat($adultCount);
         Tools.inputCtrolFloat($childCount);
 
@@ -399,14 +396,12 @@ define(function(require, exports) {
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $price = $groupInfoForm.find('.T-price'),
             $count = $groupInfoForm.find('.T-count'),
             $adultCount = $groupInfoForm.find('.T-adultCount'),
             $childCount = $groupInfoForm.find('.T-childCount');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
         Tools.inputCtrolFloat($adultCount);
         Tools.inputCtrolFloat($childCount);
 
@@ -599,8 +594,7 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
-            $row.find('.T-endTime').val(Tools.addDay(startTime, touristGroup.days - 1));
-
+                $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-startTime').data('days') - 1));
         });
 
         //客户来源
@@ -726,7 +720,6 @@ define(function(require, exports) {
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
                 $tab = $('#tab-resource_touristGroup-add-content'),
                 lineProductId = $tr.data('id');
-            touristGroup.days = $tr.data('days');
 
             if (lineProductId == null || lineProductId == '' || lineProductId == undefined) {
                 showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
@@ -739,6 +732,7 @@ define(function(require, exports) {
 
             $tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
+            $tab.find('.T-startTime').data('days',$tr.data('days'));
 
             var $form = $tab.find('.T-touristGroupMainForm');
             if (!!$form.find('.T-quoteNumber').val()) {
@@ -1073,7 +1067,7 @@ define(function(require, exports) {
                 $addTabId.find('.T-lineProductId').val(chooseQuotObj.lineProducId);
                 $addTabId.find('.T-lineProductIdName').val(chooseQuotObj.lineProductName);
                 $addTabId.find('.T-startTime').val(chooseQuotObj.startTime.split(' ')[0]);
-                $addTabId.find('.T-endTime').val(touristGroup.getEndTime(chooseQuotObj.days, chooseQuotObj.startTime.split(' ')[0]));
+                $addTabId.find('.T-endTime').val(touristGroup.getEndTime(chooseQuotObj.days-1, chooseQuotObj.startTime.split(' ')[0]));
                 $addTabId.find('.T-fromPartnerAgencyName').val(chooseQuotObj.fromPartnerAgencyName);
                 $addTabId.find('.T-fromPartnerAgencyId').val(chooseQuotObj.fromPartnerAgencyId);
                 $addTabId.find('.T-partnerAgencyNameList').val(chooseQuotObj.partnerAgencyContactName);
@@ -2050,7 +2044,7 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isTransit=false;
+        var isTransit=false,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
@@ -2059,6 +2053,11 @@ define(function(require, exports) {
             if (type == 3 && count=="" || price=="") {
                 isTransit = true;
             }
+
+            if (type!=3 && count=="" || price=="") {
+                isReturn = true;
+            };
+
             if ((type != "") || (count != "") || (price != "")) {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
@@ -2085,6 +2084,11 @@ define(function(require, exports) {
              showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
              return;
         };
+         if (isReturn) {
+             showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
+             return;
+        };
+
         //删除费用项
         if (typeFlag == 2) {
             touristGroupFeeJsonDel = [];
