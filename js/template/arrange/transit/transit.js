@@ -1161,7 +1161,7 @@ define(function(require, exports) {
 			var busCompanyId = $tr.find("input[name=busCompanyId]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany','getDrivers'),
-				data:"busId="+busLicenseNumberId+"&busCompanyId="+busCompanyId+"",
+				data:"busCompanyId="+busCompanyId+"",
 				showLoading:false,
 				type:"POST",
 				success:function(data){
