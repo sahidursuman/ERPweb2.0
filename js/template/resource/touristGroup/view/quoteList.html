@@ -33,14 +33,12 @@
 					<td>{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}</td>
 
 					<td>{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.type}}{{/if}}</td>
-					<td>
-						{{if lineProduct.lineProduct != null}}    
-							{{if lineProduct.lineProduct.customerType==0}}
-								  散客
-								{{else}}             
-								  团体
-							{{/if}}  
-						{{/if}}
+					<td>  
+						{{if lineProduct.customerType==0}}
+							  散客
+							{{else}}             
+							  团体
+						{{/if}}  
 					</td>
 
 					<td><span class="F-float F-count">{{lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{lineProduct.childCount}}</span> 小</td>
