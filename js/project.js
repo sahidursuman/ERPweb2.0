@@ -629,7 +629,11 @@ function viewAllMsg(){
 }
 
 function trim(str){
-	return str.replace(/(^\s*)|(\s*$)/g, "");
+	if (!!str) {
+		return str.replace(/(^\s*)|(\s*$)/g, "");
+	} else {
+		return str;
+	}
 }
 
 /**
