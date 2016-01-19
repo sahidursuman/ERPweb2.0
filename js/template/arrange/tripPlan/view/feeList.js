@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":26,"md5":"e2f6f2e38749e64a61383a74a42100f6"}*/
+/*TMODJS:{"debug":true,"version":28,"md5":"e2f6f2e38749e64a61383a74a42100f6"}*/
 define(function(require) {
     return require("../../../template")("arrange/tripPlan/view/feeList", function($data, $filename) {
         try {

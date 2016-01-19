@@ -231,7 +231,7 @@
                                         <input type="hidden" name="insuranceItemId" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.id}}{{/if}}">
                                     </td>
                                     <td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price F-float F-money" maxlength="8"/></td>
-                                    <td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12 F-float F-count" maxlength="8"/></td>
+                                    <td><input type="text" name="memberCount" value="{{if !!insurance.memberCount}}{{insurance.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" class="col-sm-12 F-float F-count" maxlength="8"/></td>
                                     <td><input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12 F-float F-money" maxlength="9"/></td>
                                     <td><input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price F-float F-money"  maxlength="9"/></td>
                                     </td>
@@ -290,7 +290,7 @@
                                 {{each guideList as guide}}
                                 {{if guide != "[]" || guide != null}}
                                     <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}" >
-                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
+                                        <td><input type="radio" name='isAccountGuide' {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} checked="checked" {{/if}} {{if basicInfo.status != 0}} disabled="disabled" {{/if}}></td>
                                         <td><input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td><input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                         <td>{{#guide.taskType | getTaskSelect}}</td>
@@ -305,8 +305,8 @@
                                         </td>
                                         <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                         <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td>
-                                        <td><input type="text" name="price" {{if guide.isAccountGuide == 1}} value="{{guide.price}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
-                                        <td><input type="text" name="manageFee"  {{if guide.isAccountGuide == 1}} value="{{guide.manageFee}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
+                                        <td><input type="text" name="price" {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} value="{{guide.price}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
+                                        <td><input type="text" name="manageFee"  {{if guide.isAccountGuide == 1 || basicInfo.isArranged == 0}} value="{{guide.manageFee}}" class="col-sm-12 price F-float F-money" {{else}} class="col-sm-12 price hidden" {{/if}} maxlength="9"/></td>
                                         <td><input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500"/></td>
                                         <td>
                                             {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
@@ -912,7 +912,7 @@
                                         <td><input type="hidden" name="selfPayItemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
                                         <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" /></td>
                                         <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" /></td>
-                                        <td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.marketPrice}}" style="width: 60px;" /></td>
+                                        <td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{if !!selfPay.marketPrice}}{{selfPay.marketPrice}}{{else}}{{selfPay.quotePrice}}{{/if}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" /></td>
                                         <td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
