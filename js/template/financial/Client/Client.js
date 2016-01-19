@@ -287,7 +287,7 @@ define(function(require, exports) {
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
-        $tab.find('.T-list').on('click', '.T-action', function(event){
+        $tab.find('.T-checkList').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-viewGroup')){
