@@ -146,10 +146,22 @@ define(function(require, exports) {
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
 					transit.$tab.off('click.action').on('click.action', '.T-action', function() {
-						var $this = $(this),id = $this.closest('tr').data('entity-id');
+						var $this = $(this),id = $this.closest('tr').data('entity-id'), $parents = $this.closest('tr');
 						if ($this.hasClass('T-send')) {
 							//通知
-							transit.sendTransit(id);
+							var status = {
+								receiveBusStatus: $parents.find('.receiveBusStatus').data('status'),
+								receiveHotelStatus: $parents.find('.receiveHotelStatus').data('status'),
+								receiveRestaurantStatus: $parents.find('.receiveRestaurantStatus').data('status'),
+								receiveTicketStatus: $parents.find('.receiveTicketStatus').data('status'),
+								receiveOtherStatus: $parents.find('.receiveOtherStatus').data('status'),
+								sendBusStatus: $parents.find('.sendBusStatus').data('status'),
+								sendHotelStatus: $parents.find('.sendHotelStatus').data('status'),
+								sendRestaurantStatus: $parents.find('.sendRestaurantStatus').data('status'),
+								sendTicketStatus: $parents.find('.sendTicketStatus').data('status'),
+								sendOtherStatus: $parents.find('.sendOtherStatus').data('status')
+							}
+							transit.sendTransit(id, status);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
 							transit.pageNo = page;
@@ -230,14 +242,14 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}    [description]
 	 */
-	transit.sendTransit = function(id) {
+	transit.sendTransit = function(id, status) {
 		var noticeLayer = layer.open({
 			type: 1,
 			title: '通知设置',
 			skin: 'layui-layer-rim', //加上边框
 			area: '630px', //宽高
 			zIndex:1028,
-			content: noticeTemplate(),
+			content: noticeTemplate(status),
 			success:function(){
 				var $container = $('.T-transitNotice'),
 					$checkbox = $container.find('.T-checked'),
@@ -871,6 +883,50 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
 	transit.bindBusCompanyChoose = function($tab){
+		function clearData($tr, start) {
+			switch(start) {
+				case 'brand':
+					$tr.find('input[name="busbrand"]').val('');
+				case 'licenseNumber':
+					$tr.find('input[name="busLicenseNumber"]').val('');
+					$tr.find('input[name="busLicenseNumberId"]').val('');
+				case 'CompanyName':
+					$tr.find('input[name="busCompanyName"]').val('');
+					$tr.find('input[name="busCompanyId"]').val('');
+					$tr.find('input[name="mobileNumber"]').val('');
+				case 'driverName':
+					$tr.find('input[name="driverName"]').val('');
+					$tr.find('input[name="driverId"]').val('');
+					$tr.find('input[name="driverMobileNumber"]').val('');
+				default: break;
+			}
+		}
+
+		function checkBusCompay($tr, start) {
+			setTimeout(function() {
+				var searchJson = {
+					seatCount:$tr.find('input[name=seatCount]').val(),
+					brand: $tr.find('input[name=busbrand]').val(),
+					busId: $tr.find('input[name=busLicenseNumberId]').val(),
+					busCompanyId:$tr.find('input[name=busCompanyId]').val()
+				};
+				$.ajax({
+					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					showLoading:false,
+					type: 'post',
+					data: searchJson,
+				})
+				.done(function(data) {
+					if(showDialog(data)){
+						data.busCompanyList = JSON.parse(data.busCompanyList);
+						if (!data.busCompanyList || !data.busCompanyList.length) {
+							clearData($tr, start);
+						}
+					}
+				});
+			}, 10);
+		}
+
 		//选择车座位数
 		var chooseSeatCount = $tab.find(".T-chooseSeatCount");
 		chooseSeatCount.autocomplete({
@@ -879,30 +935,15 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					parents.find("input[name=busbrand]").val("");
-					parents.find("input[name=busLicenseNumber]").val("");
-					parents.find("input[name=busLicenseNumberId]").val("");
-					parents.find("input[name=busCompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					clearData(parents, 'brand');
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
-				parents.find("input[name=busbrand]").val("");
-				parents.find("input[name=busLicenseNumber]").val("");
-				parents.find("input[name=busLicenseNumberId]").val("");
-				parents.find("input[name=busCompanyName]").val("");
-				parents.find("input[name=busCompanyId]").val("");
-				parents.find("input[name=driverName]").val("");
-				parents.find("input[name=driverId]").val("");
-				parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'brand');
 			}
 		}).unbind("click").click(function(){
-			var obj = this;
-			var $tr = $(this).closest('tr');
+			var obj = this, $tr = $(this).closest('tr');
 			$.ajax({
 				url: KingServices.build_url('bookingOrder','getSeatCountList'),
 				showLoading: false,
@@ -941,24 +982,12 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					parents.find("input[name=busLicenseNumber]").val("");
-					parents.find("input[name=busLicenseNumberId]").val("");
-					parents.find("input[name=busCompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					clearData(parents, 'LicenseNumber');
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=busLicenseNumber]").val("");
-					parents.find("input[name=busLicenseNumberId]").val("");
-					parents.find("input[name=busCompanyName]").val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=driverName]").val("");
-					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -1003,14 +1032,13 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					parents.find("input[name=busLicenseNumberId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
+					clearData(parents, 'companyName');
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
-					parents.find("input[name=driverMobileNumber]").val("");
 					parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
+					checkBusCompay(parents, 'companyName');
 			}
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),
@@ -1051,17 +1079,41 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					parents.find("input[name=busCompanyId]").val("");
-					parents.find("input[name=busCompanyName]").val("");
+					clearData($that.closest('tr'), 'CompanyName');
 			
 				}
 			},
 			select :function(event, ui){
-				var $this = $(this),parents = $(this).closest('tr');
+				var $tr = $(this).blur().closest('tr');
+				checkBusCompay($tr, 'driverName');
+				$tr.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+				$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+				$.ajax({
+					url: KingServices.build_url('busCompany', 'findBusCompanyById'),
+					type: 'post',
+					dataType: 'json',
+					showLoading: false,
+					data: {
+						id: ui.item.id
+					},
+				})
+				.done(function(data) {
+					if (showDialog(data)) {
+						data.busCompany = JSON.parse(data.busCompany || false);
+
+						if (!!data.busCompany)
+							$tr.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
+						else {
+							$tr.find("input[name=mobileNumber]").val('');
+						}
+					}
+				});
+				
+				/*var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
 					parents.find("input[name=driverName]").val('');
 					parents.find("input[name=driverMobileNumber]").val('');
-					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+					parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');*/
 			}
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),
@@ -1121,7 +1173,7 @@ define(function(require, exports) {
 			var busCompanyId = $tr.find("input[name=busCompanyId]").val();
 			$.ajax({
 				url: KingServices.build_url('busCompany','getDrivers'),
-				data:"busId="+busLicenseNumberId+"&busCompanyId="+busCompanyId+"",
+				data:"busCompanyId="+busCompanyId+"",
 				showLoading:false,
 				type:"POST",
 				success:function(data){
