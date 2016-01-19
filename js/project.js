@@ -1180,6 +1180,14 @@ var _statusText = {
 		console.info('laypage was not loaded!');
 	}
 
+	// 重写autocomplete的resize方法
+	$.widget("ui.autocomplete", $.ui.autocomplete, {
+	    _resizeMenu: function() {
+	        var a = this.menu.element;
+            a.css('min-width', (Math.max(a.width("").outerWidth(), this.element.outerWidth()) - 8) + 'px')
+	    }
+	});
+
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('body').append('<div id="desc-tooltip-containter2"></div>');
 	$('#desc-tooltip-containter, #desc-tooltip-containter2').hover(function() {
