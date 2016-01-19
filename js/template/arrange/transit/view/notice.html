@@ -1,9 +1,9 @@
 <div class="T-transitNotice col-xs-12 globalAdd">
 	<div class="form-group mar-t-20">
-		<label class="pos-rel mar-l-10"><input type="checkbox" name="tourist" class="ace T-checked"><span class="lbl">游客</span></label>
-		<label class="pos-rel mar-l-10"><input type="checkbox" name="bus" class="ace T-checked"><span class="lbl">车</span></label>
-		<label class="pos-rel mar-l-10"><input type="checkbox" name="hotel" class="ace T-checked"><span class="lbl">房</span></label>
-		<label class="pos-rel mar-l-10"><input type="checkbox" name="restaurant" class="ace T-checked"><span class="lbl">餐</span></label>
+		<label class="pos-rel mar-l-10"><input type="checkbox" name="tourist" class="ace T-checked" checked><span class="lbl">游客</span></label>
+		<label class="pos-rel mar-l-10"><input type="checkbox" name="bus" class="ace T-checked" {{if receiveBusStatus == 3 || sendBusStatus == 3}}checked{{/if}}><span class="lbl">车</span></label>
+		<label class="pos-rel mar-l-10"><input type="checkbox" name="hotel" class="ace T-checked" {{if receiveHotelStatus == 3 || sendHotelStatus == 3}}checked{{/if}}><span class="lbl">房</span></label>
+		<label class="pos-rel mar-l-10"><input type="checkbox" name="restaurant" class="ace T-checked" {{if receiveRestaurantStatus == 3 || sendRestaurantStatus == 3}}checked{{/if}}><span class="lbl">餐</span></label>
 		<!-- <label class="pos-rel mar-l-10"><input type="checkbox" name="ticket" class="ace T-checked"><span class="lbl">票</span></label>
 		<label class="pos-rel mar-l-10"><input type="checkbox" name="other" class="ace T-checked"><span class="lbl">其他</span></label> -->
 	</div>

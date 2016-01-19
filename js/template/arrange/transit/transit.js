@@ -146,10 +146,22 @@ define(function(require, exports) {
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
 					transit.$tab.off('click.action').on('click.action', '.T-action', function() {
-						var $this = $(this),id = $this.closest('tr').data('entity-id');
+						var $this = $(this),id = $this.closest('tr').data('entity-id'), $parents = $this.closest('tr');
 						if ($this.hasClass('T-send')) {
 							//通知
-							transit.sendTransit(id);
+							var status = {
+								receiveBusStatus: $parents.find('.receiveBusStatus').data('status'),
+								receiveHotelStatus: $parents.find('.receiveHotelStatus').data('status'),
+								receiveRestaurantStatus: $parents.find('.receiveRestaurantStatus').data('status'),
+								receiveTicketStatus: $parents.find('.receiveTicketStatus').data('status'),
+								receiveOtherStatus: $parents.find('.receiveOtherStatus').data('status'),
+								sendBusStatus: $parents.find('.sendBusStatus').data('status'),
+								sendHotelStatus: $parents.find('.sendHotelStatus').data('status'),
+								sendRestaurantStatus: $parents.find('.sendRestaurantStatus').data('status'),
+								sendTicketStatus: $parents.find('.sendTicketStatus').data('status'),
+								sendOtherStatus: $parents.find('.sendOtherStatus').data('status')
+							}
+							transit.sendTransit(id, status);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
 							transit.pageNo = page;
@@ -230,14 +242,14 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}    [description]
 	 */
-	transit.sendTransit = function(id) {
+	transit.sendTransit = function(id, status) {
 		var noticeLayer = layer.open({
 			type: 1,
 			title: '通知设置',
 			skin: 'layui-layer-rim', //加上边框
 			area: '630px', //宽高
 			zIndex:1028,
-			content: noticeTemplate(),
+			content: noticeTemplate(status),
 			success:function(){
 				var $container = $('.T-transitNotice'),
 					$checkbox = $container.find('.T-checked'),

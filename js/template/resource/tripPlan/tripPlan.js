@@ -91,7 +91,7 @@ define(function(require, exports) {
 
 		tripPlan.$tab.find('.T-tripPlanList').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $this = $(this), id = $this.closest('tr').data('entity-id'),
+			var $this = $(this), id = $this.closest('tr').data('entity-id'), $parents = $this.closest('tr')
 				$billStatus = $this.attr('billStatus');
 			if ($this.hasClass('T-sendOrder')) {
 				//下单
@@ -99,7 +99,15 @@ define(function(require, exports) {
 				tripPlan.singleClickSendOrder($quoteId,id);
 			}else if ($this.hasClass('T-send')){
 				//通知
-				tripPlan.sendTripPlanArrange(id);
+				var status = {
+					guideStatus: $parents.find('.guideStatus').data('status'),
+					busStatus: $parents.find('.busStatus').data('status'),
+					restaurantStatus: $parents.find('.restaurantStatus').data('status'),
+					hotelStatus: $parents.find('.hotelStatus').data('status'),
+					shopStatus: $parents.find('.shopStatus').data('status'),
+					selfPayStatus: $parents.find('.selfPayStatus').data('status')
+				}
+				tripPlan.sendTripPlanArrange(id, status);
 			}else if ($this.hasClass('T-view')) {
 				//查看
 				tripPlan.viewTripPlan(id);
@@ -270,21 +278,21 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}     [description]
 	 */
-	tripPlan.sendTripPlanArrange = function(id) {
+	tripPlan.sendTripPlanArrange = function(id, status) {
 		var noticeLayer = layer.open({
 			type: 1,
 			title: '通知设置',
 			skin: 'layui-layer-rim', //加上边框
 			area: '630px', //宽高
 			zIndex:1028,
-			content: noticeTemplate(),
+			content: noticeTemplate(status),
 			success:function(){
 				var $container = $('.T-tripPlanNotice'),
 					$checkbox = $container.find('.T-checked'),
 					$touristDiv = $container.find(".T-touristCheckedShow");
 				$container.find('[name=smsSign]').val(tripPlan.$tab.find('[name=travelAgencyName]').val());
 				
-				$container.find("[name=tourist]").click(function(){
+				/*$container.find("[name=tourist]").click(function(){
 					if($(this).is(":checked")){
 						$touristDiv.removeClass('hidden');
 					} else{
@@ -292,7 +300,7 @@ define(function(require, exports) {
 						$touristDiv.find('[name=rightNow]').trigger('click');
 						$touristDiv.find('[name=smsSign]').val('');
 					}
-				});
+				});*/
 				tripPlan.dateTimePicker($container);
 				var $timeCheck = $touristDiv.find('.T-checked')
 				$timeCheck.click(function() {

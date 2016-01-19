@@ -43,23 +43,23 @@
 			</td>
 			<td>{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
 			<!-- 导 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td> 
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td> 
 			<!-- 车 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{tripPlan.busStatus | getArrangeIcon }}"></i></td>
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus" class="busStatus" data-status="{{tripPlan.busStatus}}"><i class="ace-icon fa {{tripPlan.busStatus | getArrangeIcon }}"></i></td>
 			<!-- 险 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{tripPlan.insuranceStatus | getArrangeIcon }}"></i></td>
 			<!-- 餐 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant"><i class="ace-icon fa {{tripPlan.restaurantStatus | getArrangeIcon }}"></i></td>
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant" class="restaurantStatus" data-status="{{tripPlan.restaurantStatus}}"><i class="ace-icon fa {{tripPlan.restaurantStatus | getArrangeIcon }}"></i></td>
 			<!-- 房 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel"><i class="ace-icon fa {{tripPlan.hotelStatus | getArrangeIcon }}"></i></td>
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel" class="hotelStatus" data-status="{{tripPlan.hotelStatus}}"><i class="ace-icon fa {{tripPlan.hotelStatus | getArrangeIcon }}"></i></td>
 			<!-- 景 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic"><i class="ace-icon fa {{tripPlan.scenicStatus | getArrangeIcon }}"></i></td>
 			<!-- 票 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket"><i class="ace-icon fa {{tripPlan.ticketStatus | getArrangeIcon }}"></i></td>
 			<!-- 购 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{tripPlan.shopStatus | getArrangeIcon }}"></i></td>
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop" class="shopStatus" data-status="{{tripPlan.shopStatus}}"><i class="ace-icon fa {{tripPlan.shopStatus | getArrangeIcon }}"></i></td>
 			<!-- 娱 -->
-			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
+			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay" class="selfPayStatus" data-status="{{tripPlan.selfPayStatus}}"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
 			<!-- 它 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
 			<td>{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</td>
