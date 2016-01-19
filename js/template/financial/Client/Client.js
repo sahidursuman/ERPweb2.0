@@ -221,7 +221,7 @@ define(function(require, exports) {
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
-        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+        $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change",true);
             $tab.data('isEdited', true);
@@ -283,7 +283,7 @@ define(function(require, exports) {
         });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
