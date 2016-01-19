@@ -912,7 +912,7 @@
                                         <td><input type="hidden" name="selfPayItemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" /></td>
                                         <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" /></td>
                                         <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" /></td>
-                                        <td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.marketPrice}}" style="width: 60px;" /></td>
+                                        <td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{if !!selfPay.marketPrice}}{{selfPay.marketPrice}}{{else}}{{selfPay.quotePrice}}{{/if}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" /></td>
                                         <td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
