@@ -100,7 +100,7 @@
                     </a>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
-                <td rowspan="{{rs.rowLen}}">{{rs.createTime}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
                 <td rowspan="{{rs.rowLen}}" class="T-contractMoney F-float F-money">{{rs.contractMoney}}</td>
                 <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
                     <!-- 若有中转结算价 -->
@@ -110,18 +110,34 @@
                             <span class="F-float F-count">{{tf.count}}</span> =
                             <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
                         {{/each}}
-                    {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
+                    {{else}}
                     <!-- 若无中转结算价 -->
-                        {{each rs.detailList.otherFee.otherFeeList as of}}
-                            {{of.name}}：
-                            <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                            <span class="F-float F-count">{{of.count}}</span>=
-                            <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                        {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
+                        <!-- 中转，otherFee中多条数据 -->
+                            {{each rs.detailList.otherFee as temp index}}
+                                {{if index == 0}}
+                                    {{each temp.otherFeeList as of}}
+                                        {{of.name}}：
+                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
+                                        <span class="F-float F-count">{{of.count}}</span>=
+                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                    {{/each}}
+                                {{/if}}
                             {{/each}}
-                    {{else}}<!-- 若无费用明细 -->-
+                        {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
+                        <!-- 非中转，otherFee中单条数据 -->
+                            {{each rs.detailList.otherFee.otherFeeList as of}}
+                                {{of.name}}：
+                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
+                                <span class="F-float F-count">{{of.count}}</span>=
+                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                            {{/each}}
+                        {{else}}<!-- 若无费用明细 -->-
+                        {{/if}}
                     {{/if}}
                 </td>
-                <td rowspan="{{rs.rowLen}}"><a class="cursor T-action T-receive">
+                <td rowspan="{{rs.rowLen}}">
+                    <a class="cursor T-action T-receive">
                         社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>，
                         导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span>
                     </a>
@@ -130,25 +146,24 @@
                 <!-- 若有中转结算价 -->
                     <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.transitFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                     <td class="T-settlementMoney F-float F-money">{{rs.detailList.transitFee.settlementMoney}}</td>
-                {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
+                {{else}}
                 <!-- 若无中转结算价 -->
-                    {{if rs.status == 5}}
-                        {{each rs.detailList.otherFee.otherFeeList as of index}}
+                    {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
+                    <!-- 中转，otherFee中多条数据 -->
+                        {{each rs.detailList.otherFee as of index}}
                             {{if index == 0}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                                <span class="F-float F-count">{{of.count}}</span>=
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{of.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                                <td class="T-settlementMoney F-float F-money">{{of.settlementMoney}}</td>
                             {{/if}}
                         {{/each}}
-                    {{else}}
+                    {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
                         <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                         <td class="T-settlementMoney F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</td>
+                    {{else}}
+                    <!-- 若无费用明细 -->
+                        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                        <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                     {{/if}}
-                {{else}}
-                <!-- 若无费用明细 -->
-                    <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
-                    <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}" class="T-unReceivedMoney F-float F-money">{{rs.unReceivedMoney}}</td>
                 <td rowspan="{{rs.rowLen}}"><input type="text" class="col-sm-12 T-remark"  {{if rs.isConfirmAccount}} disabled="disabled"{{/if}} value="{{rs.checkRemark}}"></td>
@@ -165,42 +180,40 @@
             </tr>
             {{if rs.detailList.transitFee.transitFeeList.length > 0}}
             <!-- 若有中转结算价 -->
-                {{if rs.status == 5}}
+                {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
                     {{each rs.detailList.otherFee as temp}}
-                        <tr><td>{{each temp.touristGroup as rsl}}
-                                    {{rsl.name}}：
-                                    <span class="F-float F-money T-touristGroupId" data-id="{{rsl.touristGroupId}}">{{rsl.price}}</span> x
-                                    <span class="F-float F-count">{{rsl.count}}</span> =
-                                    <span class="F-float F-money">{{rsl.price * rsl.count}}</span><br>
+                        <tr><td>{{each temp.otherFeeList as of}}
+                                    {{of.name}}：
+                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                                    <span class="F-float F-count">{{of.count}}</span> =
+                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
                                 {{/each}}
                             </td>
                             <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                             <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
                         </tr>
                     {{/each}}
-                {{else}}
-                    {{if rs.detailList.otherFee.otherFeeList.length > 0}}
-                        <tr><td>{{each rs.detailList.otherFee.otherFeeList as of}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                <span class="F-float F-count">{{of.count}}</span> =
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                {{/each}}
-                            </td>
-                            <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
-                            <td class="T-settlementMoney F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</td>
-                        </tr>
-                    {{/if}}
+                {{else rs.detailList.otherFee.otherFeeList.length > 0}}
+                    <tr><td>{{each rs.detailList.otherFee.otherFeeList as of}}
+                            {{of.name}}：
+                            <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                            <span class="F-float F-count">{{of.count}}</span> =
+                            <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                            {{/each}}
+                        </td>
+                        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                        <td class="T-settlementMoney F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</td>
+                    </tr>
                 {{/if}}
             {{else}}
                 {{if rs.status == 5}}
-                    {{each rs.detailList.otherFee as temp}}
+                    {{each rs.detailList.otherFee as temp index}}
                         {{if index > 0}}
-                            <tr><td>{{each temp.touristGroup as rsl}}
-                                        {{rsl.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{rsl.touristGroupId}}">{{rsl.price}}</span> x
-                                        <span class="F-float F-count">{{rsl.count}}</span> =
-                                        <span class="F-float F-money">{{rsl.price * rsl.count}}</span><br>
+                            <tr><td>{{each temp.otherFeeList as of}}
+                                        {{of.name}}：
+                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                                        <span class="F-float F-count">{{of.count}}</span> =
+                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
                                     {{/each}}
                                 </td>
                                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
@@ -212,9 +225,7 @@
             {{/if}}
             {{/each}}
             {{else}}
-            <tr>
-                <td colspan="18">{{message}}</td>
-            </tr>
+                <tr><td colspan="18">{{message}}</td></tr>
             {{/if}}
         </tbody>
     </table>

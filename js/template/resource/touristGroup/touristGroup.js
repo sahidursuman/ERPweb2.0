@@ -876,22 +876,22 @@ define(function(require, exports) {
         var list = '';
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 0 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datepicker" /></div></div>'+
+                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datepicker" />'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 1 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datepicker" /></div></div>'+
+                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datepicker" />'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             list += '<div class="col-xs-10 hct-plan-ask" data-type="'+type+'">'+
-                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="text-align:left;">'+$.trim(title)+'要求：</div>'+
+                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求：</div>'+
                     '<div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent"></div>'+
                     '</div>';
         $tab.find('.T-action-require-list').append(list);
@@ -1974,7 +1974,7 @@ define(function(require, exports) {
             format: 'yyyy-mm-dd',
             language: 'zh-CN'
         });
-        $obj.find(".ShiftDatepicker").datetimepicker({
+        $obj.find(".datetimepicker").datetimepicker({
             autoclose: true,
             todayHighlight: true,
             format: 'L',
@@ -1994,7 +1994,15 @@ define(function(require, exports) {
         //判断购买保险状态
         var buyInsuranceS = 1;
         var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
-            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]');
+            $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
+            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
+            $touristSendObj = $arrangeForm.find('input[name=touristSend]'),
+            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]'),
+            //获取游客名单住宿、星级、自费、备注
+            $visiForm = $obj.find(".T-touristGroupMainFormMember"),
+            expectLevel = touristGroup.getVal($visiForm, "level"),
+            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
+
         if ($insuranceStatus.is(":checked") == true) {
             buyInsuranceS = 1;
         } else {
@@ -2042,26 +2050,15 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isReturn = false;
+        var isTransit=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
                 remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
-
-            if (count == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项数量");
-                isReturn = true;
+            if (type == 3 && count=="" || price=="") {
+                isTransit = true;
             }
-            if (type == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项说明");
-                isReturn = true;
-            }
-            if (price == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请输入费用项单价");
-                isReturn = true;
-            };
-
             if ((type != "") || (count != "") || (price != "")) {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
@@ -2084,8 +2081,9 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
-        if (isReturn) {
-            return;
+        if (isTransit && $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0) {
+             showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
+             return;
         };
         //删除费用项
         if (typeFlag == 2) {
@@ -2099,17 +2097,6 @@ define(function(require, exports) {
                 touristGroupFeeJsonDel.push(touristGroupFeeJson);
             })
         };
-
-        //获取游客名单住宿、星级、自费、备注
-        var $visiForm = $obj.find(".T-touristGroupMainFormMember"),
-            expectLevel = touristGroup.getVal($visiForm, "level"),
-            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
-
-
-        //接团、小车、送团
-        var $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
-            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
-            $touristSendObj = $arrangeForm.find('input[name=touristSend]');
 
         if ($receptionObj.is(':checked') == true) {
             var isNeedArriveService = 1;
@@ -2147,9 +2134,6 @@ define(function(require, exports) {
                 touristGroupMemberJsonDel.push(touristGroupMemberJson);
             })
         }
-
-      
-
         //接送JSON包
         var  reciveTrip  = {
             param : {},
@@ -2217,9 +2201,12 @@ define(function(require, exports) {
         } else {
             //提交数据
             var innerStatus = false;
-            if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
+            /*if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
                 innerStatus = true;
-            }
+            }*/
+            if($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0){
+                innerStatus = true;
+            };
             url = touristGroup.url("saveTouristGroup", "add");
             data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip;
             var tabId = addTabId;

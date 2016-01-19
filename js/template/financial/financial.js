@@ -645,6 +645,7 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
         if(isNaN($this.val())){ return false;}
 
         $tr.data("change",true);
+        $tab.data("isEdited",true);
         while($mainTr.children('td').length <= minTdLen){
             $mainTr = $mainTr.prev();
         }
@@ -666,10 +667,10 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
 
 //对账-保存json组装
 FinancialService.saveJson_checking = function($tab){
-    // if(!$tab.data('isEdited')){
-    //     showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-    //     return false;
-    // }
+    if(!$tab.data('isEdited')){
+        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        return false;
+    }
 
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
@@ -720,6 +721,6 @@ FinancialService.saveJson_checking = function($tab){
         showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
         return false;
     }
-     
+
     return saveJson;
 };
