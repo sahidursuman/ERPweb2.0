@@ -205,7 +205,7 @@ define(function(require,exports) {
 				    }
 				    //费用明细处理
 				    var resultList = data.innerTransferIncomeDetailsList;
-	                for(var i = 0; i < customerAccountList.length; i++){
+	                for(var i = 0; i < resultList.length; i++){
 	                    var detailList = JSON.parse(resultList[i].detailList),
 	                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
 	                    resultList[i].detailList = detailList;
