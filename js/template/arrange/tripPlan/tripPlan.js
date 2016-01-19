@@ -858,12 +858,12 @@ define(function(require, exports) {
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
-		arge.outTransferIncome = $tab.find('[name="transitNeedPayMoney"]').val();
+		arge.outTransferIncome = 0;//$tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
 		arge.buyInsurance = $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0;
-		arge.executeTimeType = $tab.find('.T-timed').is(":checked") ? 1 : 0;
+		arge.executeTimeType = 0; //$tab.find('.T-timed').is(":checked") ? 1 : 0;
 		if(arge.executeTimeType === 1){
 			arge.executeTime = $tab.find('[name="executeTime"]').val();
 		}
@@ -1037,7 +1037,7 @@ define(function(require, exports) {
 		args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
 		args.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
 		// 处理定时发送
-		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
+		args.executeTimeType = 0;//$tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
 			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
 			return;
