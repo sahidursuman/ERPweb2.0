@@ -282,6 +282,8 @@ define(function(require, exports) {
 				var $container = $('.T-tripPlanNotice'),
 					$checkbox = $container.find('.T-checked'),
 					$touristDiv = $container.find(".T-touristCheckedShow");
+				$container.find('[name=smsSign]').val(tripPlan.$tab.find('[name=travelAgencyName]').val());
+				
 				$container.find("[name=tourist]").click(function(){
 					if($(this).is(":checked")){
 						$touristDiv.removeClass('hidden');
