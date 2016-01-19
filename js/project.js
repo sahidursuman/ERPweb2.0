@@ -1103,7 +1103,7 @@ var _statusText = {
 		//获取或设置光标位置
 		cursorPosition : function( value ){
 			var oThat = $(this)[0], CaretPos = -1;
-			if(!!value && typeof value === "number"){
+			if(typeof value === "number"){
 				if(oThat.setSelectionRange){
 			        oThat.setSelectionRange(value,value);
 			    }
@@ -1179,6 +1179,14 @@ var _statusText = {
 	} else {
 		console.info('laypage was not loaded!');
 	}
+
+	// 重写autocomplete的resize方法
+	$.widget("ui.autocomplete", $.ui.autocomplete, {
+	    _resizeMenu: function() {
+	        var a = this.menu.element;
+            a.css('min-width', (Math.max(a.width("").outerWidth(), this.element.outerWidth()) - 8) + 'px')
+	    }
+	});
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('body').append('<div id="desc-tooltip-containter2"></div>');
@@ -1665,11 +1673,16 @@ Tools.filterCount = function(obj){
  */
 Tools.thousandPoint = function(num, length){
 	if(!!length){
-		mun = Tools.toFixed(num, length);
+		num = Tools.toFixed(num, length);
 	}
 	num = (num + '');
 	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
 		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
+	
+	if (isNaN(intNum) || (!!folatNum && isNaN(folatNum))) {
+		return num;
+	}
+
 	return intNum.replace(/(-)?\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
@@ -1687,17 +1700,67 @@ Tools.filterUnPoint = function(obj){
 			$(this).text(Tools.thousandPoint($(this).text()));
 		}
 	});
-	$('body').on('focusin', 'input.F-float', function(event) {
-		event.preventDefault();
-		this.value = $(this).val();
-	})
-	.on('focusout', 'input.F-float', function(event) {
-		event.preventDefault();
-		$(this).val(this.value);
-	});	
 	
 	return $obj;
 };
+
+$('body').on('keydown.format-float.api', 'input.F-float', function(event) {
+	Tools.input_key = event.which;
+})
+.on('input.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	var $that = $(this),
+		current = $that.cursorPosition(),
+		value = this.value,
+		newValue = Tools.thousandPoint(value);
+
+	switch(Tools.input_key) {
+		case 8:  // backspace
+			if (newValue[current] === ',') {
+				// 删除','时
+				
+				// 删除一个数字
+				value = value.substring(0, current - 1) + value.substr(current);
+				// 重新格式化
+				newValue = Tools.thousandPoint(value);
+				if (current <= 1) {
+					current --;
+				}
+			}
+			break;
+		case 46:  // delete
+			if (newValue[current] === ',') {
+				value = value.substring(0, current) + value.substr(current+1);
+				newValue = Tools.thousandPoint(value);
+				if (newValue.split(',').length) {	// 删除之后还有逗号，需要后移一位
+					current ++;
+				}
+			}
+			break;
+		default:   //处理其他输入
+			if (value.substr(0, current) != newValue.substr(0, current)) {  // 光标前的内容不同时
+				var speed = value.split(',').length - newValue.split(',').length;
+				if (speed < 0) {
+					current ++;
+				} else if (speed > 0) {
+					current --;
+				}
+			}
+		break;
+	}
+
+	this.value = newValue;
+	if (current > 0) {
+		$that.cursorPosition(current);
+	} else {
+		$that.cursorPosition(-1);
+	}
+})
+.on('change.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	$(this).val($(this).val());
+});
+
 /**
  * 把千分位转换为数字
  * @param  {string} data [description]
