@@ -231,7 +231,7 @@
                                         <input type="hidden" name="insuranceItemId" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.id}}{{/if}}">
                                     </td>
                                     <td><input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price F-float F-money" maxlength="8"/></td>
-                                    <td><input type="text" name="memberCount" value="{{insurance.memberCount}}" class="col-sm-12 F-float F-count" maxlength="8"/></td>
+                                    <td><input type="text" name="memberCount" value="{{if !!insurance.memberCount}}{{insurance.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" class="col-sm-12 F-float F-count" maxlength="8"/></td>
                                     <td><input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12 F-float F-money" maxlength="9"/></td>
                                     <td><input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price F-float F-money"  maxlength="9"/></td>
                                     </td>
