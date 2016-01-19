@@ -336,14 +336,12 @@ define(function(require, exports) {
         //精度控制
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $price = $groupInfoForm.find('.T-price'),
             $count = $groupInfoForm.find('.T-count'),
             $adultCount = $groupInfoForm.find('.T-adultCount'),
             $childCount = $groupInfoForm.find('.T-childCount');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
         Tools.inputCtrolFloat($adultCount);
         Tools.inputCtrolFloat($childCount);
 
@@ -398,14 +396,12 @@ define(function(require, exports) {
             $innerTransferForm = $updateTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
         var $payedMoney = $groupInfoForm.find('input[name=payedMoney]'),
             $currentNeedPayMoney = $groupInfoForm.find('input[name=currentNeedPayMoney]'),
-            $price = $groupInfoForm.find('.T-price'),
             $count = $groupInfoForm.find('.T-count'),
             $adultCount = $groupInfoForm.find('.T-adultCount'),
             $childCount = $groupInfoForm.find('.T-childCount');
         Tools.inputCtrolFloat($payedMoney);
         Tools.inputCtrolFloat($currentNeedPayMoney);
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
         Tools.inputCtrolFloat($adultCount);
         Tools.inputCtrolFloat($childCount);
 
@@ -2089,7 +2085,7 @@ define(function(require, exports) {
              return;
         };
          if (isReturn) {
-             showMessageDialog($("#confirm-dialog-message"), "费用项数量单价不能为空！");
+             showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
              return;
         };
 
