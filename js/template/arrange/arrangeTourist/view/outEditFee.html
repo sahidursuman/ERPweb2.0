@@ -73,7 +73,7 @@
 									<tr  data-entity-id="{{transferList.id}}"> 
 										<td>
 											<select name="type" class="col-sm-10 col-sm-offset-1">
-				                                {{#transferList.type | getFeeItemType: false}}
+				                                {{#transferList.type | getFeeItemType: true}}
 				                            </select>
 										</td>   
 										
@@ -86,7 +86,7 @@
 								
 
 										<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right {{if subsection==0}}T-payMoney{{/if}} F-float F-money" />
+										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money" />
 										</td>
 										<td>
 											<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-12  no-padding-right" />
@@ -103,7 +103,7 @@
 								<tr data-entity-id="{{transferOtherFee.id}}">
 									<td>
 										<select name="type" class="col-sm-10 col-sm-offset-1">
-				                            {{#transferOtherFee.type | getFeeItemType: false}}
+				                            {{#transferOtherFee.type | getFeeItemType: true}}
 				                        </select>
 									</td>
 									
@@ -188,7 +188,7 @@
 									</tr>
 								</thead>   
 								<tbody>
-								   {{each touristGroupFeeList as touristGroupFlist}}   	                                           
+								   {{each touristGroupFeeList as touristGroupFlist}}                                           
 												 <tr>       
 													<td>    
 														<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
