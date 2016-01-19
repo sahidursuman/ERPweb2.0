@@ -528,15 +528,10 @@ define(function(require, exports) {
 		transfer.transferOutConfirm = function(confirmButton,id,status){
 			$.ajax({
 				url: KingServices.build_url("transfer","findPager"),
-				dataType: 'id='+id+"&confirmButton="+confirmButton+"&status="+status,
+				data: 'id='+id+"&confirmButton="+confirmButton+"&status="+status,
 			})
 			.done(function(data) {
 				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-					var type="1",
-						divId="Transfer-Out";
-						transfer.getSearchParam(divId,type);
-						transfer.findPager(divId,type,0);
-						transfer.listMainHead(0);
 				})
 			})
 		};
