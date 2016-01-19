@@ -27,7 +27,6 @@ define(function(require, exports) {
         autocompleteDate: {},
         typeFlag: 0,
         visitorId: 0,
-        days: 0,
         chooseQuoteProlayer: "",
         args: {
             pageNo: 0,
@@ -599,8 +598,7 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
-            $row.find('.T-endTime').val(Tools.addDay(startTime, touristGroup.days - 1));
-
+                $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-startTime').data('days') - 1));
         });
 
         //客户来源
@@ -726,7 +724,6 @@ define(function(require, exports) {
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
                 $tab = $('#tab-resource_touristGroup-add-content'),
                 lineProductId = $tr.data('id');
-            touristGroup.days = $tr.data('days');
 
             if (lineProductId == null || lineProductId == '' || lineProductId == undefined) {
                 showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
@@ -739,6 +736,7 @@ define(function(require, exports) {
 
             $tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
+            $tab.find('.T-startTime').data('days',$tr.data('days'));
 
             var $form = $tab.find('.T-touristGroupMainForm');
             if (!!$form.find('.T-quoteNumber').val()) {
