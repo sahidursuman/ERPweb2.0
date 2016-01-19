@@ -1067,7 +1067,7 @@ define(function(require, exports) {
                 $addTabId.find('.T-lineProductId').val(chooseQuotObj.lineProducId);
                 $addTabId.find('.T-lineProductIdName').val(chooseQuotObj.lineProductName);
                 $addTabId.find('.T-startTime').val(chooseQuotObj.startTime.split(' ')[0]);
-                $addTabId.find('.T-endTime').val(touristGroup.getEndTime(chooseQuotObj.days, chooseQuotObj.startTime.split(' ')[0]));
+                $addTabId.find('.T-endTime').val(touristGroup.getEndTime(chooseQuotObj.days-1, chooseQuotObj.startTime.split(' ')[0]));
                 $addTabId.find('.T-fromPartnerAgencyName').val(chooseQuotObj.fromPartnerAgencyName);
                 $addTabId.find('.T-fromPartnerAgencyId').val(chooseQuotObj.fromPartnerAgencyId);
                 $addTabId.find('.T-partnerAgencyNameList').val(chooseQuotObj.partnerAgencyContactName);
