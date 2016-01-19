@@ -221,7 +221,7 @@ define(function(require, exports) {
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
-        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+        $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change",true);
             $tab.data('isEdited', true);
@@ -283,11 +283,11 @@ define(function(require, exports) {
         });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
-        $tab.find('.T-list').on('click', '.T-action', function(event){
+        $tab.find('.T-checkList').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-viewGroup')){
@@ -618,6 +618,8 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
+                        console.log("Client.clearDataArray:");
+                        console.log(Client.clearDataArray);
                         var bankId = $tab.find('input[name=card-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
