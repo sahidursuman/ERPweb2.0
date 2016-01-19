@@ -2048,7 +2048,7 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isTransit=false;
+        var isTransit=false,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
@@ -2057,6 +2057,11 @@ define(function(require, exports) {
             if (type == 3 && count=="" || price=="") {
                 isTransit = true;
             }
+
+            if (type!=3 && count=="" || price=="") {
+                isReturn = true;
+            };
+
             if ((type != "") || (count != "") || (price != "")) {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
@@ -2083,6 +2088,11 @@ define(function(require, exports) {
              showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
              return;
         };
+         if (isReturn) {
+             showMessageDialog($("#confirm-dialog-message"), "费用项数量单价不能为空！");
+             return;
+        };
+
         //删除费用项
         if (typeFlag == 2) {
             touristGroupFeeJsonDel = [];
