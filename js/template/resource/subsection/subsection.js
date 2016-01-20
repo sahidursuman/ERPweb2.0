@@ -287,7 +287,7 @@ define(function(require, exports) {
 		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
-		     subsection.addOperation();
+		     subsection.addOperation($(this));
 		});
         
 
@@ -369,7 +369,7 @@ define(function(require, exports) {
 	 * addOperation 新增中转费用线路
 	 * @param {[type]} $tab [description]
 	 */
-	subsection.addOperation =function(){
+	subsection.addOperation =function($this){
 			var $tbody = subsection.$tabSub.find('.T-subsectionOperationTbody'),
 			     isHasTr = 0,
 			     days = $tbody.find('tr:last-child').find('input[name=days]').val(),
@@ -379,7 +379,7 @@ define(function(require, exports) {
 				isHasTr = 1;
 			}
 			var radio = '<input type="radio" name="operateCurrentNeedPayMoney" />';
-			if ($(this).data('mark') != 0) {
+			if ($this.data('mark') != 0) {
 					radio = '-';
 			}
 			var html = ''
