@@ -29,10 +29,7 @@
 												 <input name="transNeedPayAllMoney" value="{{touristGroupTransfer.touristGroup.transNeedPayAllMoney}}" type="text" readonly="readonly" class="col-xs-12 F-float F-money"/>
 											  </div>
 											  
-											  <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>已付：</label>
-											  <div class="col-sm-2 trans-PayedMoney">
-												 <input name="transPayedMoney"  value="{{touristGroupTransfer.touristGroup.transPayedMoney}}" readonly="readonly" type="text"  class="col-xs-12 F-float F-money"/>
-											  </div>
+											 
 
 											    <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>计划现收：</label>
 											  <div class="col-sm-2 trans-PayedMoney">
@@ -50,6 +47,11 @@
 												</span>
 											</label>
 											<label class="control-label no-padding-right">对方现收</label>
+
+
+											 <div class="col-sm-2 trans-PayedMoney">
+												 <input name="transPayedMoney"  value="{{touristGroupTransfer.touristGroup.transPayedMoney}}" readonly="readonly" type="hidden"  class="col-xs-12 F-float F-money"/>
+											  </div>
 
 										 </div>
 									</div>
