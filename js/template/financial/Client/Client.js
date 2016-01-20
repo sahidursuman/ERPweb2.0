@@ -687,7 +687,7 @@ define(function(require, exports) {
             Client.clearDataArray = []
         }
 
-        $body.children('tr:nth-child(2n+1)').each(function() {
+        $body.children('tr').each(function() {
             var $tr = $(this);
 
             if ($tr.data('change')) {
