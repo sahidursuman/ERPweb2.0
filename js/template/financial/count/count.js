@@ -1512,6 +1512,9 @@ define(function(require, exports){
 			var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
+			var incomeCount = $parent.find('input[name=needCount]');
+			var incomeMoneyObj = $parent.find('input[name=realGetMoney]');
+			var incomeMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
             var realReduceMoney = $parent.find('input[name="realReduceMoney"]').val();
@@ -1524,6 +1527,7 @@ define(function(require, exports){
             guideRate = Count.changeTwoDecimal(guideRate);
             realCount = Count.changeTwoDecimal(realCount);
             realReduceMoney = Count.changeTwoDecimal(realReduceMoney);
+            incomeMoney = Count.changeTwoDecimal(incomeMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
@@ -1535,6 +1539,23 @@ define(function(require, exports){
             	var $income = parseFloat(marketPrice)*parseFloat(needCount);
             	$income = Count.changeTwoDecimal($income);
 				needIncome.text($income);
+            };
+
+            if ($obj.is('[name="needCount"]'))  {
+            	// 如果修改的是数量--计算现收
+            	var incomeMoney = (incomeCount.val()*marketPrice);
+            	incomeMoney = Count.changeTwoDecimal(incomeMoney);
+            	incomeMoney = parseFloat(incomeMoney);
+            	if(incomeCount.val() != 0){
+            		incomeMoneyObj.val(incomeMoney);
+            	}
+            	
+            } else if ($obj.is('[name="realGetMoney"]')) {
+            	// 如果修改的是现收--计算应收数量
+            	var count = (incomeMoney/marketPrice);
+            	count = Count.changeTwoDecimal(count);
+            	count = parseInt(count);
+            	incomeCount.val(count);
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
