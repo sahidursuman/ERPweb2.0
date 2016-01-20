@@ -97,6 +97,7 @@
                     {{if index == 0}}
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     {{/if}}
+                    {{if !!tripPlanTourist.touristGroup}}
                     <td>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td class="hct-absolute-group">
@@ -105,6 +106,12 @@
                         </span>
                     </td>
                     <td>{{tripPlanTourist.touristGroup.adultCount + tripPlanTourist.touristGroup.childCount}}</td>
+                    {{else}}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {{/if}}
                     {{if index == 0}}
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
