@@ -21,8 +21,8 @@
 			<span class="col-xs-8"><span class="F-float F-count">{{tripPlan.touristAdultCount}}</span>大人 <span class="F-float F-count">{{tripPlan.touristChildCount}}</span>小孩</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">团号：</label>
-			<span class="col-xs-8">{{tripPlan.tripNumber}}</span>
+			<label class="col-xs-4 text-right">收客单号：</label>
+			<span class="col-xs-8">{{tripPlan.otaOrderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
@@ -721,7 +721,20 @@
 				<tbody>
 					{{each touristGroupFeeList as rs}}
 					<tr>
-						<td>{{rs.describeInfo}}</td>
+						<td>
+							{{if rs.type == 1}}大人结算价
+							{{else if rs.type == 2}}小孩结算价
+							{{else if rs.type == 4}}车辆费用
+							{{else if rs.type == 5}}餐饮费用
+							{{else if rs.type == 6}}保险费用
+							{{else if rs.type == 7}}导服费
+							{{else if rs.type == 8}}酒店费用
+							{{else if rs.type == 9}}景区费用
+							{{else if rs.type == 10}}自费费用
+							{{else if rs.type == 11}}票务费用
+							{{else if rs.type == 12}}其他费用
+							{{/if}}
+						</td>
 						<td>{{rs.count}}</td>
 						<td>{{rs.price}}</td>
 						<td>{{rs.count*rs.price}}</td>

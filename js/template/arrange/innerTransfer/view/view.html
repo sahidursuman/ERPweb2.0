@@ -114,7 +114,7 @@
 										<!-- 其他费用 -->
 										{{each innerTransfer.innerTransferFeeSet as rs}}
 										<tr>
-											<td>{{rs.discribe}}</td>
+											<td>{{rs.name}}</td>
 											<td><span class=" F-float F-count">{{rs.count}}</span></td>
 											<td><span class=" F-float F-money">{{rs.price}}</span></td>
 											<td><span class=" F-float F-money">{{rs.count*rs.price}}</span></td>
@@ -190,7 +190,7 @@
 								<tbody>
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
-										<td>{{rs.describeInfo}}</td>
+										<td>{{rs.name}}</td>
 										<td><span class=" F-float F-count">{{rs.count}}</span></td>
 										<td><span class=" F-float F-money">{{rs.price}}</span></td>
 										<td><span class=" F-float F-money">{{rs.price*rs.count}}</span></td>

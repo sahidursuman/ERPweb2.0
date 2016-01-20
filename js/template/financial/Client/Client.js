@@ -181,6 +181,21 @@ define(function(require, exports) {
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
 
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = resultList[i].detailList,
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                    } else {
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                    }
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                }
+                data.customerAccountList = resultList; 
+                
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
@@ -206,7 +221,7 @@ define(function(require, exports) {
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
-        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+        $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change",true);
             $tab.data('isEdited', true);
@@ -259,7 +274,8 @@ define(function(require, exports) {
                     lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
-                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
                 };
             args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
             args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
@@ -267,14 +283,15 @@ define(function(require, exports) {
         });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
+        FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
-        $tab.find('.T-list').on('click', '.T-action', function(event){
+        $tab.find('.T-checkList').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
@@ -290,19 +307,14 @@ define(function(require, exports) {
                 $that.closest('tr').data('change', true);
             }
             $tab.data('isEdited', true);
-
-            if ($that.hasClass('T-refund')) {
-                // 反算金额
-                Client.CalcCheckor($that);
-            }
         });
 
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
-            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+            FinancialService.changeUncheck($tab.find('.T-checkList tr'), function(){
                 Client.saveCheckingData($tab);
-            });
+            },3);
          });
 
         //关闭页面事件
@@ -312,53 +324,32 @@ define(function(require, exports) {
 
     };
 
-    /**
-     * 通过返款计算当前行和合计的结算、未收
-     * @param {object} $obj 返款输入框
-     */
-    Client.CalcCheckor = function($obj) {
-        if ('undefined' === $obj || $obj.length != 1 || isNaN($obj.val())) {
-            return;
+    Client.viewGroup = function(id){
+        if ('undefined' === id)  {
+            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
         }
 
-        var $tr = $obj.closest('tr').data('change', true),
-            refundMoney = $obj.val(),  // 返款金额
-            settlementMoney = $tr.find('.T-settlementMoney').text() *1,   // 结算金额
-            unReceivedMoney = $tr.find('.T-unReceivedMoney').text() *1,   // 未收金额
-            spread = $tr.find('.T-contractMoney').text() *1 - settlementMoney - refundMoney;
-
-        $tr.find('.T-settlementMoney').text(settlementMoney + spread);
-        $tr.find('.T-unReceivedMoney').text(unReceivedMoney + spread);
-        Client.$checkSumBackMoney.text(Client.$checkSumBackMoney.text()*1 - spread);
-        Client.$checksumSettlementMoney.text(Client.$checksumSettlementMoney.text()*1 + spread);
-        Client.$checksumUnReceivedMoney.text(Client.$checksumUnReceivedMoney.text()*1 + spread);
-    }
-
-    Client.unfoldGroup = function($that){
-        if ('undefined' === $that)  {
-            return;
-        }
-
-        var $next = $that.closest('tr').next();
-
-        if ($that.data('ajax')) {
-            $that.text('收起' === $that.text()? '展开': '收起');
-            $next.fadeToggle();
-        } else {
-            $.ajax({
-                url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
-                type: 'post',
-                data: {touristGroupId: $that.closest('tr').data('gid')},
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    data.memberList = JSON.parse(data.memberList || false) || [];
-
-                    $next.find('.T-group-list').html(touristsTemplate(data));
-                    $that.data('ajax', true).trigger('click');
-                }
-            });            
-        }
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'findTouristGroupDetail'),
+            type: 'post',
+            data: {touristGroupId: id},
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                data.memberList = JSON.parse(data.memberList || false) || [];
+                var html = touristsTemplate(data);
+                var addGuide = layer.open({
+                    type: 1,
+                    title:"查看小组",
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '850px', //宽高
+                    zIndex:1028,
+                    content: html,
+                    scrollbar: false
+                });
+            }
+        });
     };
 
     Client.viewReceive = function(id){
@@ -455,6 +446,21 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = resultList[i].detailList,
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                    } else {
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                    }
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                }
+                data.customerAccountList = resultList; 
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
@@ -521,8 +527,8 @@ define(function(require, exports) {
         var $body = $tab.find('.T-list').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
-            if($that.hasClass('T-unfold')){
-                Client.unfoldGroup($that);
+            if($that.hasClass('T-viewGroup')){
+                Client.viewGroup($that.closest('tr').data('gid'));
             }else if($that.hasClass('T-receive')){
                 Client.viewReceive(id)
             }else if($that.hasClass('T-view')){
@@ -624,7 +630,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
-                        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
+                        $tab.find('.T-list').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
@@ -681,7 +687,7 @@ define(function(require, exports) {
             Client.clearDataArray = []
         }
 
-        $body.children('tr:nth-child(2n+1)').each(function() {
+        $body.children('tr').each(function() {
             var $tr = $(this);
 
             if ($tr.data('change')) {
@@ -742,36 +748,10 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var JsonStr = [],
-            selectFlag = 0,
-            argLen = arguments.length,
-            checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-checkbox');
-        $tr.each(function(i){
-           var flag = $(this).is(":checked");
-           var tr = $(this).closest('tr');
-           if(flag){
-                if(tr.attr("data-confirm") == 0 ){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 1,
-                        id: tr.data('id')
-                    };
-                    JsonStr.push(checkData);
-                }
-           }else{
-                if(tr.attr("data-confirm") == 1){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 0,
-                        id: tr.data('id')
-                    };  
-                    JsonStr.push(checkData);
-                }
-           }
-        });
+        var argLen = arguments.length,
+            JsonStr = FinancialService.saveJson_checking($tab);
+        if(!JsonStr){return false;}
+
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",

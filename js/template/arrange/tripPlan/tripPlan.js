@@ -483,6 +483,13 @@ define(function(require, exports) {
     			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
     			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
+			var money = 0;
+			$tab.find('.T-fee-list tr').each(function(index){
+				if ($(this).find('[name=type]').val() == 3) {
+				money += $(this).find('[name="money"]').val() * 1;
+				}
+			});
+			$tab.find('[name=transitNeedPayMoney]').val(money)
     	});
     	
     	//提交数据
@@ -838,7 +845,7 @@ define(function(require, exports) {
 			var $that = $(this);
 			arge.touristGroupFeeJson.push({
 				count : $that.find('[name="count"]').val(),
-			    describeInfo : $that.find('[name="describeInfo"]').val(),
+			    type: $that.find('[name="type"]').val(),
 			    id : $that.data("id") || "",
 			    price : $that.find('[name="price"]').val(),
 			    remark : $that.find('[name="feeRemark"]').val()
@@ -851,11 +858,12 @@ define(function(require, exports) {
 		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
 		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
 		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
+		arge.outTransferIncome = 0;//$tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
 		arge.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
 		arge.buyInsurance = $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0;
-		arge.executeTimeType = $tab.find('.T-timed').is(":checked") ? 1 : 0;
+		arge.executeTimeType = 0; //$tab.find('.T-timed').is(":checked") ? 1 : 0;
 		if(arge.executeTimeType === 1){
 			arge.executeTime = $tab.find('[name="executeTime"]').val();
 		}
@@ -1029,7 +1037,7 @@ define(function(require, exports) {
 		args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
 		args.selfPayItemIds = $tab.find('[name="selfPayItemNames"]').data("propover") || "";
 		// 处理定时发送
-		args.executeTimeType = $tab.find('.T-timed').is(':checked')?1:0;
+		args.executeTimeType = 0;//$tab.find('.T-timed').is(':checked')?1:0;
 		if (args.executeTimeType && (args.startTime + ' 06:00:00') < args.executeTime) {
 			showMessageDialog($( "#confirm-dialog-message" ),"通知时间不能在出团日期6点之后");
 			return;
@@ -1237,6 +1245,7 @@ define(function(require, exports) {
 				}
 				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 			}
 		});
 	};
@@ -1749,7 +1758,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-tripplan-lineproduct-search');
 		if(type == 1){
-			tripPlan.getLineProductList($dialog, type);
+			tripPlan.getLineProductList($dialog, type, '',0 ,$tab);
 		}else{
 			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
@@ -1770,6 +1779,10 @@ define(function(require, exports) {
 				$tab.find(".T-days").html("");
 				$tab.find(".T-tourists-list").html("");
 				$tab.find(".T-fee-list").html("");
+				/*$tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
+				$tab.find('[name=fromPartnerAgencyId]').val($tr.find('[name=travelAgencyId]').val());
+				$tab.find('[name=contactRealname]').val($tr.find('[name=contactRealname]').val());
+				$tab.find('[name=fromPartnerAgencyContactId]').val($tr.find('[name=contactId]').val());*/
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
@@ -1791,6 +1804,7 @@ define(function(require, exports) {
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
 			layer.close(searchTravelLinelayer);
+			$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 		});	
 	};
 
@@ -1802,7 +1816,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	tripPlan.getLineProductList = function($dialog, type, isSingle, page) {
+	tripPlan.getLineProductList = function($dialog, type, isSingle, page, $tab) {
 		page = page || 0;
 		var url = KingServices.build_url('lineProduct', 'findAll'),
 			$tbody = $dialog.find('.T-normal-list'),
@@ -1817,6 +1831,8 @@ define(function(require, exports) {
 			url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
 			$tbody = $dialog.find('.T-quote-list');
 			delete args.customerType;
+			args.partnerAgencyId = $tab.find('[name=fromPartnerAgencyId]').val();
+			//args.fromPartnerAgencyContactId = $tab.find('[name=fromPartnerAgencyContactId]').val();
 		}
 		$.ajax({
 			url: url,
@@ -1840,7 +1856,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							tripPlan.getLineProductList($dialog, type, isSingle, obj.curr -1);
+							tripPlan.getLineProductList($dialog, type, isSingle, obj.curr -1, $tab);
 				    	}
 				    }
 				});	

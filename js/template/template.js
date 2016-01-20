@@ -129,6 +129,19 @@
         res += '<option value="5" ' + (5 == status ? "selected" : "") + ">QQ </option>", 
         res += '<option value="6" ' + (6 == status ? "selected" : "") + ">微信</option>", 
         res += '<option value="7" ' + (7 == status ? "selected" : "") + ">线上渠道</option>";
+    }), template.helper("getFeeItemType", function(type, isTransfer) {
+        var res = "";
+        return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
+        res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
+        isTransfer && (res += '<option value="3" ' + (3 == type ? "selected" : "") + ">中转结算价</option>"), 
+        res += '<option value="4" ' + (4 == type ? "selected" : "") + ">车辆费用</option>", 
+        res += '<option value="5" ' + (5 == type ? "selected" : "") + ">餐厅费用</option>", 
+        res += '<option value="6" ' + (6 == type ? "selected" : "") + ">保险费用</option>", 
+        res += '<option value="7" ' + (7 == type ? "selected" : "") + ">导服费</option>", res += '<option value="8" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", 
+        res += '<option value="9" ' + (9 == type ? "selected" : "") + ">景区费用</option>", 
+        res += '<option value="10" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
+        res += '<option value="11" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
+        res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
     }), template.helper("getWayTypeText", function(status) {
         var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
         return status = status || 1, res[status];
@@ -239,7 +252,7 @@
             return "全程";
         }
     }), template.helper("getTaskSelect", function(status) {
-        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
+        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段", "小车接客" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
     }), template.helper("getHotelLevelDesc", function(level) {
         switch (1 * level) {

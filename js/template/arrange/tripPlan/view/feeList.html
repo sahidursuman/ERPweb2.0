@@ -1,6 +1,21 @@
 {{each touristGroupFeeList as rs}}
 <tr data-id="{{rs.id}}">
-	<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}></td>
+	<td><!-- <input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}" {{if isGuest == 1}}readonly{{/if}}> -->
+	<select class="col-xs-12 T-calculate" name="type" {{if isGuest == 1}}disabled{{/if}}>
+			<option value="1">大人结算价</option>
+			<option value="2">小孩结算价</option>
+			<!-- <option value="3">中转结算价</option> -->
+			<option value="4">车辆费用</option>
+			<option value="5">餐饮费用</option>
+			<option value="6">保险费用</option>
+			<option value="7">导服费</option>
+			<option value="8">酒店费用</option>
+			<option value="9">景区费用</option>
+			<option value="10">自费费用</option>
+			<option value="11">票务费用</option>
+			<option value="12">其它费用</option>
+		</select>
+	</td>
 	<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}" {{if isGuest == 1}}readonly{{/if}}></td>
 	<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}" {{if isGuest == 1}}readonly{{/if}}></td>
 	<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>

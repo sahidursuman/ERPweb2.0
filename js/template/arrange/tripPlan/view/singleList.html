@@ -77,17 +77,17 @@
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a class="cursor T-action T-update" title="编辑">
+                    <a class="cursor {{if rs.isEdit == 1}}gray{{else}}T-action T-update{{/if}}" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}">
                         <label class="padding-right20">|</label>
-                        编辑
+                        <span>编辑</span>
                     </a>
                     <a class="cursor T-action T-export" title="导出">
                         <label class="padding-right20">|</label>
                         导出
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}} R-right" data-right="1140007" title="取消" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140007" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
                         <label class="padding-right20">|</label>
-                        取消
+                        <span>取消</span>
                     </a>
                 </td>
             </tr>

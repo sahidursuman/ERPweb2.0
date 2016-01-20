@@ -29,6 +29,9 @@ define(function(require, exports) {
 		allData : {},
 		edited : {}
 	};
+	var getFeeItemPayTypeOptions =  {
+         payType : 1
+    };
 
 	innerTransfer.initModule = function(){
 		innerTransfer.innerTransferList();
@@ -281,9 +284,12 @@ define(function(require, exports) {
 			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
 			success:function(data){
-				data.innerTransfer = JSON.parse(data.innerTransfer);
-				data.businessGroup = JSON.parse(data.businessGroup);
-				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
+				var data = {
+					innerTransfer : JSON.parse(data.innerTransfer),
+				    businessGroup : JSON.parse(data.businessGroup),
+				    parentTouristGroup : JSON.parse(data.parentTouristGroup),
+				    getPayType : getFeeItemPayTypeOptions.getPayType
+				};
 				var result = showDialog(data);
 				if (result) {
 					var html = editTemplate(data),validator,
@@ -412,7 +418,10 @@ define(function(require, exports) {
      */
 	innerTransfer.innitAddFee=function($tab,validator){
 		var html="<tr class=\"transferFee1SelectId\">"+
-		    "<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"6\" /></td>"+
+		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+            "<option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
+            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" /></td>"+
@@ -546,7 +555,7 @@ define(function(require, exports) {
 		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
-			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+			innerTransferFeeSet : [],	//内转的其他费用	array<object>	
 			toBusinessGroupId :$tab.find("input[name=businessGroup_id]").data('group-id'),//	转给的部门ID	  	
 			transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
 			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
@@ -561,21 +570,19 @@ define(function(require, exports) {
 		var otherFeeJsonAdd = [];
 		var otherFeeJsonAddLength=$tab.find(".addTransferCost tr").length;
 		$tab.find(".addTransferCost tr").each(function(i){
-			var id=$(this).attr("data-entity-id");
-			var discribe = $(this).find("input[name=discribe]").val();
-			var count = $(this).find("input[name=count]").val();
-			var price = $(this).find("input[name=price]").val();
-			var remark = $(this).find("input[name=remark]").val();
-			if(i>1){
+			var id=$(this).attr("data-entity-id"),
+			    type = $(this).find("select[name=type]").val(),
+			    count = $(this).find("input[name=count]").val(),
+			    price = $(this).find("input[name=price]").val(),
+			    remark = $(this).find("input[name=remark]").val();
 				var otherFeeJson = { 
 					"id":id,
-					"discribe":discribe,
+					"type":type,
 					"count":count,
 					"price" : price,
 					"remark" : remark
 				}
 				otherFeeJsonAdd.push(otherFeeJson);
-			}
 		})
 		innerTransferJson.innerTransferFeeSet=otherFeeJsonAdd;
 		var innerTransferJson=JSON.stringify(innerTransferJson);
@@ -627,61 +634,27 @@ define(function(require, exports) {
 			}
 		}
 
+	//内转确认后查看内转信息
 	innerTransfer.saveTransferIn = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-	
-						$.ajax({
-							url:KingServices.build_url("innerTransfer","save"),
-							type:"POST",
-							data:"id="+id + "&isDelete=1",
-							success:function(data){
-								var result = showDialog(data);
-								if (result) {
-									var divId = "inner-TransferIn",
-										type = "2";
-									innerTransfer.getSearchParam(divId,type);
-									innerTransfer.innerList(divId,type,0);
-
-									var touristGroupId=data.touristGroupId;
-
-									//是否中转安排提信息
-									KingServices.updateTransferIn(touristGroupId);
-
-									//内转确认后数据刷新
-									$innerTrsfInObj=$('#inner-TransferIn');
-									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
-									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
-								}
-
-							 }
-						});
-						$( this ).dialog( "close" );
-					}
+		$.ajax({
+			url:KingServices.build_url("innerTransfer","save"),
+			type:"POST",
+			data:"id="+id + "&isDelete=1"
+		})
+		.done(function(data) {
+			var result = showDialog(data);
+				if (result) {
+					var touristGroupId=data.touristGroupId;
+					//查看内转
+					KingServices.viewTouristGroup(touristGroupId);
+					//刷新data
+					var divId = "inner-TransferIn",
+						type = "2";
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.innerList(divId,type,0);
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否确认转入操作？");
-			}
-		});
+		})
 	};
-
 
 	innerTransfer.deleteTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );

@@ -605,8 +605,8 @@ define(function(require, exports) {
 					 html += " value='7'>五星以上</option></select></td>" +
 					 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 					 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-					 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-					 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 					 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 					 if (hotelList[i].containBreakfast==1){
 				 		html += "含早餐"; 
@@ -669,8 +669,8 @@ define(function(require, exports) {
 				 html += " value='7'>五星以上</option></select></td>" +
 				 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 				 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-				 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-				 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 				 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 				 if (hotelList[i].containBreakfast==1){
 			 		html += "含早餐"; 
@@ -3251,7 +3251,7 @@ define(function(require, exports) {
 		//seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
 		//seatCountMarketPrice = $container.find('.T-arrangeBusCompanyList [name=marketPrice]').val()-0 || 0;
 		guidePrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
-		guideMarketPrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
+		guideMarketPrice = $container.find('.T-arrangeGuideList [name=marketPrice]').val()-0 || 0;
 		adultCount = $container.find('[name=adultCount]').val()-0 || 0;
 		childCount = $container.find('[name=childCount]').val()-0 || 0;
 
@@ -3475,7 +3475,7 @@ define(function(require, exports) {
 			"guideQuote": {
 				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
 			}
 		}

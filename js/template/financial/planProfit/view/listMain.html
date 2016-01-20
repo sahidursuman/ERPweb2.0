@@ -11,8 +11,14 @@
 			<label style="margin-left: 15px">导游：</label>
 	    	<input type="text" style="width: 100px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
 			<input type="hidden" name="guideId" value="{{searchParam.guideId}}"/>
-			<div class="financial-search-planProfit">
-			<label>开始日期：</label>
+			<label style="margin-left: 15px">针对客源：</label>
+	    	<select name="tripPlanType">
+	    		<option value="" {{if searchParam.tripPlanType == "" || !searchParam.tripPlanType}}selected{{/if}}>全部</option>
+	    		<option value="0" {{if searchParam.tripPlanType == "0"}}selected{{/if}}>散客</option>
+	    		<option value="1" {{if searchParam.tripPlanType == "1"}}selected{{/if}}>团队</option>
+	    	</select>
+
+			<label style="margin-left: 15px">开始日期：</label>
 	    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.start}}" style="width:100px;" />	
 			<label style="margin-left: 15px">结束日期：</label>
 	    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.end}}" style="width:100px;" />	
@@ -58,57 +64,19 @@
 	    <div style="margin:8px 0px;">
             <label>收入合计：<span class="T-totalIncome"></span></label>
             <label class="marginLeft-30">发团成本合计：<span class="F-float F-money T-totalTrip"></span></label>
-            <label class="marginLeft-30">中转成本合计：<span class="F-float F-money T-totalOut"></span></label>
+            <label class="marginLeft-30 T-turn">中转成本合计：<span class="F-float F-money T-totalOut"></span></label>
             <label class="marginLeft-30">毛利：<span class="F-float F-money T-profit"></span></label>
             <label class="marginLeft-30">人均毛利：<span class="F-float F-money T-perCapitaProfit"></span></label>
             <label class="marginLeft-30">人数：<span class="T-personCount"></span></label>
             <label class="marginLeft-30">团数：<span class="F-float F-count T-tripCount"></span></label>
+            <label class="pos-rel pull-right">
+                <input type="checkbox" class="ace T-checkTurn" {{if searchParam.operateCalculteOut == 1}}checked="checked"{{/if}}/>
+                <span class="lbl"> 核算中转</span>
+            </label>
         </div>
     </div>
-    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
-		<thead>
-			<tr class="bg-blur">
-				<th rowspan="2">团号</th>
-				<th rowspan="2">线路产品</th>
-				<th rowspan="2">出游日期</th>
-				<th rowspan="2">人数</th>
-				<th rowspan="2">导游</th>
-				<th rowspan="2">责任计调</th>
-				<th rowspan="2">状态</th>
-				<th colspan="5">收入</th>
-				<th colspan="10">发团成本</th>
-				<th colspan="5">中转成本</th>
-				<th rowspan="2">收入小计</th>
-				<th rowspan="2">发团成本小计</th>
-				<th rowspan="2">中转成本小计</th>
-				<th rowspan="2">毛利</th>
-				<th rowspan="2">人均毛利</th>
-			</tr>
-			<tr class="bg-blur">
-				<th >团款</th>
-				<th >购物佣金</th>
-				<th >自费</th>
-				<th >其它收入</th>
-				<th >导游管理费</th>
-				<th >导服费</th>
-				<th >保险</th>
-				<th >车费</th>
-				<th >餐费</th>
-				<th >房费</th>
-				<th >景区</th>
-				<th >票务</th>
-				<th >其它支出</th>
-				<th >购物导佣</th>
-				<th >自费导佣</th>
-				<th >车费</th>
-				<th >餐费</th>
-				<th >房费</th>
-				<th >票务</th>
-				<th >其他</th>
-			</tr>
-		</thead>
-		<tbody class="T-planProfit-list">
-		</tbody>
+    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight T-planProfit-list">
+		
 	</table>
 </div>
 

@@ -1435,14 +1435,14 @@ select {
 
 .share-quote-offer {
     width: 1000px;
-    height: 420px;
+    height: auto;
     /*border: 1px solid #666;*/
     margin-top: 40px;
 }
 
 .share-quote-offerdetails {
     width: 1000px;
-    height: 260px;
+    height: auto;
     border-top: 1px solid #DFDFDF;
     margin-top: 30px;
 }
@@ -1453,7 +1453,7 @@ select {
     padding-bottom: 10px;
     border-top: 1px solid #DFDFDF;
     /*border-bottom: 1px solid red;*/
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .share-quote-schedule {
@@ -1654,7 +1654,11 @@ p#back-top a span {
 .TransferTable .widget-main.no-padding .table {
     border-width: 1px;
 }
-
+.quoteUl li{
+    list-style-type: none;
+    float: left;
+    margin-left: 10px;
+}
 
 /*媒体查询-不同分辨率*/
 
@@ -2131,4 +2135,20 @@ p#back-top a span {
     margin-right: 5px;
     width: 57px;
     text-align: right;
+}
+
+a.gray span{
+    color:#bbb;
+}
+
+/*列表内部小列表*/
+.table-inner-list{
+    list-style-type: none;
+}
+.table-inner-list li{
+    border-top: 1px #ddd solid;
+    padding: 5px;
+}
+.table-inner-list li:first-child{
+    border:none;
 }

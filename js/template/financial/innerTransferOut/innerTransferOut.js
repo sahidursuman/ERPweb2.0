@@ -7,6 +7,7 @@ define(function(require,exports) {
 		checkDetailTemplate = require('./view/innerTransferOutDetail'),
 		clearTableTemplate = require('./view/innerTransferOutClearTable'),
 		payedDetailTemplate = require('./view/innerTransferOutPayed'),
+		viewGroupTemplate = require('./view/viewTouristGroup'),
 		listTabId = menuKey,
 		checkId = menuKey+"-checking",
 		settleId= menuKey+"-settlement";
@@ -195,7 +196,6 @@ define(function(require,exports) {
 					var html;
 					for(var i=0;i<dataList.length;i++){
 						data.list[i].innerTransferFeeList = JSON.parse(dataList[i].innerTransferFeeList);
-						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
 						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
@@ -320,27 +320,14 @@ define(function(require,exports) {
 		FinancialService.initCheckBoxs($checkAll,$checkBoxList);
 		//展开事件
 		$obj.find('.'+$list).on('click', '.T-seeGroup' ,function(event){
-			//event.preventDefault();
-	    	var tr = $(this).closest('tr').next();
-	    	if($(this).text()=="展开"){
-	    		$(this).text("收起");
-	    	}else{$(this).text("展开");}
-	     	if(tr.hasClass("hide")){
-				$(this).find("i").removeClass("fa-chevron-up");
-				$(this).find("i").addClass("fa-chevron-down");
-				tr.removeClass("hide");
-			}
-			else{
-				$(this).find("i").removeClass("fa-chevron-down");
-				$(this).find("i").addClass("fa-chevron-up");
-				tr.addClass("hide");
-			}
+			InnerTransferOut.viewGroup($(this));
         });
         //监听扣款输入框的改变
-        $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
-        	InnerTransferOut.changeTwoDecimal($(this).val());
-        	InnerTransferOut.autoSumMoney($(this));
-        });
+        FinancialService.updateMoney_checking($obj,3);
+        // $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
+        // 	InnerTransferOut.changeTwoDecimal($(this).val());
+        // 	InnerTransferOut.autoSumMoney($(this));
+        // });
         //查看对账明细
         $obj.find('.'+$list).on('click','.T-check-Detail',function(){
         	var id = $(this).closest('tr').data('id');
@@ -421,8 +408,6 @@ define(function(require,exports) {
 		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
-        	var check =  new FinRule(5).check($obj);
-    		if(!check.form()){ return false; }
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
         	var allMoney = $obj.find('input[name=sumPayMoney]').val();
         	if(allMoney == 0){
@@ -482,7 +467,7 @@ define(function(require,exports) {
             selectFlag = 0,
             argumentsLen = arguments.length,
             checkList = $obj.find('.T-checkList'),
-			$tr = checkList.find('.innerTransferFinancial');
+			$tr = checkList.find('.T-checkbox');
 		$tr.each(function(i){
  		   var flag = $(this).is(":checked");
  		   var tr = $(this).closest('tr');
@@ -592,32 +577,55 @@ define(function(require,exports) {
 			}
 		});
 	};
-	//修改扣款自动计算金额
-	InnerTransferOut.autoSumMoney = function($obj){
-		var $tr = $obj.closest('tr');
-		//获取数据
-		var transNeedPayMoney = $tr.find('.transNeedPayMoney').text();
-		var travelPayedMoney = $tr.find('.travelPayedMoney').text();
-		var currentNeedPayMoney = $tr.find('.currentNeedPayMoney').text();
-		var settlementMoney = $tr.find('.settlementMoney').text();
-		var unPayedMoney = $tr.find('.unPayedMoney').text();
-		var punishMoney = $tr.find('input[name=punishMoney]').val();
 
-		//规范数据
-		transNeedPayMoney = InnerTransferOut.changeTwoDecimal(transNeedPayMoney);
-		travelPayedMoney = InnerTransferOut.changeTwoDecimal(travelPayedMoney);
-		currentNeedPayMoney = InnerTransferOut.changeTwoDecimal(currentNeedPayMoney);
-		settlementMoney = InnerTransferOut.changeTwoDecimal(settlementMoney);
-		unPayedMoney = InnerTransferOut.changeTwoDecimal(unPayedMoney);
-		punishMoney = InnerTransferOut.changeTwoDecimal(punishMoney);
+	//查看小组
+	InnerTransferOut.viewGroup = function($obj){
+		var data = {
+			memberList : $obj.data("list")
+		};
 
-		var settleMoney = parseFloat(transNeedPayMoney)- parseFloat(punishMoney);
-		var unPayMoney = parseFloat(settleMoney) - (parseFloat(travelPayedMoney)+parseFloat(currentNeedPayMoney));
-
-		$tr.find('.unPayedMoney').text(unPayMoney);
-		$tr.find('.settlementMoney').text(settleMoney)
-		//更新数据统计
+		if(!data){
+			showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
+		}
+		var html = viewGroupTemplate(data);
+		layer.open({
+			type : 1,
+			title :"查看小组",
+			skin : 'layui-layer-rim',
+			area : "850px", 
+			zIndex : 1028,
+			content : html,
+			scrollbar: false 
+		});
 	};
+
+	// //修改扣款自动计算金额
+	// InnerTransferOut.autoSumMoney = function($obj){
+	// 	var $tr = $obj.closest('tr');
+	// 	//获取数据
+	// 	var transNeedPayMoney = $tr.find('.transNeedPayMoney').text();
+	// 	var travelPayedMoney = $tr.find('.travelPayedMoney').text();
+	// 	var currentNeedPayMoney = $tr.find('.currentNeedPayMoney').text();
+	// 	var settlementMoney = $tr.find('.settlementMoney').text();
+	// 	var unPayedMoney = $tr.find('.unPayedMoney').text();
+	// 	var punishMoney = $tr.find('input[name=punishMoney]').val();
+
+	// 	//规范数据
+	// 	transNeedPayMoney = InnerTransferOut.changeTwoDecimal(transNeedPayMoney);
+	// 	travelPayedMoney = InnerTransferOut.changeTwoDecimal(travelPayedMoney);
+	// 	currentNeedPayMoney = InnerTransferOut.changeTwoDecimal(currentNeedPayMoney);
+	// 	settlementMoney = InnerTransferOut.changeTwoDecimal(settlementMoney);
+	// 	unPayedMoney = InnerTransferOut.changeTwoDecimal(unPayedMoney);
+	// 	punishMoney = InnerTransferOut.changeTwoDecimal(punishMoney);
+
+	// 	var settleMoney = parseFloat(transNeedPayMoney)- parseFloat(punishMoney);
+	// 	var unPayMoney = parseFloat(settleMoney) - (parseFloat(travelPayedMoney)+parseFloat(currentNeedPayMoney));
+
+	// 	$tr.find('.unPayedMoney').text(unPayMoney);
+	// 	$tr.find('.settlementMoney').text(settleMoney)
+	// 	//更新数据统计
+	// };
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
