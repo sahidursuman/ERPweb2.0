@@ -2019,7 +2019,7 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 KingServices.updateTransfer = function(touristGroupId)  {
 	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransfer(touristGroupId);
+		module.updateTransfer(touristGroupId,id);
 	});
 }
 

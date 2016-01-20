@@ -67,7 +67,8 @@
 							<tbody class="T-innerOutEditFeeTbody"> 
 							    {{if touristGroup.transferFeeStatus==0}}
 									<!--初始化游客小组费用start--> 
-									{{each touristGroupFeeList as transferList}}         
+									{{each touristGroupFeeList as transferList}} 
+									    {{if transferList.type!=3}}       
 										<tr  data-entity-id="{{transferList.id}}">
 											<td>
 												 <select name="type" class="col-sm-10 col-sm-offset-1">
@@ -90,6 +91,7 @@
 											</td>
 											<td><a class="T-delete cursor">删除</a></td>
 										</tr>
+										{{/if}}
 									{{/each}}
 									<!--游客小组费end-->
 								   {{else}}
@@ -192,10 +194,7 @@
 								{{each touristGroupFeeList as touristGroupFlist}}
 										<tr>         
 											<td>
-											    <!--<input readonly="readonly" value="{{touristGroupFlist.name}}" type="text" class="col-sm-12  no-padding-right" /> --> 
-											    <select name="type" class="col-sm-10 col-sm-offset-1" disabled>
-					                                {{#touristGroupFlist.type | getFeeItemType: false}}
-					                            </select>
+											    <input readonly="readonly" value="{{touristGroupFlist.name}}" type="text" class="col-sm-12  no-padding-right" />
 											</td>
 											<td class="F-float F-count">
 												{{touristGroupFlist.count}}
