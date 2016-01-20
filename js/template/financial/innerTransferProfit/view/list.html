@@ -97,7 +97,7 @@
                 {{if searchParam.isSelectTransfer == "1"}}
                 <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}-{{else}}{{innerTransferList.change}}{{/if}}</td> 
                 <td><a href="javascript:void(0)" class="T-option T-showChangePay">
-                        <span class="F-float F-money">{{innerTransferList.changeNeedPayMoney}}</span>
+                        <span class="F-float F-money">{{innerTransferList.totalPaySettlementMoney}}</span>
                     </a>
                 </td>
                 {{/if}}
