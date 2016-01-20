@@ -2044,7 +2044,7 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isTransit=false,isReturn=false;
+        var isReturn=false,needTransitFee=0;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
@@ -2053,7 +2053,12 @@ define(function(require, exports) {
 
             if (type!=3 && count=="" || price=="") {
                 isReturn = true;
-                isTransit = true;
+            };
+
+            //计算按中转费用
+            if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
+                var transitFee=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
+                needTransitFee=needTransitFee+transitFee;
             };
 
             if ((type != "") || (count != "") || (price != "")) {
@@ -2078,24 +2083,21 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
-        
-
-        /*如果下面的中转项打勾了   
-        保存时去做一个  校验     校验是否有填写中转结算价  
-        如果没有填写  就提示 【该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续】
-*/      
-
-        //中转选项是否打勾
-        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
-        if(transitChekedLength>0 && isTransit){
-             showMessageDialog($("#confirm-dialog-message"), "是否有填写中转结算价！");
-             showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
-        }
-
+    
+        //非空校验
         if (isReturn) {
              showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
              return;
         };
+          
+
+        //中转选项是否打勾且中转费用项<=0
+        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
+        if(transitChekedLength>0 && needTransitFee<=0){
+            showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
+        }
+
+        
 
         //删除费用项
         if (typeFlag == 2) {
