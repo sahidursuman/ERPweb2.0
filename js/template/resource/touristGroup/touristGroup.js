@@ -1569,9 +1569,7 @@ define(function(require, exports) {
         var $parentsObj = $obj.closest(".T-touristGroupMainForm");
         var $tableObj = $parentsObj.find(".T-addCostTbody");
         $tableObj.append(html);
-        var $price = $tableObj.find('.T-price'),
-            $count = $tableObj.find('.T-count');
-        Tools.inputCtrolFloat($price);
+        var $count = $tableObj.find('.T-count');
         Tools.inputCtrolFloat($count);
         //删除事件
         $tableObj.find(".T-delete").off('click').on('click', function() {
