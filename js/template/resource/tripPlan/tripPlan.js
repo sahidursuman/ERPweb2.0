@@ -3093,6 +3093,7 @@ define(function(require, exports) {
 						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
 						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark: tripPlan.getVal(bus.eq(i), "remark"),
+						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
 						annouceTouristGroupIds: annouceTouristGroupIds
 
