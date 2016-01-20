@@ -79,7 +79,7 @@
             </tr>
             {{each tripPlanDayList as day}}
             <tr>
-                <td>{{day.whichDay}}</td>
+                <td>{{basicInfo.startTime | getDateText : day.whichDay}}</td>
                 <td>{{day.title}}</td>
                 <td>{{#day.repastDetail | getRestaurantDesc}}</td>
                 <td>{{day.restPosition}}</td>
