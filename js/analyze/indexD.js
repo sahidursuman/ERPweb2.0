@@ -5,6 +5,9 @@ var data = {
 		{
 			key: '#tab-financial_planProfit-content .T-search',
 			args:  ["_trackEvent", "发团利润", "按钮", "搜索", 1, siteId]
+		},{
+			key: '#tab-financial_planProfit-content .T-tripDetail',
+			args:  ["_trackEvent", "发团利润", "按钮", "单团明细", 1, siteId]
 		}
 	],
 
