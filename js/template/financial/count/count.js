@@ -1612,15 +1612,16 @@ define(function(require, exports){
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
 		'<td><input name="selfPayItem" style="width:90px;" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" style="width:60px;" type="text"></td>'+
+		'<td><input name="needCount" style="width:60px;" type="text"></td>'+
+		'<td><span class="needIncome"></span></td>'+
+		'<td><input name="realGetMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="price" style="width:60px;" type="text"></td>'+
-		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="realCount" style="width:60px;" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
 		'<td><input name="realReduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
-		'<td><span class="needIncome"></span></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="currentMonry" style="width:60px;" type="text"></td>'+
+		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
@@ -3731,7 +3732,7 @@ define(function(require, exports){
 					travelAgencyRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
 					travelAgencyRebateMoney:$(this).find('.travelAgencyRebateMoney').text(),
 					guideRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=guideRate]').val())/100),
-					realGetMoney:$(this).find('input[name=currentMonry]').val(),
+					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
 				}
