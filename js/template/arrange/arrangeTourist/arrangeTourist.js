@@ -1312,6 +1312,7 @@ define(function(require, exports) {
         $trNotDelete.each(function(i) {
             var $that = $(this),
                 FeeJson = {
+                    id: $that.data("entity-id"),
                     type: arrangeTourist.getVal($that, "type"),
                     price: arrangeTourist.getVal($that, "price"),
                     count: arrangeTourist.getVal($that, "count"),
