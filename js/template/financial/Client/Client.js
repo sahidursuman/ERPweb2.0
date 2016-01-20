@@ -618,8 +618,6 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
-                        console.log("Client.clearDataArray:");
-                        console.log(Client.clearDataArray);
                         var bankId = $tab.find('input[name=card-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
@@ -632,7 +630,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
-                        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
+                        $tab.find('.T-list').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
