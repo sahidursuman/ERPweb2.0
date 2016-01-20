@@ -158,7 +158,11 @@ define(function(require, exports) {
 		if($(".T-addUser-form .T-open-meter").is(":checked") == true){
 			isOpenOP = 1;
 		}
-		var form = $form.serialize()+"&status="+status;
+		var financialMessage = 0;
+		if($(".T-addUser-form .T-financialMessage").is(":checked")){
+			financialMessage = 1;
+		}
+		var form = $form.serialize()+"&status="+status+"&financialMessage="+financialMessage;
 		
 		$.ajax({
 			url:KingServices.build_url("user","addUser"),
@@ -470,7 +474,12 @@ define(function(require, exports) {
 								if($(".T-updateUser-form .T-open-meter").is(":checked") == true){
 									isOpenOP = 1;
 								}
-								var form = "id="+id+"&"+$form.serialize()+"&status="+status;
+
+								var financialMessage = 0;
+								if($(".T-updateUser-form .T-financialMessage").is(":checked")){
+									financialMessage = 1;
+								}
+								var form = "id="+id+"&"+$form.serialize()+"&status="+status+"&financialMessage="+financialMessage;
 								$.ajax({
 									url:KingServices.build_url("user","updateUser"),
 									type:"POST",
