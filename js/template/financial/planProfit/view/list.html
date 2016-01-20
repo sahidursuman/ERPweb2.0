@@ -9,7 +9,7 @@
 		<th rowspan="2">责任计调</th>
 		<th rowspan="2">状态</th>
 		<th colspan="5">收入</th>
-		<th colspan="10">发团成本</th>
+		<th colspan="11">发团成本</th>
 		{{if isTurn == 1}}
 		<th colspan="5">中转成本</th>
 		{{/if}}
@@ -37,6 +37,7 @@
 		<th>其它支出</th>
 		<th>购物导佣</th>
 		<th>自费导佣</th>
+		<th>导游结算扣款</th>
 		{{if isTurn}}
 		<th>车费</th>
 		<th>餐费</th>
@@ -81,6 +82,7 @@
 		<td><span class="F-float F-money">{{rs.otherMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.shopCostMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.selfMoney}}</span></td>
+		<td><span class="F-float F-money">{{rs.guideDeductions}}</span></td>
 		{{if isTurn == 1}}
 		<td><span class="F-float F-money">{{rs.outBusMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.outRestaurantMoney}}</span></td>
