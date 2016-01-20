@@ -51,6 +51,7 @@
     	<div class="form-group fixed-width">
     		<label><span class="necessary">*</span>出游日期：</label>
             <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status != 1}}readonly="readonly"{{/if}} />
+            <input type="hidden" name="days" class="form-control T-days" value="{{touristGroupDetail.lineProduct.days}}"/>
     	</div>
 
         <div class="form-group fixed-width">
