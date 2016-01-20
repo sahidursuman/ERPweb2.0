@@ -1712,7 +1712,9 @@ $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
 	$(this).data('old-value-format-float.api', this.value);
 })
 .on('focusout.format-float.api', 'input.F-float', function(event) {
-	if ($(this).data('old-value-format-float.api') !== this.value) {
+	if ($(this).data('old-value-format-float.api') !== this.value
+		&& !!this.value && this.value.split(',').length > 1) {
+		// 处理千分位存在时丢失change事件的问题
 		$(this).trigger('change');
 	}
 })

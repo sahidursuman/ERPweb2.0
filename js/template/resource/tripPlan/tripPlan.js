@@ -292,7 +292,7 @@ define(function(require, exports) {
 					$touristDiv = $container.find(".T-touristCheckedShow");
 				$container.find('[name=smsSign]').val(tripPlan.$tab.find('[name=travelAgencyName]').val());
 				
-				/*$container.find("[name=tourist]").click(function(){
+				$container.find("[name=tourist]").click(function(){
 					if($(this).is(":checked")){
 						$touristDiv.removeClass('hidden');
 					} else{
@@ -300,7 +300,7 @@ define(function(require, exports) {
 						$touristDiv.find('[name=rightNow]').trigger('click');
 						$touristDiv.find('[name=smsSign]').val('');
 					}
-				});*/
+				});
 				tripPlan.dateTimePicker($container);
 				var $timeCheck = $touristDiv.find('.T-checked')
 				$timeCheck.click(function() {
@@ -511,7 +511,7 @@ define(function(require, exports) {
 				noticeJson = JSON.parse(noticeJson);
 			}
 			if (noticeJson.length > 0) {
-				$this.text('已通知');
+				$this.text('已设置');
 			}
 		})
 		
@@ -2079,7 +2079,7 @@ define(function(require, exports) {
 							$that.autocomplete('option','source', busCompanyList);
 							$that.autocomplete('search', '');
 						}else{
-							layer.tips('无数据', obj, {
+							layer.tips('无数据', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
@@ -3070,6 +3070,9 @@ define(function(require, exports) {
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
 					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup');
+					if(typeof annouceTouristGroupIds != 'string'){
+						annouceTouristGroupIds = JSON.stringify(annouceTouristGroupIds)
+					}
 
 					var busJson = {
 						id : tripPlan.getVal(bus.eq(i), "id"),

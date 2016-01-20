@@ -1245,6 +1245,7 @@ define(function(require, exports) {
 				}
 				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 			}
 		});
 	};
@@ -1757,7 +1758,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-tripplan-lineproduct-search');
 		if(type == 1){
-			tripPlan.getLineProductList($dialog, type);
+			tripPlan.getLineProductList($dialog, type, '',0 ,$tab);
 		}else{
 			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
@@ -1778,6 +1779,10 @@ define(function(require, exports) {
 				$tab.find(".T-days").html("");
 				$tab.find(".T-tourists-list").html("");
 				$tab.find(".T-fee-list").html("");
+				/*$tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
+				$tab.find('[name=fromPartnerAgencyId]').val($tr.find('[name=travelAgencyId]').val());
+				$tab.find('[name=contactRealname]').val($tr.find('[name=contactRealname]').val());
+				$tab.find('[name=fromPartnerAgencyContactId]').val($tr.find('[name=contactId]').val());*/
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');
@@ -1799,6 +1804,7 @@ define(function(require, exports) {
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
 			layer.close(searchTravelLinelayer);
+			$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 		});	
 	};
 
@@ -1810,7 +1816,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	tripPlan.getLineProductList = function($dialog, type, isSingle, page) {
+	tripPlan.getLineProductList = function($dialog, type, isSingle, page, $tab) {
 		page = page || 0;
 		var url = KingServices.build_url('lineProduct', 'findAll'),
 			$tbody = $dialog.find('.T-normal-list'),
@@ -1825,6 +1831,8 @@ define(function(require, exports) {
 			url = KingServices.build_url('lineProduct', 'listQuoteLinePorduct');
 			$tbody = $dialog.find('.T-quote-list');
 			delete args.customerType;
+			args.partnerAgencyId = $tab.find('[name=fromPartnerAgencyId]').val();
+			//args.fromPartnerAgencyContactId = $tab.find('[name=fromPartnerAgencyContactId]').val();
 		}
 		$.ajax({
 			url: url,
@@ -1848,7 +1856,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							tripPlan.getLineProductList($dialog, type, isSingle, obj.curr -1);
+							tripPlan.getLineProductList($dialog, type, isSingle, obj.curr -1, $tab);
 				    	}
 				    }
 				});	

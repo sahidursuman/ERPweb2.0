@@ -16,8 +16,8 @@
 		<td><span class="F-float F-count">{{rs.adultCount}}</span>大 <span class="F-float F-count">{{rs.childCount}}</span>小</td>
 		<td>{{if rs.lineProduct !=null }}{{rs.lineProduct.days}}{{/if}}</td>
 		<td class="F-float F-count">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-		<td>{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
-		<td>{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}</td>
+		<td>{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}<input type="hidden" name="travelAgencyName" value="{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}"><input type="hidden" name="travelAgencyId" value="{{if rs.partnerAgency !=null }}{{rs.partnerAgency.id}}{{/if}}"></td>
+		<td>{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}<input type="hidden" name="contactRealname" value="{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}"><input type="hidden" name="contactId" value="{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.id}}{{/if}}"></td>
 		<td>{{rs.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 		<td>
 			<label class="T-quote-line">
