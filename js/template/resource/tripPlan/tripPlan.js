@@ -20,7 +20,8 @@ define(function(require, exports) {
 		busInquiryResultTemplate = require("./view/busInquiryResult"),
 		busbookingViewTemplate = require("./view/busbookingView"),
 		selectTouristTemplate = require("./view/selectTourist"),
-		noticeTemplate = require("./view/notice");
+		noticeTemplate = require("./view/notice"),
+		viewGroupTemplate = require("./view/viewGroup");
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -292,7 +293,7 @@ define(function(require, exports) {
 					$touristDiv = $container.find(".T-touristCheckedShow");
 				$container.find('[name=smsSign]').val(tripPlan.$tab.find('[name=travelAgencyName]').val());
 				
-				/*$container.find("[name=tourist]").click(function(){
+				$container.find("[name=tourist]").click(function(){
 					if($(this).is(":checked")){
 						$touristDiv.removeClass('hidden');
 					} else{
@@ -300,7 +301,7 @@ define(function(require, exports) {
 						$touristDiv.find('[name=rightNow]').trigger('click');
 						$touristDiv.find('[name=smsSign]').val('');
 					}
-				});*/
+				});
 				tripPlan.dateTimePicker($container);
 				var $timeCheck = $touristDiv.find('.T-checked')
 				$timeCheck.click(function() {
@@ -511,7 +512,7 @@ define(function(require, exports) {
 				noticeJson = JSON.parse(noticeJson);
 			}
 			if (noticeJson.length > 0) {
-				$this.text('已通知');
+				$this.text('已设置');
 			}
 		})
 		
@@ -762,6 +763,11 @@ define(function(require, exports) {
 								});
 							}
 
+							//查看游客小组
+							$container.find('.T-groupView').off('click.viewGroup').on('click.viewGroup', function() {
+								var $this = $(this), $parent = $this.closest('tr'), id = $parent.data('entity-id');
+								tripPlan.viewTouristGroup(id);
+							})
 
 							$container.find('.T-cancel').on('click', function() {
 								layer.close(noticeTouristsLayer);
@@ -2994,6 +3000,31 @@ define(function(require, exports) {
 		})
 	}
 
+	//查看旅游小组成员
+	tripPlan.viewTouristGroup = function(id){
+		$.ajax({
+			url:KingServices.build_url("tripPlan","getMemberList"),
+			data:{ touristGroupId : id + "" },
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var memberList = JSON.parse(data.memberList);
+					data.memberList = memberList;
+					var html = viewGroupTemplate(data);
+					var viewGroupTemplateLayer = layer.open({
+					    type: 1,
+					    title:"查看小组信息",
+					    skin: 'layui-layer-rim',
+					    area: '1000px',
+					    zIndex:1028,
+					    content: html,
+					    scrollbar: false
+					})
+				}
+			}
+		});
+	};
+
 	//计算 应付 计划导付
 	tripPlan.calculatePrice = function($tab){
 		$tab.find("input[name=guidePayMoney]").off("blur").on("blur", function() {
@@ -3016,7 +3047,7 @@ define(function(require, exports) {
 			//加载时自动计算
 			tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab ,true);
 		});
-	},
+	};
 	tripPlan.plusPrice = function($this, $tab , isCalc){
 		var $parents = $this.closest('tr');
 		var payType = $parents.find("select[name=payType]").val(),
@@ -3070,6 +3101,9 @@ define(function(require, exports) {
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
 					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup');
+					if(typeof annouceTouristGroupIds != 'string'){
+						annouceTouristGroupIds = JSON.stringify(annouceTouristGroupIds)
+					}
 
 					var busJson = {
 						id : tripPlan.getVal(bus.eq(i), "id"),
@@ -3090,6 +3124,7 @@ define(function(require, exports) {
 						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
 						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
 						remark: tripPlan.getVal(bus.eq(i), "remark"),
+						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
 						annouceTouristGroupIds: annouceTouristGroupIds
 

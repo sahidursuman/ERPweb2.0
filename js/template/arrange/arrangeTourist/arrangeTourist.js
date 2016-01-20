@@ -449,7 +449,7 @@ define(function(require, exports) {
             var $mergenTrList = $mergenTripPlan.find('.chooseMergeTbody').find('tr'),
                 id = "",lineProName = "",startTime="",days="";
             $mergenTrList.each(function(i) {
-                if ($mergenTrList.find(".ridioCheck").is(":checked") == true) {
+                if ($mergenTrList.eq(i).find(".ridioCheck").is(":checked") == true) {
                     id = $mergenTrList.eq(i).attr("data-entity-id");
                     lineProName = $mergenTrList.eq(i).attr("data-linePro-name");
                     startTime = $mergenTrList.eq(i).attr("data-entity-startTime");
