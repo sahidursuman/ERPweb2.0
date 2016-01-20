@@ -356,15 +356,23 @@ define(function(require, exports) {
 					Replace.saveCheckingData($tab, true);
 	            });
 			}else{
-				var allMoney = $tab.find('input[name=sumPayMoney]').val();
-	        	if(allMoney == 0){
+				if(!$tab.data('isEdited')){
+	                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+	                return false;
+	            }
+	        	var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+				var sumMoney = $tab.find('input[name=sumPayMoney]').data("money");
+			    if(sumMoney != sumPayMoney){
+			        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+			        return false;
+			    };
+	        	if(sumPayMoney == 0){
 	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
 			            Replace.savePayingData($tab, true);
 			        })
 	        	}else{
 	        		Replace.savePayingData($tab, true);
 	        	}
-				
 			}
 		});
 
