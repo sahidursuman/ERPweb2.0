@@ -33,12 +33,29 @@
     {{each day.restaurantArrange as arrangeList}}
     {{each arrangeList.restaurantArrangeList as arrange index}}
     {{if arrange != null}}
-    <tr badStatus = "{{arrange.badStatus}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}">
-        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+    <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
+        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
-        {{if arrange.billUpdateTime != null}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
+        {{if tripPlan.billStatus == -1}}
+            {{if arrange.isChoose == 1}}
+                <select name="chooseRest">
+                    <option value="">导游自选</option>
+                    {{each arrange.restaurantChooseArrangeList as rs}}
+                        <option value="{{rs.restaurantId}}">{{rs.name}}</option>
+                    {{/each}}
+                </select>
+            {{else}}
+                {{if arrange.restaurant != null}}
+                    <span>{{arrange.restaurant.name}}</span>
+                {{/if}}
+            {{/if}}
+        {{else}}{{if arrange.billUpdateTime != null}}
+        {{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
         <td>{{arrange.type}}</td> 
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}
+        <td>{{if tripPlan.billStatus == -1}}{{if arrange.isChoose == 1}}<input value="{{arrange.price}}" type="text" name="price"/>
+        <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">{{else}}
+            <span class="F-float F-money">{{arrange.price}}</span>
+        {{/if}}{{else}}{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}{{/if}}
         <input type="hidden" name="price" value="{{arrange.price}}" /></td>
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" type="text" class="F-float F-count" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
         {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
@@ -49,7 +66,7 @@
         <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}
         <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" type="text" class="F-float F-money" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value=0 {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}<input style="width:90px;" type="text" class="F-float F-money" name="realGuidePayMoney" {{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
         <td>{{if arrange.billImage != null && arrange.billImage != ""}}

@@ -84,18 +84,17 @@ template.helper("getFeeItemType", function(type,isTransfer) {
     if(isTransfer){
       res += '<option value="3" '+(type == 3?'selected':'')+'>中转结算价</option>';  
     }
-    res += '<option value="4" '+(type == 4?'selected':'')+'>保险结算价</option>';
-    res += '<option value="5" '+(type == 5?'selected':'')+'>车费结算价</option>';
-    res += '<option value="6" '+(type == 6?'selected':'')+'>餐饮结算价</option>';
+    res += '<option value="4" '+(type == 4?'selected':'')+'>车辆费用</option>';
+    res += '<option value="5" '+(type == 5?'selected':'')+'>餐厅费用</option>';
+    res += '<option value="6" '+(type == 6?'selected':'')+'>保险费用</option>';
     res += '<option value="7" '+(type == 7?'selected':'')+'>导服费</option>';
-    res += '<option value="4" '+(type == 8?'selected':'')+'>酒店费用</option>';
-    res += '<option value="5" '+(type == 9?'selected':'')+'>景区费用</option>';
-    res += '<option value="6" '+(type == 10?'selected':'')+'>自费费用</option>';
-    res += '<option value="7" '+(type == 11?'selected':'')+'>票务费用</option>';
-    res += '<option value="7" '+(type == 12?'selected':'')+'>其他费用</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>酒店费用</option>';
+    res += '<option value="9" '+(type == 9?'selected':'')+'>景区费用</option>';
+    res += '<option value="10" '+(type == 10?'selected':'')+'>自费费用</option>';
+    res += '<option value="11" '+(type == 11?'selected':'')+'>票务费用</option>';
+    res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
-
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
     status = status || 1;
@@ -219,7 +218,7 @@ template.helper("getTaskDesc", function(status) {
 });
 template.helper("getTaskSelect", function(status) {
     var str = ['<select name="taskType">'],
-        desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
+        desc = ['全程', '接机', '送机', '前段', '中段', '后段','小车接客'];
    
     for (var i = 0, len = desc.length;i < len; i ++) {
         str.push('<option value="'+ i + '" '+ (status == i?'selected': '')+'>'+ desc[i] +'</option>');

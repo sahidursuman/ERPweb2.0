@@ -102,8 +102,8 @@ define(function(require, exports) {
 				break;
 			default:  //代订账务
 				options.url = KingServices.build_url('financial/bookingAccount', 'listPager');
-				resArgs.startTime = args.startTime;
-				resArgs.endTime = args.endTime;
+				resArgs.startDate = args.startTime;
+				resArgs.endDate = args.endTime;
 				resArgs.travelAgencyName = args.name;
 				break;
 		}

@@ -284,9 +284,13 @@ define(function(require, exports) {
 						};
 						data.viewLineProduct.editorName = menukey + '-ueditor'
 						var htmlT = data.viewLineProduct;
+						var addHtml = addQuoteTemplate(htmlT);
+						$a.mainId = id;
+						$a.mainHtml = addHtml;
 						var html = mainQuoteTemplate($a);
 						if(Tools.addTab(menukey+'-add',"新增报价",html)){
-							addQuoteInit(htmlT);
+							var $container = $("#tab-arrange_quote-add-content");
+							quote.init_event($container,id,$a,addHtml);
 						}
 					}
 				}
@@ -295,25 +299,10 @@ define(function(require, exports) {
 			var htmlT = '';
 			var html = mainQuoteTemplate($a);
 			if(Tools.addTab(menukey+'-add',"新增报价",html)){
-				addQuoteInit(htmlT);
+				var $container = $("#tab-arrange_quote-add-content");
+				var addHtml = addQuoteTemplate(htmlT);
+				quote.init_event($container,id,$a,addHtml);
 			}
-		}
-
-		function addQuoteInit(htmlT){
-			var $container = $("#tab-arrange_quote-add-content");
-
-			var addHtml = addQuoteTemplate(htmlT);
-			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(addHtml)
-
-			$container.find('.inquiryContent').on("click",function(){
-				var quoteId = $container.find('[name=quoteId]').val();
-				if(!!quoteId == false){
-					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-					return false;
-				} 
-				quote.quoteStatus(quoteId,$container,'add','add');
-			});	
-			quote.init_event($container,id,$a);
 		}
 	};
 
@@ -616,8 +605,8 @@ define(function(require, exports) {
 					 html += " value='7'>五星以上</option></select></td>" +
 					 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 					 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-					 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-					 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 					 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 					 if (hotelList[i].containBreakfast==1){
 				 		html += "含早餐"; 
@@ -680,8 +669,8 @@ define(function(require, exports) {
 				 html += " value='7'>五星以上</option></select></td>" +
 				 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
 				 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-				 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-				 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
 				 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
 				 if (hotelList[i].containBreakfast==1){
 			 		html += "含早餐"; 
@@ -728,50 +717,20 @@ define(function(require, exports) {
 						a: 'update',
 						tag: tag
 					}
-					var html = mainQuoteTemplate($a);
 					var title = (!!isCopy)? '复制报价' : '修改报价';
 					data.isCopy = (!!isCopy)? '1' : '';
 					$a.isCopy = (!!isCopy)? '1' : '';
 					data.tag = tag;
+					var updateHtml = updateQuoteTemplate(data);
+					$a.mainHtml = updateHtml;
+					$a.mainId = id;
+					var html = mainQuoteTemplate($a);
 					if(Tools.addTab(menukey+'-'+tag,title,html)){
 						var $container = $("#tab-arrange_quote-"+$a.tag+"-content");
-
-						var updateHtml = updateQuoteTemplate(data);
+						quote.init_event($container,id,$a,updateHtml,target);
 						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
-						$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
+						//$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
 
-						//精度控制
-						var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
-						    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
-						    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
-						    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
-						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
-						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
-						Tools.inputCtrolFloat($guideFee);
-				        Tools.inputCtrolFloat($price);
-				        Tools.inputCtrolFloat($seatCount);
-				        Tools.inputCtrolFloat($contractPrice);
-				        Tools.inputCtrolFloat($parkingRebateMoney);
-				        Tools.inputCtrolFloat($customerRebateMoney);
-
-						$container.find('.inquiryContent').on("click",function(){
-							var quoteId = $container.find('[name=quoteId]').val();
-							if(!quoteId){
-								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-								return false;
-							} 
-							quote.quoteStatus(quoteId,$container,'update',$a.tag);
-						});	
-
-						quote.init_event($container,id,$a);
-						if (!!target) {
-							$container.find('.inquiryContent').trigger('click');
-							if (target == "T-hotel") {
-								$container.find('.hotelInquiryContent').trigger('click');
-							}else if (target == "T-bus") {
-								$container.find('.busInquiryResult').trigger('click');
-							}
-						}
 					}
 				}
 			}
@@ -779,7 +738,20 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container,id,$a) {
+	quote.init_event =function($container,id,$a,htmlT,target) {
+
+		addQuoteInit($container,htmlT,$a);
+		function addQuoteInit($container,htmlT,$a){
+			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(htmlT)
+			$container.find('.inquiryContent').on("click",function(){
+				var quoteId = $container.find('[name=quoteId]').val();
+				if(!!quoteId == false){
+					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+					return false;
+				} 
+				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
+			});	
+		}
 		var validator = rule.quoteCheckor($container);
 
 		//自费和购物 浮动显示 和 多选
@@ -811,13 +783,36 @@ define(function(require, exports) {
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			event.preventDefault();
-			quote.init_event($container,id);
+			quote.init_event($container,$container.find('[name=mainId]').val(),$a,$container.find('[name=mainHtml]').val());
 		})
 		// 保存后关闭
 		.on(CLOSE_TAB_SAVE, function(event) {
 			event.preventDefault();
 			quote.saveQuote(id,$container,'');
 		});
+
+		//精度控制
+		var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
+		    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
+		    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
+		    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
+		    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
+		    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
+		Tools.inputCtrolFloat($guideFee);
+        Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($seatCount);
+        Tools.inputCtrolFloat($contractPrice);
+        Tools.inputCtrolFloat($parkingRebateMoney);
+        Tools.inputCtrolFloat($customerRebateMoney);
+
+		if (!!target) {
+			$container.find('.inquiryContent').trigger('click');
+			if (target == "T-hotel") {
+				$container.find('.hotelInquiryContent').trigger('click');
+			}else if (target == "T-bus") {
+				$container.find('.busInquiryResult').trigger('click');
+			}
+		}
 
 		//下拉
 		quote.autocomplete($container);
@@ -892,7 +887,11 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time, $a);
+					if (!!$time) {
+						quote.changeStartTime($container, $time, $a);
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+					}
 				})
 			}
 		})
@@ -986,7 +985,7 @@ define(function(require, exports) {
 			}
 		});
 		//保存报价
-		$container.find('.T-btn-submit-quote').on('click',function(){
+		$container.find('.T-btn-submit-quote').off('click').on('click',function(){
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
 			quote.saveQuote(id, $container, $a);
@@ -1165,7 +1164,7 @@ define(function(require, exports) {
 								    }
 								});	
 								//提交
-								$layerContent.find(".T-searchtravelLine").on('click', function() {
+								$layerContent.find(".T-searchtravelLine").off('click').on('click', function() {
 									var $tr = $layerContent.find('.T-normal-list tr'), id ='';
 									$tr.each(function(i){
 										var $selectFlag = $(this).find('input[name=choice-TravelLine]').is(":checked");
@@ -2205,7 +2204,7 @@ define(function(require, exports) {
 					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
-					$tr.find("input[name=standardId]").val(0);
+					$tr.find("input[name=standardId]").val("");
 					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
@@ -3252,7 +3251,7 @@ define(function(require, exports) {
 		//seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
 		//seatCountMarketPrice = $container.find('.T-arrangeBusCompanyList [name=marketPrice]').val()-0 || 0;
 		guidePrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
-		guideMarketPrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
+		guideMarketPrice = $container.find('.T-arrangeGuideList [name=marketPrice]').val()-0 || 0;
 		adultCount = $container.find('[name=adultCount]').val()-0 || 0;
 		childCount = $container.find('[name=childCount]').val()-0 || 0;
 
@@ -3412,7 +3411,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id, $container, $a) {
+	quote.saveQuote = function(id, $container, $a,tab_id, title, html) {
 		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
@@ -3476,7 +3475,7 @@ define(function(require, exports) {
 			"guideQuote": {
 				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
 			}
 		}
@@ -3713,9 +3712,9 @@ define(function(require, exports) {
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
 							}else if (idString == "tab-arrange_quote-update-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','','update');
 							}else if (idString == "tab-arrange_quote-copy-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','1','copy');
 							}
                         }
 					});

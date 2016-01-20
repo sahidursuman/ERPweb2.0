@@ -101,9 +101,8 @@
 					</div>
 
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">酒店最低价:</label>
 						<div class="col-sm-4">
-							<input class="form-control F-float F-money" name="lowestPrice" value="{{hotel.lowestPrice}}" maxlength="9" class="col-sm-12" />
+							<input class="form-control F-float F-money col-sm-12 T-lowestPrice" type="hidden" name="lowestPrice" value="{{hotel.lowestPrice}}" maxlength="9" />
 						</div>
 					</div>
 				</div>
@@ -180,11 +179,11 @@
 										</td>
 										<td>
 											<div class="clearfix" style="margin-top:1px">
-												<input name="normalInnerPrice" type="text" class="col-sm-12 F-float F-money" value="{{room.normalInnerPrice}}" maxlength="9" />
+												<input name="normalInnerPrice" type="text" class="col-sm-12 F-float F-money T-minPrice" value="{{room.normalInnerPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix T-contractPrice contractPrice-{{i+1}}" style="margin-top:7px">
-												<input name="contractPrice" type="text" class="col-sm-12 F-float F-money" value="{{price.contractPrice}}" maxlength="9" />
+												<input name="contractPrice" type="text" class="col-sm-12 F-float F-money T-minPrice" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>

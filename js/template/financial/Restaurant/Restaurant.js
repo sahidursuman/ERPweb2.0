@@ -312,7 +312,7 @@ define(function(require, exports) {
             restaurant.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 restaurant.$clearTab.data('isEdited',true);
-                restaurant.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // restaurant.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 restaurant.$clearTab.find(".T-cancel-auto").hide();
             }

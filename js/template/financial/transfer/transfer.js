@@ -5,7 +5,8 @@ define(function(require, exports) {
 	    transferChecking = require("./view/transferChecking"),
 	    transferClearing = require("./view/transferClearing"),
 	    payedDetailTempLate = require("./view/viewPayedDetail"),
-        needPayDetailTempLate = require("./view/viewNeedPayDetail");
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
+        viewGroupTemplate = require("./view/viewTouristGroup");
 
     var Transfer = {
     	searchData : false,
@@ -146,6 +147,25 @@ define(function(require, exports) {
                 if(result){
                     var ftList = data.financialTransferList;
                     data.partnerAgencyName = partnerAgencyName;
+                    for(var i = 0; i < data.financialTransferList.length; i++){
+                        data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
+                    }
+
+                    //费用明细处理
+                    var resultList = data.financialTransferList;
+                    for(var i = 0; i < resultList.length; i++){
+                        var detailList = resultList[i].detailList,
+                            transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                        resultList[i].detailList = detailList;
+                        if(resultList[i].status == 5){
+                            resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                        } else {
+                            resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                        }
+                        resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                    }
+                    data.financialTransferList = resultList;
+
                     var html = transferChecking(data);
                     
                     var validator;
@@ -216,6 +236,8 @@ define(function(require, exports) {
         //报表内的操作
         Transfer.listOption(Transfer.$checkTab);
 
+        FinancialService.updateMoney_checking(Transfer.$checkTab,3);
+
         //复选框事件初始化
         var checkboxList = Transfer.$checkTab.find(".T-checkList tr .T-checkbox"),
             $checkAll = Transfer.$checkTab.find(".T-checkAll");
@@ -228,9 +250,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         Transfer.$checkTab.find(".T-saveCheck").click(function(){
             if(!validatorCheck.form()){return;}
-            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList").find('tr'), function(){
+            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList tr"), function(){
                 Transfer.saveChecking(id,name,page);
-            });
+            },3);
         });
     };
 
@@ -296,8 +318,26 @@ define(function(require, exports) {
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
                     data.isAutoPay = isAutoPay;
+                    for(var i = 0; i < data.financialTransferList.length; i++){
+                        data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
+                    }
+
+                    //费用明细处理
+                    var resultList = data.financialTransferList;
+                    for(var i = 0; i < resultList.length; i++){
+                        var detailList = resultList[i].detailList,
+                            transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                        resultList[i].detailList = detailList;
+                        if(resultList[i].status == 5){
+                            resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                        } else {
+                            resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                        }
+                        resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                    }
+                    data.financialTransferList = resultList;
+
                     var html = transferClearing(data);
-                    console.log(data);
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "外转付款", html)) {
@@ -478,47 +518,9 @@ define(function(require, exports) {
 
     //对账数据保存
     Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
-        if (!FinancialService.isClearSave(Transfer.$checkTab, new FinRule(0))) {
-            return;
-        }
-        var argumentsLen = arguments.length;
-
-	    var $list = Transfer.$checkTab.find(".T-checkList"),
-	        $tr = $list.find(".T-checkTr"),
-	        saveJson = []; 
-
-	    function getValue($obj,name){
-		    var result = $obj.find("[name="+name+"]").val();
-		    if (result == "") {//所有空字符串变成0
-		        result = 0;
-		    }
-		    return result;
-		} 
-
-	    $tr.each(function(){
-	        var $this = $(this);
-	        if($this.data("change")){//遍历修改行
-	            var isConfirmAccount = "";
-	            if ($this.find(".T-checkbox").is(':checked')) {
-	                isConfirmAccount = 1;
-	            } else {
-	                isConfirmAccount = 0; 
-	            }
-	            //提交修改了对账状态或已对账行数据的行
-	            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
-	                var checkRecord = {
-	                    id : $this.data("id"),
-	                    punishMoney : getValue($this,"settlementMoney"),
-	                    settlementMoney : $this.find("td[name=settlementMoney]").text(),
-	                    unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
-	                    checkRemark : $this.find("[name=checkRemark]").val(),
-	                    isConfirmAccount : isConfirmAccount
-	                };
-	                saveJson.push(checkRecord);
-	            }
-	        }
-	    });
-	    saveJson = JSON.stringify(saveJson);
+        var argumentsLen = arguments.length,
+            saveJson = FinancialService.saveJson_checking(Transfer.$checkTab); 
+        if(!saveJson){return false;}
 
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","saveAccountChecking"),
@@ -750,15 +752,7 @@ define(function(require, exports) {
                 Transfer.needPayDetail(id);
             } else if ($that.hasClass('T-viewGroup')) {
                 // 游客明细
-                var text = $that.text(),
-                	$next = $that.closest('tr').next();
-                if(text == "展开"){
-                	$that.text("收起");
-                	$next.removeClass('hide');
-                } else if (text == "收起"){
-                	$that.text("展开");
-                	$next.addClass('hide');
-                }
+                Transfer.viewGroup($(this));
             }
         });
     };
@@ -789,6 +783,28 @@ define(function(require, exports) {
 	        $unpay.text($unpay.text()*1 - spread);
 	    });
 	};
+
+    //查看小组
+    Transfer.viewGroup = function($obj){
+        var data = {
+            memberList : $obj.data("list")
+        };
+
+        if(!data){
+            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
+        }
+        var html = viewGroupTemplate(data);
+        layer.open({
+            type : 1,
+            title :"查看小组",
+            skin : 'layui-layer-rim',
+            area : "850px", 
+            zIndex : 1028,
+            content : html,
+            scrollbar: false 
+        });
+    };
 
     Transfer.initPay = function(options){
         Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate); 

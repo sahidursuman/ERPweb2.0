@@ -169,7 +169,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<!-- <div class="row">
 			<div class="col-xs-6 T-executeTime">
 				<label class="control-label">确认发团后游客短信设置</label>
 				<label>
@@ -188,7 +188,7 @@
 					<input type="text" class="col-xs-12" name="travelAgencyTag" value="{{tripPlan.travelAgencyTag}}">
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</form>
 	<div class="row">
 		<div class="col-xs-12 hd">
@@ -346,7 +346,6 @@
 				<div class="pull-left hct-plan-ask-input">
 				    <input type="text" class="col-xs-12" name="requireContent" value="{{req.requireContent}}">
 				</div>
-				<div class="pull-left hct-plan-ask-operate"><a class="cursor T-action T-delete" title="删除">删除</a></div>
 			</div>
 			{{/each}}
 		</div>
@@ -393,11 +392,25 @@
 				<tbody class="T-fee-list">
 					{{each touristGroupFeeList as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"></td>
+						<td><!-- <input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"> -->
+							<select class="col-xs-12 T-calculate" name="type">
+								<option value="1" {{if rs.type == 1}}selected{{/if}}>大人结算价</option>
+								<option value="2" {{if rs.type == 2}}selected{{/if}}>小孩结算价</option>
+								<option value="4" {{if rs.type == 4}}selected{{/if}}>车辆费用</option>
+								<option value="5" {{if rs.type == 5}}selected{{/if}}>餐饮费用</option>
+								<option value="6" {{if rs.type == 6}}selected{{/if}}>保险费用</option>
+								<option value="7" {{if rs.type == 7}}selected{{/if}}>导服费</option>
+								<option value="8" {{if rs.type == 8}}selected{{/if}}>酒店费用</option>
+								<option value="9" {{if rs.type == 9}}selected{{/if}}>景区费用</option>
+								<option value="10" {{if rs.type == 10}}selected{{/if}}>自费费用</option>
+								<option value="11" {{if rs.type == 11}}selected{{/if}}>票务费用</option>
+								<option value="12" {{if rs.type == 12}}selected{{/if}}>其它费用</option>
+							</select>
+						</td>
 						<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="100"></td>
+						<td><input type="text" class="col-xs-12" name="feeRemark" value="{{rs.remark}}" maxlength="100"></td>
 						<td><a class="cursor T-action T-delete" title="删除">删除</a></td>
 					</tr>
 					{{/each}}

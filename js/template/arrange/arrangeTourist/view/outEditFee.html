@@ -19,10 +19,7 @@
 						<div class="col-sm-2">
 							<input value="{{if touristGroup != null}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">已付:</label>
-						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price F-float F-money" readonly="readonly" />
-						</div>
+						
 
 						<label class="col-sm-1 control-label no-padding-right">计划现收:</label>
 						<div class="col-xs-1">
@@ -40,10 +37,11 @@
 								<input type="hidden" name="isCurrent" value="{{cashFlag}}">
 						</label>
                         <label class="col-sm-1 control-label no-padding-right" >对方现收</label>
-						
 
+                        <div class="col-sm-2">
+							<input value="{{if touristGroup.transferFeeStatus==1}}{{touristGroup.transPayedMoney}}{{/if}}" type="hidden" name="transPayedMoney" class="col-sm-12 price F-float F-money" readonly="readonly" />
+						</div>
 				</div>
-
 				<div class="form-group">
 					<div class="col-sm-2"></div>
 					<div class="col-sm-8">
@@ -72,8 +70,8 @@
 								{{each touristGroup.touristGroupFeeList as transferList}}     
 									<tr  data-entity-id="{{transferList.id}}"> 
 										<td>
-											<select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                                {{#getPayType | getFeeItemType: false}}
+											<select name="type" class="col-sm-10 col-sm-offset-1">
+				                                {{#transferList.type | getFeeItemType: true}}
 				                            </select>
 										</td>   
 										
@@ -86,7 +84,7 @@
 								
 
 										<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right {{if subsection==0}}T-payMoney{{/if}} F-float F-money" />
+										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money" />
 										</td>
 										<td>
 											<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-12  no-padding-right" />
@@ -102,8 +100,8 @@
 								{{each touristGroup.touristGroupTransferFeeSet as transferOtherFee}}
 								<tr data-entity-id="{{transferOtherFee.id}}">
 									<td>
-										<select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                            {{#getPayType | getFeeItemType: false}}
+										<select name="type" class="col-sm-10 col-sm-offset-1">
+				                            {{#transferOtherFee.type | getFeeItemType: true}}
 				                        </select>
 									</td>
 									
@@ -111,7 +109,7 @@
 										<input name="count" value="{{transferOtherFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count" />
 									</td>
 									<td>
-										<input name="price" value="{{transferOtherFee.otherPrice}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money" />
+										<input name="price" value="{{transferOtherFee.price}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money" />
 									</td>
 
 									<td>
@@ -188,10 +186,10 @@
 									</tr>
 								</thead>   
 								<tbody>
-								   {{each touristGroupFeeList as touristGroupFlist}}   	                                           
+								   {{each touristGroupFeeList as touristGroupFlist}}                                           
 												 <tr>       
-													<td>    
-														<input readonly="readonly" value="{{touristGroupFlist.describeInfo}}" type="text" class="col-sm-12  no-padding-right" />        
+													<td>   
+														<input readonly="readonly" value="{{touristGroupFlist.name}}" type="text" class="col-sm-12  no-padding-right" />        
 													</td>   
 									
 													<td>

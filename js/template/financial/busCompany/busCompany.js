@@ -348,7 +348,7 @@ define(function(require, exports) {
             busCompany.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 busCompany.$clearTab.data('isEdited',true);
-                busCompany.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // busCompany.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 busCompany.$clearTab.find(".T-cancel-auto").hide();
             }
@@ -732,11 +732,13 @@ define(function(require, exports) {
     //设置数据来源标识（中转、代订）
     busCompany.isMemberCount = function(dataList){
         for(var i = 0; i < dataList.length; i++){
-            var tripNumber = trim(dataList[i].tripNumber),
+            if (!!dataList[i].tripNumber) {
+                var tripNumber = trim(dataList[i].tripNumber),
                 strLen = tripNumber.length;
                 tripType = tripNumber.substring(strLen-2,strLen);
-            if(tripType == "DD" || tripType == "dd"){
-                dataList[i].isMemberCount = 1;
+                if(tripType == "DD" || tripType == "dd"){
+                    dataList[i].isMemberCount = 1;
+                }
             }
         }
         return dataList;

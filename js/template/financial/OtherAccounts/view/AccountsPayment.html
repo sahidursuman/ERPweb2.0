@@ -21,7 +21,7 @@
                 </div>
                 <label class="pull-left text-right">团信息:</label>
                 <div class="col-sm-1">
-                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="" autocomplete="off">
+                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="{{searchParam.info}}" autocomplete="off">
                     <input type="hidden" name="creatorId" value="">
                 </div>
                 <div class="col-sm-1">
@@ -41,7 +41,7 @@
 
         <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
             <div class="form-group">
-                <label class="control-label">本次付款金额：</label>
+                <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
                     <input name="sumPayMoney" type="text" class="T-btn-autofill F-float F-money" {{if type}}disabled {{/if}} {{if showBtnFlag == true}}readonly="true"{{/if}}/></label>
                 </label>
@@ -122,7 +122,8 @@
                 <td class="F-float F-count">{{Checking.memberCount}}</td>
                 <td class="F-float F-money">{{Checking.reduceMoney}}</td>
                 <td class="F-float F-money">{{Checking.needPayMoney}}</td>
-                <td><a class="T-action T-lookPay">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span></a></td>
+                <td><a class="T-action T-lookPay">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>
+                {{if Checking.isGuidePay != 1}}{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span>{{/if}}</a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td class="F-float F-money">
                     {{Checking.settlementMoney}} 
@@ -130,8 +131,10 @@
                 <td class="F-float F-money">
                     {{Checking.unPayedMoney}}
                 </td>
-                <td >
-                    <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>
+                <td>{{if !showBtnFlag && Checking.unPayedMoney <= 0}}<span class="F-float F-money">{{Checking.payMoney || 0.00}}</span>
+                    {{else}}
+                    <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}">
+                    {{/if}}
                 </td>
                 <td>
                     <input type="text" value="{{Checking.payRemark}}" name="payRemark" {{if !showBtnFlag && Checking.unPayedMoney <= 0}} disabled {{/if}}>

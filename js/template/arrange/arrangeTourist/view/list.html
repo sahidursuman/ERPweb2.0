@@ -36,10 +36,11 @@
 	<tbody class="T-arrageVisitor-list">
 		{{each touristGroupList as touristGroupList}}
 			<tr data-value={{touristGroupList.id}}
-			 data-entity-id = {{touristGroupList.lineProduct.id}}
+			 data-entity-id ={{touristGroupList.lineProduct.id}}
 			 data-entity-partnerAgency={{if !!touristGroupList.partnerAgency}} {{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}
-			 data-entity-name= {{touristGroupList.lineProduct.name}}  data-entity-type = {{touristGroupList.lineProduct.type}}  
-			 data-entity-days = {{touristGroupList.lineProduct.days}}   data-entity-startTime = {{touristGroupList.startTime}}
+			 data-entity-name={{touristGroupList.lineProduct.name}} data-entity-type = {{touristGroupList.lineProduct.type}}  
+			 data-entity-days = {{touristGroupList.lineProduct.days}}  
+			 data-entity-startTime = {{touristGroupList.startTime}}
 			 data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
 				<td>{{if !!touristGroupList.partnerAgency}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>

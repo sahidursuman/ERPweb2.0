@@ -397,9 +397,9 @@ define(function(require, exports) {
 		Ticket.clearingId = args.id;
 		Ticket.balanceName = args.name;
 		Ticket.isBalanceSource = true;
-		Ticket.clearingList(0, args.id, args.startDate, args.endDate);
+		Ticket.clearingList(0, args.id, args.startDate, args.endDate,1);
 	};
-	Ticket.clearingList = function(page, id, start, end){
+	Ticket.clearingList = function(page, id, start, end,type){
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.clearingId,
@@ -425,6 +425,7 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				data.name = Ticket.balanceName;
 				data.source = Ticket.isBalanceSource;
+				if(!!type){data.type = type;}
 				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
 				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
@@ -621,6 +622,8 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
+		var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
 		if ($tab.find('.T-saveClear').data('type') == 1) {
 	        var reciveValidtor = (new FinRule(2)).check($tab);
 	        if(!reciveValidtor.form()){
@@ -628,7 +631,10 @@ define(function(require, exports) {
 	        }
         };
         var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+            sumListMoney = $tab.find('input[name=sumPayMoney]').data("money");
+        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+        	sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
         if(sumPayMoney != sumListMoney){
             showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
             return false;

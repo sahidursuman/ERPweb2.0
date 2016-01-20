@@ -22,7 +22,7 @@
                 <th>责任计调</th>
                 <th>责任部门</th>
                 <th style="width:80px;">状态</th>
-                <th style="width:230px;">操作</th>
+                <th style="min-width:230px;">操作</th>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +69,7 @@
                     <span style="color: #333333;">已过期</span>
                     {{/if}}
                 </td>
-                <td style="vertical-align:middle">
+                <td style="vertical-align:middle" style="min-width: 230px;">
                     <a class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-hair-regiment{{/if}} R-right" data-right="1140010" title="发团" data-bill-status="{{rs.billStatus}}" data-status-value="{{rs.status}}" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
                         发团
                         <label style="padding-left:10px;">|</label>
@@ -77,9 +77,9 @@
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a class="cursor T-action T-update" title="编辑">
+                    <a class="cursor {{if rs.isEdit == 1}}gray{{else}}T-action T-update{{/if}}" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}">
                         <label class="padding-right20">|</label>
-                        编辑
+                        <span>编辑</span>
                     </a>
                     <a class="cursor T-action T-export" title="导出">
                         <label class="padding-right20">|</label>

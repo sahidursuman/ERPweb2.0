@@ -412,8 +412,13 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
+        var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
         var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+            sumListMoney = $tab.find('input[name=sumPayMoney]').data("money");
+        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+        }
         if(sumPayMoney != sumListMoney){
             showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
             return false;

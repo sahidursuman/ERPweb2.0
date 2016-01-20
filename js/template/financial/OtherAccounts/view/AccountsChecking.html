@@ -21,7 +21,7 @@
                 </div>
                 <label class="pull-left text-right">团信息:</label>
                 <div class="col-sm-1">
-                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="" autocomplete="off">
+                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="{{searchParam.info}}" autocomplete="off">
                     <input type="hidden" name="creatorId" value="">
                 </div>
                 <div class="col-sm-1">
@@ -70,15 +70,17 @@
             <tr class="T-checkTr" data-id='{{Checking.id}}' data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}">
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
-                <td><span class="F-float F-count">{{Checking.adultCount}}{{"大人"}}</span><span class="F-float F-count">{{Checking.childCount}}{{"小孩"}}</span></td>
+                <td><span class="F-float F-count">{{Checking.adultCount}}</span>{{"大人"}}<span class="F-float F-count">{{Checking.childCount}}</span>{{"小孩"}}</td>
                 <td class="F-float F-money">{{Checking.price}}</td>
                 <td class="F-float F-count">{{Checking.memberCount}}</td>
                 <td class="F-float F-money">{{Checking.reduceMoney}}</td>
                 <td class="F-float F-money">{{Checking.needPayMoney}}</td>
-                <td><a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span></a></td>
+                <td><a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>
+                {{if Checking.isGuidePay != 1}}{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span>{{/if}}</a></td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td class="F-float F-money">
-                    <input type="text" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
+                <td>
+                    <input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
+
                 </td>
                 <td name="unPayedMoney" class="F-float F-money">{{Checking.unPayedMoney}}</td>
                 <td>
