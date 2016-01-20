@@ -3,6 +3,7 @@
         <td>{{if rs.tripNumber == null || rs.tripNumber == ""}}-{{else}}{{rs.tripNumber}}{{/if}}</td>
         <td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-{{else}}<a class="T-option T-transfer" data-id="{{rs.lineProductId}}">{{rs.lineProductName}}</a>{{/if}}</td>
         <td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
+        <td>{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
         <td>{{if (rs.adultCount == null || rs.adultCount == "") && (rs.childCount == null || rs.childCount == "")}}
                 -
             {{else}}
@@ -14,6 +15,7 @@
                 {{/if}}
             {{/if}}
         </td>
+        <td>{{if rs.fromPartnerAgencyName == null || rs.fromPartnerAgencyName == ""}}-{{else}}{{rs.fromPartnerAgencyName}}{{/if}}</td>
         <td>{{if rs.totalIncome == null || rs.totalIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.totalIncome}}</span>{{/if}}</td>
         <td>{{if rs.totalOtherIncome == null || rs.totalOtherIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.totalOtherIncome}}</span>{{/if}}</td>
         <td>{{if rs.orderIncome == null || rs.orderIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.orderIncome}}</span>{{/if}}</td>

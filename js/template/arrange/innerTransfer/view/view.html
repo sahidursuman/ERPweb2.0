@@ -16,9 +16,8 @@
 				</tr>
 				<tr>
 					<td class="style-myself CheckPlan">应付</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
-					<td class="style-myself CheckPlan" style="text-align: left;padding: 0px 0px 0px 10px" colspan="2">已付 </td>
-					<td><span class=" F-float F-money">{{innerTransfer.transPayedMoney}}</span></td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
+					
 				</tr>
 			</table>
 		</div>
@@ -85,10 +84,8 @@
 							<tr>
 								<td class="style-myself CheckPlan">应付：</td>
 								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
-								<td class="style-myself CheckPlan">已付：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transPayedMoney}}</span></td>
 								<td class="style-myself CheckPlan">计划现收：</td>
-								<td style="text-align: left;padding: 0px 0px 0px 10px">
+								<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="2">
 								    {{if cashFlag==1}}
 								       	{{if !!innerTransfer.touristGroup}}<span class=" F-float F-money">{{innerTransfer.touristGroup.currentNeedPayMoney}}</span>{{/if}}
 									  {{else}}0 

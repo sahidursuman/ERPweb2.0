@@ -1779,10 +1779,10 @@ define(function(require, exports) {
 				$tab.find(".T-days").html("");
 				$tab.find(".T-tourists-list").html("");
 				$tab.find(".T-fee-list").html("");
-				/*$tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
+				$tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
 				$tab.find('[name=fromPartnerAgencyId]').val($tr.find('[name=travelAgencyId]').val());
 				$tab.find('[name=contactRealname]').val($tr.find('[name=contactRealname]').val());
-				$tab.find('[name=fromPartnerAgencyContactId]').val($tr.find('[name=contactId]').val());*/
+				$tab.find('[name=fromPartnerAgencyContactId]').val($tr.find('[name=contactId]').val());
 				$tab.find('input[name="quoteId"]').val(quoteId);
 				$tab.find('input[name="quoteOrderName"]').val($tr.find('[name="quoteNumber"]').text()).trigger('focusout');
 				$tab.find('input[name="partnerAgencyName"]').val('').data('id', '');

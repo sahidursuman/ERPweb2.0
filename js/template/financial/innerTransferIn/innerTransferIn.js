@@ -445,8 +445,17 @@ define(function(require,exports) {
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
         	if(!settleCheck.form()){return;}
-        	var sumMoney = $obj.find('input[name=sumPayMoney]').val();
-        	if(sumMoney == 0){
+        	if(!$obj.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
+        	var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
+			var sumMoney = InnerTransferIn.autoSumIncomeMoney($obj);
+		    if(sumMoney != sumPayMoney){
+		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+		        return false;
+		    };
+        	if(sumPayMoney == 0){
         		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
 		            InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
 		        })
@@ -797,12 +806,7 @@ define(function(require,exports) {
 
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,tab_id,$data,title, html){
-		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
-		var sumMoney = InnerTransferIn.autoSumIncomeMoney(tab_id);
-	    if(sumMoney != sumPayMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-	        return false;
-	    };
+		
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
 		var payMoney;
@@ -814,6 +818,10 @@ define(function(require,exports) {
 		var bankId = tab_id.find('input[name=card-id]').val();
 		var voucher = tab_id.find('input[name=credentials-number]').val();
 		var billTime = tab_id.find('input[name=tally-date]').val();
+		if(JsonStr.length == 0){
+			showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
+			return false;
+		}
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferIn','saveReceivables'),

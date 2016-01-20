@@ -36,11 +36,6 @@
 							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 						</div>
 
-						<label class="col-xs-1 control-label no-padding-right">已付：</label>
-						<div class="col-xs-1">
-							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="text" class="col-xs-12 F-float F-money" />
-						</div>
-
 						<label class="col-xs-1 control-label no-padding-right">计划现收：</label>
 						<div class="col-xs-1">
 						    {{if cashFlag==1}}
@@ -56,6 +51,10 @@
 							</span>
 						</label>
 						<label class="control-label no-padding-right">对方现收</label>
+
+						<div class="col-xs-1">
+							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="hidden" class="col-xs-12 F-float F-money" />
+						</div>
 
 					</div>
 				</div>
