@@ -9,7 +9,7 @@
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber">报价单号：</label>
             <input type="text" id="qouteNumber" name="quoteNumber" value="{{if !!touristGroupDetail.quote}}{{touristGroupDetail.quote.quoteNumber}}{{/if}}" class="form-control bind-change T-quoteNumber" readonly="readonly" />
-            <input type="hidden" name="quoteNumberId" class="T-quoteNumberId" />
+            <input type="hidden" name="quoteNumberId" class="T-quoteNumberId" value="{{if !!touristGroupDetail.quote}}{{touristGroupDetail.quote.id}}{{/if}}" />
 	        <button class="search-btn btn-sm T-ChosenQuoteNumber" onsubmit="return false">
 	                <i class="ace-icon fa fa-search "></i>搜索
 	        </button>
@@ -337,7 +337,7 @@
 
 					<div class="form-inline col-sm-12">
 					    <!--接团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedArriveService==1}}
 					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
 						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
 						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus==1}}
@@ -488,7 +488,7 @@
 
 
 						<!--送团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedLeaveService==1}}
 					          <div class="form-group fixed-width T-send col-sm-6">
 						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
 						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus==1}}
@@ -502,7 +502,7 @@
 						                <span class="lbl">车辆</span>
 						            </label>
 						            {{/if}}
-						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendHotelStatus==1}}
 						            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">酒店</span>

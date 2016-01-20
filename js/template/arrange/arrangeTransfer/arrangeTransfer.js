@@ -412,7 +412,7 @@ define(function(require, exports) {
 					transfer.deleteTransferOut(id);
 				} else if ($that.hasClass('T-transfer-confirm'))  {
 					//撤销
-					transfer.transferOutConfirm('confirmButton',id,status);
+					transfer.transferOutConfirm(id,status);
 				}
 		    });
 
@@ -525,13 +525,17 @@ define(function(require, exports) {
 		 * @param  {[type]} id [description]
 		 * @return {[type]}    [description]
 		 */
-		transfer.transferOutConfirm = function(confirmButton,id,status){
+		transfer.transferOutConfirm = function(id,status){
 			$.ajax({
-				url: KingServices.build_url("transfer","findPager"),
-				data: 'id='+id+"&confirmButton="+confirmButton+"&status="+status,
+				url: KingServices.build_url("transfer","updateStatus"),
+				data: 'id='+ id +"&status="+status,
 			})
 			.done(function(data) {
 				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					var divId="Transfer-Out",
+						type="1";
+						transfer.getSearchParam(divId,type);
+						transfer.findPager(divId,type,0);	
 				})
 			})
 		};
@@ -1021,7 +1025,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
 				var touristGroupId = data.touristGroupId;
 			    //跳转游客小组新增页面
-				KingServices.updateTransfer(touristGroupId);
+				KingServices.updateTransfer(touristGroupId,id);
 			})
 		})
 

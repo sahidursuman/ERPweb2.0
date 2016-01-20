@@ -634,61 +634,27 @@ define(function(require, exports) {
 			}
 		}
 
+	//内转确认后查看内转信息
 	innerTransfer.saveTransferIn = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-	
-						$.ajax({
-							url:KingServices.build_url("innerTransfer","save"),
-							type:"POST",
-							data:"id="+id + "&isDelete=1",
-							success:function(data){
-								var result = showDialog(data);
-								if (result) {
-									var divId = "inner-TransferIn",
-										type = "2";
-									innerTransfer.getSearchParam(divId,type);
-									innerTransfer.innerList(divId,type,0);
-
-									var touristGroupId=data.touristGroupId;
-
-									//是否中转安排提信息
-									KingServices.updateTransferIn(touristGroupId);
-
-									//内转确认后数据刷新
-									$innerTrsfInObj=$('#inner-TransferIn');
-									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
-									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
-								}
-
-							 }
-						});
-						$( this ).dialog( "close" );
-					}
+		$.ajax({
+			url:KingServices.build_url("innerTransfer","save"),
+			type:"POST",
+			data:"id="+id + "&isDelete=1"
+		})
+		.done(function(data) {
+			var result = showDialog(data);
+				if (result) {
+					var touristGroupId=data.touristGroupId;
+					//查看内转
+					KingServices.viewTouristGroup(touristGroupId);
+					//刷新data
+					var divId = "inner-TransferIn",
+						type = "2";
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.innerList(divId,type,0);
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否确认转入操作？");
-			}
-		});
+		})
 	};
-
 
 	innerTransfer.deleteTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );

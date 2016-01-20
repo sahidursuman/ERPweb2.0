@@ -52,7 +52,8 @@ define(function(require, exports) {
         isCheckFirst : true
     };
     var getFeeItemPayTypeOptions = {
-        payType: 1
+        payType: 1,
+        payType2:2
     };
     //游客管理页面初始化
     touristGroup.initModule = function() {
@@ -249,13 +250,13 @@ define(function(require, exports) {
      * @param  {[type]} touristGroupId 游客小组ID
      * @return {[type]}
      */
-    touristGroup.updateTransfer = function(touristGroupId, status, InnerTransfer) {
+    touristGroup.updateTransfer = function(touristGroupId, id,status, InnerTransfer) {
         var typeOut = 'out';
         //声明一个全局的游客小组ID用于跳转到中转安排
         touristGroup.visitorId = touristGroupId;
         $.ajax({
             url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + touristGroupId + "&type=" + typeOut,
+            data: "id=" + touristGroupId + "&type=" + typeOut+"&transferId="+id,
             type: 'POST',
             success: function(data) {
                 var result = showDialog(data);
@@ -290,6 +291,7 @@ define(function(require, exports) {
     touristGroup.addTouristGroup = function() {
         var data = {
             getPayType: getFeeItemPayTypeOptions.payType,
+            getPayType2: getFeeItemPayTypeOptions.payType2,
             isTransfer: false
         };
         var html = addTempLate(data);
@@ -1058,7 +1060,6 @@ define(function(require, exports) {
                     ids.push(id);
                 }
             });
-
             touristGroup.clearQuoteData($addTabId.find('.T-touristGroupMainForm'));
             //带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
             if (!!ids && ids.length > 0) {
@@ -1986,10 +1987,11 @@ define(function(require, exports) {
      */
     touristGroup.installData = function($obj, id, typeFlag, tabArgs, typeInner) {
         //判断购买保险状态
-        var buyInsuranceS = 1;
+        var buyInsuranceS = 1,isNeedArriveService=0,isNeedLeaveService=0; //isNeedArriveService是否接团
         var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
             $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
-            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
+            $receptionObj = $arrangeForm.find('.T-recive'),
+            $sendObj = $arrangeForm.find('.T-send'),
             $touristSendObj = $arrangeForm.find('input[name=touristSend]'),
             $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]'),
             //获取游客名单住宿、星级、自费、备注
@@ -2050,12 +2052,10 @@ define(function(require, exports) {
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
                 remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
-            if (type == 3 && count=="" || price=="") {
-                isTransit = true;
-            }
 
             if (type!=3 && count=="" || price=="") {
                 isReturn = true;
+                isTransit = true;
             };
 
             if ((type != "") || (count != "") || (price != "")) {
@@ -2080,11 +2080,21 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
-        if (isTransit && $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0) {
+        
+
+        /*如果下面的中转项打勾了   
+        保存时去做一个  校验     校验是否有填写中转结算价  
+        如果没有填写  就提示 【该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续】
+*/      
+
+        //中转选项是否打勾
+        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
+        if(transitChekedLength>0 && isTransit){
+             showMessageDialog($("#confirm-dialog-message"), "是否有填写中转结算价！");
              showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
-             return;
-        };
-         if (isReturn) {
+        }
+
+        if (isReturn) {
              showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
              return;
         };
@@ -2102,16 +2112,18 @@ define(function(require, exports) {
             })
         };
 
-        if ($receptionObj.is(':checked') == true) {
-            var isNeedArriveService = 1;
+        //接团
+        if ($receptionObj.find('.T-add-action input[type="checkbox"]:checked').length>0) {
+            isNeedArriveService = 1;
         } else {
             isNeedArriveService = 0;
-        }
+        };
 
-        if ($touristSendObj.is(":checked") == true) {
-            var isNeedLeaveService = 1;
-        } else {
-            isNeedLeaveService = 0;
+        //送团
+        if($sendObj.find('.T-add-action input[type="checkbox"]:checked').length>0){
+            isNeedLeaveService=1;
+        }else{
+            isNeedLeaveService=0;
         }
 
         var buyInsurance = buyInsuranceS;
