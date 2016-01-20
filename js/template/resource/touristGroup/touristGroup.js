@@ -589,15 +589,18 @@ define(function(require, exports) {
             // touristGroup.searchLinproduct(true,0,"",typeFlag);
             touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
         });
-        //选择出游日期带出完团日期
+
+         //选择出游日期带出完团日期
         $obj.find('.T-startTime').on('change', function(event) {
             event.preventDefault();
             /* Act on the event */
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
-                $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-startTime').data('days') - 1));
+                $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-days').val() - 1));
         });
+
+
 
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
@@ -735,6 +738,7 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductIdName"]').val($tr.children('[name="travelLine-select"]').text()).trigger('change');
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
             $tab.find('.T-startTime').data('days',$tr.data('days'));
+            $tab.find('.T-days').val($tr.data('days'));
 
             var $form = $tab.find('.T-touristGroupMainForm');
             if (!!$form.find('.T-quoteNumber').val()) {
