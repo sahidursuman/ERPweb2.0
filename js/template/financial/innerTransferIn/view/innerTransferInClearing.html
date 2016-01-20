@@ -118,83 +118,37 @@
             <tbody class="T-clearList" data-right="1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
            <tr data-id={{checking.id}} data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-entity-isComfirmAccount="{{checking.isConfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">
-                <td rowspan="{{checking.rowLen}}">{{checking.lineProductName}}</td>
-                <td rowspan="{{checking.rowLen}}" name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td rowspan="{{checking.rowLen}}">{{checking.contactUserName}}</td>
-                <td rowspan="{{checking.rowLen}}"><a href="#" class="T-seeGroup" title="查看小组" data-list="{{checking.tgMemberList}}">
+                <td>{{checking.lineProductName}}</td>
+                <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{checking.contactUserName}}</td>
+                <td><a href="#" class="T-seeGroup" title="查看小组" data-list="{{checking.tgMemberList}}">
                         <span class="F-float F-count">{{checking.adultCount}}</span>大
                         <span class="F-float F-count">{{checking.childCount}}</span>小
                     </a>
                 </td>
-                <td rowspan="{{checking.rowLen}}">{{checking.receiveUserName}}</td>
-                <td rowspan="{{checking.rowLen}}">{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
-                <td rowspan="{{checking.rowLen}}"><span class="F-float F-money">{{checking.transInMoney}}</span></td>
-                <td>{{if checking.detailList.transitFee.transitFeeList.length > 0}}
-                    <!-- 若有中转结算价 -->
-                        {{each checking.detailList.transitFee.transitFeeList as tf}}
-                            {{tf.name}}：
+                <td>{{checking.receiveUserName}}</td>
+                <td>{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
+                <td><span class="F-float F-money">{{checking.transInMoney}}</span></td>
+                <td>{{if checking.transferFeeList.length > 0}}
+                        {{each checking.transferFeeList as tf}}
+                            {{tf.discribe}}：
                             <span class="F-float F-money T-touristGroupId" data-id="{{tf.touristGroupId}}" data-status="3">{{tf.price}}</span> x
                             <span class="F-float F-count">{{tf.count}}</span> =
                             <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
                         {{/each}}
-                    {{else}}
-                    <!-- 若无中转结算价 -->
-                        {{if checking.status == 5 && checking.detailList.otherFee.length > 0}}
-                        <!-- 中转，otherFee中多条数据 -->
-                            {{each checking.detailList.otherFee as temp index}}
-                                {{if index == 0}}
-                                    {{each temp.otherFeeList as of}}
-                                        {{of.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                                        <span class="F-float F-count">{{of.count}}</span>=
-                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                    {{/each}}
-                                {{/if}}
-                            {{/each}}
-                        {{else if checking.detailList.otherFee.otherFeeList.length > 0}}
-                        <!-- 非中转，otherFee中单条数据 -->
-                            {{each checking.detailList.otherFee.otherFeeList as of}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                                <span class="F-float F-count">{{of.count}}</span>=
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                            {{/each}}
-                        {{else}}<!-- 若无费用明细 -->-
-                        {{/if}}
                     {{/if}}
                 </td>
-                <td rowspan="{{checking.rowLen}}"><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
-                {{if checking.detailList.transitFee.transitFeeList.length > 0}}
-                <!-- 若有中转结算价 -->
-                    <td><span class="F-float F-money">{{checking.detailList.transitFee.backMoney}}</span></td>
-                    <td><span class="F-float F-money">{{checking.detailList.transitFee.settlementMoney}}</span></td>
-                {{else}}
-                <!-- 若无中转结算价 -->
-                    {{if checking.status == 5 && checking.detailList.otherFee.length > 0}}
-                    <!-- 中转，otherFee中多条数据 -->
-                        {{each checking.detailList.otherFee as of index}}
-                            {{if index == 0}}
-                                <td><span class="F-float F-money">{{of.backMoney}}</span></td>
-                                <td><span class="F-float F-money">{{of.settlementMoney}}</span></td>
-                            {{/if}}
-                        {{/each}}
-                    {{else if checking.detailList.otherFee.otherFeeList.length > 0}}
-                        <td><span class="F-float F-money">{{checking.detailList.otherFee.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{checking.detailList.otherFee.settlementMoney}}</span></td>
-                    {{else}}
-                    <!-- 若无费用明细 -->
-                        <td><span class="F-float F-money">{{checking.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
-                    {{/if}}
-                {{/if}}
-                <td rowspan="{{checking.rowLen}}"><span class="F-float F-money">{{checking.unIncomeMoney}}</span></td>
-                <td rowspan="{{checking.rowLen}}"><input type="text" maxlength="9"  class="money F-float F-money" value="{{checking.payMoney}}" data-le="{{checking.unIncomeMoney}}" name="payMoney" style="text-align:center" 
+                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td><span class="F-float F-money">{{checking.backMoney}}</span></td>
+                <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{checking.unIncomeMoney}}</span></td>
+                <td><input type="text" maxlength="9"  class="money F-float F-money" value="{{checking.payMoney}}" data-le="{{checking.unIncomeMoney}}" name="payMoney" style="text-align:center" 
                 {{if !btnShowStatus && checking.unIncomeMoney <= 0}} disabled {{/if}}></td>
-                <td rowspan="{{checking.rowLen}}"><input type="text" maxlength="9" name="payRemark" value="{{checking.incomeRemark}}" style="text-align:center"
+                <td><input type="text" maxlength="9" name="payRemark" value="{{checking.incomeRemark}}" style="text-align:center"
                 {{if !btnShowStatus && checking.unIncomeMoney <= 0}} disabled {{/if}}></td>
-                <td rowspan="{{checking.rowLen}}">{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
-                <td rowspan="{{checking.rowLen}}">{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
-                <td rowspan="{{checking.rowLen}}">
+                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+                <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
+                <td>
                     <label class="pos-rel">
                         {{if checking.isConfirmAccount == 1}}
                           已对账
@@ -207,51 +161,6 @@
                     </label>
                 </td>
             </tr>
-            {{if checking.detailList.transitFee.transitFeeList.length > 0}}
-            <!-- 若有中转结算价 -->
-                {{if checking.status == 5 && checking.detailList.otherFee.length > 0}}
-                    {{each checking.detailList.otherFee as temp}}
-                        <tr><td>{{each temp.otherFeeList as of}}
-                                    {{of.name}}：
-                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                    <span class="F-float F-count">{{of.count}}</span> =
-                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                {{/each}}
-                            </td>
-                            <td><span class="F-float F-money">{{temp.backMoney}}</span></td>
-                            <td><span class="F-float F-money">{{temp.settlementMoney}}</span></td>
-                        </tr>
-                    {{/each}}
-                {{else checking.detailList.otherFee.otherFeeList.length > 0}}
-                    <tr><td>{{each checking.detailList.otherFee.otherFeeList as of}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                <span class="F-float F-count">{{of.count}}</span> =
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                            {{/each}}
-                        </td>
-                        <td><span class="F-float F-money">{{checking.detailList.otherFee.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{checking.detailList.otherFee.settlementMoney}}</span></td>
-                    </tr>
-                {{/if}}
-            {{else}}
-                {{if checking.status == 5}}
-                    {{each checking.detailList.otherFee as temp index}}
-                        {{if index > 0}}
-                            <tr><td>{{each temp.otherFeeList as of}}
-                                        {{of.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                        <span class="F-float F-count">{{of.count}}</span> =
-                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                    {{/each}}
-                                </td>
-                                <td><span class="F-float F-money">{{temp.backMoney}}</span></td>
-                                <td><span class="F-float F-money">{{temp.settlementMoney}}</span></td>
-                            </tr>
-                        {{/if}}
-                    {{/each}}
-                {{/if}}
-            {{/if}}
             {{/each}}
          </tbody>
         </table>
