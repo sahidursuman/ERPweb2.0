@@ -511,7 +511,7 @@ define(function(require, exports) {
 				noticeJson = JSON.parse(noticeJson);
 			}
 			if (noticeJson.length > 0) {
-				$this.text('已通知');
+				$this.text('已设置');
 			}
 		})
 		
