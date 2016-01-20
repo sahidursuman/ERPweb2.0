@@ -2079,7 +2079,7 @@ define(function(require, exports) {
 							$that.autocomplete('option','source', busCompanyList);
 							$that.autocomplete('search', '');
 						}else{
-							layer.tips('无数据', obj, {
+							layer.tips('无数据', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
