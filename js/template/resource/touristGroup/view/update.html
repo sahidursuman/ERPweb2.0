@@ -337,7 +337,7 @@
 
 					<div class="form-inline col-sm-12">
 					    <!--接团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedArriveService==1}}
 					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
 						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
 						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus==1}}
@@ -488,7 +488,7 @@
 
 
 						<!--送团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedLeaveService==1}}
 					          <div class="form-group fixed-width T-send col-sm-6">
 						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
 						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus==1}}

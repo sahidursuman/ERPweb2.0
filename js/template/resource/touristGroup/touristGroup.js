@@ -1058,7 +1058,6 @@ define(function(require, exports) {
                     ids.push(id);
                 }
             });
-
             touristGroup.clearQuoteData($addTabId.find('.T-touristGroupMainForm'));
             //带出线路产品、出游日期、客户来源、同行联系人、费用项的结算价的数量和单价、自动计算应收
             if (!!ids && ids.length > 0) {
@@ -1986,10 +1985,11 @@ define(function(require, exports) {
      */
     touristGroup.installData = function($obj, id, typeFlag, tabArgs, typeInner) {
         //判断购买保险状态
-        var buyInsuranceS = 1;
+        var buyInsuranceS = 1,isNeedArriveService=0,isNeedLeaveService=0; //isNeedArriveService是否接团
         var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
             $arrangeForm = $obj.find(".T-touristGroupMainFormRS"),
-            $receptionObj = $arrangeForm.find('input[name=touristReception]'),
+            $receptionObj = $arrangeForm.find('.T-recive'),
+            $sendObj = $arrangeForm.find('.T-send'),
             $touristSendObj = $arrangeForm.find('input[name=touristSend]'),
             $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]'),
             //获取游客名单住宿、星级、自费、备注
@@ -2102,16 +2102,18 @@ define(function(require, exports) {
             })
         };
 
-        if ($receptionObj.is(':checked') == true) {
-            var isNeedArriveService = 1;
+        //接团
+        if ($receptionObj.find('.T-add-action input[type="checkbox"]:checked').length>0) {
+            isNeedArriveService = 1;
         } else {
             isNeedArriveService = 0;
-        }
+        };
 
-        if ($touristSendObj.is(":checked") == true) {
-            var isNeedLeaveService = 1;
-        } else {
-            isNeedLeaveService = 0;
+        //送团
+        if($sendObj.find('.T-add-action input[type="checkbox"]:checked').length>0){
+            isNeedLeaveService=1;
+        }else{
+            isNeedLeaveService=0;
         }
 
         var buyInsurance = buyInsuranceS;
