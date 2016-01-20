@@ -512,7 +512,20 @@ define(function(require, exports) {
 				}
 			})
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
-
+			//绑定导游服务标准
+			$tab.find('.T-guideService-form').on('click','.T-add-service',function(){
+				//添加导游服务标准
+				ResLineProduct.addGuideService($tab);
+			}).on('click','.T-action',function(){
+				var $that = $(this);
+				if($that.hasClass('T-addService')){
+					//添加服务标准到资源 KingServices.addGuideService
+					ResLineProduct.addService($(this));
+				}else if($that.hasClass('T-delete')){
+					//删除服务标准
+					ResLineProduct.delService($(this));
+				}
+			});
 			// 绑定安排的拖动事件				
 			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
@@ -555,7 +568,38 @@ define(function(require, exports) {
 			})
 		}
 	};
+	//新增导游服务标准 ResLineProduct.addGuideService
+	ResLineProduct.addGuideService = function($obj){
+		var $tbody = $obj.find('.T-service-list');
+		var html = '<tr>'+
+		'<td><input name="serviceName" type="text" class="col-xs-12"><input name="serviceId" type="hidden"></td>'+
+		'<td><input name="serviceContent" type="text" class="col-xs-12"></td>'+
+		'<td><input name="serviceRequire" type="text" class="col-xs-12"></td>'+
+		'<td><a class="cursor T-action T-addService">添加服务标准</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></td>'+
+		'</tr>';
+		$tbody.append(html);
+	};
+	//添加服务标准到资源
+	ResLineProduct.addService = function($obj){
+		var $tr = $obj.closest('tr');
+		var args = {
+			serviceName:$tr.find('input[name=serviceName]').val(),
+			serviceContent:$tr.find('input[name=serviceContent]').val(),
+			serviceRequire:$tr.find('input[name=serviceRequire]').val(),
+			form:"lineProduct"
+		};
+		//添加服务标准到资源 
+		KingServices.addGuideService(args);
+	};
+	//删除服务标准
+	ResLineProduct.delService = function($obj){
+		var $tr = $obj.closest('tr');
+		if(!!$tr.attr('serviceId')){
 
+		}else{
+			$tr.remove();
+		};
+	};
 	/**
 	 * 线路产品购物多选
 	 * @param  {[type]} $this [当前元素]
