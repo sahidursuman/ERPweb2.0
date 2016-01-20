@@ -212,7 +212,7 @@ define(function(require,exports){
 				    		var $that=$(this),$td=$that.closest('td'),
 							    index =$td.find("div").length;
 							var timeLimitDiv = "<div data-index=\""+(index)+"\" class=\"clearfix T-appendDiv div-"+(index)+"\" style=\"margin-top:1px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px;\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right;padding-top:3px;\"><button class=\"btn btn-danger btn-sm btn-white T-del\" style='margin-top: -3px;'><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
-							var contractPriceInput = "<div data-index=\""+(index)+"\" class=\"clearfix appendDiv div-"+(index)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" class='col-sm-12' type=\"text\" maxlength=\"7\"/></div>";
+							var contractPriceInput = "<div data-index=\""+(index)+"\" class=\"clearfix appendDiv div-"+(index)+"\" style=\"margin-top:6px\"><input name=\"contractPrice\" class='col-sm-12 F-float F-money' type=\"text\" maxlength=\"7\"/></div>";
 							$td.next().append(contractPriceInput);
 							$td.append(timeLimitDiv);
 							itemValidator = rule.checkItems($project);

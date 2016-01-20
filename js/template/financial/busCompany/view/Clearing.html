@@ -106,9 +106,13 @@
     <tbody class="T-clearList">
         {{each financialBusCompanyListData as rs index}}  
         <tr data-id="{{rs.id}}">
-            <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}{{/if}}
-                {{if rs.lineProductName != null && rs.lineProductName != ""}}，{{rs.lineProductName}}{{/if}}
-                {{if rs.guideName != null && rs.guideName != ""}}，{{rs.guideName}}{{/if}}
+            <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
+                    {{if rs.lineProductName || rs.guideName}}，{{/if}}
+                {{/if}}
+                {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}}
+                    {{if rs.guideName}}，{{/if}}
+                {{/if}}
+                {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
             </td>
             <td>{{if rs.startTime == null || rs.startTime == ""}}
                     -
