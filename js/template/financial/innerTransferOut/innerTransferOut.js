@@ -408,7 +408,19 @@ define(function(require,exports) {
 		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
+        	if(!$obj.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
+	        	var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
+		        sumListMoney = parseFloat($obj.find('input[name=sumPayMoney]').data("money"));
+		    var sumMoney = InnerTransferOut.autoSumPayMoney($obj);
+		    if(sumPayMoney != sumMoney){
+		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+		        return false;
+		    }
+
         	var allMoney = $obj.find('input[name=sumPayMoney]').val();
         	if(allMoney == 0){
         		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
@@ -675,13 +687,6 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
-		var sumPayMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').val()),
-	        sumListMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').data("money"));
-	    var sumMoney = InnerTransferOut.autoSumPayMoney(tab_id);
-	    if(sumPayMoney != sumMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-	        return false;
-	    }
 		var settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 	    var id; 
 	    var argumentsLen = arguments.length;

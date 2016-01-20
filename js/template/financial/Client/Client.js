@@ -567,8 +567,22 @@ define(function(require, exports) {
             var check =  new FinRule(5).check($tab);
             if(!check.form()){ return false; }
             if (!validator.form()) { return; }
-            var allMoney = $tab.find('input[name=sumPayMoney]').val();
-            if(allMoney == 0){
+            if(!$tab.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
+
+            var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
+                sumList = Client.$sumUnReceivedMoney.data("money");
+            if (sumList === undefined) {  // 未修改付款的时候，直接读取
+                sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
+            }
+            if(sum != sumList){
+                showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+                return false;
+            }
+
+            if(sumList == 0){
                 showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
                     Client.saveClearData($tab);
                 })
@@ -787,15 +801,6 @@ define(function(require, exports) {
             return;
         };
 
-        var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
-            sumList = Client.$sumUnReceivedMoney.data("money");
-        if (sumList === undefined) {  // 未修改付款的时候，直接读取
-            sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-        if(sum != sumList){
-            showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-            return false;
-        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
