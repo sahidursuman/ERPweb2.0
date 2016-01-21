@@ -468,6 +468,7 @@ define(function(require, exports) {
         //付款-自动计算本次付款总额
         $PaymentTabId.find('.T-clearList').off('change').on('change', 'input', function() {
             $(this).closest('tr').data('change', true);
+            $PaymentTabId.data("isEdited",true);
             FinancialService.updateSumPayMoney($PaymentTabId, settleValidator);
         });
         //表格内操作
@@ -532,15 +533,7 @@ define(function(require, exports) {
             var check =  new FinRule(5).check($PaymentTabId);
             if(!check.form()){ return false; }
             if(!payValidator.form()){return;}
-            var allMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
-            if(allMoney == 0){
-                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                    OtherAccounts.paysave(data, $PaymentTabId);
-                })
-            }else{
-                OtherAccounts.paysave(data, $PaymentTabId);
-            }
-            
+            OtherAccounts.paysave(data, $PaymentTabId);
         });
         // 自动下账
         $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
@@ -598,14 +591,8 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function(data, tabid, title, html) {
-        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content"),
-            sumPayMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val()),
-            sumListMoney = $PaymentTabId.find('input[name=sumPayMoney]').data("money");
-        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
-            sumListMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val());
-        };
-        if(sumPayMoney != sumListMoney){
-            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
+        if(!FinancialService.isClearSave($PaymentTabId)){
             return false;
         }
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));

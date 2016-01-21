@@ -215,7 +215,7 @@ define(function(require,exports) {
 				    	if(InnerTransferIn.saveJson.autoPayList){
 				    		if(data.innerTransferIncomeDetailsList.length != 0){
 				    			var saveJson = InnerTransferIn.saveJson.autoPayList
-					    		for(var i=0;i<saveJson.length;i++){
+					    		for(var i=0;i<data.innerTransferIncomeDetailsList.length;i++){
 					    			for(var j=0;j<saveJson.length;j++){
 					    				if(data.innerTransferIncomeDetailsList[i].id == saveJson[j].id){
 					    					data.innerTransferIncomeDetailsList[i].payMoney = saveJson[j].payMoney
@@ -243,6 +243,8 @@ define(function(require,exports) {
                     		var checkTr = InnerTransferIn.$checkId.find(".T-checkTr");
                     		var rightCode = InnerTransferIn.$checkId.find(".T-checkList").data("right");
                     		checkDisabled(fiList,checkTr,rightCode);
+						} else {
+							InnerTransferIn.$checkId.data("isEdited",true);
 						}
 						
 						//获取统计数据
@@ -563,9 +565,8 @@ define(function(require,exports) {
                         InnerTransferIn.saveJson.bankNumber = bankNumber;
                         InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
 						InnerTransferIn.btnSatus = 1;
-						console.log(InnerTransferIn.saveJson);
+						$obj.data("isEdited",false);
 						$data.autoAccount = 1;
-						$obj.data('isEdited', false);
 						InnerTransferIn.chenking($data,2,"settle");
 					});
 				}

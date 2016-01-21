@@ -456,7 +456,7 @@ define(function(require,exports) {
 						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
 						InnerTransferOut.btnSatus = 1;
-						$obj.data('isEdited', false);
+						$obj.data("isEdited",false);
 						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});
@@ -672,6 +672,9 @@ define(function(require,exports) {
 					var html = settlementTemplate(data);
 				    if(Tools.addTab(settleId,'内转转出付款',html)){
 						var $settleId = $("#tab-"+settleId+"-content");
+						if(InnerTransferOut.btnSatus == 1){
+							$settleId.data("isEdited",true);
+						}
 						InnerTransferOut.$settlementTab = $settleId;
 						InnerTransferOut.$settlementSearchArea = $settleId.find(".T-search");
 						//获取线路数据
