@@ -39,9 +39,13 @@ define(function(require, exports) {
                             type: 'null',
                             errMsg: '客户来源不能为空'
                         }]
-                    },
-
-                    { //联系人
+                    }, {
+                        $ele: $obj.find('input[name="preIncomeMoney"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '预收款不合法'
+                        }]
+                    },{ //联系人
                         $ele: $obj.find('input[name="partnerAgencyNameList"]'),
                         $valObj: $obj.find('input[name="partnerAgencyContactId"]'), // 默认是undefined，用于autocomplete之类的插件
                         rules: [{
@@ -55,7 +59,21 @@ define(function(require, exports) {
                             type: 'float',
                             errMsg: '已收数字不合法'
                         }]
-                    }, { //现收
+                    }, { //已收  
+
+                        $ele: $obj.find('input[name="count"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '费用项数量不合法'
+                        }]
+                    }, { //已收  
+
+                        $ele: $obj.find('input[name="price"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '费用项单价不合法'
+                        }]
+                    },{ //现收
                         $ele: $obj.find('input[name="currentNeedPayMoney"]'),
                         rules: [{
                             type: 'float',
