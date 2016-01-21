@@ -28,7 +28,7 @@
 			<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td> 
 			<td>{{rs.quoteNumber}}</td> 
 			<td>{{rs.contactMemberName}}</td> 
-			<td><span class="F-float F-count">{{rs.adultCount}}{{if rs.childCount != 0}}</span>大 <span>{{rs.childCount}}{{/if}}</span>小</td> 
+			<td><span class="F-float F-count">{{if rs.adultCount != 0}}{{rs.adultCount}}{{else}}0{{/if}}</span>大 <span>{{if rs.childCount != 0}}{{rs.childCount}}{{else}}0{{/if}}</span>小</td> 
 			<td>{{if rs.buyInsurance == 1}}是{{else}}否{{/if}}</td> 
 			<td>{{rs.otaOrderNumber}}</td> 
 			<td>{{if rs.memberType == 1}}外宾{{else}}内宾{{/if}}</td> 
