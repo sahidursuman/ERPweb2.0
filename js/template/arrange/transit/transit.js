@@ -494,12 +494,6 @@ define(function(require, exports) {
 
 
 	transit.init_event = function($tab, validator, $id, target) {
-		if (!!target) {
-			transit.$arrangeTab.find('[href=#'+target+']').trigger('click');
-		}else{
-			transit.$arrangeTab.find('.nav-tabs a').eq(0).trigger('click');
-		}
-
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
@@ -586,6 +580,12 @@ define(function(require, exports) {
 			event.preventDefault();
 			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
 		});
+		
+		if (!!target) {
+			transit.$arrangeTab.find('[href=#'+target+']').trigger('click');
+		}else{
+			transit.$arrangeTab.find('.nav-tabs a').eq(0).trigger('click');
+		}
 	};
 
 	//添加资源 
