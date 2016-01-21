@@ -1351,7 +1351,7 @@ define(function(require, exports) {
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" + inTransferFee + "",
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "",
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
