@@ -115,7 +115,7 @@
 							<a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
 								查看
 							</a>
-							<a data-entity-id="{{touristGroup.id}}" class="{{if touristGroup.isEdit == 1}}gray{{else if (touristGroup.isInnerTransferConfirm == 1 || touristGroup.isConfirmAccount == 0 )}}T-action T-edit btn-touristGroup-edit{{else if !(touristGroup.isConfirmAccount == 0)}}gray{{/if}} cursor  R-right" data-right="1120003" title="{{if touristGroup.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{/if}}">
+							<a data-entity-id="{{touristGroup.id}}" class="{{if touristGroup.isInnerTransferConfirm == 0 || touristGroup.isConfirmAccount == 0 || touristGroup.status!=5 }}T-action T-edit btn-touristGroup-edit{{/if}} cursor  R-right" data-right="1120003" {{if touristGroup.isConfirmAccount == 0 || touristGroup.isInnerTransferConfirm == 0 || touristGroup.status==5}}style="color:#bbb;"{{/if}}>
 								<label class="padding-right20">|</label>
 								<span>编辑</span>
 							</a>

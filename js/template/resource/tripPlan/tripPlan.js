@@ -299,7 +299,6 @@ define(function(require, exports) {
 					} else{
 						$touristDiv.addClass('hidden');
 						$touristDiv.find('[name=rightNow]').trigger('click');
-						$touristDiv.find('[name=smsSign]').val('');
 					}
 				});
 				tripPlan.dateTimePicker($container);
@@ -332,7 +331,7 @@ define(function(require, exports) {
 						url: KingServices.build_url('tripPlan','noticeTripPlanArrange'), 	
 						type: 'POST',
 						data: {
-							tripPlanId: id,
+							tripPlanId: id + '',
 							resourceType: resourceType,
 							executeTime: getValue('sendDateTime'),
 							executeTimeType: getValue('timing'),
@@ -826,11 +825,7 @@ define(function(require, exports) {
 			}else{
 				$parent.find('[name=setPlaceTime],[name=setPlacePosition]').prop('disabled',false);
 			}
-			$parent.find('.T-noticeTourists').data('entity-touristGroup','');
-			layer.tips('通知游客数据已被清空', $this, {
-			    tips: [1, '#3595CC'],
-			    time: 2000
-			});
+			$parent.find('.T-noticeTourists').data('entity-touristgroup','');
 		})
 	}
 
