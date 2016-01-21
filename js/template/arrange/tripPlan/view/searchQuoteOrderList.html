@@ -1,6 +1,10 @@
 {{each lineProductList as rs}}
-<tr data-quote-id="{{rs.id}}" 
-	data-line-id="{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}">
+<!-- <tr data-quote-id="{{rs.id}}" 
+	data-line-id="{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}"> -->
+
+<tr data-quote-id='{{rs.id}}' data-quoteNumber='{{rs.quoteNumber}}' 
+	 data-line-id= '{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}' 
+	 data-adultcount='{{rs.adultCount}}' data-adultprice='{{rs.adultQuotePrice}}' data-childcount='{{rs.childCount}}' data-childprice='{{rs.childQuotePrice}}'>
 		<td name="quoteNumber">{{rs.quoteNumber}}</td>
 		<td name="lineName">{{if rs.lineProduct != null}}{{rs.lineProduct.name}}{{/if}}</td>
 		<td>{{if rs.lineProduct != null}}{{rs.lineProduct.type}}{{/if}}</td>

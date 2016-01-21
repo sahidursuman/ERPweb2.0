@@ -63,7 +63,8 @@
     		<label><span class="necessary">*</span>客户：</label>
             <input type="text" name="fromPartnerAgency" class="form-control bind-change T-fromPartnerAgencyName" placeholder="请输入客户来源" style="width:133px;" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId}} readonly {{/if}}>
 			<input type="hidden" name="fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
-			<input type="hidden" name="type" value="">
+			<input type="hidden" name="transferType" value="{{touristGroupDetail.type}}">
+			<input type="hidden" name="transferId" value="{{touristGroupDetail.transferId}}">
 			</label>
 			<span class="T-addPartner R-right {{if !!touristGroupDetail.quoteId}} hidden {{/if}}" data-right="1150002" style="display: inline-block;left:0" title="添加客户">
 				<i class="ace-icon fa fa-plus bigger-110 icon-only" ></i>
