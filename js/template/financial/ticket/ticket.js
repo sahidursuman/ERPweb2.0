@@ -520,15 +520,7 @@ define(function(require, exports) {
 		});
 		$tab.find(".T-saveClear").on('click', function(event){
 			event.preventDefault();
-			var allMoney = $tab.find('input[name=sumPayMoney]').val();
-        	if(allMoney == 0){
-        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-		            Ticket.savePayingData($tab);
-		        })
-        	}else{
-        		Ticket.savePayingData($tab);
-        	}
-			
+			Ticket.savePayingData($tab);
 		});
 
 		FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
@@ -630,13 +622,7 @@ define(function(require, exports) {
 	    		return;
 	        }
         };
-        var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-            sumListMoney = $tab.find('input[name=sumPayMoney]').data("money");
-        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
-        	sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-        if(sumPayMoney != sumListMoney){
-            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        if(!FinancialService.isClearSave($tab)){
             return false;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));

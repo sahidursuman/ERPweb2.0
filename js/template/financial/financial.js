@@ -298,8 +298,10 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 FinancialService.isClearSave = function($tab,rule){
     var check =  new FinRule(5).check($tab);
     if(!check.form()){ return false; }
-    var validator = rule.check($tab);
-    if(!validator.form()){return false;}
+    if(!!rule){
+        var validator = rule.check($tab);
+        if(!validator.form()){return false;}
+    }
 
     if(!$tab.data('isEdited')){
         showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
