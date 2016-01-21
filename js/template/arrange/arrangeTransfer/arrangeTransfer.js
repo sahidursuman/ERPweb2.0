@@ -883,8 +883,6 @@ define(function(require, exports) {
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
 					"transPayedMoney":transPayedMoney,//已付
-					"transAdultPrice":transAdultPrice,//大人转客单价
-					"transChildPrice":transChildPrice,//小孩转客单价
 					"transRemark":transRemark//转客费用备注
 				},			
 			}
