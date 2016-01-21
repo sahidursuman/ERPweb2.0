@@ -1534,21 +1534,22 @@ define(function(require, exports){
             //计算应收（单价*（实际数量-计划数量））
             var needCount = parseFloat(realCount)-parseFloat(memberCount);
             var needIncome = $parent.find('.needIncome');
-            if(needCount<0){
+            /*if(needCount<0){
             	needIncome.text(0)
             }else{
             	var $income = parseFloat(marketPrice)*parseFloat(needCount);
             	$income = Count.changeTwoDecimal($income);
 				needIncome.text($income);
-            };
+            };*/
 
             if ($obj.is('[name="needCount"]'))  {
-            	// 如果修改的是数量--计算现收
+            	// 如果修改的是数量--计算现收、应收和现收相等
             	var incomeMoney = (incomeCount.val()*marketPrice);
             	incomeMoney = Count.changeTwoDecimal(incomeMoney);
             	incomeMoney = parseFloat(incomeMoney);
             	if(incomeCount.val() != 0){
             		incomeMoneyObj.val(incomeMoney);
+            		needIncome.text(incomeMoney);
             	}
             	
             } else if ($obj.is('[name="realGetMoney"]')) {
@@ -1557,6 +1558,7 @@ define(function(require, exports){
             	count = Count.changeTwoDecimal(count);
             	count = parseInt(count);
             	incomeCount.val(count);
+            	needIncome.text(incomeMoney)
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
@@ -1801,7 +1803,7 @@ define(function(require, exports){
 		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" style="width:90p x;"/></td>'+
 		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
 		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
@@ -2763,7 +2765,6 @@ define(function(require, exports){
 							if(ui.item != null){
 								var $tr = $(this).closest('tr');
 								$tr.find('input[name=restaurantId]').val(ui.item.id);
-								$tr.find('input[name=price]').val(0);
 								$tr.find('input[name=standardId]').val(ui.item.id);
 								Count.autoRestaurantSum($(this),$parentObj);
 								//获取餐标
