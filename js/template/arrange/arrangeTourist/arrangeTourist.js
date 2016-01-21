@@ -1292,6 +1292,7 @@ define(function(require, exports) {
      */
     arrangeTourist.saveTransFee = function($editFeeObj, type) {
         var transferFeeStatus = arrangeTourist.getVal($editFeeObj, "transferFeeStatus"),
+            innerTransferFeeStatus = arrangeTourist.getVal($editFeeObj, "innerTransferFeeStatus"),
             $innerForm = $editFeeObj.find('form'),
             id = arrangeTourist.getVal($editFeeObj, "touristGroupId"),
             cashFlag = arrangeTourist.getVal($editFeeObj, "isCurrent");
@@ -1312,7 +1313,6 @@ define(function(require, exports) {
         $trNotDelete.each(function(i) {
             var $that = $(this),
                 FeeJson = {
-                    id: $that.data("entity-id"),
                     type: arrangeTourist.getVal($that, "type"),
                     price: arrangeTourist.getVal($that, "price"),
                     count: arrangeTourist.getVal($that, "count"),
@@ -1320,6 +1320,10 @@ define(function(require, exports) {
                 };
 
             if (transferFeeStatus == 1) {
+                FeeJson.id = $that.attr("data-entity-id");
+            };
+
+            if (innerTransferFeeStatus == 1) {
                 FeeJson.id = $that.attr("data-entity-id");
             };
 
