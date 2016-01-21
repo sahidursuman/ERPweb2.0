@@ -469,8 +469,9 @@ define(function(require, exports) {
     	//绑定账单新增费用项
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
-    		var data = {};
-    		data.touristGroupFeeList = [];
+    		var data = {
+    			touristGroupFeeList : [{}]
+    		};
     		data.isTrans = false;
     		$tab.find('.T-fee-list').append(T.feeList(data));
     		validate = rule.update(validate);
@@ -1191,7 +1192,7 @@ define(function(require, exports) {
 			}
 		});
 	};
-	tripPlan.getTouristsList = function($tab, id){
+	tripPlan.getTouristsList = function($tab, id, feeList){
 		$.ajax({
 			url: KingServices.build_url('touristGroup', 'getMembersByTouristGroupId'),
 			type: 'POST',
@@ -1210,7 +1211,9 @@ define(function(require, exports) {
 				if(!!groupData.quote){
 					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
 					$tab.find('[name="quoteId"]').val(groupData.quote.id);
-					tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id, groupData.quote.id, 1, 1);
+					if (!!feeList == false || feeList.length == 0) { 
+						tripPlan.initNormalLineProduct($tab, groupData.lineProduct.id, groupData.quote.id, 1, 1);
+					}
 				}else{
 					$tab.find('[name="quoteOrderName"]').val("");
 					$tab.find('[name="quoteId"]').val("");
@@ -1250,6 +1253,7 @@ define(function(require, exports) {
 				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
+
 				$tab.find('.T-add-fee').hide();
 				var listTr = $tab.find('.T-fee-list tr');
 				listTr.each(function(i) {
@@ -1772,7 +1776,7 @@ define(function(require, exports) {
 			tripPlan.getLineProductList($dialog, type, isSingle);
 		}
 		// 选择线路产品
-		$dialog.find('.T-btn-submit').on('click', function(event) {
+		$dialog.find('.T-btn-submit').off('click').on('click', function(event) {
 			event.preventDefault();
 			var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
 				oldLinetId = $tab.find('input[name="lineProductId"]').val(),
@@ -1783,7 +1787,26 @@ define(function(require, exports) {
 				return;
 			}
 			var lineId = $tr.data('id');
+
 			if(type == 1){
+				var feeJson = {
+					adultCount: $tr.data('adultcount'),
+					childCount: $tr.data('childcount'),
+					adultPrice: $tr.data('adultprice'),
+					childPrice: $tr.data('childprice')
+				}
+
+				var feeList = {};
+				feeList.touristGroupFeeList = [{
+					type: 1,
+					count: feeJson.adultCount,
+					price: feeJson.adultPrice
+				},{
+					type:2,
+					count: feeJson.childCount,
+					price: feeJson.childPrice
+				}];
+
 				quoteId = $tr.data('quote-id');
 				$tab.find(".T-days").html("");
 				$tab.find(".T-tourists-list").html("");
@@ -1800,11 +1823,6 @@ define(function(require, exports) {
 				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 				lineId = $tr.data('line-id');
 				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
-				$tab.find('.T-add-fee').hide();
-				var listTr = $tab.find('.T-fee-list tr');
-				listTr.each(function(i) {
-					listTr.find('.T-delete').hide();
-				})
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
@@ -1817,7 +1835,7 @@ define(function(require, exports) {
 			}
 			$tab.find('input[name="lineProductId"]').val(lineId);
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
-			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
+			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type, '', feeList);
 			layer.close(searchTravelLinelayer);
 		});	
 	};
@@ -1881,7 +1899,7 @@ define(function(require, exports) {
 		});			
 	};
 
-	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type, isGroup) {
+	tripPlan.initNormalLineProduct = function($tab, pId, quoteId, type, isGroup, feeList) {
 		if (!!pId) {
 			var args = {
 				lineProductId : pId
@@ -1898,7 +1916,13 @@ define(function(require, exports) {
                 	var result =showDialog(data);
 					if(result){
 						if(!!data.touristGroupId && !isGroup){
-							tripPlan.getTouristsList($tab, data.touristGroupId);
+							tripPlan.getTouristsList($tab, data.touristGroupId, feeList);
+
+							$tab.find('.T-add-fee').hide();
+							var listTr = $tab.find('.T-fee-list tr');
+							listTr.each(function(i) {
+								listTr.find('.T-delete').hide();
+							})
 						}else if(type == 1){
 							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
 							$tab.find('[name="currentNeedPayMoney"]').removeAttr('readonly');
@@ -1907,6 +1931,10 @@ define(function(require, exports) {
 							/*if(!!result.isContainSelfPay){
 								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
 							}*/
+							if (!!feeList) {
+							$tab.find('.T-fee-list').html(T.feeList(feeList));
+							$tab.find('.T-calculate').trigger('blur');
+							}
 						}
 						
 						if(!$.isEmptyObject(data.quote)){

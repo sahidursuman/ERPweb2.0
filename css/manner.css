@@ -1659,7 +1659,9 @@ p#back-top a span {
     float: left;
     margin-left: 10px;
 }
-
+.group-info .form-group {
+    margin-right: 25px;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -2049,6 +2051,10 @@ p#back-top a span {
     .timeStartMore {
         margin-left: -25px !important;
     }
+
+    .group-info .form-group{
+        margin-right: 15px;
+    }
 }
 
 
@@ -2070,9 +2076,6 @@ p#back-top a span {
 
 .group-info > .form-inline {
     height: 40px;
-}
-.group-info .form-group {
-    margin-right: 25px;
 }
 
 .group-info .search-btn {
