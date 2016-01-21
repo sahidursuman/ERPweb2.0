@@ -327,7 +327,10 @@ define(function(require, exports) {
 			});
 
 			//初始化页面disabled--false
-		    $tbody.find('.T-type').prop('disabled',false);
+			$tbody.find('.T-type').prop('disabled',false);
+		    $tbody.find('[data-type=3]').prop('disabled',true).css('backgroundColor','#EFEBEB');
+		    
+
 			$tbody.find('.T-type').on('change', function(event) {
 				event.preventDefault();
 				/* Act on the event */
