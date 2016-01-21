@@ -792,11 +792,11 @@ define(function(require, exports) {
 										}
 									}
 									touristGroupJson.push(json);
-									if (touristGroupJson.length > 0) {
-										hasJson = 1;
-									}
-									touristGroupJson = JSON.stringify(touristGroupJson);
 								})
+								if (touristGroupJson.length > 0) {
+									hasJson = 1;
+								}
+								touristGroupJson = JSON.stringify(touristGroupJson);
 								$that.data('entity-touristgroup',touristGroupJson);
 								if (!!hasJson) {
 									$that.text('已设置');
