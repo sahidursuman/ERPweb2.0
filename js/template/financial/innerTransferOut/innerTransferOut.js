@@ -248,7 +248,7 @@ define(function(require,exports) {
 	                                };
 									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
-                                	InnerTransferOut.chenking(obj.curr -1);
+                                	InnerTransferOut.chenking("",obj.curr -1);
                                 }
 							}
 					    }
@@ -640,16 +640,16 @@ define(function(require,exports) {
 	// };
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
-			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
-			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
-			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
-			args.lineProductId = $lineProductId;
-			args.lineProductName = $lineProductId == ""?"":$lineProductName;
-			args.operateUserId= InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
-			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
-			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
+		if(InnerTransferOut.$settlementSearchArea && args == ""){
+			args = {
+				toBusinessGroupId : nnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
+				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
+				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
+				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
+				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
+				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
+				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
+			};
 		};
 		args.pageNo = pageNo || 0;
 		if(args.startDate > args.endDate){
