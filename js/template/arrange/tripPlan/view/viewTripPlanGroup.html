@@ -22,12 +22,12 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">收客单号：</label>
-			<span class="col-xs-8">{{tripPlan.otaOrderNumber}}</span>
+			<span class="col-xs-8">{{tripPlan.orderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">出游日期：：</label>
+			<label class="col-xs-4 text-right">出游日期：</label>
 			<span class="col-xs-8">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
 		</div>
 		<div class="col-xs-3">
@@ -294,10 +294,10 @@
 								<label class="control-label">含餐：</label>
 								{{#days.dayInfo.repastDetail | getRestaurantDesc}}
 							</div>
-							<div class="col-xs-3">
+							<div class="col-xs-2">
 								<label class="control-label hct-label-overflow">住宿地点：<span title="{{days.dayInfo.restPosition}}">{{days.dayInfo.restPosition}}</span></label>
 							</div>
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<label class="control-label hct-label-overflow">景点：<span title="{{days.dayInfo.scenicItemNames}}">{{days.dayInfo.scenicItemNames}}</span></label>
 							</div>
 						</div>
