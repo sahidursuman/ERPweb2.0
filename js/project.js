@@ -2142,9 +2142,9 @@ KingServices.viewFeeDetail = function(id){
 	});
 }
 //查看游客小组
-KingServices.viewTouristGroup = function(id){
+KingServices.viewTouristGroup = function(id,isTransferIn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
-		module.viewTouristGroup(id);
+		module.viewTouristGroup(id,isTransferIn);
 	});
 }
 //查看外转情况

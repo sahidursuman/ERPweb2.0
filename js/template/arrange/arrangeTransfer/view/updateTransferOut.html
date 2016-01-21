@@ -28,10 +28,7 @@
 											  <div class="col-sm-2 trans-NeedPayAllMoney">
 												 <input name="transNeedPayAllMoney" value="{{touristGroupTransfer.touristGroup.transNeedPayAllMoney}}" type="text" readonly="readonly" class="col-xs-12 F-float F-money"/>
 											  </div>
-											  
-											 
-
-											    <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>计划现收：</label>
+											  <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>计划现收：</label>
 											  <div class="col-sm-2 trans-PayedMoney">
 											  {{if cashFlag==1}}
 												 <input name="currentNeedPayMoney F-float F-money"  value="{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text"  class="col-xs-12"/>
@@ -39,8 +36,6 @@
 												  <input name="currentNeedPayMoney F-float F-money"  value="0" readonly="readonly" type="text"  class="col-xs-12"/>
 											  {{/if}}
 											  </div>
-
-
 											<label>
 												<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
 												<span class="lbl">
