@@ -236,6 +236,9 @@
 			</div>
 		</div>
 	</form>
+
+
+	{{if type!='inner'}}
 	<form class="form-horizontal touristGroupMainForm T-touristGroupMainFormRS" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -243,8 +246,6 @@
 						<h5 class="">
 							<label class="middle title-size">中转</label>
 						</h5>
-
-
 			       <div class="form-inline col-sm-12">
 					    <!--接团start-->
 					    {{if touristGroupDetail.outRemarkArrange!=null}}
@@ -506,6 +507,7 @@
 		</button>
 		<div class="space-20"></div> -->
 	</form>
+    {{/if}}
 	
 	
 	

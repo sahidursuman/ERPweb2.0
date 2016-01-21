@@ -1780,6 +1780,11 @@ define(function(require, exports){
 	};
 	//新增车费--这个版本对于车队没有新增
 	Count.addBus = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td><input name="startTime" type="text" class="datepicker"></td>'+
 		'<td><input name="endTime" type="text" class="datepicker"></td>'+
@@ -1804,6 +1809,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//格式化时间

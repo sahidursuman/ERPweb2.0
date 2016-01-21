@@ -1960,6 +1960,16 @@ p#back-top a span {
     .quoteInprodactName {
         width: 95px !important;
     }
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-Right7 {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -20px !important;
+    }
 }
 
 
@@ -2027,6 +2037,17 @@ p#back-top a span {
     /*报价媒体css样式*/
     .busQuoteWidth {
         width: 140px;
+    }
+    /*报价管理*/
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-Right7 {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -25px !important;
     }
 }
 

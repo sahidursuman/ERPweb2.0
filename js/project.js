@@ -780,13 +780,33 @@ function listMenu(menuTemplate){
 
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if (targetIsCheckbox)  {	// 点击了checkbox
-								$that.toggleClass('success', $target.prop('checked'));
+								// $that.toggleClass('success', $target.prop('checked'));
+								toggleClass('success',  $target.prop('checked'));
 							} else if ($checkBox.length) {  // tr含有checkbox
 								$that.toggleClass('success');								
 								$checkBox.trigger('click');	
 							} else {   // 普通tr
-								$that.addClass('success').siblings('tr').removeClass('success');
+								$that.siblings('tr').removeClass('success');
+								toggleClass('success',  true);
 							}
+					}
+
+					// tr不对齐的处理
+					function toggleClass(className, enable) {
+						var $trs = $that.parent().children('tr'),
+							baseCnt = $trs.eq(0).children('td').length,
+							$current = $that.next(), $prev = $that;
+
+						// 向下遍历
+						while(baseCnt != $current.children('td').length && $current.children('td').length > 0) {
+							$current = $current.toggleClass(className, enable).next();
+						}
+
+						// 向上遍历
+						while(baseCnt != $prev.children('td').length && $prev.children('td').length > 0) {
+							$prev = $prev.toggleClass(className, enable).prev();
+						}
+						$prev.toggleClass(className, enable);
 					}
 				});
 
@@ -2142,9 +2162,9 @@ KingServices.viewFeeDetail = function(id){
 	});
 }
 //查看游客小组
-KingServices.viewTouristGroup = function(id){
+KingServices.viewTouristGroup = function(id,isTransferIn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
-		module.viewTouristGroup(id);
+		module.viewTouristGroup(id,isTransferIn);
 	});
 }
 //查看外转情况
