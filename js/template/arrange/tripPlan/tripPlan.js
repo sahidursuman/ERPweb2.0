@@ -469,8 +469,9 @@ define(function(require, exports) {
     	//绑定账单新增费用项
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
-    		var data = {};
-    		data.touristGroupFeeList = [];
+    		var data = {
+    			touristGroupFeeList : [{}]
+    		};
     		data.isTrans = false;
     		$tab.find('.T-fee-list').append(T.feeList(data));
     		validate = rule.update(validate);
