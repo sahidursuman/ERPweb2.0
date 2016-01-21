@@ -37,7 +37,7 @@
 										<span class="lbl"></span>
 									</label>
 								</td>
-								<td name="creatorName">{{rs.outOPUser.realName}}</td>
+								<td name="creatorName">{{if !!rs.outOPUser}}{{rs.outOPUser.realName}}{{/if}}</td>
 								<td name="lineProductName">{{rs.lineProduct.name}}</td>
 								<td name="travelAgencyName">{{rs.partnerAgency.travelAgencyName}}</td>
 								<td name="contactMemberName">{{rs.contactMember.name}}</td>

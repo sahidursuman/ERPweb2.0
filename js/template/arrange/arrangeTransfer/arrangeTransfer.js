@@ -1024,11 +1024,9 @@ define(function(require, exports) {
 			data:"outTransferId="+id+"",
 		})
 		.done(function(data) {
-			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-				var touristGroupId = data.touristGroupId;
-			    //跳转游客小组新增页面
-				KingServices.updateTransfer(touristGroupId,id);
-			})
+			var touristGroupId = data.touristGroupId;
+		    //跳转游客小组新增页面
+			KingServices.updateTransfer(touristGroupId,id);
 		})
 
 	};

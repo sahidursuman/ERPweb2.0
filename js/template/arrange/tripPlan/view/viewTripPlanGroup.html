@@ -22,7 +22,7 @@
 		</div>
 		<div class="col-xs-3">
 			<label class="col-xs-4 text-right">收客单号：</label>
-			<span class="col-xs-8">{{tripPlan.orderNumber}}</span>
+			<span class="col-xs-8">{{touristGroup.orderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
@@ -236,7 +236,7 @@
 												<td>{{busCompanyList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 												<td>{{busCompanyList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 												<td>{{busCompanyList.taskType | getTaskDesc}}</td>
-												<td class="F-float F-count">{{busCompanyList.needSeatCount}}</td>
+												<td class="F-float F-count">{{if !!busCompanyList.bus}}{{busCompanyList.bus.seatCount}}{{else}}{{busCompanyList.needSeatCount}}{{/if}}</td>
 												<td>{{busCompanyList.brand}}</td>
 												<td>{{if busCompanyList.bus}}{{busCompanyList.bus.licenseNumber}}{{/if}}</td>
 												<td>{{if busCompanyList.busCompany}}{{busCompanyList.busCompany.companyName}}{{/if}}</td>
