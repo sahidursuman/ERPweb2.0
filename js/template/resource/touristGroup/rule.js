@@ -55,7 +55,21 @@ define(function(require, exports) {
                             type: 'float',
                             errMsg: '已收数字不合法'
                         }]
-                    }, { //现收
+                    }, { //已收  
+
+                        $ele: $obj.find('input[name="count"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '费用项数量不合法'
+                        }]
+                    }, { //已收  
+
+                        $ele: $obj.find('input[name="price"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '费用项单价不合法'
+                        }]
+                    },{ //现收
                         $ele: $obj.find('input[name="currentNeedPayMoney"]'),
                         rules: [{
                             type: 'float',

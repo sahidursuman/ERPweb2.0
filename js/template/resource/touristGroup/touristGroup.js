@@ -2216,7 +2216,7 @@ define(function(require, exports) {
             touristGroupMemberJsonDel = JSON.stringify(touristGroupMemberJsonDel);
             touristGroupFeeJsonDel = JSON.stringify(touristGroupFeeJsonDel);
             url = touristGroup.url("updateTouristGroup", "update");
-            data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip
+            data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip)
             tabId = updateTabId
         } else {
             //提交数据
@@ -2228,7 +2228,7 @@ define(function(require, exports) {
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
-            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + touristGroupMemberJsonAdd + "&reciveTrip=" + reciveTrip+"&sendTrip="+sendTrip;
+            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
             var tabId = addTabId;
         };
 
