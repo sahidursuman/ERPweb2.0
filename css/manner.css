@@ -427,6 +427,10 @@ table tr td {
     margin-left: 15px;
 }
 
+.mar-r-10 {
+    margin-right: 10px;
+}
+
 .pad-0 {
     padding: 0;
 }

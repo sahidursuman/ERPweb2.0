@@ -11,9 +11,9 @@
         <td>{{checking.operateTransRealname}}</td>
         <td>{{checking.operateTransTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td><span class="transNeedPayMoney F-float F-money">{{checking.transNeedPayMoney}}</span></td>
-        <td>{{if checking.innerTransferFeeList.length > 0}}
+        <td style="text-align:left">{{if checking.innerTransferFeeList.length > 0}}
                 {{each checking.innerTransferFeeList as otherFee}}
-                    {{otherFee.discribe}}:
+                    {{otherFee.name}}:
                     <span class="F-float F-money">{{otherFee.price}}</span> X
                     <span class="F-float F-count">{{otherFee.count}}</span> =
                     <span class="F-float F-money">{{otherFee.price*otherFee.count}}</span><br>
