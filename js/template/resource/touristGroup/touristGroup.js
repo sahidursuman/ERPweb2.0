@@ -2209,20 +2209,21 @@ define(function(require, exports) {
             url = touristGroup.url("updateTouristGroup", "update");
             data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip)
             tabId = updateTabId
-        } else {
+        }
+
+        if(typeFlag==undefined || typeInner=='out'){
             //提交数据
             var innerStatus = false;
-            /*if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
-                innerStatus = true;
-            }*/
             if($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0){
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
             data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
-            var tabId = addTabId;
+            tabId = addTabId;
+            if (typeInner=='out') {
+                tabId = updateTabId
+            };
         };
-
 
        //中转选项是否打勾且中转费用项<=0
        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
@@ -2232,6 +2233,7 @@ define(function(require, exports) {
         }else{  
             touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
         }
+       
     };
 
 
@@ -2291,8 +2293,8 @@ define(function(require, exports) {
                                     touristGroup.updateEvents();
                                 }
                             } else {
-                                Tools.closeTab(tabId);
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
+                                Tools.closeTab(tabId);
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
