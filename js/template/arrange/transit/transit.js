@@ -365,13 +365,7 @@ define(function(require, exports) {
 						//已修改提示
 						transit.$arrangeTab = $("#tab-arrange_transit-update-content");
 						var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-						transit.init_event(transit.$arrangeTab, validator, id);
-						if (!!target) {
-							transit.$arrangeTab.find('[href=#'+target+']').trigger('click');
-						}else{
-							transit.$arrangeTab.find('.nav-tabs a').eq(0).trigger('click');
-						}
-
+						transit.init_event(transit.$arrangeTab, validator, id, target);
 					}
 		
 				}
@@ -499,7 +493,12 @@ define(function(require, exports) {
 	};
 
 
-	transit.init_event = function($tab, validator, $id) {
+	transit.init_event = function($tab, validator, $id, target) {
+		if (!!target) {
+			transit.$arrangeTab.find('[href=#'+target+']').trigger('click');
+		}else{
+			transit.$arrangeTab.find('.nav-tabs a').eq(0).trigger('click');
+		}
 
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
@@ -514,7 +513,7 @@ define(function(require, exports) {
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			event.preventDefault();
-			transit.init_event($tab,validator,$id);
+			transit.init_event($tab,validator,$id, target);
 		})
 		// 保存后关闭
 		.on(CLOSE_TAB_SAVE, function(event) {

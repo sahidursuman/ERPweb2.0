@@ -156,7 +156,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Self.Getcheck(obj.curr-1,selfId,selfName);
+                                Self.Getcheck(obj.curr-1,selfPayId,selfPayName);
                             }
                         }
                     });
@@ -304,7 +304,7 @@ define(function(require, exports) {
                                     voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Self.$clearTab.find('input[name=tally-date]').val()
                                 }
-                                Self.GetClear(isAutoPay,obj.curr -1,selfId,selfName);
+                                Self.GetClear(isAutoPay,obj.curr -1,selfPayId,selfPayName);
                             }
                         }
                     });
