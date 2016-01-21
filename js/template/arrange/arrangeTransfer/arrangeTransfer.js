@@ -499,6 +499,8 @@ define(function(require, exports) {
 					var result = showDialog(data);
 					if(result){	
 						var data = {
+							cashFlag: data.cashFlag,
+                            isParent: data.isParent,
 						    touristGroupTransfer : JSON.parse(data.touristGroupTransfer),
 						    parentTouristGroup : JSON.parse(data.parentTouristGroup),
 						    getPayType : getFeeItemPayTypeOptions.getPayType
@@ -1018,8 +1020,8 @@ define(function(require, exports) {
 	transfer.updateTransferIn=function(id){
 
 		$.ajax({
-			url:KingServices.build_url("transfer","saveLine"),
-			data:"transferId="+id+"",
+			url:KingServices.build_url("transfer","confirm"),
+			data:"outTransferId="+id+"",
 		})
 		.done(function(data) {
 			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {

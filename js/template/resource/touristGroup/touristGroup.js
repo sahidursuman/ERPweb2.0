@@ -452,16 +452,17 @@ define(function(require, exports) {
         $updateTabId.data('isEdited', false);
     };
     //查看小组信息
-    touristGroup.viewTouristGroupDetails = function(id) {
+    touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
         $.ajax({
             url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id,
+            data: "id=" + id+"&type=" + isTransferIn +"",
             type: 'POST',
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
                     var touristGroupInfo = JSON.parse(data.touristGroupDetail);
                     data.touristGroupDetail = touristGroupInfo;
+
                     var html = viewTemplate(data);
                     Tools.addTab(viewTabId, "查看小组", html);
                     var $viewTabId = $("#tab-resource_touristGroup-view-content"),
@@ -1054,7 +1055,8 @@ define(function(require, exports) {
                             adultCount: $tr.attr('data-adultCount'),
                             adultPrice: $tr.attr('data-adultPrice'),
                             childCount: $tr.attr('data-childCount'),
-                            childPrice: $tr.attr('data-childPrice')
+                            childPrice: $tr.attr('data-childPrice'),
+                            customerType:$tr.attr('data-customerType')
                         },
                         id = {
                             id: chooseQuot.quoteId
@@ -1083,6 +1085,7 @@ define(function(require, exports) {
                 $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice);
                 $addTabId.find('.T-Fee-adultCount').val(chooseQuotObj.adultCount);
                 $addTabId.find('.T-Fee-childCount').val(chooseQuotObj.childCount);
+                $addTabId.find('.T-customerType').val(chooseQuotObj.customerType);
                 $addTabId.find('.T-adultPrice').trigger('change');
                 $addTabId.find('.T-childPrice').trigger('change');
 
@@ -1099,32 +1102,6 @@ define(function(require, exports) {
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择报价线路产品", function() {});
             };
-        });
-    };
-
-    //查看小组信息
-    touristGroup.viewTouristGroupDetails = function(id) {
-        $.ajax({
-            url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id,
-            type: 'POST',
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var touristGroupInfo = JSON.parse(data.touristGroupDetail);
-                    data.touristGroupDetail = touristGroupInfo;
-                    var html = viewTemplate(data);
-                    Tools.addTab(viewTabId, "查看小组", html);
-                    var $viewTabId = $("#tab-resource_touristGroup-view-content"),
-                        $groupInfoForm = $viewTabId.find(".T-touristGroupMainForm"); //小组信息对象
-                    $groupMemberForm = $viewTabId.find(".T-touristGroupMainFormMember"); //游客名单对象
-                    $innerTransferForm = $viewTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
-                    //接送安排
-                    touristGroup.innerTransferDispose($innerTransferForm, 2);
-                    //游客的序号
-                    touristGroup.memberNumber($groupMemberForm);
-                }
-            }
         });
     };
     //删除小组
@@ -2218,7 +2195,7 @@ define(function(require, exports) {
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
-            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
+            data = form + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
             tabId = addTabId;
             if (typeInner=='out') {
                 tabId = updateTabId
