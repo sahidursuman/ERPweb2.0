@@ -635,6 +635,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -780,6 +781,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/each}}
                     {{/each}}
@@ -845,6 +847,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/if}}
                     {{/each}}
