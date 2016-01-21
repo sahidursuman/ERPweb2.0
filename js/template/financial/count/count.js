@@ -3619,7 +3619,8 @@ define(function(require, exports){
 				grossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.grossProfitMoney').text())),
 				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text())),
 				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
-				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text()))
+				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text())),
+				outPayAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripTransitCost').text()))
 		};
 		var isEdit = 0;
 		if($obj.find('.T-edit').is(":checked")){
