@@ -285,6 +285,8 @@ define(function(require, exports) {
 			data:"id="+id,
 			success:function(data){
 				var data = {
+					cashFlag: data.cashFlag,
+                    isParent: data.isParent,
 					innerTransfer : JSON.parse(data.innerTransfer),
 				    businessGroup : JSON.parse(data.businessGroup),
 				    parentTouristGroup : JSON.parse(data.parentTouristGroup),
