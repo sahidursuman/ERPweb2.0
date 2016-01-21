@@ -1250,6 +1250,11 @@ define(function(require, exports) {
 				$tab.find('[name="remark"]').val(groupData.remark)
 				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
 				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
+				$tab.find('.T-add-fee').hide();
+				var listTr = $tab.find('.T-fee-list tr');
+				listTr.each(function(i) {
+					listTr.find('.T-delete').hide();
+				})
 			}
 		});
 	};
@@ -1794,6 +1799,12 @@ define(function(require, exports) {
 				$tab.find('input[name="preIncomeMoney"]').val('').removeAttr('readonly');
 				$tab.find('input[name="currentNeedPayMoney"]').val('').removeAttr('readonly');
 				lineId = $tr.data('line-id');
+				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
+				$tab.find('.T-add-fee').hide();
+				var listTr = $tab.find('.T-fee-list tr');
+				listTr.each(function(i) {
+					listTr.find('.T-delete').hide();
+				})
 			}else if(oldLinetId != lineId){
 				$tab.find('input[name="quoteId"]').val("");
 				$tab.find('input[name="quoteOrderName"]').val("");
@@ -1808,7 +1819,6 @@ define(function(require, exports) {
 			$tab.find('input[name="lineProductName"]').val($tr.find('[name="lineName"]').text()).trigger('focusout');
 			tripPlan.initNormalLineProduct($tab, lineId, quoteId, type);
 			layer.close(searchTravelLinelayer);
-			$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 		});	
 	};
 
