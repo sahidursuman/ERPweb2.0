@@ -1512,6 +1512,9 @@ define(function(require, exports){
 			var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
+			var incomeCount = $parent.find('input[name=needCount]');
+			var incomeMoneyObj = $parent.find('input[name=realGetMoney]');
+			var incomeMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
             var realReduceMoney = $parent.find('input[name="realReduceMoney"]').val();
@@ -1524,6 +1527,7 @@ define(function(require, exports){
             guideRate = Count.changeTwoDecimal(guideRate);
             realCount = Count.changeTwoDecimal(realCount);
             realReduceMoney = Count.changeTwoDecimal(realReduceMoney);
+            incomeMoney = Count.changeTwoDecimal(incomeMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
@@ -1535,6 +1539,23 @@ define(function(require, exports){
             	var $income = parseFloat(marketPrice)*parseFloat(needCount);
             	$income = Count.changeTwoDecimal($income);
 				needIncome.text($income);
+            };
+
+            if ($obj.is('[name="needCount"]'))  {
+            	// 如果修改的是数量--计算现收
+            	var incomeMoney = (incomeCount.val()*marketPrice);
+            	incomeMoney = Count.changeTwoDecimal(incomeMoney);
+            	incomeMoney = parseFloat(incomeMoney);
+            	if(incomeCount.val() != 0){
+            		incomeMoneyObj.val(incomeMoney);
+            	}
+            	
+            } else if ($obj.is('[name="realGetMoney"]')) {
+            	// 如果修改的是现收--计算应收数量
+            	var count = (incomeMoney/marketPrice);
+            	count = Count.changeTwoDecimal(count);
+            	count = parseInt(count);
+            	incomeCount.val(count);
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
@@ -1591,15 +1612,16 @@ define(function(require, exports){
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
 		'<td><input name="selfPayItem" style="width:90px;" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" style="width:60px;" type="text"></td>'+
+		'<td><input name="needCount" style="width:60px;" type="text"></td>'+
+		'<td><span class="needIncome"></span></td>'+
+		'<td><input name="realGetMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="price" style="width:60px;" type="text"></td>'+
-		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="realCount" style="width:60px;" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
 		'<td><input name="realReduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
-		'<td><span class="needIncome"></span></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="currentMonry" style="width:60px;" type="text"></td>'+
+		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
@@ -3710,7 +3732,7 @@ define(function(require, exports){
 					travelAgencyRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
 					travelAgencyRebateMoney:$(this).find('.travelAgencyRebateMoney').text(),
 					guideRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=guideRate]').val())/100),
-					realGetMoney:$(this).find('input[name=currentMonry]').val(),
+					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
 				}

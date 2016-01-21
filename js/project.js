@@ -629,7 +629,11 @@ function viewAllMsg(){
 }
 
 function trim(str){
-	return str.replace(/(^\s*)|(\s*$)/g, "");
+	if (!!str) {
+		return str.replace(/(^\s*)|(\s*$)/g, "");
+	} else {
+		return str;
+	}
 }
 
 /**
@@ -1704,7 +1708,17 @@ Tools.filterUnPoint = function(obj){
 	return $obj;
 };
 
-$('body').on('keydown.format-float.api', 'input.F-float', function(event) {
+$('body').on('focusin.format-float.api', 'input.F-float', function(event) {
+	$(this).data('old-value-format-float.api', this.value);
+})
+.on('focusout.format-float.api', 'input.F-float', function(event) {
+	if ($(this).data('old-value-format-float.api') !== this.value
+		&& !!this.value && this.value.split(',').length > 1) {
+		// 处理千分位存在时丢失change事件的问题
+		$(this).trigger('change');
+	}
+})
+.on('keydown.format-float.api', 'input.F-float', function(event) {
 	Tools.input_key = event.which;
 })
 .on('input.format-float.api', 'input.F-float', function(event) {
@@ -2005,9 +2019,9 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 */
 
-KingServices.updateTransfer = function(touristGroupId)  {
+KingServices.updateTransfer = function(touristGroupId,id)  {
 	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransfer(touristGroupId);
+		module.updateTransfer(touristGroupId,id);
 	});
 }
 

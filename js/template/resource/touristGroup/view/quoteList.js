@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":291,"md5":"ad3b3f61ecb919ba9a1233d3b9f7ea3e"}*/
+/*TMODJS:{"debug":true,"version":302,"md5":"ad3b3f61ecb919ba9a1233d3b9f7ea3e"}*/
 define(function(require) {
     return require("../../../template")("resource/touristGroup/view/quoteList", function($data, $filename) {
         try {

@@ -412,7 +412,7 @@ define(function(require, exports) {
 					transfer.deleteTransferOut(id);
 				} else if ($that.hasClass('T-transfer-confirm'))  {
 					//撤销
-					transfer.transferOutConfirm('confirmButton',id,status);
+					transfer.transferOutConfirm(id,status);
 				}
 		    });
 
@@ -525,18 +525,17 @@ define(function(require, exports) {
 		 * @param  {[type]} id [description]
 		 * @return {[type]}    [description]
 		 */
-		transfer.transferOutConfirm = function(confirmButton,id,status){
+		transfer.transferOutConfirm = function(id,status){
 			$.ajax({
-				url: KingServices.build_url("transfer","findPager"),
-				dataType: 'id='+id+"&confirmButton="+confirmButton+"&status="+status,
+				url: KingServices.build_url("transfer","updateStatus"),
+				data: 'id='+ id +"&status="+status,
 			})
 			.done(function(data) {
 				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-					var type="1",
-						divId="Transfer-Out";
+					var divId="Transfer-Out",
+						type="1";
 						transfer.getSearchParam(divId,type);
-						transfer.findPager(divId,type,0);
-						transfer.listMainHead(0);
+						transfer.findPager(divId,type,0);	
 				})
 			})
 		};
@@ -664,9 +663,9 @@ define(function(require, exports) {
 		transfer.newAddFee=function($tab,validator){
 			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
 		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
-            "<option value=\"3\">中转结算价</option><option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
+            "<option value=\"3\">中转结算价</option><option value=\"4\">车辆费用</option><option value=\"5\">餐厅费用</option><option value=\"6\">保险费用</option>"+
             "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
-            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其它费用</option></select></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
@@ -1026,7 +1025,7 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
 				var touristGroupId = data.touristGroupId;
 			    //跳转游客小组新增页面
-				KingServices.updateTransfer(touristGroupId);
+				KingServices.updateTransfer(touristGroupId,id);
 			})
 		})
 

@@ -5,6 +5,9 @@ var data = {
 		{
 			key: '#tab-financial_planProfit-content .T-search',
 			args:  ["_trackEvent", "发团利润", "按钮", "搜索", 1, siteId]
+		},{
+			key: '#tab-financial_planProfit-content .T-tripDetail',
+			args:  ["_trackEvent", "发团利润", "按钮", "单团明细", 1, siteId]
 		}
 	],
 
@@ -25,6 +28,10 @@ var data = {
 		{
 			key:'#tab-financial_count-content .T-quality',
 			args:  ["_trackEvent", "报账审核", "按钮", "质量", 1, siteId]
+		},
+		{
+			key:'#tab-financial_count-content .T-account',
+			args:  ["_trackEvent", "报账审核", "按钮", "报账", 1, siteId]
 		}
 	],
 
@@ -220,7 +227,10 @@ var data = {
 			key:'#tab-financial_turnProfit-content .T-showTransPay',
 			args:  ["_trackEvent", "外转利润", "按钮", "外转成本明细", 1, siteId]
 		},
-
+		{
+			key:'#tab-financial_turnProfit-content .T-checkTurn',
+			args:  ["_trackEvent", "外转利润", "按钮", "核算中转", 1, siteId]
+		}
 	],
 
 	// 代订利润
@@ -292,6 +302,10 @@ var data = {
 		{
 			key:'#tab-financial_Client_checking-content .T-saveClear',
 			args:  ["_trackEvent", "客户对账", "按钮", "确认对账", 1, siteId]
+		},
+		{
+			key:'#tab-financial_Client_checking-content .T-viewGroup',
+			args:  ["_trackEvent", "客户对账", "按钮", "查看小组", 1, siteId]
 		}
 	],
 
@@ -316,6 +330,10 @@ var data = {
 		{
 			key:'#tab-financial_Client_clearing-content .T-saveClear',
 			args:  ["_trackEvent", "客户收款", "按钮", "确认收款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_Client_clearing-content .T-viewGroup',
+			args:  ["_trackEvent", "客户收款", "按钮", "查看小组", 1, siteId]	
 		}
 	],
 
@@ -355,6 +373,10 @@ var data = {
 		{
 			key:'#tab-financial_innerTransfer_in-checking-content .T-checking',
 			args:  ["_trackEvent", "内转转入对账", "按钮", "确认对账", 1, siteId]
+		},
+		{
+			key:'#tab-financial_innerTransfer_in-checking-content .T-seeGroup',
+			args:  ["_trackEvent", "内转转入对账", "按钮", "查看小组", 1, siteId]
 		}
 	],
 
@@ -380,6 +402,10 @@ var data = {
 			key:'#tab-financial_innerTransfer_in-settlement-content .T-incomeMoney',
 			args:  ["_trackEvent", "内转转入收款", "按钮", "确认收款", 1, siteId]	
 		},
+		{
+			key:'#tab-financial_innerTransfer_in-settlement-content .T-seeGroup',
+			args:  ["_trackEvent", "内转转入收款", "按钮", "查看小组", 1, siteId]
+		}
 	],
 
 	// 购物账务
@@ -419,6 +445,10 @@ var data = {
 		{
 			key:'#tab-financial_shop_checking-content .T-saveClear',
 			args:  ["_trackEvent", "购物对账", "按钮", "确认对账", 1, siteId]
+		},
+		{
+			key:'#tab-financial_shop_checking-content .T-view-receipts',
+			args:  ["_trackEvent", "购物对账", "按钮", "查看单据图片", 1, siteId]
 		}
 	],
 
@@ -443,6 +473,10 @@ var data = {
 		{
 			key:'#tab-financial_shop_clearing-content .T-saveClear',
 			args:  ["_trackEvent", "购物收款", "按钮", "确认收款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_shop_clearing-content .T-view-receipts',
+			args:  ["_trackEvent", "购物收款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -547,6 +581,10 @@ var data = {
 		{
 			key:'#tab-financial_innerTransfer_out-checking-content .T-checking',
 			args:  ["_trackEvent", "内转转出对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_innerTransfer_out-checking-content .T-seeGroup',
+			args:  ["_trackEvent", "内转转出对账", "按钮", "查看小组", 1, siteId]	
 		}
 	],
 
@@ -571,6 +609,10 @@ var data = {
 		{
 			key:'#tab-financial_innerTransfer_out-settlement-content .T-payMoney',
 			args:  ["_trackEvent", "内转转出付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_innerTransfer_out-settlement-content .T-seeGroup',
+			args:  ["_trackEvent", "内转转出付款", "按钮", "查看小组", 1, siteId]	
 		}
 	],
 
@@ -611,6 +653,10 @@ var data = {
 		{
 			key:'#tab-financial_transfer-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "外转对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_transfer-checking-content .T-viewGroup',
+			args:  ["_trackEvent", "外转对账", "按钮", "查看小组", 1, siteId]	
 		}
 	],
 
@@ -635,6 +681,10 @@ var data = {
 		{
 			key:'#tab-financial_transfer-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "外转付款", "按钮", "确认付款", 1, siteId]		
+		},
+		{
+			key:'#tab-financial_transfer-clearing-content .T-viewGroup',
+			args:  ["_trackEvent", "外转付款", "按钮", "查看小组", 1, siteId]	
 		}
 	],
 
@@ -747,6 +797,10 @@ var data = {
 		{
 			key:'#tab-financial_restaurant-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "餐厅对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_restaurant-checking-content .T-restaurantImg',
+			args:  ["_trackEvent", "餐厅对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -771,6 +825,10 @@ var data = {
 		{
 			key:'#tab-financial_restaurant-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "餐厅付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_restaurant-clearing-content .T-restaurantImg',
+			args:  ["_trackEvent", "餐厅付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -811,6 +869,10 @@ var data = {
 		{
 			key:'#tab-financial_rummery-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "酒店对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_rummery-checking-content .T-hotelImg',
+			args:  ["_trackEvent", "酒店对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -835,6 +897,10 @@ var data = {
 		{
 			key:'#tab-financial_rummery-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "酒店付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_rummery-clearing-content .T-hotelImg',
+			args:  ["_trackEvent", "酒店付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -875,6 +941,10 @@ var data = {
 		{
 			key:'#tab-financial_busCompany-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "车队对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_busCompany-checking-content .T-busCompanyImg',
+			args:  ["_trackEvent", "车队对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -899,6 +969,10 @@ var data = {
 		{
 			key:'#tab-financial_busCompany-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "车队付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_busCompany-clearing-content .T-busCompanyImg',
+			args:  ["_trackEvent", "车队付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -939,6 +1013,10 @@ var data = {
 		{
 			key:'#tab-financial_busCompany-checking-content .T-saveClear',
 			args:  ["_trackEvent", "票务对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_busCompany-checking-content .T-view-receipts',
+			args:  ["_trackEvent", "票务对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -963,6 +1041,10 @@ var data = {
 		{
 			key:'#tab-financial_ticket_clearing-content .T-saveClear',
 			args:  ["_trackEvent", "票务付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_ticket_clearing-content .T-view-receipts',
+			args:  ["_trackEvent", "票务付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -1003,6 +1085,10 @@ var data = {
 		{
 			key:'#tab-financial_scenic-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "景区对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_scenic-checking-content .T-scenicImg',
+			args:  ["_trackEvent", "景区对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	], 
 
@@ -1027,6 +1113,10 @@ var data = {
 		{
 			key:'#tab-financial_scenic-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "景区付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_scenic-clearing-content .T-scenicImg',
+			args:  ["_trackEvent", "景区付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -1067,6 +1157,10 @@ var data = {
 		{
 			key:'#tab-financial_self-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "自费对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_self-checking-content .T-selfPayImg',
+			args:  ["_trackEvent", "自费对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	], 
 
@@ -1091,6 +1185,10 @@ var data = {
 		{
 			key:'#tab-financial_self-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "自费付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_self-clearing-content .T-selfPayImg',
+			args:  ["_trackEvent", "自费付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -1131,6 +1229,10 @@ var data = {
 		{
 			key:'#tab-financial_insure-checking-content .T-saveCheck',
 			args:  ["_trackEvent", "保险对账", "按钮", "确认对账", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_insure-checking-content .T-insuranceImg',
+			args:  ["_trackEvent", "保险对账", "按钮", "查看单据图片", 1, siteId]	
 		}
 	], 
 
@@ -1155,6 +1257,10 @@ var data = {
 		{
 			key:'#tab-financial_insure-clearing-content .T-saveClear',
 			args:  ["_trackEvent", "保险付款", "按钮", "确认付款", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_insure-clearing-content .T-insuranceImg',
+			args:  ["_trackEvent", "保险付款", "按钮", "查看单据图片", 1, siteId]	
 		}
 	],
 
@@ -1183,6 +1289,10 @@ var data = {
 		{
 			key:'#tab-financial_pay-content .T-btn-search',
 			args:  ["_trackEvent", "财务付款", "按钮", "搜索", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_pay-content .T-pay-task',
+			args:  ["_trackEvent", "财务付款", "按钮", "付款", 1, siteId]	
 		}
 	],
 
@@ -1191,6 +1301,10 @@ var data = {
 		{
 			key:'#tab-financial_income-content .T-btn-search',
 			args:  ["_trackEvent", "财务收款", "按钮", "搜索", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_income-content .T-income-task',
+			args:  ["_trackEvent", "财务收款", "按钮", "付款", 1, siteId]	
 		}
 	],
 	// 系统管理
@@ -1227,6 +1341,38 @@ var data = {
 		{
 			key:'#tab-system_user-content .T-update ',
 			args:  ["_trackEvent", "人员管理", "按钮", "修改", 1, siteId]	
+		}
+	],
+
+	// 收客利润
+	 'tab-financial_collectedGuests-content':[
+		{
+			key:'#tab-financial_collectedGuests-content .T-search',
+			args:  ["_trackEvent", "收客利润", "按钮", "搜索", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_collectedGuests-content .T-viewLine',
+			args:  ["_trackEvent", "收客利润", "按钮", "查看线路产品", 1, siteId]	
+		}
+	],
+
+	// 中转利润
+	'tab-financial_transferProfits-content':[
+		{
+			key:'#tab-financial_transferProfits-content .T-search',
+			args:  ["_trackEvent", "中转利润", "按钮", "搜索", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_transferProfits-content .T-viewLineproduct',
+			args:  ["_trackEvent", "中转利润", "按钮", "查看线路产品", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_transferProfits-content .T-viewGroup',
+			args:  ["_trackEvent", "中转利润", "按钮", "查看小组", 1, siteId]	
+		},
+		{
+			key:'#tab-financial_transferProfits-content .T-costDetail',
+			args:  ["_trackEvent", "中转利润", "按钮", "中转成本明细", 1, siteId]	
 		}
 	]
 }

@@ -268,7 +268,7 @@ define(function(require, exports) {
 				var rs = JSON.parse(data.result);
 				data.result = rs;
 				for (var i = rs.length - 1; i >= 0; i--) {
-					if(rs[i].tripPlanTouristList.length === 1 && 
+					if(rs[i].tripPlanTouristList.length === 1 && !!rs[i].tripPlanTouristList[0].touristGroup &&
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
 						rs[i].lineProduct && 
 						rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
@@ -469,7 +469,10 @@ define(function(require, exports) {
     	//绑定账单新增费用项
     	$tab.find(".T-add-fee").on('click', function(event){
     		event.preventDefault();
-    		$tab.find('.T-fee-list').append(T.feeList({touristGroupFeeList:[{}]}));
+    		var data = {};
+    		data.touristGroupFeeList = [];
+    		data.isTrans = false;
+    		$tab.find('.T-fee-list').append(T.feeList(data));
     		validate = rule.update(validate);
     	});
     	//绑定账单表内事件
@@ -1200,6 +1203,7 @@ define(function(require, exports) {
 				data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
 				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 				data.isGuest = 1;
+				data.isTrans = true;
 				$tab.find('.T-tourists-list').html(T.touristsList(data));
 				$tab.find('.T-fee-list').html(T.feeList(data));
 				$tab.find('[name="partnerAgencyName"]').val(groupData.orderNumber).data("id", groupData.id);

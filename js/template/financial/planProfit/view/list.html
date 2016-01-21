@@ -9,7 +9,7 @@
 		<th rowspan="2">责任计调</th>
 		<th rowspan="2">状态</th>
 		<th colspan="5">收入</th>
-		<th colspan="10">发团成本</th>
+		<th colspan="12">发团成本</th>
 		{{if isTurn == 1}}
 		<th colspan="5">中转成本</th>
 		{{/if}}
@@ -24,7 +24,7 @@
 	<tr class="bg-blur">
 		<th>团款</th>
 		<th>购物佣金</th>
-		<th>自费</th>
+		<th>自费收入</th>
 		<th>其它收入</th>
 		<th>导游管理费</th>
 		<th>导服费</th>
@@ -34,9 +34,11 @@
 		<th>房费</th>
 		<th>景区</th>
 		<th>票务</th>
+		<th>自费</th>
 		<th>其它支出</th>
 		<th>购物导佣</th>
 		<th>自费导佣</th>
+		<th>导游结算扣款</th>
 		{{if isTurn}}
 		<th>车费</th>
 		<th>餐费</th>
@@ -68,7 +70,7 @@
 		</td>
 		<td><span class="F-float F-money">{{rs.needPayAllMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.shopMoney}}</span></td>
-		<td><span class="F-float F-money">{{rs.selfPayMoney}}</span></td>
+		<td><span class="F-float F-money">{{rs.selfIncome}}</span></td>
 		<td><span class="F-float F-money">{{rs.incomeMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.guideMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.guideTip}}</span></td>
@@ -78,9 +80,11 @@
 		<td><span class="F-float F-money">{{rs.hotelMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.scenicMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.ticketMoney}}</span></td>
+		<td><span class="F-float F-money">{{rs.selfPayMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.otherMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.shopCostMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.selfMoney}}</span></td>
+		<td><span class="F-float F-money">{{rs.guideDeductions}}</span></td>
 		{{if isTurn == 1}}
 		<td><span class="F-float F-money">{{rs.outBusMoney}}</span></td>
 		<td><span class="F-float F-money">{{rs.outRestaurantMoney}}</span></td>

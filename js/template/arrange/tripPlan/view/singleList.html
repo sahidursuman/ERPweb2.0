@@ -85,9 +85,9 @@
                         <label class="padding-right20">|</label>
                         导出
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}} R-right" data-right="1140007" title="取消" {{if rs.status == -1 || rs.status == 2}}style="color:#bbb;"{{/if}}>
+                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140007" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
                         <label class="padding-right20">|</label>
-                        取消
+                        <span>取消</span>
                     </a>
                 </td>
             </tr>
@@ -97,6 +97,7 @@
                     {{if index == 0}}
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     {{/if}}
+                    {{if !!tripPlanTourist.touristGroup}}
                     <td>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td class="hct-absolute-group">
@@ -105,6 +106,12 @@
                         </span>
                     </td>
                     <td>{{tripPlanTourist.touristGroup.adultCount + tripPlanTourist.touristGroup.childCount}}</td>
+                    {{else}}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {{/if}}
                     {{if index == 0}}
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>

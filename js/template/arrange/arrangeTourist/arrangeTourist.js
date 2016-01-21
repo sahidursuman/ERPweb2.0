@@ -1144,7 +1144,7 @@ define(function(require, exports) {
             if (type==2) {
                  html+="<option value=\"3\">中转结算价</option>";
             };
-            html+="<option value=\"4\">保险结算价</option><option value=\"5\">车费结算价</option><option value=\"6\">餐饮结算价</option>"+
+            html+="<option value=\"4\">车辆费用</option><option value=\"5\">餐厅费用</option><option value=\"6\">保险费用</option>"+
             "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
             "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>" +
             "<td><input  name=\"count\" type=\"text\" class=\"col-sm-12  no-padding-right count T-count T-calc F-float F-count\" /></td>" +
@@ -1159,10 +1159,8 @@ define(function(require, exports) {
             $count = $tbody.find('.T-count');
         Tools.inputCtrolFloat($price);
         Tools.inputCtrolFloat($count);
-
         // 更新表单验证的事件绑定
         //rule.update(validator);   
-
         //绑定删除分团转客信息
         if (type == '1') {
             $tab.find(".T-delete").off().on("click", function() {
@@ -1314,6 +1312,7 @@ define(function(require, exports) {
         $trNotDelete.each(function(i) {
             var $that = $(this),
                 FeeJson = {
+                    id: $that.data("entity-id"),
                     type: arrangeTourist.getVal($that, "type"),
                     price: arrangeTourist.getVal($that, "price"),
                     count: arrangeTourist.getVal($that, "count"),

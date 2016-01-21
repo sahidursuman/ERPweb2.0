@@ -14,11 +14,9 @@
 				<tr>
 					<td class="style-myself">应付：</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
-					<td class="style-myself">已付：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" readonly="readonly"  class="date-picker" colspan="3"><span class="F-float F-money">{{touristGroup.transPayedMoney}}</span>
-					</td>
+					
 
-					<td>
+					<td colspan="3">
 					    {{if touristGroup.operateCurrentNeedPayMoney==1}}
 						<label>
 							<input  type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">

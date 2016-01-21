@@ -184,7 +184,7 @@ define(function(require, exports) {
                 //费用明细处理
                 var resultList = data.customerAccountList;
                 for(var i = 0; i < resultList.length; i++){
-                    var detailList = JSON.parse(resultList[i].detailList),
+                    var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
                     if(resultList[i].status == 5){
@@ -450,7 +450,7 @@ define(function(require, exports) {
                 //费用明细处理
                 var resultList = data.customerAccountList;
                 for(var i = 0; i < resultList.length; i++){
-                    var detailList = JSON.parse(resultList[i].detailList),
+                    var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
                     if(resultList[i].status == 5){
@@ -567,8 +567,22 @@ define(function(require, exports) {
             var check =  new FinRule(5).check($tab);
             if(!check.form()){ return false; }
             if (!validator.form()) { return; }
-            var allMoney = $tab.find('input[name=sumPayMoney]').val();
-            if(allMoney == 0){
+            if(!$tab.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
+
+            var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
+                sumList = Client.$sumUnReceivedMoney.data("money");
+            if (sumList === undefined) {  // 未修改付款的时候，直接读取
+                sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
+            }
+            if(sum != sumList){
+                showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+                return false;
+            }
+
+            if(sumList == 0){
                 showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
                     Client.saveClearData($tab);
                 })
@@ -618,8 +632,6 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
-                        console.log("Client.clearDataArray:");
-                        console.log(Client.clearDataArray);
                         var bankId = $tab.find('input[name=card-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
@@ -632,7 +644,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
-                        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
+                        $tab.find('.T-list').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
@@ -689,7 +701,7 @@ define(function(require, exports) {
             Client.clearDataArray = []
         }
 
-        $body.children('tr:nth-child(2n+1)').each(function() {
+        $body.children('tr').each(function() {
             var $tr = $(this);
 
             if ($tr.data('change')) {
@@ -789,15 +801,6 @@ define(function(require, exports) {
             return;
         };
 
-        var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
-            sumList = Client.$sumUnReceivedMoney.data("money");
-        if (sumList === undefined) {  // 未修改付款的时候，直接读取
-            sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-        if(sum != sumList){
-            showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-            return false;
-        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

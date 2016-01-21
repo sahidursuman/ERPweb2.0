@@ -339,8 +339,8 @@ define(function(require, exports) {
     		timeLimitDiv = '<div data-index="'+(index)+'" class="clearfix T-appendDiv div-'+(index)+'" style="margin-top:1px"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:3px;">' + 
 			'<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px;"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'+
 			'</label></div>',
-			marketPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-marketPrice marketPrice-'+(index)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 marketPrice" maxlength="9"/></div>',
-			contractPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-contractPrice T-Min-hotelPrice contractPrice-'+(index)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 price T-minPrice" maxlength="9"/></div>';
+			marketPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-marketPrice marketPrice-'+(index)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 F-float F-money marketPrice" maxlength="9"/></div>',
+			contractPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-contractPrice T-Min-hotelPrice contractPrice-'+(index)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 F-float F-money price T-minPrice" maxlength="9"/></div>';
     	ruleData.timeAreaTd = td;
     	ruleData.UtimeAreaTd = td;
     	td.append(timeLimitDiv);

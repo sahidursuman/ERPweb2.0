@@ -5,6 +5,9 @@
 			<input class="date-picker" name="startTime" value = "{{startDate}}" placeholder="开始日期" type="text" style="width:100px;" />	
             <label class="marginLeft-30">结束时间：</label>
             <input class="date-picker" name="endTime" value = "{{endDate}}" placeholder="结束日期"  type="text" style="width:100px;" />	
+            <label class="marginLeft-30">客户：</label>
+            <input type="text" class="T-choosePartner" name="fromPartnerAgencyName" value="{{fromPartnerAgencyName}}" placeholder="客户"  type="text" style="width:100px;" /> 
+            <input type="hidden" name="fromPartnerAgencyId" value="{{fromPartnerAgencyId}}" /> 
             <label class="marginLeft-30">类别：</label>
             <select name="type">
                 <option value="" selected="selected">全部</option>
@@ -30,7 +33,9 @@
 	                   <th>团号/代订单号/收客单号</th>
 	                   <th>线路产品</th>
 	                   <th>出游日期/代订日期</th>
+                       <th>游客</th>
 	                   <th>人数</th>
+                       <th>客户</th>
 	                   <th>团款收入</th>
 	                   <th>发团收入(不含团款)</th>
                        <th>代订收入</th>
