@@ -1043,12 +1043,14 @@ define(function(require, exports) {
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),
 				seatCount = parents.find("[name=seatCount]").val(),
+				busCompanyId = parents.find("[name=busCompanyId]").val(),
 				busBrand = parents.find("[name=busbrand]").val();
 				$.ajax({
 					url: KingServices.build_url('busCompany','getLicenseNumbers'),
 					data: {
 						seatCount: seatCount,
-						brand: busBrand
+						brand: busBrand,
+						busCompanyId: busCompanyId
 					},
 					showLoading:false,
 					type:"POST",

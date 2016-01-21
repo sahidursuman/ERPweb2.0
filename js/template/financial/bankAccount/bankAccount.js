@@ -21,6 +21,11 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
+					for(var i = 0;i<data.newBankAccountList.length;i++){
+						var bankNumber = data.newBankAccountList[i].bankAccountNumber;
+							bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+						data.newBankAccountList[i].bankAccountNumber = bankNumber;
+					};
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,'银行账户',html);
 					var $listTab = $("#tab-"+menuKey+"-content");

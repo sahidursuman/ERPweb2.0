@@ -2093,15 +2093,6 @@ define(function(require, exports) {
              showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
              return;
         };
-          
-
-        //中转选项是否打勾且中转费用项<=0
-        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
-        if(transitChekedLength>0 && needTransitFee<=0){
-            showMessageDialog($("#confirm-dialog-message"), "该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
-        }
-
-        
 
         //删除费用项
         if (typeFlag == 2) {
@@ -2218,22 +2209,71 @@ define(function(require, exports) {
             url = touristGroup.url("updateTouristGroup", "update");
             data = form + "&id=" + id + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupFeeJsonDel=" + touristGroupFeeJsonDel + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&touristGroupMemberJsonDel=" + touristGroupMemberJsonDel + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip)
             tabId = updateTabId
-        } else {
+        }
+
+        if(typeFlag==undefined || typeInner=='out'){
             //提交数据
             var innerStatus = false;
-            /*if (isNeedArriveService == 1 || isNeedLeaveService == 1) {
-                innerStatus = true;
-            }*/
             if($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0){
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
             data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
-            var tabId = addTabId;
+            tabId = addTabId;
+            if (typeInner=='out') {
+                tabId = updateTabId
+            };
         };
 
-        touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+       //中转选项是否打勾且中转费用项<=0
+       var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
+        if(transitChekedLength>0 && needTransitFee<=0){
+            //中转信息Tip
+            touristGroup.TransitInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+        }else{  
+            touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+        }
+       
     };
+
+
+    /**
+     * [TransitInfo 中转信息Tip
+     * @param {[type]} $obj        [description]
+     * @param {[type]} url         [description]
+     * @param {[type]} data        数据组装
+     * @param {[type]} innerStatus 内转状态
+     * @param {[type]} tabId       Tab
+     * @param {[type]} tabArgs     
+     * @param {[type]} typeFlag    新增、编辑
+     * @param {[type]} typeInner  
+     */
+    touristGroup.TransitInfo = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+        $("#confirm-dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+            title_html: true,
+            draggable: false,
+            buttons: [{
+                text: "否",
+                "class": "btn btn-minier",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }, {
+                text: "是",
+                "class": "btn btn-primary btn-minier",
+                click: function() {
+                    touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+                    $(this).dialog("close");
+                }
+            }],
+            open: function(event, ui) {
+                $(this).find("p").text("该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
+            }
+        });
+    };
+
     //提交数据
     touristGroup.submitData = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
         $.ajax({
@@ -2253,8 +2293,8 @@ define(function(require, exports) {
                                     touristGroup.updateEvents();
                                 }
                             } else {
-                                Tools.closeTab(tabId);
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
+                                Tools.closeTab(tabId);
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
