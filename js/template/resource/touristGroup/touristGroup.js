@@ -452,16 +452,17 @@ define(function(require, exports) {
         $updateTabId.data('isEdited', false);
     };
     //查看小组信息
-    touristGroup.viewTouristGroupDetails = function(id) {
+    touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
         $.ajax({
             url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id,
+            data: "id=" + id+"&type=" + isTransferIn +"",
             type: 'POST',
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
                     var touristGroupInfo = JSON.parse(data.touristGroupDetail);
                     data.touristGroupDetail = touristGroupInfo;
+
                     var html = viewTemplate(data);
                     Tools.addTab(viewTabId, "查看小组", html);
                     var $viewTabId = $("#tab-resource_touristGroup-view-content"),
@@ -1099,32 +1100,6 @@ define(function(require, exports) {
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择报价线路产品", function() {});
             };
-        });
-    };
-
-    //查看小组信息
-    touristGroup.viewTouristGroupDetails = function(id) {
-        $.ajax({
-            url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id,
-            type: 'POST',
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var touristGroupInfo = JSON.parse(data.touristGroupDetail);
-                    data.touristGroupDetail = touristGroupInfo;
-                    var html = viewTemplate(data);
-                    Tools.addTab(viewTabId, "查看小组", html);
-                    var $viewTabId = $("#tab-resource_touristGroup-view-content"),
-                        $groupInfoForm = $viewTabId.find(".T-touristGroupMainForm"); //小组信息对象
-                    $groupMemberForm = $viewTabId.find(".T-touristGroupMainFormMember"); //游客名单对象
-                    $innerTransferForm = $viewTabId.find(".T-touristGroupMainFormRS"); //中转安排对象
-                    //接送安排
-                    touristGroup.innerTransferDispose($innerTransferForm, 2);
-                    //游客的序号
-                    touristGroup.memberNumber($groupMemberForm);
-                }
-            }
         });
     };
     //删除小组
