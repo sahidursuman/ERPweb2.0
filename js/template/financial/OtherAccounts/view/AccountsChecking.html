@@ -1,34 +1,20 @@
 <div class="row T-Accounts globalAdd">
     <div class="col-xs-12 ">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-horizontal row form-group T-search-area">
-                <label class="pull-left text-right ">项目名称:</label>
-                <div class="col-sm-1">
-                    <label class="name">{{searchParam.name}}</label>
+            <div class="search-area T-search-area">
+                <div class="form-group">
+                    <label>项目名称:{{searchParam.name}}</label>
                     <input type="hidden" name="itemName" value="{{searchParam.name}}">
-                </div>
-                <label class="pull-left text-right">账期:</label>
-                <div class="col-sm-1 input-daterange">
-                    <div class="input-group col-sm-12">
-                        <input class="col-sm-12 datepicker T-time T-startTime" name="joinTime" value="{{searchParam.startAccountTime}}" type="text">
-                    </div>
-                </div>
-                <label class="pull-left text-right ">至</label>
-                <div class="col-sm-1 input-daterange">
-                    <div class="input-group col-sm-12">
-                        <input class="col-sm-12 datepicker T-time T-endTime" name="joinTime" value="{{searchParam.endAccountTime}}" type="text">
-                    </div>
-                </div>
-                <label class="pull-left text-right">团信息:</label>
-                <div class="col-sm-1">
-                    <input type="text" class="col-xs-12 T-creatorUserChoose width110 ui-autocomplete-input" placeholder="团信息" name="creator" value="{{searchParam.info}}" autocomplete="off">
-                    <input type="hidden" name="creatorId" value="">
-                </div>
-                <div class="col-sm-1">
-                    <button class=" btn-sm T-search search-btn"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
-                </div>
-                <div class="form-group marginLeft-30">
-                    <button class="btn-sm search-btn T-btn-export">导出报表</button>
+                    <label class="marginLeft-30">账期：</label>
+                    <input class="datepicker T-time T-startTime" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="datepicker T-time T-endTime" name="joinTime" placeholder="结束日期" type="text" value="{{searchParam.endAccountTime}}" style="width:100px;" />
+                    <label class="marginLeft-30">团信息：</label>
+                    <input name="creator" class="T-creatorUserChoose  ui-autocomplete-input" placeholder="团信息" type="text" value="{{searchParam.info}}" autocomplete="off" style="width:200px;" />
+                    <button class="marginLeft-30 btn-sm search-btn T-search">
+                        <i class="ace-icon fa fa-search"></i>搜索
+                    </button>
+                    <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
                 </div>
             </div>
         </form>
@@ -80,7 +66,6 @@
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
                     <input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
-
                 </td>
                 <td name="unPayedMoney" class="F-float F-money">{{Checking.unPayedMoney}}</td>
                 <td>
@@ -110,9 +95,9 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <label class="control-label pull-right" >
-            <input type="checkbox" class="ace pull-right T-selectAll">
-            <span class="lbl"></span> 全选
+            <label class="control-label pull-right">
+                <input type="checkbox" class="ace pull-right T-selectAll">
+                <span class="lbl"></span> 全选
             </label>
         </div>
     </div>
