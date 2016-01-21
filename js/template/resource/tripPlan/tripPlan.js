@@ -299,7 +299,6 @@ define(function(require, exports) {
 					} else{
 						$touristDiv.addClass('hidden');
 						$touristDiv.find('[name=rightNow]').trigger('click');
-						$touristDiv.find('[name=smsSign]').val('');
 					}
 				});
 				tripPlan.dateTimePicker($container);
@@ -332,7 +331,7 @@ define(function(require, exports) {
 						url: KingServices.build_url('tripPlan','noticeTripPlanArrange'), 	
 						type: 'POST',
 						data: {
-							tripPlanId: id,
+							tripPlanId: id + '',
 							resourceType: resourceType,
 							executeTime: getValue('sendDateTime'),
 							executeTimeType: getValue('timing'),
