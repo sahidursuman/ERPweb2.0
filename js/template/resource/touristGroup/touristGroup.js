@@ -1055,7 +1055,8 @@ define(function(require, exports) {
                             adultCount: $tr.attr('data-adultCount'),
                             adultPrice: $tr.attr('data-adultPrice'),
                             childCount: $tr.attr('data-childCount'),
-                            childPrice: $tr.attr('data-childPrice')
+                            childPrice: $tr.attr('data-childPrice'),
+                            customerType:$tr.attr('data-customerType')
                         },
                         id = {
                             id: chooseQuot.quoteId
@@ -1084,6 +1085,7 @@ define(function(require, exports) {
                 $addTabId.find('.T-childPrice').val(chooseQuotObj.childPrice);
                 $addTabId.find('.T-Fee-adultCount').val(chooseQuotObj.adultCount);
                 $addTabId.find('.T-Fee-childCount').val(chooseQuotObj.childCount);
+                $addTabId.find('.T-customerType').val(chooseQuotObj.customerType);
                 $addTabId.find('.T-adultPrice').trigger('change');
                 $addTabId.find('.T-childPrice').trigger('change');
 
@@ -2193,7 +2195,7 @@ define(function(require, exports) {
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
-            data = form + "&touristGroupFeeJsonAdd=" + touristGroupFeeJsonAdd + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
+            data = form + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
             tabId = addTabId;
             if (typeInner=='out') {
                 tabId = updateTabId
