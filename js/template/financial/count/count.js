@@ -1278,6 +1278,7 @@ define(function(require, exports){
 
 				var parkingRebateMoney = $parentObj.find('.T-count-shopping').find('input[name=parkingRebateMoney' + shopId + ']').val();
 				var busNumber = $tableObj.find('.busNumber').val();
+				busNumber = busNumber>0?1:0;
 				//var touristAdultCount = $tableObj.find('input[name=totalPersonCount]').val();
 				
 				var sumCustomerRebateMoney = Count.changeTwoDecimal(customerRebateMoney)*Count.changeTwoDecimal(touristAdultCount);
@@ -1298,7 +1299,7 @@ define(function(require, exports){
 				var touristAdultCount = $tableObj.find('input[name=totalPersonCount]').val();
 				var parkingRebateMoney = $tr.find('input[name=parkingRebateMoney]').val();
 				var busNumber =  $tableObj.find('.busNumber').val();
-				
+				busNumber = busNumber>0?1:0;
 				var sumCustomerRebateMoney = Count.changeTwoDecimal(customerRebateMoney)*Count.changeTwoDecimal(touristAdultCount);
 				var sumParkingRebateMoney = Count.changeTwoDecimal(parkingRebateMoney)*Count.changeTwoDecimal(busNumber);
 				
