@@ -26,7 +26,8 @@
 				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
 				 data-partnerAgencyContactName ='{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.contactRealname}}-[{{lineProduct.partnerAgencyContact.contactMobileNumber}}]{{/if}}'
 				 data-partnerAgencyContactId = '{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.id}}{{/if}}'
-				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='{{lineProduct.adultQuotePrice}}' data-childCount='{{lineProduct.childCount}}' data-childPrice='{{lineProduct.childQuotePrice}}' >
+				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='{{lineProduct.adultQuotePrice}}' data-childCount='{{lineProduct.childCount}}' data-childPrice='{{lineProduct.childQuotePrice}}'
+				 data-customerType="{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.customerType}}{{/if}}">
 					<td>
 					    {{lineProduct.quoteNumber}}
 					</td>
