@@ -826,11 +826,7 @@ define(function(require, exports) {
 			}else{
 				$parent.find('[name=setPlaceTime],[name=setPlacePosition]').prop('disabled',false);
 			}
-			$parent.find('.T-noticeTourists').data('entity-touristGroup','');
-			layer.tips('通知游客数据已被清空', $this, {
-			    tips: [1, '#3595CC'],
-			    time: 2000
-			});
+			$parent.find('.T-noticeTourists').data('entity-touristgroup','');
 		})
 	}
 
