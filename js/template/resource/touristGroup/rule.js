@@ -39,9 +39,13 @@ define(function(require, exports) {
                             type: 'null',
                             errMsg: '客户来源不能为空'
                         }]
-                    },
-
-                    { //联系人
+                    }, {
+                        $ele: $obj.find('input[name="preIncomeMoney"]'),
+                        rules: [{
+                            type: 'float',
+                            errMsg: '预收款不合法'
+                        }]
+                    },{ //联系人
                         $ele: $obj.find('input[name="partnerAgencyNameList"]'),
                         $valObj: $obj.find('input[name="partnerAgencyContactId"]'), // 默认是undefined，用于autocomplete之类的插件
                         rules: [{
