@@ -645,9 +645,9 @@ define(function(require, exports) {
 		.done(function(data) {
 			var result = showDialog(data);
 				if (result) {
-					var touristGroupId=data.touristGroupId;
+					var touristGroupId=data.touristGroupId,isTransferIn='inner';
 					//查看内转
-					KingServices.viewTouristGroup(touristGroupId);
+					KingServices.viewTouristGroup(touristGroupId,isTransferIn);
 					//刷新data
 					var divId = "inner-TransferIn",
 						type = "2";
