@@ -62,7 +62,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + bus.itemImage}}">
+								{{if !!bus.itemImage}}<img src="{{imgUrl + bus.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#bus.itemText}}
@@ -89,7 +89,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + hotel.itemImage}}">
+								{{if !!hotel.itemImage}}<img src="{{imgUrl + hotel.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#hotel.itemText}}
@@ -116,7 +116,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + noteList.itemImage}}">
+								{{if !!noteList.itemImage}}<img src="{{imgUrl + noteList.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#noteList.itemText}}
@@ -143,7 +143,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + line.itemImage}}">
+								{{if !!line.itemImage}}<img src="{{imgUrl + line.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#line.itemText}}

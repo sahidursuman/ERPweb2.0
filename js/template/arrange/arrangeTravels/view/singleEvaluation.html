@@ -59,7 +59,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + noteItem.itemImage}}">
+								{{if !!noteItem.itemImage}}<img src="{{imgUrl + noteItem.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#noteItem.itemText}}

@@ -46,7 +46,7 @@
 	</div>
 	<div class="comment-container">
 		<div class="note-db-img">
-			<img src="{{imgUrl + note.coverImage}}" alt="{{note.title}}">
+			{{if !!note.coverImage}}<img src="{{imgUrl + note.coverImage}}" alt="{{note.title}}">{{/if}}
 		</div>
 	</div>
 	<div class="comment-content">
