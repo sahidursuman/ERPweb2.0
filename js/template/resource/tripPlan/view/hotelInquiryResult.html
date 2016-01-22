@@ -20,10 +20,10 @@
 		<tbody>
 			{{each mapList as rs}}
 				<tr>
-					<td>{{rs.name}}</td>
-					<td>{{rs.startTime}}</td>
-					<td>{{rs.arriveTime}}</td>
-					<td>{{rs.queryJson}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.name}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.startTime}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.arriveTime}}</td>
+					<td rowspan="{{rs.trLen}}">{{rs.queryJson}}</td>
 					{{each rs.hotelOffers as offer index}}
 						{{if index == 0}}
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.name}}</td>
@@ -44,12 +44,19 @@
 							   		五星以上
 							   	{{/if}}
 							</td>
-							{{each offer.roomOffers as room index}}
+							{{if offer.roomOffers.length > 0}}
+								{{each offer.roomOffers as room index}}
+									{{if index == 0}}
 									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
-									<td class="T-hotelPrice-{{offer.id}}">
+									<td class="T-hotelPrice-{{offer.id}} F-float F-money">
 										{{room.price}}
 									</td>
-							{{/each}}
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}} F-float F-money"></td>
+							{{/if}}
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.remark}}</td>
 							<td rowspan="{{offer.roomOffers.length}}">{{if offer.status != '已过期' && offer.status != '已拒绝'}}{{offer.reserveMinutes}}{{/if}}</td>
 							<td rowspan="{{offer.roomOffers.length}}">{{offer.expiryTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}</td>
@@ -57,6 +64,74 @@
 						{{/if}}
 					{{/each}}
 				</tr>
+				{{each rs.hotelOffers as offer index}}
+					{{if index == 0}}
+						{{if offer.roomOffers.length > 0}}
+							{{each offer.roomOffers as room index}}
+								{{if index > 0}}
+									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}} F-float F-money">
+										{{room.price}}
+									</td></tr>
+								{{/if}}
+							{{/each}}
+						{{/if}}
+					{{/if}}
+				{{/each}}
+				{{each rs.hotelOffers as offer index}}
+					{{if index > 0}}
+						<tr>
+							<td rowspan="{{offer.roomOffers.length}}">{{offer.name}}</td>
+							<td rowspan="{{offer.roomOffers.length}}">
+								{{if offer.level == 1 }}
+							    	三星以下
+							   	{{else if offer.level == 2 }}
+							   		三星
+							   	{{else if offer.level == 3 }}
+							   		准四星
+							   	{{else if offer.level == 4 }}
+							   		四星
+							   	{{else if offer.level == 5 }}
+							   		准五星
+							   	{{else if offer.level == 6 }}
+							   		五星
+							   	{{else if offer.level == 7 }}
+							   		五星以上
+							   	{{/if}}
+							</td>
+							{{if offer.roomOffers.length > 0}}
+								{{each offer.roomOffers as room index}}
+									{{if index == 0}}
+									<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+									<td class="T-hotelPrice-{{offer.id}} F-float F-money">
+										{{room.price}}
+									</td>
+									{{/if}}
+								{{/each}}
+							{{else}}
+								<td class="T-hotelType-{{offer.id}}"></td>
+								<td class="T-hotelPrice-{{offer.id}} F-float F-money"></td>
+							{{/if}}
+							<td rowspan="{{offer.roomOffers.length}}">{{offer.remark}}</td>
+							<td rowspan="{{offer.roomOffers.length}}">{{if offer.status != '已过期' && offer.status != '已拒绝'}}{{offer.reserveMinutes}}{{/if}}</td>
+							<td rowspan="{{offer.roomOffers.length}}">{{offer.expiryTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}</td>
+							<td rowspan="{{offer.roomOffers.length}}">{{offer.status}}</td>
+						</tr>
+						{{if offer.roomOffers.length > 0}}
+							{{each offer.roomOffers as room index}}
+								{{if index > 0}}
+								<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
+								<td class="T-hotelPrice-{{offer.id}} F-float F-money">
+									{{room.price}}
+								</td></tr>
+								{{/if}}
+							{{/each}}
+						{{else}}
+							<tr><td class="T-hotelType-{{offer.id}}"></td>
+							<td class="T-hotelPrice-{{offer.id}} F-float F-money"></td></tr>
+						{{/if}}
+					{{/if}}
+				{{/each}}
 			{{/each}}
 		</tbody>
 	</table>

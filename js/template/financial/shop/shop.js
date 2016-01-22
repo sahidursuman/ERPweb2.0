@@ -8,7 +8,6 @@ define(function(require, exports){
 		shopCheckingTemplate = require("./view/shopChecking"),
 		billImagesTemplate = require("./view/shopLookImg"),
 		shopClearingTemplate = require("./view/shopClearing"),
-		shopRecords = require("./view/shopRecords"),
 		viewReceivedTemplate = require("./view/viewReceived"),
 		viewAccountTemplate = require('./view/viewAccount'),
 		payingTableTemplate = require('./view/shopPayingTable'),
@@ -305,6 +304,18 @@ define(function(require, exports){
 			FinancialService.updateUnpayMoney($tab, new FinRule(0));
 			//给全选按钮绑定事件
         	FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+
+        	//导出报表事件 btn-hotelExport
+	        $tab.find(".T-btn-export").click(function(){
+	            var args = { 
+	            		shopId:$tab.find('input[name=shopId]').val(),
+	            		shopName:$tab.find('input[name=shopName]').val(),
+	            		tripMessage:$tab.find('.T-search-trip').val(),
+	                    startDate: $tab.find('.T-search-start-date').val(),
+	                    endDate: $tab.find('.T-search-end-date').val()
+	                };
+	            FinancialService.exportReport(args,"exportArrangeShopFinancial");
+	        });
 		}
 
 		// 报表内的操作
@@ -325,15 +336,32 @@ define(function(require, exports){
 
 		//绑定确定事件
 		$tab.find('.T-saveClear').on('click', function(event){
+			var check =  new FinRule(5).check($tab);
+    		if(!check.form()){ return false; }
 			event.preventDefault();
 			if(!type){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
 					saveData($tab);
 				});
 			}else{
-				saveData($tab);
+				if(!$tab.data('isEdited')){
+	                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+	                return false;
+	            }
+				var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+			        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+			    if(sumPayMoney != sumListMoney){
+			        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+			        return false;
+		    	}
+				if(sumPayMoney == 0){
+	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+			            saveData($tab);
+			        })
+	        	}else{
+	        		saveData($tab);
+	        	}
 			}
-			
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
@@ -588,9 +616,11 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
+		
 		var bankId = $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
-		var billTime = $tab.find('input[name=tally-date]').val();		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
+		var billTime = $tab.find('input[name=tally-date]').val();		
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 		if (json.length) {
 			var args = {
                 shopId: FinShop.settlementId,

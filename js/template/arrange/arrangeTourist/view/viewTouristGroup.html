@@ -25,12 +25,12 @@
 											{{else if memberList.idCardType == 1}}
 												护照
 											{{else}}
-												其他
+												其他 
 											{{/if}}
 										</td>
 										<td>{{memberList.idCardNumber}}</td>
 										<td>{{if memberList.idCardType == 0}}{{memberList.area}}{{else}}--{{/if}}</td>
-										<td>{{if memberList.idCardType == 0}}{{if memberList.age==0}}--{{else}}{{memberList.age}}{{/if}}{{else}}{{/if}}</td>
+										<td class="F-float F-count">{{if memberList.idCardType == 0}}{{if memberList.age==0}}--{{else}}{{memberList.age}}{{/if}}{{else}}{{/if}}</td>
 									</tr>
 								  {{/each}}
 								</tbody>

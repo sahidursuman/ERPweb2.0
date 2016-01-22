@@ -24,7 +24,7 @@
 									</div>
 									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" maxlength="6"/>
+										<input class="col-sm-12 F-float F-count" type="text" name="planTouristCount" id="" value="{{tripPlan.planTouristCount}}" maxlength="6"/>
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
 									<div class="col-sm-2">
@@ -35,7 +35,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
 									<div class="col-sm-2">
-										<input class="col-sm-12 T-chooseSeatCount bind-change" type="text" name="seatCount" id="" value="{{if bus.seatCount==0}}{{else}}{{bus.seatCount}}{{/if}}" />
+										<input class="col-sm-12 T-chooseSeatCount bind-change F-float F-count" type="text" name="seatCount" id="" value="{{if bus.seatCount==0}}{{else}}{{bus.seatCount}}{{/if}}" />
 									</div>
 									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
 									<div class="col-sm-2">
@@ -195,9 +195,9 @@
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 													<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 													<td>{{touristGroup.areaData}}</td>
-													<td>{{touristGroup.ageData}}</td>
-													<td class="T-memberCount">{{touristGroup.adultCount + touristGroup.childCount}}</td>
-													<td>{{touristGroup.currentNeedPayMoney}}</td>
+													<td class="F-float F-count">{{touristGroup.ageData}}</td>
+													<td class="T-memberCount F-float F-count">{{touristGroup.adultCount + touristGroup.childCount}}</td>
+													<td class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</td>
 													<td>{{if touristGroup.hotelLevel==1}}
 													   三星以下
 													   {{else if touristGroup.hotelLevel==2 }}
@@ -260,7 +260,7 @@
 											</div>
 											<label class="col-sm-1 control-label no-padding-right">天数：</label>
 											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="days" id="" value="{{lineProduct.days}}" />
+												<input class="col-sm-12 F-float F-count" readonly="readonly" type="text" name="days" id="" value="{{lineProduct.days}}" />
 											</div>				
 										</div>
 									</div>

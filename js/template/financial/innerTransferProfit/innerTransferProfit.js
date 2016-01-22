@@ -17,11 +17,16 @@ define(function(require, exports) {
     };
 
     innerProfit.initModule = function() {
-        innerProfit.listInnerProfit(0,"","","","","","","","");
+        var dateJson = FinancialService.getInitDate();
+        innerProfit.listInnerProfit(0,"","","","","","","",dateJson.startDate,dateJson.endDate,1);
     };
 
-    innerProfit.listInnerProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,startTime,endTime) {
+    innerProfit.listInnerProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,indexOrderNumber,startTime,endTime,isSelectTransfer) {
         if (innerProfit.$searchArea && arguments.length === 1) {
+            isSelectTransfer = 1;
+            if(!innerProfit.$tab.find(".T-checkTurn").is(":checked")){
+                isSelectTransfer = 0;
+            }
             // 初始化页面后，可以获取页面的参数
             lineProductId = innerProfit.$searchArea.find("input[name=lineProductId]").val(),
             lineProductName = innerProfit.$searchArea.find("input[name=lineProductName]").val(),
@@ -29,6 +34,7 @@ define(function(require, exports) {
             partnerAgencyName = innerProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
             toBusinessGroupId = innerProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
             toBusinessGroupName = innerProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
+            indexOrderNumber = innerProfit.$searchArea.find("input[name=indexOrderNumber]").val(),
             startTime = innerProfit.$searchArea.find("input[name=startTime]").val(),
             endTime = innerProfit.$searchArea.find("input[name=endTime]").val()
         }
@@ -45,8 +51,10 @@ define(function(require, exports) {
                 partnerAgencyName : partnerAgencyName,
                 toBusinessGroupId : toBusinessGroupId,
                 toBusinessGroupName : toBusinessGroupName,
+                indexOrderNumber : indexOrderNumber,
                 startTime : startTime,
                 endTime : endTime,
+                isSelectTransfer : isSelectTransfer,
                 sortType: 'auto'
             },
             success: function(data) {
@@ -83,6 +91,11 @@ define(function(require, exports) {
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
+            innerProfit.listInnerProfit(0);
+        });
+
+        //核算中转
+        innerProfit.$tab.find(".T-checkTurn").on("click",function(){
             innerProfit.listInnerProfit(0);
         });
 
@@ -270,7 +283,7 @@ define(function(require, exports) {
                         },
                         select:function(event,ui){
                             $(this).blur();
-                            $(this).next().val(ui.item.lineProductId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click", function(){
                         var Obj = lineProducts;
@@ -289,7 +302,7 @@ define(function(require, exports) {
                         select:function(evevt,ui){
                             console.log(ui);
                             $(this).blur();
-                            $(this).next().val(ui.item.partnerAgencyId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click",function(){
                         var Obj = partnerAgencyName;
@@ -307,7 +320,7 @@ define(function(require, exports) {
                         },
                         select:function(evevt,ui){
                             $(this).blur();
-                            $(this).next().val(ui.item.toBusinessGroupId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click",function(){
                         var Obj = toBusinessGroupName;

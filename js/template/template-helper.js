@@ -1,4 +1,6 @@
 template.helper("dateFormat", function(date, fmt) {
+    if (!date) return '';
+
     date = date.split('-').join('/');
     date = new Date(date);
     var o = {
@@ -18,14 +20,32 @@ template.helper("dateFormat", function(date, fmt) {
         }
     return fmt;
 });
+
+template.helper("getDateText", function(startTime, whichDay) {
+    return Tools.addDay(startTime, whichDay -1);
+});
+
+
 template.helper("encode", function(data) {
     return encodeURIComponent(data);
+});
+template.helper("decode", function(data) {
+    try {
+        data = decodeURIComponent(data);
+    } catch(e) {
+
+    }
+
+    return data;
 });
 template.helper("parseInt", function(data) {
     return parseInt(data);
 });
 template.helper("interceptStr", function(data) {
-    return data.substring(0, 39) + "...";
+    if (!!data) {
+        data = data.substring(0, 39) + "...";
+    }
+    return data;
 });
 template.helper("toFixed", function(data) {
     return (data).toFixed(2);
@@ -43,7 +63,55 @@ template.helper("getCardText", function(idCardType) {
             return '其他';
     }
 });
+template.helper("getWayType", function(status) {
+    var res = '';
+    status = status || 1;
+    res += '<option value="1" '+(status == 1?'selected':'')+'>旅行社系统</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>传真</option>';
+    res += '<option value="3" '+(status == 3?'selected':'')+'>短信</option>';
+    res += '<option value="4" '+(status == 4?'selected':'')+'>电话</option>';
+    res += '<option value="5" '+(status == 5?'selected':'')+'>QQ </option>';
+    res += '<option value="6" '+(status == 6?'selected':'')+'>微信</option>';
+    res += '<option value="7" '+(status == 7?'selected':'')+'>线上渠道</option>';
+    return res;
+});
 
+template.helper("getFeeItemType", function(type,isTransfer) {
+    var res = '';
+    type = type || 1;
+    res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
+    res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
+    if(isTransfer){
+      res += '<option value="3" '+(type == 3?'selected':'')+'>中转结算价</option>';  
+    }
+    res += '<option value="4" '+(type == 4?'selected':'')+'>车辆费用</option>';
+    res += '<option value="5" '+(type == 5?'selected':'')+'>餐厅费用</option>';
+    res += '<option value="6" '+(type == 6?'selected':'')+'>保险费用</option>';
+    res += '<option value="7" '+(type == 7?'selected':'')+'>导服费</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>酒店费用</option>';
+    res += '<option value="9" '+(type == 9?'selected':'')+'>景区费用</option>';
+    res += '<option value="10" '+(type == 10?'selected':'')+'>自费费用</option>';
+    res += '<option value="11" '+(type == 11?'selected':'')+'>票务费用</option>';
+    res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
+    return res;
+});
+template.helper("getWayTypeText", function(status) {
+    var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
+    status = status || 1;
+    return res[status];
+});
+template.helper("checked", function(status) {
+    status = status || 0;    
+    return status == 1 ? "checked" : "";
+});
+template.helper("getCardOption", function(status) {
+    var res = '';
+    status = status || 0;
+    res += '<option value="0" '+(status == 0?'selected':'')+'>身份证</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>护照</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>其它</option>';
+    return res;
+});
 template.helper("getTicketText", function(ticketType) {
     switch (ticketType * 1) {
         case 1:
@@ -71,7 +139,7 @@ template.helper("getPayTypeText", function(payType) {
         default:
             return '其他';
     }
-});
+});    
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
     switch (billStatus * 1) {
         case -1:
@@ -101,4 +169,98 @@ template.helper("getPayTypeOptions", function(payType) {
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
    
     return options;
+});
+
+template.helper("getArrangeIcon", function(status) {
+    switch (status * 1) {
+        case 1:
+            return 'fa-question';
+        case 2:
+            return 'fa-exclamation';
+        case 3:
+            return 'fa-check';
+        case 4:
+            return 'fa-times';
+        default:
+            return 'fa-minus';
+    }
+});
+template.helper("getRestaurantDesc", function(status, canEdit) {
+    var res = '', i = 0, txt = ['早餐', '中餐', '晚餐'];
+
+    status = status || '0,0,0';
+
+    status = status.split(',');
+    if (status.length != 3) {
+        status = [0, 0, 0];
+    }
+    
+    for (var i = 0; i < 3; i ++) {
+        res += '<label><input type="checkbox" class="ace" disabled="disabled" '+ (status[i] == 1?'checked': '') +'><span class="lbl"> '+ txt[i] +'</span></label>&nbsp;&nbsp;&nbsp;';
+    }
+
+    if (canEdit) {
+        res = res.split('disabled="disabled"').join('');
+    }
+    
+    return res;
+});
+
+template.helper("getTaskDesc", function(status) {
+    switch (status * 1) {
+        case 1:     return '接机';
+        case 2:     return '送机';
+        case 3:     return '前段';
+        case 4:     return '中段';
+        case 5:     return '后段';
+        default:     return '全程';
+    }
+});
+template.helper("getTaskSelect", function(status) {
+    var str = ['<select name="taskType">'],
+        desc = ['全程', '接机', '送机', '前段', '中段', '后段','小车接客'];
+   
+    for (var i = 0, len = desc.length;i < len; i ++) {
+        str.push('<option value="'+ i + '" '+ (status == i?'selected': '')+'>'+ desc[i] +'</option>');
+    }
+    str.push('</select>');
+
+    return str.join('');
+});
+template.helper("getHotelLevelDesc", function(level) {
+    switch (level * 1) {
+        case 2:     return '三星';
+        case 3:     return '准四星';
+        case 4:     return '四星';
+        case 5:     return '准五星';
+        case 6:     return '五星';
+        case 7:     return '五星以上';
+        default:     return '三星以下';
+    }
+});
+
+template.helper("getOrderStatusDesc", function(status) {
+    switch (status * 1) {
+        case 1:     return '未预定';
+        case 2:     return '预定中';
+        case 3:     return '已预订';
+        default:     return '无需预订';
+    }
+});
+template.helper("getRepastDetail", function(repastDetail) {
+    var res = [];
+
+    if (repastDetail.breakfast ==1) {
+        res.push('早餐');
+    }
+
+    if (repastDetail.lunch ==1) {
+        res.push('午餐');
+    }
+
+    if (repastDetail.dinner ==1) {
+        res.push('晚餐');
+    }
+
+    return res.join('、');
 });

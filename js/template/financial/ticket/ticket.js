@@ -217,6 +217,18 @@ define(function(require, exports) {
 		//给全选按钮绑定事件: 未去重
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
+        //导出报表事件 btn-hotelExport
+        $tab.find(".T-btn-export").click(function(){
+            var args = { 
+                    ticketId: $tab.find('input[name=ticketId]').val(),
+                    ticketName: $tab.find('input[name=ticketName]').val(),
+                    startDate: $tab.find('.T-search-start-date').val(),
+                    accountInfo: $tab.find('.T-search-type').val(),
+                    endDate: $tab.find('.T-search-end-date').val()
+                };
+            FinancialService.exportReport(args,"exportArrangeTicketFinancial");
+        });
+
 		$tab.find(".T-btn-close").on('click', function(event){
 			event.preventDefault();
 			FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
@@ -385,9 +397,9 @@ define(function(require, exports) {
 		Ticket.clearingId = args.id;
 		Ticket.balanceName = args.name;
 		Ticket.isBalanceSource = true;
-		Ticket.clearingList(0, args.id, args.startDate, args.endDate);
+		Ticket.clearingList(0, args.id, args.startDate, args.endDate,1);
 	};
-	Ticket.clearingList = function(page, id, start, end){
+	Ticket.clearingList = function(page, id, start, end,type){
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.clearingId,
@@ -413,6 +425,7 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				data.name = Ticket.balanceName;
 				data.source = Ticket.isBalanceSource;
+				if(!!type){data.type = type;}
 				Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data));
 				Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
 				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
@@ -601,11 +614,16 @@ define(function(require, exports) {
 
 	//确认收款
 	Ticket.savePayingData = function($tab, tabArgs){
+		var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
 		if ($tab.find('.T-saveClear').data('type') == 1) {
 	        var reciveValidtor = (new FinRule(2)).check($tab);
 	        if(!reciveValidtor.form()){
 	    		return;
 	        }
+        };
+        if(!FinancialService.isClearSave($tab)){
+            return false;
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json && json.length) {

@@ -51,7 +51,7 @@ define(function(require, exports) {
                     data.startAccountTime = startAccountTime
                     data.endAccountTime = endAccountTime
                     var html = listTemplate(data);
-                    Tools.addTab(menuKey, "其他账务", html);
+                    Tools.addTab(menuKey, "其它账务", html);
                     OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime);
                     //翻页
                     laypage({
@@ -140,9 +140,10 @@ define(function(require, exports) {
                         data: OtherAccounts.CheckingData,
                         success: function(data) {
                             dataTable.statistics = data.statistics;
+                            dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                             if (showDialog(data)) {
                                 // 切换tab内容成功
-                                if (Tools.addTab(checkTabId, "其他对账", AccountsCheckingTemplate(dataTable))) {
+                                if (Tools.addTab(checkTabId, "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.initCheckEvent(dataTable);
                                 } else if (OtherAccounts.$checkTab && OtherAccounts.$checkTab.length) {
                                     OtherAccounts.$checkTab.data('next', dataTable);
@@ -259,13 +260,24 @@ define(function(require, exports) {
         $checkTab.find('.T-search').click(function(event) {
             OtherAccounts.AccountsChecking(0);
         });
+
+        //导出报表事件 btn-hotelExport
+        $checkTab.find(".T-btn-export").click(function(){
+            var args = { 
+                    name: $checkTab.find('input[name=itemName]').val(),
+                    info: $checkTab.find('.T-creatorUserChoose').val(),
+                    startAccountTime: $checkTab.find('.T-startTime').val(),
+                    endAccountTime: $checkTab.find('.T-endTime').val()
+                };
+            FinancialService.exportReport(args,"exportArrangeOtherFinancial");
+        });
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($checkTab.find('.T-selectAll'), $checkTab.find('.T-Accounts').find('input[type="checkbox"]'));
 
         OtherAccounts.$checkTab = $checkTab;
     };
     /**
-     * 获取其他账务list列表
+     * 获取其它账务list列表
      * @param  {object} $obj 客户列表搜索框的Jquery对象
      * @return {[type]}      [description]
      */
@@ -355,7 +367,7 @@ define(function(require, exports) {
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             sortType: 'auto'
-        }
+        };
 
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
@@ -365,7 +377,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     //暂存数据读取
-                    console.log(OtherAccounts.saveJson);
                     if(OtherAccounts.saveJson){
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
@@ -400,8 +411,11 @@ define(function(require, exports) {
                             if (showDialog(data)) {
 
                                 dataTable.statistics = data.statistics;
-
-                                if (Tools.addTab(PaymentTabId, "其他付款", AccountsPaymentTemplate(dataTable))) {
+                                dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
+                                if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
+                                    if(OtherAccounts.saveJson.btnShowStatus){
+                                        OtherAccounts.$PaymentTabId.data("isEdited",true);
+                                    }
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
                                     OtherAccounts.$PaymentTabId.data('next', dataTable);
@@ -436,8 +450,10 @@ define(function(require, exports) {
             OtherAccounts.setAutoFillEdit($PaymentTabId, true);
         }
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                OtherAccounts.OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
+                OtherAccounts.saveJson = false;
+                OtherAccounts.saveJson.autoPayList = false;
+                OtherAccounts.$PaymentTabId.data("isEdited",false);
+                OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
             })
             // 监听保存，并切换tab
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -452,6 +468,7 @@ define(function(require, exports) {
         //付款-自动计算本次付款总额
         $PaymentTabId.find('.T-clearList').off('change').on('change', 'input', function() {
             $(this).closest('tr').data('change', true);
+            $PaymentTabId.data("isEdited",true);
             FinancialService.updateSumPayMoney($PaymentTabId, settleValidator);
         });
         //表格内操作
@@ -513,6 +530,8 @@ define(function(require, exports) {
         });
         //保存付款事件
         $PaymentTabId.find(".T-saveClear").click(function() {
+            var check =  new FinRule(5).check($PaymentTabId);
+            if(!check.form()){ return false; }
             if(!payValidator.form()){return;}
             OtherAccounts.paysave(data, $PaymentTabId);
         });
@@ -548,6 +567,7 @@ define(function(require, exports) {
                         success: function(data) {
                             var result = showDialog(data);
                             if (result) {
+                                OtherAccounts.$PaymentTabId.data("isEdited",false);
                                 OtherAccounts.saveJson = data;
                                 OtherAccounts.AccountsPayment(0);
                                 OtherAccounts.saveJson.btnShowStatus = true;
@@ -571,6 +591,10 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function(data, tabid, title, html) {
+        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
+        if(!FinancialService.isClearSave($PaymentTabId)){
+            return false;
+        }
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
         var arguementLen = arguments.length,
             searchParam = {

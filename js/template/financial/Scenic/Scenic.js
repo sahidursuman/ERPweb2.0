@@ -192,15 +192,16 @@ define(function(require, exports) {
             scenic.scenicCheck(0,null,name);
         });
 
-        //导出报表事件 btn-scenicExport
-        // scenic.$checkSearchArea.find(".T-scenicExport").click(function(){
-        //     var year = scenic.$checkSearchArea.find("[name=year]").val();
-        //     var month = scenic.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","scenic") + "&scenicId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        //导出报表事件 btn-hotelExport
+        scenic.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    scenicId: scenic.$checkSearchArea.find("input[name=scenicId]").val(), 
+                    accountInfo : scenic.$checkSearchArea.find("input[name=accountInfo]").val(),
+                    startDate: scenic.$checkSearchArea.find('input[name=startDate]').val(),
+                    endDate: scenic.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportArrangeScenicFinancial");
+        });
 
         //复选框事件初始化
         var checkboxList = scenic.$checkTab.find(".T-checkList tr .T-checkbox"),
@@ -310,7 +311,7 @@ define(function(require, exports) {
                             scenic.$clearTab.find(".T-clear-auto").hide(); 
                             scenic.$clearTab.find(".T-cancel-auto").show();
                             scenic.$clearTab.data('isEdited', !!data.autoPaymentJson.length);
-                            scenic.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // scenic.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else {
                             scenic.$clearTab.find(".T-clear-auto").show(); 
                             scenic.$clearTab.find(".T-cancel-auto").hide();

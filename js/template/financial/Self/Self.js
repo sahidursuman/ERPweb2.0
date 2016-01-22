@@ -156,7 +156,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Self.Getcheck(obj.curr-1,selfId,selfName);
+                                Self.Getcheck(obj.curr-1,selfPayId,selfPayName);
                             }
                         }
                     });
@@ -179,6 +179,17 @@ define(function(require, exports) {
         Self.$checkSearchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
             Self.Getcheck(0,id,name);
+        });
+
+        //导出报表事件 btn-hotelExport
+        Self.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    selfPayId: id, 
+                    tripInfo: Self.$checkSearchArea.find('input[name=tripInfo]').val(),
+                    startTime: Self.$checkSearchArea.find('input[name=startDate]').val(),
+                    endTime: Self.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportSelfPayFinancial");
         });
 
         //报表内的操作
@@ -265,7 +276,7 @@ define(function(require, exports) {
                         Self.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Self.$clearTab.data('isEdited',true);
-                            Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Self.$clearTab.find(".T-cancel-auto").hide();
                         }
@@ -293,7 +304,7 @@ define(function(require, exports) {
                                     voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Self.$clearTab.find('input[name=tally-date]').val()
                                 }
-                                Self.GetClear(isAutoPay,obj.curr -1,selfId,selfName);
+                                Self.GetClear(isAutoPay,obj.curr -1,selfPayId,selfPayName);
                             }
                         }
                     });

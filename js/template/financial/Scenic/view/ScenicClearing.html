@@ -22,17 +22,17 @@
             </div>
         </form>
         <form class="form-horizontal clearfix" role="form" onsubmit="return false">
-            <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}元 </label>
-            <label class="control-label pull-left marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
-            <label class="control-label pull-left marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
+            <label class="control-label pull-left">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span>元 </label>
+            <label class="control-label pull-left marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}} </span></label>
+            <label class="control-label pull-left marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
             <label class="control-label pull-left marginLeft-30">未付金额合计：<span>{{sumUnPayedMoney}}</span></label>
-            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
+            <label class="control-label pull-left marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
         </form>
         <div class="form-inline globalAdd T-summary" style="padding-top: 10px;">
             <div class="form-group">
-                <label class="control-label">本次付款金额：</label>
+                <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money" value="{{sumPayMoney}}" {{if isOuter}} disabled="disabled" {{/if}}>
+                    <input type="text" name="sumPayMoney" class="money F-float F-money" value="{{sumPayMoney}}" {{if isOuter}} disabled="disabled" {{/if}}>
                 </label>
             </div>
             {{if (!isOuter)}}
@@ -54,7 +54,7 @@
             <div class="form-group mar-l-10 T-bankDiv">
                 <label class="control-label">银行账号：</label>
                 <label class="control-label">
-                    <input type="text" name="card-number" value="{{bankNo}}" class="money" style="width:230px;">
+                    <input type="text" name="card-number" value="{{bankNo}}" class="money" style="width:300px;">
                     <input type="hidden" name="card-id" value="{{bankId}}" />
                 </label>
             </div>
@@ -108,7 +108,7 @@
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.price}}</td>
                 <td>{{rs.memberCount}}</td>
-                <td>{{if reduceMoney==null || reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
+                <td>{{if rs.reduceMoney==null || rs.reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
                 <td>{{rs.needPayMoney}}</td>
                 <td><a class="T-option T-payedDetail">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}，{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>

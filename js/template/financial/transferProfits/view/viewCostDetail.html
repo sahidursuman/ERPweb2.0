@@ -1,0 +1,26 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>应付类别</th>
+                <th>发生业务</th>
+                <th>金额</th>
+                <th>备注</th>
+                <th>操作人</th>
+                <th>操作时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each financialNeedPays as rs}}
+			<tr>
+			    <td>{{if rs.receivableType == null || !rs.receivableType}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
+			    <td>{{if rs.businessType == null || !rs.businessType}}-{{else}}{{rs.businessType.name}}{{/if}}</td>
+			    <td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
+			    <td>{{rs.remark}}</td>
+			    <td>{{if !rs.user}}-{{else}}{{rs.user.realName}}{{/if}}</td>
+			    <td>{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
+			</tr>
+			{{/each}}
+        </tbody>
+    </table>
+</div>

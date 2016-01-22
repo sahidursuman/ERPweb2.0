@@ -27,12 +27,12 @@
 					<div class="form-group">
 						<label class="col-sm-1 control-label no-padding-right">应付：</label>
 						<div class="col-sm-2">
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12" />
+							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" type="text" readonly="readonly" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 						</div>
 
 						<label class="col-sm-1 control-label no-padding-right">已付：</label>
 						<div class="col-sm-2">
-							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
+							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" type="text" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 						</div>
 
 
@@ -83,16 +83,16 @@
 									<tr>
 										<td>内转价</td>
 										<td>大人</td>
-										<td>{{innerTransfer.transAdultCount}}</td>
-										<td>{{innerTransfer.transAdultPrice}}</td>
+										<td><span class=" F-float F-count">{{innerTransfer.transAdultCount}}</span></td>
+										<td><span class=" F-float F-money">{{innerTransfer.transAdultPrice}}</span></td>
 
 									</tr>
 
 									<tr>
 										<td>内转价</td>
 										<td>小孩</td>
-										<td>{{innerTransfer.transChildCount}}</td>
-										<td>{{innerTransfer.transChildPrice}}</td>
+										<td><span class=" F-float F-count">{{innerTransfer.transChildCount}}</span></td>
+										<td><span class=" F-float F-money">{{innerTransfer.transChildPrice}}</span></td>
 									</tr>
 
 									<!-- 其他费用 -->
@@ -100,8 +100,8 @@
 									<tr>
 										<td>其他费用</td>
 										<td>{{rs.discribe}}</td>
-										<td>{{rs.count}}</td>
-										<td>{{rs.price}}</td>
+										<td><span class=" F-float F-count">{{rs.count}}</span></td>
+										<td><span class=" F-float F-money">{{rs.price}}</span></td>
 									</tr>
 									{{/each}}
 								</tbody>

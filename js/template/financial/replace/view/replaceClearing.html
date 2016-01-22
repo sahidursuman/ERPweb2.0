@@ -27,23 +27,23 @@
          <div class="form-inline" style="padding-top: 10px;">
             <div class="form-group">
                 <label>代订金额合计：</label>
-                <label>{{totalList.sumBookingMoney}}</label>
+                <label class="F-float F-money">{{totalList.sumBookingMoney}}</label>
             </div>
             <div class="form-group marginLeft-30">
                 <label>已收金额合计：</label>
-                <label>{{totalList.sumReceiveMoney}}</label>
+                <label class="F-float F-money">{{totalList.sumReceiveMoney}}</label>
             </div>
             <div class="form-group marginLeft-30">
                 <label>结算金额合计：</label>
-                <label>{{totalList.sumSettlementMoney}}</label>
+                <label class="F-float F-money">{{totalList.sumSettlementMoney}}</label>
             </div>
             <div class="form-group marginLeft-30">
                 <label>未收金额合计：</label>
-                <label>{{totalList.sumUnReceiveMoney}}</label>
+                <label class="F-float F-money">{{totalList.sumUnReceiveMoney}}</label>
             </div>
             <div class="form-group marginLeft-30">
                 <label>未收金额合计(已对账)：</label>
-                <label class="T-unpayMoney">{{totalList.checkedUnPayedMoney}}</label>
+                <label class="T-unpayMoney F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
             <div class="form-group">
                 <label class="control-label">本次收款金额合计：</label>
                 <label class="control-label">
-                    <input type="text" class="form-control T-sumReciveMoney money" name="sumPayMoney"  {{if source}}readonly="readonly"{{/if}}>
+                    <input type="text" class="form-control T-sumReciveMoney money F-float F-money" name="sumPayMoney"  {{if source}}disabled="disabled"{{/if}}>
                 </label>
             </div>
 
@@ -71,7 +71,7 @@
             <div class="form-group mar-l-10">
                 <label class="control-label">银行账号：</label>
                 <label class="control-label">
-                    <input type="text" name="card-number" class="money" style="width:230px;">
+                    <input type="text" name="card-number" class="money" style="width:300px;">
                     <input type="hidden" name="card-id">
                 </label>
             </div>
@@ -84,7 +84,7 @@
             <div class="form-group mar-l-10">
                 <label class="control-label">记账日期：</label>
                 <label class="control-label">
-                    <input type="text" name="tally-date"  style="width:100px;">
+                    <input type="text" name="tally-date"  style="width:140px;">
                 </label>
             </div>
         </div>
@@ -109,7 +109,7 @@
                 <col style="width:5%;"> 
                 <col style="width:6%;"> 
                 <col style="width:6%;"> 
-                <col style="width:5%;"> 
+                <col style="width:10%;"> 
                 <col style="width:7%;"> 
                 <col style="width:7%; min-width: 105px;"> 
             </colgroup>
