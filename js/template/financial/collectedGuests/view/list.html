@@ -4,11 +4,13 @@
 	<td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-
 		{{else}}
 			<a class="cursor T-viewLine" data-lid="{{rs.lineProductId}}">{{rs.lineProductName}}</a>
-		{{/if}}
+		{{/if}} 
 	</td>
 	<td>{{if rs.customerType == 0}}散客{{else if rs.customerType == 1}}团队{{/if}}</td>
 	<td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
+	<td>{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
 	<td>{{rs.adultCount || 0}} 大 {{rs.childCount || 0}} 小</td>
+	<td>{{if rs.fromPartnerAgencyName == null || rs.fromPartnerAgencyName == ""}}-{{else}}{{rs.fromPartnerAgencyName}}{{/if}}</td>
 	<td><span class="F-float F-money">{{rs.totalIncome}}</span></td>
 	<td><span class="F-float F-money">{{rs.totalOtherIncome}}</span></td>
 	<td><span class="F-float F-money">{{rs.totalOut}}</span></td>

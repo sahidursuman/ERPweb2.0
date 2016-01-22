@@ -67,41 +67,37 @@
             <tbody class="T-checkList" data-right="1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
             <tr class="T-checkTr" data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-confirm ="{{checking.isConfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">
-                <td rowspan="{{checking.transferFeeList.length}}">{{checking.lineProductName}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}" name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{checking.contactUserName}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}"><a href="#" class="T-seeGroup" data-list="{{checking.tgMemberList}}" title="查看小组">
+                <td>{{checking.lineProductName}}</td>
+                <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{checking.contactUserName}}</td>
+                <td><a href="#" class="T-seeGroup" data-list="{{checking.tgMemberList}}" title="查看小组">
                         <span class="F-float F-count">{{checking.adultCount}}</span>大
                         <span class="F-float F-count">{{checking.childCount}}</span>小
                     </a>
                 </td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{checking.receiveUserName}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}"><span class="transInMoney F-float F-money">{{checking.transInMoney}}</span></td>
+                <td>{{checking.receiveUserName}}</td>
+                <td>{{if checking.receiveTime != null}}{{checking.receiveTime | dateFormat: 'yyyy-MM-dd'}}{{else}}-{{/if}}</td>
+                <td><span class="transInMoney F-float F-money">{{checking.transInMoney}}</span></td>
                 <td>{{if checking.transferFeeList.length > 0}}
-                        {{each checking.transferFeeList as detail index}}
-                            {{if index == 0}}
-                                {{each checking.transferFeeList as detail}}
-                                    {{detail.discribe}}：
-                                    <span class="F-float F-money">{{detail.price}}</span>*
-                                    <span class="F-float F-count">{{detail.count}}</span>=
-                                    <span class="F-float F-money">{{detail.count*detail.price}}</span><br> 
-                                {{/each}}
-                            {{/if}}
+                        {{each checking.transferFeeList as tf}}
+                            {{tf.discribe}}：
+                            <span class="F-float F-money T-touristGroupId" data-id="{{tf.touristGroupId}}" data-status="3">{{tf.price}}</span> x
+                            <span class="F-float F-count">{{tf.count}}</span> =
+                            <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
                         {{/each}}
                     {{else}}-
-                    {{/if}} 
+                    {{/if}}
                 </td>
-                <td rowspan="{{checking.transferFeeList.length}}"><a href="javascript:void(0)" class="T-viewDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
-                <td>{{if checking.isConfirmAccount == 1}}<input type="text" class="F-float F-money" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="money backMoney F-float F-money" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
-                <td><span class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</span></td>
-                <td rowspan="{{checking.transferFeeList.length}}"><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}">{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
-                <td rowspan="{{checking.transferFeeList.length}}">
+                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
+                <td><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
+                <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
+                <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+                <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
+                <td>
                     <label class="pos-rel">
-                        <input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace innerTransferFinancial" 
+                        <input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace T-checkbox" 
                         {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}}/>
                         <span class="lbl">对账</span>
                     </label>
@@ -111,22 +107,6 @@
                         </label>
                 </td>
             </tr>
-            {{if checking.transferFeeList.length > 1}}
-                {{each checking.transferFeeList as detail index}}
-                    {{if index > 0}}
-                        <tr><td>{{each checking.transferFeeList as detail}}
-                                    {{detail.discribe}}：
-                                    <span class="F-float F-money">{{detail.price}}</span>*
-                                    <span class="F-float F-count">{{detail.count}}</span>=
-                                    <span class="F-float F-money">{{detail.count*detail.price}}</span><br> 
-                                {{/each}}
-                            </td>
-                            <td>{{if checking.isConfirmAccount == 1}}<input type="text" class="F-float F-money" readonly="readonly" value="{{checking.backMoney}}"></span>{{else}}<input type="text" name="settlementMoney" class="money" class="backMoney F-float F-money" value="{{checking.backMoney}}" maxlength="9" style="text-align:center">{{/if}}</td>
-                            <td><span class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</span></td>
-                        </tr>
-                    {{/if}}
-                {{/each}}
-            {{/if}}
             {{/each}}
          </tbody>
         </table>

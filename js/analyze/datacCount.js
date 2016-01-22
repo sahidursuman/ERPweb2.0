@@ -12,7 +12,7 @@ var data = {
 		},
 		{
 			key: '#tab-resource_partnerAgency-content .T-partnerAgency-add',
-			args:  ["_trackEvent", "同行管理", "按钮", "新增", 1, siteId]
+			args:  ["_trackEvent", "同行管理", "按钮", "新增同行", 1, siteId]
 		},
 		{
 			key: '#tab-resource_partnerAgency-content .T-partnerAgency-view',
@@ -39,7 +39,7 @@ var data = {
 		},
 		{
 			key: '#tab-resource_travelLine-content .T-btn-add',
-			args:  ["_trackEvent", "线路模板", "按钮", "新增", 1, siteId]
+			args:  ["_trackEvent", "线路模板", "按钮", "新增线路", 1, siteId]
 		},
 		{
 			key: '#tab-resource_travelLine-content .T-add-lineproduct',
@@ -87,7 +87,7 @@ var data = {
 			key: '#tab-resource_travelLine-add-content .T-btn-save',
 			args:  ["_trackEvent", "新增线路模板", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_travelLine-update-content':[
 		{//修改线路模板
 			key: '#tab-resource_travelLine-update-content .T-add-schedule',
@@ -109,7 +109,7 @@ var data = {
 			key: '#tab-resource_travelLine-update-content .T-btn-save',
 			args:  ["_trackEvent", "修改线路模板", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_travelLine-copy-content':[
 		{//复制线路模板
 			key: '#tab-resource_travelLine-copy-content .T-add-schedule',
@@ -131,13 +131,13 @@ var data = {
 			key: '#tab-resource_travelLine-copy-content .T-btn-save',
 			args:  ["_trackEvent", "复制线路模板", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_travelLine-view-content':[
 		{//查看线路模板
 			key: '#tab-resource_travelLine-view-content .T-btn-viewCancel',
 			args:  ["_trackEvent", "查看线路模板", "按钮", "关闭", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_lineProduct-add-content':[
 		{//新建线路产品
 			key: '#tab-resource_lineProduct-add-content .T-addInsurance',
@@ -179,7 +179,7 @@ var data = {
 			key: '#tab-resource_lineProduct-add-content .T-btn-submit',
 			args:  ["_trackEvent", "新建线路产品", "按钮", "提交", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_lineProduct-content':[ //线路产品
 		{
 			key: '#tab-resource_lineProduct-content .T-status',
@@ -255,7 +255,7 @@ var data = {
 			key: '#tab-resource_lineProduct-copy-content .T-btn-submit',
 			args:  ["_trackEvent", "复制线路产品", "按钮", "提交", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_lineProduct-update-content':[
 		{//修改线路产品
 			key: '#tab-resource_lineProduct-update-content .T-addInsurance',
@@ -267,11 +267,11 @@ var data = {
 		},
 		{
 			key: '#tab-resource_lineProduct-update-content .T-insuranceForm .T-delTr',
-			args:  ["_trackEvent", "修改线路产品", "按钮", "新增车队", 1, siteId]
+			args:  ["_trackEvent", "修改线路产品", "按钮", "删除车队", 1, siteId]
 		},
 		{
 			key: '#tab-resource_lineProduct-update-content .T-busCompanyForm .T-delTr',
-			args:  ["_trackEvent", "修改线路产品", "按钮", "新增车队", 1, siteId]
+			args:  ["_trackEvent", "修改线路产品", "按钮", "删除车队", 1, siteId]
 		},
 		{
 			key: '#tab-resource_lineProduct-update-content .T-btn-submit',
@@ -297,7 +297,7 @@ var data = {
 			key: '#tab-resource_lineProduct-update-content #dayListUpdate-0 .T-addOther',
 			args:  ["_trackEvent", "修改线路产品", "按钮", "新增其他", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_quote-add-content':[
 		{//新增报价 报价详情
 			key: '#tab-arrange_quote-add-content #quoteContent-add-add .T-addInsurance',
@@ -309,11 +309,11 @@ var data = {
 		},
 		{
 			key: '#tab-arrange_quote-add-content #quoteContent-add-add .T-insuranceForm .T-delTr',
-			args:  ["_trackEvent", "报价详情", "按钮", "新增车队", 1, siteId]
+			args:  ["_trackEvent", "报价详情", "按钮", "删除保险", 1, siteId]
 		},
 		{
 			key: '#tab-arrange_quote-add-content #quoteContent-add-add .T-busCompanyForm .T-delTr',
-			args:  ["_trackEvent", "报价详情", "按钮", "新增车队", 1, siteId]
+			args:  ["_trackEvent", "报价详情", "按钮", "删除车队", 1, siteId]
 		},
 		{
 			key: '#tab-arrange_quote-add-content #quoteContent-add-add .T-car',
@@ -346,6 +346,18 @@ var data = {
 		{
 			key: '#tab-arrange_quote-add-content #quoteContent-add-add  .T-btn-submit-quote',
 			args:  ["_trackEvent", "报价详情", "按钮", "提交", 1, siteId]
+		},//询价状态
+		{
+			key: '#tab-arrange_quote-add-content #inquiryContent-add-add  .T-refresh-status',
+			args:  ["_trackEvent", "询价状态", "按钮", "刷新", 1, siteId]
+		}
+		{
+			key: '#tab-arrange_quote-add-content #inquiryContent-add-add #busInquiryResult-add-add .T-bus-delete',
+			args:  ["_trackEvent", "询价状态", "按钮", "删除车队", 1, siteId]
+		},
+		{
+			key: '#tab-arrange_quote-add-content #inquiryContent-add-add #hotelInquiryContent-add-add .T-hotel-delete',
+			args:  ["_trackEvent", "询价状态", "按钮", "删除房", 1, siteId]
 		}
 	],
 	'tab-arrange_quote-content':[//报价管理
@@ -398,6 +410,10 @@ var data = {
 		{
 			key: '#tab-arrange_quote-update-content #quoteContent-update-copy .T-busCompanyForm .T-delTr',
 			args:  ["_trackEvent", "修改报价", "按钮", "删除车队", 1, siteId]
+		},
+		{
+			key: '#tab-arrange_quote-update-content #quoteContent-update-copy .T-busCompanyForm .T-car',
+			args:  ["_trackEvent", "修改报价", "按钮", "车俩询价", 1, siteId]
 		},
 		{
 			key:'#tab-arrange_quote-update-content #quoteContent-update-copy #dayListupdate-0 .T-addRestaurant',
@@ -460,6 +476,10 @@ var data = {
 		{
 			key: '#tab-arrange_quote-copy-content #quoteContent-update-update .T-busCompanyForm .T-delTr',
 			args:  ["_trackEvent", "复制报价", "按钮", "删除车队", 1, siteId]
+		},
+		{
+			key: '#tab-arrange_quote-copy-content #quoteContent-update-update .T-busCompanyForm .T-car',
+			args:  ["_trackEvent", "复制报价", "按钮", "车俩询价", 1, siteId]
 		},
 		{
 			key:'#tab-arrange_quote-copy-content #quoteContent-update-update #dayListupdate-0 .T-addRestaurant',
@@ -530,12 +550,12 @@ var data = {
 	],
 	'tab-resource_touristGroup-add-content':[
 		{//添加游客
-			key: '#tab-resource_touristGroup-add-content .T-submit-addTouristGroup',
-			args:  ["_trackEvent", "添加游客", "按钮", "提交", 1, siteId]
+			key: '#tab-resource_touristGroup-add-content .T-addPartner',
+			args:  ["_trackEvent", "添加游客", "按钮", "添加客户", 1, siteId]
 		},
 		{
-			key: '#tab-resource_touristGroup-add-content .T-submit-addTouristGroup',
-			args:  ["_trackEvent", "添加游客", "按钮", "提交", 1, siteId]
+			key: '#tab-resource_touristGroup-add-content .T-addPartnerManager',
+			args:  ["_trackEvent", "添加游客", "按钮", "未客户来源添加联系人", 1, siteId]
 		},
 		{
 			key: '#tab-resource_touristGroup-add-content .T-touristGroup-addOtherCost',
@@ -556,10 +576,46 @@ var data = {
 		{
 			key: '#tab-resource_touristGroup-add-content .T-travelLine-search',
 			args:  ["_trackEvent", "添加游客", "按钮", "选择线路产品", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-add-content .btnDeleteTourist',
+			args:  ["_trackEvent", "编辑游客", "按钮", "删除游客", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-add-content .T-submit-addTouristGroup guideSubmit',
+			args:  ["_trackEvent", "添加游客", "按钮", "提交", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_touristGroup-update-content':[
 		{//编辑游客
+			key: '#tab-resource_touristGroup-update-content .T-addPartner',
+			args:  ["_trackEvent", "编辑游客", "按钮", "添加客户", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .T-addPartnerManager',
+			args:  ["_trackEvent", "编辑游客", "按钮", "未客户来源添加联系人", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .T-touristGroup-addOtherCost',
+			args:  ["_trackEvent", "编辑游客", "按钮", "新增费用项", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .T-add-tourist',
+			args:  ["_trackEvent", "编辑游客", "按钮", "添加成员", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .T-add-tourist-more',
+			args:  ["_trackEvent", "编辑游客", "按钮", "批量添加", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .btnDeleteTourist',
+			args:  ["_trackEvent", "编辑游客", "按钮", "删除游客", 1, siteId]
+		},
+		{
+			key: '#tab-resource_touristGroup-update-content .T-ChosenQuoteNumber',
+			args:  ["_trackEvent", "编辑游客", "按钮", "选择报价线路产品", 1, siteId]
+		},
+		{
 			key: '#tab-resource_touristGroup-update-content .T-submit-updateTouristGroup',
 			args:  ["_trackEvent", "编辑小组", "按钮", "提交", 1, siteId]
 		}
@@ -586,7 +642,7 @@ var data = {
 			args:  ["_trackEvent", "中转安排", "按钮", "导出", 1, siteId]
 		}
 	],
-	'#tab-arrange_transit-update-content':[
+	'tab-arrange_transit-update-content':[
 		{//编辑中转安排
 			key: '#tab-arrange_transit-update-content #receptionList .T-btn-bus-add',
 			args:  ["_trackEvent", "编辑中转安排", "按钮", "新增车俩", 1, siteId]
@@ -615,7 +671,7 @@ var data = {
 			key: '#tab-arrange_transit-update-content #carList .T-arrange-delete',
 			args:  ["_trackEvent", "编辑中转安排", "按钮", "删除", 1, siteId]
 		}
-	]
+	],
 	'tab-resource_subsection-content':[ //中转分段
 		{
 			key: '#tab-resource_subsection-content .T-btn-subsection-search',
@@ -647,7 +703,7 @@ var data = {
 			key: '#tab-resource_subsection-operation-content .T-btn-operation-save',
 			args:  ["_trackEvent", "分段操作", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_tourist-content':[//并团转客
 		{ //散拼
 			key: '#tab-arrange_tourist-content #T-Visitor-list .T-visitorTourist-search',
@@ -738,7 +794,7 @@ var data = {
 			key: '#tab-arrange_inner_Transfer-edit-content .T-saveTransoutInfo',
 			args:  ["_trackEvent", "修改内转信息", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_transfer-content':[//外转管理
 		{//我社转出
 			key: '#tab-arrange_transfer-content #Transfer-Out .T-transferOut-search',
@@ -799,7 +855,7 @@ var data = {
 			key: '#tab-arrange_transfer-updateTransferOut-content .T-saveTransoutInfo',
 			args:  ["_trackEvent", "编辑我社转出", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_plan-content' :[ //发团计划
 		{//团体
 			key: '#tab-arrange_plan-content #arrangePlanTab_2 .T-btn-tripPlan-search',
@@ -893,7 +949,7 @@ var data = {
 			key: '#tab-arrange_plan_single_add-content .T-savePlan',
 			args:  ["_trackEvent", "新增散客计划", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_plan_group_update-content':[
 		{//编辑团队计划
 			key: '#tab-arrange_plan_group_update-content .T-add-days',
@@ -935,27 +991,27 @@ var data = {
 			key: '#tab-arrange_plan_group_update-content .T-savePlan',
 			args:  ["_trackEvent", "编辑团队计划", "按钮", "保存", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_all-content':[//发团安排
 		{
-			key: 'tab-arrange_all-content .T-btn-tripPlan-search',
+			key: '#tab-arrange_all-content .T-btn-tripPlan-search',
 			args:  ["_trackEvent", "发团安排", "按钮", "搜索", 1, siteId]
 		},
 		{
-			key: 'tab-arrange_all-content .T-send',
+			key: '#tab-arrange_all-content .T-send',
 			args:  ["_trackEvent", "发团安排", "按钮", "通知", 1, siteId]
 		},
 		{
-			key: 'tab-arrange_all-content .T-view',
+			key: '#tab-arrange_all-content .T-view',
 			args:  ["_trackEvent", "发团安排", "按钮", "查看", 1, siteId]
 		},
 		{
-			key: 'tab-arrange_all-content .T-plan',
+			key: '#tab-arrange_all-content .T-plan',
 			args:  ["_trackEvent", "发团安排", "按钮", "安排", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_all-update-content':[
-	{//编辑发团安排  导游
+		{//编辑发团安排  导游
 			key: '#tab-arrange_all-update-content #tripPlan_addPlan_guide .T-addResource ',
 			args:  ["_trackEvent", "编辑发团安排", "按钮", "新增导游", 1, siteId]
 		},
@@ -1153,7 +1209,7 @@ var data = {
 			key: '#tab-arrange_booking-update-content .T-submit-booking',
 			args:  ["_trackEvent", "修改项目代订", "按钮", "提交信息", 1, siteId]
 		}
-	]
+	],
 	'tab-arrange_booking-add-content':[
 		{//新增项目代订
 			key: '#tab-arrange_booking-add-content .T-hotel-add',
@@ -1191,7 +1247,7 @@ var data = {
 			key: '#tab-arrange_booking-add-content .T-submit-booking',
 			args:  ["_trackEvent", "新增项目代订", "按钮", "提交信息", 1, siteId]
 		}
-	]
+	],
 	//业务分析
 	'tab-business_analyst_saleProduct-content':[
 		{//产品销量
@@ -1201,6 +1257,10 @@ var data = {
 	],
 	'tab-business_analyst_employeePerfor-content':[
 		{//员工业绩
+			key: '#tab-business_analyst_employeePerfor-content .T-employeePerfor-search',
+			args:  ["_trackEvent", "员工业绩", "按钮", "搜索", 1, siteId]
+		},
+		{
 			key: '#tab-business_analyst_employeePerfor-content .T-employeePerfor-search',
 			args:  ["_trackEvent", "员工业绩", "按钮", "搜索", 1, siteId]
 		}

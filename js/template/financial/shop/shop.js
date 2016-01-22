@@ -344,17 +344,24 @@ define(function(require, exports){
 					saveData($tab);
 				});
 			}else{
-				var allMoney = $tab.find('input[name=sumPayMoney]').val();
-	        	if(allMoney == 0){
+				if(!$tab.data('isEdited')){
+	                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+	                return false;
+	            }
+				var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+			        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
+			    if(sumPayMoney != sumListMoney){
+			        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+			        return false;
+		    	}
+				if(sumPayMoney == 0){
 	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
 			            saveData($tab);
 			        })
 	        	}else{
 	        		saveData($tab);
 	        	}
-				
 			}
-			
 		});
 		//绑定取消事件
 		$tab.find('.T-btn-close').on('click', function(event){
@@ -609,15 +616,11 @@ define(function(require, exports){
     }
 
 	FinShop.saveSettlement = function($tab, tabArgs){
-		var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-	        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
-	    if(sumPayMoney != sumListMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
-	        return false;
-	    }
+		
 		var bankId = $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
-		var billTime = $tab.find('input[name=tally-date]').val();		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
+		var billTime = $tab.find('input[name=tally-date]').val();		
+		var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
 		if (json.length) {
 			var args = {
                 shopId: FinShop.settlementId,

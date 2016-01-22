@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover T-showHighLight">
+<table class="table overflow-table table-striped table-bordered table-hover T-showHighLight">
    <!--  <colgroup>
            <col style="width:150px"></col>
            <col style="width:8%"></col>
@@ -69,18 +69,18 @@
             </td>
             <td>{{transit.arriveShiftTime}}</td>
             <td>{{transit.arriveShift}}</td>
-            <td data-target="transit_receive_bus"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_receive_hotel"><i class="ace-icon fa {{transit.receiveHotelStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_receive_restaurant"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_receive_ticket"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_receive_other"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_bus" class="receiveBusStatus" data-status="{{transit.receiveBusStatus}}"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_hotel" class="receiveHotelStatus" data-status="{{transit.receiveHotelStatus}}"><i class="ace-icon fa {{transit.receiveHotelStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_ticket" class="receiveTicketStatus" data-status="{{transit.receiveTicketStatus}}"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
             <td>{{transit.leaveShiftTime}}</td>
             <td>{{transit.leaveShift}}</td>
-            <td data-target="transit_send_bus"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_send_hotel"><i class="ace-icon fa {{transit.sendHotelStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_send_restaurant"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_send_ticket"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
-            <td data-target="transit_send_other"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_bus" class="sendBusStatus" data-status="{{transit.sendBusStatus}}"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_hotel" class="sendHotelStatus" data-status="{{transit.sendHotelStatus}}"><i class="ace-icon fa {{transit.sendHotelStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_restaurant" class="sendRestaurantStatus" data-status="{{transit.sendRestaurantStatus}}"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_ticket" class="sendTicketStatus" data-status="{{transit.sendTicketStatus}}"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_other" class="sendOtherStatus" data-status="{{transit.sendOtherStatus}}"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
             <td>{{if transit.arrangeUser != null}}{{transit.arrangeUser.realName}}{{else}}-{{/if}}</td>
             <td>{{if transit.arrangeTime != null}}{{transit.arrangeTime}}{{else}}-{{/if}}</td>
             <td style="width: 100px">{{if transit.status == 1}}

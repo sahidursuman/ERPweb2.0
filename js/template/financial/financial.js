@@ -144,16 +144,43 @@ FinancialService.checkSaveJson = function($tab,rule){
 };
 
 //对账-修改但未勾选提醒
-FinancialService.changeUncheck = function(trList,fn){
-    var result = false,uncheckList = [];
+FinancialService.changeUncheck = function(trList,fn,minTdLen){
+    var result = false,
+        argLen = arguments.length;
+
     trList.each(function(){
-        var $this = $(this);
-        if($this.data('change') && $this.data("confirm") == 0 && !$this.find('.T-checkbox').is(":checked")){
-            $this.addClass('success');
-            uncheckList.push($this);
-            result = true;
+        var $tr = $(this),
+            $mainTr = $tr;
+        
+        if($tr.data('change')){
+            if(argLen === 3){
+                while($mainTr.children('td').length <= minTdLen){
+                    $mainTr = $mainTr.prev();
+                }
+            }
+
+            if($mainTr.data("confirm") == 0 && !$mainTr.find('.T-checkbox').is(":checked")){
+                if(argLen === 3){
+                    var $tempTr = $mainTr.next(),
+                        index = $mainTr.index();
+                    $mainTr.addClass('success');
+                    var end = false;
+                    while($tempTr.length > 0 && !end){
+                        if($tempTr.hasClass('T-checkTr')){
+                            end = true;
+                        } else {
+                            $tempTr.addClass('success');
+                            $tempTr = $tempTr.next();
+                        }
+                    }
+                } else{
+                    $tr.addClass('success');
+                }
+                result = true;
+            }
         }
     });
+
     if(result){
         var buttons = [
             {
@@ -271,8 +298,10 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 FinancialService.isClearSave = function($tab,rule){
     var check =  new FinRule(5).check($tab);
     if(!check.form()){ return false; }
-    var validator = rule.check($tab);
-    if(!validator.form()){return false;}
+    if(!!rule){
+        var validator = rule.check($tab);
+        if(!validator.form()){return false;}
+    }
 
     if(!$tab.data('isEdited')){
         showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
@@ -451,13 +480,13 @@ FinancialService.isGuidePay = function(dataList){
                 dataList[i].isGuidePay = 1;
             }
         }else if(!!dataList[i].info){
-                var tripNumData = dataList[i].info;
-                var tripNum = tripNumData.split(',');
-                if(/ZZ$/.test(tripNum[0] )|| /zz$/.test(tripNum[0]) || /DD$/.test(tripNum[0]) || /dd$/.test(tripNum[0])){
-                    dataList[i].isGuidePay = 1;
-                }else{
-                    dataList[i].isGuidePay = 0;
-                };
+            var tripNumData = dataList[i].info;
+            var tripNum = tripNumData.split(',');
+            if(/ZZ$/.test(tripNum[0] )|| /zz$/.test(tripNum[0]) || /DD$/.test(tripNum[0]) || /dd$/.test(tripNum[0])){
+                dataList[i].isGuidePay = 1;
+            }else{
+                dataList[i].isGuidePay = 0;
+            }
         }
         
     }
@@ -470,7 +499,6 @@ FinancialService.exportReport = function(args,method){
     for(var i in args){
         str += "&" + i + "=" + args[i];
     }
-    console.log("exportReport");
     exportXLS(KingServices.build_url('export',method) + str);
 };
 
@@ -618,10 +646,11 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
             $mainTr = $tr;
         if(isNaN($this.val())){ return false;}
 
+        $tr.data("change",true);
+        $tab.data("isEdited",true);
         while($mainTr.children('td').length <= minTdLen){
             $mainTr = $mainTr.prev();
         }
-        $mainTr.data("change",true);
 
         var backMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
             settlementMoney = $tr.find('.T-settlementMoney').text() *1,
@@ -639,5 +668,61 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
 };
 
 //对账-保存json组装
-FinancialService.saveJson_checking = function($tab,rule){
-}
+FinancialService.saveJson_checking = function($tab){
+    if(!$tab.data('isEdited')){
+        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        return false;
+    }
+
+    var $list = $tab.find(".T-checkList"),
+        $tr = $list.find(".T-checkTr"),
+        saveJson = []; 
+    $tr.each(function(){
+        var $this = $(this),
+            isConfirmAccount = $this.data("confirm"),
+            isCheck = "";
+        if ($this.find(".T-checkbox").is(':checked')) {
+            isCheck = 1;
+        } else {
+            isCheck = 0; 
+        }
+
+        if(isCheck != isConfirmAccount || isConfirmAccount == 1){//修改了对账状态
+            var $childTr = $this,
+                detailList = [],
+                end = false;
+            while(!end && $childTr.length > 0){
+                if($childTr.data("change")){
+                    var detailJosn = {
+                        touristGroupId : $childTr.find(".T-touristGroupId").data("id"),
+                        backMoney : $childTr.find('.T-refund').val(),
+                        flag : $childTr.find(".T-touristGroupId").data("status")
+                    };
+                    detailList.push(detailJosn);
+                }
+                $childTr = $childTr.next();
+                if($childTr.hasClass('T-checkTr')){
+                    end = true;
+                }
+            }
+
+            if(isCheck != isConfirmAccount || detailList.length > 0){
+                var checkRecord = {
+                    id : $this.data("id"),
+                    isConfirmAccount : isCheck,
+                    unPayedMoney : $this.find(".T-unReceivedMoney").text(),
+                    checkRemark : $this.find(".T-remark").val(),
+                    status : $this.data("status"),
+                    detailList : detailList
+                };
+                saveJson.push(checkRecord);
+            }
+        }
+    });
+    if(saveJson.length == 0){
+        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+        return false;
+    }
+
+    return saveJson;
+};

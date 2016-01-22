@@ -427,6 +427,10 @@ table tr td {
     margin-left: 15px;
 }
 
+.mar-r-10 {
+    margin-right: 10px;
+}
+
 .pad-0 {
     padding: 0;
 }
@@ -1659,7 +1663,9 @@ p#back-top a span {
     float: left;
     margin-left: 10px;
 }
-
+.group-info .form-group {
+    margin-right: 25px;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -1960,6 +1966,16 @@ p#back-top a span {
     .quoteInprodactName {
         width: 95px !important;
     }
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-Right7 {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -20px !important;
+    }
 }
 
 
@@ -2028,6 +2044,21 @@ p#back-top a span {
     .busQuoteWidth {
         width: 140px;
     }
+    /*报价管理*/
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-Right7 {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -25px !important;
+    }
+
+    .group-info .form-group{
+        margin-right: 15px;
+    }
 }
 
 
@@ -2049,9 +2080,6 @@ p#back-top a span {
 
 .group-info > .form-inline {
     height: 40px;
-}
-.group-info .form-group {
-    margin-right: 25px;
 }
 
 .group-info .search-btn {
@@ -2137,7 +2165,7 @@ p#back-top a span {
     text-align: right;
 }
 
-a.gray,a.gray span{
+a.gray span{
     color:#bbb;
 }
 

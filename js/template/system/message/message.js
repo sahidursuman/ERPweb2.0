@@ -1,13 +1,35 @@
 define(function(require, exports) {
 	var menuKey = "public_message",
-		tabId = "tab-"+menuKey+"-content";
-		listTemplate = require("./view/list");
+		tabId = "tab-"+menuKey+"-content",
+		listTemplate = require("./view/list"),
+		listMainTemplate = require("./view/listMain"),
 		viewTemplate = require("./view/view");
 	
 	var message = {};	
 
 	message.initModule = function() {
-		message.listMsg(0);
+		message.listMainMsg();
+	};
+
+	message.listMainMsg = function() {
+		$.ajax({
+			url: KingServices.build_url("message","findMessageType"),
+			type: 'POST',
+		})
+		.done(function(data) {
+			data.menus = JSON.parse(data.menus);
+
+			var html = listMainTemplate(data);
+			Tools.addTab(menuKey,"消息列表",html);
+			var $container = $('#'+ tabId);
+			message.listMsg(0);
+			
+			//搜索事件
+			$container.find('.T-search').on('click', function(event) {
+				event.preventDefault();
+				message.listMsg(0);
+			});
+		});
 	};
 
 	message.listMsg = function(page){
@@ -15,10 +37,12 @@ define(function(require, exports) {
 		var $tab = $("#" + tabId),
 		    searchParam = {
 				pageNo : page,
-				messageTypeName : $tab.find("input[name=menuName]").val(),
-				messageType : $tab.find("input[name=menuId]").val(),
+				messageKey: $tab.find('input[name=messageKey]').val(),
+				//messageTypeName : $tab.find("input[name=menuName]").val(),
+				messageType : $tab.find("[name=menuId]").val(),
 				sortType : "auto"
-			}
+			};
+		
 		$.ajax({
 			url:KingServices.build_url("message","listMessage"),
 			type:"POST",
@@ -29,8 +53,9 @@ define(function(require, exports) {
 				if (result) {
 					data.msgList = JSON.parse(data.msgList);
 					var html = listTemplate(data);
-					Tools.addTab(menuKey,"消息列表",html);
-					message.getQuery();
+					//Tools.addTab(menuKey,"消息列表",html);
+					$tab.find('.T-message-tbody').html(html);
+					
 					message.$tab = $('#tab-public_message-content');
 
 					//查看消息内容
@@ -50,11 +75,6 @@ define(function(require, exports) {
 						message.setReadAll();
 					});
 
-					//搜索事件
-					message.$tab.find('.T-search').on('click', function(event) {
-						event.preventDefault();
-						message.listMsg(0);
-					});
 
 					// 绑定翻页组件
 					laypage({
@@ -130,32 +150,7 @@ define(function(require, exports) {
 	};
 
 	message.getQuery = function(){
-		$.ajax({
-			url: KingServices.build_url("message","findMessageType"),
-			type: 'POST',
-		})
-		.done(function(data) {
-			var menus = JSON.parse(data.menus),
-				$menu = $("#" + tabId + " .T-chooseMenu");
-			for(var i = 0 ;i < menus.length; i ++){
-				menus[i].value = menus[i].name;
-			}
-
-			$menu.autocomplete({
-	            minLength: 0,
-	            source : menus,
-	            change: function(event,ui) {
-	                if (!ui.item)  {
-	                    $(this).nextAll('input[name="menuId"]').val('');
-	                }
-	            },
-	            select: function(event,ui) {
-	                $(this).blur().nextAll('input[name="menuId"]').val(ui.item.id);
-	            }
-	        }).on("click",function(){
-	            $menu.autocomplete('search','');
-	        }); 
-		});
+		
 		
 	};
 

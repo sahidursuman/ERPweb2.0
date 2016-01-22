@@ -209,10 +209,11 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
+					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
-				    	if(!!InnerTransferIn.saveJson.autoPayList && InnerTransferIn.saveJson.autoPayList.length>0){
-				    		if(data.innerTransferIncomeDetailsList.length > 0){
+				    	if(InnerTransferIn.saveJson.autoPayList){
+				    		if(data.innerTransferIncomeDetailsList.length != 0){
 				    			var saveJson = InnerTransferIn.saveJson.autoPayList
 					    		for(var i=0;i<data.innerTransferIncomeDetailsList.length;i++){
 					    			for(var j=0;j<saveJson.length;j++){
@@ -222,8 +223,7 @@ define(function(require,exports) {
 					    			}
 					    		}
 				    		}
-				    	};
-				    	console.log(data.innerTransferIncomeDetailsList);
+				    	}
 				    	html = settlementTemplate(data);
 				    }else{
 				    	tabId = checkId;
@@ -243,6 +243,8 @@ define(function(require,exports) {
                     		var checkTr = InnerTransferIn.$checkId.find(".T-checkTr");
                     		var rightCode = InnerTransferIn.$checkId.find(".T-checkList").data("right");
                     		checkDisabled(fiList,checkTr,rightCode);
+						} else {
+							InnerTransferIn.$checkId.data("isEdited",true);
 						}
 						
 						//获取统计数据
@@ -361,8 +363,6 @@ define(function(require,exports) {
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
 			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
-			$obj.find('select[name=sumPayType]').val($listSearchData.payType);
-			FinancialService.initPayEvent($obj.find('.T-summary'));
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
@@ -390,7 +390,7 @@ define(function(require,exports) {
 		$obj.find('.'+$list).on('click','.T-seeGroup',function(event){
 			event.preventDefault();
 	    	InnerTransferIn.viewGroup($(this));
-        });
+	    });
          //查看对账明细
         $obj.find('.'+$list).on('click','.T-check-Detail',function(){
         	var id = $(this).closest('tr').attr('data-entity-id');
@@ -401,7 +401,7 @@ define(function(require,exports) {
         	var id = $(this).closest('tr').attr('data-entity-id');
         	InnerTransferIn.viewPayedDetail(id);
         });
-        //金额自动返算
+        //计算返款金额
 		FinancialService.updateMoney_checking($obj,3);
         //确认对账事件
         $obj.find(".T-checking").on('click',function(event){
@@ -446,11 +446,18 @@ define(function(require,exports) {
         });
         //确认付款
         $obj.find('.T-incomeMoney').off('click').on('click',function(){
-        	var check =  new FinRule(5).check($obj);
-            if(!check.form()){ return false; }
         	if(!settleCheck.form()){return;}
-        	var sumMoney = $obj.find('input[name=sumPayMoney]').val();
-        	if(sumMoney == 0){
+        	if(!$obj.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
+        	var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
+			var sumMoney = InnerTransferIn.autoSumIncomeMoney($obj);
+		    if(sumMoney != sumPayMoney){
+		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+		        return false;
+		    };
+        	if(sumPayMoney == 0){
         		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
 		            InnerTransferIn.saveBlanceData(0,$obj,$listSearchData,"");
 		        })
@@ -498,7 +505,29 @@ define(function(require,exports) {
 		sumPayMoney.val(sumMoney);
 		return sumMoney;
 	};
-	
+	// //自动计算返款
+	// InnerTransferIn.autoSumBackMoney = function($obj,$parentObj){
+	// 	var $tr = $parentObj.find('input[name=settlementMoney]');
+	// 	var sum = 0;
+	// 	var backMoneyObj = $parentObj.find('.T-sumBackMoney');
+	// 	var backMoney = backMoneyObj.find('.T-sumBackMoney').text();
+	// 	$tr.each(function(){
+	// 		var $that = $(this);
+	// 		var tr = $(this).closest('tr');
+	// 		var settlementMoney = tr.find('.T-settlementMoney').text();
+	// 		var unIncomeMoney = tr.find('.T-unReceivedMoney').text();
+	// 		var transInMoney = tr.find('.transInMoney').text();
+	// 		var transGetedMoney = tr.find('.transGetedMoney').text();
+	// 		var sumMoney = transInMoney-$that.val();
+	// 		var unIncome = sumMoney-transGetedMoney
+	// 		tr.find('.T-settlementMoney').text(InnerTransferIn.changeTwoDecimal(sumMoney));
+	// 		tr.find('.T-unReceivedMoney').text(unIncome);
+			
+	// 		sum += parseFloat($that.val());
+	// 	});
+	// 	var result = sum+backMoney;
+	// 	backMoneyObj.text(InnerTransferIn.changeTwoDecimal(result));
+	// };
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
@@ -536,11 +565,8 @@ define(function(require,exports) {
                         InnerTransferIn.saveJson.bankNumber = bankNumber;
                         InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
 						InnerTransferIn.btnSatus = 1;
-						console.log(InnerTransferIn.saveJson);
+						$obj.data("isEdited",false);
 						$data.autoAccount = 1;
-						$obj.data('isEdited', false);
-						$data.payType = payType;
-						console.log($data);
 						InnerTransferIn.chenking($data,2,"settle");
 					});
 				}
@@ -561,7 +587,7 @@ define(function(require,exports) {
             selectFlag = 0,
             argumentsLen = arguments.length,
             checkList = $obj.find('.T-checkList'),
-			$tr = checkList.find('.innerTransferFinancial');
+			$tr = checkList.find('.T-checkbox');
 		$tr.each(function(i){
  		   var flag = $(this).is(":checked");
  		   var tr = $(this).closest('tr');
@@ -781,12 +807,7 @@ define(function(require,exports) {
 
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,tab_id,$data,title, html){
-		var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
-		var sumMoney = InnerTransferIn.autoSumIncomeMoney(tab_id);
-	    if(sumMoney != sumPayMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-	        return false;
-	    };
+		
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
 		var payMoney;
@@ -798,6 +819,10 @@ define(function(require,exports) {
 		var bankId = tab_id.find('input[name=card-id]').val();
 		var voucher = tab_id.find('input[name=credentials-number]').val();
 		var billTime = tab_id.find('input[name=tally-date]').val();
+		if(JsonStr.length == 0){
+			showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
+			return false;
+		}
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferIn','saveReceivables'),
@@ -898,8 +923,7 @@ define(function(require,exports) {
 				receiveUserName:'',
 				startAccountTime:options.startDate,
 				endAccountTime:options.endDate,
-				btnShowStatus:true,
-				payType:0
+				btnShowStatus:true
 			}
         InnerTransferIn.chenking(args,2); 
     };

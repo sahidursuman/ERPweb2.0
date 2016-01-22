@@ -371,6 +371,7 @@ define(function(require, exports){
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
 	                var html = Reimbursement(tmp);
+	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -489,13 +490,6 @@ define(function(require, exports){
 				Count.autoRestaurantSum($(this),$obj);
 			}
 			
-		});
-		//自选餐厅的时候获取餐标
-		var $tr = $restObj.find('input[name=price]').closest('tr');
-		$tr.find('select[name=chooseRest]').off('change').on('change',function(){
-				var tr = $(this).closest("tr");
-				tr.find('input[name=price]').val(0);
-				Count.getRestPrice($tr,$obj);
 		});
 		//新增餐费安排
 		$listObj.find('.T-restaurantpay-add').off('click').on('click',function(){
@@ -1284,6 +1278,7 @@ define(function(require, exports){
 
 				var parkingRebateMoney = $parentObj.find('.T-count-shopping').find('input[name=parkingRebateMoney' + shopId + ']').val();
 				var busNumber = $tableObj.find('.busNumber').val();
+				busNumber = busNumber>0?1:0;
 				//var touristAdultCount = $tableObj.find('input[name=totalPersonCount]').val();
 				
 				var sumCustomerRebateMoney = Count.changeTwoDecimal(customerRebateMoney)*Count.changeTwoDecimal(touristAdultCount);
@@ -1304,7 +1299,7 @@ define(function(require, exports){
 				var touristAdultCount = $tableObj.find('input[name=totalPersonCount]').val();
 				var parkingRebateMoney = $tr.find('input[name=parkingRebateMoney]').val();
 				var busNumber =  $tableObj.find('.busNumber').val();
-				
+				busNumber = busNumber>0?1:0;
 				var sumCustomerRebateMoney = Count.changeTwoDecimal(customerRebateMoney)*Count.changeTwoDecimal(touristAdultCount);
 				var sumParkingRebateMoney = Count.changeTwoDecimal(parkingRebateMoney)*Count.changeTwoDecimal(busNumber);
 				
@@ -1518,6 +1513,9 @@ define(function(require, exports){
 			var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
+			var incomeCount = $parent.find('input[name=needCount]');
+			var incomeMoneyObj = $parent.find('input[name=realGetMoney]');
+			var incomeMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
             var realReduceMoney = $parent.find('input[name="realReduceMoney"]').val();
@@ -1530,17 +1528,37 @@ define(function(require, exports){
             guideRate = Count.changeTwoDecimal(guideRate);
             realCount = Count.changeTwoDecimal(realCount);
             realReduceMoney = Count.changeTwoDecimal(realReduceMoney);
+            incomeMoney = Count.changeTwoDecimal(incomeMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
             var needCount = parseFloat(realCount)-parseFloat(memberCount);
             var needIncome = $parent.find('.needIncome');
-            if(needCount<0){
+            /*if(needCount<0){
             	needIncome.text(0)
             }else{
             	var $income = parseFloat(marketPrice)*parseFloat(needCount);
             	$income = Count.changeTwoDecimal($income);
 				needIncome.text($income);
+            };*/
+
+            if ($obj.is('[name="needCount"]'))  {
+            	// 如果修改的是数量--计算现收、应收和现收相等
+            	var incomeMoney = (incomeCount.val()*marketPrice);
+            	incomeMoney = Count.changeTwoDecimal(incomeMoney);
+            	incomeMoney = parseFloat(incomeMoney);
+            	if(incomeCount.val() != 0){
+            		incomeMoneyObj.val(incomeMoney);
+            		needIncome.text(incomeMoney);
+            	}
+            	
+            } else if ($obj.is('[name="realGetMoney"]')) {
+            	// 如果修改的是现收--计算应收数量
+            	var count = (incomeMoney/marketPrice);
+            	count = Count.changeTwoDecimal(count);
+            	count = parseInt(count);
+            	incomeCount.val(count);
+            	needIncome.text(incomeMoney)
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
@@ -1597,15 +1615,16 @@ define(function(require, exports){
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
 		'<td><input name="selfPayItem" style="width:90px;" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" style="width:60px;" type="text"></td>'+
+		'<td><input name="needCount" style="width:60px;" type="text"></td>'+
+		'<td><span class="needIncome"></span></td>'+
+		'<td><input name="realGetMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="price" style="width:60px;" type="text"></td>'+
-		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="realCount" style="width:60px;" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
 		'<td><input name="realReduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
-		'<td><span class="needIncome"></span></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="currentMonry" style="width:60px;" type="text"></td>'+
+		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
@@ -1763,6 +1782,11 @@ define(function(require, exports){
 	};
 	//新增车费--这个版本对于车队没有新增
 	Count.addBus = function($obj,$parentObj){
+		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
+			td = '';
+		if(billStatus == 2){
+			td = '<td></td>'
+		};
 		var html = '<tr>'+
 		'<td><input name="startTime" type="text" class="datepicker"></td>'+
 		'<td><input name="endTime" type="text" class="datepicker"></td>'+
@@ -1779,7 +1803,7 @@ define(function(require, exports){
 		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" style="width:90p x;"/></td>'+
 		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
 		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
@@ -1787,6 +1811,7 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		td+
 		'</tr>';
 		$obj.append(html);
 		//格式化时间
@@ -2740,7 +2765,6 @@ define(function(require, exports){
 							if(ui.item != null){
 								var $tr = $(this).closest('tr');
 								$tr.find('input[name=restaurantId]').val(ui.item.id);
-								$tr.find('input[name=price]').val(0);
 								$tr.find('input[name=standardId]').val(ui.item.id);
 								Count.autoRestaurantSum($(this),$parentObj);
 								//获取餐标
@@ -3308,15 +3332,19 @@ define(function(require, exports){
                 		
                 		if(travelAgencyRate > 0) {
                 			$obj.closest('tr').find("input[name=travelAgencyRate]").val(travelAgencyRate);
+                			Count.autoShopSum($obj,$bodyObj);
                 		} else {
                 			$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+                			Count.autoShopSum($obj,$bodyObj);
                 		}
                 		if(guideRate > 0) {
                 			$obj.closest('tr').find("input[name=guideRate]").val(guideRate);
+                			Count.autoShopSum($obj,$bodyObj);
                 		} else {
                 			$obj.closest('tr').find("input[name=guideRate]").val(0);
+                			Count.autoShopSum($obj,$bodyObj);
                 		}
-                		Count.autoShopSum($obj,$bodyObj);
+                		
                 	}else{
                 		$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
                 		$obj.closest('tr').find("input[name=guideRate]").val(0);
@@ -3332,7 +3360,7 @@ define(function(require, exports){
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
 			saveJsonStr.log.type = "1";
-
+		console.log(saveJsonStr);
 		var addShopList = saveJsonStr.addShopArrangeList;
 		for(var i = 0;i<addShopList.length;i++){
 			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
@@ -3380,7 +3408,18 @@ define(function(require, exports){
 				return;
 			}
 		}
-
+		//导游自选餐厅
+		if(typeFlag == 3){
+			var restaurantList= saveJsonStr.restaurantArrangeList;
+			for(var i = 0;i<restaurantList.length;i++){
+				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
+					message = "请选择导游自选餐厅"
+					console.log(message);
+					showMessageDialog($("#confirm-dialog-message"),message);
+					return;
+				}
+			}
+		};
 		var addHotelList = saveJsonStr.addHotelArrangeList;
 		for(var i = 0;i<addHotelList.length;i++){
 			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
@@ -3486,8 +3525,13 @@ define(function(require, exports){
 		}
 
 		saveJsonStr = JSON.stringify(saveJsonStr);
+
+		var url = KingServices.build_url('financialTripPlan',method);
+		if(typeFlag == 3){
+			url += "&category=category";
+		}
 		$.ajax({
-			url:KingServices.build_url('financialTripPlan',method),
+			url: url,
 			data:{
 				saveJson:saveJsonStr
 			},
@@ -3575,7 +3619,8 @@ define(function(require, exports){
 				grossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.grossProfitMoney').text())),
 				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text())),
 				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
-				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text()))
+				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text())),
+				outPayAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripTransitCost').text()))
 		};
 		var isEdit = 0;
 		if($obj.find('.T-edit').is(":checked")){
@@ -3696,7 +3741,7 @@ define(function(require, exports){
 					travelAgencyRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
 					travelAgencyRebateMoney:$(this).find('.travelAgencyRebateMoney').text(),
 					guideRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=guideRate]').val())/100),
-					realGetMoney:$(this).find('input[name=currentMonry]').val(),
+					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
 				}
@@ -3776,9 +3821,11 @@ define(function(require, exports){
 			if($(this).attr('restaurantArrangeId')){
 				var restaurantArrange = {
 						"id":Count.changeToString($(this).attr('restaurantArrangeId')),
+						"isChoose":Count.changeToString($(this).attr('isChoose')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"restaurantId":Count.changeToString($(this).find('select[name=chooseRest]').val()) || "",
 						"restaurantStandardId":$(this).find('input[name=standardId]').val() || "",
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),

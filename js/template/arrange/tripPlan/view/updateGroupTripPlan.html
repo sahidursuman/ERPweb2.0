@@ -56,9 +56,9 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户</label>
 				<div class="hct-input-group col-xs-8">
-					<input type="text" class="col-xs-12" name="travelAgencyName" value="{{if !!touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}">
+					<input type="text" class="col-xs-12" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}disabled{{/if}} name="travelAgencyName" value="{{if !!touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}">
 					<input type="hidden" name="fromPartnerAgencyId" value="{{if !!touristGroup.partnerAgency}}{{touristGroup.partnerAgency.id}}{{/if}}">
-					<span class="hct-group-add cursor T-addPartner">[新增]</span>
+					<span class="hct-group-add cursor T-addPartner {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}hidden{{/if}}">[新增]</span>
 				</div>
 			</div>
 			<div class="col-xs-3">
@@ -169,7 +169,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<!-- <div class="row">
 			<div class="col-xs-6 T-executeTime">
 				<label class="control-label">确认发团后游客短信设置</label>
 				<label>
@@ -188,7 +188,7 @@
 					<input type="text" class="col-xs-12" name="travelAgencyTag" value="{{tripPlan.travelAgencyTag}}">
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</form>
 	<div class="row">
 		<div class="col-xs-12 hd">
@@ -354,7 +354,7 @@
 		<div class="col-xs-12 hd">
 			<h3 class="pull-left">账单</h3>
 			<div class="pull-left mar-l-15">
-				<button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>
+				{{if !!touristGroup.orderNumber == false &&  !!tripPlan.quoteNumber == false}}<button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>{{/if}}
 			</div>
 		</div>
 		<div class="col-xs-12">
@@ -374,12 +374,6 @@
 				<label class="col-xs-4 text-right">计划现收</label>
 				<div class="col-xs-8">
 					<input type="text" class="col-xs-12" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}">
-				</div>
-			</div>
-			<div class="col-xs-2">
-				<label class="col-xs-4 text-right">中转应收</label>
-				<div class="col-xs-8">
-					<input type="text" class="col-xs-12 F-float F-money" name="transitNeedPayMoney" readonly>
 				</div>
 			</div>
 		</div>
@@ -402,7 +396,6 @@
 							<select class="col-xs-12 T-calculate" name="type">
 								<option value="1" {{if rs.type == 1}}selected{{/if}}>大人结算价</option>
 								<option value="2" {{if rs.type == 2}}selected{{/if}}>小孩结算价</option>
-								<option value="3" {{if rs.type == 3}}selected{{/if}}>中转结算价</option>
 								<option value="4" {{if rs.type == 4}}selected{{/if}}>车辆费用</option>
 								<option value="5" {{if rs.type == 5}}selected{{/if}}>餐饮费用</option>
 								<option value="6" {{if rs.type == 6}}selected{{/if}}>保险费用</option>
@@ -418,7 +411,7 @@
 						<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
 						<td><input type="text" class="col-xs-12" name="feeRemark" value="{{rs.remark}}" maxlength="100"></td>
-						<td><a class="cursor T-action T-delete" title="删除">删除</a></td>
+						<td>{{if !!touristGroup.orderNumber == false  &&  !!tripPlan.quoteNumber == false}}<a class="cursor T-action T-delete" title="删除">删除</a>{{/if}}</td>
 					</tr>
 					{{/each}}
 				</tbody>
