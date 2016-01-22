@@ -12,7 +12,8 @@ var modals = {};
 var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
-	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event';
+	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
+	REFRESH_TAB_EVENT = 'refresh.tab.event';
 
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
@@ -67,7 +68,9 @@ function addTab(tabId,tabName,html){
 	else{
 		$("#tabContent").append("<div id=\"tab-"+tabId+"-content\" class=\"tab-pane tab-pane-menu active\"></div>");
 	}
-
+	html = Tools.filterCount(html);
+	html = Tools.filterMoney(html);
+	html = Tools.filterUnPoint(html);
 	html = filterUnAuth(html);
 	$("#tab-"+tabId+"-content").html(html);
 }
@@ -343,7 +346,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 		}
 	});
 }
-function showConfirmDialog(dialogObj,message, fn){
+function showConfirmDialog(dialogObj,message, fn, closeFn){
 	dialogObj.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -355,6 +358,9 @@ function showConfirmDialog(dialogObj,message, fn){
 				"class" : "btn btn-minier btn-heightMall",
 				click: function() {
 					$( this ).dialog( "close" );
+					if(closeFn){
+						closeFn();
+					}
 				}
 			},
 			{
@@ -623,7 +629,11 @@ function viewAllMsg(){
 }
 
 function trim(str){
-	return str.replace(/(^\s*)|(\s*$)/g, "");
+	if (!!str) {
+		return str.replace(/(^\s*)|(\s*$)/g, "");
+	} else {
+		return str;
+	}
 }
 
 /**
@@ -653,6 +663,7 @@ var modalScripts = {
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
+    'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -687,12 +698,15 @@ var modalScripts = {
     'financial_pay': 'js/template/financial/FinPay/finPay.js', //财务收款
     'financial_transfer': "js/template/financial/transfer/transfer.js",
 	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
+	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
+	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
     'system_user': "js/template/system/user/user.js",
     'system_department': "js/template/system/department/business.js",
 	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
+	'system_companyInformation':"js/template/system/companyInfo/company.js",//公司资料
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
@@ -766,13 +780,33 @@ function listMenu(menuTemplate){
 
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if (targetIsCheckbox)  {	// 点击了checkbox
-								$that.toggleClass('success', $target.prop('checked'));
+								// $that.toggleClass('success', $target.prop('checked'));
+								toggleClass('success',  $target.prop('checked'));
 							} else if ($checkBox.length) {  // tr含有checkbox
 								$that.toggleClass('success');								
 								$checkBox.trigger('click');	
 							} else {   // 普通tr
-								$that.addClass('success').siblings('tr').removeClass('success');
+								$that.siblings('tr').removeClass('success');
+								toggleClass('success',  true);
 							}
+					}
+
+					// tr不对齐的处理
+					function toggleClass(className, enable) {
+						var $trs = $that.parent().children('tr'),
+							baseCnt = $trs.eq(0).children('td').length,
+							$current = $that.next(), $prev = $that;
+
+						// 向下遍历
+						while(baseCnt != $current.children('td').length && $current.children('td').length > 0) {
+							$current = $current.toggleClass(className, enable).next();
+						}
+
+						// 向上遍历
+						while(baseCnt != $prev.children('td').length && $prev.children('td').length > 0) {
+							$prev = $prev.toggleClass(className, enable).prev();
+						}
+						$prev.toggleClass(className, enable);
 					}
 				});
 
@@ -993,6 +1027,131 @@ var _statusText = {
 		return _ajax(opt);
 	};
 
+	jQuery.fn.extend({
+		//重写jquery的text方法
+		text : function( value ){
+			return jQuery.access( this, function( value ) {
+				var $that = $(this);
+				if(value === undefined){
+					value = jQuery.text( this )
+					if($that.hasClass('F-float')){
+						value = Tools.formatQuantile(value);
+					}
+				}else{
+					if($that.hasClass('F-float')){
+						// 精度控制
+						if ($that.hasClass('F-money')) {
+							value = Tools.toFixed(value, 2);
+						} else if ($that.hasClass('F-count')) {
+							value = Tools.toFixed(value, 1, false);
+						}
+
+						value = Tools.thousandPoint(value);
+					}
+					value = this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) )
+				}
+				return value;
+			}, null, value, arguments.length );
+		},
+
+		//重写jquery的val方法
+		val : function( value ){
+			var ret, hooks, isFunction,rreturn = /\r/g,
+			elem = this[0]
+				$that = $(this);
+
+			if ( !arguments.length ) {
+				if ( elem ) {
+					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
+
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+						return ret;
+					}
+
+					ret = elem.value;
+					if($that.hasClass('F-float') && ret !== ""){						
+						ret = Tools.formatQuantile(ret);
+					}
+					return typeof ret === "string" ?
+						ret.replace(rreturn, "") :
+						ret == null ? "" : ret;
+				}
+
+				return;
+			}
+
+			isFunction = jQuery.isFunction( value );
+
+			return this.each(function( i ) {
+				var val;
+
+				if ( this.nodeType !== 1 ) {
+					return;
+				}
+
+				if ( isFunction ) {
+					val = value.call( this, i, jQuery( this ).val() );
+				} else {
+					val = value;
+				}
+
+				// Treat null/undefined as ""; convert numbers to string
+				if ( val == null ) {
+					val = "";
+				} else if ( typeof val === "number" ) {
+					val += "";
+				} else if ( jQuery.isArray( val ) ) {
+					val = jQuery.map(val, function ( value ) {
+						return value == null ? "" : value + "";
+					});
+				}
+
+				hooks = jQuery.valHooks[ this.type ] || jQuery.valHooks[ this.nodeName.toLowerCase() ];
+
+				// If set returns undefined, fall back to normal setting
+				if ( !hooks || !("set" in hooks) || hooks.set( this, val, "value" ) === undefined ) {
+					if($that.hasClass('F-float')){
+						// 精度控制
+						if ($that.hasClass('F-money')) {
+							val = Tools.toFixed(val, 2);
+						} else if ($that.hasClass('F-count')) {
+							val = Tools.toFixed(val, 1, false);
+						}
+						val = Tools.thousandPoint(val);						
+					}
+					this.value = val;
+				}
+			});
+		},
+
+		//获取或设置光标位置
+		cursorPosition : function( value ){
+			var oThat = $(this)[0], CaretPos = -1;
+			if(typeof value === "number"){
+				if(oThat.setSelectionRange){
+			        oThat.setSelectionRange(value,value);
+			    }
+			    else if (oThat.createTextRange) {
+			        var range = oThat.createTextRange();
+			        range.collapse(true);
+			        range.moveEnd('character', value);
+			        range.moveStart('character', value);
+			        range.select();
+			    }
+			}else{
+				if(document.selection){
+					var Sel = document.selection.createRange();
+			        Sel.moveStart ('character', -oThat.value.length);
+			        CaretPos = Sel.text.length;
+				}
+				else if (oThat.selectionStart || oThat.selectionStart == '0'){
+	        		CaretPos = oThat.selectionStart;
+				}
+			}
+		    return CaretPos;
+        }
+	});
+
 	/****
 		Tools
 	*****/
@@ -1045,8 +1204,17 @@ var _statusText = {
 		console.info('laypage was not loaded!');
 	}
 
+	// 重写autocomplete的resize方法
+	$.widget("ui.autocomplete", $.ui.autocomplete, {
+	    _resizeMenu: function() {
+	        var a = this.menu.element;
+            a.css('min-width', (Math.max(a.width("").outerWidth(), this.element.outerWidth()) - 8) + 'px')
+	    }
+	});
+
 	$('body').append('<div id="desc-tooltip-containter"></div>');
-	$('#desc-tooltip-containter').hover(function() {
+	$('body').append('<div id="desc-tooltip-containter2"></div>');
+	$('#desc-tooltip-containter, #desc-tooltip-containter2').hover(function() {
 		$(this).data('focus-in', true);
 	}, function() {
 		$(this).data('focus-in', false).html('');
@@ -1054,7 +1222,8 @@ var _statusText = {
 })(jQuery);
 
 var Tools = {
-	$descContainer: $('#desc-tooltip-containter')
+	$descContainer: $('#desc-tooltip-containter'),
+	$descContainer2: $('#desc-tooltip-containter2'),
 };
 
 /**
@@ -1081,6 +1250,48 @@ var Tools = {
         return serializeObj;  
     };  
 })(jQuery); 
+
+/**
+ * 获取表格中的数据：input:text radio checkbox password
+ * 通过名称获取，并会获取tr上的Id
+ * @param  {object} $tbody table的query对象
+ * @return {json}        返回JSON
+ */
+Tools.getTableVal = function($tbody, idName) {
+	var res = false;
+
+	if (!!$tbody && $tbody.length) {
+		res = [];
+		var name, value;	
+		idName = idName || 'id';
+
+		$tbody.children('tr').each(function() {
+			var $tr = $(this), val = {id: $tr.data(idName)};
+
+			$tr.find('input,select').each(function() {
+				var $that = $(this);
+
+				name = $that.prop('name');
+				if (!!name) {
+					if ($that.is('[type=checkbox],[type=radio]')) {
+						value = $that.is(':checked')?1:0;
+					} else {
+						value = $that.val();
+					}
+
+					val[name] = value;
+				}
+
+
+			});
+
+			res.push(val);
+		});
+	}
+
+	return res;
+};
+
 /**
  * 自定义简介的提示
  * @param  {object} $elements 需要绑定提示的DOM
@@ -1105,7 +1316,7 @@ Tools.descToolTip = function($elements,type, placement) {
 			}else if (type == 2) {
 				options = {
 					trigger: 'manual',
-					container: '#desc-tooltip-containter',
+					container: '#desc-tooltip-containter2',
 					content: html,
 					html : true
 				};
@@ -1130,8 +1341,15 @@ Tools.descToolTip = function($elements,type, placement) {
 					}
 					// 设置超时，通过判断来确定提示
 					setTimeout(function() {
-						if (Tools.$descContainer.data('focus-in') != true)  {
-							$that.popover('hide');
+						if (type === 2) {
+							if (Tools.$descContainer2.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+						} else {
+							if (Tools.$descContainer.data('focus-in') != true)  {
+								$that.popover('hide');
+							}
+
 						}
 					}, 100);
 				});
@@ -1225,7 +1443,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 			Tools.justifyTab();
 		}
-
+		html = Tools.filterCount(html);
+		html = Tools.filterMoney(html);
+		html = Tools.filterUnPoint(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -1250,6 +1470,17 @@ Tools.closeTab = function(tab_id) {
 
 	Tools.justifyTab();
 };
+
+/**
+ * 刷新tab
+ * @param  {string} id 需要刷新的tab的Id
+ * @return {[type]}    [description]
+ */
+Tools.refreshTab = function(id) {
+	if (!!id) {
+		$('#' + id).trigger(REFRESH_TAB_EVENT);
+	}
+}
 
 /**
  * 调整tab的位置
@@ -1324,19 +1555,23 @@ Tools.getTabKey = function(id) {
 Tools.inputCtrolFloat=function($inputCtrol){
 	if (jQuery.isArray($inputCtrol)) {
 		for (var i = 0, len = $inputCtrol.length; i < len; i++) {
-			$inputCtrol[i].on('keyup', function (event) {
+			$inputCtrol[i].on('input', function (event) {
 			    var $amountInput = $(this);
 			    //响应鼠标事件，允许左右方向键移动 
 			    event = window.event || event;
 			    if (event.keyCode == 37 | event.keyCode == 39) {
 			        return;
 			    }
-			    //先把非数字的都替换掉，除了数字和. 
-			    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-			        //只允许一个小数点              
-			        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-			        //只能输入小数点后两位
-			        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    };
 		    });
 			$inputCtrol[i].on('blur', function () {
 			    var $amountInput = $(this);
@@ -1345,19 +1580,23 @@ Tools.inputCtrolFloat=function($inputCtrol){
 			});
 		}
 	}else{
-		$inputCtrol.on('keyup', function (event) {
+		$inputCtrol.on('input', function (event) {
 		    var $amountInput = $(this);
 		    //响应鼠标事件，允许左右方向键移动 
 		    event = window.event || event;
 		    if (event.keyCode == 37 | event.keyCode == 39) {
 		        return;
 		    }
-		    //先把非数字的都替换掉，除了数字和. 
-		    $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
-		        //只允许一个小数点              
-		        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
-		        //只能输入小数点后两位
-		        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+		     if (isNaN($amountInput.val())) {
+			    	setTimeout(function(){
+			    		 //先把非数字的都替换掉，除了数字和. 
+				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
+				        //只允许一个小数点              
+				        //replace(/^\./g, "").replace(/\.{2,}/g, ".").
+				        //只能输入小数点后两位
+				        replace(".", "$#$").replace(/\./g, "").replace("$#$", ".").replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'));
+			    	},100)
+			    }; 
 	    });
 		$inputCtrol.on('blur', function () {
 		    var $amountInput = $(this);
@@ -1379,20 +1618,190 @@ Tools.addZero2Two = function(num)  {
  * 控制精度
  * @param  {string/float} data   数据
  * @param  {float} length 精度的长度
+ * @param  {boolean} fixed 是否固定长度，默认是:true
  * @return {float}        返回修正后的数据
  */
-Tools.toFixed = function(data, length) {
-	if (!!Number.prototype.toFixed) {
+Tools.toFixed = function(data, length, fixed) {
+	if (typeof fixed !== 'boolean') {
+		fixed = true;
+	}
+	if (!!Number.prototype.toFixed && data != "") {
 		if (isNaN(length) || !length) {
 			length = 2;
 		}
 
 		if (!isNaN(data)) {
-			data = (data * 1).toFixed(length);
+			if (!(fixed === false && length >= checkPrecisionLength(data))) {
+				data = (data * 1).toFixed(length);
+			}
 		}
 	}
 
 	return data;
+
+	function checkPrecisionLength(data) {
+		var len = 0;
+		if (!!data) {
+			data = (data + '').split('.');
+			if (data.length === 2) {
+				len = data[1].length;
+			}
+		}
+
+		return len;
+	}
+};
+/**
+ * 过滤金额精度为2位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterMoney = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-money").each(function(){
+		var $taht = $(this);
+		if(!$taht.is(':not("input")')){
+			$taht.val(Tools.toFixed($taht.val(), 2))
+		}else{
+			$taht.text(Tools.toFixed($taht.text(), 2));
+		}
+	});
+	return $obj;
+};
+/**
+ * 过滤数量精度为1位小数
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterCount = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-count").each(function(){
+		if(!$(this).is(':not("input")')){
+			var value = $(this).val();
+			value = /\d+\./.test(value) ? Tools.toFixed(value, 1) : value;
+			$(this).val(value);
+		}else{
+			var text = $(this).text();
+			text = /\d+\./.test(value) ? Tools.toFixed(text, 1) : text;
+			$(this).text(text);
+		}
+	});
+	return $obj;
+};
+/**
+ * 添加千分位
+ * @param  {float} num   数据
+ * @return {string}      返回添加千分位后的数据
+ */
+Tools.thousandPoint = function(num, length){
+	if(!!length){
+		num = Tools.toFixed(num, length);
+	}
+	num = (num + '');
+	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
+		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
+	
+	if (isNaN(intNum) || (!!folatNum && isNaN(folatNum))) {
+		return num;
+	}
+
+	return intNum.replace(/(-)?\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
+};
+/**
+ * 过滤千分位
+ * @param  {string} obj html数据
+ * @return {object}     返回转换后的html数据
+ */
+Tools.filterUnPoint = function(obj){
+	if(!obj)return;
+	var $obj = $(obj);
+	$obj.find(".F-float").each(function(){
+		if(!$(this).is(':not("input")')){
+			$(this).val(Tools.thousandPoint($(this).val()));
+		}else{
+			$(this).text(Tools.thousandPoint($(this).text()));
+		}
+	});
+	
+	return $obj;
+};
+
+$('body').on('focusin.format-float.api', 'input.F-float', function(event) {
+	$(this).data('old-value-format-float.api', this.value);
+})
+.on('focusout.format-float.api', 'input.F-float', function(event) {
+	if ($(this).data('old-value-format-float.api') !== this.value
+		&& !!this.value && this.value.split(',').length > 1) {
+		// 处理千分位存在时丢失change事件的问题
+		$(this).trigger('change');
+	}
+})
+.on('keydown.format-float.api', 'input.F-float', function(event) {
+	Tools.input_key = event.which;
+})
+.on('input.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	var $that = $(this),
+		current = $that.cursorPosition(),
+		value = this.value,
+		newValue = Tools.thousandPoint(value);
+
+	switch(Tools.input_key) {
+		case 8:  // backspace
+			if (newValue[current] === ',') {
+				// 删除','时
+				
+				// 删除一个数字
+				value = value.substring(0, current - 1) + value.substr(current);
+				// 重新格式化
+				newValue = Tools.thousandPoint(value);
+				if (current <= 1) {
+					current --;
+				}
+			}
+			break;
+		case 46:  // delete
+			if (newValue[current] === ',') {
+				value = value.substring(0, current) + value.substr(current+1);
+				newValue = Tools.thousandPoint(value);
+				if (newValue.split(',').length) {	// 删除之后还有逗号，需要后移一位
+					current ++;
+				}
+			}
+			break;
+		default:   //处理其他输入
+			if (value.substr(0, current) != newValue.substr(0, current)) {  // 光标前的内容不同时
+				var speed = value.split(',').length - newValue.split(',').length;
+				if (speed < 0) {
+					current ++;
+				} else if (speed > 0) {
+					current --;
+				}
+			}
+		break;
+	}
+
+	this.value = newValue;
+	if (current > 0) {
+		$that.cursorPosition(current);
+	} else {
+		$that.cursorPosition(-1);
+	}
+})
+.on('change.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	$(this).val($(this).val());
+});
+
+/**
+ * 把千分位转换为数字
+ * @param  {string} data [description]
+ * @return {[type]}      [description]
+ */
+Tools.formatQuantile = function(data){
+	return data.replace(/,/g, '');
 };
 
 /**
@@ -1439,8 +1848,11 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     if (isInputRange && $obj.length === 2) {
         $obj.eq(0).on('changeDate', function(event) {
              event.preventDefault();
-             var start = $(this).val(),
-                 $end = $obj.eq(1).datepicker('setStartDate', start);
+             var start = $(this).val();
+         	 if(options.moreDay && start != ""){
+         	 	start = Tools.addDay(start,options.moreDay);
+         	 }
+             var $end = $obj.eq(1).datepicker('setStartDate', start);
 
              if ($end.val() < start) {
                  $end.val(start);
@@ -1520,15 +1932,21 @@ Tools.getDateDiff = function(startDate,endDate)
 Tools.addDay = function(date, days) {
 	if (!isNaN(days)) {
 		if (!(date instanceof Date)) {
+			if (typeof date === 'string') {
+				date = date.split('-').join('/');
+			}
+			
 			date = new Date(date);
 		}
 		var timer = date.getTime()+ days*24*60*60*1000;
 		date.setTime(timer);
-		date = date.getFullYear()+ "-"+ (date.getMonth() + 1) + "-"+ (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+		var month = date.getMonth() + 1, day = date.getDate();
+		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
 
 	return date;
 }
+
 /**
  * 获取记录描述信息
  * 主要是为了统一描述
@@ -1621,9 +2039,9 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 */
 
-KingServices.updateTransfer = function(touristGroupId)  {
+KingServices.updateTransfer = function(touristGroupId,id)  {
 	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransfer(touristGroupId);
+		module.updateTransfer(touristGroupId,id);
 	});
 }
 
@@ -1744,9 +2162,9 @@ KingServices.viewFeeDetail = function(id){
 	});
 }
 //查看游客小组
-KingServices.viewTouristGroup = function(id){
+KingServices.viewTouristGroup = function(id,isTransferIn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
-		module.viewTouristGroup(id);
+		module.viewTouristGroup(id,isTransferIn);
 	});
 }
 //查看外转情况
@@ -1773,14 +2191,18 @@ KingServices.viewPayMentDetail = function(id,num){
 		module.init(id,num);
 	});
 };
+//报账审核--跳转发团安排的查看页面
+KingServices.viewTripDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_all,function(module){
+		module.viewTripPlan(id);
+	});
+};
 //报价  修改
 KingServices.updateQuoteToOffer = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_quote,function(module){
 		module.updateQuoteToOffer(id);
 	});
 }
-
-
 //同行  新增
 KingServices.addPartnerAgency = function(fn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_partnerAgency,function(module){
@@ -1788,6 +2210,50 @@ KingServices.addPartnerAgency = function(fn){
 	});
 }
 
+//购物自费多选和浮动显示
+KingServices.shopMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.shopMultiselect($this);
+	});
+}
+KingServices.viewOptionalShop = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalShop($this);
+	});
+}
+KingServices.selfPayMultiselect = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewOptionalSelfPay = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.viewOptionalSelfPay($this);
+	});
+}
+//景区多选和浮动显示
+KingServices.chooseScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.chooseScenic($this);
+	});
+}
+KingServices.viewOptionalScenic = function($this){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_travelLine,function(module){
+		module.viewOptionalScenic($this);
+	});
+}
+
+//发团计划--散客
+KingServices.updateSingleTripPlan = function(id,mergeTouristGroupIdJson){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.updateSingleTripPlan(id,mergeTouristGroupIdJson);
+	});
+}
+KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+		module.addTripPlan(false,args,mergeTouristGroupIdJson);
+	});
+}
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
@@ -1802,6 +2268,7 @@ KingServices.addResourceFunction = function(e){
 			console.log(data)
 			if (!!data.name && !!name && !!data.id && !!id) {$parents.find('input[name=price],input[name=hotelRoom],input[name=hotelRoomId],input[name=fee],input[name=chargingProjects],input[name=chargingId],input[name=goodsPolicy],input[name=shopPolicyId],input[name=selfitem],input[name=selfitemId],input[name=oldPrice],input[name=hotelRoomType],input[name=hotelRoomTypeId],input[name=hotelPrice],input[name=partnerAgencyNameList],input[name=partnerAgencyContactId]').val("")}
 			if (!!data.name && !!name) {$parents.find('input[name='+name+']').val(data.name).trigger('change');}
+			if (!!data.companyName && !!name) {$parents.find('input[name='+name+']').val(data.companyName).trigger('change');}
 			if (!!data.id && !!id) {$parents.find('input[name='+id+']').val(data.id).trigger('change');}
 			if (!!data.managerName && !!managerName) {$parents.find('input[name='+managerName+']').val(data.managerName);}
 			if (!!data.mobileNumber && !!mobileNumber) {$parents.find('input[name='+mobileNumber+']').val(data.mobileNumber);}
@@ -1814,8 +2281,8 @@ KingServices.addResourceFunction = function(e){
 KingServices.addBusDriverFunction = function(e){
 	var $this = $(this),
 		$parents = $(this).closest(e.data.type),
-		$busCompany = $parents.find('[name=busCompanyName]').val() || "",
-		$busCompanyId = $parents.find('[name=busCompanyId]').val() || "",
+		$busCompany = $parents.find('[name=' + e.data.busCompanyName + ']').val() || "",
+		$busCompanyId = $parents.find('[name=' + e.data.busCompanyId + ']').val() || "",
 		busCompanyName = e.data.busCompanyName,
 		busCompanyId = e.data.busCompanyId,
 		licenseNumberId = e.data.busLicenseNumberId,
@@ -1970,3 +2437,11 @@ KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
 };
+
+//内部模板
+KingServices.inlineTemplate = function(source, option) {
+	var s = source,
+		render = template.compile(s),
+		html = render(option);
+	return html;
+}

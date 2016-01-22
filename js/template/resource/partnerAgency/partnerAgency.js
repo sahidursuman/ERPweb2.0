@@ -118,7 +118,7 @@ define(function(require,exports){
 		var addHtml = addTempLate();
 		var addPartnerAgencyLayer = layer.open({
 			type:1,
-			title:'新增同行旅行社',
+			title:'新增客户旅行社',
 			skin:'layui-layer-rim',
 			area:'1190px',
 			zIndex:1028,
@@ -231,7 +231,7 @@ define(function(require,exports){
 					var html = viewDetialPartnerAgencyTempLate(data);
 					layer.open({
 						type:1,
-						title:'查看同行旅行社信息',
+						title:'查看客户旅行社信息',
 						skin:'layui-layer-rim',
 						area:'60%',
 						zIndex:1028,

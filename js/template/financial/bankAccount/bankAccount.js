@@ -21,6 +21,11 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
+					for(var i = 0;i<data.newBankAccountList.length;i++){
+						var bankNumber = data.newBankAccountList[i].bankAccountNumber;
+							bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+						data.newBankAccountList[i].bankAccountNumber = bankNumber;
+					};
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,'银行账户',html);
 					var $listTab = $("#tab-"+menuKey+"-content");
@@ -50,10 +55,12 @@ define(function(require,exports){
 		$obj.find('.T-bankAcc-list').on('click', '.T-action', function(event) {
 			var $that = $(this), 
 				id = $that.closest('tr').attr('bankid'),
-				bankNumber = $that.closest('tr').attr('banknum');
+				bankNumber = $that.closest('tr').attr('banknum'),
+				bankMoney = $that.closest('tr').attr('bankMoney'),
+				bankInfo = "账户：" + bankNumber + ",余额：" + bankMoney;
 			if ($that.hasClass('T-view'))  {
 				// 查看账户信息
-				KingServices.viewPayMentDetail(id,bankNumber);
+				KingServices.viewPayMentDetail(id,bankInfo);
 			} 
 		});
 	};

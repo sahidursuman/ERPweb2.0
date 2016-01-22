@@ -13,16 +13,17 @@
                     <button class=" btn-sm T-search search-btn marginLeft-30">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
+                    <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
                 </div>
             </div>
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
-                <label class="control-label pull-left">账面应付合计：{{sumNeedPayMoney}}</label>
-                <label class="control-label marginLeft-30">已付金额合计：{{sumPayedMoney}}</label>
-                <label class="control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumSettlementMoney}}</span></label>
-                <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumUnPayedMoney}}</span></label>
-                <label class="control-label marginLeft-30">未付金额合计(已对账)：{{checkedUnPayedMoney}}</label>
+                <label class="control-label pull-left">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
+                <label class="control-label marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span></label>
+                <label class="control-label marginLeft-30">结算金额合计：<span class="T-stMoney F-float F-money" >{{sumSettlementMoney}}</span></label>
+                <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney F-float F-money">{{sumUnPayedMoney}}</span></label>
+                <label class="control-label marginLeft-30">未付金额合计(已对账)：<span class="F-float F-money">{{checkedUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
@@ -52,20 +53,27 @@
         <tbody class="T-checkList" data-right="1270005">
             {{each financialInsuranceList as rs index}}
             <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
-                <td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
+                <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
+                        {{if rs.lineProductName || rs.guideName}}，{{/if}}
+                    {{/if}}
+                    {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}}
+                        {{if rs.guideName}}，{{/if}}
+                    {{/if}}
+                    {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
+                </td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}} - {{else}} {{rs.accountTime | dateFormat:'yyyy-MM-dd'}} {{/if}}
                 </td>
                 <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
-                <td>{{rs.price}}</td>
-                <td>{{rs.memberCount}}</td>
-                <td>{{rs.reduceMoney}}</td>
-                <td>{{rs.needPayMoney}}</td>
-                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}{{rs.payedMoney}}</a></td>
+                <td class="F-float F-money">{{rs.price}}</td>
+                <td class="F-float F-count">{{rs.memberCount}}</td>
+                <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                <td><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-insuranceImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>
-                    <input type="text" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money">
+                    <input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money">
                 </td>
-                <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
+                <td class="F-float F-money" name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td>
                     <input type="text" maxlength="1000" name="checkRemark" style="text-align:center" value="{{rs.checkRemark}}" />
                 </td>

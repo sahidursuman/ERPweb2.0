@@ -187,14 +187,15 @@ define(function(require, exports) {
         });
 
         //导出报表事件 btn-hotelExport
-        // hotel.$checkSearchArea.find(".T-hotelExport").click(function(){
-        //     var year = hotel.$checkSearchArea.find("[name=year]").val();
-        //     var month = hotel.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","hotel") + "&hotelId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        hotel.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    hotelId: id, 
+                    accountInfo : hotel.$checkSearchArea.find("input[name=accountInfo]").val(),
+                    startTime: hotel.$checkSearchArea.find('input[name=startDate]').val(),
+                    endTime: hotel.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportArrangeHotelFinancial");
+        });
 
         //复选框事件初始化
         var checkboxList = hotel.$checkTab.find(".T-checkList tr .T-checkbox"),
@@ -337,7 +338,7 @@ define(function(require, exports) {
             hotel.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 hotel.$clearTab.data('isEdited',true);
-                hotel.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // hotel.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 hotel.$clearTab.find(".T-cancel-auto").hide();
             }

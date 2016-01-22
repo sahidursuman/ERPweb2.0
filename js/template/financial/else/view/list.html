@@ -41,11 +41,11 @@
                 {{each ticketList as ticket}}
                 <tr class="ticket-{{ticket.id}}">
                     <td>888</td>
-                    <td>{{ticket.name}}</td>
-                    <td>{{ticket.managerName}}</td>
-                    <td>{{ticket.mobileNumber}}</td>
-                    <td>{{ticket.companyPhoneNumber}}</td>
-                    <td>
+                    <td class="F-float F-money">{{ticket.name}}</td>
+                    <td class="F-float F-money">{{ticket.managerName}}</td>
+                    <td class="F-float F-money">{{ticket.mobileNumber}}</td>
+                    <td class="F-float F-money">{{ticket.companyPhoneNumber}}</td>
+                    <td class="F-float F-money">
                         {{if ticket.province!=null}}
                         {{ticket.province.name}}
                         {{/if}}

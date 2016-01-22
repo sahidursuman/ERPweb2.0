@@ -20,11 +20,11 @@
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group">
             <div class="pull-left" style="margin:3px 30px 0px 0px;">
-                <label>账面应付合计：{{sumNeedPayMoney}}元 </label>
-                <label class="marginLeft-30">已付金额合计：{{sumPayedMoney}} </label>
-                <label class="marginLeft-30">结算金额合计：{{sumSettlementMoney}}</label>
-                <label class="marginLeft-30">未付金额合计：{{sumUnPayedMoney}}</label>
-                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney">{{checkedUnPayedMoney}}</span></label>
+                <label>账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
+                <label class="marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span> </label>
+                <label class="marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
+                <label class="marginLeft-30">未付金额合计：<span class="F-float F-money">{{sumUnPayedMoney}}</span></label>
+                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
             </div>
         </div>
     </form>
@@ -33,7 +33,7 @@
         <div class="form-group">
             <label class="control-label">本次付款金额合计：</label>
             <label class="control-label">
-                <input type="text" name="sumPayMoney" class="money"  value="{{sumPayMoney}}">
+                <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}">
             </label>
         </div>
 
@@ -56,7 +56,7 @@
         <div class="form-group mar-l-10 T-bankDiv">
             <label class="control-label">银行账号：</label>
             <label class="control-label">
-                <input type="text" name="card-number" value="{{bankNo}}" class="money" style="width:230px;">
+                <input type="text" name="card-number" value="{{bankNo}}" class="money" style="width:300px;">
                 <input type="hidden" name="card-id" value="{{bankId}}" />
             </label>
         </div>
@@ -106,9 +106,13 @@
     <tbody class="T-clearList">
         {{each financialBusCompanyListData as rs index}}  
         <tr data-id="{{rs.id}}">
-            <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}{{/if}}
-                {{if rs.lineProductName != null && rs.lineProductName != ""}}，{{rs.lineProductName}}{{/if}}
-                {{if rs.guideName != null && rs.guideName != ""}}，{{rs.guideName}}{{/if}}
+            <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
+                    {{if rs.lineProductName || rs.guideName}}，{{/if}}
+                {{/if}}
+                {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}}
+                    {{if rs.guideName}}，{{/if}}
+                {{/if}}
+                {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
             </td>
             <td>{{if rs.startTime == null || rs.startTime == ""}}
                     -
@@ -118,8 +122,8 @@
             </td>
             <td>{{if rs.isMemberCount == 1}} - 
                 {{else}}
-                    {{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}{{rs.touristAdultCount}}{{/if}} 大  
-                    {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}{{rs.touristChildCount}}{{/if}} 小
+                    {{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}<span class="F-float F-count">{{rs.touristAdultCount}}</span>{{/if}} 大  
+                    {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}<span class="F-float F-count">{{rs.touristChildCount}}</span>{{/if}} 小
                 {{/if}}
             </td>
             <td>{{if rs.driverName == null || rs.driverName == ""}}-{{else}}{{rs.driverName}}{{/if}}</td>
@@ -130,14 +134,14 @@
                 {{/if}}
             </td>
             <td>{{if rs.licenseNumber == null || rs.licenseNumber == ""}}-{{else}}{{rs.licenseNumber}}{{/if}}</td>
-            <td>{{rs.fee}}</td>
-            <td>{{rs.reduceMoney}}</td>
-            <td>{{rs.needPayMoney}}</td>
-            <td><a class="T-option T-payedDetail">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td>
+            <td><span class="F-float F-money">{{rs.fee}}</span></td>
+            <td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
+            <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
+            <td><a class="T-option T-payedDetail">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span>{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span>{{/if}}</a></td>
             <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-busCompanyImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-            <td>{{rs.settlementMoney}}</td>
-            <td>{{rs.unPayedMoney}}</td>
-            <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9" data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}} /></td>
+            <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+            <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
+            <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money" maxlength="9" data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}} /></td>
             <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}} /></td>
             <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
             <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>

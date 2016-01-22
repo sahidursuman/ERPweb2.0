@@ -1,0 +1,22 @@
+{{each touristGroupMemberList as rs index}}
+<tr data-index="{{index + 1}}" data-id="{{rs.id}}">
+	<td>{{index + 1}}</td>
+	<td><input type="text" class="col-xs-12" name="name" value="{{rs.name}}"></td>
+	<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{rs.mobileNumber}}"></td>
+	<td>
+		<select class="col-xs-12" name="idCardType">
+			{{#rs.idCardType | getCardOption}}
+		</select>
+	</td>
+	<td><input type="text" class="col-xs-12" name="idCardNumber" value="{{rs.idCardNumber}}"></td>
+	<td>
+		<label class="control-label">
+			<input type="checkbox" name="isContactUser" class="ace" {{if rs.isContactUser == 1}}checked{{/if}}>
+			<span class="lbl"></span>
+		</label>
+	</td>
+	<td>
+        <a class="cursor T-action T-delete" title="删除">删除</a>
+	</td>
+</tr>
+{{/each}}
