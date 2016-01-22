@@ -9,11 +9,11 @@ define(function(require, exports){
 
 	};
 	ServiceStandards.initModule = function(){
-		ServiceStandards.listService();
+		ServiceStandards.listService(0,'',1);
 	};
-	ServiceStandards.listService = function(){
+	ServiceStandards.listService = function(pageNo,serviceTitle,status){
 		var name = [];
-		var name1 = {
+		/*var name1 = {
 			serviceStandardsId:1,
 			serviceStandards:"剪纸",
 			serviceContent:"老师手把手一对一培训",
@@ -28,42 +28,47 @@ define(function(require, exports){
 			status:0
 		};
 		name.push(name1);
-		name.push(name2);
-		var searchParam = {
-			serviceName:"",
-			status:0
-		};
-		var serviceData = {
-			serviceStandardList:name,
-			searchParam:searchParam,
-			recordSize:2,
-			totalPage:1,
-			pageNo:0
-		};
-		console.log(serviceData);
-		var html = listTemplate(serviceData);
-		Tools.addTab(menuKey,'服务标准',html);
-		var $serviceTab = $("#tab-"+menuKey+"-content");
-		var $tbody=$serviceTab.find('.T-service-list');
-		//添加记录
-		var recordSize = Tools.getRecordSizeDesc(serviceData.recordSize);
-		$serviceTab.find('.recordSize').text(recordSize);
-		//要求内容过长的处理
-		Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
-		// 绑定翻页组件
-		laypage({
-		    cont: $serviceTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-		    pages: serviceData.totalPage, //总页数
-		    curr: (serviceData.pageNo + 1),
-		    jump: function(obj, first) {
-		    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-		    		//args.pageNo = obj.curr -1
-		    		//Infrastructure.listBankAcc(args,$obj,'page');
-		    	}
-		    }
+		name.push(name2);*/
+		$.ajax({
+			url:KingServices.build_url('serviceStandardController','getServiceStandardTemplateList'),
+			data:{
+				pageNo:pageNo,
+				serviceTitle:serviceTitle,
+				status:status
+			},
+			type:'POST',
+			success:function(data){
+				if(showDialog(data)){
+					data.gssTemplateList = JSON.parse(data.gssTemplateList);
+					var searchParam = {
+						serviceTitle:serviceTitle,
+						status:status
+					};
+					var html = listTemplate(data);
+					Tools.addTab(menuKey,'服务标准',html);
+					//添加记录
+					var recordSize = Tools.getRecordSizeDesc(data.recordSize);
+					$serviceTab.find('.recordSize').text(recordSize);
+					//要求内容过长的处理
+					Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
+					// 绑定翻页组件
+					laypage({
+					    cont: $serviceTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (data.pageNo + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		//args.pageNo = obj.curr -1
+					    		//Infrastructure.listBankAcc(args,$obj,'page');
+					    	}
+					    }
+					});
+					//绑定事件
+					ServiceStandards.initEvents($serviceTab);
+				}
+			}
 		});
-		//绑定事件
-		ServiceStandards.initEvents($serviceTab);
+		
 	};
 	//页面事件
 	ServiceStandards.initEvents = function($obj){
