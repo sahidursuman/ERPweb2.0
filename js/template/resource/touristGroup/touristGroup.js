@@ -2272,6 +2272,11 @@ define(function(require, exports) {
                             } else {
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
                                 Tools.closeTab(tabId);
+
+                                //外转确认
+                                if (!!typeInner && typeInner=='out') {
+                                    touristGroup.freshTransferList($obj);
+                                };
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
@@ -2351,6 +2356,24 @@ define(function(require, exports) {
         } else {
             return erroFlag;
         }
+    };
+
+
+
+    /**
+     * 更新外转确认记录data
+     * @param  {[type]} $obj [description]
+     * @return {[type]}      [description]
+     */
+    touristGroup.freshTransferList = function($obj){
+        var transferId = touristGroup.getVal($obj,"transferId");
+        $.ajax({
+            url:KingServices.build_url("transfer","saveTourist"),
+            data: "transferId="+transferId,
+            type: 'POST'
+        })
+        .done(function(data) {
+        })     
     };
 
 
