@@ -4,8 +4,8 @@
 		<i class="ace-icon fa fa-search"></i>
 		搜索
 	</button>
-	<div class="btn-group btn-status T-select-status" style="margin-left: 20px">
-		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+	<div class="btn-group T-status" style="margin-left: 20px">
+		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class="T-select-status btn-sm  dropdown-toggle block-up" aria-expanded="false">
 			<span>
 				{{if searchParam.status == ""}}
 					全部
@@ -17,7 +17,7 @@
 			</span>
 			<i class="ace-icon fa fa-angle-down icon-on-right"></i>
 		</button>
-		<ul class="dropdown-menu">
+		<ul class="dropdown-menu T-sleect-ul">
 			<li>
 				<a data-value="" href="javascript:void(0)">全部</a>
 			</li>
@@ -56,9 +56,9 @@
 			</thead>
 
 			<tbody class="T-service-list">
-				{{each serviceStandardList as service}}
+				{{each gssTemplateList as service}}
 					<tr serviceId="{{service.id}}">
-					 	<td>{{service.serviceStandards}}</td>
+					 	<td>{{service.serviceTitle}}</td>
 						
 						<td class="T-ctrl-tip" title="{{service.serviceContent}}">
 						<span style="height: 35px">{{service.serviceContent}}</span></td>

@@ -6,29 +6,17 @@ define(function(require, exports){
 		updateTemplate = require('./view/update'),
 		addTemplate = require('./view/add');
 	var ServiceStandards ={
-
+		$listTab:false
 	};
 	ServiceStandards.initModule = function(){
 		ServiceStandards.listService(0,'',1);
 	};
 	ServiceStandards.listService = function(pageNo,serviceTitle,status){
-		var name = [];
-		/*var name1 = {
-			serviceStandardsId:1,
-			serviceStandards:"剪纸",
-			serviceContent:"老师手把手一对一培训",
-			serviceRequire:"男女均可，耐得住寂寞",
-			status:1
+		if(arguments.length == 1){
+			serviceTitle = ServiceStandards.$listTab.find('input[name=service_name]').val();
+			status = ServiceStandards.$listTab.find(".T-status").find("button").attr("data-value")
 		};
-		var name2 = {
-			serviceStandardsId:2,
-			serviceStandards:"剪纸",
-			serviceContent:"老师手把手一对一培训，老师手把手一对一培训，老师手把手一对一培训，老师手把手一对一培训，老师手把手一对一培训，老师手把手一对一培训",
-			serviceRequire:"男女均可，耐得住寂寞，男女均可，耐得住寂寞，男女均可，耐得住寂寞男女均可，耐得住寂寞,男女均可，耐得住寂寞,男女均可，耐得住寂寞,男女均可，耐得住寂寞,男女均可，耐得住寂寞,男女均可，耐得住寂寞",
-			status:0
-		};
-		name.push(name1);
-		name.push(name2);*/
+		pageNo = pageNo || 0;
 		$.ajax({
 			url:KingServices.build_url('serviceStandardController','getServiceStandardTemplateList'),
 			data:{
@@ -44,22 +32,25 @@ define(function(require, exports){
 						serviceTitle:serviceTitle,
 						status:status
 					};
+					data.searchParam = searchParam;
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,'服务标准',html);
+					var $serviceTab = $("#tab-"+menuKey+"-content");
+					ServiceStandards.$listTab = $serviceTab;
 					//添加记录
 					var recordSize = Tools.getRecordSizeDesc(data.recordSize);
 					$serviceTab.find('.recordSize').text(recordSize);
 					//要求内容过长的处理
+					var $tbody = $serviceTab.find('.T-service-list');
 					Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
 					// 绑定翻页组件
 					laypage({
 					    cont: $serviceTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 					    pages: data.totalPage, //总页数
-					    curr: (data.pageNo + 1),
+					    curr: (pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		//args.pageNo = obj.curr -1
-					    		//Infrastructure.listBankAcc(args,$obj,'page');
+					    		ServiceStandards.listService(obj.curr -1);
 					    	}
 					    }
 					});
@@ -74,13 +65,13 @@ define(function(require, exports){
 	ServiceStandards.initEvents = function($obj){
 		//搜索事件
 		$obj.find('.T-search-area').on('click','.T-btn-service-search',function(){
-			//Infrastructure.listBankAcc(args,$obj,'search');
+			ServiceStandards.listService(0);
 		});
 		//状态栏事件
 		$obj.find(".T-sleect-ul").on('click','a',function(){
 			$(this).closest('div').find(".T-select-status").attr("data-value",$(this).attr("data-value"));
 			$(this).closest('div').find("span").text($(this).text());
-			//Infrastructure.listBankAcc(args,$obj,'search');
+			ServiceStandards.listService(0);
 		});
 		//新增服务标准
 		$obj.find('.T-search-area').on('click','.T-service-add',function(){
@@ -88,15 +79,14 @@ define(function(require, exports){
 		});
 		// 报表内的操作
 		$obj.find('.T-service-list').on('click', '.T-action', function(event) {
-			//event.preventDefault();
 			var $that = $(this), id = $that.closest('tr').attr('serviceId');
 			if ($that.hasClass('T-edit'))  {
 				// 编辑账户信息
-				ServiceStandards.updateService(id);
+				ServiceStandards.getDataById(id);
 			} else if ($that.hasClass('T-delete'))  {
 				// 删除账户
 				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
-					ServiceStandards.deleteService(id,args,$obj);
+					ServiceStandards.deleteService(id);
 				});
 				
 			}
@@ -127,8 +117,9 @@ define(function(require, exports){
 		});
 	};
 	//编辑事件
-	ServiceStandards.updateService = function(){
-		var html = updateTemplate();
+	ServiceStandards.updateService = function(data){
+		console.log(data);
+		var html = updateTemplate(data);
 		var updateServiceLayer = layer.open({
 			type: 1,
 			title:"修改服务标准",
@@ -143,7 +134,7 @@ define(function(require, exports){
 				var validator = rule.check($updateTabObj);
 				//保存事件
 				$updateTabObj.find('.T-submit').on('click',function(){
-					var args = ServiceStandards.installData ($updateTabObj,1);
+					var args = ServiceStandards.installData ($updateTabObj,2);
 					if(!validator.form()){return;};
 					ServiceStandards.saveData(args,updateServiceLayer);
 				});
@@ -152,8 +143,34 @@ define(function(require, exports){
 	};
 	//保存事件
 	ServiceStandards.saveData = function(args,closeLayer){
-		console.log(args);
-		//layer.close(closeLayer);
+		$.ajax({
+			url:KingServices.build_url('serviceStandardController','saveServiceStandardTemplate'),
+			data:args,
+			type:'POST',
+			success:function(data){
+				if(showDialog(data)){
+					layer.close(closeLayer);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						ServiceStandards.listService(0,'',1);
+					});
+				}
+			}
+		});
+	};
+	//删除事件
+	ServiceStandards.deleteService = function(id){
+		$.ajax({
+			url:KingServices.build_url('serviceStandardController','deleteServiceStandardTemplate'),
+			data:{id:id},
+			type:'POST',
+			success:function(data){
+				if(showDialog(data)){
+				showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					ServiceStandards.listService(0,'',1);
+				});
+			}
+			}
+		});
 	};
 	//组装数据
 	ServiceStandards.installData = function($obj,typeFlag){
@@ -163,13 +180,31 @@ define(function(require, exports){
 			status = 1;
 		};
 		var subData = {
-			serviceName:$obj.find('input[name=serviceName]').val(),
+			serviceTitle:$obj.find('input[name=serviceName]').val(),
 			serviceContent:$obj.find('textarea[name=serviceContent]').val(),
 			serviceRequire:$obj.find('textarea[name=serviceRequire]').val(),
 			status:status,
-			id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
+			id:typeFlag == 2 ? $obj.find('input[name=serviceId]').val():'',
 		};
 		return subData;
+	};
+	//通过id获取数据
+	ServiceStandards.getDataById = function(id){
+		$.ajax({
+			url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
+			data:{
+				id:id
+			},
+			type:'POST',
+			success:function(data){
+				if(showDialog(data)){
+					console.log(data);
+					data.gssTemplate = JSON.parse(data.gssTemplate);
+					ServiceStandards.updateService(data);
+				}
+			}
+
+		});
 	};
 	exports.init = ServiceStandards.initModule;
 	exports.saveData = ServiceStandards.saveData;
