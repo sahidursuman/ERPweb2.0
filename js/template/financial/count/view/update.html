@@ -23,6 +23,7 @@
     </table>
     <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
+    <input type="hidden" name='billStatus' value="{{tripPlan.billStatus}}">
     <div class="col-sm-12 " style="margin: 20px 0px 20px 0px;display: none;">
         billStatus:{{if tripPlan.billStatus == '-1'}}待报账{{else if tripPlan.billStatus == '0'}}待审核（就是已报账）{{else if tripPlan.billStatus == '1'}}计调已审{{else if tripPlan.billStatus == '2'}}财务已审{{/if}}
         <br />
@@ -208,7 +209,7 @@
                         <th>联系电话</th>
                         <th>人数</th>
                         <th>应收</th>
-                        <th>已收</th>
+                        <th>社收</th>
                         <th>现收</th>
                         <th>明细</th>
                     </thead>
@@ -226,7 +227,7 @@
                             <td>
                                 {{if touristGroup.touristGroupFeeList.length > 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
-                                        {{touristGroupFee.describeInfo}} ：
+                                        {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
@@ -302,7 +303,6 @@
                         <th class="th-border">联系电话</th>
                         <th class="th-border">人数</th>
                         <th class="th-border">接团</th>
-                        <th class="th-border">小车</th>
                         <th class="th-border">送团</th>
                         <th class="th-border">明细</th>
                     </tr>
@@ -316,7 +316,6 @@
                         <td>{{touristGroup.mobileNumber}}</td>
                         <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
                         <td>{{touristGroup.arriveService}}</td>
-                        <td>{{touristGroup.busService}}</td>
                         <td>{{touristGroup.leaveService}}</td>
                         <td><a href="javascript:void(0);" data-entity-id="{{touristGroup.id}}" class="T-viewTripTransit">查看</a></td>
                      </tr>

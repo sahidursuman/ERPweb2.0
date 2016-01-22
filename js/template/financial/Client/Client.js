@@ -180,6 +180,21 @@ define(function(require, exports) {
                 data.searchParam.creatorName = args.creatorName || '全部';
                 // 合并数据
                 Client.pushClearData(data, Client.clearDataArray);
+
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = resultList[i].detailList,
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                    } else {
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                    }
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                }
+                data.customerAccountList = resultList; 
                 
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
@@ -206,7 +221,7 @@ define(function(require, exports) {
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
-        $tab.find(".T-List").off('change').on('change',"input",function(event) {
+        $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change",true);
             $tab.data('isEdited', true);
@@ -259,7 +274,8 @@ define(function(require, exports) {
                     lineProductName: Client.$checkSearchArea.find('.T-search-line').val(),
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
-                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id')
+                    creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
                 };
             args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
             args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
@@ -267,11 +283,11 @@ define(function(require, exports) {
         });
 
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-list").find('.T-checkbox'));
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
-        $tab.find('.T-list').on('click', '.T-action', function(event){
+        $tab.find('.T-checkList').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-viewGroup')){
@@ -296,9 +312,9 @@ define(function(require, exports) {
         //确认对账按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
-            FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
+            FinancialService.changeUncheck($tab.find('.T-checkList tr'), function(){
                 Client.saveCheckingData($tab);
-            });
+            },3);
          });
 
         //关闭页面事件
@@ -430,6 +446,21 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+
+                //费用明细处理
+                var resultList = data.customerAccountList;
+                for(var i = 0; i < resultList.length; i++){
+                    var detailList = resultList[i].detailList,
+                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
+                    resultList[i].detailList = detailList;
+                    if(resultList[i].status == 5){
+                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
+                    } else {
+                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
+                    }
+                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
+                }
+                data.customerAccountList = resultList; 
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
@@ -536,8 +567,22 @@ define(function(require, exports) {
             var check =  new FinRule(5).check($tab);
             if(!check.form()){ return false; }
             if (!validator.form()) { return; }
-            var allMoney = $tab.find('input[name=sumPayMoney]').val();
-            if(allMoney == 0){
+            if(!$tab.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
+
+            var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
+                sumList = Client.$sumUnReceivedMoney.data("money");
+            if (sumList === undefined) {  // 未修改付款的时候，直接读取
+                sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
+            }
+            if(sum != sumList){
+                showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+                return false;
+            }
+
+            if(sumList == 0){
                 showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
                     Client.saveClearData($tab);
                 })
@@ -599,7 +644,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
-                        $tab.find('.T-list').children('tr:nth-child(2n+1)').each(function() {
+                        $tab.find('.T-list').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
@@ -656,7 +701,7 @@ define(function(require, exports) {
             Client.clearDataArray = []
         }
 
-        $body.children('tr:nth-child(2n+1)').each(function() {
+        $body.children('tr').each(function() {
             var $tr = $(this);
 
             if ($tr.data('change')) {
@@ -717,36 +762,10 @@ define(function(require, exports) {
     }
 
     Client.saveCheckingData = function($tab, tabArgs){
-        var JsonStr = [],
-            selectFlag = 0,
-            argLen = arguments.length,
-            checkList = $tab.find('.T-list'),
-            $tr = checkList.find('.T-checkbox');
-        $tr.each(function(i){
-           var flag = $(this).is(":checked");
-           var tr = $(this).closest('tr');
-           if(flag){
-                if(tr.attr("data-confirm") == 0 ){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 1,
-                        id: tr.data('id')
-                    };
-                    JsonStr.push(checkData);
-                }
-           }else{
-                if(tr.attr("data-confirm") == 1){
-                    var checkData = {
-                        backMoney: tr.find('.T-refund').val(),
-                        checkRemark: tr.find('.T-remark').val(),
-                        isConfirmAccount: 0,
-                        id: tr.data('id')
-                    };  
-                    JsonStr.push(checkData);
-                }
-           }
-        });
+        var argLen = arguments.length,
+            JsonStr = FinancialService.saveJson_checking($tab);
+        if(!JsonStr){return false;}
+
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
@@ -782,15 +801,6 @@ define(function(require, exports) {
             return;
         };
 
-        var sum = parseFloat(Client.$sumUnReceivedMoney.val()),
-            sumList = Client.$sumUnReceivedMoney.data("money");
-        if (sumList === undefined) {  // 未修改付款的时候，直接读取
-            sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-        if(sum != sumList){
-            showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-            return false;
-        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

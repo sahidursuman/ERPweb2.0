@@ -326,15 +326,7 @@ define(function(require, exports) {
         $tab.find(".T-saveClear").click(function() {
             if (!validatorCheck.form())return;
             if (type) {
-                var allMoney = $tab.find('input[name=sumPayMoney]').val();
-                if(allMoney == 0){
-                    showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                        FinGuide.savePayingData($tab);
-                    })
-                }else{
-                    FinGuide.savePayingData($tab);
-                }
-                
+                FinGuide.savePayingData($tab);
             } else {
                 FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
                     FinGuide.saveCheckingData($tab);
@@ -412,18 +404,10 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab, tabArgs) {
-        var check =  new FinRule(5).check($tab);
-        if(!check.form()){ return false; }
-        var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-            sumListMoney = $tab.find('input[name=sumPayMoney]').data("money");
-        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
-            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-        if(sumPayMoney != sumListMoney){
-            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
+        if(!FinancialService.isClearSave($tab,validator)){
             return false;
         }
-        var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
 		var bankId = $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();

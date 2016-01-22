@@ -629,7 +629,11 @@ function viewAllMsg(){
 }
 
 function trim(str){
-	return str.replace(/(^\s*)|(\s*$)/g, "");
+	if (!!str) {
+		return str.replace(/(^\s*)|(\s*$)/g, "");
+	} else {
+		return str;
+	}
 }
 
 /**
@@ -777,13 +781,33 @@ function listMenu(menuTemplate){
 
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if (targetIsCheckbox)  {	// 点击了checkbox
-								$that.toggleClass('success', $target.prop('checked'));
+								// $that.toggleClass('success', $target.prop('checked'));
+								toggleClass('success',  $target.prop('checked'));
 							} else if ($checkBox.length) {  // tr含有checkbox
 								$that.toggleClass('success');								
 								$checkBox.trigger('click');	
 							} else {   // 普通tr
-								$that.addClass('success').siblings('tr').removeClass('success');
+								$that.siblings('tr').removeClass('success');
+								toggleClass('success',  true);
 							}
+					}
+
+					// tr不对齐的处理
+					function toggleClass(className, enable) {
+						var $trs = $that.parent().children('tr'),
+							baseCnt = $trs.eq(0).children('td').length,
+							$current = $that.next(), $prev = $that;
+
+						// 向下遍历
+						while(baseCnt != $current.children('td').length && $current.children('td').length > 0) {
+							$current = $current.toggleClass(className, enable).next();
+						}
+
+						// 向上遍历
+						while(baseCnt != $prev.children('td').length && $prev.children('td').length > 0) {
+							$prev = $prev.toggleClass(className, enable).prev();
+						}
+						$prev.toggleClass(className, enable);
 					}
 				});
 
@@ -1104,7 +1128,7 @@ var _statusText = {
 		//获取或设置光标位置
 		cursorPosition : function( value ){
 			var oThat = $(this)[0], CaretPos = -1;
-			if(!!value && typeof value === "number"){
+			if(typeof value === "number"){
 				if(oThat.setSelectionRange){
 			        oThat.setSelectionRange(value,value);
 			    }
@@ -1180,6 +1204,14 @@ var _statusText = {
 	} else {
 		console.info('laypage was not loaded!');
 	}
+
+	// 重写autocomplete的resize方法
+	$.widget("ui.autocomplete", $.ui.autocomplete, {
+	    _resizeMenu: function() {
+	        var a = this.menu.element;
+            a.css('min-width', (Math.max(a.width("").outerWidth(), this.element.outerWidth()) - 8) + 'px')
+	    }
+	});
 
 	$('body').append('<div id="desc-tooltip-containter"></div>');
 	$('body').append('<div id="desc-tooltip-containter2"></div>');
@@ -1666,11 +1698,16 @@ Tools.filterCount = function(obj){
  */
 Tools.thousandPoint = function(num, length){
 	if(!!length){
-		mun = Tools.toFixed(num, length);
+		num = Tools.toFixed(num, length);
 	}
 	num = (num + '');
 	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
 		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
+	
+	if (isNaN(intNum) || (!!folatNum && isNaN(folatNum))) {
+		return num;
+	}
+
 	return intNum.replace(/(-)?\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')+folatNum;
 };
 /**
@@ -1688,17 +1725,77 @@ Tools.filterUnPoint = function(obj){
 			$(this).text(Tools.thousandPoint($(this).text()));
 		}
 	});
-	$('body').on('focusin', 'input.F-float', function(event) {
-		event.preventDefault();
-		this.value = $(this).val();
-	})
-	.on('focusout', 'input.F-float', function(event) {
-		event.preventDefault();
-		$(this).val(this.value);
-	});	
 	
 	return $obj;
 };
+
+$('body').on('focusin.format-float.api', 'input.F-float', function(event) {
+	$(this).data('old-value-format-float.api', this.value);
+})
+.on('focusout.format-float.api', 'input.F-float', function(event) {
+	if ($(this).data('old-value-format-float.api') !== this.value
+		&& !!this.value && this.value.split(',').length > 1) {
+		// 处理千分位存在时丢失change事件的问题
+		$(this).trigger('change');
+	}
+})
+.on('keydown.format-float.api', 'input.F-float', function(event) {
+	Tools.input_key = event.which;
+})
+.on('input.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	var $that = $(this),
+		current = $that.cursorPosition(),
+		value = this.value,
+		newValue = Tools.thousandPoint(value);
+
+	switch(Tools.input_key) {
+		case 8:  // backspace
+			if (newValue[current] === ',') {
+				// 删除','时
+				
+				// 删除一个数字
+				value = value.substring(0, current - 1) + value.substr(current);
+				// 重新格式化
+				newValue = Tools.thousandPoint(value);
+				if (current <= 1) {
+					current --;
+				}
+			}
+			break;
+		case 46:  // delete
+			if (newValue[current] === ',') {
+				value = value.substring(0, current) + value.substr(current+1);
+				newValue = Tools.thousandPoint(value);
+				if (newValue.split(',').length) {	// 删除之后还有逗号，需要后移一位
+					current ++;
+				}
+			}
+			break;
+		default:   //处理其他输入
+			if (value.substr(0, current) != newValue.substr(0, current)) {  // 光标前的内容不同时
+				var speed = value.split(',').length - newValue.split(',').length;
+				if (speed < 0) {
+					current ++;
+				} else if (speed > 0) {
+					current --;
+				}
+			}
+		break;
+	}
+
+	this.value = newValue;
+	if (current > 0) {
+		$that.cursorPosition(current);
+	} else {
+		$that.cursorPosition(-1);
+	}
+})
+.on('change.format-float.api', 'input.F-float', function(event) {
+	event.preventDefault();
+	$(this).val($(this).val());
+});
+
 /**
  * 把千分位转换为数字
  * @param  {string} data [description]
@@ -1943,9 +2040,9 @@ KingServices.updateTouristGroup = function(id,type)  {
 
 */
 
-KingServices.updateTransfer = function(touristGroupId)  {
+KingServices.updateTransfer = function(touristGroupId,id)  {
 	seajs.use("" + ASSETS_ROOT +modalScripts.resource_touristGroup,function(module){
-		module.updateTransfer(touristGroupId);
+		module.updateTransfer(touristGroupId,id);
 	});
 }
 
@@ -2074,9 +2171,9 @@ KingServices.viewFeeDetail = function(id){
 	});
 }
 //查看游客小组
-KingServices.viewTouristGroup = function(id){
+KingServices.viewTouristGroup = function(id,isTransferIn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
-		module.viewTouristGroup(id);
+		module.viewTouristGroup(id,isTransferIn);
 	});
 }
 //查看外转情况

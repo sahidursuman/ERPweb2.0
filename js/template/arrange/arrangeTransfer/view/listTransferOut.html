@@ -16,7 +16,7 @@
  <tbody class="T-listTransferOut">
  		{{each result as result}}
  		{{if result!=null}}        
-			<tr data-value="{{result.id}}">
+			<tr data-value="{{result.id}}" data-status="{{result.status}}">
 				<td>{{result.partnerAgency.travelAgencyName}}</td>
 				{{if result.touristGroup != null}}
 				<td>
@@ -64,42 +64,14 @@
 							<label class="padding-right20">|</label>
 							撤销
 						</a>
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status == 3}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status != 3}}style="color:#bbb;"{{/if}} data-right="1180004">
+							<label class="padding-right20">|</label>
+							确认
+						</a>
+
 					</div>
-	
-					<div class="hidden-md hidden-lg">
-						<div class="inline pos-rel">
-							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-								<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-							</button>
-	
-							<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-								
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transfer-view" data-rel="tooltip">
-										<span class="red">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-									</a>
-								</li>
-								
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-success T-transfer-edit" data-rel="tooltip">
-										<span class="green">
-											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-										</span>
-									</a>
-								</li>
-	
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transfer-delete" data-rel="tooltip">
-										<span class="red">
-											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+
 				</td>
 			</tr>
 		{{/if}}

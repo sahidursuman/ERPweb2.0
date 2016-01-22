@@ -13,15 +13,11 @@
 						<input name="transRemark" value="{{touristGroup.transRemark}}" class="col-sm-12  no-padding-right" type="text" maxlength="500" />  
 					</div>
 				</div> 
-				<input type="hidden" name="transferFeeStatus" value="{{touristGroup.transferFeeStatus}}">  
+				<input type="hidden" name="innerTransferFeeStatus" value="{{touristGroup.innerTransferFeeStatus}}">  
 				<div class="form-group">
 						<label class="col-sm-2 control-label no-padding-right">应付:</label>
 						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus == 0}}{{touristGroup.needPayAllMoney}}{{else}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">已付:</label>
-						<div class="col-sm-2">
-							<input value="{{if touristGroup.transferFeeStatus == 1}}{{touristGroup.transPayedMoney}}{{/if}}" type="text" name="transPayedMoney" class="col-sm-12 price F-float F-money"  maxlength="10" readonly="readonly" />
+							<input value="{{if touristGroup.innerTransferFeeStatus == 0}}{{touristGroup.needPayAllMoney}}{{else}}{{touristGroup.transNeedPayAllMoney}}{{/if}}" readonly="readonly" type="text" name="transNeedPayAllMoney" class="col-sm-12 F-float F-money" />
 						</div>
 
 					 	<label class="col-sm-1 control-label no-padding-right">计划现收:</label>
@@ -41,6 +37,9 @@
 							</span>
 							<input type="hidden" name="cashFlag F-float F-money" value="{{cashFlag}}">
 						</label>
+						<div class="col-sm-2">
+							<input value="{{if touristGroup.innerTransferFeeStatus == 1}}{{touristGroup.transPayedMoney}}{{/if}}" type="hidden" name="transPayedMoney" class="col-sm-12 price F-float F-money"  maxlength="10" readonly="readonly" />
+						</div>
 					</div>
 				<div class="form-group">
 					<div class="col-sm-2"></div>
@@ -60,75 +59,76 @@
 									<th class="th-border" width="20%">费用项</th>
 									<th class="th-border">数量</th>
 									<th class="th-border">单价</th>
-									<th class="th-border">金额</th>   
+									<th class="th-border">金额</th>
 									<th class="th-border">说明</th>
 									<th class="th-border" width="80px">操作</th>
 								</tr>
 							</thead>
 							<tbody class="T-innerOutEditFeeTbody"> 
-								{{if touristGroup.transferFeeStatus == 0}}
+							    {{if touristGroup.innerTransferFeeStatus==0}}
 									<!--初始化游客小组费用start--> 
-									{{each touristGroupFeeList as transferList}}         
+									{{each touristGroupFeeList as transferList}} 
+									          
 										<tr  data-entity-id="{{transferList.id}}">
 											<td>
-												 <select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                                    {{#getPayType | getFeeItemType: false}}
+												 <select name="type" class="col-sm-10 col-sm-offset-1" {{if transferList.type==3}}disabled{{/if}}>
+				                                    {{#transferList.type | getFeeItemType: true}}
 				                                 </select>
 											</td>  
 											
 											<td>
-												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" />
+												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" {{if transferList.type==3}}readonly{{/if}}/>
 											</td>
 											<td>
-												<input name="price" value="{{transferList.price}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
+												<input name="price" value="{{transferList.price}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" {{if transferList.type==3}}readonly{{/if}} />
 											</td>
 
 											<td>
-												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right {{if subsection==0}}T-payMoney{{/if}} F-float F-money"/>
+												<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney F-float F-money"/>
 											</td>
 											<td>
-												<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-10  no-padding-right"  maxlength="500" />
+												<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-10  no-padding-right"  maxlength="500"  {{if transferList.type==3}}readonly{{/if}} />
 											</td>
-											<td><a class="T-delete cursor">删除</a></td>
+											<td> {{if transferList.type!=3}}<a class="T-delete cursor">删除</a>{{/if}}</td>
 										</tr>
+										
 									{{/each}}
 									<!--游客小组费end-->
-									{{else}}
+								   {{else}}
 									<!--转客其他费用start-->
 									{{each innerTransferFeeList as innerFee}}
 									<tr data-entity-id="{{innerFee.id}}">
 										<td>
-										    <select name="describeInfo" class="col-sm-10 col-sm-offset-1">
-				                                {{#getPayType | getFeeItemType: false}}
+										    <select name="type" class="col-sm-10 col-sm-offset-1" {{if innerFee.type==3}}disabled{{/if}}>
+				                                {{#innerFee.type | getFeeItemType: true}}
 				                            </select>
 										</td>
 										
 										<td>
-											<input name="count" value="{{innerFee.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" />
+											<input name="count" value="{{innerFee.count}}" {{if innerFee.type==3}}readonly{{/if}} type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" />
 										</td>
 										<td>
-											<input name="price" value="{{innerFee.price}}" type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
+											<input name="price" value="{{innerFee.price}}" {{if innerFee.type==3}}readonly{{/if}} type="text" class="col-sm-12  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
 										</td>
 										<td>
 											<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money"/>
 										</td>
 										<td>
-											<input name="remark" value="{{innerFee.remark}}" type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
+											<input name="remark" value="{{innerFee.remark}}" {{if innerFee.type==3}}readonly{{/if}} type="text" class="col-sm-12  no-padding-right"  maxlength="500" />
 										</td>
 
-										<td><a class="T-delete cursor">删除</a></td>
+										<td>{{if innerFee.type!=3}}<a class="T-delete cursor">删除</a>{{/if}}</td>
 									</tr>
 									{{/each}}
 									<!--转客其他费用end-->
-
-								{{/if}}
+							    {{/if}}
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form> 
+	</form>
 
   {{if subsection==0}}
 	<!--收客信息 start-->
@@ -194,7 +194,7 @@
 								{{each touristGroupFeeList as touristGroupFlist}}
 										<tr>         
 											<td>
-												{{touristGroupFlist.describeInfo}}
+											    <input readonly="readonly" value="{{touristGroupFlist.name}}" type="text" class="col-sm-12  no-padding-right" />
 											</td>
 											<td class="F-float F-count">
 												{{touristGroupFlist.count}}

@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -140,14 +140,14 @@
         return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
         res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
         isTransfer && (res += '<option value="3" ' + (3 == type ? "selected" : "") + ">中转结算价</option>"), 
-        res += '<option value="4" ' + (4 == type ? "selected" : "") + ">保险结算价</option>", 
-        res += '<option value="5" ' + (5 == type ? "selected" : "") + ">车费结算价</option>", 
-        res += '<option value="6" ' + (6 == type ? "selected" : "") + ">餐饮结算价</option>", 
-        res += '<option value="7" ' + (7 == type ? "selected" : "") + ">导服费</option>", res += '<option value="4" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", 
-        res += '<option value="5" ' + (9 == type ? "selected" : "") + ">景区费用</option>", 
-        res += '<option value="6" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
-        res += '<option value="7" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
-        res += '<option value="7" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+        res += '<option value="4" ' + (4 == type ? "selected" : "") + ">车辆费用</option>", 
+        res += '<option value="5" ' + (5 == type ? "selected" : "") + ">餐厅费用</option>", 
+        res += '<option value="6" ' + (6 == type ? "selected" : "") + ">保险费用</option>", 
+        res += '<option value="7" ' + (7 == type ? "selected" : "") + ">导服费</option>", res += '<option value="8" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", 
+        res += '<option value="9" ' + (9 == type ? "selected" : "") + ">景区费用</option>", 
+        res += '<option value="10" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
+        res += '<option value="11" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
+        res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
     }), template.helper("getWayTypeText", function(status) {
         var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
         return status = status || 1, res[status];

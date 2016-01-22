@@ -165,7 +165,7 @@ define(function(require,exports) {
 				if(result){
 					data.searchParam = $listSearchData;
 				    var $lineProductData = data.lineProductList;
-
+				    //return
 					var html = checkTemplate(data);
 				    if(Tools.addTab(checkId,'内转转出对账',html)){
 						var $checkId = $("#tab-"+checkId+"-content");
@@ -248,7 +248,7 @@ define(function(require,exports) {
 	                                };
 									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
-                                	InnerTransferOut.chenking(obj.curr -1);
+                                	InnerTransferOut.chenking("",obj.curr -1);
                                 }
 							}
 					    }
@@ -320,12 +320,14 @@ define(function(require,exports) {
 		FinancialService.initCheckBoxs($checkAll,$checkBoxList);
 		//展开事件
 		$obj.find('.'+$list).on('click', '.T-seeGroup' ,function(event){
-			//event.preventDefault();
-	    	InnerTransferOut.viewGroup($(this));
+			InnerTransferOut.viewGroup($(this));
         });
-        //自动返算金额
+        //监听扣款输入框的改变
         FinancialService.updateMoney_checking($obj,3);
-
+        // $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
+        // 	InnerTransferOut.changeTwoDecimal($(this).val());
+        // 	InnerTransferOut.autoSumMoney($(this));
+        // });
         //查看对账明细
         $obj.find('.'+$list).on('click','.T-check-Detail',function(){
         	var id = $(this).closest('tr').data('id');
@@ -406,9 +408,19 @@ define(function(require,exports) {
 		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
-        	var check =  new FinRule(5).check($obj);
-    		if(!check.form()){ return false; }
+        	if(!$obj.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
+	        	var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
+		        sumListMoney = parseFloat($obj.find('input[name=sumPayMoney]').data("money"));
+		    var sumMoney = InnerTransferOut.autoSumPayMoney($obj);
+		    if(sumPayMoney != sumMoney){
+		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+		        return false;
+		    }
+
         	var allMoney = $obj.find('input[name=sumPayMoney]').val();
         	if(allMoney == 0){
         		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
@@ -444,7 +456,7 @@ define(function(require,exports) {
 						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
 						InnerTransferOut.btnSatus = 1;
-						$obj.data('isEdited', false);
+						$obj.data("isEdited",false);
 						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});
@@ -467,7 +479,7 @@ define(function(require,exports) {
             selectFlag = 0,
             argumentsLen = arguments.length,
             checkList = $obj.find('.T-checkList'),
-			$tr = checkList.find('.innerTransferFinancial');
+			$tr = checkList.find('.T-checkbox');
 		$tr.each(function(i){
  		   var flag = $(this).is(":checked");
  		   var tr = $(this).closest('tr');
@@ -600,18 +612,44 @@ define(function(require,exports) {
 		});
 	};
 
+	// //修改扣款自动计算金额
+	// InnerTransferOut.autoSumMoney = function($obj){
+	// 	var $tr = $obj.closest('tr');
+	// 	//获取数据
+	// 	var transNeedPayMoney = $tr.find('.transNeedPayMoney').text();
+	// 	var travelPayedMoney = $tr.find('.travelPayedMoney').text();
+	// 	var currentNeedPayMoney = $tr.find('.currentNeedPayMoney').text();
+	// 	var settlementMoney = $tr.find('.settlementMoney').text();
+	// 	var unPayedMoney = $tr.find('.unPayedMoney').text();
+	// 	var punishMoney = $tr.find('input[name=punishMoney]').val();
+
+	// 	//规范数据
+	// 	transNeedPayMoney = InnerTransferOut.changeTwoDecimal(transNeedPayMoney);
+	// 	travelPayedMoney = InnerTransferOut.changeTwoDecimal(travelPayedMoney);
+	// 	currentNeedPayMoney = InnerTransferOut.changeTwoDecimal(currentNeedPayMoney);
+	// 	settlementMoney = InnerTransferOut.changeTwoDecimal(settlementMoney);
+	// 	unPayedMoney = InnerTransferOut.changeTwoDecimal(unPayedMoney);
+	// 	punishMoney = InnerTransferOut.changeTwoDecimal(punishMoney);
+
+	// 	var settleMoney = parseFloat(transNeedPayMoney)- parseFloat(punishMoney);
+	// 	var unPayMoney = parseFloat(settleMoney) - (parseFloat(travelPayedMoney)+parseFloat(currentNeedPayMoney));
+
+	// 	$tr.find('.unPayedMoney').text(unPayMoney);
+	// 	$tr.find('.settlementMoney').text(settleMoney)
+	// 	//更新数据统计
+	// };
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
-			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
-			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
-			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
-			args.lineProductId = $lineProductId;
-			args.lineProductName = $lineProductId == ""?"":$lineProductName;
-			args.operateUserId= InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
-			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
-			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
+		if(InnerTransferOut.$settlementSearchArea && args == ""){
+			args = {
+				toBusinessGroupId : nnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
+				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
+				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
+				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
+				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
+				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
+				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
+			};
 		};
 		args.pageNo = pageNo || 0;
 		if(args.startDate > args.endDate){
@@ -634,6 +672,9 @@ define(function(require,exports) {
 					var html = settlementTemplate(data);
 				    if(Tools.addTab(settleId,'内转转出付款',html)){
 						var $settleId = $("#tab-"+settleId+"-content");
+						if(InnerTransferOut.btnSatus == 1){
+							$settleId.data("isEdited",true);
+						}
 						InnerTransferOut.$settlementTab = $settleId;
 						InnerTransferOut.$settlementSearchArea = $settleId.find(".T-search");
 						//获取线路数据
@@ -649,13 +690,6 @@ define(function(require,exports) {
 	};
 	//保存数据
 	InnerTransferOut.saveBlanceData = function(pageNo,$data,tab_id, title, html){
-		var sumPayMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').val()),
-	        sumListMoney = parseFloat(InnerTransferOut.$settlementTab.find('input[name=sumPayMoney]').data("money"));
-	    var sumMoney = InnerTransferOut.autoSumPayMoney(tab_id);
-	    if(sumPayMoney != sumMoney){
-	        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-	        return false;
-	    }
 		var settlermentValidator = $data.showBtnFlag == true ? new FinRule(3):new FinRule(1);
 	    var id; 
 	    var argumentsLen = arguments.length;

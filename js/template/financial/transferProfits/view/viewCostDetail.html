@@ -17,8 +17,8 @@
 			    <td>{{if rs.businessType == null || !rs.businessType}}-{{else}}{{rs.businessType.name}}{{/if}}</td>
 			    <td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
 			    <td>{{rs.remark}}</td>
-			    <td>{{if creator == null || rs.creator == ""}}-{{else}}{{rs.creator}}{{/if}}</td>
-			    <td>{{rs.createTime | dateFormat:'yyyy-MM-dd'}}</td>
+			    <td>{{if !rs.user}}-{{else}}{{rs.user.realName}}{{/if}}</td>
+			    <td>{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>
 			{{/each}}
         </tbody>

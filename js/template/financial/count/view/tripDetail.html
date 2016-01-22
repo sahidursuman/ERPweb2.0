@@ -58,7 +58,7 @@
             <td><label>导服费：<span class="tripCost-guideArrangePrice F-float F-money">{{guideArrange.price}}</span></label></td>
             <td><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
             <td><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
-            <td><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">{{guideArrange.manageFee}}</span></label></td>
+            <td><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
             <td><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{touristGroup.outBusMoney}}</span></label></td>
             <td><label>餐费：<span class="F-float F-money tripTransitCost-outRestaurantMoney">{{touristGroup.outRestaurantMoney}}</span></label></td>
         </tr>
@@ -68,7 +68,7 @@
             <td><label>餐费：<span class="F-float F-money tripCost-restaurantArrangeNeedPayMoney">0</span></label></td>
             <td><label>房费：<span class="F-float F-money tripCost-hotelArrangeNeedPayMoney">0</span></label></td>
             <td><label>景区费用：<span class="F-float F-money tripCost-scenicArrangeNeedPayMoney">0</span></label></td>
-            <td><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney">{{touristGroup.outBusMoney}}</span></label></td>
+            <td><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney"></span></label></td>
             <td><label>房费：<span class="F-float F-money tripTransitCost-hotelArrangeNeedPayMoney">{{touristGroup.outHotelMoney}}</span></label></td>
             <td><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{touristGroup.outOtherMoney}}</span></label></td>
         </tr>
@@ -151,7 +151,7 @@
                         <td>联系电话</td>
                         <td>人数</td>
                         <td>应收</td>
-                        <td>已收</td>
+                        <td>社收</td>
                         <td>现收</td>
                         <td>明细</td>
                    {{each touristGroups as touristGroup index}}
@@ -167,7 +167,7 @@
                             <td>
                                 {{if touristGroup.touristGroupFeeList.length > 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
-                                        {{touristGroupFee.describeInfo}} ：
+                                        {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
@@ -216,7 +216,7 @@
                       <th class="th-border">返佣</th>
                       <th class="th-border">元/人</th>
                       <th class="th-border">返佣</th>
-                      <th class="th-border">元/车</th>
+                      <th class="th-border">元</th>
                       <th class="th-border">返佣</th>
                     </tr></thead>
                     <tbody class="T-count-shopping"> 
@@ -228,7 +228,7 @@
                     <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}">
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}}
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
-                        <td>{{arrange.shopPolicy.name}}</td>
+                        <td>{{arrange.shop.name}}</td>
                         <td><span class="F-float F-money">{{arrange.consumeMoney}}</span><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
                         {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                         <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -635,6 +635,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -780,6 +781,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/each}}
                     {{/each}}
@@ -845,6 +847,7 @@
                         </td>
                         <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
+                          {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -876,7 +879,6 @@
                         <th class="th-border">联系电话</th>
                         <th class="th-border">人数</th>
                         <th class="th-border">接团</th>
-                        <th class="th-border">小车</th>
                         <th class="th-border">送团</th>
                         <th class="th-border">明细</th>
                         </tr>
@@ -890,7 +892,6 @@
                         <td>{{touristGroup.mobileNumber}}</td>
                         <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
                         <td>{{touristGroup.arriveService}}</td>
-                        <td>{{touristGroup.busService}}</td>
                         <td>{{touristGroup.leaveService}}</td>
                         <td><a href="javascript:void(0);" data-entity-id="{{touristGroup.id}}" class="T-viewTripTransit">查看</a></td>
                      </tr>

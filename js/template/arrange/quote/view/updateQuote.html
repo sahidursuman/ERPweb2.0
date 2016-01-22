@@ -207,8 +207,10 @@
 														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
 																<input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
-																<input class="col-xs-12 T-changeQuote F-float F-money" name="remarkPrice" type="text" maxlength="9" value="{{guideQuote.quotePrice}}" />
 																<input type="hidden" name="arrangeId" value="{{guideQuote.id}}">
+															</td>
+															<td>
+																<input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="{{guideQuote.quotePrice}}" />
 															</td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
 														</tr>

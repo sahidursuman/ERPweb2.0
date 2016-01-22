@@ -14,8 +14,8 @@ define(function(require, exports) {
         var dateJson = FinancialService.getInitDate();
         ColGuest.searchData = {
             pageNo : 0,
-            startTime : dateJson.startDate,
-            endTime : dateJson.endDate,
+            startDate : dateJson.startDate,
+            endDate : dateJson.endDate,
         };
         var data = {};
         data.searchParam = ColGuest.searchData;
@@ -34,33 +34,36 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startTime : startTime,
-            endTime : endTime,
+            startDate : startTime,
+            endDate : endTime,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(ColGuest.searchData);
 
         $.ajax({
-            url: KingServices.build_url('profitTransfer', 'searchParam'),
+            url: KingServices.build_url('receiveProfit', 'getStatistics'),
             type: 'POST',
+            data:{searchParam : JSON.stringify(ColGuest.searchData)},
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
-                    var lineProductNameList = data.lineProductNameList,
-                        partnerAgencyNameList = data.partnerAgencyNameList;
+                    var  $tab = $("#tab-" + menuKey + "-content");
+                    ColGuest.$searchArea = $tab.find('.T-search-area');
 
-                    var lineProducts  = $("#tab-" + menuKey + "-content input[name=lineProductName]"),
-                        groupCollective  = $("#tab-" + menuKey + "-content input[name=partnerAgencyName]");
+                    var lineProductNameList = data.lineProductList,
+                        partnerAgencyList = data.fromPartnerAgencyList;
 
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
-                            lineProductNameList[i].value = lineProductNameList[i].name
+                            lineProductNameList[i].id = lineProductNameList[i].lineProductId;
+                            lineProductNameList[i].value = lineProductNameList[i].lineProductName;
                         }
                     }
 
-                    if(partnerAgencyNameList !=null && partnerAgencyNameList.length>0){
-                        for(var i = 0;i<partnerAgencyNameList.length;i++){
-                            partnerAgencyNameList[i].value = partnerAgencyNameList[i].name
+                    if(partnerAgencyList !=null && partnerAgencyList.length>0){
+                        for(var i = 0;i<partnerAgencyList.length;i++){
+                            partnerAgencyList[i].id = partnerAgencyList[i].fromPartnerAgencyId;
+                            partnerAgencyList[i].value = partnerAgencyList[i].fromPartnerAgencyName;
                         }
                     }
                     var all = {
@@ -68,13 +71,18 @@ define(function(require, exports) {
                         value : "全部"
                     };
                     lineProductNameList.unshift(all);
-                    partnerAgencyNameList.unshift(all);
-                    ColGuest.listGuest(0); 
+                    partnerAgencyList.unshift(all);
 
                     ColGuest.lineProductList = lineProductNameList;
-                    ColGuest.partnerAgencyList = partnerAgencyNameList;
+                    ColGuest.partnerAgencyList = partnerAgencyList;
 
-                    var  $tab = $("#tab-" + menuKey + "-content");
+                    ColGuest.listGuest(0);
+
+                    $tab.find(".T-totalIncome").text(data.sumIncomeTrip);
+                    $tab.find(".T-totalTrip").text(data.sumPayTrip);
+                    $tab.find(".T-totalProfit").text(data.sumProfit);
+                    $tab.find(".T-AvgProfit").text(data.sumAvgProfit);
+
                     Tools.setDatePicker($tab.find(".date-picker"),true);
                     //搜索按钮事件
                     $tab.find('.T-search').off().on('click', function(event) {
@@ -115,11 +123,11 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startTime : startTime,
-            endTime : endTime,
-            sortType: 'auto'
+            startDate : startTime,
+            endDate : endTime,
+            order : "desc",
+            sortType: 'startTime'
         };
-        console.log(ColGuest.searchData);
         $.ajax({
             url:KingServices.build_url("receiveProfit","listReceiveProfit"),
             type: "POST",
@@ -130,10 +138,8 @@ define(function(require, exports) {
                     var html = listTemplate(data);
                     $("#tab-" + menuKey + "-content").find(".T-guest-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
-                    ColGuest.$searchArea = $tab.find('.T-search-area');
-                    $tab.find(".T-totalSize").text("共计   条记录");
+                    $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
-                    ColGuest.getSumData(ColGuest.$tab);
                     ColGuest.getQuery($tab);
 
                     $tab.find(".T-viewLine").off().on("click",function(){
@@ -151,23 +157,6 @@ define(function(require, exports) {
                             }
                         }
                     });
-                }
-            }
-        });
-    };
-
-    ColGuest.getSumData = function($tab){
-        $.ajax({
-            url: KingServices.build_url('receiveProfit', 'getStatistics'),
-            type: 'POST',
-            data: { searchParam : JSON.stringify(ColGuest.searchData)},
-            success: function(data) {
-                var result = showDialog(data);
-                if(result){
-                    $tab.find(".T-totalIncome").text(data.sumIncomeTrip);
-                    $tab.find(".T-totalTrip").text(data.sumPayTrip);
-                    $tab.find(".T-totalProfit").text(data.sumProfit);
-                    $tab.find(".T-AvgProfit").text(data.sumAvgProfit);
                 }
             }
         });

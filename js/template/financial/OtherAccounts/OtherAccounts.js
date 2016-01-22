@@ -367,7 +367,7 @@ define(function(require, exports) {
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             sortType: 'auto'
-        }
+        };
 
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
@@ -377,7 +377,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     //暂存数据读取
-                    console.log(OtherAccounts.saveJson);
                     if(OtherAccounts.saveJson){
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
@@ -414,6 +413,9 @@ define(function(require, exports) {
                                 dataTable.statistics = data.statistics;
                                 dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                                 if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
+                                    if(OtherAccounts.saveJson.btnShowStatus){
+                                        OtherAccounts.$PaymentTabId.data("isEdited",true);
+                                    }
                                     OtherAccounts.initPaymentEvent(dataTable);
                                 } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
                                     OtherAccounts.$PaymentTabId.data('next', dataTable);
@@ -448,8 +450,10 @@ define(function(require, exports) {
             OtherAccounts.setAutoFillEdit($PaymentTabId, true);
         }
         OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                event.preventDefault();
-                OtherAccounts.OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
+                OtherAccounts.saveJson = false;
+                OtherAccounts.saveJson.autoPayList = false;
+                OtherAccounts.$PaymentTabId.data("isEdited",false);
+                OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
             })
             // 监听保存，并切换tab
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -464,6 +468,7 @@ define(function(require, exports) {
         //付款-自动计算本次付款总额
         $PaymentTabId.find('.T-clearList').off('change').on('change', 'input', function() {
             $(this).closest('tr').data('change', true);
+            $PaymentTabId.data("isEdited",true);
             FinancialService.updateSumPayMoney($PaymentTabId, settleValidator);
         });
         //表格内操作
@@ -528,15 +533,7 @@ define(function(require, exports) {
             var check =  new FinRule(5).check($PaymentTabId);
             if(!check.form()){ return false; }
             if(!payValidator.form()){return;}
-            var allMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
-            if(allMoney == 0){
-                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                    OtherAccounts.paysave(data, $PaymentTabId);
-                })
-            }else{
-                OtherAccounts.paysave(data, $PaymentTabId);
-            }
-            
+            OtherAccounts.paysave(data, $PaymentTabId);
         });
         // 自动下账
         $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
@@ -570,6 +567,7 @@ define(function(require, exports) {
                         success: function(data) {
                             var result = showDialog(data);
                             if (result) {
+                                OtherAccounts.$PaymentTabId.data("isEdited",false);
                                 OtherAccounts.saveJson = data;
                                 OtherAccounts.AccountsPayment(0);
                                 OtherAccounts.saveJson.btnShowStatus = true;
@@ -593,14 +591,8 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function(data, tabid, title, html) {
-        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content"),
-            sumPayMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val()),
-            sumListMoney = $PaymentTabId.find('input[name=sumPayMoney]').data("money");
-        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
-            sumListMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val());
-        };
-        if(sumPayMoney != sumListMoney){
-            showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
+        if(!FinancialService.isClearSave($PaymentTabId)){
             return false;
         }
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
