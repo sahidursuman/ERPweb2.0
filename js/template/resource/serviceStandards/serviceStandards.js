@@ -149,10 +149,14 @@ define(function(require, exports){
 			type:'POST',
 			success:function(data){
 				if(showDialog(data)){
-					layer.close(closeLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						ServiceStandards.listService(0,'',1);
-					});
+					if(!!args.form){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+					}else{
+						layer.close(closeLayer);
+						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+							ServiceStandards.listService(0,'',1);
+						});
+					};
 				}
 			}
 		});

@@ -583,7 +583,7 @@ define(function(require, exports) {
 	ResLineProduct.addService = function($obj){
 		var $tr = $obj.closest('tr');
 		var args = {
-			serviceName:$tr.find('input[name=serviceName]').val(),
+			serviceTitle:$tr.find('input[name=serviceName]').val(),
 			serviceContent:$tr.find('input[name=serviceContent]').val(),
 			serviceRequire:$tr.find('input[name=serviceRequire]').val(),
 			form:"lineProduct"
@@ -595,7 +595,7 @@ define(function(require, exports) {
 	ResLineProduct.delService = function($obj){
 		var $tr = $obj.closest('tr');
 		if(!!$tr.attr('serviceId')){
-
+			
 		}else{
 			$tr.remove();
 		};
