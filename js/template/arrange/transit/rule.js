@@ -177,6 +177,16 @@ define(function(require, exports) {
 					});*/
 
 					settings.push({
+						$ele: $that.find('input[name="ticketName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '票务公司不能为空'
+							}
+						]
+					});
+
+					settings.push({
 						$ele: $that.find('input[name="ticketStartTime"]'),
 						rules: [
 							{
