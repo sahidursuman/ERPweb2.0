@@ -84,14 +84,15 @@ define(function(require, exports) {
 
         $tab.find('.T-list').find('.T-share').hover(function() {
             var $that = $(this),
-                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/groupTravelList.html?lineProductId='+$that.closest('tr').data('id');
+                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/groupTravelList.html?lineProductId='+$that.closest('tr').data('id'),
+                bdText = $that.closest('tr').find('td').eq(0).text();
 
             window._bd_share_config = {
                 common : {
-                    bdText : '火柴头业务操作系统', 
-                    bdDesc : '火柴头业务操作系统', 
+                    bdText : bdText, 
+                    bdDesc : bdText, 
                     bdUrl : url,
-                    bdPic : ''
+                    bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
                 },
                 share : [{
                     "bdSize" : 16
@@ -260,16 +261,16 @@ define(function(require, exports) {
         travels.share($tab.find('.T-share'), 'right');
         $tab.find('.T-share').hover(function() {
             var $that = $(this),
-                type = $(this).data('type'),
+                type = $that.data('type'),
                 parem = type == 'singleEvaluation' ? 'noteItemId' : 'noteId',
                 url = /*location.origin*/'http://djs.huochaitou.com' + '/share/'+type+'.html?'+parem+'='+$that.data('id');
 
             window._bd_share_config = {
                 common : {
-                    bdText : '火柴头业务操作系统', 
-                    bdDesc : '火柴头业务操作系统', 
+                    bdText : $that.data('title'), 
+                    bdDesc : $that.data('title'), 
                     bdUrl : url,
-                    bdPic : ''
+                    bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
                 },
                 share : [{
                     "bdSize" : 16
