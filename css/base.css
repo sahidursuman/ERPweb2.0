@@ -556,8 +556,10 @@ input.datepicker {
 }
 .note-db-img > img{
 	display: block;
-	width: 100%;
+	width: auto;
+	max-width: 100%;
 	height: auto;
+	margin: 0 auto;
 }
 .note-details-body > p,
 .comment-container > p{
@@ -672,6 +674,10 @@ input.datepicker {
 }
 .ui-dialog-content > p{
 	word-break: break-all;
+}
+.note-db-itemText img{
+	max-width: 100%;
+	height: auto!important;
 }
 /*财务样式兼容*/
 .financial-search-planProfit{

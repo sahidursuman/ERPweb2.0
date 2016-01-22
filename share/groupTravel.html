@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>跟团游记 - 火柴头</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<link rel="stylesheet" href="../components/ace-admin/assets/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="../components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="../css/base.css" />
@@ -95,7 +96,7 @@
 						<div class="note-details-list">
 							<div class="note-details-body">
 								<div class="note-db-img">
-									<img src="{{imgUrl + bus.itemImage}}">
+									{{if !!bus.itemImage}}<img src="{{imgUrl + bus.itemImage}}">{{/if}}
 								</div>
 								<div class="note-db-itemText">
 									{{#bus.itemText}}
@@ -122,7 +123,7 @@
 						<div class="note-details-list">
 							<div class="note-details-body">
 								<div class="note-db-img">
-									<img src="{{imgUrl + hotel.itemImage}}">
+									{{if !!hotel.itemImage}}<img src="{{imgUrl + hotel.itemImage}}">{{/if}}
 								</div>
 								<div class="note-db-itemText">
 									{{#hotel.itemText}}
@@ -149,7 +150,7 @@
 						<div class="note-details-list">
 							<div class="note-details-body">
 								<div class="note-db-img">
-									<img src="{{imgUrl + noteList.itemImage}}">
+									{{if !!noteList.itemImage}}<img src="{{imgUrl + noteList.itemImage}}">{{/if}}
 								</div>
 								<div class="note-db-itemText">
 									{{#noteList.itemText}}
@@ -176,7 +177,7 @@
 						<div class="note-details-list">
 							<div class="note-details-body">
 								<div class="note-db-img">
-									<img src="{{imgUrl + line.itemImage}}">
+									{{if !!line.itemImage}}<img src="{{imgUrl + line.itemImage}}">{{/if}}
 								</div>
 								<div class="note-db-itemText">
 									{{#line.itemText}}

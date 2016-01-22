@@ -277,7 +277,10 @@ define(function(require, exports) {
         var url = location.origin + '/share/'+type+'.html';
         if(type == "singleEvaluation"){
             url += '?noteItemId='+id;
-        }else{
+        }else if(type == "groupTravelList"){
+            url += '?lineProductId='+id;
+        }
+        else{
             url += '?noteId='+id;
         }
         $( "#confirm-dialog-message" ).removeClass('hide').dialog({
