@@ -679,6 +679,43 @@ input.datepicker {
 	max-width: 100%;
 	height: auto!important;
 }
+.hct-share-tips{
+	width: 280px;
+	background-color: #fff;
+	border: 1px solid #e9e9e9;
+}
+.hct-share-tips .hct-share-header{
+	padding: 7px 5px;
+	background-color: #f6f6f6;
+	line-height: 1;
+	font-size: 14px;
+	font-weight: bold;
+}
+.hct-share-tips .hct-share-body{
+	width: 100%;
+	overflow: hidden;
+}
+.hct-share-body ul{
+	margin-left: 0;
+	margin-bottom: 0;
+	overflow: hidden;
+	padding: 8px;
+}
+.hct-share-body li{
+	display: block;
+	width: 110px;
+	float: left;
+	list-style: none;
+	border: 1px solid #fff;
+	padding-left: 4px;
+	margin-right: 10px;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.hct-share-body li:hover{
+	background-color: #f3f3f3;
+	border: 1px solid #eee;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;
