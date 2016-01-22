@@ -326,7 +326,7 @@ define(function(require, exports) {
         $obj.find(".T-standard-add").click(function() {
             var html = "<tr>" +
                 "<td><select name=\"type\"><option value=\"早餐\">早餐</option><option value=\"午餐\">午餐</option><option value=\"晚餐\">晚餐</option></select></td>" +
-                "<td class=\"price\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"price\" maxlength=\"9\" type=\"text\" class=\"col-sm-12\" style=\"margin-right:10px;\" /></div></td>" +
+                "<td class=\"price\"><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"price\" maxlength=\"9\" type=\"text\" class=\"col-sm-12 F-float F-money\" style=\"margin-right:10px;\" /></div></td>" +
                 "<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"menuList\" type=\"text\" maxlength=\"1000\" class=\"col-sm-12\" /></div></td>" +
                 "<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"remark\" type=\"text\" class=\"col-sm-12\" maxlength=\"1000\"/></div></td>" +
                 "<td style=\"width:90px\"><a class=\"T-standard-delete\">删除</a></td>" +

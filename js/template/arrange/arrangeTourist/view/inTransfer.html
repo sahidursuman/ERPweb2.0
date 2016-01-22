@@ -17,7 +17,6 @@
 							<th>客源地</th>
 							<th>年龄</th>
 							<th>应付</th>
-							<th>已付</th>
 							<th>填写状态</th>
 							<th>操作</th>
 						</tr>
@@ -36,10 +35,9 @@
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td><span class="T-viewTouristGroup T-action" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
 								<td>{{touristGroup.areaData}}</td>
-								<td>{{touristGroup.ageData}}</td>
-								<td><label name="label_needPay">{{touristGroup.transNeedPayAllMoney}}</label></td>
-								<td><label name="label_payed">{{touristGroup.transPayedMoney}}</label></td>
-								<td class="transferFeeStatus">{{if touristGroup.transferFeeStatus == 1}}
+								<td class="F-float F-count">{{touristGroup.ageData}}</td>
+								<td class="F-float F-money T-needPay">{{touristGroup.transNeedPayAllMoney}}</td>
+								<td class="transferFeeStatus">{{if touristGroup.innerTransferFeeStatus == 1}}
 									<i class ="ace-icon fa fa-check green"></i>
 									已填写
 									{{else}}
@@ -60,10 +58,14 @@
 				<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;">
 					<div class="form-group col-sm-12" style="text-align: center;">
 						<label class="control-label no-padding-right">部门：</label>
-						<input name="businessGroupName" style="width:270px;" class="T-Chosen-businessGroup" placeholder="选择部部门" />
+						<input name="businessGroupName" style="width:270px;" class="T-Chosen-businessGroup" placeholder="请选择部门" />
 						<input name="businessGroupId" type="hidden" value="businessGroupId" style="width:270px;"/>
+
+						<label class="control-label no-padding-right">责任计调：</label>
+						<input name="opUserName" style="width:270px;" class="T-Chosen-opUser" placeholder="请选择责任计调" />
+						<input name="opUserId" type="hidden" value="1" style="width:270px;"/>
 					</div>
-					<div class="form-group col-sm-12" style="text-align: center;">
+					<div class="form-group col-sm-12" style="text-align: center; margin-top:50px;">
 						<button class="btn btn-sm btn-danger T-cancelTransfer">
 							<i class="ace-icon fa fa-times "></i>
 							取消

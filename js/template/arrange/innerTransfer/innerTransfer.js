@@ -29,6 +29,9 @@ define(function(require, exports) {
 		allData : {},
 		edited : {}
 	};
+	var getFeeItemPayTypeOptions =  {
+         payType : 1
+    };
 
 	innerTransfer.initModule = function(){
 		innerTransfer.innerTransferList();
@@ -157,13 +160,13 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					if(divId == "inner-TransferIn"){
-						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-						$("#"+divId).find(".needPayMoney").text("应收款合计:"+data.total.transNeedPayMoney+"元");
-						$("#"+divId).find(".payedMoney").text("已收款合计:"+data.total.transPayedMoney+"元");
+						$("#"+divId).find(".peopleCount").html("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
+						$("#"+divId).find(".needPayMoney").html("应收款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").html("已收款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					} else {
-						$("#"+divId).find(".peopleCount").text("人数合计 : "+data.total.adultCount+"大"+data.total.childCount+"小");
-						$("#"+divId).find(".needPayMoney").text("应付款合计:"+data.total.transNeedPayMoney+"元");
-						$("#"+divId).find(".payedMoney").text("已付款合计:"+data.total.transPayedMoney+"元");
+						$("#"+divId).find(".peopleCount").html("人数合计 : <span class='F-float F-count'>"+data.total.adultCount+"</span>大<span class='F-float F-count'>"+data.total.childCount+"</span>小");
+						$("#"+divId).find(".needPayMoney").html("应付款合计:<span class='F-float F-money'>"+data.total.transNeedPayMoney+"</span>元");
+						$("#"+divId).find(".payedMoney").html("已付款合计:<span class='F-float F-money'>"+data.total.transPayedMoney+"</span>元");
 					}
 				}
 			}
@@ -281,9 +284,14 @@ define(function(require, exports) {
 			url:KingServices.build_url("innerTransfer","edit"),
 			data:"id="+id,
 			success:function(data){
-				data.innerTransfer = JSON.parse(data.innerTransfer);
-				data.businessGroup = JSON.parse(data.businessGroup);
-				data.parentTouristGroup = JSON.parse(data.parentTouristGroup);
+				var data = {
+					cashFlag: data.cashFlag,
+                    isParent: data.isParent,
+					innerTransfer : JSON.parse(data.innerTransfer),
+				    businessGroup : JSON.parse(data.businessGroup),
+				    parentTouristGroup : JSON.parse(data.parentTouristGroup),
+				    getPayType : getFeeItemPayTypeOptions.getPayType
+				};
 				var result = showDialog(data);
 				if (result) {
 					var html = editTemplate(data),validator,
@@ -353,6 +361,7 @@ define(function(require, exports) {
 			    //重新计算
 			    innerTransfer.PayMoneyF($tab);
 
+
 			    //数量&&价格change事件
 				$tab.find(".count").on('change',function(event) {
 					event.preventDefault();
@@ -364,6 +373,10 @@ define(function(require, exports) {
 					/* Act on the event */
 					innerTransfer.PayMoneyF($tab);
 				});
+
+				//计算金额
+				innerTransfer.calcPayMoney($tab);
+				$tab.find('.T-calc').trigger('change');
 
 				//精度调整
 				var $adultPrice=$tab.find('input[name=transAdultPrice]'),
@@ -407,19 +420,20 @@ define(function(require, exports) {
      */
 	innerTransfer.innitAddFee=function($tab,validator){
 		var html="<tr class=\"transferFee1SelectId\">"+
-			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-10  no-padding-right\"  maxlength=\"100\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10  no-padding-right count\" maxlength=\"6\" /></td>"+
-			"<td><span class=\"necessary  pull-left col-sm-2\"></span><input  name=\"price\" type=\"text\" class=\"col-sm-10  no-padding-right price\" maxlength=\"9\" /></td>"+
+		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+            "<option value=\"4\">车辆费用</option><option value=\"5\">餐厅费用</option><option value=\"6\">保险费用</option>"+
+            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>"+
 			"</tr>";
-			$tab.find(".addTransferCost").append(html);
-
 			var $tbody=$tab.find(".addTransferCost");
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
 			Tools.inputCtrolFloat($count);
-
 			//表单验证
 			rule.update(validator);
 
@@ -444,6 +458,36 @@ define(function(require, exports) {
 			});
 
 	};
+
+
+
+	/**
+     * calcPayMoney 根据费用【单价、数量】项目计算金额
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    innerTransfer.calcPayMoney = function($tab){
+        $tab.find('.addTransferCost').on('change', '.T-calc', function(event) {
+            /* Act on the event */
+            var $that=$(this),$tr = $that.closest('tr');
+            if ($that.hasClass('T-count')) {  //若数量改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+
+            }else if($that.hasClass('T-price')){ //若价格改变
+                var count = $tr.find('.T-count').val(),
+                    price = $tr.find('.T-price').val(),payMoney;
+                if (!isNaN(price) && !isNaN(count)) {
+                     payMoney=parseFloat(price*count);        
+                    $tr.find('.T-payMoney').val(payMoney);
+                };
+            };
+        });
+    };
 
 
 	/**
@@ -482,7 +526,7 @@ define(function(require, exports) {
 	innerTransfer.delTransferData = function(id,$tr,$tab){
 		if( id!=null && id!=""){
 			$.ajax({
-				url:innerTransfer.url("deleteFee","delete"),
+				url:KingServices.build_url("innerTransfer","deleteFee"),
 				type:"POST",
 				data:"id="+id,
 				success:function(data){
@@ -512,7 +556,7 @@ define(function(require, exports) {
 		var cashFlag = getValParam("cashFlag");
 		var innerTransferJson = {
 			id : getValParam("id"),//	内转ID		
-			innerTransferFeeSet : "",	//内转的其他费用	array<object>	
+			innerTransferFeeSet : [],	//内转的其他费用	array<object>	
 			toBusinessGroupId :$tab.find("input[name=businessGroup_id]").data('group-id'),//	转给的部门ID	  	
 			transAdultPrice	: getValParam("transAdultPrice"),//内转大人价		
 			transChildPrice	: getValParam("transChildPrice"), //内转小孩价		
@@ -527,19 +571,19 @@ define(function(require, exports) {
 		var otherFeeJsonAdd = [];
 		var otherFeeJsonAddLength=$tab.find(".addTransferCost tr").length;
 		$tab.find(".addTransferCost tr").each(function(i){
-			var id=$(this).attr("data-entity-id");
-			var discribe = $(this).find("input[name=discribe]").val();
-			var count = $(this).find("input[name=count]").val();
-			var price = $(this).find("input[name=price]").val();
-			if(i>1){
+			var id=$(this).attr("data-entity-id"),
+			    type = $(this).find("select[name=type]").val(),
+			    count = $(this).find("input[name=count]").val(),
+			    price = $(this).find("input[name=price]").val(),
+			    remark = $(this).find("input[name=remark]").val();
 				var otherFeeJson = { 
 					"id":id,
-					"discribe":discribe,
+					"type":type,
 					"count":count,
-					"price" : price
+					"price" : price,
+					"remark" : remark
 				}
 				otherFeeJsonAdd.push(otherFeeJson);
-			}
 		})
 		innerTransferJson.innerTransferFeeSet=otherFeeJsonAdd;
 		var innerTransferJson=JSON.stringify(innerTransferJson);
@@ -591,61 +635,27 @@ define(function(require, exports) {
 			}
 		}
 
+	//内转确认后查看内转信息
 	innerTransfer.saveTransferIn = function(id){
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier",
-					click: function() {
-	
-						$.ajax({
-							url:KingServices.build_url("innerTransfer","save"),
-							type:"POST",
-							data:"id="+id + "&isDelete=1",
-							success:function(data){
-								var result = showDialog(data);
-								if (result) {
-									var divId = "inner-TransferIn",
-										type = "2";
-									innerTransfer.getSearchParam(divId,type);
-									innerTransfer.innerList(divId,type,0);
-
-									var touristGroupId=data.touristGroupId;
-
-									//是否中转安排提信息
-									KingServices.updateTransferIn(touristGroupId);
-
-									//内转确认后数据刷新
-									$innerTrsfInObj=$('#inner-TransferIn');
-									$innerTrsfInObj.find(".T-transferIn-search").off("click").on("click",{divId:"inner-TransferIn",btn:"btn-transferIn-search",type:"2"},innerTransfer.getListPage);
-									$innerTrsfInObj.find(".T-transferIn-search").trigger('click');
-								}
-
-							 }
-						});
-						$( this ).dialog( "close" );
-					}
+		$.ajax({
+			url:KingServices.build_url("innerTransfer","save"),
+			type:"POST",
+			data:"id="+id + "&isDelete=1"
+		})
+		.done(function(data) {
+			var result = showDialog(data);
+				if (result) {
+					var touristGroupId=data.touristGroupId,isTransferIn='inner';
+					//查看内转
+					KingServices.viewTouristGroup(touristGroupId,isTransferIn);
+					//刷新data
+					var divId = "inner-TransferIn",
+						type = "2";
+						innerTransfer.getSearchParam(divId,type);
+						innerTransfer.innerList(divId,type,0);
 				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否确认转入操作？");
-			}
-		});
+		})
 	};
-
 
 	innerTransfer.deleteTransferIn = function(id){
 		var dialogObj = $( "#confirm-dialog-message" );

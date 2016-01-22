@@ -34,10 +34,10 @@
                 {{each financialInsuranceList as rs}}
                 <tr data-id="{{rs.insuranceId}}" data-name="{{rs.insuranceName}}">
                     <td>{{if rs.insuranceName == null || rs.insuranceName == ""}}-{{else}}{{rs.insuranceName}}{{/if}}</td>
-                    <td>{{rs.sumNeedPayMoney}}</td>
-                    <td>{{rs.sumSettlementMoney}}</td>
-                    <td>{{rs.sumPayedMoney}}</td>
-                    <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                    <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
+                    <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
+                    <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
+                    <td class="F-float F-money"><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
                     <td>{{if rs.allCheckCount != rs.checkedCount}}
                             <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
                         {{/if}}

@@ -42,11 +42,13 @@
             <tr data-id='{{rs.fromPartnerAgencyId}}'>
                 <td>{{rs.headerAgencyName}}</td>
                 <td>{{rs.fromPartnerAgencyName}}</td>
-                <td>{{rs.sumAdultCount}}大{{rs.sumChildCount}}小</td>
-                <td>{{rs.contractMoney}}</td>
-                <td>{{rs.settlementMoney}}</td>
-                <td>{{rs.receiveMoney}}</td>
-                <td>{{if rs.unReceivedMoney != 0}}<span style="color:#FF0000;">{{rs.unReceivedMoney}}</span>{{else}}{{rs.unReceivedMoney}}{{/if}}</td>
+                <td><span class="F-float F-count">{{rs.sumAdultCount}}</span>大
+                    <span class="F-float F-count">{{rs.sumChildCount}}</span>小
+                </td>
+                <td><span class="F-float F-money">{{rs.contractMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.receiveMoney}}</span></td>
+                <td>{{if rs.unReceivedMoney != 0}}<span class="F-float F-money" style="color:#FF0000;">{{rs.unReceivedMoney}}</span>{{else}}{{rs.unReceivedMoney}}{{/if}}</td>
                 <td>{{if rs.checkStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{/if}}</td>
                 <td>{{if rs.reciveStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{/if}}</td>
                 <td>

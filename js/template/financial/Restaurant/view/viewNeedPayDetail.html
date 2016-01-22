@@ -26,11 +26,11 @@
 									<tr data-id="{{rs.id}}">
 										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
-										<td>{{rs.price}}</td>
-										<td>{{rs.count}}</td>
-										<td>{{rs.reduceMoney}}</td>
-										<td>{{rs.needPayMoney}}</td>
-										<td>{{rs.settlementMoney}}</td>
+										<td><span class="F-float F-money">{{rs.price}}</span></td>
+										<td><span class="F-float F-count">{{rs.count}}</span></td>
+										<td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
+										<td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
+										<td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
 										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>

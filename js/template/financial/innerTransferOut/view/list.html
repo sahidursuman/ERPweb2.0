@@ -33,11 +33,13 @@
                 {{each list as innerTransferOut}}
                 <tr businessGroupId="{{innerTransferOut.businessGroupId}}" businessGroupName="{{innerTransferOut.businessGroupName}}" endDate="{{endDate}}" startDate="{{startDate}}">
                     <td>{{innerTransferOut.businessGroupName}}</td>
-                    <td>{{innerTransferOut.sumTransAdultCount}}大{{innerTransferOut.sumTransChildCount}}小</td>
-                    <td>{{innerTransferOut.sumTransNeedPayMoney}}</td>
-                    <td>{{innerTransferOut.sumSettlementMoney}}</td>
-                    <td>{{innerTransferOut.sumPayedMoney}}</td>
-                    <td><span style="color:#FF0000">{{innerTransferOut.sumUnPayedMoney}}</span></td>
+                    <td><span class="F-float F-count">{{innerTransferOut.sumTransAdultCount}}</span>大
+                        <span class="F-float F-count">{{innerTransferOut.sumTransChildCount}}</span>小
+                    </td>
+                    <td><span class="F-float F-money">{{innerTransferOut.sumTransNeedPayMoney}}</span></td>
+                    <td><span class="F-float F-money">{{innerTransferOut.sumSettlementMoney}}</span></td>
+                    <td><span class="F-float F-money">{{innerTransferOut.sumPayedMoney}}</span></td>
+                    <td><span class="F-float F-money" style="color:#FF0000">{{innerTransferOut.sumUnPayedMoney}}</span></td>
                      <td >
                         {{if innerTransferOut.checkFCount != innerTransferOut.sumFCount}}
                         <span style="color:#ff9900">{{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>

@@ -31,6 +31,9 @@
 						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{scenic.mobileNumber}}" maxlength="11">
+							<label class="feild-label feild-error-tip" style="top:4px;right:54px;">
+								<i title="该手机号码将接收短信" class="fa fa-info blue"></i>
+							</label>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -125,11 +128,11 @@
 										</td>
 										<td>
 											<div class="clearfix normalInnerPrice" style="margin-top:2px" data-index="0">
-												<input name="normalInnerPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7"/>
+												<input name="normalInnerPrice" type="text" value="{{item.normalInnerPrice}}" maxlength="7" class="F-float F-money" />
 											</div>
 											{{each item.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix div-{{i+1}}" style="margin-top:7px">
-												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7"/>
+												<input name="contractPrice" type="text" value="{{price.contractPrice}}" maxlength="7" class="F-float F-money" />
 											</div>
 											{{/each}}
 										</td>

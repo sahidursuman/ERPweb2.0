@@ -189,6 +189,18 @@ define(function(require, exports) {
             Insure.GetChecking(0,id,name);
         });
 
+        //导出报表事件
+        Insure.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                insuranceId : id,
+                insuranceName: name, 
+                accountInfo : Insure.$checkSearchArea.find("input[name=accountInfo]").val(),
+                startDate: Insure.$checkSearchArea.find('input[name=startDate]').val(),
+                endDate: Insure.$checkSearchArea.find('input[name=endDate]').val()
+            };
+            FinancialService.exportReport(args,"exportArrangeInsuranceFinancial");
+        });
+
         //报表内的操作
         Insure.listOption(Insure.$checkTab);
 
@@ -291,7 +303,7 @@ define(function(require, exports) {
                         Insure.$clearTab.find(".T-clear-auto").hide(); 
                         if(isAutoPay == 1){
                             Insure.$clearTab.data('isEdited',true);
-                            Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                            // Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
                         } else if(isAutoPay == 2){
                             Insure.$clearTab.find(".T-cancel-auto").hide();
                         }

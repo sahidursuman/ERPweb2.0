@@ -1,11 +1,11 @@
 {{each lineProductList as lineProduct}}
-	<tr data-quote-id="{{lineProduct.quoteId}}" data-id="{{lineProduct.id}}">
-		<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}">
+	<tr data-quote-id="{{lineProduct.quoteId}}" data-id="{{lineProduct.id}}" data-days="{{lineProduct.days}}">
+		<td name="travelLine-select" data-travelLine-Id="{{lineProduct.id}}" >
 			{{lineProduct.name}}
 		</td>
 
 		<td>
-			{{lineProduct.days}}
+			<span class="F-float F-count">{{lineProduct.days}}</span>
 		</td>
 
 		<td>

@@ -25,15 +25,15 @@
 			     <td>{{quote.quoteNumber}}</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</td>
 				<td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</td>
-				<td>{{quote.adultCount}}大{{quote.childCount}}小</td>
+				<td><span class="F-float F-count">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</span></td>
+				<td><span class="F-float F-count">{{quote.adultCount}}</span>大<span class="F-float F-count">{{quote.childCount}}</span>小</td>
 				<td>{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</td>
 				<td>{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</td>
 				<td>{{quote.partnerAgency.travelAgencyName}}</td>
 				<td>{{quote.partnerAgencyContact.contactRealname}}</td>
-				<td>{{quote.adultQuotePrice}}</td>
-				<td>{{quote.childQuotePrice}}</td>
-				<td>{{quote.sumQuoteFee}}</td>
+				<td><span class="F-float F-money">{{quote.adultQuotePrice}}</span></td>
+				<td><span class="F-float F-money">{{quote.childQuotePrice}}</span></td>
+				<td><span class="F-float F-money">{{quote.sumQuoteFee}}</span></td>
 				<td>{{if quote.user != null}}{{quote.user.realName}}{{/if}}</td>
 				<td>{{quote.createTime}}</td>
 				<td>

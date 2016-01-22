@@ -9,7 +9,7 @@
           {{each financialInnerTransferInSettlementRecordList as record index}}
 	        <tr>
 	           <td>操作者:{{record.operationUser}},操作时间:{{record.operationTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}},
-           		 操作详情:(账期{{record.year}}年{{record.month}}月,收款金额:{{record.incomeMoney}},收款方式:{{record.payType}},备注:{{record.remark}})</td>
+           		 操作详情:(账期{{record.year}}年{{record.month}}月,收款金额:<span class="F-float F-money">{{record.incomeMoney}}</span>,收款方式:{{record.payType}},备注:{{record.remark}})</td>
 	        </tr>
 	      {{/each}}
         </tbody>

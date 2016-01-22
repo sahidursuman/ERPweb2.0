@@ -60,16 +60,16 @@
     </div>
     <div class="form-group marginLeft-30">
         <label>银行账号：</label>
-        <input type="text" class="form-control T-card-number" name="card-number" value="{{searchParam.resourceName}}" style="width: 150px;">
+        <input type="text" class="form-control T-card-number" name="card-number" value="{{searchParam.resourceName}}" style="width: 300px;">
         <input type="hidden" name="card-id" class="T-bankId" value="{{searchParam.bankId}}">
         <input type="hidden" name="tally-date" class="datepicker" value="{{searchParam.bankId}}">
     </div>
     <div class="form-group marginLeft-30">
         <label>收款合计：</label>
-        <label class="T-incomeMoney">{{total.incomeMoney}}</label>
+        <label class="T-incomeMoney F-float F-money">{{total.incomeMoney}}</label>
     </div>
     <div class="form-group marginLeft-30">
         <label>付款合计：</label>
-        <label class="T-payMoney">{{total.payMoney}}</label>
+        <label class="T-payMoney F-float F-money">{{total.payMoney}}</label>
     </div>
 </form>

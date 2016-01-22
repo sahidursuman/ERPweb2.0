@@ -185,16 +185,17 @@ define(function(require, exports) {
             event.preventDefault();
             restaurant.restaurantCheck(0,id,name);
         });
-
-        //导出报表事件
-        // restaurant.$checkSearchArea.find(".T-restaurantExport").click(function(){
-        //     var year = restaurant.$checkSearchArea.find("[name=year]").val();
-        //     var month = restaurant.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","restaurant") + "&restaurantId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        
+        //导出报表事件 btn-hotelExport
+        restaurant.$checkSearchArea.find(".T-btn-export").click(function(){
+            var args = {
+                    restaurantId: id, 
+                    accountInfo : restaurant.$checkSearchArea.find("input[name=accountInfo]").val(),
+                    startDate: restaurant.$checkSearchArea.find('input[name=startDate]').val(),
+                    endDate: restaurant.$checkSearchArea.find('input[name=endDate]').val()
+                };
+            FinancialService.exportReport(args,"exportArrangeRestaurantFinancial");
+        });
 
         //报表内的操作
         restaurant.listOption(restaurant.$checkTab);
@@ -311,7 +312,7 @@ define(function(require, exports) {
             restaurant.$clearTab.find(".T-clear-auto").hide(); 
             if(isAutoPay == 1){
                 restaurant.$clearTab.data('isEdited',true);
-                restaurant.$clearTab.find(".T-bankDiv").removeClass('hidden');
+                // restaurant.$clearTab.find(".T-bankDiv").removeClass('hidden');
             } else if(isAutoPay == 2){
                 restaurant.$clearTab.find(".T-cancel-auto").hide();
             }

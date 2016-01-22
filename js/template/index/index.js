@@ -245,7 +245,7 @@ define(function(require, exports) {
                     });
 
                 // 绑定查看事件
-                var $tip = Tools.$descContainer;
+                var $tip = Tools.$descContainer2;
 
                 if ($tip.length) {
                     $tip.on('click', '.T-view-quote', function(event) {
@@ -515,14 +515,21 @@ define(function(require, exports) {
         }else if (name == 'bus') {
             var $rs = data, $tab = $('#tab-arrange_all-update-content'),
                 $tripPlanId = $rs.tripPlanId;
-            var tripPlanId = $tab.find('[name=tripPlanId]').val()
-             if (!!$tab && $tripPlanId == tripPlanId) {
-                if (type == 1) {
-                     $tab.find('#tripPlan_addPlan_bus tbody').find('[name=busOrder]').val(3);
-                }else{
-                    $tab.find('#tripPlan_addPlan_bus tbody').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','rgb(51, 122, 183)');
-                }
-             }
+                $busCompanyId = $rs.busCompanyId;
+            var tripPlanId = $tab.find('[name=tripPlanId]').val(),
+                $tr = $tab.find('#tripPlan_addPlan_bus tbody tr');
+            if (!!$tab && $tripPlanId == tripPlanId) {
+                $tr.each(function(i) {
+                    var busCompanyId = $tr.eq(i).find('[name=busCompanyId]').val()
+                    if (busCompanyId == $busCompanyId) {
+                        if (type == 1) {
+                            $tr.eq(i).find('[name=busOrder]').val(3);
+                        }else{
+                            $tr.eq(i).find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','rgb(51, 122, 183)');
+                        }
+                    }
+                })
+            }
         }
     };
 

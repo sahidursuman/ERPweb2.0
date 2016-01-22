@@ -37,9 +37,9 @@
 							{{/if}}
 					</td>
 					<td>{{hotOrderList.type}}</td>
-					<td class="count">{{hotOrderList.count}}</td>
-					<td class="price">{{hotOrderList.price}}</td>
-					<td class="totalMoney">{{hotOrderList.price * hotOrderList.count}}</td>
+					<td class="count F-float F-count">{{hotOrderList.count}}</td>
+					<td class="price F-float F-money">{{hotOrderList.price}}</td>
+					<td class="totalMoney F-float F-money">{{hotOrderList.price * hotOrderList.count}}</td>
 					<td style="vertical-align:middle">{{hotOrderList.creator}}</td>
 					<td>{{hotOrderList.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>			    				    	    
 					<td style="vertical-align:middle" class="T-ctrl-tip">{{hotOrderList.remark}}</td>
