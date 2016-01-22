@@ -44,7 +44,7 @@
 					<th>线路名称</th>
 					<th>行程天数</th>
 					<th>创建时间</th>
-					<th>新建线路产品</th>
+					<!-- <th>新建线路产品</th> -->
 					<th>是否启用</th>
 					<th>操作</th>
 				</tr>
@@ -57,11 +57,11 @@
 						<td>{{travelLine.name}}</td>
 						<td>{{travelLine.days}}天</td>
 						<td>{{travelLine.createTime}}</td>
-						<td>
+						<!-- <td>
 							<button class="btn btn-xs btn-success T-action T-add-lineproduct R-right" data-right="1110002">
 								新建线路产品
 							</button>
-						</td>
+						</td> -->
 						<td>
 							{{if travelLine.status == 1}}
 								<i class="ace-icon fa fa-check green bigger-130"></i> 已启用
@@ -70,7 +70,12 @@
 							{{/if}}
 						</td>
 						<td>
+						<a class="T-action cursor T-add-lineproduct" data-right="1100004">
+								<label class="padding-right20"></label>
+								新建产品
+							</a>
 							<a class="T-action T-preview cursor">
+							<label class="padding-right20">|</label>
 								预览
 							</a>
 							<a class="T-action T-view cursor" >
@@ -89,6 +94,7 @@
 								<label class="padding-right20">|</label>
 								删除
 							</a>
+
 						</td>
 					</tr>
 				{{/each}}

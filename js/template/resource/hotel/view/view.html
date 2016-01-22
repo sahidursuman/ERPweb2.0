@@ -61,9 +61,7 @@
 		   </tr>
 		   <tr>
 			   <td class="style-myself">酒店简介：</td>
-			   <td class="styleOne-self">{{hotel.remark}}</td>
-			   <td class="style-myself">酒店最低价：</td>
-			   <td class="styleOne-self">{{hotel.lowestPrice}}</td>
+			   <td class="styleOne-self" colspan="4">{{hotel.remark}}</td>
 		   </tr>
 	   </table>
 	</form>
@@ -97,22 +95,22 @@
 					{{/each}}
 				</td>
 				<td>
-					<div>
+					<div class="F-float F-money">
 						{{room.normalMarketPrice}}
 					</div>
 					{{each room.priceList as price}}
-						<div>
+						<div class="F-float F-money">
 							{{price.marketPrice}}
 						</div>
 					{{/each}}
 				</td>
 
 				<td>
-					<div>
+					<div class="F-float F-money">
 						{{room.normalInnerPrice}}
 					</div>
 					{{each room.priceList as price}}
-						<div>
+						<div class="F-float F-money">
 							{{price.contractPrice}}
 						</div>
 					{{/each}}
@@ -143,10 +141,10 @@
 				<td>
 					{{room.broadband}}
 				</td>
-				<td>
+				<td class="F-float F-count">
 					{{room.areaSize}}
 				</td>
-				<td>
+				<td class="F-float F-count">
 					{{room.guestNumber}}
 				</td>
 				<td class="remarkWidth">

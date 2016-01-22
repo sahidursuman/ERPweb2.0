@@ -21,10 +21,11 @@
 
 								<tbody>
 									{{each payedMoneyDetailList as rs}}
-									<tr><td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
+									<tr>
+									<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
 										<td>{{if rs.payParty == null || rs.payParty == ""}}-{{else}}{{rs.payParty}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
+										<td class="F-float F-money">{{rs.payDifferenceMoney}}</td>
 										<td>{{rs.payType | getPayTypeText}}</td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>

@@ -3,11 +3,11 @@ define(function(require,exports) {
 		listTemplate = require("./view/list"),
 		checkTemplate = require("./view/innerTransferOutChecking"),
 		settlementTemplate = require("./view/InnerTransferClearing"),
-		recordTemplate = require("./view/innerTransferOutRecord"),
 		checkTableTemplate = require('./view/innerTransferOutCheckTable'),
 		checkDetailTemplate = require('./view/innerTransferOutDetail'),
 		clearTableTemplate = require('./view/innerTransferOutClearTable'),
 		payedDetailTemplate = require('./view/innerTransferOutPayed'),
+		viewGroupTemplate = require('./view/viewTouristGroup'),
 		listTabId = menuKey,
 		checkId = menuKey+"-checking",
 		settleId= menuKey+"-settlement";
@@ -196,7 +196,6 @@ define(function(require,exports) {
 					var html;
 					for(var i=0;i<dataList.length;i++){
 						data.list[i].innerTransferFeeList = JSON.parse(dataList[i].innerTransferFeeList);
-						data.list[i].touristGroupMemberList = JSON.parse(dataList[i].touristGroupMemberList);
 					};
 					if(typeFlag == 2){
 						data.list.innerTransferFeeList = FinancialService.getTempDate(data.list,InnerTransferOut.saveJson.autoPayList);
@@ -249,7 +248,7 @@ define(function(require,exports) {
 	                                };
 									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
-                                	InnerTransferOut.chenking(obj.curr -1);
+                                	InnerTransferOut.chenking("",obj.curr -1);
                                 }
 							}
 					    }
@@ -275,14 +274,17 @@ define(function(require,exports) {
 				$(this).closest('tr').data('change',true);
 				//自动计算本次付款金额
 				InnerTransferOut.autoSumPayMoney($obj);
+				$obj.data('isEdited', true);
 			});
 			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
 				InnerTransferOut.setAutoFillEdit($obj,true);
+
 			};
 		}else{
 			$obj.find('.'+$list).off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
+				$obj.data('isEdited', true);
 			});
 		};
 		//页面时间控件格式化
@@ -300,9 +302,17 @@ define(function(require,exports) {
 			}
 		});
 		//导出报表事件
-		$obj.find(".T-transferExport").on('click',function(event){
-			event.preventDefault();
-			InnerTransferOut.exportData($obj)
+		$obj.find(".T-btn-export").on('click',function(event){
+			var args = { 
+					toBusinessGroupId:$obj.find('input[name=toBusinessGroupId]').val(),
+					lineProductId:$obj.find('input[name=lineProductId]').val(),
+					lineProductName:$obj.find('input[name=lineProductName]').val(),
+					operateUserId:$obj.find('select[name=operater]').val(),
+                    startDate: $obj.find('input[name=startDate]').val(),
+                    endDate: $obj.find('input[name=endDate]').val()
+                };
+            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
+            FinancialService.exportReport(args,"exportArrangeInnerTransferOutFinancial");
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
@@ -310,27 +320,14 @@ define(function(require,exports) {
 		FinancialService.initCheckBoxs($checkAll,$checkBoxList);
 		//展开事件
 		$obj.find('.'+$list).on('click', '.T-seeGroup' ,function(event){
-			//event.preventDefault();
-	    	var tr = $(this).closest('tr').next();
-	    	if($(this).text()=="展开"){
-	    		$(this).text("收起");
-	    	}else{$(this).text("展开");}
-	     	if(tr.hasClass("hide")){
-				$(this).find("i").removeClass("fa-chevron-up");
-				$(this).find("i").addClass("fa-chevron-down");
-				tr.removeClass("hide");
-			}
-			else{
-				$(this).find("i").removeClass("fa-chevron-down");
-				$(this).find("i").addClass("fa-chevron-up");
-				tr.addClass("hide");
-			}
+			InnerTransferOut.viewGroup($(this));
         });
         //监听扣款输入框的改变
-        $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
-        	InnerTransferOut.changeTwoDecimal($(this).val());
-        	InnerTransferOut.autoSumMoney($(this));
-        });
+        FinancialService.updateMoney_checking($obj,3);
+        // $obj.find('input[name=settlementMoney]').off('change').on('change',function(){
+        // 	InnerTransferOut.changeTwoDecimal($(this).val());
+        // 	InnerTransferOut.autoSumMoney($(this));
+        // });
         //查看对账明细
         $obj.find('.'+$list).on('click','.T-check-Detail',function(){
         	var id = $(this).closest('tr').data('id');
@@ -411,22 +408,31 @@ define(function(require,exports) {
 		var payingCheck = new FinRule(2).check($obj);
         //确认付款事件
         $obj.find('.T-payMoney').off('click').on('click',function(){
+        	if(!$obj.data('isEdited')){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            }
         	if(!InnerTransferOut.$settlermentValidator.form()){return;}
-        	InnerTransferOut.saveBlanceData(0,$data,$obj);
+	        	var sumPayMoney = parseFloat($obj.find('input[name=sumPayMoney]').val()),
+		        sumListMoney = parseFloat($obj.find('input[name=sumPayMoney]').data("money"));
+		    var sumMoney = InnerTransferOut.autoSumPayMoney($obj);
+		    if(sumPayMoney != sumMoney){
+		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
+		        return false;
+		    }
+
+        	var allMoney = $obj.find('input[name=sumPayMoney]').val();
+        	if(allMoney == 0){
+        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+		            InnerTransferOut.saveBlanceData(0,$data,$obj);
+		        })
+        	}else{
+        		InnerTransferOut.saveBlanceData(0,$data,$obj);
+        	}
+        	
         });
 	};
-	//导出事件
-	InnerTransferOut.exportData = function($obj){
-		var year=$obj.find("select[name=year]").val(),
-			toBusinessGroupId = $obj.find("input[name=toBusinessGroupId]").val(),
-			toBusinessGroupName = $obj.find("input[name=toBusinessGroupName]").val(),
-	      	month=$obj.find("select[name=month]").val();
-      	checkLogin(function(){
-        	var url = KingServices.build_url("export","exportInnerTransferOut");
-        	    url += "&toBusinessGroupId="+toBusinessGroupId+"&toBusinessGroupName="+toBusinessGroupName+"&year="+year+"&month="+month+"&sortType=auto";
-        	exportXLS(url)
-        });
-	};
+
 	//自动下账
 	InnerTransferOut.autoAcountMoney = function($obj,id,name,$data){
 		var args = {
@@ -450,7 +456,7 @@ define(function(require,exports) {
 						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
 						InnerTransferOut.btnSatus = 1;
-						$obj.data('isEdited', false);
+						$obj.data("isEdited",false);
 						InnerTransferOut.settlement($data);
 						//设置按钮样式
 					});
@@ -473,7 +479,7 @@ define(function(require,exports) {
             selectFlag = 0,
             argumentsLen = arguments.length,
             checkList = $obj.find('.T-checkList'),
-			$tr = checkList.find('.innerTransferFinancial');
+			$tr = checkList.find('.T-checkbox');
 		$tr.each(function(i){
  		   var flag = $(this).is(":checked");
  		   var tr = $(this).closest('tr');
@@ -583,44 +589,67 @@ define(function(require,exports) {
 			}
 		});
 	};
-	//修改扣款自动计算金额
-	InnerTransferOut.autoSumMoney = function($obj){
-		var $tr = $obj.closest('tr');
-		//获取数据
-		var transNeedPayMoney = $tr.find('.transNeedPayMoney').text();
-		var travelPayedMoney = $tr.find('.travelPayedMoney').text();
-		var currentNeedPayMoney = $tr.find('.currentNeedPayMoney').text();
-		var settlementMoney = $tr.find('.settlementMoney').text();
-		var unPayedMoney = $tr.find('.unPayedMoney').text();
-		var punishMoney = $tr.find('input[name=punishMoney]').val();
 
-		//规范数据
-		transNeedPayMoney = InnerTransferOut.changeTwoDecimal(transNeedPayMoney);
-		travelPayedMoney = InnerTransferOut.changeTwoDecimal(travelPayedMoney);
-		currentNeedPayMoney = InnerTransferOut.changeTwoDecimal(currentNeedPayMoney);
-		settlementMoney = InnerTransferOut.changeTwoDecimal(settlementMoney);
-		unPayedMoney = InnerTransferOut.changeTwoDecimal(unPayedMoney);
-		punishMoney = InnerTransferOut.changeTwoDecimal(punishMoney);
+	//查看小组
+	InnerTransferOut.viewGroup = function($obj){
+		var data = {
+			memberList : $obj.data("list")
+		};
 
-		var settleMoney = parseFloat(transNeedPayMoney)- parseFloat(punishMoney);
-		var unPayMoney = parseFloat(settleMoney) - (parseFloat(travelPayedMoney)+parseFloat(currentNeedPayMoney));
-
-		$tr.find('.unPayedMoney').text(unPayMoney);
-		$tr.find('.settlementMoney').text(settleMoney)
-		//更新数据统计
+		if(!data){
+			showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            return false;
+		}
+		var html = viewGroupTemplate(data);
+		layer.open({
+			type : 1,
+			title :"查看小组",
+			skin : 'layui-layer-rim',
+			area : "850px", 
+			zIndex : 1028,
+			content : html,
+			scrollbar: false 
+		});
 	};
+
+	// //修改扣款自动计算金额
+	// InnerTransferOut.autoSumMoney = function($obj){
+	// 	var $tr = $obj.closest('tr');
+	// 	//获取数据
+	// 	var transNeedPayMoney = $tr.find('.transNeedPayMoney').text();
+	// 	var travelPayedMoney = $tr.find('.travelPayedMoney').text();
+	// 	var currentNeedPayMoney = $tr.find('.currentNeedPayMoney').text();
+	// 	var settlementMoney = $tr.find('.settlementMoney').text();
+	// 	var unPayedMoney = $tr.find('.unPayedMoney').text();
+	// 	var punishMoney = $tr.find('input[name=punishMoney]').val();
+
+	// 	//规范数据
+	// 	transNeedPayMoney = InnerTransferOut.changeTwoDecimal(transNeedPayMoney);
+	// 	travelPayedMoney = InnerTransferOut.changeTwoDecimal(travelPayedMoney);
+	// 	currentNeedPayMoney = InnerTransferOut.changeTwoDecimal(currentNeedPayMoney);
+	// 	settlementMoney = InnerTransferOut.changeTwoDecimal(settlementMoney);
+	// 	unPayedMoney = InnerTransferOut.changeTwoDecimal(unPayedMoney);
+	// 	punishMoney = InnerTransferOut.changeTwoDecimal(punishMoney);
+
+	// 	var settleMoney = parseFloat(transNeedPayMoney)- parseFloat(punishMoney);
+	// 	var unPayMoney = parseFloat(settleMoney) - (parseFloat(travelPayedMoney)+parseFloat(currentNeedPayMoney));
+
+	// 	$tr.find('.unPayedMoney').text(unPayMoney);
+	// 	$tr.find('.settlementMoney').text(settleMoney)
+	// 	//更新数据统计
+	// };
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && arguments.length === 2){
-			var $lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
-			var $lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
-			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
-			args.lineProductId = $lineProductId;
-			args.lineProductName = $lineProductId == ""?"":$lineProductName;
-			args.operateUserId= InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
-			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
-			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
+		if(InnerTransferOut.$settlementSearchArea && args == ""){
+			args = {
+				toBusinessGroupId : nnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
+				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
+				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
+				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
+				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
+				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
+				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
+			};
 		};
 		args.pageNo = pageNo || 0;
 		if(args.startDate > args.endDate){
@@ -643,6 +672,9 @@ define(function(require,exports) {
 					var html = settlementTemplate(data);
 				    if(Tools.addTab(settleId,'内转转出付款',html)){
 						var $settleId = $("#tab-"+settleId+"-content");
+						if(InnerTransferOut.btnSatus == 1){
+							$settleId.data("isEdited",true);
+						}
 						InnerTransferOut.$settlementTab = $settleId;
 						InnerTransferOut.$settlementSearchArea = $settleId.find(".T-search");
 						//获取线路数据
@@ -710,11 +742,6 @@ define(function(require,exports) {
 	//切换tab页面自动提示
 	InnerTransferOut.init_CRU_event = function($tab,$data,id,name,typeFlag){
 		if(!!$tab && $tab.length === 1){
-			// 监听修改
-			$tab.on('change', function(event) {
-				event.preventDefault();
-				$tab.data('isEdited', true);
-			});
 			// 监听保存，并切换tab
 			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
 				event.preventDefault();
@@ -844,6 +871,7 @@ define(function(require,exports) {
 			sumMoney += $thisVal;
 		});
 		sumPayMoney.val(sumMoney);
+		return sumMoney;
 	};
 	//规范输入的数字数据
 	InnerTransferOut.changeTwoDecimal = function($val){

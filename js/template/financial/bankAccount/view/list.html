@@ -1,7 +1,7 @@
 <div class="T-search-area search-area guideAdd">
-    <label class="control-label">期初余额合计: {{beginningBalance}}</label>
-    <label class="control-label marginLeft-30">收入合计{{incomeMoney}}</label>
-    <label class="control-label marginLeft-30">支出合计{{payMoney}}</label>
+    <label class="control-label">期初余额合计: <span class=" F-float F-money">{{beginningBalance}}</span></label>
+    <label class="control-label marginLeft-30">收入合计：<span class=" F-float F-money">{{incomeMoney}}</span></label>
+    <label class="control-label marginLeft-30">支出合计：<span class=" F-float F-money">{{payMoney}}</span></label>
 </div>
 <div class="row guideList guideAdd">
 	<div class="col-xs-12">
@@ -32,16 +32,16 @@
 			</thead>
 			<tbody class="T-bankAcc-list">
 				{{each newBankAccountList as rs}}
-					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}">
+					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}" bankMoney="{{rs.balance}}">
 						<td>{{rs.bankAccountNumber}}</td>
 						<td>
 							{{rs.openingBank}}
 						</td>
 						<td>{{rs.accountName}}</td>
 						<td>{{rs.beginningTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td class="">{{rs.beginningBalance}}</td>
-						<td>{{rs.incomeMoney}}</td>
-						<td>{{rs.payMoney}}</td>
+						<td class="F-float F-money">{{rs.beginningBalance}}</td>
+						<td class="F-float F-money">{{rs.incomeMoney}}</td>
+						<td class="F-float F-money">{{rs.payMoney}}</td>
 						<td>{{rs.balance}}</td>
 						<td>
 							<div class="hidden-sm hidden-xs btn-group">
@@ -50,7 +50,7 @@
 								</a>
 							</div>
 						</td>
-					</tr> 
+					</tr>
 				{{/each}}
 			</tbody>
 		</table>

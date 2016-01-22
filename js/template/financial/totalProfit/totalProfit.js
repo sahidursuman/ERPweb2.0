@@ -31,11 +31,14 @@ define(function(require, exports) {
         //格式化时间控件
         Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
 
+        TotalProfit.getPartnerList(TotalProfit.$searchArea.find('input[name=fromPartnerAgencyName]'));
+
         //搜索按钮事件
-        TotalProfit.$searchArea.find('.T-search').on('click', function(){
+        TotalProfit.$searchArea.find('.T-search').off().on('click', function(){
             var args = {
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
+                fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val()
             };
             //获取数据列表
@@ -53,6 +56,7 @@ define(function(require, exports) {
             args = {
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
+                fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 pageNo: page || 0
             }
@@ -104,5 +108,43 @@ define(function(require, exports) {
             }
         });
     };
+
+    TotalProfit.getPartnerList = function($obj){
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $(this).val("");
+                    $(this).nextAll('input[name=fromPartnerAgencyId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id);
+            }
+        }).one("click",function(){
+            $.ajax({
+                url:KingServices.build_url("partnerAgency","getPartnerAnencyList"),
+                data:"",
+                showLoading:false,
+                type:'POST',
+                success:function(data){
+                    if(showDialog(data)){
+                        var partnerList = JSON.parse(data.partnerAgencyList);
+                        for(var i = 0; i < partnerList.length; i++){
+                            partnerList[i].value = partnerList[i].travelAgencyName;
+                        }
+
+                        $obj.autocomplete('option', 'source', partnerList).data('ajax', true);
+                        $obj.autocomplete('search', '');
+                    }
+                }
+            });
+        }).on("click",function(){
+            if ($obj.data('ajax')) {
+                $obj.autocomplete('search', '');
+            }
+        });
+    };
+
     exports.init = TotalProfit.initModule;
 });

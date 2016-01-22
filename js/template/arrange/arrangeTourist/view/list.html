@@ -21,7 +21,7 @@
 			<th>来源</th>
 			<th>线路产品</th>
 			<th>线路类型</th>
-			<th>应用范围</th>
+			<th>针对客源</th>
 			<th>天数</th>
 			<th>出游日期</th>
 			<th>联系人</th>
@@ -35,18 +35,24 @@
 	</thead>
 	<tbody class="T-arrageVisitor-list">
 		{{each touristGroupList as touristGroupList}}
-			<tr data-value={{touristGroupList.id}} data-entity-id = {{touristGroupList.lineProduct.id}} data-entity-partnerAgency= {{touristGroupList.partnerAgency.travelAgencyName}} data-entity-name= {{touristGroupList.lineProduct.name}}  data-entity-type = {{touristGroupList.lineProduct.type}}   data-entity-days = {{touristGroupList.lineProduct.days}}   data-entity-startTime = {{touristGroupList.startTime}} data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
+			<tr data-value={{touristGroupList.id}}
+			 data-entity-id ={{touristGroupList.lineProduct.id}}
+			 data-entity-partnerAgency={{if !!touristGroupList.partnerAgency}} {{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}
+			 data-entity-name={{touristGroupList.lineProduct.name}} data-entity-type = {{touristGroupList.lineProduct.type}}  
+			 data-entity-days = {{touristGroupList.lineProduct.days}}  
+			 data-entity-startTime = {{touristGroupList.startTime}}
+			 data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
-				<td>{{touristGroupList.partnerAgency.travelAgencyName}}</td>
+				<td>{{if !!touristGroupList.partnerAgency}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
 				<td class="T-ctrl-tip" title="{{touristGroupList.lineProduct.name}}"><span style="height: 35px">{{touristGroupList.lineProduct.name}}</span></td>
 				<td>{{touristGroupList.lineProduct.type}}</td>
 				<td>
-					{{if touristGroupList.lineProduct.customerType == 0}}散拼
-					    {{else if touristGroupList.lineProduct.customerType == 1}}团体
-					    {{else if touristGroupList.lineProduct.customerType == 2}}转客
+					{{if touristGroupList.customerType == 0}}散拼
+					    {{else if touristGroupList.customerType == 1}}团体
+					    {{else if touristGroupList.customerType == 2}}转客
 					{{/if}} 
 				</td>
-				<td>{{touristGroupList.lineProduct.days}}</td>
+				<td class="F-float F-count">{{touristGroupList.lineProduct.days}}</td>
 				<td>{{touristGroupList.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
 				{{if !!touristGroupList.contactMember}}
 				<td>{{touristGroupList.contactMember.name}}</td>
@@ -55,7 +61,7 @@
 				<td></td>
 				<td></td>
 				{{/if}}
-				<td>{{touristGroupList.adultCount}} 大 {{touristGroupList.childCount}}小</td>
+				<td class="F-float F-count">{{touristGroupList.adultCount}} 大 {{touristGroupList.childCount}}小</td>
 					
 				<td>{{touristGroupList.areaData}}</td>
 				<td>{{touristGroupList.ageData}}</td>

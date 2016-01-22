@@ -26,9 +26,9 @@
 				{{else}}
 				{{each busCompany.busList as bus index}}
 				{{if index == 0}}
-				<td>{{bus.seatCount}}</td>
+				<td><span class="F-float F-count">{{bus.seatCount}}</span></td>
 				<td>{{bus.brand}}</td>
-				<td>{{bus.price | toFixed}}</td>
+				<td><span class="F-float F-money">{{bus.price | toFixed}}</span></td>
 				{{/if}}
 				{{/each}}
 				{{/if}}

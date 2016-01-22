@@ -1,29 +1,61 @@
 define(function(require, exports) {
 	var menuKey = "public_message",
-		tabId = "tab-"+menuKey+"-content";
-		listTemplate = require("./view/list");
+		tabId = "tab-"+menuKey+"-content",
+		listTemplate = require("./view/list"),
+		listMainTemplate = require("./view/listMain"),
 		viewTemplate = require("./view/view");
 	
 	var message = {};	
 
 	message.initModule = function() {
-		message.listMsg(0);
+		message.listMainMsg();
+	};
+
+	message.listMainMsg = function() {
+		$.ajax({
+			url: KingServices.build_url("message","findMessageType"),
+			type: 'POST',
+		})
+		.done(function(data) {
+			data.menus = JSON.parse(data.menus);
+
+			var html = listMainTemplate(data);
+			Tools.addTab(menuKey,"消息列表",html);
+			var $container = $('#'+ tabId);
+			message.listMsg(0);
+			
+			//搜索事件
+			$container.find('.T-search').on('click', function(event) {
+				event.preventDefault();
+				message.listMsg(0);
+			});
+		});
 	};
 
 	message.listMsg = function(page){
 		page = page || 0;
+		var $tab = $("#" + tabId),
+		    searchParam = {
+				pageNo : page,
+				messageKey: $tab.find('input[name=messageKey]').val(),
+				//messageTypeName : $tab.find("input[name=menuName]").val(),
+				messageType : $tab.find("[name=menuId]").val(),
+				sortType : "auto"
+			};
+		
 		$.ajax({
 			url:KingServices.build_url("message","listMessage"),
 			type:"POST",
-			data:{
-				pageNo : page,
-				sortType : "auto"
-			},
+			data: searchParam,
 			success:function(data){
+				data.searchParam = searchParam;
 				var result = showDialog(data);
 				if (result) {
+					data.msgList = JSON.parse(data.msgList);
 					var html = listTemplate(data);
-					Tools.addTab(menuKey,"消息列表",html);
+					//Tools.addTab(menuKey,"消息列表",html);
+					$tab.find('.T-message-tbody').html(html);
+					
 					message.$tab = $('#tab-public_message-content');
 
 					//查看消息内容
@@ -42,6 +74,7 @@ define(function(require, exports) {
 						event.preventDefault();
 						message.setReadAll();
 					});
+
 
 					// 绑定翻页组件
 					laypage({
@@ -94,7 +127,6 @@ define(function(require, exports) {
 	    		    	}
 				    }
 				});
-
 				// 设置list
 				message.$tab.find('[data-id="'+id+'"]').children('td').eq(1).find('b').text('已读').css('color', 'green');
 			}
@@ -115,6 +147,11 @@ define(function(require, exports) {
 				})
 			}
 		});		
+	};
+
+	message.getQuery = function(){
+		
+		
 	};
 
 	exports.init = message.initModule;
