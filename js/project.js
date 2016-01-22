@@ -659,6 +659,7 @@ var modalScripts = {
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
+    'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
