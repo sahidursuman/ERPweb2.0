@@ -77,10 +77,28 @@ define(function(require, exports) {
             var $that = $(this), id = $that.closest('tr').data('id');
             if($that.hasClass('T-view')){
                 travels.viewTravelShowList(0, id);
-            }else if($that.hasClass('T-share')){
-                travels.share(id, "groupTravelList");
             }
-        })
+        });
+
+        travels.share($tab.find('.T-list').find('.T-share'));
+
+        $tab.find('.T-list').find('.T-share').hover(function() {
+            var $that = $(this),
+                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/groupTravelList.html?lineProductId='+$that.closest('tr').data('id'),
+                bdText = $that.closest('tr').find('td').eq(0).text();
+
+            window._bd_share_config = {
+                common : {
+                    bdText : bdText, 
+                    bdDesc : bdText, 
+                    bdUrl : url,
+                    bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
+                },
+                share : [{
+                    "bdSize" : 16
+                }]
+            };
+        });
     };
     /**
      * 游记展示列表页
@@ -238,9 +256,26 @@ define(function(require, exports) {
                 travels.groupEvaluate(id)
             }else if($that.hasClass('T-single-comment')){
                 travels.singleEvaluate(id)
-            }else if($that.hasClass('T-share')){
-                travels.share(id, $that.data('type'));
             }
+        });
+        travels.share($tab.find('.T-share'), 'right');
+        $tab.find('.T-share').hover(function() {
+            var $that = $(this),
+                type = $that.data('type'),
+                parem = type == 'singleEvaluation' ? 'noteItemId' : 'noteId',
+                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/'+type+'.html?'+parem+'='+$that.data('id');
+
+            window._bd_share_config = {
+                common : {
+                    bdText : $that.data('title'), 
+                    bdDesc : $that.data('title'), 
+                    bdUrl : url,
+                    bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
+                },
+                share : [{
+                    "bdSize" : 16
+                }]
+            };
         });
         var colorbox_params = {
             photo : true,
@@ -269,15 +304,30 @@ define(function(require, exports) {
     };
 
     /**
+     * 
      * 分享
-     * @param  {int}    id   游记ID
-     * @param  {string} type 分享类型
+     * @param  {int}     id   游记ID
+     * @param  {string}  type 分享类型
+     * @param  {Boolean} isShow 是否显示分享
      */
-    travels.share = function(id, type){
-        var url = location.origin + '/share/'+type+'.html';
+    travels.share = function($elements, type){
+        if(!$('body').data('isShareUrl')){
+            with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+            $('body').data('isShareUrl', true);
+        }
+
+        var html = T.travelShare();
+
+        Tools.descToolTip($elements, 2, type || 'left', html, function(){
+            _bd_share_main.init(window._bd_share_config);
+        });
+        /*var url = location.origin + '/share/'+type+'.html';
         if(type == "singleEvaluation"){
             url += '?noteItemId='+id;
-        }else{
+        }else if(type == "groupTravelList"){
+            url += '?lineProductId='+id;
+        }
+        else{
             url += '?noteId='+id;
         }
         $( "#confirm-dialog-message" ).removeClass('hide').dialog({
@@ -307,7 +357,7 @@ define(function(require, exports) {
                 $(this).find("p").html("分享链接:&nbsp;"+ url);
             }
         });
-        new ZeroClipboard($('.T-copy-clip-btn-share'));
+        new ZeroClipboard($('.T-copy-clip-btn-share'));*/
     };
 
     exports.init = travels.initModule;
