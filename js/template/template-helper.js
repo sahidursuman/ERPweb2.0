@@ -63,6 +63,16 @@ template.helper("getCardText", function(idCardType) {
             return '其他';
     }
 });
+template.helper("getCustomerType", function(status, isSel) {
+    var res = '';
+    res += '<option value="" '+(status == ''|| status == null?'selected':'')+'>全部</option>';
+    res += '<option value="0" '+(status == '0'?'selected':'')+'>散客</option>';
+    res += '<option value="1" '+(status == '1'?'selected':'')+'>团体</option>';
+    if(isSel){
+        res = status == "1" ? "团体" : "散客";
+    }
+    return res;
+});
 template.helper("getWayType", function(status) {
     var res = '';
     status = status || 1;
@@ -263,4 +273,72 @@ template.helper("getRepastDetail", function(repastDetail) {
     }
 
     return res.join('、');
+});
+template.helper("getScoreStar", function(str, scoreType){
+    var res = "", star = ['fa-star-o', 'fa-star-o', 'fa-star-o', 'fa-star-o', 'fa-star-o'];
+    if(str > 4 && str < 15){
+        star[0] = "fa-star-half-o";
+    }else if(str >= 15  &&  str < 25){
+        star[0] = "fa-star";
+    }else if(str >= 25 &&  str < 35){
+        star[0] = "fa-star";
+        star[1] = "fa-star-half-o";
+    }else if(str >= 35 &&  str < 45){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+    }else if(str >= 45 &&  str < 55){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star-half-o";
+    }else if(str >= 55 &&  str < 65){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star";
+    }else if(str >= 65 &&  str < 75){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star";
+        star[3] = "fa-star-half-o";
+    }else if(str >= 75 &&  str < 85){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star";
+        star[3] = "fa-star";
+    }else if(str >= 85 &&  str < 95){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star";
+        star[3] = "fa-star";
+        star[4] = "fa-star-half-o";
+    }else if(str >= 95){
+        star[0] = "fa-star";
+        star[1] = "fa-star";
+        star[2] = "fa-star";
+        star[3] = "fa-star";
+        star[4] = "fa-star";
+    }
+    if(scoreType == "1"){
+        for(var j=0; j<str * 1;j++){
+            star[j] = "fa-star";
+        }
+    }
+    for(var i=0; i<star.length; i++){
+        res += '<i class="fa '+star[i]+'"></i>';
+    }
+    return res;
+});
+template.helper("getNoteItemText", function(status){
+    var res = "交通";
+    if(status == "trafic"){
+        res = "交通";
+    }else if(status == "hotel"){
+        res = "住宿";
+    }else if(status == "play"){
+        res = "游玩";
+    }else if(status == "note"){
+        res = "笔记";
+    }else if(status == "line"){
+        res = "线路简介";
+    }
+    return res;
 });

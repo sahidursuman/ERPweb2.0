@@ -663,6 +663,7 @@ var modalScripts = {
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
+    'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
@@ -2137,6 +2138,14 @@ KingServices.addQuote = function(id){
 		module.addQuote(id);
 	});
 }
+
+//导游服务标准--新增 'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
+KingServices.addGuideService = function(args,closeLayer){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_serviceStandards,function(module){
+		module.saveData(args,closeLayer);
+	});
+}
+
 //单团明细
 KingServices.tripDetail = function(id){
 	seajs.use("" + ASSETS_ROOT + "js/template/financial/count/count.js",function(module){

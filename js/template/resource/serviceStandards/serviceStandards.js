@@ -148,7 +148,7 @@ define(function(require, exports){
 	//保存事件
 	ServiceStandards.saveData = function(args,closeLayer){
 		console.log(args);
-		layer.close(closeLayer);
+		//layer.close(closeLayer);
 	};
 	//组装数据
 	ServiceStandards.installData = function($obj,typeFlag){
@@ -167,4 +167,5 @@ define(function(require, exports){
 		return subData;
 	};
 	exports.init = ServiceStandards.initModule;
+	exports.saveData = ServiceStandards.saveData;
 });
