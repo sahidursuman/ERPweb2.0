@@ -272,17 +272,6 @@ define(function(require, exports) {
 			var $this = $(this);
 			subsection.delFeeItem($this);
 		});
-
-		//初始化页面disabled--false
-		subsection.$tbody.find('.T-type').prop('disabled',false);
-		//费用项选中后不能编辑
-		subsection.$tbody.find('.T-type').on('change', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that = $(this);
-			    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
-		});
-
         
 		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
@@ -329,14 +318,6 @@ define(function(require, exports) {
 			//初始化页面disabled--false
 			$tbody.find('.T-type').prop('disabled',false);
 		    $tbody.find('[data-type=3]').prop('disabled',true).css('backgroundColor','#EFEBEB');
-		    
-
-			$tbody.find('.T-type').on('change', function(event) {
-				event.preventDefault();
-				/* Act on the event */
-				var $that = $(this);
-				    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
-			});
 		};
 
 	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
@@ -393,7 +374,7 @@ define(function(require, exports) {
 			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
             +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
             +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-money T-count T-count-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc " readonly></div></td>'
 			+ '<td>' + radio + '</td>'
@@ -430,13 +411,6 @@ define(function(require, exports) {
 				/* Act on the event */
 				subsection.addFeeItem($that, $tbody);
 			});
-
-			$tbody.find('.T-type').on('change', function(event) {
-				event.preventDefault();
-				/* Act on the event */
-				var $that = $(this);
-				    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
-		    });
 
 			$tbody.data('isEdited', true);
 	};
