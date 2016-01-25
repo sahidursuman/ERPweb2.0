@@ -3,7 +3,7 @@
 		<div class="col-xs-12">
 			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
 			<label class="control-label mar-l-10">{{note.title}}</label>
-			<a class="hct-top-share T-action T-share" data-id="{{note.id}}" data-type="singleEvaluation"><i class="fa fa-share-alt"></i>分享</a>
+			<a class="hct-top-share T-action T-share" data-title="{{note.title}}" data-id="{{noteItem.id}}" data-type="singleEvaluation"><i class="fa fa-share-alt"></i>分享</a>
 		</div>
 	</div>
 	<div class="row hct-note">
@@ -59,7 +59,7 @@
 					<div class="note-details-list">
 						<div class="note-details-body">
 							<div class="note-db-img">
-								<img src="{{imgUrl + noteItem.itemImage}}">
+								{{if !!noteItem.itemImage}}<img src="{{imgUrl + noteItem.itemImage}}">{{/if}}
 							</div>
 							<div class="note-db-itemText">
 								{{#noteItem.itemText}}

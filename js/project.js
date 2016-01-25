@@ -1298,11 +1298,11 @@ Tools.getTableVal = function($tbody, idName) {
  * @param  {object} $elements 需要绑定提示的DOM
  * @return {[type]}           [description]
  */
-Tools.descToolTip = function($elements,type, placement) {
+Tools.descToolTip = function($elements,type, placement, htmlContent, hoverFn) {
 	if (!!$elements)  {
 		$elements.each(function() {
 			var $that = $(this), content = $that.prop('title'),
-				html = $that.data("html"), 
+				html = htmlContent || $that.data("html"), 
 				timer = false, options = false;
 
 			// 内容过长，才提示
@@ -1335,6 +1335,9 @@ Tools.descToolTip = function($elements,type, placement) {
 					timer = setTimeout(function() {
 						timer = false;
 						$that.popover('show');
+						if(hoverFn){
+							hoverFn();
+						}
 					},200)
 				}, function() {
 					if (timer) {
