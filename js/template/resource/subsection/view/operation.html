@@ -104,7 +104,7 @@
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
                             <div class="clearfix" style="margin-top:6px">
-                                <select name="type" data-index="{{index}}" disabled=""    data-id="{{FeeList.id}}" class="T-type pull-left">
+                                <select name="type" data-index="{{index}}"    data-id="{{FeeList.id}}" class="T-type pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
@@ -116,7 +116,7 @@
                           {{/if}}
                           {{if index>0}}
                            <div class="clearfix" style="margin-top:5px">
-                                <select name="type" data-index="{{index}}" disabled=""  data-id="{{FeeList.id}}" class="T-type pull-left">
+                                <select name="type" data-index="{{index}}" data-id="{{FeeList.id}}" class="T-type pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
@@ -143,10 +143,10 @@
                          <td>
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-count T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-count T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{/each}}
                         </td>
