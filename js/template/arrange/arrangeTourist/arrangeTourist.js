@@ -1299,6 +1299,7 @@ define(function(require, exports) {
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
+                "currentNeedPayMoney": arrangeTourist.getVal($editFeeObj, "currentNeedPayMoney") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
                 "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
