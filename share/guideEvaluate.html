@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>导游评价 - 火柴头</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<link rel="stylesheet" href="../components/ace-admin/assets/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="../components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="../css/base.css" />
@@ -188,7 +189,6 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
-					console.log(data)
 					var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 						imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 					data.imgUrl = imgUrl;

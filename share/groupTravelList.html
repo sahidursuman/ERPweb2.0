@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>游记展示 - 火柴头</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 	<style type="text/css">
 		body{
 			font: 14px/1.2 "Microsoft YaHei";
@@ -303,15 +304,16 @@
 							var images = [];
 							var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
 								imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
-								imgUrl = "";
 							var list  = data.noteList;
 							for(var i=0; i<list.length; i++){
 								if(list[i].coverImage){
 									images.push(imgUrl + list[i].coverImage);
+								}else{
+									images.push(location.origin+'/images/loading-error.png?'+list[i].id);
 								}
 								var html =  '<div class="item">'+
 											'	<div class="item-img">'+
-											'		<a href="groupTravel.html?noteId='+list[i].id+'" class="load-image" url="'+(list[i].coverImage ? (imgUrl + list[i].coverImage) : '')+'"><span class="hct-logo-grey"><span class="hct-logo-blue"></span></span></a>'+
+											'		<a href="groupTravel.html?noteId='+list[i].id+'" class="load-image" url="'+(list[i].coverImage ? (imgUrl + list[i].coverImage) : location.origin+'/images/loading-error.png?'+list[i].id)+'"><span class="hct-logo-grey"><span class="hct-logo-blue"></span></span></a>'+
 											'	</div>'+
 											'	<a href="groupTravel.html?noteId='+list[i].id+'" class="item-title">'+list[i].title+'</a>'+
 											'	<div class="item-footer">'+
@@ -400,7 +402,7 @@
 								var $loadImage = $(this).find('.load-image');
 								if($loadImage.attr('url') === img.src){
 									if(img.error === 1){
-										$loadImage.html('');
+										$loadImage.html('<img src="/images/loading-error.png" width="298" height="259">');
 									}else{
 										$loadImage.html('<img src="'+img.src+'" width="'+img.width+'" height="'+img.height+'">')	
 									}
