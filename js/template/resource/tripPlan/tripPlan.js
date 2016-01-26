@@ -502,6 +502,41 @@ define(function(require, exports) {
 		})
 		tripPlan.taskTypeOperation($tab);
 
+		//购物安排添加删除购物商品
+		$tab.find('#tripPlan_addPlan_shop').off('click.shop').on('click.shop', '.T-shopPolicy', function() {
+			var $this = $(this), $parentTd = $this.closest('td'), $parentDiv = $this.closest('div');
+			if ($this.hasClass('T-add')) {
+				var html = ''
+				+'<div class="mar-t-10" data-entity-id="">'
+                +'<input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />'
+                +'<input type="hidden" name="shopPolicyId" value=""/>'
+                +'<button class="btn btn-danger btn-sm btn-white T-shopPolicy T-del"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'
+                +'</div>';
+                $parentTd.append(html);
+			}else if ($this.hasClass('T-del')) {
+				var id = $parentDiv.data('entity-id');
+				if (!!id) {
+					showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条商品？', function() {
+						$.ajax({
+							url: KingServices.build_url('tripPlan','deleteTripPlanInfoByCategoryId'),
+							type: 'POST',
+							data: {
+								cateName: 'shopItem',
+								cateId: id
+							},
+							success: function(data) {
+								if (showDialog(data)) {
+									$parentDiv.remove();
+								}
+							}
+						})
+					})
+				}else{
+					$parentDiv.remove();
+				}
+			}
+			tripPlan.bindShopChoose($tab);
+		})
 
 		var noticeTourists = $tab.find('.T-noticeTourists')
 		noticeTourists.each(function(i) {
@@ -1434,7 +1469,13 @@ define(function(require, exports) {
         '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 T-chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
         '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
-        '<td><input type="text" name="goodsPolicy" class="col-sm-12 T-chooseGoodsPolicy" value="" /><input type="hidden" name="shopPolicyId" value=""/></td>'+
+        '<td>'+
+		'<div>'
+        +'<input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />'
+        +'<input type="hidden" name="shopPolicyId" value=""/>'
+        +'<button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>'
+        +'</div>'
+        +'</td>'+
         '<td><input type="text" name="remark" class="col-sm-12" value="" maxlength="500" /></td>'+
         '<td><a class="cursor T-btn-deleteTripPlanList" data-entiy-id="" data-entity-name="shop" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -2587,44 +2628,49 @@ define(function(require, exports) {
 		chooseGoodsPolicy.autocomplete({
 			minLength: 0,
 			select: function(event, ui){
-				var $this = $(this), $parents = $this.closest('tr');
+				var $this = $(this), $parents = $this.closest('div');
 				$parents.find("input[name=shopPolicyId]").val(ui.item.id).trigger('change');
 			},
 			change: function(event,nameUi){
 				if(nameUi.item == null){ 
-					var $this = $(this), $parents = $this.closest('tr');
+					var $this = $(this), $parents = $this.closest('div');
 					$this.val("");
 					$parents.find("input[name=shopPolicyId]").val("");
-					$parents.find("input[name=guideRate]").val("");
-					$parents.find("input[name=travelAgencyRate]").val("");
 				}
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this), $parents = $this.closest('tr'),
 				id = $parents.find("input[name=shopId]").val();
-			$.ajax({
-				url: KingServices.build_url('shop','findPolicyByShopId'),
-                type: 'POST',
-                showLoading:false,
-                data: "id="+id,
-                success: function(data) {
-					if(showDialog(data)){
-						var shopPolicyList = JSON.parse(data.shopPolicyList);
-						if(shopPolicyList && shopPolicyList.length > 0){
-							for(var i=0; i < shopPolicyList.length; i++){
-								shopPolicyList[i].value = shopPolicyList[i].name;
+			if (!!id) {
+				$.ajax({
+					url: KingServices.build_url('shop','findPolicyByShopId'),
+	                type: 'POST',
+	                showLoading:false,
+	                data: "id="+id,
+	                success: function(data) {
+						if(showDialog(data)){
+							var shopPolicyList = JSON.parse(data.shopPolicyList);
+							if(shopPolicyList && shopPolicyList.length > 0){
+								for(var i=0; i < shopPolicyList.length; i++){
+									shopPolicyList[i].value = shopPolicyList[i].name;
+								}
+								$this.autocomplete('option','source', shopPolicyList);
+								$this.autocomplete('search', '');
+							}else{
+								layer.tips('没有内容。', $this, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
 							}
-							$this.autocomplete('option','source', shopPolicyList);
-							$this.autocomplete('search', '');
-						}else{
-							layer.tips('没有内容。', $this, {
-							    tips: [1, '#3595CC'],
-							    time: 2000
-							});
 						}
-					}
-                }
-            });
+	                }
+	            });
+            }else{
+				layer.tips('请选择购物店', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+            }
 		});
 	};
 
@@ -3163,6 +3209,46 @@ define(function(require, exports) {
 				}
 			}
 		}
+
+		//购物安排数据
+		var shop = $("#tripPlan_addPlan_shop tbody tr"), shopArrangeList = [];
+		if(shop.length > 0){
+			for(var i=0; i<shop.length; i++){
+				var shopJson = {
+					id: shop.eq(i).data('entity-arrangeid'),
+					whichDay: tripPlan.getVal(shop.eq(i), 'whichDay'),
+					shopId: tripPlan.getVal(shop.eq(i), 'shopId'),
+					managerName: tripPlan.getVal(shop.eq(i), 'managerName'),
+					mobileNumber: tripPlan.getVal(shop.eq(i), 'mobileNumber'),
+					remark: tripPlan.getVal(shop.eq(i), 'remark'),
+					shopArrangeItemSet: []
+				}
+				var shopDiv = shop.eq(i).children('td').eq(4).find('div');
+				for (var j = 0; j < shopDiv.length; j++) {
+					var json = {
+						id: shopDiv.eq(j).data('entity-id'),
+						shopPolicyId: tripPlan.getVal(shopDiv.eq(j), 'shopPolicyId')
+					}
+					shopJson.shopArrangeItemSet.push(json);
+				}
+				var hasSameShop = 0;
+				if (i > 0) {
+					for (var j = 0; j < shopArrangeList.length; j++) {
+						if(shopJson.whichDay == shopArrangeList[j].whichDay && shopJson.shopId == shopArrangeList[j].shopId) {
+							showMessageDialog($("#confirm-dialog-message"),'购物安排中同一天安排了相同的商店')
+							return;
+						}else{
+							hasSameShop = 1;
+						}
+					}
+				}else{
+					hasSameShop = 1;
+				}
+				if (hasSameShop) {
+					shopArrangeList.push(shopJson)
+				}
+			}
+		}
 	
 		
 		//获取tripPlan
@@ -3182,7 +3268,7 @@ define(function(require, exports) {
 			restaurantList : restaurantArrangeList,
 			scenicList : Tools.getTableVal($tab.find('#tripPlan_addPlan_scenic').find('tbody'), 'entity-arrangeid'),
 			selfPayList : Tools.getTableVal($tab.find('#tripPlan_addPlan_selfPay').find('tbody'), 'entity-arrangeid'),
-			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
+			shopList : shopArrangeList,//Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		},
 		json = JSON.stringify(tripPlanJson),arrangeStatus = {};
