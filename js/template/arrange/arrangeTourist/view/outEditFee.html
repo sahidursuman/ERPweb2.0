@@ -25,6 +25,7 @@
 						<div class="col-xs-1">
 						{{if cashFlag== 1}}
 							<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
+							<input value="{{touristGroup.currentNeedPayMoney}}" type="hidden" name="currentNeedPayMoney" class="col-sm-12" />
 							{{else}}
 							<span class="F-float F-money">0</span>
 						{{/if}}
