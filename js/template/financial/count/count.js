@@ -1559,19 +1559,26 @@ define(function(require, exports){
             	count = Count.changeTwoDecimal(count);
             	count = parseInt(count);
             	incomeCount.val(count);
-            	needIncome.text(incomeMoney)
+            	needIncome.text(incomeMoney);
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
             $parent.find('.selfMoney').val($selfSum);
-			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
-			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
+			//导游佣金= (应收数量)*(单价-低价)*导佣比例
+			var needCountSum = 0;
+			if($parent.find('input[name=needCount]').length>0){
+				needCountSum = $parent.find('input[name=needCount]').val();
+			}else{
+				needCountSum = $parent.find('.needIncomeCount').text();
+			}
+			
+			var guideRebateMoney =  needCountSum* (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
-			//旅行社佣金= (实际数量-计划数量)*(单价-低价)*社佣比例
-			var travelAgencyRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
+			//旅行社佣金= (应收数量)*(单价-低价)*社佣比例
+			var travelAgencyRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
 			$parent.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
