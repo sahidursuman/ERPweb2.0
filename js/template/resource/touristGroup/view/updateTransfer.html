@@ -54,7 +54,7 @@
 
         <div class="form-group fixed-width">
             <label><span class="necessary">*</span>完团日期：</label>
-            <input type="text" name="endTime"  class="form-control date-picker datepicker T-endTime"  value="{{if !!touristGroupDetail.lineProduct.id}}{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}{{/if}}"/>
+            <input type="text" name="endTime"  class="form-control date-picker datepicker T-endTime"  value="{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}"/>
         </div>
 
 
