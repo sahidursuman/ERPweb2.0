@@ -792,7 +792,7 @@ define(function(require, exports) {
                 reciveType = 0;
 
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$reciveText,$label,type,reciveType);
+            touristGroup.isRemoveRequire($that,$div,$reciveText,$label,type,reciveType,$obj);
         });
 
         //送团操作
@@ -806,7 +806,7 @@ define(function(require, exports) {
                 type = $label.data('type'),
                 sendType = 1;
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$sendText,$label,type,sendType);
+            touristGroup.isRemoveRequire($that,$div,$sendText,$label,type,sendType,$obj);
         });
 
        
@@ -820,7 +820,7 @@ define(function(require, exports) {
      * @param  {[type]}  type  复选框标识
      * @return {Boolean}
      */
-    touristGroup.isRemoveRequire = function($that,$div,$text,$label,type ,isReciveType){
+    touristGroup.isRemoveRequire = function($that,$div,$text,$label,type ,isReciveType,$innerTransferForm){
         if ($that.is(":checked")) {
             touristGroup.addActionPlan($div,$text.text(),$label.text(), type,isReciveType);
         }else{
@@ -863,6 +863,7 @@ define(function(require, exports) {
                 $div.find('.T-action-require-list').children('div.require-commons').remove();
             };
         };
+        rule.checkInnerTransfer($innerTransferForm);
     };
 
     /**
@@ -1998,6 +1999,10 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"), "完团日期不能为空！");
             return;
         };
+
+
+        if ($receptionObj.find('input[name=arriveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "接团时间不能为空！"); return;};
+        if ($sendObj.find('input[name=leaveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "送团时间不能为空！"); return;};
 
         // for 出游日期
         if ($startTime.prop('disabled')) {
