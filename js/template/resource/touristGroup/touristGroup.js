@@ -268,11 +268,10 @@ define(function(require, exports) {
                     if (status == undefined || status == null || status == "") {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
                             var $updateTabId = $('#' + updateTab);
-                            $updateTabId.find('input[name=lineProductIdName]').val("");
-                            $updateTabId.find('input[name=lineProductId]').val("");
-                            $updateTabId.find('.T-touristReception').prop("checked", false);
-                            $updateTabId.find('.T-smallCar').prop("checked", false);
-                            $updateTabId.find('.T-touristSend').prop("checked", false);
+                            $updateTabId.find('input[name=accompanyGuideName]').val("");
+                            $updateTabId.find('input[name=accompanyGuideMobile]').val("");
+                            $updateTabId.find('input[name=otaOrderNumber]').val("");
+                            $updateTabId.find('input[name=orderNumber]').val("");
                             touristGroup.updateEvents(typeOut);
                         }
                     } else if (!!status && !!InnerTransfer) {
