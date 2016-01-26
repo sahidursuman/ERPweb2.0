@@ -254,6 +254,7 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			//计算金额
 			Count.autoShopSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//自费
 		var $selfObj = $listObj.find('.T-count-selfPay');
@@ -262,6 +263,7 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			//计算自费金额
 			Count.autoSelfSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
@@ -272,6 +274,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoOtherInSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		
@@ -280,35 +283,41 @@ define(function(require, exports){
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.autoBusSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="hidden"]').off('change').on('change',function(){
 			Count.autoRestaurantSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
 		$hotelObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoHotelSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//景区处理--计算、新增
 		var $scenicObj = $listObj.find('.T-count-scenic');
 		$scenicObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoScenicSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//票务处理--计算、新增
 		var $ticketObj = $listObj.find('.T-count-ticket');
 		$ticketObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoTicketSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//其他支出
 		var $totherOutObj = $listObj.find('.T-count-otherOut');
 		$totherOutObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoOtherOutSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
