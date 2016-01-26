@@ -345,8 +345,10 @@ define(function(require, exports) {
 
 						ResLineProduct.tmpData.productId = id;
 						ResLineProduct.tmpData.type = clipboardMode;
-						data.serviceStandardList = JSON.parse(data.serviceStandardList);
-						data.viewLineProduct.serviceStandardList = data.serviceStandardList;
+						if (!!data.serviceStandardList) {
+							data.serviceStandardList = JSON.parse(data.serviceStandardList);
+							data.viewLineProduct.serviceStandardList = data.serviceStandardList;
+						}
 						data.viewLineProduct.editorName = tab_id + '-ueditor';
 						var html = updateLineProductTemplate(data.viewLineProduct);
 						// 初始化页面
