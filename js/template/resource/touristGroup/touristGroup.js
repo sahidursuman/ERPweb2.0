@@ -268,7 +268,8 @@ define(function(require, exports) {
                     if (status == undefined || status == null || status == "") {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
                             var $updateTabId = $('#' + updateTab);
-                            $updateTabId.find('input[name=lineProductIdName]').val("");
+                            $updateTabId.find('input[name=endTime]').val("");
+                            $updateTabId.find('input[name=lineProductId]').val("");
                             $updateTabId.find('input[name=lineProductId]').val("");
                             $updateTabId.find('input[name=accompanyGuideName]').val("");
                             $updateTabId.find('input[name=accompanyGuideMobile]').val("");
@@ -599,7 +600,10 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
+            if (!!startTime) {
                 $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-days').val() - 1));
+            };
+               
         });
 
 
@@ -725,7 +729,7 @@ define(function(require, exports) {
         $dialog.find('.T-searchtravelLine').on('click', function(event) {
             event.preventDefault();
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
-                $tab = $('#tab-resource_touristGroup-add-content'),
+                $tab = $('#tab-resource_touristGroup-add-content'),startTime,
                 lineProductId = $tr.data('id');
 
             if (lineProductId == null || lineProductId == '' || lineProductId == undefined) {
@@ -741,7 +745,10 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
             $tab.find('.T-startTime').data('days',$tr.data('days'));
             $tab.find('.T-days').val($tr.data('days'));
-
+            startTime = $tab.find('.T-startTime').val();
+            if (!!startTime) {
+                $tab.find('.T-endTime').val(Tools.addDay(startTime, $tr.data('days') - 1));
+            };
             var $form = $tab.find('.T-touristGroupMainForm');
             if (!!$form.find('.T-quoteNumber').val()) {
                 // 有报价产品切换到普通线路产品，则清空报价的数据
