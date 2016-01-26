@@ -225,8 +225,9 @@
                     {{each day.shopArrange as shopArrangeList}}
                     {{each shopArrangeList.shopArrangePolicy as arrange index}}
                     {{if arrange != null}}
-                    <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}">
-                        {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">第{{arrange.whichDay}}天</td>{{/if}}
+                    <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}" 
+                    whichDay = "{{arrange.whichDay}}">
+                        {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="whichDay"></span></td>{{/if}}
                         {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
                         <td>{{arrange.shop.name}}</td>
                         <td><span class="F-float F-money">{{arrange.consumeMoney}}</span><input policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
@@ -403,7 +404,7 @@
                     {{each arrangeIncomePaymentList as otherInCome}}
                     {{if otherInCome != null}}
                     <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}" whichDay="{{otherInCome.whichDay}}">
-                        <td whichDay="{{otherInCome.whichDay}}">第{{otherInCome.whichDay}}<span class="whichDay"></span></td>
+                        <td><span class="whichDay"></span></td>
                         <td>{{otherInCome.title}}</td>
                         <td><span>{{otherInCome.price}}</span><input style="width:90px;" type="hidden" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
