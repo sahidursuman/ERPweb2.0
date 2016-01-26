@@ -255,7 +255,7 @@ define(function(require, exports) {
         //声明一个全局的游客小组ID用于跳转到中转安排
         touristGroup.visitorId = touristGroupId;
         $.ajax({
-            url: touristGroup.url("viewTouristGroupDetails", "view"),
+            url: touristGroup.url("viewTransferTouristGroup", "view"),
             data: "id=" + touristGroupId + "&type=" + typeOut+"&transferId="+id,
             type: 'POST',
             success: function(data) {
@@ -268,6 +268,8 @@ define(function(require, exports) {
                     if (status == undefined || status == null || status == "") {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
                             var $updateTabId = $('#' + updateTab);
+                            $updateTabId.find('input[name=lineProductIdName]').val("");
+                            $updateTabId.find('input[name=lineProductId]').val("");
                             $updateTabId.find('input[name=accompanyGuideName]').val("");
                             $updateTabId.find('input[name=accompanyGuideMobile]').val("");
                             $updateTabId.find('input[name=otaOrderNumber]').val("");
@@ -2198,6 +2200,7 @@ define(function(require, exports) {
             tabId = addTabId;
             if (typeInner=='out') {
                 tabId = updateTabId
+                url = touristGroup.url("saveTransferTouristGroup", "add");
             };
         };
 

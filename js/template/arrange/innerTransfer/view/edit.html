@@ -89,20 +89,41 @@
   <tbody class="addTransferCost">
 		<!-- 其他费用 -->
 		{{each innerTransfer.innerTransferFeeSet as rs}}
+		{{if isParent==1}}
 			<tr data-entity-id={{rs.id}}>
 				<td>	
-				  <select name="type" class="col-sm-10 col-sm-offset-1">
-				       {{#rs.type | getFeeItemType: false}}
+				  <select name="type" class="col-sm-10 col-sm-offset-1" {{if rs.type==3}}disabled{{/if}}>
+				       {{#rs.type | getFeeItemType: true}}
 				  </select>
 				</td>
-				<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}" /></td>
-				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" /></td>
+				<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}" {{if rs.type==3}}disabled{{/if}}/></td>
+				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" {{if rs.type==3}}disabled{{/if}}/></td>
 				<td>
-					<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
+					<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" {{if rs.type==3}}disabled{{/if}}/>
 				</td>
-				<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}" /></td>
-				<td><a class="cursor T-edittransfer-delete">删除</a></td>
+				<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}" {{if rs.type==3}}disabled{{/if}}/></td>
+				<td>{{if rs.type!=3}}<a class="cursor T-edittransfer-delete">删除</a>{{/if}}</td>
 			</tr>
+			{{else}}
+			{{if rs.type!=3}}
+				<tr data-entity-id={{rs.id}}>
+					<td>	
+					  <select name="type" class="col-sm-10 col-sm-offset-1">
+					       {{#rs.type | getFeeItemType: false}}
+					  </select>
+					</td>
+					<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}" /></td>
+					<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" /></td>
+					<td>
+						<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
+					</td>
+					<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}" /></td>
+					<td><a class="cursor T-edittransfer-delete">删除</a></td>
+				</tr>
+			{{/if}}
+
+
+		{{/if}}
 		{{/each}}
 
 	</tbody>
@@ -240,9 +261,7 @@
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
 										<td>  
-										   <select name="type" class="col-sm-10 col-sm-offset-1" disabled>
-										       {{#rs.type | getFeeItemType: false}}
-										  </select>
+										  <input value="{{rs.name}}" readonly="readonly" type="text" name="type" class="col-sm-12">
 				                        </td>
 										<td><span class=" F-float F-count">{{rs.count}}</span></td>
 										<td><span class=" F-float F-money">{{rs.price}}</span></td>
