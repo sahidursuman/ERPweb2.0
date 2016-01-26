@@ -1624,8 +1624,8 @@ define(function(require, exports){
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
+		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
 		'<td><input name="guideRate" style="width:60px;" type="text"></td>'+
