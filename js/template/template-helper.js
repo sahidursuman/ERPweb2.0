@@ -226,9 +226,12 @@ template.helper("getTaskDesc", function(status) {
         default:     return '全程';
     }
 });
-template.helper("getTaskSelect", function(status) {
+template.helper("getTaskSelect", function(status, isCar) {
     var str = ['<select name="taskType">'],
-        desc = ['全程', '接机', '送机', '前段', '中段', '后段','小车接客'];
+        desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
+    if (isCar) {
+        desc.push('小车接客');
+    }
    
     for (var i = 0, len = desc.length;i < len; i ++) {
         str.push('<option value="'+ i + '" '+ (status == i?'selected': '')+'>'+ desc[i] +'</option>');
