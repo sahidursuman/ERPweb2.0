@@ -1532,16 +1532,17 @@ define(function(require, exports){
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
-            var needCount = parseFloat(realCount)-parseFloat(memberCount);
-            var needIncome = $parent.find('.needIncome');
-            /*if(needCount<0){
-            	needIncome.text(0)
-            }else{
-            	var $income = parseFloat(marketPrice)*parseFloat(needCount);
+            //
+            //明细的应收
+            var needCount = $parent.find('.needIncomeCount');
+            var detailNeedIncome = $parent.find('.needIncome').text();
+            	var $income = parseInt(detailNeedIncome)/parseInt(marketPrice);
             	$income = Count.changeTwoDecimal($income);
-				needIncome.text($income);
-            };*/
+            	$income = parseInt($income);
+				needCount.text($income);
 
+			//报账/审核
+			var needIncome = $parent.find('.needIncome');
             if ($obj.is('[name="needCount"]'))  {
             	// 如果修改的是数量--计算现收、应收和现收相等
             	var incomeMoney = (incomeCount.val()*marketPrice);
