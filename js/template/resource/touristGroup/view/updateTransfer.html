@@ -18,7 +18,7 @@
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber"><span class="necessary">*</span> 线路产品：</label>
 	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName" readonly="readonly" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}"/>
-	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProductId}}" />
+	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProduct.id}}" />
 	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
 	    	<button class="search-btn btn-sm T-travelLine-search" onsubmit="return false">
 	        	<i class="ace-icon fa fa-search "></i>搜索
@@ -48,13 +48,13 @@
 
         <div class="form-group fixed-width">
     		<label><span class="necessary">*</span>出游日期：</label>
-            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status != 1}}readonly="readonly"{{/if}} />
+            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} />
             <input type="hidden" name="days" class="form-control T-days" value="{{touristGroupDetail.lineProduct.days}}"/>
     	</div>
 
         <div class="form-group fixed-width">
             <label><span class="necessary">*</span>完团日期：</label>
-            <input type="text" name="endTime"  class="form-control date-picker datepicker T-endTime"  value="{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}"/>
+            <input type="text" name="endTime"  class="form-control date-picker datepicker T-endTime"  value="{{if !!touristGroupDetail.lineProduct.id}}{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}{{/if}}"/>
         </div>
 
 

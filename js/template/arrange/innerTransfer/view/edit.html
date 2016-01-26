@@ -261,9 +261,7 @@
 									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
 									<tr>
 										<td>  
-										   <select name="type" class="col-sm-10 col-sm-offset-1" disabled>
-										       {{#rs.type | getFeeItemType: false}}
-										  </select>
+										  <input value="{{rs.name}}" readonly="readonly" type="text" name="type" class="col-sm-12">
 				                        </td>
 										<td><span class=" F-float F-count">{{rs.count}}</span></td>
 										<td><span class=" F-float F-money">{{rs.price}}</span></td>
