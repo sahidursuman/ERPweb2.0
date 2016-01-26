@@ -251,6 +251,7 @@ define(function(require, exports) {
 						//var guideTemplate = JSON.parse(data.guideTemplate);
 						var insuranceTemplate = JSON.parse(data.insuranceTemplate);
 						var daysList = JSON.parse(data.daysList);
+						console.log(data);
 						data.viewLineProduct = {
 								lineProduct : lineProduct,
 								busCompanyTemplate : busCompanyTemplate,
@@ -258,7 +259,7 @@ define(function(require, exports) {
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
-						
+						data.serviceStandardList = JSON.parse(data.serviceStandardList);
 						Tools.addTab(menuKey+"-view","查看线路产品",viewDetailTemplate(data));
 					}
 				}
@@ -324,6 +325,7 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
+						console.log(data);
 						var lineProductDetail = JSON.parse(data.lineProduct),
 							busCompanyTemplate = JSON.parse(data.busCompanyTemplate),
 							//guideTemplate = JSON.parse(data.guideTemplate),
@@ -522,15 +524,7 @@ define(function(require, exports) {
 				var $that = $(this);
 				if($that.hasClass('T-addService')){
 					//添加服务标准到资源 KingServices.addGuideService
-					var $that = $(this).closest('tr');
-					var title = $that.find('input[name=serviceName]').val();
-					var content = $that.find('input[name=serviceContent]').val();
-					var require = $that.find('input[name=serviceRequire]').val();
-					if(title != $that.attr('name') && content != $that.attr('content') && require != $that.attr('require')){
-						ResLineProduct.addService($that);
-					}else{
-						showMessageDialog($( "#confirm-dialog-message" ),"该服务标准已经存在，不可添加");
-					};
+					ResLineProduct.addService($that);
 				}else if($that.hasClass('T-delete')){
 					//删除服务标准
 					ResLineProduct.delService($(this));
