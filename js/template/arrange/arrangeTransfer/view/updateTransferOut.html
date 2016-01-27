@@ -239,6 +239,7 @@
 										</tr>
 									</thead>
 								  <tbody>
+
 										{{each touristGroupTransfer.touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
 											<td>
@@ -246,10 +247,12 @@
 										    </td>
 											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
 											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>
-											<td><span class="F-float F-money">{{transferFeeList.price*transferFeeList.price}}</span></td>
+											<td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
 											<td>{{transferFeeList.remark}}</td>	  
 										</tr>
 										{{/each}}
+
+
 									</tbody>
 								</table>
 							</div>

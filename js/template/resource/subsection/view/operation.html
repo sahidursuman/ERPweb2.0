@@ -58,7 +58,7 @@
         </div>
     </div>
     <!--游客小组费end-->
-
+    <input type="hidden" name="flag" class="T-flag" value="{{flag}}">
 
     <div class="form-group">
         <button class="btn btn-sm btn-success T-btn-operation-add" data-mark="{{mark}}"> <i class="ace-icon fa fa-plus"></i>新增分段</button>
@@ -99,12 +99,13 @@
                         <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker col-sm-12" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
                     </td>
 
+                    <!--费用项start-->
                     {{if subList.touristGroupFeeList!=null}}
                         <td>
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px">
-                                <select name="type" data-index="{{index}}" disabled=""    data-id="{{FeeList.id}}" class="T-type pull-left">
+                         <div class="clearfix" style="margin-top:6px">
+                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"    data-id="{{FeeList.id}}" class="T-type pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
@@ -116,7 +117,7 @@
                           {{/if}}
                           {{if index>0}}
                            <div class="clearfix" style="margin-top:5px">
-                                <select name="type" data-index="{{index}}" disabled=""  data-id="{{FeeList.id}}" class="T-type pull-left">
+                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  data-id="{{FeeList.id}}" class="T-type pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
@@ -143,14 +144,23 @@
                          <td>
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-count T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-count T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{/each}}
                         </td>
                      {{/if}}
+                    <!--费用项end-->
+
+                     
+
+
+
+
+
+
 
                     <td>      
                     <div class="clearfix" style="margin-top:6px" data-id=''><input class="F-float F-money  T-payedMoney T-calc" value="" readonly type="text" name="needPayAllMoney" value=""></div>
