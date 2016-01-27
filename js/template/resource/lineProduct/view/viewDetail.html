@@ -89,6 +89,14 @@
                             </tr>
                         </thead>
                         <tbody class="T-service-list">
+                        {{each serviceStandardList as service}}
+                            <tr serviceId="{{service.id}}" name="{{service.serviceTitle}}" content="{{service.serviceContent}}" require = "{{service.serviceRequire}}">
+                                <td><input type="text" class="col-xs-12" name="serviceName" value="{{service.serviceTitle}}">
+                                <input type="hidden" name="serviceId" value="{{service.id}}"></td>
+                                <td><input type="text" class="col-xs-12" name="serviceContent" value="{{service.serviceContent}}"></td>
+                                <td><input type="text" class="col-xs-12" name="serviceRequire" value="{{service.serviceRequire}}"></td>
+                            </tr>
+                        {{/each}}
                         </tbody>
                     </table>
                 </div>
