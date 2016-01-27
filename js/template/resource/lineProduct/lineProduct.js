@@ -2730,15 +2730,21 @@ define(function(require, exports) {
 				serviceRequire:$that.find('input[name=serviceRequire]').val()
 
 			};
-
 			travelLineData.serviceStandardList.push(args);
 		});
 		//校验是否有重复的服务标准
 		var checkArr = travelLineData.serviceStandardList;
 		for(var i = 0;i<checkArr.length;i++){
-			if(checkArr[i].serviceTitle == checkArr[i+1].serviceTitle){
-				showMessageDialog($( "#confirm-dialog-message" ),"该服务标准已存在，请检查");
-				return;
+			if(i+1 !=checkArr.length){
+				if(checkArr[i].serviceTitle == checkArr[i+1].serviceTitle){
+					showMessageDialog($( "#confirm-dialog-message" ),'['+checkArr[i+1].serviceTitle+']'+"服务标准已存在，请检查");
+					return;
+				}
+			}else{
+				if(checkArr[i-1].serviceTitle == checkArr[i].serviceTitle){
+					showMessageDialog($( "#confirm-dialog-message" ),'['+checkArr[i].serviceTitle+']'+"服务标准已存在，请检查");
+					return;
+				}
 			}
 		};
 		// 存放每天安排数据的数组
