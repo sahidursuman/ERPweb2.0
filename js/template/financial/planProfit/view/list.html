@@ -51,7 +51,7 @@
 <tbody class="T-planProfit-list">
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
-		<td><a class="T-tripDetail">{{rs.tripNumber}}</a></td>
+		<td>{{rs.tripNumber}}</td>
 		<td>{{rs.lineProductName}}</td>
 		<td>{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</td>
 		<td>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
