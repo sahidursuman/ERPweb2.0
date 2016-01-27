@@ -330,7 +330,7 @@ input.datepicker {
 	position: absolute;
     right: 0;
     top: 0;
-    line-height: 24px;
+    line-height: 34px;
     padding-right: 14px;
     font-size: 12px;
     color: #e2b058;
@@ -412,6 +412,7 @@ input.datepicker {
 	padding-bottom: 10px;
 	border-bottom: 1px solid #f4f4f4;
 	margin-bottom: 10px;
+	background-color: #fafafa;
 }
 .note-guide-info > p{
 	float: left;
@@ -558,7 +559,6 @@ input.datepicker {
 	width: auto;
 	max-width: 100%;
 	height: auto;
-	margin: 0 auto;
 }
 .note-details-body > p,
 .comment-container > p{
@@ -714,6 +714,29 @@ input.datepicker {
 .hct-share-body li:hover{
 	background-color: #f3f3f3;
 	border: 1px solid #eee;
+}
+.hct-mar-auto{
+	margin-left: auto;
+	margin-right: auto; 
+}
+.hct-top-header .yj-title label.control-label{
+	font-size: 18px;
+}
+.thumbnail-img{
+	width: 100%;
+	position: relative;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+.hct-thumbnail .thumbnail-img{
+	margin-left: 0;
+}
+.thumbnail-img img{
+	display: block;
+	width: 100%;
+	visibility: hidden;
+	opacity: 0;
 }
 /*财务样式兼容*/
 .financial-search-planProfit{
