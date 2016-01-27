@@ -119,7 +119,6 @@ define(function(require, exports) {
 					// typeKey赋给value
 					lineObj[i].value = lineObj[i].typeKey;
 				}
-				console.log(lineObj);
 				if(lineObj !=null) {
 					$(objM).autocomplete('option','source', lineObj);
 					$(objM).autocomplete('search', '');
@@ -251,7 +250,6 @@ define(function(require, exports) {
 						//var guideTemplate = JSON.parse(data.guideTemplate);
 						var insuranceTemplate = JSON.parse(data.insuranceTemplate);
 						var daysList = JSON.parse(data.daysList);
-						console.log(data);
 						data.viewLineProduct = {
 								lineProduct : lineProduct,
 								busCompanyTemplate : busCompanyTemplate,
@@ -325,7 +323,6 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.log(data);
 						var lineProductDetail = JSON.parse(data.lineProduct),
 							busCompanyTemplate = JSON.parse(data.busCompanyTemplate),
 							//guideTemplate = JSON.parse(data.guideTemplate),
@@ -673,7 +670,6 @@ define(function(require, exports) {
 				}
 			},
 			select:function(event,ui){
-				console.log(ui.item);
 				var $that = $(this);
 				ResLineProduct.checkService($tab,ui.item.serviceTitle);
 				$.ajax({
@@ -852,7 +848,6 @@ define(function(require, exports) {
 							shopArray.push(json);
 						}
 	        		}
-	        		console.log(shopArray)
 	        	};
 	        	//保存函数
 	        	function saveShop(type){
@@ -1011,7 +1006,6 @@ define(function(require, exports) {
 							}]
 						}
 						selfPayArray.push(json);
-	        		console.log(selfPayArray)
 					}else{
 						for (var i = 0,len = selfPayArray.length; i < len; i++) {
 		        			if (selfPayArray[i].selfPayId == $selfPayId) {
