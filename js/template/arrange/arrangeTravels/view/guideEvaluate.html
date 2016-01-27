@@ -51,7 +51,7 @@
 	</div>
 	<div class="comment-content">
 		<div class="comment-cont-head">
-			收到的评论 {{note.commentCount}}
+			收到的评论 {{if !!guideServiceStandardCommentList}}{{guideServiceStandardCommentList.length}}{{else}}0{{/if}}
 		</div>
 		<div class="comment-cont-body">
 			{{each guideServiceStandardCommentList as rs}}
