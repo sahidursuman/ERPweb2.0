@@ -15,7 +15,9 @@
 	{{each noteList as rs}}
   		<div class="col-xs-3">
     		<div class="thumbnail hct-thumbnail" data-id="{{rs.id}}">
-      			<img class="cursor T-action T-view-group" src="{{rs.coverImage ? imgUrl + rs.coverImage : '/images/default_youji.png'}}" alt="{{rs.title}}">
+      			<div class="thumbnail-img cursor T-action T-view-group" style="background-image: url({{rs.coverImage ? imgUrl + rs.coverImage : '/images/default_youji.png'}})" title="{{rs.title}}">
+                    <img class="error-img" src="/images/loading-error.png">
+                </div>
       			<div class="caption">
         			<h3 class="cursor T-action T-view-group">{{rs.title}}</h3>
         			<div class="caption-info">

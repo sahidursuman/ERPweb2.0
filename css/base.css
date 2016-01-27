@@ -722,6 +722,22 @@ input.datepicker {
 .hct-top-header .yj-title label.control-label{
 	font-size: 18px;
 }
+.thumbnail-img{
+	width: 100%;
+	position: relative;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+.hct-thumbnail .thumbnail-img{
+	margin-left: 0;
+}
+.thumbnail-img img{
+	display: block;
+	width: 100%;
+	visibility: hidden;
+	opacity: 0;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;
