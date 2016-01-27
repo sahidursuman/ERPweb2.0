@@ -2252,7 +2252,7 @@ define(function(require, exports) {
 					lengthWhichDay = theWhichDay;
 				}
 				if(startTime != ""){
-					$days.find('[name="whichDayDate"]').val(whichDate);
+					Tools.setDatePicker($days.find('[name="whichDayDate"]').val(whichDate));
 					endTime.val(Tools.addDay(startTime, lengthWhichDay - 1));
 				}
 				if(index == $tr.length-1){
