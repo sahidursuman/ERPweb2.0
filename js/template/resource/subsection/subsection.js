@@ -263,31 +263,16 @@ define(function(require, exports) {
 			subsection.deleteOperation(id,$this);
 			subsection.$tabSub.data('isEdited', true);
 		});
-
-
-		 //删除费用项
-		subsection.$tbody.find('.T-del').on('click', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $this = $(this);
-			subsection.delFeeItem($this);
-		});
         
-		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
+		
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
 		     subsection.addOperation($(this));
 		});
+
+		//若本段核算中转选中将重装费用项带到新增分段的费用项目中
+	    subsection.checkedTransitFee(subsection.$tbody);
         
-
-		//新增费用项目
-		subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').on('click', function(event) {
-			event.preventDefault();
-			var $that = $(this),$tbody =subsection.$tbody;
-			/* Act on the event */
-			subsection.addFeeItem($that, $tbody);
-		});
-
 		/**
 		 * [addFeeItem 新增费用项目
 		 * @param {[type]} $that  [description]
@@ -298,11 +283,11 @@ define(function(require, exports) {
 		       index  = $td.find('div').length;
 		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'"  name="type"  class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
 					  +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
-                      +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+                      +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                     count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		        }
@@ -320,8 +305,34 @@ define(function(require, exports) {
 		    
 		};
 
-	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
-	    subsection.checkedTransitFee(subsection.$tbody);
+	    //删除、新增费用项
+	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-action', function(event) {
+	    	event.preventDefault();
+	    	/* Act on the event */
+	    	var $that=$(this);
+	    	    if ($that.hasClass('T-del')) {
+	    	    	subsection.delFeeItem($that); //删除费用项
+	    	    }else if($that.hasClass('T-add')){
+	    	    	subsection.addFeeItem($that, subsection.$tbody);//新增费用项
+	    	    }
+	    });
+
+	    
+
+	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('change', '.T-calc', function(event) {
+           var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
+	            if ($that.hasClass('T-count')) {  //若数量改变
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	            }else if($that.hasClass('T-price')){ //若价格改变
+	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	        };
+        });
+
+        //计算
+	    subsection.$tbody.find('.T-price').trigger('change');
+
 
 		/**
 		 * [startIntime 中转分段初日期
@@ -373,7 +384,7 @@ define(function(require, exports) {
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
 			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
             +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
-            +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
+            +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc " readonly></div></td>'
@@ -427,7 +438,7 @@ define(function(require, exports) {
 					divIndex = $div.index(),
 					index = $div.length,
 					entityId = $this.closest('div').find('.T-type').data("id");
-					flag = $this.closest('div').find('.T-type').data("Flag");
+					flag = $this.closest('div').find('.T-type').attr("data-Flag");
 				$div.closest('tr').find('div:not(.delete)').find('.T-count').eq(divIndex).fadeOut(function(){
 					$(this).closest('div').remove();
 				});
@@ -515,28 +526,6 @@ define(function(require, exports) {
 	    	
 	    });
 
-	};
-
-
-
-
-
-    /**
-     * 费用项目监听change
-     * @return {[type]} [description]
-     */
-	subsection.feeItemChange = function(){
-		subsection.$tbody.on('change', '.T-calc', function(event) {
-            /* Act on the event */
-           var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
-	            if ($that.hasClass('T-count')) {  //若数量改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
-	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
-	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
-	        };
-        });
 	};
 
 	/**
