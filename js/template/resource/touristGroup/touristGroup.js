@@ -271,11 +271,8 @@ define(function(require, exports) {
                             $updateTabId.find('input[name=endTime]').val("");
                             $updateTabId.find('input[name=lineProductId]').val("");
                             $updateTabId.find('input[name=lineProductId]').val("");
-                            $updateTabId.find('input[name=fromPartnerAgency]').val("");
-                            $updateTabId.find('input[name=fromPartnerAgencyId]').val("");
                             $updateTabId.find('input[name=partnerAgencyNameList]').val("");
                             $updateTabId.find('input[name=partnerAgencyContactId]').val("");
-
                             $updateTabId.find('input[name=accompanyGuideName]').val("");
                             $updateTabId.find('input[name=accompanyGuideMobile]').val("");
                             $updateTabId.find('input[name=otaOrderNumber]').val("");
