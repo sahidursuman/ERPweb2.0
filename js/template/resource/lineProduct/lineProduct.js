@@ -531,7 +531,12 @@ define(function(require, exports) {
 					//删除服务标准
 					ResLineProduct.delService($(this));
 				}
-			})
+			}).on('change','input[name=serviceName]',function(){
+				//校验服务标准是否重复
+				ResLineProduct.checkService($tab,$(this));
+			});
+			//获取服务标准
+			ResLineProduct.getServiceList($tab,$tab.find('.T-service-list'));
 			// 绑定安排的拖动事件				
 			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
@@ -585,7 +590,7 @@ define(function(require, exports) {
 		'</tr>';
 		$tbody.append(html);
 		//获取服务标准
-		ResLineProduct.getServiceList($tbody);
+		ResLineProduct.getServiceList($obj,$tbody);
 	};
 	//添加服务标准到资源
 	ResLineProduct.addService = function($obj){
@@ -620,8 +625,43 @@ define(function(require, exports) {
 			$tr.remove();
 		};
 	};
+	//校验服务标准是否重复
+	ResLineProduct.checkService = function($tab){
+		//获取服务标准
+		var serviceStandardList = [];
+		var flag = false;
+		$tab.find('.T-service-list tr').each(function(index,el){
+			var $that = $(this);
+			var args = {
+				serviceTitle:$that.find('input[name=serviceName]').val(),
+				serviceContent:$that.find('input[name=serviceContent]').val(),
+				serviceRequire:$that.find('input[name=serviceRequire]').val()
+			};
+			serviceStandardList.push(args);
+		});
+		console.log(serviceStandardList);
+		//校验是否有重复的服务标准
+		if(serviceStandardList.length>=2){
+			for(var i = 0;i<serviceStandardList.length;i++){
+				
+				if(i+1 !=serviceStandardList.length){
+					if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
+						showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i+1].serviceTitle+']'+"服务标准已存在，请检查");
+						flag = true;
+						return;
+					}
+				}else{
+					if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
+						showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i].serviceTitle+']'+"服务标准已存在，请检查");
+						flag = true;
+						return;
+					}
+				}
+			}
+		};
+	};
 	//获取导游服务标准
-	ResLineProduct.getServiceList = function($obj){
+	ResLineProduct.getServiceList = function($tab,$obj){
 		var $clickObj = $obj.find('input[name=serviceName]');
 		$clickObj.autocomplete({
 			minLength:0,
@@ -630,25 +670,29 @@ define(function(require, exports) {
 				}
 			},
 			select:function(event,ui){
-				console.log(ui.item);
 				var $that = $(this);
-				$.ajax({
-					url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
-					data:{
-						id:ui.item.id
-					},
-					type:'POST',
-					showLoading:false,
-					success:function(data){
-						if(showDialog(data)){
-							var $tr = $that.closest('tr');
-							data.gssTemplate = JSON.parse(data.gssTemplate);
-							$tr.find('input[name=serviceContent]').val(data.gssTemplate.serviceContent);
-							$tr.find('input[name=serviceRequire]').val(data.gssTemplate.serviceRequire);
-							$tr.find('input[name=serviceId]').val(ui.item.id);
+				var flag = ResLineProduct.checkService($tab);
+				console.log(flag);
+				
+					$.ajax({
+						url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
+						data:{
+							id:ui.item.id
+						},
+						type:'POST',
+						showLoading:false,
+						success:function(data){
+							if(showDialog(data)){
+								var $tr = $that.closest('tr');
+								data.gssTemplate = JSON.parse(data.gssTemplate);
+								$tr.find('input[name=serviceContent]').val(data.gssTemplate.serviceContent);
+								$tr.find('input[name=serviceRequire]').val(data.gssTemplate.serviceRequire);
+								$tr.find('input[name=serviceId]').val(ui.item.id);
+							}
 						}
-					}
-				});
+					});
+				
+				
 			}
 		}).off('click').on('click',function(){
 			var obj = this;
@@ -2672,21 +2716,29 @@ define(function(require, exports) {
 		travelLineData.serviceStandardList = [];
 		$tab.find('.T-service-list tr').each(function(index,el){
 			var $that = $(this);
-			var id;
+			var id = '';
 			if(!!$that.attr('serviceId')){
 				id = $that.attr('serviceId');
-			}else{
-				id = ''
 			}
+
 			var args = {
 				id:id,
 				serviceTitle:$that.find('input[name=serviceName]').val(),
 				serviceContent:$that.find('input[name=serviceContent]').val(),
 				serviceRequire:$that.find('input[name=serviceRequire]').val()
 
-			}
+			};
+
 			travelLineData.serviceStandardList.push(args);
 		});
+		//校验是否有重复的服务标准
+		var checkArr = travelLineData.serviceStandardList;
+		for(var i = 0;i<checkArr.length;i++){
+			if(checkArr[i].serviceTitle == checkArr[i+1].serviceTitle){
+				showMessageDialog($( "#confirm-dialog-message" ),"该服务标准已存在，请检查");
+				return;
+			}
+		};
 		// 存放每天安排数据的数组
 		travelLineData.lineDayList = [];
 		
