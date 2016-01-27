@@ -300,6 +300,7 @@
 								$(".sumCommentCount").text(data.lineProduct.sumCommentCount);
 								$(".sumShareCount").text(data.lineProduct.sumShareCount);
 								$(".sumViewCount").text(data.lineProduct.sumViewCount);
+								setShare(data.lineProduct.name);
 							}
 							var images = [];
 							var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
@@ -335,7 +336,7 @@
 											'				<a class="a-praise"><i class="icon i-praise"></i>'+list[i].likeCount+'</a>'+
 											'				<a href="groupEvaluation.html?noteId='+list[i].id+'"><i class="icon i-comment"></i>'+list[i].commentCount+'</a>'+
 											'			</div>'+
-											'			<div class="item-foot-date">'+list[i].updateTime+'</div>'+
+											'			<div class="item-foot-date">'+list[i].startTime+'</div>'+
 											'		</div>'+
 											'	</div>'+
 											'</div>';
@@ -421,6 +422,24 @@
 			});
 			getItemList();
 		});
+		function setShare(title){
+			with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+			window._bd_share_config = {
+	            common : {
+	                bdText : title, 
+	                bdDesc : title, 
+	                bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
+	            },
+	            share : [{
+	                "bdSize" : 16
+	            }],
+	            slide : [{	   
+					bdImg : 2,
+					bdPos : "right",
+					bdTop : 100
+				}],
+	        };
+		}
 	</script>
 </body>
 </html>
