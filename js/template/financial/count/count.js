@@ -411,6 +411,9 @@ define(function(require, exports){
 			}
 			
 		});
+		$shopObj.on('click','.T-addShop',function(){
+			Count.addShop($(this));
+		})
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
 			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
@@ -1227,6 +1230,26 @@ define(function(require, exports){
 			//计算团成本
 			Count.tripCost($parentObj);
 		});
+	};
+	//新增商品
+	Count.addShop = function($obj){
+		var html = '<tr>'+
+			'<td><input type="text"></td>'+
+			'<td></td>'+
+			'<td></td>'+
+			'<td></td>'+
+			'<td></td>'+
+			'<td></td>'+
+			'<td></td>'+
+			'</tr>';
+			var $that = $obj, $next,
+				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
+				td_cnt = $tr.children('td').length;
+
+			rowSpan = rowSpan * 1 + 1;
+			$tr.children('td[rowspan]').prop('rowspan', rowSpan);
+			console.log(rowSpan);
+			$that.closest('tr').after(html);
 	};
 	//购物金额计算
 	Count.autoShopSum = function($obj,$parentObj){
