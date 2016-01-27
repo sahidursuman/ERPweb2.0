@@ -798,6 +798,10 @@ define(function(require, exports) {
 
 	tripPlan.savePlanData = function($tab, validate, tabArgs){
 		if(!validate.form())return;
+		if (!F.judgmentTimeInterval($tab.find('[name=startTime]').val(), $tab.find('[name=endTime]').val(), $tab.find('[name=whichDayDate]'))) {
+			return false;
+		}
+		
 		var arge = $tab.find('.T-basic-info').serializeJson();
 		var tripPlanId = $tab.find('.T-tab').data("id");
 		if(tripPlanId){
@@ -1036,6 +1040,9 @@ define(function(require, exports) {
 	 */
 	tripPlan.saveSinglePlan = function($tab, validate, tabArgs) {
 		if(!validate.form())return;
+		if (!F.judgmentTimeInterval($tab.find('[name=startTime]').val(), $tab.find('[name=endTime]').val(), $tab.find('[name=whichDayDate]'))) {
+			return false;
+		}
 		var args = $tab.find('.T-basic-info').serializeJson();
 		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
 		args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
@@ -2312,6 +2319,32 @@ define(function(require, exports) {
         	}else{
 				showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
         	}
+		},
+		judgmentTimeInterval: function(startTime, endTime, $planObj) {
+			var res = true, len = Tools.getDateDiff(startTime, endTime) + 1
+
+			if (!startTime || !endTime || !$planObj.length) {
+				showMessageDialog($( "#confirm-dialog-message" ), '请添加行程安排');
+				return false;
+			}
+			if (len != $planObj.length) {
+				res = false;
+				showMessageDialog($( "#confirm-dialog-message" ), '行程安排天数不正确');
+			}
+
+			var days = [];
+			$planObj.each(function(index, el) {
+				days.push($(this).val());
+			});
+
+			for (var i = 0; i < len; i ++) {
+				if (days.indexOf(Tools.addDay(startTime , i)) < 0) {
+					res = false;
+					showMessageDialog($( "#confirm-dialog-message" ), '行程安排不连续');
+					break;
+				}
+			}
+			return res;
 		}
 	};
 
