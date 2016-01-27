@@ -77,9 +77,9 @@
             <tbody class="T-list">
             {{each touristGroupInnerTransferList as innerTransferList index}}
             <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}"> 
-                <td>{{if innerTransferList.orderNumber == null || innerTransferList.orderNumber == ""}}-{{else}}{{innerTransferList.orderNumber}}{{/if}}</td>
+                <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{if innerTransferList.orderNumber == null || innerTransferList.orderNumber == ""}}-{{else}}{{innerTransferList.orderNumber}}{{/if}}</a></td>
                 <!-- <td>{{innerTransferList.fromBusinessGroupName}}</td> --> 
-                <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{innerTransferList.lineProductName}}</a></td>
+                <td>{{innerTransferList.lineProductName}}</td>
                 <!--给日期转码-->
                 <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{if innerTransferList.contact == null || innerTransferList.contact ==""}}无{{else}}{{innerTransferList.contact}}{{/if}}</td>
