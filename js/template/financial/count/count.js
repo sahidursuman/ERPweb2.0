@@ -371,7 +371,6 @@ define(function(require, exports){
 	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
 	                };
 	                var html = Reimbursement(tmp);
-	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -412,14 +411,18 @@ define(function(require, exports){
 			
 		});
 		$shopObj.on('click','.T-addShop',function(){
-			Count.addShop($(this));
-		})
-		//填写金额带出社佣、导佣
-		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
+			Count.addShop($(this),$obj);
+		}).on('click','.T-delShop',function(){
+			Count.delShop($(this));
+		}).on('blur','input[name=consumeMoney]',function(){
+			//填写金额带出社佣、导佣 T-del
 			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
+		}).on('click','.T-del',function(){
+			//删除新增的购物安排
+			Count.delShopArrange($(this));
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -430,7 +433,6 @@ define(function(require, exports){
 		if($shopPolicyObj.length>0){
 			Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
 		};
-		
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
 		$selfObj.find('input[type=text]').off('change').on('change',function(){
@@ -1168,23 +1170,26 @@ define(function(require, exports){
 			td = '<td></td>'
 		};
 		var html = '<tr>'+
-		'<td class="countWhichDaysContainer"></td>'+
-		'<td><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
-		'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" /></td>'+
+		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
+		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
+		'<td>人数返佣</td>'+
 		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="sumMoney"></span></td>'+
 		'<td><input type="text" name="travelAgencyRate" style="width:90px;"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
 		'<td><span class="travelAgencyRateMoney"></span></td>'+
 		'<td><input type="text" name="guideRate" style="width:90px;"/><input type="hidden" name="guideRateMoney" /></td>'+
 		'<td><span class="guideRateMoney"></span></td>'+
-		'<td><input type="text" name="customerRebateMoney" style="width:90px;"/></td>'+
-		'<td><span class="sumCustomerRebateMoney"></span></td>'+
-		'<td><input type="text" name="parkingRebateMoney" style="width:90px;"/></td>'+
-		'<td><span class="sumParkingRebateMoney"></span></td>'+
-		'<td><span class="T-shopIncome"></span></td>'+
-		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
+		'<td rowspan="2"><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
 		td+
+		'</tr>'+
+		'<tr>'+
+		'<td>停车返佣&nbsp;&nbsp;<a href="javascript:void(0)" class="T-addShop">[增加]</a></td>'+
+		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
+		'<td><span style="color:#bbb;">查看</span></td>'+
+		'<td><input type="text" name="travelAgencyRate" style="width:90px;"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><span class="travelAgencyRateMoney"></span></td>'+
+		'<td><input type="text" name="guideRate" style="width:90px;"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><span class="guideRateMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1208,48 +1213,96 @@ define(function(require, exports){
 			var date =$parentObj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
 		});
-		//删除新增的购物安排
-		$bodyObj.find('.T-del').off('click').on('click',function(){
-			var $tr = $(this).closest('tr');
-			$tr.fadeOut(function(){
-                $(this).remove();
-            });
-			var $sumIncome = $tr.find('.T-shopIncome').text();
-			var $tripIncome = $parentObj.find('.tripIncome-shopTravelAgencyRateMoney');
-			var $newTripIncome = parseFloat(parseFloat($tripIncome.text()-$sumIncome));
-			$newTripIncome = Count.changeTwoDecimal($newTripIncome);
-			$tripIncome.text($newTripIncome);
-			//删除计算团成本的购物返佣
-			var $guideRateMoney = $tr.find('.guideRateMoney').text();
-			var $tripCost = $parentObj.find('.tripCost-guideshopFee');
-			var $newTripCost = parseFloat(parseFloat($tripCost.text()-$guideRateMoney));
-			$newTripCost = Count.changeTwoDecimal($newTripCost);
-			$tripCost.text($newTripCost);
-			//计算团收入
-			Count.tripIncome($parentObj);
-			//计算团成本
-			Count.tripCost($parentObj);
-		});
 	};
 	//新增商品
-	Count.addShop = function($obj){
+	Count.addShop = function($obj,$parentObj){
 		var html = '<tr>'+
-			'<td><input type="text"></td>'+
-			'<td></td>'+
-			'<td></td>'+
-			'<td></td>'+
-			'<td></td>'+
-			'<td></td>'+
-			'<td></td>'+
+			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<a href="javascript:void(0)" class="T-delShop">[删除]</a></td>'+
+			'<td><input type="text" name="consumeMoney" style="width:90px;"></td>'+
+			'<td><span style="color:#bbb;">查看</span></td>'+
+			'<td><input type="text" name="travelAgencyRate" style="width:90px;"><input type="hidden" name="travelAgencyRateMoney"></td>'+
+			'<td><span class="travelAgencyRateMoney"></span></td>'+
+			'<td><input type="text" name="guideRate" style="width:90px;"><input type="hidden" name="guideRateMoney"></td>'+
+			'<td><span class="guideRateMoney"></span></td>'+
 			'</tr>';
 			var $that = $obj, $next,
 				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
 				td_cnt = $tr.children('td').length;
-
-			rowSpan = rowSpan * 1 + 1;
-			$tr.children('td[rowspan]').prop('rowspan', rowSpan);
-			console.log(rowSpan);
-			$that.closest('tr').after(html);
+			$next =  $that.closest('tr').nextAll();
+			if($next.length>0){
+				rowSpan = rowSpan * 1 + 1;
+				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
+				for(var i = 0;i<$next.length;i++){
+					var tdLen = $next.eq(i).children('td').length;
+					if( tdLen == td_cnt){
+						$next.eq(i).prev().after(html);
+						break;
+					}else{
+						console.log(1);
+						$next.eq(i).after(html);
+						break;
+					}
+				};
+				
+			}else{
+				rowSpan = rowSpan * 1 + 1;
+				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
+				$that.closest('tr').after(html);
+			};
+			//商品选择
+			/*var $shopObj = $parentObj.find('.T-count-shopping');
+			var $shopPolicyObj = $shopObj.find('input[name=shopPolicy]');
+			if($shopPolicyObj.length>0){
+				Count.getShopPolicy($shopPolicyObj.closest('tr'),$obj);
+			};*/
+	};
+	//删除新增的商品
+	Count.delShop = function($obj){
+		var $tr = $obj.closest('tr');
+		var $prev = $tr.prevAll(),
+			td_cnt = $tr.children('td').length;
+		for(var i = 0; i<$prev.length;i++){
+			var tdLen = $prev.eq(i).children('td').length;
+			if(tdLen>td_cnt){
+				var rowSpan = $prev.eq(i).children('td').eq(0).attr('rowspan');
+				rowSpan = rowSpan*1 - 1;
+				$prev.eq(i).children('td[rowspan]').prop('rowspan', rowSpan);
+				$tr.remove();
+				break;
+			}
+		}
+	};
+	//删除新增的购物安排
+	Count.delShopArrange = function($obj,$parentObj){
+		var $tr = $obj.closest('tr'),
+			$nextTr = $tr.nextAll(),
+			td_cnt = $tr.children('td').length;
+		if($nextTr.length>2){
+			$tr.remove();
+			for(var i = 0;i<$nextTr.length;i++){
+				var tdLen = $nextTr.eq(i).children('td').length;
+				if(tdLen == td_cnt){
+					break;
+				}else{
+					if(i+1==$nextTr.length ){
+						if(!!$nextTr.eq(i).next()){
+							$nextTr.eq(i).remove();
+						}else{
+							$nextTr.eq(i-1).remove();
+						}
+					}else{
+						$nextTr.eq(i).remove();
+					}
+				}
+			};
+		}else{
+			for(var i = 0;i<$nextTr.length;i++){
+				var tdLen = $nextTr.eq(i).children('td').length;
+				$nextTr.eq(i).remove();
+				$tr.remove();
+			};
+		}
+		
 	};
 	//购物金额计算
 	Count.autoShopSum = function($obj,$parentObj){
@@ -1554,17 +1607,16 @@ define(function(require, exports){
             incomeMoney = Count.changeTwoDecimal(incomeMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
-            //计算应收（单价*（实际数量-计划数量））
-            var needCount = parseFloat(realCount)-parseFloat(memberCount);
-            var needIncome = $parent.find('.needIncome');
-            /*if(needCount<0){
-            	needIncome.text(0)
-            }else{
-            	var $income = parseFloat(marketPrice)*parseFloat(needCount);
+           //明细的应收
+            var needCount = $parent.find('.needIncomeCount');
+            var detailNeedIncome = $parent.find('.needIncome').text();
+            	var $income = parseInt(detailNeedIncome)/parseInt(marketPrice);
             	$income = Count.changeTwoDecimal($income);
-				needIncome.text($income);
-            };*/
+            	$income = parseInt($income);
+				needCount.text($income);
 
+			//报账/审核
+			var needIncome = $parent.find('.needIncome');
             if ($obj.is('[name="needCount"]'))  {
             	// 如果修改的是数量--计算现收、应收和现收相等
             	var incomeMoney = (incomeCount.val()*marketPrice);
@@ -1581,11 +1633,19 @@ define(function(require, exports){
             	count = Count.changeTwoDecimal(count);
             	count = parseInt(count);
             	incomeCount.val(count);
-            	needIncome.text(incomeMoney)
+            	needIncome.text(incomeMoney);
             };
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
             $parent.find('.selfMoney').val($selfSum);
+			//导游佣金= (应收数量)*(单价-低价)*导佣比例
+			var needCountSum = 0;
+			if($parent.find('input[name=needCount]').length>0){
+				needCountSum = $parent.find('input[name=needCount]').val();
+			}else{
+				needCountSum = $parent.find('.needIncomeCount').text();
+			}
+            
 			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
 			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
@@ -3308,7 +3368,7 @@ define(function(require, exports){
                 selectText += '<option value="'+(i+1)+'">'+Tools.addDay(startTime, i)+'</option>';
             }
             selectText += '</select>';
-            tr.eq(tr.length-1).find(".countWhichDaysContainer").html(selectText);
+            tr.eq(tr.length-2).find(".countWhichDaysContainer").html(selectText);
         }else{
             $("td.whichDaysContainer").each(function(index){
                 var val = $(this).attr("value");

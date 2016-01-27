@@ -40,27 +40,27 @@
         <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}" shopArrid = "{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{shopArrangeList.shopArrangePolicy.length}}">
             {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="whichDay"></span> </td>{{/if}}
             {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
-            <td>{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.name}}&nbsp;&nbsp;
-            <a href="javascript:void(0)" class="T-addShop">[增加]</a>{{else}}<input name="shopPolicyName" value="" type="text"><input name="shopPolicyId" type="hidden">&nbsp;&nbsp;<a href="javascript:void(0)">[增加]</a>{{/if}}</td>
-            <td><input class="F-float F-money" policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
-            {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-            <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+            <td><div data-index="{{index+1}}">{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.name}}&nbsp;&nbsp;
+            <a href="javascript:void(0)" class="T-addShop">[增加]</a>{{else}}<input name="shopPolicyName" value="" type="text"><input name="shopPolicyId" type="hidden">&nbsp;&nbsp;<a href="javascript:void(0)">[增加]</a>{{/if}}</div></td>
+            <td><div data-index="{{index+1}}"><input class="F-float F-money" policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
+            {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></div></td>
+            <td><div data-index="{{index+1}}">{{if arrange.billImage != null && arrange.billImage != ""}}
                     <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
                 {{else}}
                     <span style="color:#bbb;">查看</span>
-                {{/if}}
+                {{/if}}</div>
             </td>
             
-            <td><input name="travelAgencyRate" style="width:90px;" type="text" value="{{arrange.travelAgencyRate*100}}" old="{{arrange.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+            <td><div data-index="{{index+1}}"><input name="travelAgencyRate" style="width:90px;" type="text" value="{{arrange.travelAgencyRate*100}}" old="{{arrange.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></div></td>
             
-            <td><span class="travelAgencyRateMoney F-float F-money">{{arrange.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{arrange.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td><div data-index="{{index+1}}"><span class="travelAgencyRateMoney F-float F-money">{{arrange.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{arrange.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></div></td>
             
-            <td><input name="guideRate" style="width:90px;" type="text" value="{{arrange.guideRate*100}}" old="{{arrange.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td><div data-index="{{index+1}}"><input name="guideRate" style="width:90px;" type="text" value="{{arrange.guideRate*100}}" old="{{arrange.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></div></td>
             
-            <td><span class="guideRateMoney F-float F-money">{{arrange.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{arrange.guideRateMoney}}" 
-            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td><div data-index="{{index+1}}"><span class="guideRateMoney F-float F-money">{{arrange.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{arrange.guideRateMoney}}" 
+            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></div></td>
 
-            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</td>{{/if}}
+            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><div data-index="{{index+1}}">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</div></td>{{/if}}
 
             {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
         </tr>
