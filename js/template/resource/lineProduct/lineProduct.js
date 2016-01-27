@@ -626,10 +626,10 @@ define(function(require, exports) {
 		};
 	};
 	//校验服务标准是否重复
-	ResLineProduct.checkService = function($tab){
+	ResLineProduct.checkService = function($tab,val){
+
 		//获取服务标准
 		var serviceStandardList = [];
-		var flag = false;
 		$tab.find('.T-service-list tr').each(function(index,el){
 			var $that = $(this);
 			var args = {
@@ -639,24 +639,27 @@ define(function(require, exports) {
 			};
 			serviceStandardList.push(args);
 		});
-		console.log(serviceStandardList);
 		//校验是否有重复的服务标准
 		if(serviceStandardList.length>=2){
 			for(var i = 0;i<serviceStandardList.length;i++){
-				
-				if(i+1 !=serviceStandardList.length){
-					if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
-						showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i+1].serviceTitle+']'+"服务标准已存在，请检查");
-						flag = true;
-						return;
+				if(!!val){
+					if(serviceStandardList[i].serviceTitle == val){
+						showMessageDialog($( "#confirm-dialog-message" ),'['+val+']'+"服务标准已存在，请检查");
 					}
 				}else{
-					if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
-						showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i].serviceTitle+']'+"服务标准已存在，请检查");
-						flag = true;
-						return;
+					if(i+1 !=serviceStandardList.length){
+						if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
+							showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i+1].serviceTitle+']'+"服务标准已存在，请检查");
+							return;
+						}
+					}else{
+						if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
+							showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i].serviceTitle+']'+"服务标准已存在，请检查");
+							return;
+						}
 					}
 				}
+				
 			}
 		};
 	};
@@ -670,27 +673,26 @@ define(function(require, exports) {
 				}
 			},
 			select:function(event,ui){
+				console.log(ui.item);
 				var $that = $(this);
-				var flag = ResLineProduct.checkService($tab);
-				console.log(flag);
-				
-					$.ajax({
-						url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
-						data:{
-							id:ui.item.id
-						},
-						type:'POST',
-						showLoading:false,
-						success:function(data){
-							if(showDialog(data)){
-								var $tr = $that.closest('tr');
-								data.gssTemplate = JSON.parse(data.gssTemplate);
-								$tr.find('input[name=serviceContent]').val(data.gssTemplate.serviceContent);
-								$tr.find('input[name=serviceRequire]').val(data.gssTemplate.serviceRequire);
-								$tr.find('input[name=serviceId]').val(ui.item.id);
-							}
+				ResLineProduct.checkService($tab,ui.item.serviceTitle);
+				$.ajax({
+					url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
+					data:{
+						id:ui.item.id
+					},
+					type:'POST',
+					showLoading:false,
+					success:function(data){
+						if(showDialog(data)){
+							var $tr = $that.closest('tr');
+							data.gssTemplate = JSON.parse(data.gssTemplate);
+							$tr.find('input[name=serviceContent]').val(data.gssTemplate.serviceContent);
+							$tr.find('input[name=serviceRequire]').val(data.gssTemplate.serviceRequire);
+							$tr.find('input[name=serviceId]').val(ui.item.id);
 						}
-					});
+					}
+				});
 				
 				
 			}
