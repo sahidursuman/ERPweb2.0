@@ -111,7 +111,6 @@ Analyze.getType = function(target) {
 	}
 
 	$('body').on('click', function(event) {
-		event.preventDefault();
 		target = Analyze.utility.getTarget(event);
 		Analyze.push_cnzz(target, pathname);
 	});
