@@ -734,14 +734,14 @@ FinancialService.saveJson_checking = function($tab){
 /**
  * 未完成订单提醒
  */
-FinancialService.unfinishedBill = function(args){
+FinancialService.unfinishedBill = function(args,listFn){
     var buttons = [
         {
             text: '现在去支付',
             class: "btn btn-primary btn-minier btn-heightMall",
             click: function() {
                 $(this).dialog("close");
-                KingServices.payment(args,1);
+                KingServices.payment(args,listFn);
             }
         }, 
         {
