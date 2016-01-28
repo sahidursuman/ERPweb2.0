@@ -320,5 +320,19 @@
         var res = "交通";
         return "trafic" == status ? res = "交通" : "hotel" == status ? res = "住宿" : "play" == status ? res = "游玩" : "note" == status ? res = "笔记" : "line" == status && (res = "线路简介"), 
         res;
+    }), template.helper("getBusinessTypeText", function(businessType) {
+        switch (businessType) {
+          case "guide":
+            return "导游";
+
+          case "busCompany":
+            return "车队";
+
+          case "hotel":
+            return "酒店";
+
+          default:
+            return "-";
+        }
     });
 }();

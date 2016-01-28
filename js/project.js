@@ -701,6 +701,7 @@ var modalScripts = {
 	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
 	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
+	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
@@ -2264,6 +2265,18 @@ KingServices.updateSingleTripPlan = function(id,mergeTouristGroupIdJson){
 KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
 	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
 		module.addTripPlan(false,args,mergeTouristGroupIdJson);
+	});
+}
+
+//支付
+KingServices.payment = function(args,type){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
+		module.payment(args,type);
+	});
+}
+KingServices.paymentDetail = function(orderId){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
+		module.paymentDetail(orderId);
 	});
 }
 
