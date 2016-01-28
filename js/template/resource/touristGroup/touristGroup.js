@@ -269,7 +269,7 @@ define(function(require, exports) {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
                             var $updateTabId = $('#' + updateTab);
                             $updateTabId.find('input[name=endTime]').val("");
-                            $updateTabId.find('input[name=lineProductId]').val("");
+                            $updateTabId.find('input[name=lineProductIdName]').val("");
                             $updateTabId.find('input[name=lineProductId]').val("");
                             $updateTabId.find('input[name=partnerAgencyNameList]').val("");
                             $updateTabId.find('input[name=partnerAgencyContactId]').val("");

@@ -54,7 +54,7 @@
 									<div class="form-group col-sm-12">
 										<div class="search-area">
 											<label class="col-sm-1 control-label no-padding-right">外转备注:</label>
-											<div class="col-sm-10"> <textarea class="form-control col-sm-12" name="transRemark" value="" maxlength="1000"></textarea> </div>
+											<div class="col-sm-10"> <textarea class="form-control col-sm-12" name="transRemark" value="" maxlength="1000">{{touristGroupTransfer.touristGroup.transRemark}}</textarea> </div>
 										</div>
 									</div>
 									
@@ -239,6 +239,7 @@
 										</tr>
 									</thead>
 								  <tbody>
+
 										{{each touristGroupTransfer.touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
 											<td>
@@ -246,10 +247,12 @@
 										    </td>
 											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
 											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>
-											<td><span class="F-float F-money">{{transferFeeList.price*transferFeeList.price}}</span></td>
+											<td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
 											<td>{{transferFeeList.remark}}</td>	  
 										</tr>
 										{{/each}}
+
+
 									</tbody>
 								</table>
 							</div>

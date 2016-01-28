@@ -24,7 +24,7 @@ Analyze.push_cnzz = function(target, page) {
 
 			if (tmp.length === 6) {
 				_czc.push(tmp);
-				console.info(tmp)
+				// console.info(tmp)
 			} else if (tmp.length === 3) {
 				data = data.concat(tmp);
 				data = data.concat([1, siteId]);
