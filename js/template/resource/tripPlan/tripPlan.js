@@ -444,6 +444,21 @@ define(function(require, exports) {
 
 		tripPlan.addResource($tab);
 
+		$tab.find('.T-toggle-tripPlanDayList').off('click.toggle').on('click.toggle', function() {
+			var $this = $(this), $tbody = $tab.find('.T-tripPlanDayList-tbody');
+			if ($this.hasClass('T-show')) {
+				$this.addClass('T-hide');
+				$tbody.hide();
+				$this.text('展开');
+				$this.removeClass('T-show');
+			}else if ($this.hasClass('T-hide')) {
+				$this.addClass('T-show');
+				$tbody.show();
+				$this.text('收起');
+				$this.removeClass('T-hide');
+			}
+		})
+
 		var validator = rule.listTripPlanCheckor($tab);  
 		$tab.find('.tab-content').on('click', '.T-addResource', function() {
 			var $that = $(this);
