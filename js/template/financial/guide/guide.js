@@ -746,83 +746,115 @@ define(function(require, exports) {
 
     //选择支付方式
     FinGuide.payment = function(args,type){//type:0新建，1账务付款进入,2在线支付列表进入
-        var url = KingServices.build_url('onlinePay/payOrder', 'createPayOrder');
-        if(type == 1 || type == 2){
-            url = KingServices.build_url('onlinePay/payOrder', 'findPayOrderById');
-        }
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: args,
-        })
-        .done(function(data) {
+        if(type == 0){
+            var data = [];
             data.type = type;
-            if(type == 0){
-                data.payMoney = args.payMoney;
-                data.resourceName = args.resourceName;
-            }
-            var html = paymentTemplate(data);
+            data.args = args;
+            FinGuide.initPayment(data);
+        } else {
+            $.ajax({
+                url: KingServices.build_url('onlinePay/payOrder', 'findPayOrderById'),
+                type: 'POST',
+                data: args,
+            })
+            .done(function(data) {
+                data.type = type;
+                data.args = args;
+                FinGuide.initPayment(data);
+            });
+        }
+    };
 
-            var payTypeLayer = layer.open({
-                type: 1,
-                title: "选择支付方式",
-                skin: 'layui-layer-rim', // 加上边框
-                area: '700px', // 宽高
-                zIndex: 1028,
-                content: html,
-                scrollbar: false,
-                success : function(){
-                    var $container = $(".T-payment-container"),
-                        $layer = $container.closest(".layui-layer");
-                    $layer.find(".layui-layer-close").off().on('click', function() {
-                        layer.close(payTypeLayer);
-                        if(type == 0){
-                            FinGuide.initOperationModule(args, 1,$("#tab-financial_guide-paying-content"));
-                        }
-                    });
+    FinGuide.initPayment = function(data){
+        var args = data.args,
+            type = data.type;
+        var html = paymentTemplate(data);
+
+        var payTypeLayer = layer.open({
+            type: 1,
+            title: "选择支付方式",
+            skin: 'layui-layer-rim', // 加上边框
+            area: '700px', // 宽高
+            zIndex: 1028,
+            content: html,
+            scrollbar: false,
+            success : function(){
+                var $container = $(".T-payment-container"),
+                    $layer = $container.closest(".layui-layer");
+                $layer.find(".layui-layer-close").off().on('click', function() {
+                    layer.close(payTypeLayer);
                     if(type == 0){
-                        FinGuide.getGuideInfo($container,args.resourceId);
+                        FinGuide.initOperationModule(args, 1,$("#tab-financial_guide-paying-content"));
                     }
-                    $container.off().on("click",".T-option",function(){
-                        var $this = $(this);
-                        if($this.hasClass('T-hideGuide')){
-                            $container.find(".T-guideInfo").addClass('hide');
-                        }else if($this.hasClass('T-showGuide')){
-                            $container.find(".T-guideInfo").removeClass('hide');
-                        } else if($this.hasClass('T-detail')){//新建时无明细
-                            if(type == 1 || type == 2){
-                                FinGuide.paymentDetail(args.orderId);
-                            }
-                        } else if($this.hasClass('T-toPay')){
-                            if($container.find('.T-showGuide').is(":checked")){
-                                var o = window.open();
+                });
+                if(type == 0){
+                    FinGuide.getGuideInfo($container,args.resourceId);
+                }
+                $container.off().on("click",".T-option",function(){
+                    var $this = $(this);
+                    if($this.hasClass('T-hideGuide')){
+                        $container.find(".T-guideInfo").addClass('hide');
+                    }else if($this.hasClass('T-showGuide')){
+                        $container.find(".T-guideInfo").removeClass('hide');
+                    } else if($this.hasClass('T-detail')){//新建时无明细
+                        if(type == 1 || type == 2){
+                            FinGuide.paymentDetail(args.orderId);
+                        }
+                    } else if($this.hasClass('T-toPay')){
+                        if($container.find('.T-showGuide').is(":checked")){
+                            var o = window.open();
+                            if(type == 0){
+                                FinGuide.createPayOrder($layer,type,args,o);
+                            } else {
                                 setTimeout(function(){
                                     o.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
                                 }, 0);
                                 FinGuide.payResult($layer,type,args);
-                            } else if($container.find('.T-hideGuide').is(":checked")){
-                                layer.close(payTypeLayer);
-                                if(type == 0){
-                                    FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
-                                } else{
-                                    $.ajax({
-                                        url: KingServices.build_url('onlinePay/payOrder', 'offlinePayByOrderId'),
-                                        type: 'POST',
-                                        data: args,
-                                    })
-                                    .done(function(data) {
-                                        showMessageDialog($("#confirm-dialog-message"),data.message);
-                                        if(type == 2){//刷新在线支付列表
-                                            $(".financial_onlinePay").trigger('click');
-                                        }
-                                    });
-                                    
-                                }
+                            }
+                        } else if($container.find('.T-hideGuide').is(":checked")){
+                            layer.close(payTypeLayer);
+                            if(type == 0){
+                                FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
+                            } else{
+                                $.ajax({
+                                    url: KingServices.build_url('onlinePay/payOrder', 'offlinePayByOrderId'),
+                                    type: 'POST',
+                                    data: args,
+                                })
+                                .done(function(data) {
+                                    showMessageDialog($("#confirm-dialog-message"),data.message);
+                                    if(type == 2){//刷新在线支付列表
+                                        $(".financial_onlinePay").trigger('click');
+                                    }
+                                });
+                                
                             }
                         }
-                    });
-                }
-            });
+                    }
+                });
+            }
+        });
+    };
+
+    //创建订单
+    FinGuide.createPayOrder = function($layer,type,args, win){
+        $.ajax({
+            url: KingServices.build_url('onlinePay/payOrder', 'createPayOrder'),
+            type: 'POST',
+            data: args,
+            error : function(){
+                win.close();
+            }
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                setTimeout(function(){
+                    win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
+                }, 0);
+                FinGuide.payResult($layer,type,args);
+            }else{
+                win.close();
+            }
         });
     };
 
