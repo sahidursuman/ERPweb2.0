@@ -802,13 +802,10 @@ define(function(require, exports) {
                         }
                     } else if($this.hasClass('T-toPay')){
                         if($container.find('.T-showGuide').is(":checked")){
-                            var o = window.open();
                             if(type == 0){
-                                FinGuide.createPayOrder($layer,type,args,o);
+                                FinGuide.createPayOrder($layer,type,args);
                             } else {
-                                setTimeout(function(){
-                                    o.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
-                                }, 0);
+                                FinGuide.openPayWindow(data.orderNumber);
                                 FinGuide.payResult($layer,type,args);
                             }
                         } else if($container.find('.T-hideGuide').is(":checked")){
@@ -837,7 +834,7 @@ define(function(require, exports) {
     };
 
     //创建订单
-    FinGuide.createPayOrder = function($layer,type,args, win){
+    FinGuide.createPayOrder = function($layer,type,args){
         $.ajax({
             url: KingServices.build_url('onlinePay/payOrder', 'createPayOrder'),
             type: 'POST',
@@ -848,15 +845,21 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                setTimeout(function(){
-                    win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
-                }, 0);
+                FinGuide.openPayWindow(data.orderNumber);
                 FinGuide.payResult($layer,type,args);
             }else{
                 win.close();
             }
         });
     };
+
+    FinGuide.openPayWindow = function(orderNum) {
+        var win = window.open();
+
+        setTimeout(function() {
+            win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token');            
+        });
+    }
 
     //支付明细
     FinGuide.paymentDetail = function(orderId){
