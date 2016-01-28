@@ -555,7 +555,7 @@ var data = {
 		},
 		{
 			key: '#tab-resource_touristGroup-add-content .T-addPartnerManager',
-			args:  ["_trackEvent", "添加游客", "按钮", "未客户来源添加联系人", 1, siteId]
+			args:  ["_trackEvent", "添加游客", "按钮", "为客户来源添加联系人", 1, siteId]
 		},
 		{
 			key: '#tab-resource_touristGroup-add-content .T-touristGroup-addOtherCost',
