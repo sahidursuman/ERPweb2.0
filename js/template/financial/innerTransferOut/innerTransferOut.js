@@ -248,7 +248,7 @@ define(function(require,exports) {
 	                                };
 									InnerTransferOut.settlement($data,obj.curr -1);
                                 }else{
-                                	InnerTransferOut.chenking("",obj.curr -1);
+                                	InnerTransferOut.chenking(obj.curr -1);
                                 }
 							}
 					    }
