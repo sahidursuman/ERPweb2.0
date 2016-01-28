@@ -318,7 +318,7 @@ define(function(require, exports) {
 	    });
 
 	    
-
+	    //根据数量、单价计算金额
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('change', '.T-calc', function(event) {
            var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
 	            if ($that.hasClass('T-count')) {  //若数量改变
@@ -415,14 +415,6 @@ define(function(require, exports) {
 			subsection.lineProductChoose();
 			validator = rule.checkdSaveSubsection($tbody);
 
-			//新增费用项目
-			subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').off().on('click', function(event) {
-				event.preventDefault();
-				var $that = $(this),$tbody =subsection.$tbody;
-				/* Act on the event */
-				subsection.addFeeItem($that, $tbody);
-			});
-
 			$tbody.data('isEdited', true);
 	};
 
@@ -483,7 +475,6 @@ define(function(require, exports) {
 	 */
 	subsection.checkedTransitFee = function($tbody){
 		 $tbody.on('change', '.T-operateCalculteOut', function(event) {
-	    	event.preventDefault();
 
 	    	var $FeeItems = subsection.$tabSub.find('.T-innerOutEditFeeTbody').find('[data-type=3]'),  // 中转费用的tr
 	    		$fistItem = $(this).closest('tr').find('.T-type').first(),			// 分段费用项的第一个费用名称
