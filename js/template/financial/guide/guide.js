@@ -437,7 +437,7 @@ define(function(require, exports) {
             voucher:voucher,
             billTime:billTime
         }
-        if(payType == 1){
+        if(payType == 1 && IndexData.userInfo.onlinePay == 1){
             if(!Dsave){
                 args.resourceId = $tab.find('.T-saveClear').data('id');
                 args.resourceName = $tab.find(".T-guideName").text();
@@ -792,6 +792,7 @@ define(function(require, exports) {
                 $layer.find(".layui-layer-close").off().on('click', function() {
                     layer.close(payTypeLayer);
                     if(type == 0){
+                        $('#tab-financial_guide-paying-content').data("isEdited",false);
                         listFn();
                     }
                 });
@@ -810,10 +811,11 @@ define(function(require, exports) {
                         }
                     } else if($this.hasClass('T-toPay')){
                         if($container.find('.T-showGuide').is(":checked")){
-                           if(type == 0){
-                                FinGuide.createPayOrder($layer,type,args);
+                            var pay = $container.find('.T-showGuide').data("pay");
+                           if(type == 0 && !pay){
+                                FinGuide.createPayOrder($layer,args,listFn);
                             } else {
-                                FinGuide.openPayWindow(data.orderNumber);
+                                FinGuide.openPayWindow(type == 0 ? $container.find('.T-showGuide').data("orderNumber") : data.orderNumber);
                                 FinGuide.payResult($layer,args,listFn);
                             }
                         } else if($container.find('.T-hideGuide').is(":checked")){
@@ -858,6 +860,8 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
+                $layer.find('.T-showGuide').data("pay",true);
+                $layer.find('.T-showGuide').data("orderNumber",data.orderNumber);
                 FinGuide.openPayWindow(data.orderNumber);
                 $layer.find('.T-hideGuide').data("orderId",data.orderId);
                 FinGuide.payResult($layer,args,listFn);
