@@ -226,7 +226,9 @@ define(function(require, exports) {
                         if(data.success == 2){
                             args.orderId = data.orderId;
                             args.type = 1;
-                            FinancialService.unfinishedBill(args);
+                            FinancialService.unfinishedBill(args,function(){
+                                FinGuide.initOperationModule(args, 1,$tab);
+                            });
                             return false;
                         }
                         data.isOuter = FinGuide.isOuter = args.isOuter;
@@ -851,7 +853,7 @@ define(function(require, exports) {
     };
 
     //创建订单
-    FinGuide.createPayOrder = function($layer,type,args, win){
+    FinGuide.createPayOrder = function($layer,args,listFn, win){
         $.ajax({
             url: KingServices.build_url('onlinePay/payOrder', 'createPayOrder'),
             type: 'POST',
