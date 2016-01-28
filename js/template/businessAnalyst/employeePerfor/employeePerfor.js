@@ -19,6 +19,7 @@ define(function(require, exports) {
 			startTime:"",
 			endTime:"",
 			type:"",
+			customerType:"",
 			pageNo:""
 		}
 	};
@@ -68,8 +69,9 @@ define(function(require, exports) {
     		//初始化页面后可以获取页面参数
 		   	var startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	    endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-		   	    type =employeePerforObj.$tab.find('button').attr('data-value');//1
-	   		employeePerforObj.getListEmpDept(startTime,endTime,type,0);
+		   	    type=employeePerforObj.$tab.find('button').attr('data-value'),
+		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value');
+	   		employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,0);
 
     	}); 	
     	//trigger事件
@@ -79,27 +81,47 @@ define(function(require, exports) {
 		employeePerforObj.$tab.find('.T-select-employeerDept').on('click', 'a', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			var $that=$(this);
+			var $that=$(this),customerType;
 			$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
 			$that.closest('ul').prev().attr('data-value');
+			customerType = $that.closest('div').next('div').children('button').data('value');
 			if ($that.closest('ul').prev().attr('data-value')==1) {
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",1,0);
+				employeePerforObj.getListEmpDept("","",1,customerType,0);
 			} else{
 				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept("","",2,0);
+				employeePerforObj.getListEmpDept("","",2,customerType,0);
 
 			};
-			
 		});
+
+		//针对客源 
+		employeePerforObj.$tab.find('.T-select-customerType').on('click', 'a', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+			var isEmployee = $that.closest('div').prev('div').find('.T-select-employeerDept').children('button').attr('data-value');
+			if (isEmployee==1) {//员工
+				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
+				employeePerforObj.getListEmpDept("","",1,$that.data('value'),0);
+			}else{//部门
+				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				employeePerforObj.getListEmpDept("","",2,$that.data('value'),0);
+			};
+			   
+		});
+
     };
 
-    employeePerforObj.getListEmpDept=function(startTime,endTime,type,page){
+    employeePerforObj.getListEmpDept=function(startTime,endTime,type,customerType,page){
     		employeePerforObj.$searchParam.startTime=startTime;
     		employeePerforObj.$searchParam.endTime=endTime;
     		employeePerforObj.$searchParam.type=type;
+    		employeePerforObj.$searchParam.customerType=customerType;
     		employeePerforObj.$searchParam.pageNo=page;
 	
 	    	if (type==1) {
@@ -119,7 +141,7 @@ define(function(require, exports) {
 							    curr: (page + 1),
 							    jump: function(obj, first) {
 							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		employeePerforObj.getListEmpDept(startTime,endTime,1,obj.curr -1);
+							    		employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,obj.curr -1);
 							    	}
 							    }
 							});
@@ -146,7 +168,7 @@ define(function(require, exports) {
 							    curr: (page + 1),
 							    jump: function(obj, first) {
 							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		employeePerforObj.getListEmpDept(startTime,endTime,2,obj.curr -1);
+							    		employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,obj.curr -1);
 							    	}
 							    }
 							});
