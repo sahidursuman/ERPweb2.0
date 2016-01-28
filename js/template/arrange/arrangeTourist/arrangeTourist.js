@@ -1257,7 +1257,7 @@ define(function(require, exports) {
             transNeedPayAllMoney = $tab.find("input[name=transNeedPayAllMoney]"), //应付
             transPayedMoney = $tab.find("input[name=transPayedMoney]"), //已付
             transCurrentPM = $tab.find("input[name=transCurrentPayedMoney]"), //现付
-            trList = $tab.find("tbody.T-innerOutEditFeeTbody").find("tr");
+            trList = $tab.find("tbody.T-innerOutEditFeeTbody").find("tr:not(.deleted)");
 
         for (i = 0; i < trList.length; i++) {
             var a = parseFloat(trList.eq(i).find(".count").val());
