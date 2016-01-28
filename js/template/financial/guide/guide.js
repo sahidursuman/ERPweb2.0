@@ -839,16 +839,11 @@ define(function(require, exports) {
             url: KingServices.build_url('onlinePay/payOrder', 'createPayOrder'),
             type: 'POST',
             data: args,
-            error : function(){
-                win.close();
-            }
         })
         .done(function(data) {
             if(showDialog(data)){
                 FinGuide.openPayWindow(data.orderNumber);
                 FinGuide.payResult($layer,type,args);
-            }else{
-                win.close();
             }
         });
     };
