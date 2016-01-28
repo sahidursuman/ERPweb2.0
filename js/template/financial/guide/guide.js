@@ -225,6 +225,7 @@ define(function(require, exports) {
                     if (type) {
                         if(data.success == 2){
                             args.orderId = data.orderId;
+                            args.type = 1;
                             FinancialService.unfinishedBill(args);
                             return false;
                         }
@@ -440,7 +441,10 @@ define(function(require, exports) {
                 args.resourceName = $tab.find(".T-guideName").text();
                 args.businessType = "guide";
                 args.payRemark = $tab.find('.T-remark').val();
-                FinGuide.payment(args,0);
+                args.type = 0;
+                FinGuide.payment(args,function(){
+                    FinGuide.initOperationModule(args, 1,$tab);
+                });
                 return false;
             }
         }
@@ -745,12 +749,13 @@ define(function(require, exports) {
     };
 
     //选择支付方式
-    FinGuide.payment = function(args,type){//type:0新建，1账务付款进入,2在线支付列表进入
+    FinGuide.payment = function(args,listFn){//listFn列表刷新函数
+        var type = args.type;
         if(type == 0){
             var data = [];
             data.type = type;
             data.args = args;
-            FinGuide.initPayment(data);
+            FinGuide.initPayment(data,listFn);
         } else {
             $.ajax({
                 url: KingServices.build_url('onlinePay/payOrder', 'findPayOrderById'),
@@ -760,14 +765,15 @@ define(function(require, exports) {
             .done(function(data) {
                 data.type = type;
                 data.args = args;
-                FinGuide.initPayment(data);
+                FinGuide.initPayment(data,listFn);
             });
         }
     };
 
-    FinGuide.initPayment = function(data){
+    FinGuide.initPayment = function(data,listFn){
         var args = data.args,
             type = data.type;
+        args.type = type;
         var html = paymentTemplate(data);
 
         var payTypeLayer = layer.open({
@@ -784,7 +790,7 @@ define(function(require, exports) {
                 $layer.find(".layui-layer-close").off().on('click', function() {
                     layer.close(payTypeLayer);
                     if(type == 0){
-                        FinGuide.initOperationModule(args, 1,$("#tab-financial_guide-paying-content"));
+                        listFn();
                     }
                 });
                 if(type == 0){
@@ -804,18 +810,22 @@ define(function(require, exports) {
                         if($container.find('.T-showGuide').is(":checked")){
                             var o = window.open();
                             if(type == 0){
-                                FinGuide.createPayOrder($layer,type,args,o);
+                                FinGuide.createPayOrder($layer,args,listFn,o);
                             } else {
                                 setTimeout(function(){
                                     o.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
                                 }, 0);
-                                FinGuide.payResult($layer,type,args);
+                                FinGuide.payResult($layer,args,listFn);
                             }
                         } else if($container.find('.T-hideGuide').is(":checked")){
+                            var orderId = $container.find('.T-hideGuide').data("orderId");
                             layer.close(payTypeLayer);
-                            if(type == 0){
+                            if(type == 0 && !orderId){
                                 FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
                             } else{
+                                if(orderId){
+                                    args.orderId = orderId;
+                                }
                                 $.ajax({
                                     url: KingServices.build_url('onlinePay/payOrder', 'offlinePayByOrderId'),
                                     type: 'POST',
@@ -823,8 +833,12 @@ define(function(require, exports) {
                                 })
                                 .done(function(data) {
                                     showMessageDialog($("#confirm-dialog-message"),data.message);
+                                    if(type == 0){
+                                        $('#tab-financial_guide-paying-content').data("isEdited",false);
+                                        listFn();
+                                    }
                                     if(type == 2){//刷新在线支付列表
-                                        $(".financial_onlinePay").trigger('click');
+                                        listFn();
                                     }
                                 });
                                 
@@ -851,7 +865,8 @@ define(function(require, exports) {
                 setTimeout(function(){
                     win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + data.orderNumber+"&token=" +$.cookie('token');
                 }, 0);
-                FinGuide.payResult($layer,type,args);
+                $layer.find('.T-hideGuide').data("orderId",data.orderId);
+                FinGuide.payResult($layer,args,listFn);
             }else{
                 win.close();
             }
@@ -879,7 +894,8 @@ define(function(require, exports) {
         });
     };
 
-    FinGuide.payResult = function($layer,type,args){
+    FinGuide.payResult = function($layer,args,listFn){
+        var type = args.type;
         $layer.hide();
         var html = payResultTemplate();
         var rstLayer = layer.open({
@@ -898,9 +914,9 @@ define(function(require, exports) {
                     $layer.remove();
                     if(type == 0){
                         $('#tab-financial_guide-paying-content').data("isEdited",false);
-                        FinGuide.initOperationModule(args, 1,$("#tab-financial_guide-paying-content"));
+                        listFn();
                     } else if(type == 2){
-                        $(".financial_onlinePay").trigger('click');
+                        listFn();
                     }
                 });
 
@@ -916,7 +932,7 @@ define(function(require, exports) {
                             } else {
                                 $tab.data("isEdited",false);
                             }
-                            FinGuide.initOperationModule(args, 1,$tab);
+                            listFn();
                         }
                     } else if($this.hasClass('T-problem')){
                         var o = window.open();

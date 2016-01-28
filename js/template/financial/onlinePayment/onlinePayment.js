@@ -89,9 +89,12 @@ define(function(require, exports) {
                 KingServices.paymentDetail(orderId);
             } else if($this.hasClass('T-payment')){
                 var args = {
-                    orderId : orderId
+                    orderId : orderId,
+                    type : 2
                 };
-                KingServices.payment(args,2);
+                KingServices.payment(args,function(){
+                    Payment.listPayment(0);
+                });
             } else if($this.hasClass('T-cancel-payment')){
                 Payment.cancelPayOrder(orderId);
             }

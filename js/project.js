@@ -2257,9 +2257,9 @@ KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
 }
 
 //支付
-KingServices.payment = function(args,type){
+KingServices.payment = function(args,listFn){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
-		module.payment(args,type);
+		module.payment(args,listFn);
 	});
 }
 KingServices.paymentDetail = function(orderId){
