@@ -10,9 +10,11 @@
 		    <label for="qouteNumber">报价单号：</label>
             <input type="text" id="qouteNumber" name="quoteNumber" value="{{if !!touristGroupDetail.quote}}{{touristGroupDetail.quote.quoteNumber}}{{/if}}" class="form-control bind-change T-quoteNumber" readonly="readonly" />
             <input type="hidden" name="quoteNumberId" class="T-quoteNumberId" value="{{if !!touristGroupDetail.quote}}{{touristGroupDetail.quote.id}}{{/if}}" />
+            {{if !(touristGroupDetail.status < 3)}}
 	        <button class="search-btn btn-sm T-ChosenQuoteNumber" onsubmit="return false">
 	                <i class="ace-icon fa fa-search "></i>搜索
 	        </button>
+	        {{/if}}
 		</div>
 
 		<div class="form-group fixed-width">
@@ -20,7 +22,7 @@
 	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName" readonly="readonly" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}"/>
 	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProduct.id}}" />
 	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
-	        {{if touristGroupDetail.status == 1}}
+	        {{if !(touristGroupDetail.status < 3)}}
 	    	<button class="search-btn btn-sm T-travelLine-search" onsubmit="return false">
 	        	<i class="ace-icon fa fa-search "></i>搜索
         	</button>
@@ -50,13 +52,13 @@
     <div class="form-inline">
     	<div class="form-group fixed-width">
     		<label><span class="necessary">*</span>出游日期：</label>
-            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status != 1}}readonly="readonly"{{/if}} />
+            <input type="text" name="startTime" class="form-control {{if !(touristGroupDetail.status < 3)}}date-picker datepicker{{/if}} T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status < 3}}readonly="readonly"{{/if}} />
             <input type="hidden" name="days" class="form-control T-days" value="{{touristGroupDetail.lineProduct.days}}"/>
     	</div>
 
         <div class="form-group fixed-width">
             <label><span class="necessary">*</span>完团日期：</label>
-            <input type="text" name="endTime" class="form-control date-picker datepicker T-endTime"  value="{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}" />
+            <input type="text" name="endTime" class="form-control {{if !(touristGroupDetail.status < 3)}}date-picker datepicker{{/if}} T-endTime" {{if touristGroupDetail.status < 3}}readonly="readonly"{{/if}}  value="{{touristGroupDetail.endTime  | dateFormat: 'yyyy-MM-dd'}}" />
         </div>
 
      	<div class="form-group">
@@ -341,7 +343,7 @@
 					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedArriveService==1}}
 					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
 						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
-						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus!=0}}
 						            <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">车辆</span>
@@ -352,7 +354,7 @@
 						                <span class="lbl">车辆</span>
 						            </label>
 						            {{/if}}
-						            {{if touristGroupDetail.outRemarkArrange.receiveHotelStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.receiveHotelStatus!=0}}
 						            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">酒店</span>
@@ -364,7 +366,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.receiveRestaurantStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.receiveRestaurantStatus!=0}}
 						            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">餐饮</span>
@@ -376,7 +378,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}
 						            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">票务</span>
@@ -388,7 +390,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.receiveOtherStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.receiveOtherStatus!=0}}
 						            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">其他</span>
@@ -492,7 +494,7 @@
 					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedLeaveService==1}}
 					          <div class="form-group fixed-width T-send col-sm-6">
 						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
-						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus!=0}}
 						            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">车辆</span>
@@ -503,7 +505,7 @@
 						                <span class="lbl">车辆</span>
 						            </label>
 						            {{/if}}
-						            {{if touristGroupDetail.outRemarkArrange.sendHotelStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendHotelStatus!=0}}
 						            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">酒店</span>
@@ -515,7 +517,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendRestaurantStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendRestaurantStatus!=0}}
 						            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">餐饮</span>
@@ -527,7 +529,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}
 						            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">票务</span>
@@ -539,7 +541,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendOtherStatus==1}}
+						            {{if touristGroupDetail.outRemarkArrange.sendOtherStatus!=0}}
 						            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked>
 						                <span class="lbl">其他</span>

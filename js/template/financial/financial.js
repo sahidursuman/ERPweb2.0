@@ -45,7 +45,7 @@ FinancialService.initPayEvent = function($container,rule)  {
                             }
                             cardNumberJson.push(seatCount);
                         }
-                        $that.autocomplete('option','source', cardNumberJson);
+                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
                         $that.autocomplete('search', '');
                     }else{
                         layer.tips('没有内容', $that, {
@@ -58,8 +58,10 @@ FinancialService.initPayEvent = function($container,rule)  {
         })
     })
     .on('click', function() {
-
-        $(this).autocomplete('search', '');
+        var $that = $(this);
+        if ($that.data('ajax')) {
+            $that.autocomplete('search', '');
+        }
     });
     $container.find('select').on('change', function(event) {
         event.preventDefault();

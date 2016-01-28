@@ -268,11 +268,10 @@ define(function(require, exports) {
                     if (status == undefined || status == null || status == "") {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
                             var $updateTabId = $('#' + updateTab);
-                            $updateTabId.find('input[name=lineProductIdName]').val("");
-                            $updateTabId.find('input[name=lineProductId]').val("");
-                            $updateTabId.find('.T-touristReception').prop("checked", false);
-                            $updateTabId.find('.T-smallCar').prop("checked", false);
-                            $updateTabId.find('.T-touristSend').prop("checked", false);
+                            $updateTabId.find('input[name=accompanyGuideName]').val("");
+                            $updateTabId.find('input[name=accompanyGuideMobile]').val("");
+                            $updateTabId.find('input[name=otaOrderNumber]').val("");
+                            $updateTabId.find('input[name=orderNumber]').val("");
                             touristGroup.updateEvents(typeOut);
                         }
                     } else if (!!status && !!InnerTransfer) {
@@ -792,7 +791,7 @@ define(function(require, exports) {
                 reciveType = 0;
 
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$reciveText,$label,type,reciveType);
+            touristGroup.isRemoveRequire($that,$div,$reciveText,$label,type,reciveType,$obj);
         });
 
         //送团操作
@@ -806,7 +805,7 @@ define(function(require, exports) {
                 type = $label.data('type'),
                 sendType = 1;
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$sendText,$label,type,sendType);
+            touristGroup.isRemoveRequire($that,$div,$sendText,$label,type,sendType,$obj);
         });
 
        
@@ -820,7 +819,7 @@ define(function(require, exports) {
      * @param  {[type]}  type  复选框标识
      * @return {Boolean}
      */
-    touristGroup.isRemoveRequire = function($that,$div,$text,$label,type ,isReciveType){
+    touristGroup.isRemoveRequire = function($that,$div,$text,$label,type ,isReciveType,$innerTransferForm){
         if ($that.is(":checked")) {
             touristGroup.addActionPlan($div,$text.text(),$label.text(), type,isReciveType);
         }else{
@@ -863,6 +862,7 @@ define(function(require, exports) {
                 $div.find('.T-action-require-list').children('div.require-commons').remove();
             };
         };
+        rule.checkInnerTransfer($innerTransferForm);
     };
 
     /**
@@ -1999,6 +1999,10 @@ define(function(require, exports) {
             return;
         };
 
+
+        if ($receptionObj.find('input[name=arriveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "接团时间不能为空！"); return;};
+        if ($sendObj.find('input[name=leaveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "送团时间不能为空！"); return;};
+
         // for 出游日期
         if ($startTime.prop('disabled')) {
             form = form + '&startTime=' + $startTime.val();
@@ -2272,6 +2276,11 @@ define(function(require, exports) {
                             } else {
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
                                 Tools.closeTab(tabId);
+
+                                //外转确认
+                                if (!!typeInner && typeInner=='out') {
+                                    touristGroup.freshTransferList($obj);
+                                };
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
@@ -2351,6 +2360,24 @@ define(function(require, exports) {
         } else {
             return erroFlag;
         }
+    };
+
+
+
+    /**
+     * 更新外转确认记录data
+     * @param  {[type]} $obj [description]
+     * @return {[type]}      [description]
+     */
+    touristGroup.freshTransferList = function($obj){
+        var transferId = touristGroup.getVal($obj,"transferId");
+        $.ajax({
+            url:KingServices.build_url("transfer","saveTourist"),
+            data: "transferId="+transferId,
+            type: 'POST'
+        })
+        .done(function(data) {
+        })     
     };
 
 
