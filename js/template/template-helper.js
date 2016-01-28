@@ -345,3 +345,16 @@ template.helper("getNoteItemText", function(status){
     }
     return res;
 });
+
+template.helper("getBusinessTypeText", function(businessType) {
+    switch (businessType) {
+        case "guide":
+            return '导游';
+        case "busCompany":
+            return '车队';
+        case "hotel":
+            return '酒店';
+        default:
+            return '-';
+    }
+});

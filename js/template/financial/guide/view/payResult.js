@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":38,"md5":"961744eb01e87c810ccdac8c4b349cb1"}*/
+define(function(require) {
+    return require("../../../template")("financial/guide/view/payResult", '<div class="T-payResult-container pay-container" style="margin:20px 0px;"> <form class="form-horizontal col-sm-12" role="form" onsubmit="return false"> <div class="form-group col-sm-11"> 付款完成前请不要关闭此窗口，完成后请根据您的情况点击下面的按钮。 </div> <div class="form-group col-sm-11" style="text-align:center;"> <button class="T-option T-success" style="margin:0;padding:5px 10px;border:none;font-size:14px;font-weight:bold;background:#ff8400;color:#fff;"> 已经完成付款 </button> <button class="T-option T-problem" style="margin:0;padding:5px 10px;border:none;font-size:14px;font-weight:bold;background:#ededed;color:#333;"> 付款遇到问题 </button> </div> <div class="form-group col-sm-11"> <a class="T-option T-return">返回选择其他付款方式</a> </div> </form> </div>');
+});
