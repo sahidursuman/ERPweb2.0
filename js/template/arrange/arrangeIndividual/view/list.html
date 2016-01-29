@@ -1,16 +1,16 @@
 <table class="table table-striped table-bordered table-hover globalAdd T-showHighLight table-fixed">
     <colgroup>
     	<col style="width:8%;"></col>
+    	<col style="width:175px"></col>
     	<col style="width:20%;"></col>
     	<col style="width:25%;"></col>
     	<col style="width:95px"></col>
-    	<col style="width:175px"></col>
     	<col style="width:95px"></col>
     	<col style="width:80px;"></col>
     	<col style="width:15%;"></col>
     	<col style="width:10%;"></col>
-	 	<col style="width:15%;"></col>
- 	 	<col style="width:10%;"></col>
+	 	<col style="width:20%;"></col>
+ 	 	<col style="width:25%;"></col>
  	 	<col style="width:100px;"></col>
  	 	<col style="width:80px;"></col>
  	 	<col style="width:25%;"></col>
@@ -19,10 +19,10 @@
 	<thead>
 		<tr class="bg-blur">
 			<th>选择</th>
+			<th>收客单号</th>
 			<th>客户</th>
 			<th>线路产品</th>
 			<th>线路类型</th>
-			<th>收客单号</th>
 			<th>针对客源</th>
 			<th>天数</th>
 			<th>出游日期</th>
@@ -45,10 +45,10 @@
 			 data-entity-startTime = {{touristGroupList.startTime}}
 			 data-entity-memberCount={{touristGroupList.adultCount +touristGroupList.childCount}} class="tr-{{touristGroupList.lineProduct.id}}-{{touristGroupList.startTime}}" data-entity-adultCount = {{touristGroupList.adultCount}}  data-entity-childCount = {{touristGroupList.childCount}} >
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
+			    <td>{{touristGroupList.orderNumber}}</td>
 				<td>{{if !!touristGroupList.partnerAgency}}{{touristGroupList.partnerAgency.travelAgencyName}}{{/if}}</td>
 				<td class="T-ctrl-tip" title="{{touristGroupList.lineProduct.name}}"><span style="height: 35px">{{touristGroupList.lineProduct.name}}</span></td>
 				<td>{{touristGroupList.lineProduct.type}}</td>
-				<td>{{touristGroupList.orderNumber}}</td>
 				<td>
 					{{if touristGroupList.customerType == 0}}散拼
 					    {{else if touristGroupList.customerType == 1}}团体
