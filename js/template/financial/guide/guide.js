@@ -782,7 +782,7 @@ define(function(require, exports) {
             type: 1,
             title: "选择支付方式",
             skin: 'layui-layer-rim', // 加上边框
-            area: '700px', // 宽高
+            area: '900px', // 宽高
             zIndex: 1028,
             content: html,
             scrollbar: false,
@@ -803,23 +803,17 @@ define(function(require, exports) {
                     var $this = $(this);
                     if($this.hasClass('T-hideGuide')){
                         $container.find(".T-guideInfo").addClass('hide');
-                    }else if($this.hasClass('T-showGuide')){
-                        $container.find(".T-guideInfo").removeClass('hide');
-                    } else if($this.hasClass('T-detail')){//新建时无明细
+                    }else if($this.hasClass('T-detail')){//新建时无明细
                         if(type == 1 || type == 2){
                             FinGuide.paymentDetail(args.orderId);
                         }
                     } else if($this.hasClass('T-toPay')){
-                        if($container.find('.T-showGuide').is(":checked")){
-                            var pay = $container.find('.T-showGuide').data("pay");
-                           if(type == 0 && !pay){
-                                FinGuide.createPayOrder($layer,args,listFn);
-                            } else {
-                                FinGuide.openPayWindow(type == 0 ? $container.find('.T-showGuide').data("orderNumber") : data.orderNumber);
-                                FinGuide.payResult($layer,args,listFn);
-                            }
-                        } else if($container.find('.T-hideGuide').is(":checked")){
-                            var orderId = $container.find('.T-hideGuide').data("orderId");
+                        var payValue = $container.find('.T-pay-item.pay-action').data("value");
+                        if(payValue == "2"){
+                            FinGuide.payResult($layer,args,listFn);
+                        } else if(payValue == "1"){
+                            $container.find('.T-toPay').attr('href', 'javascript:;').removeAttr('target');
+                            var orderId = $container.data("orderId");
                             layer.close(payTypeLayer);
                             if(type == 0 && !orderId){
                                 FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
@@ -845,6 +839,24 @@ define(function(require, exports) {
                                 
                             }
                         }
+                        
+                    }else if($this.hasClass("T-pay-item")){
+                        event.preventDefault();
+                        $container.find(".T-pay-item").removeClass('pay-action');
+                        $this.addClass('pay-action');
+                        if($this.hasClass("T-showGuide")){
+                            $container.find(".T-guideInfo").removeClass('hide');
+                        }else{
+                            $container.find(".T-guideInfo").addClass('hide');
+                        }
+                        if($this.data("value") == "2"){
+                            var pay = $container.data("pay");
+                            if(type == 0 && !pay){
+                                FinGuide.createPayOrder($layer,args,listFn);
+                            } else {
+                                FinGuide.openPayWindow(type == 0 ? $container.data("orderNumber") : data.orderNumber, $container);
+                            }
+                        }
                     }
                 });
             }
@@ -860,11 +872,10 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $layer.find('.T-showGuide').data("pay",true);
-                $layer.find('.T-showGuide').data("orderNumber",data.orderNumber);
-                FinGuide.openPayWindow(data.orderNumber);
-                $layer.find('.T-hideGuide').data("orderId",data.orderId);
-                FinGuide.payResult($layer,args,listFn);
+                $layer.find(".T-payment-container").data("pay",true);
+                $layer.find(".T-payment-container").data("orderNumber",data.orderNumber);
+                FinGuide.openPayWindow(data.orderNumber, $layer);
+                $layer.find(".T-payment-container").data("orderId",data.orderId);
             }
         });
     };
@@ -874,12 +885,16 @@ define(function(require, exports) {
      * @param  {sring} orderNum 订单号
      * @return {[type]}          [description]
      */
-    FinGuide.openPayWindow = function(orderNum) {
-        var win = window.open();
+    FinGuide.openPayWindow = function(orderNum, $layer) {
+        $layer.find(".T-toPay").attr({
+            'href' : APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token'),
+            'target' : '_blank'
+        });
+        /*var win = window.open('about:blank', '_blank');
 
         setTimeout(function() {
-            win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token');            
-        });
+            win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token') + "&_"+(+new Date());
+        });*/
     }
 
     //支付明细
@@ -973,9 +988,7 @@ define(function(require, exports) {
                     return false;
                 }
                 var photo = data.guideInfo.photo;
-                if(photo != null || photo != ""){
-                    $container.find(".T-guideImg").attr("src",photo);
-                }
+                $container.find(".T-guideImg").attr("src",!!photo ? photo : "/images/logo_24x24.png");
                 $container.find(".T-guideName").text(data.guideInfo.name);
                 $container.find(".T-guideNumber").text(data.guideInfo.guideCardNumber);
                 $container.find(".T-guideMobile").text(data.guideInfo.mobileNumber);
