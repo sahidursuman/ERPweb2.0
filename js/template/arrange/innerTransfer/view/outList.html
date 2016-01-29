@@ -6,7 +6,7 @@
 			<th>联系电话</th>
 			<th>人数</th>
 			<th>应付款</th>
-			<th>已付款</th>
+		<!-- 	<th>已付款</th> -->
 			<th>转客人</th>
 			<th>转客时间</th>
 			<th>对方状态</th>
@@ -20,8 +20,8 @@
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 			<td><span class=" F-float F-count">{{list.touristGroup.adultCount}}</span>大<span class=" F-float F-money">{{list.touristGroup.childCount}}</span>小</td>
 			<td><span class=" F-float F-money">{{list.transNeedPayMoney}}</span></td>
-			<td><span class=" F-float F-money">{{list.transPayedMoney}}</span></td>
-			<td>{{list.user.realName}}</td>
+            <!-- <td><span class=" F-float F-money">{{list.transPayedMoney}}</span></td>-->			
+            <td>{{list.user.realName}}</td>
 			<td>{{list.createTime}}</td>
 			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{else if list.status == 2}}<span style="color: red;">已拒收</span>{{/if}}</td>
 			<td>
