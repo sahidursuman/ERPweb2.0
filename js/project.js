@@ -660,6 +660,7 @@ var modalScripts = {
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
     'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
+    'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',

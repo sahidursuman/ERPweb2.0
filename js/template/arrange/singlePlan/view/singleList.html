@@ -6,8 +6,9 @@
                 <th>出游日期</th>
                 <th>完团日期</th>
                 <th>线路产品</th>
+                <th>人数</th>
                 <th>团队人数</th>
-                <th>客户</th>
+                <th>剩余座位</th>
                 <th>导</th>
                 <th>车</th>
                 <th>险</th>
@@ -18,7 +19,6 @@
                 <th>购</th>
                 <th>娱</th>
                 <th>它</th>
-                <th>外联销售</th>
                 <th>责任计调</th>
                 <th>责任部门</th>
                 <th style="width:80px;">状态</th>
@@ -27,13 +27,25 @@
         </thead>
         <tbody>
             {{each result as rs}}
-            <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
+            <tr data-id="{{rs.id}}">
                 <td style="vertical-align:middle">{{rs.tripNumber}}</td>
-                <td style="vertical-align:middle">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{rs.lineProduct.name}}</td>
+                <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td class="hct-absolute-group">
+                    <span class="hct-span-left">
+                        {{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}
+                    </span>
+                    {{if rs.tripPlanTouristList.length != 0}}
+                    <label class="T-action T-showLineInfo hct-button-right"> 
+                        <button class="btn btn-success btn-sm btn-white show" index="0"> 
+                            <i class="fa fa-plus bigger-110 icon-only"></i>
+                        </button> 
+                    </label>
+                    {{/if}}
+                </td>
+                <td>{{rs.touristAdultCount  + rs.touristChildCount }}</td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
-                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                <td style="vertical-align:middle">{{rs.surplusSeat}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
@@ -44,7 +56,6 @@
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}}</td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
                 <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
                 <td style="vertical-align:middle">
@@ -80,6 +91,48 @@
                     </a>
                 </td>
             </tr>
+            {{if rs.tripPlanTouristList.length!=0}}
+                {{each rs.tripPlanTouristList as tripPlanTourist index}}
+                <tr class="hidden">
+                    {{if index == 0}}
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    {{/if}}
+                    {{if !!tripPlanTourist.touristGroup}}
+                    <td>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td class="hct-absolute-group">
+                        <span class="hct-span-left">
+                            {{if tripPlanTourist.touristGroup}}{{tripPlanTourist.touristGroup.lineProduct.name }}{{/if}}
+                        </span>
+                    </td>
+                    <td>{{tripPlanTourist.touristGroup.adultCount + tripPlanTourist.touristGroup.childCount}}</td>
+                    {{else}}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {{/if}}
+                    {{if index == 0}}
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    {{/if}}
+                </tr>                                
+                {{/each}}
+            {{/if}}
             {{/each}}
         </tbody>
     </table>
