@@ -1543,6 +1543,16 @@ define(function(require, exports) {
 				}
 				$tbody.html(listHtml);
 				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
+
+				$dialog.find('.T-btn-search').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					var $that=$(this),$searchLine=$that.closest('.form-inline');
+					var name=$searchLine.find('.T-name').val();
+					tripPlan.getLineProductList($dialog, type, isSingle, page, $tab,name);
+
+				});
+
 				// 绑定翻页组件
 				laypage({
 				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
