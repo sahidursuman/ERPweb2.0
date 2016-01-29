@@ -13,6 +13,7 @@
 							<th>客户来源</th>
 							<th>联系人</th>
 							<th>联系电话</th>
+							<th>收客单号</th>
 							<th>人数</th>
 							<th>客源地</th>
 							<th>年龄</th>
@@ -33,6 +34,7 @@
 								<td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
+								<td>{{touristGroup.orderNumber}}</td>
 								<td><span class="T-viewTouristGroup T-action" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
 								<td>{{touristGroup.areaData}}</td>
 								<td class="F-float F-count">{{touristGroup.ageData}}</td>
