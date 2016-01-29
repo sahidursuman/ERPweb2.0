@@ -1288,7 +1288,7 @@ define(function(require, exports) {
 			scrollbar: false,
 		});
 		var $dialog = $('.T-tripplan-lineproduct-search');
-		singlePlan.getLineProductList($dialog, type, isSingle);
+		singlePlan.getLineProductList($dialog, type, isSingle, '');
 		// 选择线路产品
 		$dialog.find('.T-btn-submit').off('click').on('click', function(event) {
 			event.preventDefault();
@@ -1327,13 +1327,14 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	singlePlan.getLineProductList = function($dialog, type, isSingle, page, $tab) {
+	singlePlan.getLineProductList = function($dialog, type, isSingle, page, $tab, name) {
 		page = page || 0;
 		var url = KingServices.build_url('lineProduct', 'findAll'),
 			$tbody = $dialog.find('.T-normal-list'),
 			args = {
 				pageNo: page,
-				customerType : 1
+				customerType : 1,
+				name : name 
 			};
 		if(isSingle){
 			delete args.customerType;
@@ -1375,7 +1376,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							singlePlan.getLineProductList($dialog, type, isSingle, obj.curr -1, $tab);
+							singlePlan.getLineProductList($dialog, type, isSingle, obj.curr -1, $tab, name);
 				    	}
 				    }
 				});	
