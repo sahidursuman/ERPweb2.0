@@ -3,7 +3,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>业务类别：</label>
 			<div class="col-sm-3">
-				<select name="moneyType" class="col-sm-12">
+				<select name="moneyType" class="col-sm-12 T-moneyType">
 					<option value="0">收入</option>
 					<option value="1">支出</option>
 				</select>
@@ -36,11 +36,11 @@
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
 			<div class="col-sm-3">
 				<select name="subjectId" class="col-sm-12 T-option T-subject">
-					{{each subjectdata as sub}}
-					<option value="{{sub.id}}">{{sub.subjectName}}</option>
+					{{each subjectdata0 as sub0}}
+					<option value="{{sub0.id}}">{{sub0.subjectName}}</option>
 					{{/each}}
 				</select>
-				<input type="hidden" name="subjectName" value="{{each subjectdata as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
+				<input type="hidden" name="subjectName" value="{{each subjectdata0 as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">所属部门：</label>
 			<div class="col-sm-4">
