@@ -59,9 +59,9 @@
 <table class="table table-bordered">
     <tbody>
         <tr>
-            <td>现收：<span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span></td>
-            <td>现付：<span class="F-float F-money">{{basicInfo.guideAllPayMoney}}</span></td>
-            <td>预支款：<span class="F-float F-money">{{basicInfo.guideAllPreMoney}}</span></td>
+            <td>计划现收：<span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span></td>
+            <td>计划现付：<span class="F-float F-money">{{basicInfo.guideAllPayMoney}}</span></td>
+            <td>计划预支款：<span class="F-float F-money">{{basicInfo.guideAllPreMoney}}</span></td>
         </tr>
     </tbody>
 </table>
@@ -441,7 +441,17 @@
                 <td>{{if shop.shop != null}}{{shop.shop.name}}{{/if}}</td>
                 <td>{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}</td>
                 <td>{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}</td>
-                <td>{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}</td>
+                <td>
+                    {{if !!shop.shopArrangeItemSet}}
+                    {{if shop.shopArrangeItemSet.length > 0}}
+                    {{each shop.shopArrangeItemSet as rs index}}
+                    <div {{if index > 0}}class="mar-t-10"{{/if}}>
+                    {{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    {{/if}}
+                </td>
                 <td>{{shop.remark}}</td>
             </tr>
             {{/if}}

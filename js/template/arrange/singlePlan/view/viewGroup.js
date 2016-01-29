@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":57,"md5":"36684ee0bf2f7a45090d96aefdbd40eb"}*/
+/*TMODJS:{"debug":true,"version":58,"md5":"96ea8f26231e49a74cdb24a12013adc0"}*/
 define(function(require) {
-    return require("../../../template")("arrange/tripPlan/view/viewGroup", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/viewGroup", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, memberList = $data.memberList, $escape = ($data.$index, 
             $utils.$escape), $out = "";
