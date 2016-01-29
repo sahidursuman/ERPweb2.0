@@ -776,6 +776,7 @@ define(function(require, exports) {
         var args = data.args,
             type = data.type;
         args.type = type;
+        data.imgUrl = imgUrl;
         var html = paymentTemplate(data);
 
         var payTypeLayer = layer.open({
@@ -988,7 +989,7 @@ define(function(require, exports) {
                     return false;
                 }
                 var photo = data.guideInfo.photo;
-                $container.find(".T-guideImg").attr("src",!!photo ? photo : "/images/logo_24x24.png");
+                $container.find(".T-guideImg").attr("src",!!photo ? imgUrl + photo : "/images/logo_24x24.png");
                 $container.find(".T-guideName").text(data.guideInfo.name);
                 $container.find(".T-guideNumber").text(data.guideInfo.guideCardNumber);
                 $container.find(".T-guideMobile").text(data.guideInfo.mobileNumber);
