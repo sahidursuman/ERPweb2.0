@@ -74,7 +74,7 @@ define(function(require, exports){
 
 		$searchArea.on('click',".T-btn-search",function(event){
 			event.preventDefault();
-			Payment.getTotal(0);
+			Payment.getTotal(0,$tab);
 			Payment.ajaxInit(0);
 		})
 		.on('click',".T-btn-add",function(event){
