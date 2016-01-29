@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":65,"md5":"7740b876b6f4b2635e1db4304a83a08f"}*/
+/*TMODJS:{"debug":true,"version":66,"md5":"7740b876b6f4b2635e1db4304a83a08f"}*/
 define(function(require) {
-    return require("../../../template")("arrange/tripPlan/view/addSingleTripPlan", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/addSingleTripPlan", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), id = $data.id, $escape = $utils.$escape, lineProName = $data.lineProName, startTime = $data.startTime, endTime = $data.endTime, $out = "";
             return $out += '<div class="container-fulid hct-editor-plan T-tab globalAdd">  <form class="T-basic-info" role="form" onsubmit="return false"> <div class="row"> <div class="col-xs-12 hd"> <h3 class="pull-left">基本信息</h3> <div class="pull-right" style="width:280px;"> <label class="col-xs-4 control-label text-right par-r-15">团号</label> <input type="text" readonly class="col-xs-8" value="系统自动生成"> </div> </div> </div> <div class="row"> <div class="col-xs-3"> <label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label> <div class="hct-input-group col-xs-8 ', 

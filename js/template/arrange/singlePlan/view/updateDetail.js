@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":9,"md5":"bde44a29fa3fd89259e75d8fd2b17826"}*/
+/*TMODJS:{"debug":true,"version":10,"md5":"bde44a29fa3fd89259e75d8fd2b17826"}*/
 define(function(require) {
-    return require("../../../template")("arrange/tripPlan/view/updateDetail", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/updateDetail", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $string = $utils.$string, detail = $data.detail, $out = "";
             return $out += '<div class="hct-update-detail globalAdd"> <div class="detail-content"> <script class="T-editor" id="tripPlanUpdateDetail" type="text/plain" style="width:100%"> ', 
