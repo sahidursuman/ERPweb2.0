@@ -253,6 +253,7 @@ define(function(require, exports) {
         // 初始化下拉选项
         Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
+        Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'));
 
         Client.datepicker(Client.$checkSearchArea);
 
@@ -518,6 +519,7 @@ define(function(require, exports) {
         // 初始化下拉选项
         Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
         Client.getRecorderList(Client.$clearSearchArea.find('.T-search-enter'),  id);
+        Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'));
         //搜索事件
         Client.$clearSearchArea.find(".T-btn-search").click(function(){
             Client.ClientClear(0, false, $tab);
@@ -1007,6 +1009,43 @@ define(function(require, exports) {
         });        
     };
 
+    Client.getPartnerContactList = function($obj){
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item)  {
+                    $obj.val("");
+                    $obj.data('id', '');
+                }
+            },
+            select: function(event, ui) {
+                $obj.blur().data('id', ui.item.id);
+            }
+        }).one('click', function(event) {
+            $.ajax({
+                url : KingServices.build_url('financial/customerAccount', 'selectPartnerContact'),
+                type : 'POST',
+                showLoading:false,
+                data: ""
+            }).done(function(data) {
+                var partnerContact = data.partnerContact;
+                for(var i=0; i<partnerContact.length; i++){
+                    partnerContact[i].value = partnerContact[i].contactRealname;
+                    partnerContact[i].id = partnerContact[i].fromPartnerAgencyContactId;
+                }
+                partnerContact.unshift({id:'', value: '全部'});
+
+                $obj.autocomplete('option', 'source', partnerContact);
+                $obj.autocomplete('search', '').data('ajax', true);
+            });
+        }).on('click', function(event) {
+            event.preventDefault();
+            if ($obj.data('ajax')) {
+                $obj.autocomplete('search', '');
+            }
+        });        
+    };
+
     function getBaseArgs($tab, isAuto) {
         var id = $tab.find('.T-search-enter').data('id'),
             args = {};
@@ -1015,13 +1054,16 @@ define(function(require, exports) {
             if(!args)return false;
         }
         args = {
+            orderNumber : $tab.find('.T-search-orderNumber').val(),
             otaOrderNumber : $tab.find('.T-search-number').val(),
             creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
             creatorName : $tab.find('.T-search-enter').val(),
             startDate : $tab.find('.T-search-start-date').val(),
-            endDate : $tab.find('.T-search-end-date').val()
+            endDate : $tab.find('.T-search-end-date').val(),
+            fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
+            contactRealname : $tab.find('.T-search-contact').val()
         }
         console.log(args.lineProductId);
         if (args.lineProductName === '全部') {

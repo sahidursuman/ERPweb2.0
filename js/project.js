@@ -660,6 +660,7 @@ var modalScripts = {
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
     'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
+    'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
@@ -710,7 +711,9 @@ var modalScripts = {
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
-    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js" //并团转客
+    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js", //并团转客
+    'arrange_groupTransfer': "js/template/arrange/arrangeGroupTransfer/arrangeGroupTransfer.js", //团散转客
+    'arrange_individual': "js/template/arrange/arrangeIndividual/arrangeIndividual.js" //散客拼团
 };
 
 

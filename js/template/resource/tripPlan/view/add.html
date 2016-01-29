@@ -76,22 +76,22 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4">现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
+                    <span class="fix-w-4">计划现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">现付:</span><span class="T-guidePayedMoney F-float F-money">{{basicInfo.guideAllPayMoney}}</span>
+                    <span class="fix-w-4">计划现付:</span><span class="T-guidePayedMoney F-float F-money">{{basicInfo.guideAllPayMoney}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">预支款:</span><input type="text" name="guideAllPreMoney" class="F-float F-money" value="{{basicInfo.guideAllPreMoney}}">
+                    <span class="fix-w-4">计划预支款:</span><input type="text" name="guideAllPreMoney" class="F-float F-money" value="{{basicInfo.guideAllPreMoney}}">
                 </div>
             </div>
         </div>
     </div>
 
     <div class="trip-arrange">
-        <h5 class="base-title">行程安排</h5>
+        <h5 class="base-title">行程安排<a class="T-toggle-tripPlanDayList T-show" style="font-size: 12px; color: #999; display: inline-block; margin-left: 15px; font-weight: 100;">收起</a></h5>
         <table class="table table-bordered">
-            <tbody>
+            <tbody class="T-tripPlanDayList-tbody">
                 <tr>
                     <th>日期</th>
                     <th>行程简要</th>
@@ -860,6 +860,7 @@
                                         <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" /></td>
                                         <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
                                         <td>
+                                            {{if !!shop.shopArrangeItemSet}}
                                             {{if shop.shopArrangeItemSet.length > 0}}
                                             {{each shop.shopArrangeItemSet as rs index}}
                                             <div data-entity-id="{{rs.id}}" {{if index > 0}}class="mar-t-10"{{/if}}>
@@ -868,6 +869,13 @@
                                             <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
                                             </div>
                                             {{/each}}
+                                            {{/if}}
+                                            {{else}}
+                                            <div data-entity-id="">
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                            <input type="hidden" name="shopPolicyId" value=""/>
+                                            <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                            </div>
                                             {{/if}}
                                         </td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500"/></td>
