@@ -105,11 +105,11 @@
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
                          <div class="clearfix" style="margin-top:6px">
-                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"    data-id="{{FeeList.id}}" class="T-type pull-left">
-                                    {{#FeeList.type | getFeeItemType: false}}
+                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type pull-left">
+                                    {{#FeeList.type | getFeeItemType: true}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
-                                    <button class="btn btn-success btn-sm btn-white T-action T-add">
+                                    <button class="btn btn-success btn-sm btn-white T-action T-add" {{if FeeList.type==3}}disabled{{/if}}>
                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                     </button>
                                 </label>
@@ -117,11 +117,11 @@
                           {{/if}}
                           {{if index>0}}
                            <div class="clearfix" style="margin-top:5px">
-                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  data-id="{{FeeList.id}}" class="T-type pull-left">
-                                    {{#FeeList.type | getFeeItemType: false}}
+                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}" {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type pull-left">
+                                    {{#FeeList.type | getFeeItemType: true}}
                                  </select>
                                 <label class="timeArea" style="float:right;padding-top:0px;">
-                                    <button class="btn btn-success btn-sm btn-white T-action T-del">
+                                    <button class="btn btn-success btn-sm btn-white T-action T-del" {{if FeeList.type==3}}disabled{{/if}}>
                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                     </button>
                                 </label>
@@ -133,10 +133,10 @@
                          <td>
                           {{each subList.touristGroupFeeList as FeeList index}}
                            {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
+                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
                             {{/if}}
                             {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
+                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}}  class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
 
                             {{/if}}
                           {{/each}}
@@ -144,10 +144,10 @@
                          <td>
                          {{each subList.touristGroupFeeList as FeeList index}}
                          {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{/each}}
                         </td>
