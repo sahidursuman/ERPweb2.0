@@ -10,7 +10,7 @@
 			<span class="hct-pay-payee">收款方：<strong>{{if type == 0}}{{args.resourceName}}{{else}}{{resourceName}}{{/if}}</strong></span>
 		</div>
 		<div class="col-xs-3">
-			<a class="hct-pay-item fa fa-check T-option T-pay-item" data-value="1">
+			<a class="hct-pay-item fa fa-check T-option T-pay-item pay-action" data-value="1">
 				<img src="/images/underline.png">
 			</a>
 		</div>
@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-xs-12 hide T-guideInfo">
 			<div class="hct-pay-info">
-				<div class="hct-pi-header pull-left"><img class="T-guideImg" src="{{if type == 0 || guideInfo.photo == "" || guideInfo.photo == null}}/images/logo_24x24.png{{else}}{{guideInfo.photo}}{{/if}}"></div>
+				<div class="hct-pi-header pull-left"><img class="T-guideImg" src="{{if type == 0 || guideInfo.photo == "" || guideInfo.photo == null}}/images/logo_24x24.png{{else}}{{imgUrl + guideInfo.photo}}{{/if}}"></div>
 				<div class="hct-pi-name pull-left T-guideName">{{if type == 1 || type == 2}}{{guideInfo.name}}{{/if}}</div>
 				<div class="hct-pi-guideNum pull-left">导游证：<span class="T-guideNumber">{{if type == 1 || type == 2}}{{guideInfo.guideCardNumber}}{{/if}}</span></div>
 				<div class="hct-pi-hotel pull-left">联系电话：<span class="T-guideMobile">{{if type == 1 || type == 2}}{{guideInfo.mobileNumber}}{{/if}}</span></div>
