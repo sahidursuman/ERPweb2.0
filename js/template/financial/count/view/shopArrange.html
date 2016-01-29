@@ -18,7 +18,7 @@
             <th class="th-border" colspan="2">导佣</th>
             <!--  <th class="th-border" rowspan="2">现收</th> -->
             <th class="th-border" rowspan="2">导游报账备注</th>
-            {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+            <th class="th-border" rowspan="2">是否对账</th>
         </tr>
         <tr>
           <th class="th-border"><span class="necessary">*</span>时间</th>
@@ -34,14 +34,14 @@
         <tbody class="T-count-shopping"> 
         {{each dayList as day}}
         {{if day.shopArrange != null}}
-        {{each day.shopArrange as shopArrangeList}}
-        {{each shopArrangeList.shopArrangePolicy as arrange index}}
+        {{each day.shopArrange as arrangeList}}
+        {{each arrangeList.shopArrangeList as arrange index}}
         {{if arrange != null}}
-        <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}" shopArrid = "{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{shopArrangeList.shopArrangePolicy.length}}">
-            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><span class="whichDay"></span> </td>{{/if}}
-            {{if index==0}}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}">{{arrange.shop.name}}</td>{{/if}}
-            <td><div data-index="{{index+1}}">{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.name}}&nbsp;&nbsp;
-            <a href="javascript:void(0)" class="T-addShop">[增加]</a>{{else}}<input name="shopPolicyName" value="" type="text"><input name="shopPolicyId" type="hidden">&nbsp;&nbsp;<a href="javascript:void(0)">[增加]</a>{{/if}}</div></td>
+        <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.whichDay}}_{{arrange.shopId}}" shopArrid = "{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+            {{if index==0}}<td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>{{/if}}
+            {{if index==0}}<td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}</td>{{/if}}
+
+            <td></td>
             <td><div data-index="{{index+1}}"><input class="F-float F-money" policyId="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{arrange.consumeMoney}}" old="{{arrange.consumeMoney}}" maxlength="11" 
             {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></div></td>
             <td><div data-index="{{index+1}}">{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -60,9 +60,8 @@
             <td><div data-index="{{index+1}}"><span class="guideRateMoney F-float F-money">{{arrange.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{arrange.guideRateMoney}}" 
             {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></div></td>
 
-            {{if index == 0 }}<td rowspan="{{shopArrangeList.shopArrangePolicy.length}}"><div data-index="{{index+1}}">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</div></td>{{/if}}
-
-            {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+            {{if index == 0 }}<td ><div data-index="{{index+1}}">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</div></td>{{/if}}
+            <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
         </tr>
         {{/if}}
         {{/each}}  
