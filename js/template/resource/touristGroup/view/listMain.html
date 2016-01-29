@@ -9,9 +9,9 @@
                 </select>
             </div>
             <div class="form-group mar-r-10">
-                <input type="text" class="T-choosePAB" placeholder="全部来源" style="{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
-                <input type="text" class="T-choosePartnerAgency T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
-                <input type="text" class="T-chooseBussinessGroup T-PorB" placeholder="来源" name="fromBussinessGroupName" style="{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == " "}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
+                <input type="text" class="T-choosePAB" placeholder="全部客户" style="{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
+                <input type="text" class="T-choosePartnerAgency T-PorB" placeholder="客户" name="fromPartnerAgencyName" style="{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
+                <input type="text" class="T-chooseBussinessGroup T-PorB" placeholder="客户" name="fromBussinessGroupName" style="{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == " "}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
                 <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
                 <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
             </div>

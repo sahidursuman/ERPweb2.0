@@ -7,8 +7,8 @@
                 <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
             </div>
             <div class="form-group mar-l-10">
-                <label class="control-label"><span>客户来源：</span></label>
-                <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName" placeholder="客户来源" />
+                <label class="control-label"><span>客户：</span></label>
+                <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName" placeholder="客户" />
                 <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
             </div>
             <div class="form-group mar-l-10">
@@ -59,7 +59,7 @@
                     <th>出游日期</th>
                     <th>游客</th>  
                     <th>人数</th>
-                    <th>客户来源</th>   
+                    <th>客户</th>   
                     <th>团款应收</th>
                     {{if searchParam.type == 1}}
                     <th>中转</th>
