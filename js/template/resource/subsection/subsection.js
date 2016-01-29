@@ -255,7 +255,7 @@ define(function(require, exports) {
 
 		subsection.datePicker("T-startTime");
 
-		subsection.lineProductChoose();
+	/*	subsection.lineProductChoose();*/
 
 		// 删除
 		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
@@ -342,6 +342,16 @@ define(function(require, exports) {
 	    //若本段核算中转选中将重装费用项带到新增分段的费用项目中
 	    subsection.checkedTransitFee(subsection.$tbody);
 
+
+
+	    //搜索线路
+		subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-search-line').children('span').on('click', function(event) {
+			alert('Hello');
+			/* Act on the event */
+			subsection.getLineProductList($('.T-subsection-lineproduct-search'), 0, '');
+		});
+
+
 		/**
 		 * [startIntime 中转分段初日期
 		 * @param  {[type]} whichDay  [description]
@@ -386,7 +396,7 @@ define(function(require, exports) {
 			}
 			var html = ''
 			+ '<tr data-entity-id="">'
-			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
+			+ '<td><div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value=""><span class="hct-group-search cursor">[搜索]</span><input type="hidden" name="lineProductId" value=""></div></td>'
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
@@ -420,16 +430,16 @@ define(function(require, exports) {
 				subsection.deleteOperation(id,$this);
 			})
 			subsection.datePicker("T-startTime");
-			subsection.lineProductChoose();
+			/*subsection.lineProductChoose();*/
 			validator = rule.checkdSaveSubsection($tbody);
 
 			//新增费用项目
-			subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').off().on('click', function(event) {
+			/*subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-add').off().on('click', function(event) {
 				event.preventDefault();
 				var $that = $(this),$tbody =subsection.$tbody;
-				/* Act on the event */
+				 Act on the event *
 				subsection.addFeeItem($that, $tbody);
-			});
+			});*/
 
 			$tbody.find('.T-type').on('change', function(event) {
 				event.preventDefault();
@@ -721,7 +731,7 @@ define(function(require, exports) {
 	 * 线路产品选择
 	 * @param  {[type]}  [description]
 	 */
-	subsection.lineProductChoose = function() {
+/*	subsection.lineProductChoose = function() {
 		var chooseLineProduct = subsection.$tabSub.find(".T-chooseLineProduct");
 		chooseLineProduct.autocomplete({
 			minLength:0,
@@ -782,7 +792,60 @@ define(function(require, exports) {
                 }
 			})
 		})
-	}
+	}*/
+
+
+
+
+		/**
+	 * 获取线路产品数据，并填入选择线路产品的对话框
+	 * @param  {object} $dialog dialog的Jquery对象
+	 * @param  {int} type    0：新增 1：更新
+	 * @param  {int} page    页码
+	 * @param  {string} name    搜索关键字
+	 * @return {[type]}         [description]
+	 */
+	subsection.getLineProductList = function($dialog, page, name) {
+		page = page || 0;
+		$.ajax({
+			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
+			type: 'POST',
+            showLoading: false,
+			data: "name=" + name + "&page=" + page
+		})
+		.done(function(data) {
+			if (showDialog(data)) {
+				data.lineProductList = JSON.parse(data.lineProductList);
+				var listHtml = lineproductSearchList(data);
+				$tbody=$dialog.find('.T-normal-list')
+				$tbody.html(listHtml);
+				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
+
+				$dialog.find('.T-btn-search').on('click', function(event) {
+					event.preventDefault();
+					/* Act on the event */
+					var $that=$(this),$searchLine=$that.closest('.form-inline');
+					var name=$searchLine.find('.T-name').val();
+					subsection.getLineProductList($dialog, obj.curr -1, name);
+				});
+
+				// 绑定翻页组件
+				laypage({
+				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							subsection.getLineProductList($dialog, obj.curr -1, name);
+				    	}
+				    }
+				});	
+				// 让对话框居中
+				$(window).trigger('resize');
+			}
+		});			
+	};
+
 	/**
 	 * 撤销分段操作
 	 * @return {[type]} id [id]
