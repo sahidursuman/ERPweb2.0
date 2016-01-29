@@ -89,7 +89,7 @@
                     </a>
                 </td>
                 <td>{{if innerTransferList.area == null || innerTransferList.area == ""}}-{{else}}{{innerTransferList.area}}{{/if}}</td>
-                <td>{{if innerTransferList.partnerAgencyName == null || innerTransferList.partnerAgencyName == ""}}无{{else}}{{innerTransferList.partnerAgencyName}}{{/if}}</td>
+                <td>{{if !innerTransferList.fromBusinessGroupName}}无{{else}}{{innerTransferList.fromBusinessGroupName}}{{/if}}</td>
                 <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">
                         <span class="F-float F-money">{{innerTransferList.needInComeMoney}}</span>
                     </a>
