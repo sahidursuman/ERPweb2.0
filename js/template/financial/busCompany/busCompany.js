@@ -105,7 +105,7 @@ define(function(require, exports) {
                     $('.tab-' + menuKey + '-checking').children('a').trigger('click');
                     return false;
                 }
-                busCompany.busCompanyCheck(0,id,name,"",startDate,endDate);
+                busCompany.busCompanyCheck(0,id,name,"","",startDate,endDate);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 var $clearTab = $("#tab-" + menuKey + "-clearing-content");
@@ -113,15 +113,16 @@ define(function(require, exports) {
                     $('.tab-' + menuKey + '-clearing').children('a').trigger('click');
                     return false;
                 }
-                busCompany.busCompanyClear(0,0,id,name,"",startDate,endDate);
+                busCompany.busCompanyClear(0,0,id,name,"","",startDate,endDate);
             }
         });
     };
 
     //对账
-    busCompany.busCompanyCheck = function(page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
+    busCompany.busCompanyCheck = function(page,busCompanyId,busCompanyName,accountInfo,licenseNumber,startDate,endDate){
         if (busCompany.$checkSearchArea && arguments.length === 3) {
             accountInfo = busCompany.$checkSearchArea.find("input[name=accountInfo]").val(),
+            licenseNumber = busCompany.$checkSearchArea.find("input[name=licenseNumber]").val(),
             startDate = busCompany.$checkSearchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$checkSearchArea.find("input[name=endDate]").val()
         }
@@ -136,6 +137,7 @@ define(function(require, exports) {
             pageNo: page,
             busCompanyId: busCompanyId + "",
             accountInfo: accountInfo,
+            licenseNumber: licenseNumber,
             startTime: startDate,
             endTime: endDate,
             sortType: "startTime"
@@ -230,9 +232,10 @@ define(function(require, exports) {
     };
 
     //付款
-    busCompany.busCompanyClear = function(isAutoPay,page,busCompanyId,busCompanyName,accountInfo,startDate,endDate){
+    busCompany.busCompanyClear = function(isAutoPay,page,busCompanyId,busCompanyName,accountInfo,licenseNumber,startDate,endDate){
         if (busCompany.$clearSearchArea && arguments.length === 4) {
             accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val(),
+            licenseNumber = busCompany.$clearSearchArea.find("input[name=licenseNumber]").val(),
             startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val()
         }
@@ -246,6 +249,7 @@ define(function(require, exports) {
             pageNo: page,
             busCompanyId: busCompanyId + "",
             accountInfo: accountInfo,
+            licenseNumber : licenseNumber,
             startTime: startDate,
             endTime: endDate,
             sortType: "startTime"

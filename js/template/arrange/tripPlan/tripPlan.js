@@ -471,7 +471,7 @@ define(function(require, exports) {
                     }
                 });
             } else {
-                layer.tips('请选择客户来源', this, {
+                layer.tips('请选择客户', this, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });
