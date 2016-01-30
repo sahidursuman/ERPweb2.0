@@ -10,6 +10,8 @@ define(function(require, exports) {
 	    listTemplate = require("./view/list"),
 	    rule = require("./rule"),
 	    operationTemplate = require("./view/operation"),
+	    lineproductSearchList = require("./view/lineproductSearchList"),
+	    searchListTemplate = require("./view/searchList"),
 	    tabId = "tab-"+menuKey+"-content",
 		validator;
 	/**
@@ -65,7 +67,7 @@ define(function(require, exports) {
 		});
 		//模糊查询
 		subsection.getPartnerAgencyList();
-		subsection.getLineProductList();
+		//subsection.getLineProductList();
 		subsection.getCreatorList();
 		//初始化列表
 		subsection.subsectionList(0);
@@ -255,15 +257,6 @@ define(function(require, exports) {
 
 		subsection.datePicker("T-startTime");
 
-	/*	subsection.lineProductChoose();*/
-
-		// 删除
-		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
-			var $this = $(this), $parents = $this.closest("tr"), id = $parents.data("entity-id");
-			subsection.deleteOperation(id,$this);
-			subsection.$tabSub.data('isEdited', true);
-		});
-
 
 		 //删除费用项
 		subsection.$tbody.find('.T-del').on('click', function(event) {
@@ -273,17 +266,6 @@ define(function(require, exports) {
 			subsection.delFeeItem($this);
 		});
 
-		//初始化页面disabled--false
-		subsection.$tbody.find('.T-type').prop('disabled',false);
-		//费用项选中后不能编辑
-		subsection.$tbody.find('.T-type').on('change', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that = $(this);
-			    $that.attr("disabled",true);$that.css('backgroundColor','#EFEBEB');
-		});
-
-        
 		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
@@ -345,11 +327,17 @@ define(function(require, exports) {
 
 
 	    //搜索线路
-		subsection.$tabSub.find('.T-subsectionOperationTbody').find('.T-search-line').children('span').on('click', function(event) {
-			alert('Hello');
-			/* Act on the event */
-			subsection.getLineProductList($('.T-subsection-lineproduct-search'), 0, '');
-		});
+	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-option', function(event) {
+	    	event.preventDefault();
+	    	/* Act on the event */
+	    	var $that=$(this),$parents = $that.closest("tr"), id = $parents.data("entity-id");
+	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
+	    		subsection.getLineProductList(0, '');
+	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
+				subsection.deleteOperation(id,$that);
+				subsection.$tabSub.data('isEdited', true);
+	    	};
+	    });
 
 
 		/**
@@ -641,7 +629,7 @@ define(function(require, exports) {
 				days : getValue(subsection.$tabSub, "touristGroupDays"),
 				subTouristGroupList : [],
 				delSubTouristGroupIdList : [],
-				touristGroupFeeList : []
+				touristGroupSubFeeList : []
 			},
 			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
 			receivables = 0, tmp;
@@ -666,7 +654,7 @@ define(function(require, exports) {
 					operateCalculteOut : $tr.find("input[name=operateCalculteOut]").is(":checked") ? 1 : 0 ,
 					needPayAllMoney: getValue($tr,"needPayAllMoney"),
 					days : getValue($tr,"days"),
-					touristGroupFeeList : []
+					touristGroupSubFeeList : []
 				}
 
 				//费用项目$feeItemTr
@@ -678,7 +666,7 @@ define(function(require, exports) {
 							count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
 						    price : $(this).closest('tr').find(".T-price-" + divIndex).val()
 						};
-					subTouristGroupJson.touristGroupFeeList.push(touristGroupFeeJson);
+					subTouristGroupJson.touristGroupSubFeeList.push(touristGroupFeeJson);
 				});
 
 				subTouristGroup.subTouristGroupList.push(subTouristGroupJson);
@@ -805,7 +793,18 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	subsection.getLineProductList = function($dialog, page, name) {
+	subsection.getLineProductList = function(page, name) {
+		var html=searchListTemplate({});  
+		var searchTravelLinelayer = layer.open({
+			type: 1,
+			title: '请选择线路产品',
+			skin: 'layui-layer-rim', //加上边框
+			area: '85%', //宽高
+			zIndex:1029,
+			content: html,
+			scrollbar: false,
+		});
+		var $dialog = $('.T-subsection-lineproduct-search');
 		page = page || 0;
 		$.ajax({
 			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
@@ -815,9 +814,9 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)) {
-				data.lineProductList = JSON.parse(data.lineProductList);
+				data.lineProductList = data.lineProductList;
 				var listHtml = lineproductSearchList(data);
-				$tbody=$dialog.find('.T-normal-list')
+				$tbody=$dialog.find('.T-normal-list');
 				$tbody.html(listHtml);
 				$tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
 
@@ -826,7 +825,7 @@ define(function(require, exports) {
 					/* Act on the event */
 					var $that=$(this),$searchLine=$that.closest('.form-inline');
 					var name=$searchLine.find('.T-name').val();
-					subsection.getLineProductList($dialog, obj.curr -1, name);
+					subsection.getLineProductList($dialog, 0, name);
 				});
 
 				// 绑定翻页组件
@@ -836,7 +835,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							subsection.getLineProductList($dialog, obj.curr -1, name);
+							subsection.getLineProductList(obj.curr -1, name);
 				    	}
 				    }
 				});	
@@ -891,34 +890,6 @@ define(function(require, exports) {
 			}
 		}
 			$(obj).autocomplete('option','source',fromGuideObj);
-			$(obj).autocomplete('search', '');
-		});
-	},
-
-	//线路产品模糊查询
-	subsection.getLineProductList = function(){
-		var getPartnerAgencyList = subsection.$tab.find(".T-chooseLineProduct");
-		getPartnerAgencyList.autocomplete({
-			minLength: 0,
-			change: function(event, ui) {
-				if (ui.item == null)  {
-					$(this).closest("div").find("input[name=lineProductId]").val("");
-				}
-			},
-			select: function(event, ui) {
-				$(this).blur();
-				var obj = this;
-				$(obj).closest("div").find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-			}
-		}).click(function(){
-		var obj = this;
-		var lineProductObj = autocompleteData.lineProductList;
-		if(lineProductObj !=null && lineProductObj.length>0){
-			for(var i=0;i<lineProductObj.length;i++){
-				lineProductObj[i].value = lineProductObj[i].name;
-			}
-		}
-			$(obj).autocomplete('option','source',lineProductObj);
 			$(obj).autocomplete('search', '');
 		});
 	},
