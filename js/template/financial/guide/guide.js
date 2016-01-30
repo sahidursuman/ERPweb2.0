@@ -511,7 +511,7 @@ define(function(require, exports) {
                     .done(function(data) {
                         if (showDialog(data)) {
                             FinGuide.payingJson = data.autoPayList;
-                            $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                            $tab.data('isEdited', true).find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                             FinGuide.setAutoFillEdit($tab, true);
                         }
                     });
