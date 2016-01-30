@@ -110,7 +110,10 @@
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                   {{else}}
-                                 <input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"   class="T-type col-sm-8 pull-left" type="text" name="type"  value="中转结算价">
+                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                    {{#FeeList.type | getFeeItemType: true}}
+                                 </select>
+
                             {{/if}}
                                 <label class="timeArea" style="float:right;padding-top:0px;">
                                     <button class="btn btn-success btn-sm btn-white T-action T-add" {{if FeeList.type==3}}disabled{{/if}}>
@@ -126,7 +129,9 @@
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                  {{else}}
-                                 <input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  class="T-type col-sm-8 pull-left" type="text" name="type"  value="中转结算价">
+                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                    {{#FeeList.type | getFeeItemType: true}}
+                                 </select>
                             {{/if}}
 
 
