@@ -577,7 +577,7 @@ define(function(require, exports) {
 	subsection.operationSave = function(tabArgs) {
 		if(!validator.form()){return;}
 		var flag = subsection.$tabSub.find('.T-flag').val();
-		var $btn = subsection.$tabSub.find(".T-btn-operation-save"),
+		var $btn = subsection.$tabSub.find(".T-btn-operation-save"),num=0,
 			days = $btn.data('days'),
 			currentNeedPayMoney = $btn.data('currentNeedPayMoney'),
 			isCheckNeedPayMoney = false,
@@ -595,6 +595,7 @@ define(function(require, exports) {
 		// get table data
 		$tbody.children('tr').each(function() {
 			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type');
+			     num+=$(this).find('.T-payedMoney').val();
 
 			if ($tr.hasClass('del')) {
 				subTouristGroup.delSubTouristGroupIdList.push({id: id});
@@ -631,6 +632,13 @@ define(function(require, exports) {
 				receivables += getValue($tr,"needPayAllMoney")*1;
 			}
 		});
+
+
+		if ($tbody.children('tr').find("input[name=operateCurrentNeedPayMoney]:checked").length==0 && $tbody.data('neepayallmoney')<=num) {
+			showMessageDialog($( "#confirm-dialog-message" ),"费用项金额应等于应收与中转结算价之差");
+			return;
+        };
+
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
 		}
