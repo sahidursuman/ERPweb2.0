@@ -511,7 +511,7 @@ define(function(require, exports) {
                     .done(function(data) {
                         if (showDialog(data)) {
                             FinGuide.payingJson = data.autoPayList;
-                            $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                            $tab.data('isEdited', true).find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                             FinGuide.setAutoFillEdit($tab, true);
                         }
                     });
@@ -991,7 +991,7 @@ define(function(require, exports) {
                 var photo = data.guideInfo.photo;
                 $container.find(".T-guideImg").attr("src",!!photo ? imgUrl + photo : "/images/logo_24x24.png");
                 $container.find(".T-guideName").text(data.guideInfo.name);
-                $container.find(".T-guideNumber").text(data.guideInfo.guideCardNumber);
+                $container.find(".T-guideNumber").text(data.guideInfo.guideCardNumber || '');
                 $container.find(".T-guideMobile").text(data.guideInfo.mobileNumber);
             });
             
