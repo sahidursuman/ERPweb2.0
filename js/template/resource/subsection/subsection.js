@@ -281,13 +281,13 @@ define(function(require, exports) {
 		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'"  name="type"  class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'"  name="type"  class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
 					  +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
                       +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type  col-sm-8  pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
                     count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
            	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
 		        }
@@ -382,7 +382,7 @@ define(function(require, exports) {
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
             +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
             +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
 			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>'
@@ -587,7 +587,7 @@ define(function(require, exports) {
 				days : getValue(subsection.$tabSub, "touristGroupDays"),
 				subTouristGroupList : [],
 				delSubTouristGroupIdList : [],
-				touristGroupFeeList : []
+				touristGroupSubFeeList : []
 			},
 			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
 			receivables = 0, tmp;
@@ -612,7 +612,7 @@ define(function(require, exports) {
 					operateCalculteOut : $tr.find("input[name=operateCalculteOut]").is(":checked") ? 1 : 0 ,
 					needPayAllMoney: getValue($tr,"needPayAllMoney"),
 					days : getValue($tr,"days"),
-					touristGroupFeeList : []
+					touristGroupSubFeeList : []
 				}
 
 				//费用项目$feeItemTr
@@ -624,7 +624,7 @@ define(function(require, exports) {
 							count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
 						    price : $(this).closest('tr').find(".T-price-" + divIndex).val()
 						};
-					subTouristGroupJson.touristGroupFeeList.push(touristGroupFeeJson);
+					subTouristGroupJson.touristGroupSubFeeList.push(touristGroupFeeJson);
 				});
 
 				subTouristGroup.subTouristGroupList.push(subTouristGroupJson);
