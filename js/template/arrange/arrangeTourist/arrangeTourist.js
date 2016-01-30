@@ -1207,7 +1207,7 @@ define(function(require, exports) {
      */
     arrangeTourist.delTransferData = function(id, $tr, $tab) {
         if (id != null && id != "") {
-            $.ajax({
+           /* $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "deleteInTransferFee"),
                 type: "POST",
                 data: "id=" + id,
@@ -1215,7 +1215,15 @@ define(function(require, exports) {
                     $tr.remove();
                     arrangeTourist.PayMoneyF($tab);
                 }
+            });*/
+
+             //移除空的其他费用
+            $tr.fadeOut(function() {
+                $tr.addClass('deleted');
+                $tr.hide();
+                arrangeTourist.PayMoneyF($tab);
             });
+
         } else {
             //移除空的其他费用
             $tr.fadeOut(function() {
@@ -1342,17 +1350,29 @@ define(function(require, exports) {
                 otherFeeListDel.push(otherFeeDel);
             })
         };
+
+         var otherinnerFeeDel  = [];
+        if (innerTransferFeeStatus == 1) {
+            $tbodyFee.find(" tr.deleted").each(function(i) {
+                var otherFeeDel = {
+                    "id": $(this).attr("data-entity-id")
+                };
+                otherinnerFeeDel.push(otherFeeDel);
+            })
+        };
+
         var formInData = $innerForm.serialize();
         var touristGroup = JSON.stringify(touristGroup),
             inTransferFee = JSON.stringify(inTransferFee),
             otherFeeList = JSON.stringify(otherFeeList),
             otherFeeListDel = JSON.stringify(otherFeeListDel);
+            otherinnerFeeDel = JSON.stringify(otherinnerFeeDel);
 
 
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "",
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherinnerFeeDel),
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
