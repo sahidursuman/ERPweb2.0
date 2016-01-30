@@ -641,17 +641,17 @@ define(function(require, exports) {
 			for(var i = 0;i<serviceStandardList.length;i++){
 				if(!!val){
 					if(serviceStandardList[i].serviceTitle == val){
-						showMessageDialog($( "#confirm-dialog-message" ),'['+val+']'+"服务标准已存在，请检查");
+						showMessageDialog($( "#confirm-dialog-message" ),'【'+val+'】'+"服务标准已存在，请检查");
 					}
 				}else{
 					if(i+1 !=serviceStandardList.length){
 						if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
-							showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i+1].serviceTitle+']'+"服务标准已存在，请检查");
+							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i+1].serviceTitle+'】'+"服务标准已存在，请检查");
 							return;
 						}
 					}else{
 						if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
-							showMessageDialog($( "#confirm-dialog-message" ),'['+serviceStandardList[i].serviceTitle+']'+"服务标准已存在，请检查");
+							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i].serviceTitle+'】'+"服务标准已存在，请检查");
 							return;
 						}
 					}
@@ -2727,20 +2727,16 @@ define(function(require, exports) {
 			travelLineData.serviceStandardList.push(args);
 		});
 		//校验是否有重复的服务标准
-		var checkArr = travelLineData.serviceStandardList;
-		for(var i = 0;i<checkArr.length;i++){
-			if(i+1 !=checkArr.length){
-				if(checkArr[i].serviceTitle == checkArr[i+1].serviceTitle){
-					showMessageDialog($( "#confirm-dialog-message" ),'['+checkArr[i+1].serviceTitle+']'+"服务标准已存在，请检查");
-					return;
-				}
-			}else{
-				if(checkArr[i-1].serviceTitle == checkArr[i].serviceTitle){
-					showMessageDialog($( "#confirm-dialog-message" ),'['+checkArr[i].serviceTitle+']'+"服务标准已存在，请检查");
+		var checkArr = travelLineData.serviceStandardList, len = checkArr.length;
+		for (var i = 0;i < len ;i ++ ) {
+			for (var j = i-1; j >= 0; j --)  {
+				if (checkArr[i].serviceTitle === checkArr[j].serviceTitle) {
+					showMessageDialog($( "#confirm-dialog-message" ),'【'+checkArr[i].serviceTitle+'】'+"服务标准已重复，请去重之后再提交");
 					return;
 				}
 			}
-		};
+		}
+
 		// 存放每天安排数据的数组
 		travelLineData.lineDayList = [];
 		
