@@ -102,7 +102,7 @@ define(function(require, exports) {
 			event.preventDefault();
 			/* Act on the event */
 			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
-			var isEmployee = $that.closest('div').prev('div').find('.T-select-employeerDept').children('button').attr('data-value');
+			var isEmployee = $that.closest('div').prev('div').children('button').attr('data-value');
 			if (isEmployee==1) {//员工
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
