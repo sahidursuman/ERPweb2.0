@@ -29,11 +29,12 @@
                         <th class="th-border" width="20%">费用项</th>
                         <th class="th-border">数量</th>
                         <th class="th-border">单价</th>
-                        <th class="th-border">金额</th>   
+                        <th class="th-border">金额</th>
                         <th class="th-border">说明</th>
                     </tr>
                 </thead>
                 <tbody class="T-innerOutEditFeeTbody">
+                     <input type="hidden"  class="T-currentNeedPayMoney" value="{{ptGroup.currentNeedPayMoney}}" />
                     <!--游客小组费用start-->
                     {{each ptGroup.touristGroupFeeList as transferList}}
                         <tr  data-entity-id="{{transferList.id}}" data-type="{{transferList.type}}">
