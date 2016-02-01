@@ -3686,8 +3686,8 @@ define(function(require, exports){
 		//团信息
 		var tripPlan = {
 				id:Count.changeTwoDecimal($obj.find('.financial-tripPlanId').val()),
-				grossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.grossProfitMoney').text())),
-				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text())),
+				grossProfitMoney:parseFloat($obj.find('.grossProfitMoney').text()),
+				perGrossProfitMoney:parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text()),
 				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
 				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text())),
 				outPayAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripTransitCost').text()))
