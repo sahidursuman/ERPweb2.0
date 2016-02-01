@@ -1166,7 +1166,7 @@ define(function(require, exports){
 	};
 	//新增购物安排--报账、审核通用
 	Count.addShopping = function($bodyObj,$parentObj){
-		var html = '<tr>'+
+		var html = '<tr class="oldData">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
 		'<td>人数返佣</td>'+
@@ -1187,7 +1187,7 @@ define(function(require, exports){
 		'<td><span class="travelAgencyRateMoney"></span></td>'+
 		'<td><input type="text" name="guideRate" style="width:90px;"/><input type="hidden" name="guideRateMoney" /></td>'+
 		'<td><span class="guideRateMoney"></span></td>'+
-		'<td><input type="text" name="billRemark"/></td>'+
+		'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1214,7 +1214,16 @@ define(function(require, exports){
 	};
 	//新增商品
 	Count.addShop = function($obj,$parentObj){
-		var html = '<tr>'+
+		var $that = $obj, $next,
+				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
+				shopId = "",
+				td_cnt = $tr.children('td').length;
+			if(!!$tr.attr('shopId')){
+				shopId = $tr.attr('shopId');
+			}
+			$next =  $tr.nextAll();
+
+		var html = '<tr shopId = '+shopId+'>'+
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<a href="javascript:void(0)" class="T-delShop">[删除]</a></td>'+
 			'<td><input type="text" name="consumeMoney" style="width:90px;"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
@@ -1222,12 +1231,9 @@ define(function(require, exports){
 			'<td><span class="travelAgencyRateMoney"></span></td>'+
 			'<td><input type="text" name="guideRate" style="width:90px;"><input type="hidden" name="guideRateMoney"></td>'+
 			'<td><span class="guideRateMoney"></span></td>'+
-			'<td><input type="text" name="billRemark"/></td>'+
+			'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 			'</tr>';
-			var $that = $obj, $next,
-				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
-				td_cnt = $tr.children('td').length;
-			$next =  $tr.nextAll();
+			
 			if($next.length>1){
 				rowSpan = rowSpan * 1 + 1;
 				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
@@ -1246,6 +1252,7 @@ define(function(require, exports){
 			}else{
 				rowSpan = rowSpan * 1 + 1;
 				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
+				$tr.prop('shopId', shopId);
 				$that.closest('tr').after(html);
 			};
 			//商品选择
@@ -2455,7 +2462,6 @@ define(function(require, exports){
 				
 			});
 		}
-		
 	};
 	//获取自费的数据
 	Count.getSelfData = function($obj,$parentObj){
@@ -3396,7 +3402,6 @@ define(function(require, exports){
 		var method = typeFlag == 1?'update':'webGuideAccountUpdate';
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-			saveJsonStr.log.type = "1";
 		console.log(saveJsonStr);
 		var addShopList = saveJsonStr.addShopArrangeList;
 		for(var i = 0;i<addShopList.length;i++){
@@ -3683,42 +3688,104 @@ define(function(require, exports){
 		});
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
-		$tr = $shopObj.find('tr');
-		$tr.each(function(){
-				var shopId = "";$(this).attr('shopid');
-
-				var id = "";
+		$tr = $shopObj.find('tr'),
+		$dataTr = $shopObj.find('.oldData');
+		$dataTr.each(function(i){
+			var shopArrange,shopArrangeItemSet = [],$that = $(this),$thatTd_len = $(this).children('td').length;
+			var id = "",shopId = '',whichDay = 1,td_len = $(this).children('td').length;
 				if(!!$(this).attr('shopArrangeId')){
 					id = $(this).attr('shopArrangeId');
-				}
-				var shopArrange = {
-					id:id,
-					shopPolicyId:$(this).find('input[name=shopPolicyId]').val(),
-					consumeMoney:$(this).find('input[name=consumeMoney]').val(),
-					travelAgencyRate:parseFloat($(this).find('input[name=travelAgencyRate]').val())/100,
-					travelAgencyRebateMoney:$(this).find('input[name=travelAgencyRateMoney]').val(),
-					guideRate:parseFloat($(this).find('input[name=guideRate]').val())/100,
-					guideRebateMoney:$(this).find('input[name=guideRateMoney]').val(),
-					customerRebateMoney:$(this).find('input[name=customerRebateMoney' + shopId + ']').val(),
-					parkingRebateMoney:$(this).find('input[name=parkingRebateMoney' + shopId + ']').val(),
-					billRemark:$(this).find('input[name=billRemark]').val()
-				}
+				};
+				if(!!$(this).attr('shopId')){
+					shopId = $(this).attr('shopId');
+				}else{
+					shopId = $(this).find('input[name=shopId]').val();
+				};
+				if(!!$(this).attr('whichDay')){
+					whichDay = $(this).attr('whichDay');
+				}else{
+					whichDay = $(this).find('select[name=whichDay]').val();
+				};
+				if(!!$that.attr('shopId')){
+					for(var j = 0;j<$tr.length;j++){
+						var $thisTr = $tr.eq(j),turnFlag = false;
+						if(!!$that.attr('shopId')){
+							if($that.attr('shopId') == $thisTr.attr('shopId') && !!$thisTr.attr('shopId')){
+								shopArrange = {
+									id:id,
+									shopId:shopId,
+									whichDay:whichDay,
+								};
+								itemSet={
+									id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
+									shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val(),
+									name:$thisTr.find('input[name=shopPolicy]').val(),
+									consumeMoney:$thisTr.find('input[name=consumeMoney]').val(),
+									billRemark:$thisTr.find('input[name=billRemark]').val(),
+									guideRate:parseFloat($thisTr.find('input[name=guideRate]').val())/100,
+									guideRebateMoney:$thisTr.find('input[name=guideRateMoney]').val(),
+									travelAgencyRate:parseFloat($thisTr.find('input[name=travelAgencyRate]').val())/100,
+									travelAgencyRebateMoney:$thisTr.find('input[name=travelAgencyRateMoney]').val()
+								};
+								shopArrangeItemSet.push(itemSet);
+								shopArrange.shopArrangeItemSet = shopArrangeItemSet;
+							};
+						};
+					}
+				}else{
+					var $newTr = $that,
+						$nextTr = $newTr.nextAll(),
+						td_cnt = $newTr.children('td').length;
+						for(var i = 0;i<$nextTr.length;i++){
+							var tdLen = $nextTr.eq(i).children('td').length,
+								$thisTr = $nextTr.eq(i);
+							if(tdLen < td_cnt){
+								if(i==0){
+									shopArrange = {
+										id:id,
+										shopId:shopId,
+										whichDay:whichDay,
+									};
+									itemSet={
+										id:$newTr.find('input[name=shopPolicyArrId]').val() || '',
+										shopPolicyId:$newTr.find('input[name=shopPolicyId]').val(),
+										name:$newTr.find('input[name=shopPolicy]').val(),
+										consumeMoney:$newTr.find('input[name=consumeMoney]').val(),
+										billRemark:$newTr.find('input[name=billRemark]').val(),
+										guideRate:parseFloat($newTr.find('input[name=guideRate]').val())/100,
+										guideRebateMoney:$newTr.find('input[name=guideRateMoney]').val(),
+										travelAgencyRate:parseFloat($newTr.find('input[name=travelAgencyRate]').val())/100,
+										travelAgencyRebateMoney:$newTr.find('input[name=travelAgencyRateMoney]').val()
+									};
+									shopArrangeItemSet.push(itemSet);
+									shopArrange.shopArrangeItemSet = shopArrangeItemSet;
+								}else{
+									shopArrange = {
+										id:id,
+										shopId:shopId,
+										whichDay:whichDay,
+									};
+									itemSet={
+										id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
+										shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val(),
+										name:$thisTr.find('input[name=shopPolicy]').val(),
+										consumeMoney:$thisTr.find('input[name=consumeMoney]').val(),
+										billRemark:$thisTr.find('input[name=billRemark]').val(),
+										guideRate:parseFloat($thisTr.find('input[name=guideRate]').val())/100,
+										guideRebateMoney:$thisTr.find('input[name=guideRateMoney]').val(),
+										travelAgencyRate:parseFloat($thisTr.find('input[name=travelAgencyRate]').val())/100,
+										travelAgencyRebateMoney:$thisTr.find('input[name=travelAgencyRateMoney]').val()
+									};
+									shopArrangeItemSet.push(itemSet);
+									shopArrange.shopArrangeItemSet = shopArrangeItemSet;
+								};	
+							};
+						}
+				};
 				saveJson.shopArrangeList.push(shopArrange);
-				var log = {
-					"aid":shopArrange.id,
-					"om":Count.changeToString(parseFloat($(this).find('input[name=consumeMoney]').attr('old'))),
-					"nm":shopArrange.consumeMoney,
-					"orr":Count.changeToString(parseFloat($(this).find('input[name=travelAgencyRate]').attr('old'))),
-					"nrr":shopArrange.travelAgencyRate,
-					"ogr":Count.changeToString(parseFloat($(this).find('input[name=guideRate]').attr('old'))),
-					"ngr":shopArrange.guideRate,
-					"ocm":Count.changeToString(parseFloat($(this).find('input[name=customerRebateMoney' + shopId + ']').attr('old'))),
-					"ncm":shopArrange.customerRebateMoney,
-					"opm":Count.changeToString(parseFloat($(this).find('input[name=parkingRebateMoney' + shopId + ']').attr('old'))),
-					"npm":shopArrange.parkingRebateMoney
-				}
-				saveJson.log.shopLog.push(log);
 		});
+console.log(saveJson.shopArrangeList);
+return;
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
