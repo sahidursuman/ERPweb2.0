@@ -59,7 +59,7 @@
                     <th>出游日期</th>
                     <th>游客</th>  
                     <th>人数</th>
-                    <th>客户来源</th>   
+                    <th>客户</th>
                     <th>团款应收</th>
                     {{if searchParam.type == 1}}
                     <th>中转</th>
@@ -74,8 +74,8 @@
             <tbody>
                 {{each touristGroupTransferList as turnProfit index}}
                     <tr data-id = "{{turnProfit.touristGroupId}}" lineProductId="{{turnProfit.lineProductId}}" tgTransferId = "{{turnProfit.tgTransferId}}">  
-                        <td>{{if turnProfit.orderNumber == null || turnProfit.orderNumber == ""}}-{{else}}{{turnProfit.orderNumber}}{{/if}}</td>
-                        <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{turnProfit.lineProductName}}</a></td>
+                        <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{if turnProfit.orderNumber == null || turnProfit.orderNumber == ""}}-{{else}}{{turnProfit.orderNumber}}{{/if}}</a></td>
+                        <td>{{turnProfit.lineProductName}}</td>
                         <!--给日期转码-->
                         <td>{{turnProfit.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                         <td>{{turnProfit.contact}}</td>
