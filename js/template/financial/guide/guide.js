@@ -195,6 +195,9 @@ define(function(require, exports) {
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
             }
+            if($tab.find('.T-saveClear').data('borrow') == "borrow"){
+                args.borrow = true;
+            }
 
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
@@ -217,6 +220,9 @@ define(function(require, exports) {
                         title = '导游对账',
                         html;
                     if (type) {
+                        if(args.borrow){
+                            data.borrow = args.borrow;
+                        }
                         data.isOuter = FinGuide.isOuter = args.isOuter;
                         key = payMenuKey, title = args.borrow ? '导游借款' : '导游付款';
                         html = guidePayTemplate(data);
@@ -413,10 +419,12 @@ define(function(require, exports) {
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
 		var bankId = $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
-        var billTime = $tab.find('input[name=tally-date]').val();
+        var billTime = $tab.find('input[name=tally-date]').val(),
+            borrow = $tab.find('.T-saveClear').data('borrow'),
+            method = borrow == "borrow" ? "operateGuidePreAccount" : "operatePayAccount";
         if (json.length) {
             $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
+                    url: KingServices.build_url('account/guideFinancial', method),
                     type: 'post',
                     data: {
                         payJson: JSON.stringify(json),
