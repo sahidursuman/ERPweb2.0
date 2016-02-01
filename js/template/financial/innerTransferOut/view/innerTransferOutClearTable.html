@@ -2,7 +2,7 @@
     <tr data-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" isComfirmStatus="{{checking.isConfirmAccount}}" data-entity-realUnPayedMoney="{{checking.realUnPayedMoney}}"  data-entity-remark="{{checking.checkRemark}}">
         <td rowspan="{{checking.rowLen}}">{{checking.lineProductName}}</td>
         <td rowspan="{{checking.rowLen}}">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
-        <td rowspan="{{checking.rowLen}}">111</td><!-- {{checking.contactUserName}} -->
+        <td rowspan="{{checking.rowLen}}">{{checking.contactUserName}}</td>
         <td rowspan="{{checking.rowLen}}"><a href="#" class="T-seeGroup" data-list="{{checking.touristGroupMemberList}}" title="查看小组">
                 <span class="F-float F-count">{{checking.adultCount}}</span>大
                 <span class="F-float F-count">{{checking.childCount}}</span>小

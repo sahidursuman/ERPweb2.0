@@ -1207,7 +1207,7 @@ define(function(require, exports) {
      */
     arrangeTourist.delTransferData = function(id, $tr, $tab) {
         if (id != null && id != "") {
-            $.ajax({
+           /* $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "deleteInTransferFee"),
                 type: "POST",
                 data: "id=" + id,
@@ -1215,7 +1215,15 @@ define(function(require, exports) {
                     $tr.remove();
                     arrangeTourist.PayMoneyF($tab);
                 }
+            });*/
+
+             //移除空的其他费用
+            $tr.fadeOut(function() {
+                $tr.addClass('deleted');
+                $tr.hide();
+                arrangeTourist.PayMoneyF($tab);
             });
+
         } else {
             //移除空的其他费用
             $tr.fadeOut(function() {
@@ -1257,7 +1265,7 @@ define(function(require, exports) {
             transNeedPayAllMoney = $tab.find("input[name=transNeedPayAllMoney]"), //应付
             transPayedMoney = $tab.find("input[name=transPayedMoney]"), //已付
             transCurrentPM = $tab.find("input[name=transCurrentPayedMoney]"), //现付
-            trList = $tab.find("tbody.T-innerOutEditFeeTbody").find("tr");
+            trList = $tab.find("tbody.T-innerOutEditFeeTbody").find("tr:not(.deleted)");
 
         for (i = 0; i < trList.length; i++) {
             var a = parseFloat(trList.eq(i).find(".count").val());
@@ -1299,6 +1307,7 @@ define(function(require, exports) {
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeTourist.getVal($editFeeObj, "remark") || "无",
+                "currentNeedPayMoney": arrangeTourist.getVal($editFeeObj, "currentNeedPayMoney") || 0,
                 "transPayedMoney": arrangeTourist.getVal($editFeeObj, "transPayedMoney") || 0,
                 "transNeedPayAllMoney": arrangeTourist.getVal($editFeeObj, "transNeedPayAllMoney") || 0,
                 "cashFlag": arrangeTourist.getVal($editFeeObj, "isCurrent") || 0
@@ -1341,17 +1350,29 @@ define(function(require, exports) {
                 otherFeeListDel.push(otherFeeDel);
             })
         };
+
+         var otherinnerFeeDel  = [];
+        if (innerTransferFeeStatus == 1) {
+            $tbodyFee.find(" tr.deleted").each(function(i) {
+                var otherFeeDel = {
+                    "id": $(this).attr("data-entity-id")
+                };
+                otherinnerFeeDel.push(otherFeeDel);
+            })
+        };
+
         var formInData = $innerForm.serialize();
         var touristGroup = JSON.stringify(touristGroup),
             inTransferFee = JSON.stringify(inTransferFee),
             otherFeeList = JSON.stringify(otherFeeList),
             otherFeeListDel = JSON.stringify(otherFeeListDel);
+            otherinnerFeeDel = JSON.stringify(otherinnerFeeDel);
 
 
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "",
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherinnerFeeDel),
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
@@ -1649,7 +1670,7 @@ define(function(require, exports) {
                     list[i].value = list[i].name;
                 };
             } else {
-                layer.tips('没有内容', obj, {
+                layer.tips('没有内容', $obj, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });

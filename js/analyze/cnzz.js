@@ -1,5 +1,5 @@
 
-var Analyze = Analyze || {}
+var Analyze = Analyze || {};
 Analyze.utility = {
 	getEvent: function(event) { 
 	        return event ? event :window.event; 
@@ -8,56 +8,111 @@ Analyze.utility = {
 		var event = this.getEvent(event);
 	    return event.target  || event.srcElement; 
 	}	
-}
-
-Analyze.push_cnzz = function(target, page, siteId) {
-	var id = target.id,
-
-		data = Analyze.cnzz.data[page][id];
-
-	data.push(siteId);
-
-	return data;
-}
-
-Analyze.cnzz = {}
-
-Analyze.cnzz.data = {
-	'/login.html': {
-		'baseEvent': [["_trackEvent", "登录", "访问登录页面", "", 3]],
-
-		'id-btn-login': ["_trackEvent", "登录", "点击登录", "", 1]
-	}
-
 };
 
+Analyze.push_cnzz = function(target, page) {
+	var data = ["_trackEvent"];
+	switch (page) {
+		case '/login.html':
+			_czc.push(["_trackEvent", '登陆页', '', '', 1, siteId]);
+			if (target.id === 'id-btn-login') {
+				_czc.push( ["_trackEvent", "登录", "点击登录", "", 1, siteId]);
+			}
+			break;
+		case '/index.html':
+			var tmp = Analyze.getType(target);
+
+			if (tmp.length === 6) {
+				_czc.push(tmp);
+				// console.info(tmp)
+			} else if (tmp.length === 3) {
+				data = data.concat(tmp);
+				data = data.concat([1, siteId]);
+				// console.info(data)
+				_czc.push(data);
+			}
+		default: break;
+	}
+};
+
+Analyze.getType = function(target) {
+	var data = [], $that = $(target), $parent = $that.parent();
+
+	if ($that.closest('#sidebar').length) {
+		if ($that.is('a')) {
+			data.push('菜单操作');
+			if ($that.find('.submenu').length) {
+				data = data.concat([$that.text().trim(), '']);
+			} else if ($that.closest('.submenu').length) {
+				var mainMenu = $that.closest('.submenu').prevAll('a').text().trim();
+
+				data = data.concat([mainMenu, $that.text().trim()])
+			}
+		}
+	} else if ($that.closest('#tabContent').length) {
+		if ($that.is('[class*=T-]') || $parent.is('[class*=T-]')) {
+			// 1. get from data
+			var id = $that.closest('.tab-pane-menu').prop('id');
+			if (!!id) {
+				var item = Analyze.data[id], targetItem = false;
+
+				if (item) {
+					for (var i = 0, len = item.length; i < len; i ++) {
+						if ($that.is(item[i].key) || $parent.is(item[i].key)) {
+							targetItem = item[i];
+							data = targetItem.args;
+							break;
+						}
+					}
+				}
+
+				if (!targetItem) {
+					var $menuA = $('#sidebar').find('.active').children('a');
+
+					if ($menuA.length === 2) {
+						data.push($menuA.eq(0).text().trim());
+
+						data.push($('#tabList').find('[href="#' + id + '"]').text().trim());
+						data.push($that.text().trim());
+					}
+				}
+			}
+			// var $a = $('#sidebar').find('.active').children('a'),
+			// 	len = $a.length, i = 1;
+			// while (len-- > 0) {
+			// 	data[i-1] = $a.eq(i-1).text().trim();
+			// 	i++;
+			// }
+
+			// data.push($that.text().trim());
+		}
+	} else {
+		var item = Analyze.data['other'], targetItem = false;
+
+		if (item) {
+			for (var i = 0, len = item.length; i < len; i ++) {
+				if ($that.is(item[i].key) || $parent.is(item[i].key)) {
+					targetItem = item[i];
+					data = targetItem.args;
+					break;
+				}
+			}
+		}
+	}
+
+	return !data[2] ?[]:data;
+};
 
 (function($) {
-	//声明_czc对象:
-	var _czc = _czc || [],
-	// site id
-	siteId = "1257163552",
-
-	pathname = location.pathname;
+	var pathname = location.pathname;
 
 	if (pathname === '/') {
 		pathname = '/login.html'
 	}
 
-	//绑定siteid，请用您的siteid替换下方"XXXXXXXX"部分
-	_czc.push(["_setAccount", siteId]);
-
 	$('body').on('click', function(event) {
-		event.preventDefault();
 		target = Analyze.utility.getTarget(event);
-
-		_czc.push(Analyze.push_cnzz(target, pathname, siteId));
+		Analyze.push_cnzz(target, pathname);
 	});
 
-
-	var baseEvent = Analyze.cnzz.data[pathname]['baseEvent'];
-	for (var i = 0, len = baseEvent.length; i < len ; i ++ ) {
-		baseEvent[i].push(siteId);
-		_czc.push(baseEvent[i]);
-	}
 })(jQuery);
