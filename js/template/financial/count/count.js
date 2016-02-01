@@ -1169,7 +1169,7 @@ define(function(require, exports){
 		var html = '<tr class="oldData">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
-		'<td>人头返佣<input type="hidden" value="人头返佣" name="shopPolicy"></td>'+
+		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="travelAgencyRate" style="width:90px;" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
@@ -1261,7 +1261,7 @@ define(function(require, exports){
 			//商品选择
 			var $shopObj = $parentObj.find('.T-count-shopping');
 			var $shopPolicyObj = $shopObj.find('input[name=shopPolicy]');
-			//Count.getShopPolicy($shopPolicyObj,$parentObj,$tr);
+			Count.getShopPolicy($shopPolicyObj,$parentObj,$tr);
 	};
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
@@ -1389,9 +1389,9 @@ define(function(require, exports){
 			//计算导游购物返佣
 			$mainTable.find('.tripCost-guideshopFee').text(guideSum);
 			//计算团收入
-			Count.tripIncome($mainTable);
+			Count.tripIncome($tableObj);
 			//计算团成本
-			Count.tripCost($mainTable);	
+			Count.tripCost($tableObj);	
 	};
 	//计算整个团收入、毛利、人均毛利
 	Count.tripIncome = function($obj){
@@ -2349,13 +2349,26 @@ define(function(require, exports){
 						},
 						select:function(event,ui){
 							if(ui.item != null){
-								var $tr = $(this).closest('tr');
+								var $tr = $(this).closest('tr'),
+									adultCount = 0,busNumber = 0,
+									sumPerson = 0,sumBus = 0,
+									nextTd = $tr.next();
+								adultCount = $parentObj.find('.tripPlanAdultCount').val();
+								if($parentObj.find('.busNumber').val() != 0 ){
+									busNumber = 1;
+								};
+								sumPerson = Count.changeTwoDecimal(adultCount)*Count.changeTwoDecimal(ui.item.customerRebateMoney);
+								sumBus = Count.changeTwoDecimal(busNumber)*Count.changeTwoDecimal(ui.item.parkingRebateMoney);
 								$tr.find('input[name=shopId]').val(ui.item.id);
 								$tr.find('input[name=shopPolicy]').val('');
-								$tr.find('input[name=consumeMoney]').val(ui.item.customerRebateMoney);
-								$tr.next().find('input[name=consumeMoney]').val(ui.item.parkingRebateMoney);
+								$tr.find('input[name=consumeMoney]').val(sumPerson);
+								$tr.next().find('input[name=consumeMoney]').val(sumBus);
 								$tr.find().val();
 								Count.getShopPolicy($tr,$parentObj);
+								Count.calculateCost($(this));
+								//计算金额
+								Count.autoShopSum($(this),$parentObj);
+								Count.autoShopSum(nextTd.find('input[name=consumeMoney]'),$parentObj);
 							}
 						}
 					}).off('click').on('click',function(){
@@ -3699,7 +3712,7 @@ define(function(require, exports){
 								};
 								itemSet={
 									id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
-									shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val(),
+									shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val() || '',
 									name:$thisTr.find('input[name=shopPolicy]').val(),
 									consumeMoney:$thisTr.find('input[name=consumeMoney]').val(),
 									billRemark:$thisTr.find('input[name=billRemark]').val(),
@@ -3729,8 +3742,8 @@ define(function(require, exports){
 									};
 									itemSet={
 										id:$newTr.find('input[name=shopPolicyArrId]').val() || '',
-										shopPolicyId:$newTr.find('input[name=shopPolicyId]').val(),
-										name:$newTr.find('input[name=shopPolicy]').val(),
+										shopPolicyId:$newTr.find('input[name=shopPolicyId]').val() || '',
+										name:"人数返佣",
 										consumeMoney:$newTr.find('input[name=consumeMoney]').val(),
 										billRemark:$newTr.find('input[name=billRemark]').val(),
 										guideRate:parseFloat($newTr.find('input[name=guideRate]').val())/100,
@@ -3748,7 +3761,7 @@ define(function(require, exports){
 									};
 									itemSet={
 										id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
-										shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val(),
+										shopPolicyId:$thisTr.find('input[name=shopPolicyId]').val() || '',
 										name:$thisTr.find('input[name=shopPolicy]').val(),
 										consumeMoney:$thisTr.find('input[name=consumeMoney]').val(),
 										billRemark:$thisTr.find('input[name=billRemark]').val(),
@@ -3788,7 +3801,6 @@ define(function(require, exports){
 				saveJson.shopArrangeList.push(shopArrange);
 		});
 		console.log(saveJson.shopArrangeList);
-		return
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');

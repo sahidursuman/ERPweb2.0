@@ -32,6 +32,7 @@
                 <input type="hidden" class="financial-tripPlanId" value="{{tripPlan.id}}" />
                 <input type="hidden" class="tripPlanAdultCount" value="{{tripPlan.touristAdultCount}}" />
                 <input type="hidden" class="tripPlanChildCount" value="{{tripPlan.touristChildCount}}" />
+                <input type="hidden" class="totalPersonCount" value="{{tripPlan.touristChildCount}}+{{tripPlan.touristAdultCount}}" />
                 <input type="hidden" class="tripPlanStartTime" value="{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}" />
                 
                 <label style="margin-left:50px;font-weight: bold;">毛利：<span class="F-float F-money grossProfitMoney">0</span></label>
