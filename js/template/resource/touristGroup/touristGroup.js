@@ -924,6 +924,16 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     data.lineProductList = JSON.parse(data.lineProductList);
                     $tbody.html(lineproductSearchList(data));
+
+                    //搜索线路名称
+                    $dialog.find('.T-btn-search').on('click', function(event) {
+                        event.preventDefault();
+                        /* Act on the event */
+                        var $that=$(this),$searArea=$that.closest('.form-inline');
+                        var name= $searArea.find('.T-productName').val();
+                        touristGroup.getLineProductList($dialog, type, page, name);
+                    });
+
                     $tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
                     // 绑定翻页组件
                     laypage({
