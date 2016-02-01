@@ -2405,71 +2405,89 @@ define(function(require, exports){
 	};
 	//获取商品政策的数据
 	Count.getShopPolicy = function($obj,$parentObj,$tr){
-		var $shopPolicyObj = false,shopId = false;
+		
 		if(!!$tr){
-			$shopPolicyObj = $obj;
-			shopId = $tr.find('input[name=shopId]').val();
+			var $shopPolicyObj = $obj;
+			var shopId = $tr.find('input[name=shopId]').val();
+			var trArr = $tr.nextAll();
+			Count.getShopPolicyByTr($tr,trArr,shopId,$parentObj);
 		}else{
 			if($obj.attr('shopArrangeId')){
-				shopId = $obj.attr('shopArrid');
-
-				$shopPolicyObj = $parentObj.find('input[name=shopPolicyName]');
+				var shopId = $obj.attr('shopArrid');
+				var $shopPolicyObj = $parentObj.find('input[name=shopPolicyName]');
+				
 			}else{
-				$shopPolicyObj = $parentObj.find('input[name=shopPolicy]');
-				shopId = $obj.find('input[name=shopId]').val();
+				var trArr = $obj.nextAll();
+				var shopId = $obj.find('input[name=shopId]').val();
+				Count.getShopPolicyByTr($obj,trArr,shopId,$parentObj);
+				
 			};
 		};
-		if(shopId != null && shopId != ""){
-			$shopPolicyObj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).val('');
-					$obj.find('input[name=shopPolicyId]').val('');
-				}
-			},
-			select:function(event,ui){
-				if(ui.item != null){
-					$(this).closest('tr').find('input[name=shopPolicyId]').val(ui.item.id);
-					var shopPolicyId = ui.item.id;
-					var consumeMoney = $(this).closest('tr').find('input[name=consumeMoney]').val() || 0;
-					var date =$parentObj.find('.tripPlanStartTime').val();
-					Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
+		
+	};
+	Count.getShopPolicyByTr = function(parentTr,trArr,shopId,$parentObj){
+		
+		for(var i = 0;i<trArr.length;i++){
+			var $that = trArr.eq(i);
+			var td_cnt = parentTr.children('td').length;
+			var td_len = $that.children('td').length;
+			if(td_cnt == td_len){
+				break;
+			}else{
+				var $shopPolicyObj = $that.find('input[name=shopPolicy]');
+				if(shopId != null && shopId != ""){
+					$shopPolicyObj.autocomplete({
+					minLength:0,
+					change:function(event,ui){
+						if(ui.item == null){
+							$(this).val('');
+							$obj.find('input[name=shopPolicyId]').val('');
+						}
+					},
+					select:function(event,ui){
+						if(ui.item != null){
+							$(this).closest('tr').find('input[name=shopPolicyId]').val(ui.item.id);
+							var shopPolicyId = ui.item.id;
+							var consumeMoney = $(this).closest('tr').find('input[name=consumeMoney]').val() || 0;
+							var date =$parentObj.find('.tripPlanStartTime').val();
+							Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
+						}
+					}
+					}).off('click').on('click',function(){
+						var obj = $(this);
+						var shopPolicyList;
+						$.ajax({
+							url:KingServices.build_url('shop','findPolicyByShopId'),
+							data:{
+								id:shopId
+							}, 
+							type:'POST',
+							showLoading:false,
+							success:function(data){
+								var result = showDialog(data);
+								if(result){
+									shopPolicyList = JSON.parse(data.shopPolicyList);
+									if(shopPolicyList && shopPolicyList.length > 0){
+										for(var i=0; i < shopPolicyList.length; i++){
+											shopPolicyList[i].value = shopPolicyList[i].name;
+										}
+									}else{
+										layer.tips('没有内容。', shopObj, {
+										    tips: [1, '#3595CC'],
+										    time: 2000
+										});
+									}
+								};
+								obj.autocomplete('option','source', shopPolicyList);
+								obj.autocomplete('search', '');
+							}
+						});
+						
+					});
 				}
 			}
-			}).off('click').on('click',function(){
-				var obj = $(this);
-				var shopPolicyList;
-				$.ajax({
-					url:KingServices.build_url('shop','findPolicyByShopId'),
-					data:{
-						id:shopId
-					}, 
-					type:'POST',
-					showLoading:false,
-					success:function(data){
-						var result = showDialog(data);
-						if(result){
-							shopPolicyList = JSON.parse(data.shopPolicyList);
-							if(shopPolicyList && shopPolicyList.length > 0){
-								for(var i=0; i < shopPolicyList.length; i++){
-									shopPolicyList[i].value = shopPolicyList[i].name;
-								}
-							}else{
-								layer.tips('没有内容。', shopObj, {
-								    tips: [1, '#3595CC'],
-								    time: 2000
-								});
-							}
-						};
-						obj.autocomplete('option','source', shopPolicyList);
-						obj.autocomplete('search', '');
-					}
-				});
-				
-			});
 		}
-	};
+	}
 	//获取自费的数据
 	Count.getSelfData = function($obj,$parentObj){
 		var $selfObj = $obj.find('input[name=selfPayName]');
