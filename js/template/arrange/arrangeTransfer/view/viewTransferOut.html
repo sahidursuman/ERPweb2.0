@@ -7,10 +7,9 @@
 			<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
 				<tr>
 					<td class="style-myself">同行地接：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{partnerAgency.travelAgencyName}}</td>
-					<td class="style-myself">转客备注：</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{transRemark}}</td>
-					</tr>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="4">{{partnerAgency.travelAgencyName}}</td>
+					
+				</tr>
 				<tr>
 					<td class="style-myself">应付：</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
@@ -33,8 +32,10 @@
 						{{/if}}
 						<label class="control-label no-padding-right">对方现收</label>
 					</td>
-
-					
+				</tr>
+				<tr>
+					<td class="style-myself">转客备注：</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="4">{{touristGroup.transRemark}}</td>
 				</tr>
 			</table>
 		</div>
