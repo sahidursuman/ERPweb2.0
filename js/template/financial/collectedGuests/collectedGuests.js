@@ -93,7 +93,7 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find('input[name="lineProductId"]').val(),
                             ColGuest.$searchArea.find('input[name="fromPartnerAgencyName"]').val(),
                             ColGuest.$searchArea.find('input[name="fromPartnerAgencyId"]').val(),
-                            ColGuest.$searchArea.find('input[name="customerType"]').val(),
+                            ColGuest.$searchArea.find('select[name="customerType"]').val(),
                             ColGuest.$searchArea.find('input[name="orderNumber"]').val(),
                             ColGuest.$searchArea.find('input[name="startTime"]').val(),
                             ColGuest.$searchArea.find('input[name="endTime"]').val()
