@@ -332,7 +332,7 @@ define(function(require, exports) {
 	    	/* Act on the event */
 	    	var $that=$(this),$parents = $that.closest("tr"), id = $parents.data("entity-id");
 	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
-	    		subsection.getLayerProductList(0, '');
+	    		subsection.getLayerProductList($that);
 	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
 				subsection.deleteOperation(id,$that);
 				subsection.$tabSub.data('isEdited', true);
@@ -709,7 +709,7 @@ define(function(require, exports) {
 	};
 
 	//初始化线路Layer层
-	subsection.getLayerProductList = function(){
+	subsection.getLayerProductList = function($that){
 		var html=searchListTemplate({});  
 		var searchTravelLinelayer = layer.open({
 			type: 1,
@@ -722,7 +722,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-subsection-lineproduct-search');
 		//初始化线路产品数据
-		subsection.getLineProductList($dialog, 0, '');
+		subsection.getLineProductList($that,$dialog, 0, '');
 	};
 
 	/**
@@ -733,7 +733,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	subsection.getLineProductList = function($dialog, page, name) {
+	subsection.getLineProductList = function($that, $dialog, page, name) {
 		page = page || 0;
 		$.ajax({
 			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
@@ -759,8 +759,22 @@ define(function(require, exports) {
 
 				//提交选中线路
 				$dialog.find('.T-btn-submit').on('click', function(event) {
-					event.preventDefault();
 					/* Act on the event */
+					var $lineProTr=$dialog.find('.T-normal-list').find('tr'),lineProductId='';
+					$lineProTr.each(function(index, el) {
+						if ($lineProTr.eq(index).find('.T-choice-ProLine').is(':checked')) {
+							lineProductId = $lineProTr.eq(index).data('id');
+							$that.find('inputp[name=lineProductName]').val($lineProTr.eq(index).data('name'));
+							$that.find('inputp[name=lineProductId]').val($lineProTr.eq(index).data('id'));
+							$that.find('inputp[name=customerType]').val($lineProTr.eq(index).data('customerType'));
+							$that.find('inputp[name=days]').val($lineProTr.eq(index).data('days'));
+						};
+					});
+					//若没有选中线路
+					if (lineProductId=='' || lineProductId==null ) {
+						showMessageDialog($( "#confirm-dialog-message" ),"请选择选择线路产品");
+			            return;
+					};
 				});
 
 				// 绑定翻页组件
@@ -770,7 +784,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							subsection.getLineProductList($dialog, obj.curr -1, name);
+							subsection.getLineProductList($that, $dialog, obj.curr -1, name);
 				    	}
 				    }
 				});	

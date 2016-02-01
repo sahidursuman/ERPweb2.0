@@ -1,5 +1,5 @@
 {{each lineProductList as lineProduct}}
-	<tr data-id="{{lineProduct.id}}" data-name="{{lineProduct.name}}" data-customerType="{{lineProduct.customerType}}" data-days="{{lineProduct.days}}">
+	<tr data-id="{{lineProduct.id}}" data-name="{{lineProduct.name}}" data-customerType="{{if lineProduct.customerType==0}}散客{{else if lineProduct.customerType==1}}团体{{/if}}" data-days="{{lineProduct.days}}">
 		<td>
 			{{lineProduct.name}}
 		</td>
