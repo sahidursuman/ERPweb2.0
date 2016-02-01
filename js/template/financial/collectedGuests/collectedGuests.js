@@ -87,7 +87,16 @@ define(function(require, exports) {
                     //搜索按钮事件
                     $tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
-                        ColGuest.listGuest(0);
+
+                        ColGuest.listMain(
+                            ColGuest.$searchArea.find('input[name="lineProductName"]').val(),
+                            ColGuest.$searchArea.find('input[name="lineProductId"]').val(),
+                            ColGuest.$searchArea.find('input[name="fromPartnerAgencyName"]').val(),
+                            ColGuest.$searchArea.find('input[name="fromPartnerAgencyId"]').val(),
+                            ColGuest.$searchArea.find('input[name="customerType"]').val(),
+                            ColGuest.$searchArea.find('input[name="startTime"]').val(),
+                            ColGuest.$searchArea.find('input[name="endTime"]').val()
+                            );
                     });
                 }
             }
