@@ -24,7 +24,7 @@
             <th class="th-border">单据</th>
             <th class="th-border">差额</th>
             <th class="th-border">导游报账备注</th>
-            {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+            <th class="th-border" rowspan="2">是否对账</th>
         </tr> 
     </thead>
     <tbody class="T-count-hotel">
@@ -57,7 +57,7 @@
                 </td>
                 <td><span class="difference F-float F-money"></span></td>
                 <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</td>
-                {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+                <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
             </tr>
         {{/if}}
         {{/each}}

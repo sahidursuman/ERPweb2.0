@@ -17,7 +17,7 @@
         <th class="th-border" colspan="2">导佣</th>
         <!-- <th class="th-border" colspan="2">人数返佣</th> -->
         <th class="th-border" rowspan="2">导游报账备注</th>
-        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+        <th class="th-border" rowspan="2">是否对账</th>
     </tr>
     <tr>
       <th class="th-border"><span class="necessary">*</span>时间</th>
@@ -109,7 +109,7 @@
             
             <td>{{if editStatus == 1}}<input name="billRemark" value="{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}" maxlength="1000" />{{else}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</td>
             
-            {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}                              
+            <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>                             
     </tr>
     {{/if}}
     {{/each}}
