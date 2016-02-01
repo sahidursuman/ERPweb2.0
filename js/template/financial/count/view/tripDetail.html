@@ -147,6 +147,7 @@
                     <tr>
                         <td>序号</td>
                         <td>客户</td>
+                        <th>收客单号</th>
                         <td>小组联系人</td>
                         <td>联系电话</td>
                         <td>人数</td>
@@ -158,6 +159,7 @@
                         <tr>
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                            <td>{{touristGroup.orderNumber}}</td>
                             <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
                             <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</td>
                             <td><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</td>
@@ -875,6 +877,7 @@
                         <tr>
                         <th class="th-border">序号</th>
                         <th class="th-border">客户</th>
+                        <th class="th-border">中转单号</th>
                         <th class="th-border">小组联系人</th>
                         <th class="th-border">联系电话</th>
                         <th class="th-border">人数</th>
@@ -888,6 +891,7 @@
                      <tr>
                         <td>{{index+1}}</td>
                         <td>{{touristGroup.partnerAgencyName}}</td>
+                        <td>{{touristGroup.orderNumber}}</td>
                         <td>{{touristGroup.name}}</td>
                         <td>{{touristGroup.mobileNumber}}</td>
                         <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
