@@ -1670,7 +1670,7 @@ define(function(require, exports) {
                     list[i].value = list[i].name;
                 };
             } else {
-                layer.tips('没有内容', obj, {
+                layer.tips('没有内容', $obj, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });

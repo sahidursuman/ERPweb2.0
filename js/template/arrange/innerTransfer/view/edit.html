@@ -206,7 +206,7 @@
 					    	<div class="search-area col-sm-12">
 							    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
 								<div class="col-sm-1">
-									<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
+									<input name="needPayAllMoney" value="{{parentTouristGroup.subsectionNeedPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 								</div>
 
 								<label class="col-sm-1 control-label no-padding-right">已收：</label>
@@ -216,7 +216,11 @@
 
 								<label class="col-sm-1 control-label no-padding-right">现收：</label>
 								<div class="col-sm-1">
-									<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
+									{{if cashFlag==1}}
+										<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
+										{{else}}
+										<input name="currentNeedPayMoney" value="0" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
+									{{/if}}
 				  				</div>
 				  			</div>
 						  
