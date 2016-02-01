@@ -82,10 +82,10 @@
                         {{else if rs.otherFeeList.length > 0}}
                         <!-- 若无中转结算价 -->
                             {{each rs.otherFeeList as of index}}
-                            {{of.describe}}：
-                            <span class="F-float F-money">{{of.price}}</span>x
-                            <span class="F-float F-count">{{of.count}}</span>=
-                            <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                {{of.describe}}：
+                                <span class="F-float F-money">{{of.price}}</span>x
+                                <span class="F-float F-count">{{of.count}}</span>=
+                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
                             {{/each}}
                         {{else}}<!-- 若无费用明细 -->-
                         {{/if}}

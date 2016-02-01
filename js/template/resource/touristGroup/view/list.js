@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":349,"md5":"e2b35a0bb0bed2cd2dd7b559dbf6acea"}*/
+/*TMODJS:{"debug":true,"version":325,"md5":"6e5ac5b2207d52af337f66b01263bdd4"}*/
 define(function(require) {
     return require("../../../template")("resource/touristGroup/view/list", function($data, $filename) {
         try {

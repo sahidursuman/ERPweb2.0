@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":688,"md5":"7b30b1386524f7e873d981f626f65ab5"}*/
+/*TMODJS:{"debug":true,"version":702,"md5":"7b30b1386524f7e873d981f626f65ab5"}*/
 define(function(require) {
     return require("../../../template")("arrange/orderManage/view/listBusCompany", function($data, $filename) {
         try {

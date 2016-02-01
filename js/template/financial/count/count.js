@@ -1558,13 +1558,12 @@ define(function(require, exports){
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
-            //
             //明细的应收
             var needCount = $parent.find('.needIncomeCount');
             var detailNeedIncome = $parent.find('.needIncome').text();
             	var $income = parseInt(detailNeedIncome)/parseInt(marketPrice);
             	$income = Count.changeTwoDecimal($income);
-            	$income = parseInt($income);
+            	$income = parseFloat($income);
 				needCount.text($income);
 
 			//报账/审核
@@ -1583,7 +1582,7 @@ define(function(require, exports){
             	// 如果修改的是现收--计算应收数量
             	var count = (incomeMoney/marketPrice);
             	count = Count.changeTwoDecimal(count);
-            	count = parseInt(count);
+            	count = parseFloat(count);
             	incomeCount.val(count);
             	needIncome.text(incomeMoney);
             };
@@ -1597,8 +1596,9 @@ define(function(require, exports){
 			}else{
 				needCountSum = $parent.find('.needIncomeCount').text();
 			}
-			
-			var guideRebateMoney =  needCountSum* (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
+            
+			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
+			var guideRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);

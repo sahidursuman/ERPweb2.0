@@ -18,7 +18,7 @@
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber"><span class="necessary">*</span> 线路产品：</label>
 	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName" readonly="readonly" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}"/>
-	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProductId}}" />
+	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProduct.id}}" />
 	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
 	    	<button class="search-btn btn-sm T-travelLine-search" onsubmit="return false">
 	        	<i class="ace-icon fa fa-search "></i>搜索
@@ -48,7 +48,7 @@
 
         <div class="form-group fixed-width">
     		<label><span class="necessary">*</span>出游日期：</label>
-            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status != 1}}readonly="readonly"{{/if}} />
+            <input type="text" name="startTime" class="form-control date-picker datepicker T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} />
             <input type="hidden" name="days" class="form-control T-days" value="{{touristGroupDetail.lineProduct.days}}"/>
     	</div>
 
@@ -147,7 +147,7 @@
     <div class="form-group clearfix">
         <label class="pull-left control-label no-padding-right" style="margin-left:42px;">备注:</label>
         <div class="col-sm-10">
-         <textarea class="form-control col-sm-12" name="remark" value=""  maxlength="1000"></textarea>
+         <textarea class="form-control col-sm-12" name="remark" value=""  maxlength="1000">{{touristGroupDetail.remark}}</textarea>
         </div>
     </div>
 
@@ -259,7 +259,7 @@
 									<input name="includeOwnExpense" value="{{touristGroupDetail.includeSelfPay}}" type="text" class="col-sm-12" maxlength="1000" />
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group hide">
 								<label class="col-sm-1 control-label no-padding-right">备注：</label>
 								<div class="col-sm-11">
 									<input name="remark" value="{{touristGroupDetail.remark}}" maxlength="1000"  class="col-sm-12  no-padding-right" type="text">

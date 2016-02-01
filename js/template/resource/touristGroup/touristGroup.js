@@ -255,7 +255,7 @@ define(function(require, exports) {
         //声明一个全局的游客小组ID用于跳转到中转安排
         touristGroup.visitorId = touristGroupId;
         $.ajax({
-            url: touristGroup.url("viewTouristGroupDetails", "view"),
+            url: touristGroup.url("viewTransferTouristGroup", "view"),
             data: "id=" + touristGroupId + "&type=" + typeOut+"&transferId="+id,
             type: 'POST',
             success: function(data) {
@@ -597,7 +597,10 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
+            if (!!startTime) {
                 $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-days').val() - 1));
+            };
+               
         });
 
 
@@ -723,7 +726,7 @@ define(function(require, exports) {
         $dialog.find('.T-searchtravelLine').on('click', function(event) {
             event.preventDefault();
             var $tr = $dialog.find('input[name="choice-TravelLine"]:checked').closest('tr'),
-                $tab = $('#tab-resource_touristGroup-add-content'),
+                $tab = $('#tab-resource_touristGroup-add-content'),startTime,
                 lineProductId = $tr.data('id');
 
             if (lineProductId == null || lineProductId == '' || lineProductId == undefined) {
@@ -739,7 +742,10 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
             $tab.find('.T-startTime').data('days',$tr.data('days'));
             $tab.find('.T-days').val($tr.data('days'));
-
+            startTime = $tab.find('.T-startTime').val();
+            if (!!startTime) {
+                $tab.find('.T-endTime').val(Tools.addDay(startTime, $tr.data('days') - 1));
+            };
             var $form = $tab.find('.T-touristGroupMainForm');
             if (!!$form.find('.T-quoteNumber').val()) {
                 // 有报价产品切换到普通线路产品，则清空报价的数据
@@ -2203,6 +2209,7 @@ define(function(require, exports) {
             tabId = addTabId;
             if (typeInner=='out') {
                 tabId = updateTabId
+                url = touristGroup.url("saveTransferTouristGroup", "add");
             };
         };
 

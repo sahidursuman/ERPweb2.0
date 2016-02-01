@@ -236,7 +236,7 @@ define(function(require,exports) {
 							InnerTransferIn.$settlementTab = $checkId;
 							InnerTransferIn.$checkSearchArea = $checkId.find(".T-search");
 							
-						var countObj = $checkId.find(".T-count");
+						var $countObj = $checkId.find(".T-count");
 						if(typeFlag !=2){
 							//取消对账权限过滤
 							var fiList= data.innerTransferIncomeDetailsList
@@ -252,7 +252,7 @@ define(function(require,exports) {
 						}
 						
 						//获取统计数据
-						InnerTransferIn.getCountData($listSearchData,countObj);
+						InnerTransferIn.getCountData($listSearchData, $countObj);
 						//
 						InnerTransferIn.getReceiveUser(InnerTransferIn.$checkSearchArea,args);
 					    // 绑定翻页组件
@@ -265,13 +265,13 @@ define(function(require,exports) {
 							    	if(typeFlag == 2){
 							    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
 		                                InnerTransferIn.saveJson.autoPayList = tempJson;
-		                                var sumPayMoney = parseFloat($checkId.find('input[name=sumPayMoney]').val()),
-		                                    sumPayType = parseFloat($checkId.find('select[name=sumPayType]').val()),
-		                                    sumPayRemark = $checkId.find('input[name=sumRemark]').val();
-		                                    var bankId = $checkId.find('input[name=card-id]').val();
-											var voucher = $checkId.find('input[name=credentials-number]').val();
-											var billTime = $checkId.find('input[name=tally-date]').val();
-											var bankNumber = $checkId.find('input[name=card-number]').val();
+		                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
+		                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
+		                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
+		                                    var bankId = $countObj.find('input[name=card-id]').val();
+											var voucher = $countObj.find('input[name=credentials-number]').val();
+											var billTime = $countObj.find('input[name=tally-date]').val();
+											var bankNumber = $countObj.find('input[name=card-number]').val();
 		                                InnerTransferIn.saveJson = {
 		                                    sumPayMoney : sumPayMoney,
 		                                    sumPayType : sumPayType,
@@ -282,6 +282,7 @@ define(function(require,exports) {
 		                                    sumPayRemark : sumPayRemark
 		                                }
 							    	}  // 避免死循环，第一次进入，不调用页面方法
+							    	
 						    		args.pageNo = obj.curr -1;
 						    		InnerTransferIn.chenking(args,typeFlag,tab);
 								}
@@ -498,6 +499,8 @@ define(function(require,exports) {
         		Tools.closeTab(settleId);
         	}
         });
+
+        $obj.data('isEdited', false);
 	};
 
 	//自动计算本次收款金额
