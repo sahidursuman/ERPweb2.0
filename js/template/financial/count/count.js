@@ -2435,12 +2435,12 @@ define(function(require, exports){
 				break;
 			}else{
 				var $shopPolicyObj = $that.find('input[name=shopPolicy]');
-				Count.getDataByAutocomplete($shopPolicyObj,shopId);
+				Count.getDataByAutocomplete($shopPolicyObj,shopId,$parentObj);
 				
 			}
 		}
 	};
-	Count.getDataByAutocomplete = function($shopPolicyObj,shopId){
+	Count.getDataByAutocomplete = function($shopPolicyObj,shopId,$parentObj){
 		if(!!shopId && !!shopId){
 			$shopPolicyObj.autocomplete({
 			minLength:0,
