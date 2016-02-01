@@ -633,11 +633,17 @@ define(function(require, exports) {
 			}
 		});
 
-
-		if ($tbody.children('tr').find("input[name=operateCurrentNeedPayMoney]:checked").length==0 && $tbody.data('neepayallmoney')<=num) {
+		var operateCurPayLength = $tbody.children('tr').find("input[name=operateCurrentNeedPayMoney]:checked").length;
+		if (operateCurPayLength==0 && $tbody.data('neepayallmoney')<=num) {
 			showMessageDialog($( "#confirm-dialog-message" ),"费用项金额应等于应收与中转结算价之差");
 			return;
         };
+
+
+        if(operateCurPayLength==0 && subsection.$tabSub.find('.T-currentNeedPayMoney').val()!=0){
+        	showMessageDialog($( "#confirm-dialog-message" ),"小组现收不为0时,请选择本段现收团款");
+			return;
+        }
 
 		if (subsection.$tabSub.find(".T-btn-operation-save").data("entity-mark")) {
 			isCheckNeedPayMoney = 1;
