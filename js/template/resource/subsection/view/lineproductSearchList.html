@@ -1,10 +1,7 @@
 {{each lineProductList as lineProduct}}
-	<tr data-id="{{lineProduct.id}}">
-		<td name="lineName" data-travelLine-Id="{{lineProduct.id}}">
-			{{lineProduct.name}}
-		</td>
+	<tr data-id="{{lineProduct.id}}" data-name="{{lineProduct.name}}" data-customerType="{{lineProduct.customerType}}" data-days="{{lineProduct.days}}">
 		<td>
-			{{lineProduct.type}}
+			{{lineProduct.name}}
 		</td>
 		<td>
 			{{if lineProduct.customerType==0}}
@@ -18,7 +15,7 @@
 		</td>
 		<td>
 			<label class="choice-TravelLine-click">
-				<input type="radio" class="ace" name="choice-TravelLine" index="0">
+				<input type="radio" class="ace" name="T-choice-ProLine" index="0">
 					<span class="lbl"></span>
 			</label>
 		</td>
