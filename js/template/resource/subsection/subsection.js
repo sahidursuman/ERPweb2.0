@@ -22,7 +22,8 @@ define(function(require, exports) {
 		$tab: false,
 		$tabSub: false,
 		$searchArea: false,
-		$tbody:false
+		$tbody:false,
+		searchTravelLinelayer:false
 	};
 	var autocompleteData = {};
 
@@ -332,7 +333,7 @@ define(function(require, exports) {
 	    	/* Act on the event */
 	    	var $that=$(this),$parents = $that.closest("tr"), id = $parents.data("entity-id");
 	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
-	    		subsection.getLayerProductList($that);
+	    		subsection.getLayerProductList($parents);
 	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
 				subsection.deleteOperation(id,$that);
 				subsection.$tabSub.data('isEdited', true);
@@ -711,7 +712,7 @@ define(function(require, exports) {
 	//初始化线路Layer层
 	subsection.getLayerProductList = function($that){
 		var html=searchListTemplate({});  
-		var searchTravelLinelayer = layer.open({
+		subsection.searchTravelLinelayer = layer.open({
 			type: 1,
 			title: '请选择线路产品',
 			skin: 'layui-layer-rim', //加上边框
@@ -760,20 +761,28 @@ define(function(require, exports) {
 				//提交选中线路
 				$dialog.find('.T-btn-submit').on('click', function(event) {
 					/* Act on the event */
-					var $lineProTr=$dialog.find('.T-normal-list').find('tr'),lineProductId='';
-					$lineProTr.each(function(index, el) {
+					var $lineProTr=$dialog.find('.T-normal-list').children('tr'),lineProductJson={};
+					$lineProTr.each(function(index) {
 						if ($lineProTr.eq(index).find('.T-choice-ProLine').is(':checked')) {
-							lineProductId = $lineProTr.eq(index).data('id');
-							$that.find('inputp[name=lineProductName]').val($lineProTr.eq(index).data('name'));
-							$that.find('inputp[name=lineProductId]').val($lineProTr.eq(index).data('id'));
-							$that.find('inputp[name=customerType]').val($lineProTr.eq(index).data('customerType'));
-							$that.find('inputp[name=days]').val($lineProTr.eq(index).data('days'));
+							lineProductJson = {
+								lineProductId : $lineProTr.eq(index).data('id'),
+							　　name : $lineProTr.eq(index).data('name'),
+							    customerType : $lineProTr.eq(index).attr('data-customerType'),
+							    days : $lineProTr.eq(index).data('days')
+							};
 						};
 					});
 					//若没有选中线路
-					if (lineProductId=='' || lineProductId==null ) {
+					if (!lineProductJson.lineProductId) {
 						showMessageDialog($( "#confirm-dialog-message" ),"请选择选择线路产品");
 			            return;
+					}else{
+						layer.close(subsection.searchTravelLinelayer);
+						$that.find('input[name=lineProductName]').val(lineProductJson.name);
+						$that.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
+						$that.find('input[name=customerType]').val(lineProductJson.customerType);
+						$that.find('input[name=days]').val(lineProductJson.days);
+						
 					};
 				});
 
