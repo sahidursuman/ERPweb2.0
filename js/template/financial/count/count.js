@@ -668,14 +668,27 @@ define(function(require, exports){
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
-		$shopObj.find('input[type=text]').off('change').on('change',function(){
+		
+		$shopObj.on('click','.T-addShop',function(){
+			Count.addShop($(this),$obj);
+		}).on('click','.T-delShop',function(){
+			Count.delShop($(this),$obj);
+		}).on('blur','input[name=consumeMoney]',function(){
+			//填写金额带出社佣、导佣 T-del
+			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
+		}).on('click','.T-del',function(){
+			//删除新增的购物安排
+			Count.delShopArrange($(this),$obj);
+		}).on('change','input[type=text]',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
 			}
-			
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
