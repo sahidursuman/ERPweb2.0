@@ -3271,7 +3271,7 @@ define(function(require, exports) {
 		tmp = {  // 基础数据
 			id : $addTripTab.find('input[name=tripPlanId]').val(),
 			guideAllPayMoney : $addTripTab.find('.T-guidePayedMoney').text(),
-			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val(),
+			guidePlanAllPreMoney : $addTripTab.find('input[name=guidePlanAllPreMoney]').val(),
 		},
 		tripPlanJson = {  // 安排数据
 			guideList : Tools.getTableVal($tab.find('#tripPlan_addPlan_guide').find('tbody'), 'entity-arrangeid'),
