@@ -172,28 +172,28 @@ define(function(require, exports) {
 
         checkInnerTransfer: function($obj) {
             var checkInnerValidator = $obj.formValidate([{ //接待日期
-                    $ele: $obj.find('input[name="receptionTime"]'),
+                    $ele: $obj.find('input[name="arriveTime"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '接待日期不能为空'
+                        errMsg: '接团时间不能为空'
                     }]
                 }, { //地点
-                    $ele: $obj.find('input[name="receptionAddress"]'),
+                    $ele: $obj.find('input[name="leaveTime"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '地点不能为空'
+                        errMsg: '送团时间不能为空'
                     }]
                 }, { //送离日期
-                    $ele: $obj.find('input[name="sendTime"]'),
+                    $ele: $obj.find('input[name="arrivePosition"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '送离日期不能为空'
+                        errMsg: '接团地点不能为空'
                     }]
                 }, { //地点
-                    $ele: $obj.find('input[name="sendAddress"]'),
+                    $ele: $obj.find('input[name="leavePosition"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '地点不能为空'
+                        errMsg: '送团地点不能为空'
                     }]
                 }
 
