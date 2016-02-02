@@ -414,7 +414,7 @@ define(function(require, exports){
 			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
-			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
 		}).on('click','.T-del',function(){
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
@@ -1264,7 +1264,6 @@ define(function(require, exports){
 						break;
 					}
 				};
-				
 			}else{
 				rowSpan = rowSpan * 1 + 1;
 				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
@@ -3376,7 +3375,6 @@ define(function(require, exports){
 	};
 	//获取社佣比例、导佣比例
 	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){
-		console.log(shopPolicyId);
 		consumeMoney = consumeMoney || 0;
 		if(!!shopPolicyId){
 			$.ajax({
