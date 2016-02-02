@@ -52,7 +52,7 @@ define(function(require, exports) {
 		.done(function(data) {
 			if (showDialog(data)) {
 				data = FinPay.covertResponse(data);
-				console.info(data)
+				data.currentType = FinPay.currentType;
 				FinPay.$tab.find('.T-list').html(listTableTemplate(data));
 
 				FinPay.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
@@ -387,7 +387,7 @@ define(function(require, exports) {
 		});
 
 		// 收款
-		$tab.find('.T-list').on('click', '.T-pay-task', function(event) {
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $tr = $(this).closest('tr'),
 			options = {
@@ -395,6 +395,9 @@ define(function(require, exports) {
 				name: $tr.children('td').eq(0).text(),
 				startDate: $tab.find('.T-start').val(),
 				endDate: $tab.find('.T-end').val()
+			}
+			if($(this).hasClass('T-pay-borrow')){
+				options.borrow = true;
 			}
 			FinPay.doIncomeTask(options);
 		});

@@ -126,6 +126,26 @@ template.helper("getTicketText", function(ticketType) {
             return '其他';
     }
 });
+template.helper("getPlanPayTypeText", function(payType) {
+    switch (payType * 1) {
+        case 0:
+            return '现金';
+        case 1:
+            return '刷卡';
+        case 2:
+            return '签单';
+        default:
+            return '其他';
+    }
+}); 
+template.helper("getPlanPayTypeOption", function(status) {
+    var res = '';
+    status = status || 0;
+    res += '<select name="payType"><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
+    return res;
+});
 template.helper("getPayTypeText", function(payType) {
     switch (payType * 1) {
         case 0:
@@ -139,7 +159,7 @@ template.helper("getPayTypeText", function(payType) {
         default:
             return '其他';
     }
-});    
+});      
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
     switch (billStatus * 1) {
         case -1:

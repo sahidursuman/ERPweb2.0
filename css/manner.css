@@ -839,7 +839,11 @@ select {
     font-size: 12px;
     padding: 0px 0px 0px 10px;
 }
-
+.guideInputListAging {
+    width: 250px !important;
+    font-size: 12px;
+    padding: 0px 0px 0px 10px;
+}
 .globalAdd .guideInterval {
     margin-bottom: 10px !important;
 }
@@ -2168,6 +2172,13 @@ p#back-top a span {
     margin-right: 5px;
     width: 57px;
     text-align: right;
+}
+
+.fix-w-5 {
+    display: inline-block;
+    margin-right: 5px;
+    width: 70px;
+    text-align: right; 
 }
 
 a.gray span{
