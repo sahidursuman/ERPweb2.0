@@ -32,7 +32,7 @@
                 <td style="vertical-align:middle">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td style="vertical-align:middle">{{rs.lineProduct.name}}</td>
-                <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
+                <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
                 <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>

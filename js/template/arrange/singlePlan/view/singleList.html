@@ -6,7 +6,6 @@
                 <th>出游日期</th>
                 <th>完团日期</th>
                 <th>线路产品</th>
-                <th>人数</th>
                 <th>团队人数</th>
                 <th>剩余座位</th>
                 <th>导</th>
@@ -43,8 +42,7 @@
                     </label>
                     {{/if}}
                 </td>
-                <td>{{rs.touristAdultCount  + rs.touristChildCount }}</td>
-                <td style="vertical-align:middle">{{rs.touristAdultCount + rs.touristChildCount}}</td>
+                <td>{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
                 <td style="vertical-align:middle">{{rs.surplusSeat}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
@@ -105,7 +103,7 @@
                             {{if tripPlanTourist.touristGroup}}{{tripPlanTourist.touristGroup.lineProduct.name }}{{/if}}
                         </span>
                     </td>
-                    <td>{{tripPlanTourist.touristGroup.adultCount + tripPlanTourist.touristGroup.childCount}}</td>
+                    <td>{{tripPlanTourist.touristGroup.adultCount}}大{{tripPlanTourist.touristGroup.childCount}}小</td>
                     {{else}}
                     <td></td>
                     <td></td>
@@ -113,7 +111,6 @@
                     <td></td>
                     {{/if}}
                     {{if index == 0}}
-                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
