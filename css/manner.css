@@ -1191,9 +1191,9 @@ select {
 
 /*中转分段*/
 
-.subsection-width-time {
-    width: 145px;
-}
+.width110 {
+        width: 110px !important;
+    }
 
 .marginLeftTourist-38 {
     margin-left: 15px;
@@ -1725,11 +1725,12 @@ p#back-top a span {
         right: 8px;
     }
     .width110 {
-        width: 110px
+        width: 110px !important;
     }
     .subsectionStartTime {
         width: 100px;
     }
+
     .marginLeftTourist-38 {
         margin-left: 54px;
     }
@@ -1840,7 +1841,7 @@ p#back-top a span {
         margin-left: 20px !important;
     }
     .width110 {
-        width: 110px;
+        width: 110px !important;
     }
     .trans-PayedMoney {
         width: 280px;
@@ -1978,13 +1979,29 @@ p#back-top a span {
     .listQuote{
         width: 75px;
     }
-    .marginLeft-Right7 {
+    .marginLeft-bigM {
         margin-left: 75px;
         margin-top: -20px;
     }
     .timeStartMore {
         margin-left: -20px !important;
     }
+     /*分并转团*/
+    .arrangeEndtime{
+        margin-left: 15px;
+    }
+    .arrangetype{
+        margin-left: 25px;
+    }
+    .orderManagerTime{
+        width: 270px;
+    }
+    .orderManagerOption{
+        width: 230px;
+        margin-left: 60px;
+        margin-top: -20px;
+    }
+
 }
 
 
@@ -2043,8 +2060,11 @@ p#back-top a span {
         left: -18px;
     }
     /*中转分段*/
-    .subsection-width-time {
+  /*  .subsection-width-time {
         width: 120px;
+    }*/
+    .marginLeftSub{
+        margin-left: 15px;
     }
     .marginLeftTourist-38 {
         margin-left: 38px;
@@ -2057,7 +2077,7 @@ p#back-top a span {
     .listQuote{
         width: 75px;
     }
-    .marginLeft-Right7 {
+    .marginLeft-bigM {
         margin-left: 75px;
         margin-top: -20px;
     }
@@ -2068,6 +2088,15 @@ p#back-top a span {
     .group-info .form-group{
         margin-right: 15px;
     }
+    .orderStatus{
+        margin-top: 25px;
+        margin-left: -27px;
+    }
+    .searchOrder{
+        margin-left: 5px;
+        margin-top: 25px;
+    }
+    
 }
 
 

@@ -1,0 +1,27 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>团号</th>
+                <th>线路</th>
+                <th>完团日期(账期)</th>
+                <th>付款金额</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{{if payItemList.length > 0}}
+        		{{each payItemList as rs}}
+        			<tr><td>{{rs.tripNumber}}</td>
+		                <td>{{rs.lineProductName}}</td>
+		                <td>{{rs.time | dateFormat:"yyyy-MM-dd hh:mm:ss"}}</td>
+		                <td><span class="F-float F-money">{{rs.payMoney}}</span></td>
+		                <td>{{rs.payRemark}}</td>
+		            </tr>
+        		{{/each}}
+        	{{else}}
+        		<tr><td colspan="5">暂无记录！</td></tr>
+        	{{/if}}
+       	</tbody>
+    </table>
+</div>

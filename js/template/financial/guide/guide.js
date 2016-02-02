@@ -16,6 +16,9 @@ define(function(require, exports) {
         // 费用明细
         costDetailTemplate = require("./view/costDetail"),
         billImagesTemplate = require("./view/billImages"),
+        paymentTemplate = require("./view/payment"),
+        paymentDetailTemplate = require("./view/paymentDetail"),
+        payResultTemplate = require("./view/payResult"),
 
         checkMenuKey = menuKey + "_checking",
         payMenuKey = menuKey + "-paying";
@@ -202,6 +205,10 @@ define(function(require, exports) {
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
         }
+
+        if(type == 1){
+            args.actionType = "pay";
+        }
         $.ajax({
                 url: KingServices.build_url('account/guideFinancial', 'financialGuideSumStaticsByGuideId'),
                 type: 'post',
@@ -220,6 +227,14 @@ define(function(require, exports) {
                         title = '导游对账',
                         html;
                     if (type) {
+                        if(data.success == 2){
+                            args.orderId = data.orderId;
+                            args.type = 1;
+                            FinancialService.unfinishedBill(args,function(){
+                                FinGuide.initOperationModule(args, 1,$tab);
+                            });
+                            return false;
+                        }
                         if(args.borrow){
                             data.borrow = args.borrow;
                         }
@@ -411,36 +426,53 @@ define(function(require, exports) {
      * @param  {array} tabArgs 翻页提示所需的切换参数
      * @return {[type]}         [description]
      */
-    FinGuide.savePayingData = function($tab, tabArgs) {
+    FinGuide.savePayingData = function($tab, tabArgs,Dsave) {
         var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
         if(!FinancialService.isClearSave($tab,validator)){
             return false;
         }
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
+        var payType = $tab.find('.T-sumPayType').val();
 		var bankId = $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val(),
             borrow = $tab.find('.T-saveClear').data('borrow'),
             method = borrow == "borrow" ? "operateGuidePreAccount" : "operatePayAccount";
+        var args = {
+            payJson: JSON.stringify(json),
+            guideId: $tab.find('.T-saveClear').data('id'),
+            payType: payType,
+            remark: $tab.find('.T-remark').val(),
+            bankId:bankId,
+            payMoney: $tab.find('.T-sumPayMoney').val(),
+            voucher:voucher,
+            billTime:billTime
+        }
+        if(payType == 1 && IndexData.userInfo.onlinePay == 1){
+            if(!Dsave){
+                args.resourceId = $tab.find('.T-saveClear').data('id');
+                args.resourceName = $tab.find(".T-guideName").text();
+                args.businessType = "guide";
+                args.payRemark = $tab.find('.T-remark').val();
+                args.type = 0;
+                FinGuide.payment(args,function(){
+                    FinGuide.initOperationModule(args, 1,$tab);
+                });
+                return false;
+            }
+        }
+
         if (json.length) {
             $.ajax({
                     url: KingServices.build_url('account/guideFinancial', method),
                     type: 'post',
-                    data: {
-                        payJson: JSON.stringify(json),
-                        guideId: $tab.find('.T-saveClear').data('id'),
-                        payType: $tab.find('.T-sumPayType').val(),
-                        remark: $tab.find('.T-remark').val(),
-                        bankId:bankId,
-                        voucher:voucher,
-                        billTime:billTime
-                    },
+                    data: args,
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
                     FinGuide.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
+                        if (!!tabArgs && tabArgs) {
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                             FinGuide.initOperationEvent($tab, 1);
                         } else {
@@ -491,7 +523,7 @@ define(function(require, exports) {
                     .done(function(data) {
                         if (showDialog(data)) {
                             FinGuide.payingJson = data.autoPayList;
-                            $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                            $tab.data('isEdited', true).find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                             FinGuide.setAutoFillEdit($tab, true);
                         }
                     });
@@ -627,30 +659,26 @@ define(function(require, exports) {
                 title = '预支款金额明细';
             }
             $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', method),
-                    type: 'post',
-                    data: {
-                        id: id
-                    },
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        data.type = type;
-                        if(type == 2){
-                            data.payedRecordList = data.guidePreRecordList;
-                        }
-                        layer.open({
-                            type: 1,
-                            title: title,
-                            skin: 'layui-layer-rim',
-                            area: '1024px',
-                            zIndex: 1028,
-                            content: operationDetailTemplate(data),
-                            scrollbar: false
-                        });
-                    }
-                });
-
+                url: KingServices.build_url('account/guideFinancial', method),
+                type: 'post',
+                data: {
+                    id: id
+                },
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    data.type = type;
+                    layer.open({
+                        type: 1,
+                        title: title,
+                        skin: 'layui-layer-rim',
+                        area: '1024px',
+                        zIndex: 1028,
+                        content: operationDetailTemplate(data),
+                        scrollbar: false
+                    });
+                }
+            });
         }
     }
 
@@ -737,6 +765,254 @@ define(function(require, exports) {
         });
     };
 
+    //选择支付方式
+    FinGuide.payment = function(args,listFn){//listFn列表刷新函数
+        var type = args.type;
+        if(type == 0){
+            var data = [];
+            data.type = type;
+            data.args = args;
+            FinGuide.initPayment(data,listFn);
+        } else {
+            $.ajax({
+                url: KingServices.build_url('onlinePay/payOrder', 'findPayOrderById'),
+                type: 'POST',
+                data: args,
+            })
+            .done(function(data) {
+                data.type = type;
+                data.args = args;
+                FinGuide.initPayment(data,listFn);
+            });
+        }
+    };
+
+    FinGuide.initPayment = function(data,listFn){
+        var args = data.args,
+            type = data.type;
+        args.type = type;
+        data.imgUrl = imgUrl;
+        var html = paymentTemplate(data);
+
+        var payTypeLayer = layer.open({
+            type: 1,
+            title: "选择支付方式",
+            skin: 'layui-layer-rim', // 加上边框
+            area: '900px', // 宽高
+            zIndex: 1028,
+            content: html,
+            scrollbar: false,
+            success : function(){
+                var $container = $(".T-payment-container"),
+                    $layer = $container.closest(".layui-layer");
+                $layer.find(".layui-layer-close").off().on('click', function() {
+                    layer.close(payTypeLayer);
+                    if(type == 0){
+                        $('#tab-financial_guide-paying-content').data("isEdited",false);
+                        listFn();
+                    }
+                });
+                if(type == 0){
+                    FinGuide.getGuideInfo($container,args.resourceId);
+                }
+                $container.off().on("click",".T-option",function(){
+                    var $this = $(this);
+                    if($this.hasClass('T-hideGuide')){
+                        $container.find(".T-guideInfo").addClass('hide');
+                    }else if($this.hasClass('T-detail')){//新建时无明细
+                        if(type == 1 || type == 2){
+                            FinGuide.paymentDetail(args.orderId);
+                        }
+                    } else if($this.hasClass('T-toPay')){
+                        var payValue = $container.find('.T-pay-item.pay-action').data("value");
+                        if(payValue == "2"){
+                            FinGuide.payResult($layer,args,listFn);
+                        } else if(payValue == "1"){
+                            $container.find('.T-toPay').attr('href', 'javascript:;').removeAttr('target');
+                            var orderId = $container.data("orderId");
+                            layer.close(payTypeLayer);
+                            if(type == 0 && !orderId){
+                                FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
+                            } else{
+                                if(orderId){
+                                    args.orderId = orderId;
+                                }
+                                $.ajax({
+                                    url: KingServices.build_url('onlinePay/payOrder', 'offlinePayByOrderId'),
+                                    type: 'POST',
+                                    data: args,
+                                })
+                                .done(function(data) {
+                                    showMessageDialog($("#confirm-dialog-message"),data.message);
+                                    if(type == 0){
+                                        $('#tab-financial_guide-paying-content').data("isEdited",false);
+                                        listFn();
+                                    }
+                                    if(type == 2){//刷新在线支付列表
+                                        listFn();
+                                    }
+                                });
+                                
+                            }
+                        }
+                        
+                    }else if($this.hasClass("T-pay-item")){
+                        event.preventDefault();
+                        $container.find(".T-pay-item").removeClass('pay-action');
+                        $this.addClass('pay-action');
+                        if($this.hasClass("T-showGuide")){
+                            $container.find(".T-guideInfo").removeClass('hide');
+                        }else{
+                            $container.find(".T-guideInfo").addClass('hide');
+                        }
+                        if($this.data("value") == "2"){
+                            var pay = $container.data("pay");
+                            if(type == 0 && !pay){
+                                FinGuide.createPayOrder($layer,args,listFn);
+                            } else {
+                                FinGuide.openPayWindow(type == 0 ? $container.data("orderNumber") : data.orderNumber, $container);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    //创建订单
+    FinGuide.createPayOrder = function($layer,args,listFn){
+        $.ajax({
+            url: KingServices.build_url('onlinePay/payOrder', 'createPayOrder'),
+            type: 'POST',
+            data: args
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $layer.find(".T-payment-container").data("pay",true);
+                $layer.find(".T-payment-container").data("orderNumber",data.orderNumber);
+                FinGuide.openPayWindow(data.orderNumber, $layer);
+                $layer.find(".T-payment-container").data("orderId",data.orderId);
+            }
+        });
+    };
+
+    /**
+     * 支付调整
+     * @param  {sring} orderNum 订单号
+     * @return {[type]}          [description]
+     */
+    FinGuide.openPayWindow = function(orderNum, $layer) {
+        $layer.find(".T-toPay").attr({
+            'href' : APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token'),
+            'target' : '_blank'
+        });
+        /*var win = window.open('about:blank', '_blank');
+
+        setTimeout(function() {
+            win.location.href = APP_ROOT + "back/onlinePay/alipay.do?method=pay&orderNumber=" + orderNum +"&token=" +$.cookie('token') + "&_"+(+new Date());
+        });*/
+    }
+
+    //支付明细
+    FinGuide.paymentDetail = function(orderId){
+        $.ajax({
+            url: KingServices.build_url('onlinePay/payOrder', 'findPayItemListByOrderId'),
+            type: 'POST',
+            data: {orderId: orderId},
+        })
+        .done(function(data) {
+            var html = paymentDetailTemplate(data);
+            layer.open({
+                type: 1,
+                title: "明细",
+                skin: 'layui-layer-rim', // 加上边框
+                area: '700px', // 宽高
+                zIndex: 1038,
+                content: html,
+                scrollbar: false
+            });
+        });
+    };
+
+    FinGuide.payResult = function($layer,args,listFn){
+        var type = args.type;
+        $layer.hide();
+        var html = payResultTemplate();
+        var rstLayer = layer.open({
+            type: 1,
+            title: "支付",
+            skin: 'layui-layer-rim', // 加上边框
+            area: '400px', // 宽高
+            zIndex: 1038,
+            content: html,
+            scrollbar: false,
+            success : function(){
+                var $container = $(".T-payResult-container"),
+                    $close = $container.closest(".layui-layer").find(".layui-layer-close");
+                $close.off().on('click', function() {
+                    $layer.prev(".layui-layer-shade").remove();
+                    $layer.remove();
+                    if(type == 0){
+                        $('#tab-financial_guide-paying-content').data("isEdited",false);
+                        listFn();
+                    } else if(type == 2){
+                        listFn();
+                    }
+                });
+
+                $container.off().on('click', '.T-option', function(event) {
+                    event.preventDefault();
+                    var $this = $(this);
+                    if($this.hasClass('T-success')){
+                        $close.trigger('click');
+                        if(type == 0 ||　type == 1){
+                            var $tab = $('#tab-financial_guide-paying-content');
+                            if($tab.length == 0){
+                                $tab = false;
+                            } else {
+                                $tab.data("isEdited",false);
+                            }
+                            listFn();
+                        }
+                    } else if($this.hasClass('T-problem')){
+                        var o = window.open();
+                        setTimeout(function(){
+                            o.location.href = "https://help.alipay.com/lab/help_detail.htm?help_id=258086";
+                        }, 0);
+                    } else if($this.hasClass('T-return')){
+                        $layer.show();
+                        layer.close(rstLayer);
+                    }
+                });
+            }
+        });
+    };
+
+    FinGuide.getGuideInfo = function($container,guideId){
+        $container.find(".T-showGuide").one("click",function(){
+            $.ajax({
+                url: KingServices.build_url('account/guideFinancial', 'checkGuideIsUseApp'),
+                type: 'POST',
+                data: {guideId : guideId},
+            })
+            .done(function(data) {
+                if(data.success == 0){
+                    showMessageDialog($("#confirm-dialog-message"),data.message);
+                    $container.find(".T-guideInfo").addClass('hide');
+                    $container.find(".T-payType").eq(0).prop("checked",true);
+                    $container.find(".T-payType").prop("disabled",true);
+                    return false;
+                }
+                var photo = data.guideInfo.photo;
+                $container.find(".T-guideImg").attr("src",!!photo ? imgUrl + photo : "/images/logo_24x24.png");
+                $container.find(".T-guideName").text(data.guideInfo.name);
+                $container.find(".T-guideNumber").text(data.guideInfo.guideCardNumber || '');
+                $container.find(".T-guideMobile").text(data.guideInfo.mobileNumber);
+            });
+            
+        });
+    };
+
     FinGuide.initPayModule = function(options) {
         options.guideId = options.id;
         delete(options.id);
@@ -749,4 +1025,6 @@ define(function(require, exports) {
     exports.init = FinGuide.initModule;
     exports.initPay = FinGuide.initPayModule;
 	exports.viewFeeDetail = FinGuide.viewFeeDetail;
+    exports.payment = FinGuide.payment;
+    exports.paymentDetail = FinGuide.paymentDetail;
 });

@@ -54,7 +54,7 @@
 									<div class="form-group col-sm-12">
 										<div class="search-area">
 											<label class="col-sm-1 control-label no-padding-right">外转备注:</label>
-											<div class="col-sm-10"> <textarea class="form-control col-sm-12" name="transRemark" value="" maxlength="1000"></textarea> </div>
+											<div class="col-sm-10"> <textarea class="form-control col-sm-12" name="transRemark" value="" maxlength="1000">{{touristGroupTransfer.touristGroup.transRemark}}</textarea> </div>
 										</div>
 									</div>
 									
@@ -79,7 +79,7 @@
 										</thead>
 									  <tbody class="T-addTransferCost">
 											  <!-- 其他费用 -->
-										      {{each touristGroupTransfer.touristGroup.touristGroupTransferFeeSet as transferFee1}}
+										      {{each touristGroupTransfer.touristGroup.touristGroupTransferFeeList as transferFee1}}
 										      {{if transferFee1 != null}}
 											      <tr  data-entity-id="{{transferFee1.id}}">
 											      		<td>
@@ -188,7 +188,7 @@
 						{{if isParent==1}}
 							    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
 								<div class="col-sm-1">
-									<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
+									<input name="needPayAllMoney" value="{{parentTouristGroup.subsectionNeedPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 								</div>
 
 								<label class="col-sm-1 control-label no-padding-right">已收：</label>
@@ -239,18 +239,20 @@
 										</tr>
 									</thead>
 								  <tbody>
+
 										{{each touristGroupTransfer.touristGroup.touristGroupFeeList as transferFeeList}}
 										<tr>
-											<td><select name="type" class="col-sm-10 col-sm-offset-1" disabled>
-												{{#transferFeeList.type | getFeeItemType: true}}
-											   </select>
+											<td>
+											    <input value="{{transferFeeList.name}}" readonly="readonly" type="text" name="type" class="col-sm-12">
 										    </td>
 											<td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
 											<td><span class="F-float F-money">{{transferFeeList.price}}</span></td>
-											<td><span class="F-float F-money">{{transferFeeList.price*transferFeeList.price}}</span></td>
+											<td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
 											<td>{{transferFeeList.remark}}</td>	  
 										</tr>
 										{{/each}}
+
+
 									</tbody>
 								</table>
 							</div>

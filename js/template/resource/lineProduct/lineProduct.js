@@ -119,7 +119,6 @@ define(function(require, exports) {
 					// typeKey赋给value
 					lineObj[i].value = lineObj[i].typeKey;
 				}
-				console.log(lineObj);
 				if(lineObj !=null) {
 					$(objM).autocomplete('option','source', lineObj);
 					$(objM).autocomplete('search', '');
@@ -258,8 +257,13 @@ define(function(require, exports) {
 								insuranceTemplate : insuranceTemplate,
 								daysList : daysList
 						};
-						
+						data.serviceStandardList = JSON.parse(data.serviceStandardList);
 						Tools.addTab(menuKey+"-view","查看线路产品",viewDetailTemplate(data));
+						//要求内容过长的处理
+						var tab_id = menuKey+"-view" ;
+						var $viewTab = $('#tab-'+tab_id+'-content');
+						var $tbody = $viewTab.find('.T-service-list');
+						Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
 					}
 				}
 	    	})
@@ -328,6 +332,7 @@ define(function(require, exports) {
 							busCompanyTemplate = JSON.parse(data.busCompanyTemplate),
 							//guideTemplate = JSON.parse(data.guideTemplate),
 							insuranceTemplate = JSON.parse(data.insuranceTemplate),
+
 							daysList = JSON.parse(data.daysList);					
 
 						data.viewLineProduct = {
@@ -342,7 +347,10 @@ define(function(require, exports) {
 
 						ResLineProduct.tmpData.productId = id;
 						ResLineProduct.tmpData.type = clipboardMode;
-
+						if (!!data.serviceStandardList) {
+							data.serviceStandardList = JSON.parse(data.serviceStandardList);
+							data.viewLineProduct.serviceStandardList = data.serviceStandardList;
+						}
 						data.viewLineProduct.editorName = tab_id + '-ueditor';
 						var html = updateLineProductTemplate(data.viewLineProduct);
 						// 初始化页面
@@ -512,7 +520,25 @@ define(function(require, exports) {
 				}
 			})
 			.on('click', '.T-delete', ResLineProduct.deleteLineProductDaysArrange);
-
+			//绑定导游服务标准
+			$tab.find('.T-guideService-form').on('click','.T-add-service',function(){
+				//添加导游服务标准
+				ResLineProduct.addGuideService($tab);
+			}).on('click','.T-action',function(){
+				var $that = $(this);
+				if($that.hasClass('T-addService')){
+					//添加服务标准到资源 KingServices.addGuideService
+					ResLineProduct.addService($that);
+				}else if($that.hasClass('T-delete')){
+					//删除服务标准
+					ResLineProduct.delService($(this));
+				}
+			}).on('change','input[name=serviceName]',function(){
+				//校验服务标准是否重复
+				ResLineProduct.checkService($tab,$(this));
+			});
+			//获取服务标准
+			ResLineProduct.getServiceList($tab,$tab.find('.T-service-list'));
 			// 绑定安排的拖动事件				
 			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
@@ -555,7 +581,141 @@ define(function(require, exports) {
 			})
 		}
 	};
+	//新增导游服务标准 ResLineProduct.addGuideService
+	ResLineProduct.addGuideService = function($obj){
+		var $tbody = $obj.find('.T-service-list');
+		var html = '<tr>'+
+		'<td><input name="serviceName" type="text" class="col-xs-12"><input name="serviceId" type="hidden"></td>'+
+		'<td><input name="serviceContent" type="text" class="col-xs-12"></td>'+
+		'<td><input name="serviceRequire" type="text" class="col-xs-12"></td>'+
+		'<td><a class="cursor T-action T-addService">添加服务标准</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></td>'+
+		'</tr>';
+		$tbody.append(html);
+		//获取服务标准
+		ResLineProduct.getServiceList($obj,$tbody);
+	};
+	//添加服务标准到资源
+	ResLineProduct.addService = function($obj){
+		var $tr = $obj.closest('tr');
+		var args = {
+			serviceTitle:$tr.find('input[name=serviceName]').val(),
+			serviceContent:$tr.find('input[name=serviceContent]').val(),
+			serviceRequire:$tr.find('input[name=serviceRequire]').val(),
+			form:"lineProduct"
+		};
+		//添加服务标准到资源 
+		KingServices.addGuideService(args);
+	};
+	//删除服务标准
+	ResLineProduct.delService = function($obj){
+		var $tr = $obj.closest('tr');
+		if(!!$tr.attr('serviceId')){
+			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+				$.ajax({
+					url:KingServices.build_url('serviceStandardController','deleteServiceStandard'),
+					data:{
+						id:$tr.attr('serviceId')
+					},
+					type:'POST',
+					success:function(data){
+						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						$tr.remove();
+					}
+				});
+			});
+		}else{
+			$tr.remove();
+		};
+	};
+	//校验服务标准是否重复
+	ResLineProduct.checkService = function($tab,val){
 
+		//获取服务标准
+		var serviceStandardList = [];
+		$tab.find('.T-service-list tr').each(function(index,el){
+			var $that = $(this);
+			var args = {
+				serviceTitle:$that.find('input[name=serviceName]').val(),
+				serviceContent:$that.find('input[name=serviceContent]').val(),
+				serviceRequire:$that.find('input[name=serviceRequire]').val()
+			};
+			serviceStandardList.push(args);
+		});
+		//校验是否有重复的服务标准
+		if(serviceStandardList.length>=2){
+			for(var i = 0;i<serviceStandardList.length;i++){
+				if(!!val){
+					if(serviceStandardList[i].serviceTitle == val){
+						showMessageDialog($( "#confirm-dialog-message" ),'【'+val+'】'+"服务标准已存在，请检查");
+					}
+				}else{
+					if(i+1 !=serviceStandardList.length){
+						if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
+							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i+1].serviceTitle+'】'+"服务标准已存在，请检查");
+							return;
+						}
+					}else{
+						if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
+							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i].serviceTitle+'】'+"服务标准已存在，请检查");
+							return;
+						}
+					}
+				}
+				
+			}
+		};
+	};
+	//获取导游服务标准
+	ResLineProduct.getServiceList = function($tab,$obj){
+		var $clickObj = $obj.find('input[name=serviceName]');
+		$clickObj.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+				}
+			},
+			select:function(event,ui){
+				var $that = $(this);
+				ResLineProduct.checkService($tab,ui.item.serviceTitle);
+				$.ajax({
+					url:KingServices.build_url('serviceStandardController','getServiceStandardTemplate'),
+					data:{
+						id:ui.item.id
+					},
+					type:'POST',
+					showLoading:false,
+					success:function(data){
+						if(showDialog(data)){
+							var $tr = $that.closest('tr');
+							data.gssTemplate = JSON.parse(data.gssTemplate);
+							$tr.find('input[name=serviceContent]').val(data.gssTemplate.serviceContent);
+							$tr.find('input[name=serviceRequire]').val(data.gssTemplate.serviceRequire);
+							$tr.find('input[name=serviceId]').val(ui.item.id);
+						}
+					}
+				});
+				
+				
+			}
+		}).off('click').on('click',function(){
+			var obj = this;
+			$.ajax({
+				url:KingServices.build_url('serviceStandardController','getServiceStandardTemplateDropDownList'),
+				type:'POST',
+				showLoading:false,
+				success:function(data){
+					if(showDialog(data)){
+						var serviceList = JSON.parse(data.gssTemplateList);
+						for(var i = 0; i<serviceList.length;i++){
+							serviceList[i].value = serviceList[i].serviceTitle;
+						};
+						$(obj).autocomplete('option','source',serviceList);
+						$(obj).autocomplete('search', '');
+					}
+				}
+			})
+		});
+	};
 	/**
 	 * 线路产品购物多选
 	 * @param  {[type]} $this [当前元素]
@@ -693,7 +853,6 @@ define(function(require, exports) {
 							shopArray.push(json);
 						}
 	        		}
-	        		console.log(shopArray)
 	        	};
 	        	//保存函数
 	        	function saveShop(type){
@@ -852,7 +1011,6 @@ define(function(require, exports) {
 							}]
 						}
 						selfPayArray.push(json);
-	        		console.log(selfPayArray)
 					}else{
 						for (var i = 0,len = selfPayArray.length; i < len; i++) {
 		        			if (selfPayArray[i].selfPayId == $selfPayId) {
@@ -1465,8 +1623,9 @@ define(function(require, exports) {
 							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){	
-								var index = objParents.index();									
-								$(".T-timeline-item").eq(index).remove();
+								/*var index = objParents.index();									
+								$(".T-timeline-item").eq(index).remove();*/
+							$obj.closest('.T-timeline-item').remove();
 							}
 						}
 					});
@@ -2490,7 +2649,8 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
 			return false;
 		}
-
+		
+		
 
 		// 获取表单的数据
 		travelLineData.lineProduct = 
@@ -2552,6 +2712,34 @@ define(function(require, exports) {
 					remark : getValue($item, "remark")
 				}
 				travelLineData.busCompany.push(json);
+			}
+		}
+		//获取服务标准
+		travelLineData.serviceStandardList = [];
+		$tab.find('.T-service-list tr').each(function(index,el){
+			var $that = $(this);
+			var id = '';
+			if(!!$that.attr('serviceId')){
+				id = $that.attr('serviceId');
+			}
+
+			var args = {
+				id:id,
+				serviceTitle:$that.find('input[name=serviceName]').val(),
+				serviceContent:$that.find('input[name=serviceContent]').val(),
+				serviceRequire:$that.find('input[name=serviceRequire]').val()
+
+			};
+			travelLineData.serviceStandardList.push(args);
+		});
+		//校验是否有重复的服务标准
+		var checkArr = travelLineData.serviceStandardList, len = checkArr.length;
+		for (var i = 0;i < len ;i ++ ) {
+			for (var j = i-1; j >= 0; j --)  {
+				if (checkArr[i].serviceTitle === checkArr[j].serviceTitle) {
+					showMessageDialog($( "#confirm-dialog-message" ),'【'+checkArr[i].serviceTitle+'】'+"服务标准已重复，请去重之后再提交");
+					return;
+				}
 			}
 		}
 

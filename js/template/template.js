@@ -120,6 +120,12 @@
           default:
             return "其他";
         }
+    }), template.helper("getCustomerType", function(status, isSel) {
+        var res = "";
+        return res += '<option value="" ' + ("" == status || null == status ? "selected" : "") + ">全部</option>", 
+        res += '<option value="0" ' + ("0" == status ? "selected" : "") + ">散客</option>", 
+        res += '<option value="1" ' + ("1" == status ? "selected" : "") + ">团体</option>", 
+        isSel && (res = "1" == status ? "团体" : "散客"), res;
     }), template.helper("getWayType", function(status) {
         var res = "";
         return status = status || 1, res += '<option value="1" ' + (1 == status ? "selected" : "") + ">旅行社系统</option>", 
@@ -270,8 +276,10 @@
           default:
             return "全程";
         }
-    }), template.helper("getTaskSelect", function(status) {
-        for (var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段", "小车接客" ], i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
+    }), template.helper("getTaskSelect", function(status, isCar) {
+        var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ];
+        isCar && desc.push("小车接客");
+        for (var i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
     }), template.helper("getHotelLevelDesc", function(level) {
         switch (1 * level) {
@@ -314,5 +322,36 @@
         var res = [];
         return 1 == repastDetail.breakfast && res.push("早餐"), 1 == repastDetail.lunch && res.push("午餐"), 
         1 == repastDetail.dinner && res.push("晚餐"), res.join("、");
+    }), template.helper("getScoreStar", function(str, scoreType) {
+        var res = "", star = [ "fa-star-o", "fa-star-o", "fa-star-o", "fa-star-o", "fa-star-o" ];
+        if (str > 4 && 15 > str ? star[0] = "fa-star-half-o" : str >= 15 && 25 > str ? star[0] = "fa-star" : str >= 25 && 35 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star-half-o") : str >= 35 && 45 > str ? (star[0] = "fa-star", star[1] = "fa-star") : str >= 45 && 55 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star-half-o") : str >= 55 && 65 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star") : str >= 65 && 75 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star", star[3] = "fa-star-half-o") : str >= 75 && 85 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star", star[3] = "fa-star") : str >= 85 && 95 > str ? (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star", star[3] = "fa-star", star[4] = "fa-star-half-o") : str >= 95 && (star[0] = "fa-star", 
+        star[1] = "fa-star", star[2] = "fa-star", star[3] = "fa-star", star[4] = "fa-star"), 
+        "1" == scoreType) for (var j = 0; 1 * str > j; j++) star[j] = "fa-star";
+        for (var i = 0; i < star.length; i++) res += '<i class="fa ' + star[i] + '"></i>';
+        return res;
+    }), template.helper("getNoteItemText", function(status) {
+        var res = "交通";
+        return "trafic" == status ? res = "交通" : "hotel" == status ? res = "住宿" : "play" == status ? res = "游玩" : "note" == status ? res = "笔记" : "line" == status && (res = "线路简介"), 
+        res;
+    }), template.helper("getBusinessTypeText", function(businessType) {
+        switch (businessType) {
+          case "guide":
+            return "导游";
+
+          case "busCompany":
+            return "车队";
+
+          case "hotel":
+            return "酒店";
+
+          default:
+            return "-";
+        }
     });
 }();

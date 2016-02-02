@@ -166,10 +166,10 @@ define(function(require, exports) {
 			    	plan.getSumData();
                     plan.getQuery();
 
-                    plan.$tab.find(".T-tripDetail").on("click",function(){
-                        var id = $(this).closest('tr').data("id");
-                        KingServices.tripDetail(id);
-                    });
+                    // plan.$tab.find(".T-tripDetail").on("click",function(){
+                    //     var id = $(this).closest('tr').data("id");
+                    //     KingServices.tripDetail(id);
+                    // });
 
                     //核算中转
                     plan.$tab.find(".T-checkTurn").on("click",function(){

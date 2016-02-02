@@ -10,7 +10,7 @@
 			<th>联系人</th>
 			<th>联系电话</th>
 			<th>应收</th>
-			<th>已收</th>
+		<!-- 	<th>已收</th> -->
 			<th>我方状态</th>
 			<th width="143">操作</th>
 		</tr>
@@ -26,7 +26,7 @@
 			<td>{{list.user.realName}}</td>
 			<td>{{list.user.mobileNumber}}</td>
 			<td><span class=" F-float F-money">{{list.transNeedPayMoney}}</span></td>
-			<td><span class=" F-float F-money">{{list.transPayedMoney}}</span></td>
+			<!--<td><span class=" F-float F-money">{{list.transPayedMoney}}</span></td>-->			
 			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{/if}}</td>
 			<td>
 				<div class="hidden-sm hidden-xs btn-group">

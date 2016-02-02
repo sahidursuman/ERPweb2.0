@@ -350,7 +350,7 @@ var data = {
 		{
 			key: '#tab-arrange_quote-add-content #inquiryContent-add-add  .T-refresh-status',
 			args:  ["_trackEvent", "询价状态", "按钮", "刷新", 1, siteId]
-		}
+		},
 		{
 			key: '#tab-arrange_quote-add-content #inquiryContent-add-add #busInquiryResult-add-add .T-bus-delete',
 			args:  ["_trackEvent", "询价状态", "按钮", "删除车队", 1, siteId]

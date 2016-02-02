@@ -1,0 +1,94 @@
+<div class="container-fluid globalAdd hct-min-width hct-mar-auto">
+	<div class="row hct-top-header">
+		<div class="col-xs-12 yj-title">
+			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+			<label class="control-label mar-l-10">{{note.title}}</label>
+			<a class="hct-top-share T-action T-share" data-title="{{note.title}}" data-id="{{note.id}}" data-type="guideEvaluate"><i class="fa fa-share-alt"></i>分享</a>
+		</div>
+	</div>
+	<div class="row hct-note">
+		<div class="col-xs-12">
+			<div class="pull-left">
+				<div class="caption-user-header pull-left{{if !note.guideInfo.photo}} default-img{{/if}}">
+					{{if note.guideInfo.photo}}<img src="{{imgUrl + note.guideInfo.photo}}">{{/if}}
+				</div>
+				<div class="note-guide-info pull-left">
+					<p>{{note.guideInfo.name}}</p>
+					<p class="starLevel">{{#note.guideInfo.guideSatisfaction | getScoreStar}}</p>
+				</div>
+			</div>
+			<div class="pull-right note-date">
+				<p>
+					<label class="control-label">出行日期：{{note.startTime}}</label>
+	        		<label class="control-label mar-l-10">出游天数：{{note.days}}天</label>
+	        	</p>
+			</div>
+		</div>
+		<div class="col-xs-12 score-body">
+			<div class="pull-left note-score">
+				<p class="scoreCount">{{note.tripSatisfaction}}%</p>
+				<p class="starLevel">{{#note.tripSatisfaction | getScoreStar}}</p>
+			</div>
+			<div class="pull-left note-line-score">
+				<p>此线路产品跟团游客满意度为{{note.tripSatisfaction}}%</p>
+				<p>已有{{note.scoreCount}}人评分</p>
+			</div>
+			<div class="pull-right p-no-mar">
+				<p>&nbsp;</p>
+				<p class="comment-info">
+					<label class="control-label"><i class="fa fa-heart"></i>{{note.likeCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-comment"></i>{{note.commentCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-share-alt"></i>{{note.shareCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-eye"></i>{{note.viewCount}}</label>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="comment-container">
+		<div class="note-db-img">
+			{{if !!note.coverImage}}<img src="{{imgUrl + note.coverImage}}" alt="{{note.title}}">{{/if}}
+		</div>
+	</div>
+	<div class="comment-content">
+		<div class="comment-cont-head">
+			收到的评论 {{if !!guideServiceStandardCommentList}}{{guideServiceStandardCommentList.length}}{{else}}0{{/if}}
+		</div>
+		<div class="comment-cont-body">
+			{{each guideServiceStandardCommentList as rs}}
+			<div class="comment-cont-item">
+				<div class="comment-user">
+					<div class="caption-user-header pull-left{{if !rs.photo}} default-img{{/if}}">
+						{{if rs.photo}}<img src="{{imgUrl + rs.photo}}">{{/if}}
+					</div>
+					<div class="pull-left comment-cont-name">
+						{{rs.name}}
+					</div>
+					{{if rs.hasStandard == "1"}}
+					<div class="pull-left comment-cont-score">
+						<label class="control-label">{{rs.standardTitle}}</label>
+						<label class="control-label starLevel">{{#rs.standardScore | getScoreStar : "1"}}</label>
+					</div>
+					{{else}}
+					<div class="pull-left comment-cont-score">
+						<label class="control-label">服务意识</label>
+						<label class="control-label starLevel">{{#rs.serviceAbilityScore | getScoreStar : "1"}}</label>
+					</div>
+					<div class="pull-left comment-cont-score">
+						<label class="control-label">语言能力</label>
+						<label class="control-label starLevel">{{#rs.talkAbilityScore | getScoreStar : "1"}}</label>
+					</div>
+					<div class="pull-left comment-cont-score">
+						<label class="control-label">业务水平</label>
+						<label class="control-label starLevel">{{#rs.businessAbilityScore | getScoreStar : "1"}}</label>
+					</div>
+					{{/if}}
+					<div class="pull-right comment-cont-date">{{rs.createTime}}</div>
+				</div>
+				<div class="comment-cont-text">
+					<p>{{rs.commentContent}}</p>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+</div>

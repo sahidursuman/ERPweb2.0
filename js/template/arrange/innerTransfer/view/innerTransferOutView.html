@@ -16,9 +16,9 @@
 					<td class="style-myself CheckPlan">客户</td>
 					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.fromBusinessGroup!=null}}{{innerTransfer.fromBusinessGroup.name}}{{/if}}</td>
 					<td class="style-myself CheckPlan">同行联系人</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.dutyOPUser != null}}{{innerTransfer.dutyOPUser.realName}}{{/if}}</td>
 					<td class="style-myself CheckPlan">联系人电话</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.dutyOPUser != null}}{{innerTransfer.dutyOPUser.mobileNumber}}{{/if}}</td>
 					
 				</tr>
 
