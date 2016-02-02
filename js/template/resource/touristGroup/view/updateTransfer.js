@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":342,"md5":"a56e2ca6f74efc064d359cbfa3dcecd8"}*/
+/*TMODJS:{"debug":true,"version":344,"md5":"23b97ccba670a90a09e797d906345c7f"}*/
 define(function(require) {
     return require("../../../template")("resource/touristGroup/view/updateTransfer", function($data, $filename) {
         try {
