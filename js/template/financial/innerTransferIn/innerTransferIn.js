@@ -244,7 +244,11 @@ define(function(require,exports) {
                     		var rightCode = InnerTransferIn.$checkId.find(".T-checkList").data("right");
                     		checkDisabled(fiList,checkTr,rightCode);
 						} else {
-							InnerTransferIn.$checkId.data("isEdited",true);
+							if(!!args.autoAccount && args.autoAccount == 1){
+								InnerTransferIn.$checkId.data("isEdited",true);
+							}else{
+								InnerTransferIn.$checkId.data("isEdited",false);
+							};
 						}
 						
 						//获取统计数据
@@ -258,26 +262,27 @@ define(function(require,exports) {
 						    curr: (args.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {
-						    	if(typeFlag == 2){
-						    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
-	                                InnerTransferIn.saveJson.autoPayList = tempJson;
-	                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
-	                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
-	                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
-	                                    var bankId = $countObj.find('input[name=card-id]').val();
-										var voucher = $countObj.find('input[name=credentials-number]').val();
-										var billTime = $countObj.find('input[name=tally-date]').val();
-										var bankNumber = $countObj.find('input[name=card-number]').val();
-	                                InnerTransferIn.saveJson = {
-	                                    sumPayMoney : sumPayMoney,
-	                                    sumPayType : sumPayType,
-	                                    bankId:bankId,
-	                                    voucher:voucher,
-	                                    billTime:billTime,
-	                                    bankNumber:bankNumber,
-	                                    sumPayRemark : sumPayRemark
-	                                }
-						    	}  // 避免死循环，第一次进入，不调用页面方法
+							    	if(typeFlag == 2){
+							    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
+		                                InnerTransferIn.saveJson.autoPayList = tempJson;
+		                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
+		                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
+		                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
+		                                    var bankId = $countObj.find('input[name=card-id]').val();
+											var voucher = $countObj.find('input[name=credentials-number]').val();
+											var billTime = $countObj.find('input[name=tally-date]').val();
+											var bankNumber = $countObj.find('input[name=card-number]').val();
+		                                InnerTransferIn.saveJson = {
+		                                    sumPayMoney : sumPayMoney,
+		                                    sumPayType : sumPayType,
+		                                    bankId:bankId,
+		                                    voucher:voucher,
+		                                    billTime:billTime,
+		                                    bankNumber:bankNumber,
+		                                    sumPayRemark : sumPayRemark
+		                                }
+							    	}  // 避免死循环，第一次进入，不调用页面方法
+							    	
 						    		args.pageNo = obj.curr -1;
 						    		InnerTransferIn.chenking(args,typeFlag,tab);
 								}
@@ -334,6 +339,10 @@ define(function(require,exports) {
 			settleValidator = $listSearchData.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 			settleCheck = settleValidator.check($obj);
 			autoValidatorCheck = autoValidator.check($obj.find('.T-count'));
+			$obj.on('change','input',function(){
+				
+				$obj.data('isEdited', true);
+			});
 			$obj.find('.T-clearList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
 				$obj.data('isEdited', true);
@@ -849,6 +858,7 @@ define(function(require,exports) {
                     	} else if(argumentsLen == 4){
                     		InnerTransferIn.saveJson = [];
                     		InnerTransferIn.btnSatus = 0;
+                    		$data.autoAccount = 0;
                             InnerTransferIn.chenking($data,2,"settle");
                     	} else {
                             Tools.addTab(tab_id, title, html);
@@ -856,6 +866,7 @@ define(function(require,exports) {
                             var businessGroupName = $obj.find('input[name=businessGroupName]').val();
                             $data.businessGroupId = id;
                             $data.businessGroupName = businessGroupName;
+                            $data.autoAccount = 0;
                             InnerTransferIn.chenking($data,2,"settle");
                     	}
                 	});
