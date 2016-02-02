@@ -70,22 +70,22 @@
                     {{/if}}
                 </td>
                 <td style="vertical-align:middle" style="min-width: 230px;">
-                    <a class="cursor T-action {{if rs.status == 0}}T-hair-regiment{{/if}} R-right" data-right="1140010" title="{{if rs.status == 0}}点击发团{{/if}}" data-bill-status="{{rs.billStatus}}" data-status-value="{{rs.status}}" {{if rs.status != 0}}style="color:#bbb;"{{/if}}>
+                    <a class="cursor T-action {{if rs.status == 0}}T-hair-regiment{{/if}} R-right" data-right="1460006" title="{{if rs.status == 0}}点击发团{{/if}}" data-bill-status="{{rs.billStatus}}" data-status-value="{{rs.status}}" {{if rs.status != 0}}style="color:#bbb;"{{/if}}>
                         发团
                         <label style="padding-left:10px;">|</label>
                     </a>
-                    <a class="cursor T-action T-view" title="查看">
+                    <a class="cursor T-action T-view R-right" title="查看" data-right="1460001">
                         查看
                     </a>
-                    <a class="cursor {{if rs.isEdit == 1}}gray{{else}}T-action T-update{{/if}}" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}">
+                    <a class="cursor {{if rs.isEdit == 1}}gray{{else}}T-action T-update{{/if}} R-right" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}" data-right="1460003">
                         <label class="padding-right20">|</label>
                         <span>编辑</span>
                     </a>
-                    <a class="cursor T-action T-export" title="导出">
+                    <a class="cursor T-action T-export R-right" title="导出" data-right="1460005">
                         <label class="padding-right20">|</label>
                         导出
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140007" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
+                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140004" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
                         <label class="padding-right20">|</label>
                         <span>取消</span>
                     </a>
