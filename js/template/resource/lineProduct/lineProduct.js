@@ -1623,8 +1623,9 @@ define(function(require, exports) {
 							layer.close(globalLoadingLayer);
 							var result = showDialog(data);
 							if(result){	
-								var index = objParents.index();									
-								$(".T-timeline-item").eq(index).remove();
+								/*var index = objParents.index();									
+								$(".T-timeline-item").eq(index).remove();*/
+							$obj.closest('.T-timeline-item').remove();
 							}
 						}
 					});
