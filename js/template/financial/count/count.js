@@ -239,8 +239,7 @@ define(function(require, exports){
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		var $whichDayObj = $listObj.find('.whichDay');
-		Count.formatDays($whichDayObj,$obj);
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -255,6 +254,7 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			//计算金额
 			Count.autoShopSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//自费
 		var $selfObj = $listObj.find('.T-count-selfPay');
@@ -263,6 +263,7 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			//计算自费金额
 			Count.autoSelfSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
@@ -273,6 +274,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoOtherInSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		
@@ -281,35 +283,41 @@ define(function(require, exports){
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.autoBusSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="hidden"]').off('change').on('change',function(){
 			Count.autoRestaurantSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
 		$hotelObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoHotelSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//景区处理--计算、新增
 		var $scenicObj = $listObj.find('.T-count-scenic');
 		$scenicObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoScenicSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//票务处理--计算、新增
 		var $ticketObj = $listObj.find('.T-count-ticket');
 		$ticketObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoTicketSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//其他支出
 		var $totherOutObj = $listObj.find('.T-count-otherOut');
 		$totherOutObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoOtherOutSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
@@ -324,7 +332,9 @@ define(function(require, exports){
 			KingServices.viewTripDetail(id);
 		});
 		//触发页面的change事件
-		$obj.find('input[type=hidden]').trigger('change');
+		$obj.find('input[type=hidden]').trigger('change',function(){
+			Count.formatDays($(this),$obj);
+		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			var $that = $(this);
@@ -384,8 +394,7 @@ define(function(require, exports){
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
 		var $listObj = $obj.find('.T-list');
-		var $whichDayObj = $listObj.find('.whichDay');
-		Count.formatDays($whichDayObj,$obj);
+		
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -398,6 +407,7 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			//计算金额
 			Count.autoGuideSum($(this),$obj);
+
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -408,6 +418,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -437,6 +448,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算自费金额
 				Count.autoSelfSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 
@@ -456,6 +468,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoOtherInSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		//新增其他收入安排
@@ -471,6 +484,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoBusSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -488,6 +502,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoRestaurantSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -502,6 +517,7 @@ define(function(require, exports){
 			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				Count.autoHotelSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -516,6 +532,7 @@ define(function(require, exports){
 			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				Count.autoScenicSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -530,6 +547,7 @@ define(function(require, exports){
 			if($nameFlag != "billRemark" && $nameFlag != "shift"){
 				Count.calculateCost($(this));
 				Count.autoTicketSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -544,6 +562,7 @@ define(function(require, exports){
 			if($nameFlag != "billRemark"){
 				Count.calculateCost($(this));
 				Count.autoOtherOutSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		//新增其他支出
@@ -638,8 +657,6 @@ define(function(require, exports){
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		var $listObj = $obj.find('.T-list');
-		var $whichDayObj = $listObj.find('.whichDay');
-		Count.formatDays($whichDayObj,$obj);
 		//中转明细
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
@@ -667,6 +684,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 			
 		});
@@ -695,6 +713,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算自费金额
 				Count.autoSelfSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		//新增自费安排
@@ -713,6 +732,7 @@ define(function(require, exports){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoOtherInSum($(this),$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		//新增其他收入安排
@@ -723,6 +743,7 @@ define(function(require, exports){
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=text]').off('change').on('change',function(){
 			Count.autoBusSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增车费
 		$listObj.find('.T-buspay-add').off('click').on('click',function(){
@@ -732,6 +753,7 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
 			Count.autoRestaurantSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增餐费安排
 		$listObj.find('.T-restaurantpay-add').off('click').on('click',function(){
@@ -742,6 +764,7 @@ define(function(require, exports){
 		$hotelObj.find('input[type=text]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoHotelSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增房费
 		$listObj.find('.T-hotel-add').off('click').on('click',function(){
@@ -752,6 +775,7 @@ define(function(require, exports){
 		$scenicObj.find('input[type=text]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoScenicSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增景区
 		$listObj.find('.T-scenic-add').off('click').on('click',function(){
@@ -762,6 +786,7 @@ define(function(require, exports){
 		$ticketObj.find('input[type=text]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoTicketSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增票务
 		$listObj.find('.T-ticket-add').off('click').on('click',function(){
@@ -772,6 +797,7 @@ define(function(require, exports){
 		$totherOutObj.find('input[type=text]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			Count.autoOtherOutSum($(this),$obj);
+			Count.formatDays($(this),$obj);
 		});
 		//新增其他支出
 		$listObj.find('.T-otherOut-add').off('click').on('click',function(){
@@ -1531,6 +1557,7 @@ define(function(require, exports){
             incomeMoney = Count.changeTwoDecimal(incomeMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
+            //计算应收（单价*（实际数量-计划数量））
             //明细的应收
             var needCount = $parent.find('.needIncomeCount');
             var detailNeedIncome = $parent.find('.needIncome').text();
@@ -1576,7 +1603,7 @@ define(function(require, exports){
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
-			//旅行社佣金= (实际数量-计划数量)*(单价-低价)*社佣比例
+			//旅行社佣金= (应收数量)*(单价-低价)*社佣比例
 			var travelAgencyRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
@@ -3314,7 +3341,8 @@ define(function(require, exports){
 		var days = $obj.closest('tr').attr('whichDay')-1;
 		var startTime = $parentObj.find('.tripPlanStartTime').val();
 		var date = Tools.addDay(startTime, days);
-		$obj.text(date)
+
+		$obj.closest('tr').find('.whichDay').text(date)
 	};
 	//获取社佣比例、导佣比例
 	Count.getShopRate = function($obj,shopPolicyId,consumeMoney,date,$bodyObj){

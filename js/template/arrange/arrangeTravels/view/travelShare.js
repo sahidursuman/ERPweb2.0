@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":18,"md5":"4940d2c773ce7ac520f76b6a7f850c8c"}*/
+define(function(require) {
+    return require("../../../template")("arrange/arrangeTravels/view/travelShare", '<div class="hct-share-tips"> <div class="hct-share-header">分享到</div> <div class="hct-share-body bdsharebuttonbox" data-tag="share_1"> <ul> <li><a class="bds_mshare" data-cmd="mshare">一键分享</a></li> <li><a class="bds_qzone" data-cmd="qzone">QQ空间</a></li> <li><a class="bds_tqq" data-cmd="tqq">腾讯微博</a></li> <li><a class="bds_sqq" data-cmd="sqq">QQ好友</a></li> <li><a class="bds_tsina" data-cmd="tsina">新浪微博</a></li> <li><a class="bds_weixin" data-cmd="weixin">微信</a></li> <li><a class="bds_more" data-cmd="more">更多</a></li> </ul> </div> </div>');
+});

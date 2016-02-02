@@ -45,7 +45,7 @@ FinancialService.initPayEvent = function($container,rule)  {
                             }
                             cardNumberJson.push(seatCount);
                         }
-                        $that.autocomplete('option','source', cardNumberJson);
+                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
                         $that.autocomplete('search', '');
                     }else{
                         layer.tips('没有内容', $that, {
@@ -58,8 +58,10 @@ FinancialService.initPayEvent = function($container,rule)  {
         })
     })
     .on('click', function() {
-
-        $(this).autocomplete('search', '');
+        var $that = $(this);
+        if ($that.data('ajax')) {
+            $that.autocomplete('search', '');
+        }
     });
     $container.find('select').on('change', function(event) {
         event.preventDefault();
@@ -725,4 +727,41 @@ FinancialService.saveJson_checking = function($tab){
     }
 
     return saveJson;
+};
+
+
+//支付
+/**
+ * 未完成订单提醒
+ */
+FinancialService.unfinishedBill = function(args,listFn){
+    var buttons = [
+        {
+            text: '现在去支付',
+            class: "btn btn-primary btn-minier btn-heightMall",
+            click: function() {
+                $(this).dialog("close");
+                KingServices.payment(args,listFn);
+            }
+        }, 
+        {
+            text: '否',
+            class: "btn btn-minier btn-heightMall",
+            click: function() {
+                $(this).dialog("close");
+                Tools.closeTab("financial_guide-paying");
+            }
+        }
+    ];
+
+    $("#confirm-dialog-message").removeClass('hide').dialog({
+        modal: true,
+        title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>提示</h4></div>",
+        title_html: true,
+        draggable:false,
+        buttons: buttons,
+        open:function(event,ui){
+            $(this).find("p").text("您有未完成的支付订单，是否跳转到付款界面？");
+        }
+    });
 };
