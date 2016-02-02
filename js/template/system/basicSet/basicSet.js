@@ -114,6 +114,7 @@ define(function(require,exports){
 			data:{
 				number:number,
 				subjectName:subjectName,
+				type : $obj.find('select[name=selectType]').val(),
 				status:1
 			},
 			success:function(data){
@@ -293,7 +294,6 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					data.bankAccount = JSON.parse(data.bankAccount);
 					var bankNumber = data.bankAccount.bankAccountNumber;
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
@@ -309,6 +309,7 @@ define(function(require,exports){
 						scrollbar: false,
 						success:function(){
 							var $updateTabObj = $('.T-bankAcc-container');
+							
 							//给添加页面绑定事件
 							Infrastructure.bankAccEvent($updateTabObj,args,$obj,2);
 						}
@@ -327,6 +328,14 @@ define(function(require,exports){
 		Infrastructure.formatBank($inputObj);
 		//表单验证
 		var validator = rule.check($obj);
+		if(typeFlag == 2){
+			var incomeMoney = $obj.find('input[name=incomeMoney]').val();
+			var payMoney = $obj.find('input[name=payMoney]').val();
+			if(incomeMoney != 0 || payMoney != 0){
+				//提示
+				$obj.find('input[type=text]').prop('readonly','readonly');
+			};
+		}
 
 		//提交事件
 		$obj.find('.T-submit').on('click',function(){

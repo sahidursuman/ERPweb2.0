@@ -668,14 +668,27 @@ define(function(require, exports){
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
-		$shopObj.find('input[type=text]').off('change').on('change',function(){
+		
+		$shopObj.on('click','.T-addShop',function(){
+			Count.addShop($(this),$obj);
+		}).on('click','.T-delShop',function(){
+			Count.delShop($(this),$obj);
+		}).on('blur','input[name=consumeMoney]',function(){
+			//填写金额带出社佣、导佣 T-del
+			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
+			var consumeMoney = $(this).val();
+			var date =$obj.find('.tripPlanStartTime').val();
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
+		}).on('click','.T-del',function(){
+			//删除新增的购物安排
+			Count.delShopArrange($(this),$obj);
+		}).on('change','input[type=text]',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
 			}
-			
 		});
 		//填写金额带出社佣、导佣
 		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
@@ -2392,21 +2405,43 @@ define(function(require, exports){
 	};
 	//获取商品政策的数据
 	Count.getShopPolicy = function($obj,$parentObj,$tr){
-		var $shopPolicyObj = false,shopId = false;
+		
 		if(!!$tr){
-			$shopPolicyObj = $obj;
-			shopId = $tr.find('input[name=shopId]').val();
+			var $shopPolicyObj = $obj;
+			var shopId = $tr.find('input[name=shopId]').val();
+			var trArr = $tr.nextAll();
+			Count.getShopPolicyByTr($tr,trArr,shopId,$parentObj);
 		}else{
 			if($obj.attr('shopArrangeId')){
-				shopId = $obj.attr('shopArrid');
-
-				$shopPolicyObj = $parentObj.find('input[name=shopPolicyName]');
+				var shopId = $obj.attr('shopArrid');
+				var $shopPolicyObj = $parentObj.find('input[name=shopPolicyName]');
+				
 			}else{
-				$shopPolicyObj = $parentObj.find('input[name=shopPolicy]');
-				shopId = $obj.find('input[name=shopId]').val();
+				var trArr = $obj.nextAll();
+				var shopId = $obj.find('input[name=shopId]').val();
+				Count.getShopPolicyByTr($obj,trArr,shopId,$parentObj);
+				
 			};
 		};
-		if(shopId != null && shopId != ""){
+		
+	};
+	Count.getShopPolicyByTr = function(parentTr,trArr,shopId,$parentObj){
+		
+		for(var i = 0;i<trArr.length;i++){
+			var $that = trArr.eq(i);
+			var td_cnt = parentTr.children('td').length;
+			var td_len = $that.children('td').length;
+			if(td_cnt == td_len){
+				break;
+			}else{
+				var $shopPolicyObj = $that.find('input[name=shopPolicy]');
+				Count.getDataByAutocomplete($shopPolicyObj,shopId,$parentObj);
+				
+			}
+		}
+	};
+	Count.getDataByAutocomplete = function($shopPolicyObj,shopId,$parentObj){
+		if(!!shopId && !!shopId){
 			$shopPolicyObj.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -2453,7 +2488,6 @@ define(function(require, exports){
 						obj.autocomplete('search', '');
 					}
 				});
-				
 			});
 		}
 	};
@@ -3652,8 +3686,8 @@ define(function(require, exports){
 		//团信息
 		var tripPlan = {
 				id:Count.changeTwoDecimal($obj.find('.financial-tripPlanId').val()),
-				grossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.grossProfitMoney').text())),
-				perGrossProfitMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text())),
+				grossProfitMoney:parseFloat($obj.find('.grossProfitMoney').text()),
+				perGrossProfitMoney:parseFloat($obj.find('.T-main-table .perGrossProfitMoney').text()),
 				getAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripIncome').text())),
 				payAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripCost').text())),
 				outPayAllMoney:Count.changeTwoDecimal(parseFloat($obj.find('.T-main-table .tripTransitCost').text()))
