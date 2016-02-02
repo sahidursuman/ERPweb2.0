@@ -399,12 +399,7 @@ define(function(require, exports){
 			Count.autoGuideSum($(this),$obj);
 		});
 		//购物处理--计算、新增
-		var $shopObj = $listObj.find('.T-count-shopping');/*
-
-		$shopObj.find('input[type=text]').off('change').on('change',function(){
-			
-			
-		});*/
+		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.on('click','.T-addShop',function(){
 			Count.addShop($(this),$obj);
 		}).on('click','.T-delShop',function(){
@@ -678,7 +673,7 @@ define(function(require, exports){
 			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
-			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
+			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
 		}).on('click','.T-del',function(){
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
@@ -689,13 +684,6 @@ define(function(require, exports){
 				//计算金额
 				Count.autoShopSum($(this),$obj);
 			}
-		});
-		//填写金额带出社佣、导佣
-		$shopObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).attr('policyid') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
-			var consumeMoney = $(this).val();
-			var date =$obj.find('.tripPlanStartTime').val();
-			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$shopObj);
 		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
@@ -1607,13 +1595,13 @@ define(function(require, exports){
 			}
             
 			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
-			var guideRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
+			var guideRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
 			//旅行社佣金= (实际数量-计划数量)*(单价-低价)*社佣比例
-			var travelAgencyRebateMoney = (parseFloat(realCount)-parseFloat(memberCount)) * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
+			var travelAgencyRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
 			$parent.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
