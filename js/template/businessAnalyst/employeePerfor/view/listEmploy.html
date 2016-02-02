@@ -23,12 +23,12 @@
 		{{each resultList as empL}}
 		   <tr>
 	   		    <td>{{empL.name}}</td>
-	   			<td>{{empL.getCount}}</td>
+	   			<td>{{empL.getAdultCount}}大{{empL.getChildCount}}小</td>
 	   			<td>{{empL.tripPlanCount}}</td>
-	   			<td>{{empL.tripPlanMemberCount}}</td>
+	   			<td>{{empL.tripPlanAdultCount}}大{{empL.tripPlanChildCount}}小</td>
 	   			<td>{{empL.transCount}}</td>
 	   			<td>{{empL.innerCount}}</td>
-	   			<td>{{empL.orderCount}}</td>		
+	   			<td>{{empL.orderCount}}</td>	
 		   	</tr>
 		{{/each}}
 	</tbody>

@@ -21,7 +21,8 @@ define(function(require, exports) {
 		busbookingViewTemplate = require("./view/busbookingView"),
 		selectTouristTemplate = require("./view/selectTourist"),
 		noticeTemplate = require("./view/notice"),
-		viewGroupTemplate = require("./view/viewGroup");
+		viewGroupTemplate = require("./view/viewGroup"),
+		payTypeHtml = '<select name="payType"><option value="0" selected="">现金</option><option value="1">刷卡</option><option value="2">签单</option></select>';
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -257,6 +258,26 @@ define(function(require, exports) {
 						event.preventDefault();
 						Tools.closeTab('arrange_all-view');
 					});
+
+					// 计算计划导付
+					var detail = [0, 0, 0];
+					$tab.find('.T-guidePayFeild').each(function() {
+						var $td = $(this), type = $td.data('type')*1,
+							money = $td.find('.F-money').text() * 1;
+
+						if (type < 4 && type >= 0) {
+							detail[type] += money;
+						}
+					});
+					
+					var text = [], label = ['现金', '刷卡', '签单'];
+					for (var i = 0; i < 3;i ++) {
+						if (detail[i] != 0) {
+							text.push(label[i] + detail[i]);
+						}
+					}
+
+					$tab.find('.T-guidePayMoneyLabel').text(text.length?text.join(','): 0);
 				}
 			}
 		});
@@ -421,6 +442,8 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_event = function($tab,id,target) {
 		tripPlan.$editTab = $tab;
+		// 计算导付
+		tripPlan.moneyTripPlan($tab);
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
@@ -443,6 +466,21 @@ define(function(require, exports) {
 		});
 
 		tripPlan.addResource($tab);
+
+		$tab.find('.T-toggle-tripPlanDayList').off('click.toggle').on('click.toggle', function() {
+			var $this = $(this), $tbody = $tab.find('.T-tripPlanDayList-tbody');
+			if ($this.hasClass('T-show')) {
+				$this.addClass('T-hide');
+				$tbody.hide();
+				$this.text('展开');
+				$this.removeClass('T-show');
+			}else if ($this.hasClass('T-hide')) {
+				$this.addClass('T-show');
+				$tbody.show();
+				$this.text('收起');
+				$this.removeClass('T-hide');
+			}
+		})
 
 		var validator = rule.listTripPlanCheckor($tab);  
 		$tab.find('.tab-content').on('click', '.T-addResource', function() {
@@ -502,6 +540,41 @@ define(function(require, exports) {
 		})
 		tripPlan.taskTypeOperation($tab);
 
+		//购物安排添加删除购物商品
+		$tab.find('#tripPlan_addPlan_shop').off('click.shop').on('click.shop', '.T-shopPolicy', function() {
+			var $this = $(this), $parentTd = $this.closest('td'), $parentDiv = $this.closest('div');
+			if ($this.hasClass('T-add')) {
+				var html = ''
+				+'<div class="mar-t-10" data-entity-id="">'
+                +'<input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />'
+                +'<input type="hidden" name="shopPolicyId" value=""/>'
+                +'<button class="btn btn-danger btn-sm btn-white T-shopPolicy T-del"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'
+                +'</div>';
+                $parentTd.append(html);
+			}else if ($this.hasClass('T-del')) {
+				var id = $parentDiv.data('entity-id');
+				if (!!id) {
+					showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条商品？', function() {
+						$.ajax({
+							url: KingServices.build_url('tripPlan','deleteTripPlanInfoByCategoryId'),
+							type: 'POST',
+							data: {
+								cateName: 'shopItem',
+								cateId: id
+							},
+							success: function(data) {
+								if (showDialog(data)) {
+									$parentDiv.remove();
+								}
+							}
+						})
+					})
+				}else{
+					$parentDiv.remove();
+				}
+			}
+			tripPlan.bindShopChoose($tab);
+		})
 
 		var noticeTourists = $tab.find('.T-noticeTourists')
 		noticeTourists.each(function(i) {
@@ -1320,7 +1393,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
-					+ '<td><input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
+					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -1352,7 +1425,7 @@ define(function(require, exports) {
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input name="prePayMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><input name="guidePayMoney" type="text" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
@@ -1381,7 +1454,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><input type="text" class="col-sm-12 F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="col-sm-12 F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="orderStatus"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
@@ -1413,7 +1486,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1434,7 +1507,13 @@ define(function(require, exports) {
         '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 T-chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
         '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
-        '<td><input type="text" name="goodsPolicy" class="col-sm-12 T-chooseGoodsPolicy" value="" /><input type="hidden" name="shopPolicyId" value=""/></td>'+
+        '<td>'+
+		'<div>'
+        +'<input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />'
+        +'<input type="hidden" name="shopPolicyId" value=""/>'
+        +'<button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>'
+        +'</div>'
+        +'</td>'+
         '<td><input type="text" name="remark" class="col-sm-12" value="" maxlength="500" /></td>'+
         '<td><a class="cursor T-btn-deleteTripPlanList" data-entiy-id="" data-entity-name="shop" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1457,7 +1536,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1488,7 +1567,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1517,7 +1596,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
@@ -2587,44 +2666,49 @@ define(function(require, exports) {
 		chooseGoodsPolicy.autocomplete({
 			minLength: 0,
 			select: function(event, ui){
-				var $this = $(this), $parents = $this.closest('tr');
+				var $this = $(this), $parents = $this.closest('div');
 				$parents.find("input[name=shopPolicyId]").val(ui.item.id).trigger('change');
 			},
 			change: function(event,nameUi){
 				if(nameUi.item == null){ 
-					var $this = $(this), $parents = $this.closest('tr');
+					var $this = $(this), $parents = $this.closest('div');
 					$this.val("");
 					$parents.find("input[name=shopPolicyId]").val("");
-					$parents.find("input[name=guideRate]").val("");
-					$parents.find("input[name=travelAgencyRate]").val("");
 				}
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this), $parents = $this.closest('tr'),
 				id = $parents.find("input[name=shopId]").val();
-			$.ajax({
-				url: KingServices.build_url('shop','findPolicyByShopId'),
-                type: 'POST',
-                showLoading:false,
-                data: "id="+id,
-                success: function(data) {
-					if(showDialog(data)){
-						var shopPolicyList = JSON.parse(data.shopPolicyList);
-						if(shopPolicyList && shopPolicyList.length > 0){
-							for(var i=0; i < shopPolicyList.length; i++){
-								shopPolicyList[i].value = shopPolicyList[i].name;
+			if (!!id) {
+				$.ajax({
+					url: KingServices.build_url('shop','findPolicyByShopId'),
+	                type: 'POST',
+	                showLoading:false,
+	                data: "id="+id,
+	                success: function(data) {
+						if(showDialog(data)){
+							var shopPolicyList = JSON.parse(data.shopPolicyList);
+							if(shopPolicyList && shopPolicyList.length > 0){
+								for(var i=0; i < shopPolicyList.length; i++){
+									shopPolicyList[i].value = shopPolicyList[i].name;
+								}
+								$this.autocomplete('option','source', shopPolicyList);
+								$this.autocomplete('search', '');
+							}else{
+								layer.tips('没有内容。', $this, {
+								    tips: [1, '#3595CC'],
+								    time: 2000
+								});
 							}
-							$this.autocomplete('option','source', shopPolicyList);
-							$this.autocomplete('search', '');
-						}else{
-							layer.tips('没有内容。', $this, {
-							    tips: [1, '#3595CC'],
-							    time: 2000
-							});
 						}
-					}
-                }
-            });
+	                }
+	            });
+            }else{
+				layer.tips('请选择购物店', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+            }
 		});
 	};
 
@@ -3031,12 +3115,8 @@ define(function(require, exports) {
 			$this.find("input[name=price], input[name=payedMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 				tripPlan.plusPrice($(this), $tab);
 			});
-			$this.find("select[name=payType]").on("change", function(){
-				if($(this).val()!=0){
-					$parents.find("input[name=guidePayMoney]").val("");
-				}else{
-					tripPlan.plusPrice($(this), $tab);
-				}
+			$this.find("select[name=payType]").off("change").on("change", function(){
+				tripPlan.plusPrice($(this), $tab);
 			});
 
 			//加载时自动计算
@@ -3070,16 +3150,30 @@ define(function(require, exports) {
 		tripPlan.moneyTripPlan($tab);
 	};
 	tripPlan.moneyTripPlan = function($tab) {
-		var guideAllPayMoney = 0.0;	//总计划导付
-		var guideAllNowMoney = 0.0;	//现收款
+		var guideAllPayMoney = 0,	//总计划导付
+			detail = [0,0,0],
+			index = 0,
+			money;
 		
-		var inputs = $tab.find('.tab-content').find("input[name=guidePayMoney]");
-		for(var i=0; i < inputs.length; i ++) {
-			var val = $(inputs[i]).val();
-			guideAllPayMoney += tripPlan.checkParamIsDouble(val);
-			
+		var $objs = $tab.find('.tab-content').find("input[name=guidePayMoney]");
+		for(var i=0; i < $objs.length; i ++) {
+			money = $objs.eq(i).val();
+			money = tripPlan.checkParamIsDouble(money);
+			guideAllPayMoney += money;
+
+			index = $objs.eq(i).prevAll('select[name="payType"]').val() * 1;
+			detail[index] += money;
 		}
 		$tab.find(".T-guidePayedMoney").html(guideAllPayMoney);
+
+		var text = [], label = ['现金', '刷卡', '签单'];
+		for (var i = 0; i < 3;i ++) {
+			if (detail[i] != 0) {
+				text.push(label[i] + detail[i]);
+			}
+		}
+
+		$tab.find('.T-guidePayedMoneyLabel').text(text.length?text.join(','): 0);
 	};
 
 	/**
@@ -3163,6 +3257,46 @@ define(function(require, exports) {
 				}
 			}
 		}
+
+		//购物安排数据
+		var shop = $("#tripPlan_addPlan_shop tbody tr"), shopArrangeList = [];
+		if(shop.length > 0){
+			for(var i=0; i<shop.length; i++){
+				var shopJson = {
+					id: shop.eq(i).data('entity-arrangeid'),
+					whichDay: tripPlan.getVal(shop.eq(i), 'whichDay'),
+					shopId: tripPlan.getVal(shop.eq(i), 'shopId'),
+					managerName: tripPlan.getVal(shop.eq(i), 'managerName'),
+					mobileNumber: tripPlan.getVal(shop.eq(i), 'mobileNumber'),
+					remark: tripPlan.getVal(shop.eq(i), 'remark'),
+					shopArrangeItemSet: []
+				}
+				var shopDiv = shop.eq(i).children('td').eq(4).find('div');
+				for (var j = 0; j < shopDiv.length; j++) {
+					var json = {
+						id: shopDiv.eq(j).data('entity-id'),
+						shopPolicyId: tripPlan.getVal(shopDiv.eq(j), 'shopPolicyId')
+					}
+					shopJson.shopArrangeItemSet.push(json);
+				}
+				var hasSameShop = 0;
+				if (i > 0) {
+					for (var j = 0; j < shopArrangeList.length; j++) {
+						if(shopJson.whichDay == shopArrangeList[j].whichDay && shopJson.shopId == shopArrangeList[j].shopId) {
+							showMessageDialog($("#confirm-dialog-message"),'购物安排中同一天安排了相同的商店')
+							return;
+						}else{
+							hasSameShop = 1;
+						}
+					}
+				}else{
+					hasSameShop = 1;
+				}
+				if (hasSameShop) {
+					shopArrangeList.push(shopJson)
+				}
+			}
+		}
 	
 		
 		//获取tripPlan
@@ -3170,7 +3304,7 @@ define(function(require, exports) {
 		tmp = {  // 基础数据
 			id : $addTripTab.find('input[name=tripPlanId]').val(),
 			guideAllPayMoney : $addTripTab.find('.T-guidePayedMoney').text(),
-			guideAllPreMoney : $addTripTab.find('input[name=guideAllPreMoney]').val(),
+			guidePlanAllPreMoney : $addTripTab.find('input[name=guidePlanAllPreMoney]').val(),
 		},
 		tripPlanJson = {  // 安排数据
 			guideList : Tools.getTableVal($tab.find('#tripPlan_addPlan_guide').find('tbody'), 'entity-arrangeid'),
@@ -3182,7 +3316,7 @@ define(function(require, exports) {
 			restaurantList : restaurantArrangeList,
 			scenicList : Tools.getTableVal($tab.find('#tripPlan_addPlan_scenic').find('tbody'), 'entity-arrangeid'),
 			selfPayList : Tools.getTableVal($tab.find('#tripPlan_addPlan_selfPay').find('tbody'), 'entity-arrangeid'),
-			shopList : Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
+			shopList : shopArrangeList,//Tools.getTableVal($tab.find('#tripPlan_addPlan_shop').find('tbody'), 'entity-arrangeid'),
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		},
 		json = JSON.stringify(tripPlanJson),arrangeStatus = {};

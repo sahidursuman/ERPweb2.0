@@ -797,7 +797,7 @@ define(function(require, exports) {
                 reciveType = 0;
 
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$reciveText,$label,type,reciveType,$obj);
+            touristGroup.isRemoveRequire($obj,$that,$div,$reciveText,$label,type,reciveType);
         });
 
         //送团操作
@@ -811,7 +811,7 @@ define(function(require, exports) {
                 type = $label.data('type'),
                 sendType = 1;
             //移除中转信息
-            touristGroup.isRemoveRequire($that,$div,$sendText,$label,type,sendType,$obj);
+            touristGroup.isRemoveRequire($obj,$that,$div,$sendText,$label,type,sendType);
         });
 
        
@@ -825,7 +825,7 @@ define(function(require, exports) {
      * @param  {[type]}  type  复选框标识
      * @return {Boolean}
      */
-    touristGroup.isRemoveRequire = function($that,$div,$text,$label,type ,isReciveType,$innerTransferForm){
+    touristGroup.isRemoveRequire = function($obj,$that,$div,$text,$label,type ,isReciveType){
         if ($that.is(":checked")) {
             touristGroup.addActionPlan($div,$text.text(),$label.text(), type,isReciveType);
         }else{
@@ -868,7 +868,7 @@ define(function(require, exports) {
                 $div.find('.T-action-require-list').children('div.require-commons').remove();
             };
         };
-        rule.checkInnerTransfer($innerTransferForm);
+        touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
     };
 
     /**
@@ -882,17 +882,17 @@ define(function(require, exports) {
     touristGroup.addActionPlan = function($tab,textTitle, title, type, isReciveType ){
         var list = '';
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 0 ) {
-                list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
+                list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
                         '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 1 ) {
-                list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width">'+
+                list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
                         '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
                         '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
@@ -930,6 +930,16 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     data.lineProductList = JSON.parse(data.lineProductList);
                     $tbody.html(lineproductSearchList(data));
+
+                    //搜索线路名称
+                    $dialog.find('.T-btn-search').on('click', function(event) {
+                        event.preventDefault();
+                        /* Act on the event */
+                        var $that=$(this),$searArea=$that.closest('.form-inline');
+                        var name= $searArea.find('.T-productName').val();
+                        touristGroup.getLineProductList($dialog, type, page, name);
+                    });
+
                     $tbody.closest('.tab-pane').find('.T-total').text(data.recordSize);
                     // 绑定翻页组件
                     laypage({

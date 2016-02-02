@@ -114,6 +114,7 @@ define(function(require,exports){
 			data:{
 				number:number,
 				subjectName:subjectName,
+				type : $obj.find('select[name=selectType]').val(),
 				status:1
 			},
 			success:function(data){
@@ -129,8 +130,9 @@ define(function(require,exports){
 	};
 	//修改会计科目
 	Infrastructure.editAccountant = function($obj,args){
-		var oldTitle = $obj.attr('title');
-		var oldStatus = $obj.attr('status');
+		var oldTitle = $obj.attr('title'),
+			oldStatus = $obj.attr('status'),
+			oldType = $obj.attr('type');
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
 		var selected = '';
@@ -142,6 +144,16 @@ define(function(require,exports){
 		'<option value="0" '+selected+'>已停用</option>'+
 		'</select>';
 		$obj.find('.status').html(selectHtml);
+
+		var selected2 = '';
+		if (oldType == 1) {
+			selected2 = 'selected="selected"'
+		};
+		var typeHtml = '<select name="selectType">'+
+		'<option value="0">收入</option>'+
+		'<option value="1" '+selected2+'>支出</option>'+
+		'</select>';
+		$obj.find('.T-type').html(typeHtml);
 		$obj.find('input').off('change').on('change',function(){
 			Infrastructure.installAccData($obj,args);
 		});
@@ -154,7 +166,8 @@ define(function(require,exports){
 		var updateData={
 			id:$obj.attr('id'),
 			subjectName:$obj.find('input[name=subjectName]').val(),
-			status:$obj.find('select[name=selectStatus]').val()
+			status:$obj.find('select[name=selectStatus]').val(),
+			type:$obj.find('select[name=selectType]').val()
 		};
 		$.ajax({
 			url:KingServices.build_url('subject','updateSubject'),
@@ -281,7 +294,6 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					data.bankAccount = JSON.parse(data.bankAccount);
 					var bankNumber = data.bankAccount.bankAccountNumber;
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
@@ -297,6 +309,7 @@ define(function(require,exports){
 						scrollbar: false,
 						success:function(){
 							var $updateTabObj = $('.T-bankAcc-container');
+							
 							//给添加页面绑定事件
 							Infrastructure.bankAccEvent($updateTabObj,args,$obj,2);
 						}
@@ -315,6 +328,14 @@ define(function(require,exports){
 		Infrastructure.formatBank($inputObj);
 		//表单验证
 		var validator = rule.check($obj);
+		if(typeFlag == 2){
+			var incomeMoney = $obj.find('input[name=incomeMoney]').val();
+			var payMoney = $obj.find('input[name=payMoney]').val();
+			if(incomeMoney != 0 || payMoney != 0){
+				//提示
+				$obj.find('input[type=text]').prop('readonly','readonly');
+			};
+		}
 
 		//提交事件
 		$obj.find('.T-submit').on('click',function(){

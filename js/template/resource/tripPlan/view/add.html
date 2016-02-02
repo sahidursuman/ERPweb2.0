@@ -76,22 +76,22 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <span class="fix-w-4">现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
+                    <span class="fix-w-4">计划现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">现付:</span><span class="T-guidePayedMoney F-float F-money">{{basicInfo.guideAllPayMoney}}</span>
+                    <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">预支款:</span><input type="text" name="guideAllPreMoney" class="F-float F-money" value="{{basicInfo.guideAllPreMoney}}">
+                    <span class="fix-w-5">计划预支款:</span><input type="text" name="guidePlanAllPreMoney" class="F-float F-money" value="{{basicInfo.guidePlanAllPreMoney}}">
                 </div>
             </div>
         </div>
     </div>
 
     <div class="trip-arrange">
-        <h5 class="base-title">行程安排</h5>
+        <h5 class="base-title">行程安排<a class="T-toggle-tripPlanDayList T-show" style="font-size: 12px; color: #999; display: inline-block; margin-left: 15px; font-weight: 100;">收起</a></h5>
         <table class="table table-bordered">
-            <tbody>
+            <tbody class="T-tripPlanDayList-tbody">
                 <tr>
                     <th>日期</th>
                     <th>行程简要</th>
@@ -358,7 +358,7 @@
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:80px;">
-                                        <col style="width:80px;">
+                                        <col style="width:150px;">
                                         <col>
                                         <col style="width:100px;">
                                         <col style="width:140px;">
@@ -441,7 +441,7 @@
                                                 <td><input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price F-float F-money" maxlength="9"/></td>
                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money"/></td>
                                                 <td><input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9"/></td>
-                                                <td><input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12 F-float F-money"/></td>
+                                                <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption}}<input name="guidePayMoney" type="text" value="{{busCompany.guidePayMoney}}" maxlength="9" class="col-sm-12 F-float F-money"/></td>
                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                 <td>
                                                     <select name="orderStatus">
@@ -498,7 +498,7 @@
                                 <col style="width:60px;"> 
                                 <col style="width:60px;">
                                 <col style="width:60px;">
-                                <col style="width:80px;">
+                                <col style="width:150px;">
                                 <col> 
                                 <col style="width:50px;"> 
                             </colgroup>
@@ -555,7 +555,7 @@
                                         <td><input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;"/></td>
                                         <td><input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>
                                         <td><input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;"/></td>
-                                        <td><input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>
+                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption}}<input name="guidePayMoney" type="text" value="{{restaurant.guidePayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>
                                         <td><input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12"/></td>
                                         <td>
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">
@@ -604,7 +604,7 @@
                                 <col style="width:60px;">
                                 <col style="width:60px;">
                                 <col style="width:60px;">
-                                <col style="width:80px;">
+                                <col style="width:150px;">
                                 <col>
                                 <col style="width:80px;"> 
                                 <col style="width:110px;"> 
@@ -665,7 +665,7 @@
                                         <td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" /></td>
                                         <td><input type="text" class="col-sm-12 F-float F-money" readonly="readonly" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" /></td>         
                                         <td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" /></td>
-                                        <td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
+                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption}}<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{hotel.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500"/></td>
                                         <td>
                                             <select name="orderStatus">
@@ -718,7 +718,7 @@
                                <col style="width:110px;">
                                <col style="width:60px;">
                                <col style="width:60px;">
-                               <col style="width:80px;">
+                               <col style="width:150px;">
                                <col>
                                <col style="width:60px;"> 
                             </colgroup>
@@ -788,8 +788,8 @@
                                         <td>
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" />
                                         </td>
-                                        <td>
-                                            <input name="guidePayMoney" type="text" class="col-sm-12 F-float F-money" value="{{scenic.guidePayMoney}}" maxlength="9" style="width: 60px;" />
+                                        <td class="inline-flex">
+                                            {{#scenic.payType | getPlanPayTypeOption}}<input name="guidePayMoney" type="text" class="col-sm-12 F-float F-money" value="{{scenic.guidePayMoney}}" maxlength="9" style="width: 60px;" />
                                         </td>
                                         <td>
                                             <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" />
@@ -827,7 +827,7 @@
                               <col style="width:150px;"> 
                               <col style="width:90px;"> 
                               <col style="width:110px;"> 
-                              <col style="width:120px;"> 
+                              <col style="width:160px;"> 
                               <col>
                               <col style="width:60px;"> 
                               </colgroup> 
@@ -859,7 +859,25 @@
                                         </td>
                                         <td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" /></td>
                                         <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
-                                        <td><input type="text" name="goodsPolicy" class="col-sm-12 T-chooseGoodsPolicy" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.name}}{{/if}}" /><input type="hidden" name="shopPolicyId" value="{{if shop.shopPolicy != null}}{{shop.shopPolicy.id}}{{/if}}"/></td>
+                                        <td>
+                                            {{if !!shop.shopArrangeItemSet}}
+                                            {{if shop.shopArrangeItemSet.length > 0}}
+                                            {{each shop.shopArrangeItemSet as rs index}}
+                                            <div data-entity-id="{{rs.id}}" {{if index > 0}}class="mar-t-10"{{/if}}>
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
+                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}"/>
+                                            <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
+                                            </div>
+                                            {{/each}}
+                                            {{/if}}
+                                            {{else}}
+                                            <div data-entity-id="">
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                            <input type="hidden" name="shopPolicyId" value=""/>
+                                            <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                            </div>
+                                            {{/if}}
+                                        </td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500"/></td>
                                         <td>
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" title="删除">
@@ -900,7 +918,7 @@
                                <col style="width:80px"> 
                                 <col style="width:80px">
                                 <col style="width:80px">
-                                <col style="width:80px"> 
+                                <col style="width:150px"> 
                                 <col>
                                 <col style="width:60px;"> 
                             </colgroup>  
@@ -946,7 +964,7 @@
                                         <td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" /></td>
                                         <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{selfPay.needPayMoney}}" style="width: 60px;" /></td>
                                         <td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9"/></td>
-                                        <td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{selfPay.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
+                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption}}<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{selfPay.guidePayMoney}}" style="width: 60px;" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500"/></td>
                                         <td>
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">
@@ -988,7 +1006,7 @@
                                 <col style="width:80px">
                                 <col style="width:80px">
                                 <col style="width:80px">
-                                <col style="width:80px"> 
+                                <col style="width:150px"> 
                                 <col>
                                 <col style="width:60px;"> 
                             </colgroup>  
@@ -1043,7 +1061,7 @@
                                         <td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.reduceMoney}}" /></td>
                                         <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{ticket.needPayMoney}}" /></td>
                                         <td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" /></td>
-                                        <td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{ticket.guidePayMoney}}" maxlength="9"/></td>
+                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption}}<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{ticket.guidePayMoney}}" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500"/></td>
                                         <td>
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">
@@ -1084,7 +1102,7 @@
                                 <col style="width:80px"> 
                                 <col style="width:80px">
                                 <col style="width:80px">
-                                <col style="width:80px">
+                                <col style="width:150px">
                                 <col>
                                 <col style="width:60px;"> 
                             </colgroup>  
@@ -1117,7 +1135,7 @@
                                         <td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{other.reduceMoney}}" maxlength="9"/></td>
                                         <td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{other.needPayMoney}}" maxlength="9"/></td>
                                         <td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9"/></td>
-                                        <td><input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{other.guidePayMoney}}" maxlength="9"/></td>
+                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption}}<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" value="{{other.guidePayMoney}}" maxlength="9"/></td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500"/></td>
                                         <td>
                                             <a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">

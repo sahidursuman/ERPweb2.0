@@ -198,6 +198,10 @@ define(function(require, exports) {
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
             }
+            if($tab.find('.T-saveClear').data('borrow') == "borrow"){
+                args.borrow = true;
+            }
+
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
         }
@@ -231,8 +235,11 @@ define(function(require, exports) {
                             });
                             return false;
                         }
+                        if(args.borrow){
+                            data.borrow = args.borrow;
+                        }
                         data.isOuter = FinGuide.isOuter = args.isOuter;
-                        key = payMenuKey, title = '导游付款';
+                        key = payMenuKey, title = args.borrow ? '导游借款' : '导游付款';
                         html = guidePayTemplate(data);
                     } else {
                         html = guideCheckingTemplate(data);
@@ -333,6 +340,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-gid')) {
                 // 查看费用明细
                 FinGuide.viewFeeDetail($that.data('id'));
+            } else if($that.hasClass('T-borrow-detail')){
+                FinGuide.viewOperationDetail(id, 2);
             }
         });
 
@@ -426,7 +435,9 @@ define(function(require, exports) {
         var payType = $tab.find('.T-sumPayType').val();
 		var bankId = $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
-        var billTime = $tab.find('input[name=tally-date]').val();
+        var billTime = $tab.find('input[name=tally-date]').val(),
+            borrow = $tab.find('.T-saveClear').data('borrow'),
+            method = borrow == "borrow" ? "operateGuidePreAccount" : "operatePayAccount";
         var args = {
             payJson: JSON.stringify(json),
             guideId: $tab.find('.T-saveClear').data('id'),
@@ -450,9 +461,10 @@ define(function(require, exports) {
                 return false;
             }
         }
+
         if (json.length) {
             $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'operatePayAccount'),
+                    url: KingServices.build_url('account/guideFinancial', method),
                     type: 'post',
                     data: args,
                 })
@@ -639,9 +651,12 @@ define(function(require, exports) {
         if (!!id) {
             var method = 'viewCheckRecordList',
                 title = '应付金额明细';
-            if (type) {
+            if (type == 1) {
                 method = 'viewPayedRecordList';
                 title = '已付金额明细';
+            } else if(type == 2){
+                method = 'viewGuidePreRecordList';
+                title = '预支款金额明细';
             }
             $.ajax({
                 url: KingServices.build_url('account/guideFinancial', method),
