@@ -327,3 +327,8 @@ input.datepicker {
 	    padding-top: 8px;
 	}
 }
+
+
+.inline-flex {
+	display: inline-flex;
+}

@@ -169,6 +169,25 @@
           default:
             return "其他";
         }
+    }), template.helper("getPlanPayTypeText", function(payType) {
+        switch (1 * payType) {
+          case 0:
+            return "现金";
+
+          case 1:
+            return "刷卡";
+
+          case 2:
+            return "签单";
+
+          default:
+            return "其他";
+        }
+    }), template.helper("getPlanPayTypeOption", function(status) {
+        var res = "";
+        return status = status || 0, res += '<select name="payType"><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+        res += '<option value="1" ' + (1 == status ? "selected" : "") + ">刷卡</option>", 
+        res += '<option value="2" ' + (2 == status ? "selected" : "") + ">签单</option></select>";
     }), template.helper("getPayTypeText", function(payType) {
         switch (1 * payType) {
           case 0:
