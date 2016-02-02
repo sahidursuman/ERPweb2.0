@@ -259,6 +259,11 @@ define(function(require, exports) {
 						};
 						data.serviceStandardList = JSON.parse(data.serviceStandardList);
 						Tools.addTab(menuKey+"-view","查看线路产品",viewDetailTemplate(data));
+						//要求内容过长的处理
+						var tab_id = menuKey+"-view" ;
+						var $viewTab = $('#tab-'+tab_id+'-content');
+						var $tbody = $viewTab.find('.T-service-list');
+						Tools.descToolTip($tbody.find(".T-ctrl-tip"),1);
 					}
 				}
 	    	})
