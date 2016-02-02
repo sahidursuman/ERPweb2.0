@@ -1570,10 +1570,8 @@ define(function(require, exports){
             	var incomeMoney = (incomeCount.val()*marketPrice);
             	incomeMoney = Count.changeTwoDecimal(incomeMoney);
             	incomeMoney = parseFloat(incomeMoney);
-            	if(incomeCount.val() != 0){
-            		incomeMoneyObj.val(incomeMoney);
-            		needIncome.text(incomeMoney);
-            	}
+            	incomeMoneyObj.val(incomeMoney);
+        		needIncome.text(incomeMoney);
             	
             } else if ($obj.is('[name="realGetMoney"]')) {
             	// 如果修改的是现收--计算应收数量
