@@ -114,6 +114,7 @@ define(function(require,exports){
 			data:{
 				number:number,
 				subjectName:subjectName,
+				type : $obj.find('select[name=selectType]').val(),
 				status:1
 			},
 			success:function(data){
