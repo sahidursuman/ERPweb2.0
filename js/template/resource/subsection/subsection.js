@@ -263,7 +263,6 @@ define(function(require, exports) {
 			subsection.deleteOperation(id,$this);
 			subsection.$tabSub.data('isEdited', true);
 		});
-        
 		
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
@@ -302,7 +301,6 @@ define(function(require, exports) {
 
 			//初始化页面
 		    $tbody.find('[data-type=3]').prop('disabled',true).css('backgroundColor','#EFEBEB');
-		    
 		};
 
 	    //删除、新增费用项
