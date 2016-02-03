@@ -4,8 +4,6 @@ var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
-var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
-imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
@@ -14,7 +12,19 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event';
-
+/**
+ * 图片地址
+ */
+var imgUrl = function () {
+	var host = window.location.host, url = '';
+	if(host.indexOf("192.168.0.") >= -1
+		|| host.indexOf("localhost") >= -1){
+		url = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试或开发的图片地址
+	}else{
+		url = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
+	}
+	return url;
+}();
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
 		$next_li = $tabList.find('.tab-'+tabId);
