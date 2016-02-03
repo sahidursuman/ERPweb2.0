@@ -51,15 +51,16 @@ define(function(require, exports) {
 
 					subsection.$tab = $("#tab-resource_subsection-content");
 					subsection.$searchArea = subsection.$tab.find(".T-subsectionSearchForm");
-					subsection.initMain_event();
+					subsection.initMain_event(subsection.$tab);
 				}
 			}
 		})
 	};
 
-	subsection.initMain_event = function() {
+	subsection.initMain_event = function($tab) {
 		//时间控件
-		subsection.datePicker("T-subsectionStartTime");
+		Tools.setDatePicker($tab.find('.T-subsectionStartTime'));
+		Tools.setDatePicker($tab.find('.T-date-range').find('input[type="text"]'), true);
 		//搜索按钮事件
 		subsection.$searchArea.find('.T-btn-subsection-search').on('click', function(event) {
 			event.preventDefault();
@@ -88,36 +89,28 @@ define(function(require, exports) {
 	 * @param  {[type]} operationEndDate    [操作日期-结束]
 	 * @return {[type]}                     [description]
 	 */
-	subsection.subsectionList = function(page,lineProduct,lineProductId,fromPartnerAgency,fromPartnerAgencyId,creator,creatorId,travelDate,operationStartDate,operationEndDate) {
+	subsection.subsectionList = function(page) {
 		if (subsection.$searchArea && arguments.length == 1) {
-			lineProduct = subsection.$searchArea.find("input[name=lineProduct]").val();
-			lineProductId = subsection.$searchArea.find("input[name=lineProductId]").val();
-			fromPartnerAgency = subsection.$searchArea.find("input[name=fromPartnerAgency]").val();
-			fromPartnerAgencyId = subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val();
-			creator = subsection.$searchArea.find("input[name=creator]").val();
-			creatorId = subsection.$searchArea.find("input[name=creatorId]").val();
-			travelDate = subsection.$searchArea.find("input[name=travelDate]").val();
-			operationStartDate = subsection.$searchArea.find("input[name=operationStartDate]").val();
-			operationEndDate = subsection.$searchArea.find("input[name=operationEndDate]").val();
+			var args = {
+				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
+				lineProduct:subsection.$searchArea.find("input[name=lineProduct]").val(),
+				lineProductId:subsection.$searchArea.find("input[name=lineProductId]").val(),
+				fromPartnerAgency:subsection.$searchArea.find("input[name=fromPartnerAgency]").val(),
+				fromPartnerAgencyId:subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+				creator:subsection.$searchArea.find("input[name=creator]").val(),
+				creatorId:subsection.$searchArea.find("input[name=creatorId]").val(),
+				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),
+				operationStartDate:subsection.$searchArea.find("input[name=operationStartDate]").val(),
+				operationEndDate:subsection.$searchArea.find("input[name=operationEndDate]").val(),
+			}
 		}
 		// 修正页码
 		page = page || 0;
-
+		args.pageNo = page;
 		$.ajax({
 			url: KingServices.build_url('innerTransferOperation', "listTransitSubTgroup"),
 			type: 'POST',
-			data: {
-				pageNo: page,
-				lineProduct: lineProduct,
-				lineProductId: lineProductId,
-				fromPartnerAgency: fromPartnerAgency,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				creator: creator,
-				creatorId: creatorId,
-				travelDate: travelDate,
-				operationStartDate: operationStartDate,
-				operationEndDate: operationEndDate
-			},
+			data: args,
 			success: function(data){
 				data.transitSubTgroupList = JSON.parse(data.transitSubTgroupList);
 				var result = showDialog(data);
@@ -350,9 +343,9 @@ define(function(require, exports) {
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-option', function(event) {
 	    	event.preventDefault();
 	    	/* Act on the event */
-	    	var $that=$(this),$parents = $that.closest("tr"), id = $parents.data("entity-id");
+	    	var $that=$(this),$tr = $that.closest("tr"), id = $tr.data("entity-id");
 	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
-	    		subsection.getLayerProductList($parents);
+	    		subsection.getLayerProductList($tr);
 	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
 				subsection.deleteOperation(id,$that);
 				subsection.$tabSub.data('isEdited', true);
@@ -714,7 +707,7 @@ define(function(require, exports) {
 	};
 
 	//初始化线路Layer层
-	subsection.getLayerProductList = function($that){
+	subsection.getLayerProductList = function($tr){
 		var html=searchListTemplate({});  
 		subsection.searchTravelLinelayer = layer.open({
 			type: 1,
@@ -727,7 +720,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-subsection-lineproduct-search');
 		//初始化线路产品数据
-		subsection.getLineProductList($that,$dialog, 0, '');
+		subsection.getLineProductList($tr,$dialog, 0, '');
 	};
 
 	/**
@@ -738,7 +731,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	subsection.getLineProductList = function($that, $dialog, page, name) {
+	subsection.getLineProductList = function($tr, $dialog, page, name) {
 		page = page || 0;
 		$.ajax({
 			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
@@ -757,9 +750,11 @@ define(function(require, exports) {
 				//线路产品搜索
 				$dialog.find('.T-btn-search').off().on('click', function(event) {
 					/* Act on the event */
-					var $that=$(this),$searchLine=$that.closest('.form-inline');
-					var name=$searchLine.find('.T-name').val();
-					subsection.getLineProductList($dialog, 0, name);
+					var $that = $(this), 
+						$searchLine = $that.closest('.form-inline'),
+						name=$searchLine.find('.T-name').val();
+						
+					subsection.getLineProductList($tr, $dialog, 0, name);
 				});
 
 				//提交选中线路
@@ -782,10 +777,10 @@ define(function(require, exports) {
 			            return;
 					}else{
 						layer.close(subsection.searchTravelLinelayer);
-						$that.find('input[name=lineProductName]').val(lineProductJson.name);
-						$that.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
-						$that.find('input[name=customerType]').val(lineProductJson.customerType);
-						$that.find('input[name=days]').val(lineProductJson.days);
+						$tr.find('input[name=lineProductName]').val(lineProductJson.name);
+						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
+						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
+						$tr.find('input[name=days]').val(lineProductJson.days);
 						
 					};
 				});
@@ -797,7 +792,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							subsection.getLineProductList($that, $dialog, obj.curr -1, name);
+							subsection.getLineProductList($tr, $dialog, obj.curr -1, name);
 				    	}
 				    }
 				});	
