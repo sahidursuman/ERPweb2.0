@@ -140,17 +140,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
 			type: 'POST',
-			data: {
-				lineProduct: lineProduct,
-				lineProductId: lineProductId,
-				fromPartnerAgency: fromPartnerAgency,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				creator: creator,
-				creatorId: creatorId,
-				travelDate: travelDate,
-				operationStartDate: operationStartDate,
-				operationEndDate: operationEndDate
-			},
+			data: args,
 			success: function(data){
 				subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
 				subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
