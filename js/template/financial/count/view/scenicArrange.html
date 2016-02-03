@@ -42,7 +42,7 @@
                         <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" class="F-float F-count" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                         </td>
-                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
+                        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                         </td>
                         <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney F-float F-money"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
@@ -57,7 +57,7 @@
                             {{/if}}
                         </td>
                         <td><span class="difference F-float F-money"></span></td>
-                        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text"></td>
+                        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}></td>
                         <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
                     </tr>
                     {{/if}}
