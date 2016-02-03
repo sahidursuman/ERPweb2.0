@@ -199,7 +199,7 @@ define(function(require, exports) {
                 if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
-                    Client.initCheck($tab);
+                    Client.initCheck($tab,args);
 
                     // 绑定翻页组件
                     laypage({
@@ -217,7 +217,7 @@ define(function(require, exports) {
         });
     };
 
-    Client.initCheck = function($tab){
+    Client.initCheck = function($tab,args){
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(0)).check($tab);
@@ -253,7 +253,7 @@ define(function(require, exports) {
         // 初始化下拉选项
         Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
-        Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'));
+        Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'),args);
 
         Client.datepicker(Client.$checkSearchArea);
 
@@ -465,7 +465,7 @@ define(function(require, exports) {
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
-                    Client.initClear($tab, args.fromPartnerAgencyId);                    
+                    Client.initClear($tab, args.fromPartnerAgencyId,args);                    
 
                     // 绑定翻页组件
                     laypage({
@@ -484,7 +484,7 @@ define(function(require, exports) {
         });
     };
 
-    Client.initClear = function($tab, id){
+    Client.initClear = function($tab, id,args){
         var id = $tab.find('.T-saveClear').data('id');
         
         Client.$clearSearchArea = $tab.find('.T-search-area');
@@ -496,7 +496,7 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initClear($tab, id);
+            Client.initClear($tab, id,args);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -519,7 +519,7 @@ define(function(require, exports) {
         // 初始化下拉选项
         Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
         Client.getRecorderList(Client.$clearSearchArea.find('.T-search-enter'),  id);
-        Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'));
+        Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件
         Client.$clearSearchArea.find(".T-btn-search").click(function(){
             Client.ClientClear(0, false, $tab);
@@ -1009,7 +1009,7 @@ define(function(require, exports) {
         });        
     };
 
-    Client.getPartnerContactList = function($obj){
+    Client.getPartnerContactList = function($obj,args){
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1026,7 +1026,7 @@ define(function(require, exports) {
                 url : KingServices.build_url('financial/customerAccount', 'selectPartnerContact'),
                 type : 'POST',
                 showLoading:false,
-                data: ""
+                data: args
             }).done(function(data) {
                 var partnerContact = data.partnerContact;
                 for(var i=0; i<partnerContact.length; i++){
