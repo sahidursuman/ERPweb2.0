@@ -3112,7 +3112,7 @@ define(function(require, exports) {
 		var table = $tab.find(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
 		table.each(function(){
 			var $this = $(this), $parents = $this.closest('tr');
-			$this.find("input[name=price], input[name=payedMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
+			$this.find("input[name=price], input[name=prePayMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
 				tripPlan.plusPrice($(this), $tab);
 			});
 			$this.find("select[name=payType]").off("change").on("change", function(){
@@ -3120,7 +3120,7 @@ define(function(require, exports) {
 			});
 			if (isFirst) {
 				//加载时自动计算
-				tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=payedMoney]'), $tab ,isFirst);
+				tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=prePayMoney]'), $tab ,isFirst);
 			}else{
 				tripPlan.plusPrice($(this), $tab);
 			}
@@ -3129,8 +3129,8 @@ define(function(require, exports) {
 	tripPlan.plusPrice = function($this, $tab , isCalc){
 		var $parents = $this.closest('tr');
 		var payType = $parents.find("select[name=payType]").val(),
-			payedMoney = $parents.find("input[name=payedMoney]").val(),
-			payedMoney = isNaN(payedMoney) ? 0 : payedMoney,
+			prePayMoney = $parents.find("input[name=prePayMoney]").val(),
+			prePayMoney = isNaN(prePayMoney) ? 0 : prePayMoney,
 			price = parseFloat($parents.find("input[name=price]").val()),
 			lowestPrice = $parents.find("input[name=lowestPrice]").val();
 
@@ -3145,10 +3145,8 @@ define(function(require, exports) {
 
 		$parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
 		
-		if(payType == 0){
-			if (!!isCalc == false) {
-				$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-payedMoney);
-			}
+		if (!!isCalc == false) {
+			$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-prePayMoney);
 		}
 		tripPlan.moneyTripPlan($tab);
 	};
