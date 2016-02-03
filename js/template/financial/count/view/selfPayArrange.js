@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":130,"md5":"e269dfa19ae767b65d54a36ed02f3482"}*/
+/*TMODJS:{"debug":true,"version":131,"md5":"e269dfa19ae767b65d54a36ed02f3482"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/selfPayArrange", function($data, $filename) {
         try {
