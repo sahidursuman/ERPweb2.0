@@ -102,8 +102,8 @@
 
                 <td><input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
                 {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-                <td>{{if arrange.billImage != null && arrange.billImage != ""}}
-                        <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                 <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
+                        <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                     {{else}}
                         <span style="color:#bbb;">查看</span>
                     {{/if}}
