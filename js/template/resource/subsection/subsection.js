@@ -51,15 +51,16 @@ define(function(require, exports) {
 
 					subsection.$tab = $("#tab-resource_subsection-content");
 					subsection.$searchArea = subsection.$tab.find(".T-subsectionSearchForm");
-					subsection.initMain_event();
+					subsection.initMain_event(subsection.$tab);
 				}
 			}
 		})
 	};
 
-	subsection.initMain_event = function() {
+	subsection.initMain_event = function($tab) {
 		//时间控件
-		subsection.datePicker("T-subsectionStartTime");
+		Tools.setDatePicker($tab.find('.T-subsectionStartTime'));
+		Tools.setDatePicker($tab.find('.T-date-range').find('input[type="text"]'), true);
 		//搜索按钮事件
 		subsection.$searchArea.find('.T-btn-subsection-search').on('click', function(event) {
 			event.preventDefault();
@@ -88,36 +89,28 @@ define(function(require, exports) {
 	 * @param  {[type]} operationEndDate    [操作日期-结束]
 	 * @return {[type]}                     [description]
 	 */
-	subsection.subsectionList = function(page,lineProduct,lineProductId,fromPartnerAgency,fromPartnerAgencyId,creator,creatorId,travelDate,operationStartDate,operationEndDate) {
+	subsection.subsectionList = function(page) {
 		if (subsection.$searchArea && arguments.length == 1) {
-			lineProduct = subsection.$searchArea.find("input[name=lineProduct]").val();
-			lineProductId = subsection.$searchArea.find("input[name=lineProductId]").val();
-			fromPartnerAgency = subsection.$searchArea.find("input[name=fromPartnerAgency]").val();
-			fromPartnerAgencyId = subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val();
-			creator = subsection.$searchArea.find("input[name=creator]").val();
-			creatorId = subsection.$searchArea.find("input[name=creatorId]").val();
-			travelDate = subsection.$searchArea.find("input[name=travelDate]").val();
-			operationStartDate = subsection.$searchArea.find("input[name=operationStartDate]").val();
-			operationEndDate = subsection.$searchArea.find("input[name=operationEndDate]").val();
+			var args = {
+				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
+				lineProduct:subsection.$searchArea.find("input[name=lineProduct]").val(),
+				lineProductId:subsection.$searchArea.find("input[name=lineProductId]").val(),
+				fromPartnerAgency:subsection.$searchArea.find("input[name=fromPartnerAgency]").val(),
+				fromPartnerAgencyId:subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+				creator:subsection.$searchArea.find("input[name=creator]").val(),
+				creatorId:subsection.$searchArea.find("input[name=creatorId]").val(),
+				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),
+				operationStartDate:subsection.$searchArea.find("input[name=operationStartDate]").val(),
+				operationEndDate:subsection.$searchArea.find("input[name=operationEndDate]").val(),
+			}
 		}
 		// 修正页码
 		page = page || 0;
-
+		args.pageNo = page;
 		$.ajax({
 			url: KingServices.build_url('innerTransferOperation', "listTransitSubTgroup"),
 			type: 'POST',
-			data: {
-				pageNo: page,
-				lineProduct: lineProduct,
-				lineProductId: lineProductId,
-				fromPartnerAgency: fromPartnerAgency,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				creator: creator,
-				creatorId: creatorId,
-				travelDate: travelDate,
-				operationStartDate: operationStartDate,
-				operationEndDate: operationEndDate
-			},
+			data: args,
 			success: function(data){
 				data.transitSubTgroupList = JSON.parse(data.transitSubTgroupList);
 				var result = showDialog(data);
