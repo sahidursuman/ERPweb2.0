@@ -47,7 +47,7 @@
 								<td name="contactMemberMobileNumber">{{if touristGroup.contactMember}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td name="areaData">{{touristGroup.areaData}}</td>
 								<td name="ageData">{{touristGroup.ageData}}</td>
-								<td name="peopleCount" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">{{touristGroup.adultCount+touristGroup.childCount}}</td>
+								<td name="peopleCount" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
 								<td name="currentNeedPayMoney">{{touristGroup.currentNeedPayMoney}}</td>
 								<td name="hotelLevel">{{touristGroup.hotelLevel | getHotelLevelDesc}}</td>
 								<td name="includeSelfPay">{{touristGroup.includeSelfPay}}</td>
