@@ -1244,6 +1244,7 @@ define(function(require, exports){
 		var $that = $obj, $next,
 				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
 				shopId = "",
+				whichDay = "",
 				shopArrangeId = "",
 				td_cnt = $tr.children('td').length;
 			if(!!$tr.attr('shopId')){
@@ -1252,9 +1253,12 @@ define(function(require, exports){
 			if(!!$tr.attr('shopArrangeId')){
 				shopArrangeId = $tr.attr('shopArrangeId');
 			};
+			if(!!$tr.attr('whichDay')){
+				whichDay = $tr.attr('whichDay');
+			}
 			$next =  $tr.nextAll();
 
-		var html = '<tr shopId = '+shopId+'>'+
+		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
 			'<td><input type="text" name="consumeMoney" style="width:90px;"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
@@ -3441,7 +3445,11 @@ define(function(require, exports){
 				return;
 			}
 		}
-
+		var submitStatus =  Count.checkShopArrange(saveJsonStr.shopArrangeList);
+		if(submitStatus){
+			showMessageDialog($( "#confirm-dialog-message" ),"您在同一天，安排了同一家购物店，请检查");
+			return;
+		};
 		var addSelfList = saveJsonStr.addSelfPayArrangeList;
 		for(var i = 0;i<addSelfList.length;i++){
 			if(addSelfList[i].selfPayId == "" || addSelfList[i].selfPayItemId == ""){
@@ -3733,7 +3741,7 @@ define(function(require, exports){
 					for(var j = 0;j<$tr.length;j++){
 						var $thisTr = $tr.eq(j),turnFlag = false;
 						if(!!$that.attr('shopId')){
-							if($that.attr('shopId') == $thisTr.attr('shopId') && !!$thisTr.attr('shopId')){
+							if($that.attr('shopId') == $thisTr.attr('shopId') && $that.attr('whichDay') == $thisTr.attr('whichDay')){
 								shopArrange = {
 									id:id,
 									shopId:shopId,
@@ -3829,7 +3837,6 @@ define(function(require, exports){
 				};
 				saveJson.shopArrangeList.push(shopArrange);
 		});
-		console.log(saveJson.shopArrangeList);
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
@@ -4238,6 +4245,17 @@ define(function(require, exports){
 			};
 		}
 		return remarkList;
+	};
+	Count.checkShopArrange = function(dataArr){
+		var submitStatus = false;
+		for(var i = 0 ;i<dataArr.length;i++){
+			for(var j = i+1;j<dataArr.length;j++){
+				if(dataArr[i].shopId == dataArr[j].shopId && dataArr[i].whichDay == dataArr[j].whichDay){
+					submitStatus = true
+				}
+			}
+		}
+		return submitStatus;
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
