@@ -56,7 +56,7 @@
                     {{/if}}
                 </td>
                 <td><span class="difference F-float F-money"></span></td>
-                <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</td>
+                <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}</td>
                 <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
             </tr>
         {{/if}}

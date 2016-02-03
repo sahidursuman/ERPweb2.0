@@ -36,13 +36,7 @@ define(function(require, exports){
 		data = {
 			searchParam : args
 		};
-		Tools.addTab(menuKey, "现金日记", listTemplate(data));
-		$tab = $('#tab-' + menuKey + '-content');
-		FinancialService.initPayEvent($tab);
-		Payment.getTotal(args,$tab);
-		Payment.ajaxInit(args);
 		Payment.initSearch(args,bankNo);
-		Payment.$tab = $tab;
 	};
 	/**
 	 * 获取收/付款合计
@@ -103,8 +97,14 @@ define(function(require, exports){
 			data.total = Payment.total;
 			data.searchParam = args;
 			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-			var html = listSearchTemplate(data);
-			Payment.$tab.find('.T-search-area').html(html);
+
+			Tools.addTab(menuKey, "现金日记", listTemplate(data));
+			$tab = $('#tab-' + menuKey + '-content');
+			FinancialService.initPayEvent($tab);
+			Payment.getTotal(args,$tab);
+			Payment.ajaxInit(args);
+			Payment.$tab = $tab;
+
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
 				Payment.$tab.find(".T-card-number").val(bankNo);
