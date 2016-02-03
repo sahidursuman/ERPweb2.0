@@ -1,12 +1,12 @@
 /**
- * 发团管理--同行管理：表单验证规则
+ * 发团管理--客户管理：表单验证规则
  */
 
 define(function(require, exports) {
 	var rule = {};
 	
 	/**
-	 * 绑定同行管理的表单验证
+	 * 绑定客户管理的表单验证
 	 * @param  {object} $container 同行表单的顶级元素
 	 * @return {object}            同行表单验证对象
 	 */
