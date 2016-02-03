@@ -258,7 +258,7 @@ define(function(require, exports) {
 
 		subsection.datePicker("T-startTime");
 
-		subsection.lineProductChoose();
+		/*subsection.lineProductChoose();*/
 
 		// 删除
 		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
@@ -275,7 +275,7 @@ define(function(require, exports) {
 			subsection.delFeeItem($this);
 		});
 
-		subsection.$tbody.find('.T-calc').trigger('change',subsection.feeItemChange());
+		subsection.$tbody.find('.T-calc').trigger('change'/*,subsection.feeItemChange()*/);
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
 		     subsection.addOperation($(this));
