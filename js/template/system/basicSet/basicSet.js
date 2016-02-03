@@ -333,7 +333,7 @@ define(function(require,exports){
 			var payMoney = $obj.find('input[name=payMoney]').val();
 			if(incomeMoney != 0 || payMoney != 0){
 				//提示
-				$obj.find('input[type=text]').prop('readonly','readonly');
+				$obj.find('input[type=text]').prop('disabled',true);
 			};
 		}
 

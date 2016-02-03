@@ -55,7 +55,7 @@
             {{if arrange.badStatus == 1}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{else}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{/if}}
             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
             
-            <td><input name="needCount" type="text" class="col-xs-12" ></td>
+            <td><span class="needCount"></span></td>
             
             <td>{{if arrange.badStatus == 1}}<span class="needIncome F-float F-money"></span>{{else}}<span class="needIncome F-float F-money"></span>{{/if}}
             </td>

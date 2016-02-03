@@ -1244,6 +1244,7 @@ define(function(require, exports){
 		var $that = $obj, $next,
 				$tr = $that.closest('tr').prev(), rowSpan = $tr.children('td').eq(0).attr('rowspan') || 1,
 				shopId = "",
+				whichDay = "",
 				shopArrangeId = "",
 				td_cnt = $tr.children('td').length;
 			if(!!$tr.attr('shopId')){
@@ -1252,9 +1253,12 @@ define(function(require, exports){
 			if(!!$tr.attr('shopArrangeId')){
 				shopArrangeId = $tr.attr('shopArrangeId');
 			};
+			if(!!$tr.attr('whichDay')){
+				whichDay = $tr.attr('whichDay');
+			}
 			$next =  $tr.nextAll();
 
-		var html = '<tr shopId = '+shopId+'>'+
+		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
 			'<td><input type="text" name="consumeMoney" style="width:90px;"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
@@ -1565,10 +1569,11 @@ define(function(require, exports){
 			var badStatus = $parent.attr('badStatus');
 			var incomeCount = $parent.find('input[name=needCount]');
 			var incomeMoneyObj = $parent.find('input[name=realGetMoney]');
-			var incomeMoney = $parent.find('input[name=realGetMoney]').val();
+			var realGetMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
             var realReduceMoney = $parent.find('input[name="realReduceMoney"]').val();
+            var sumNeedCount = $parent.find(".needCount");
             //规范数据
             realCount = Count.changeTwoDecimal(realCount);
             memberCount = Count.changeTwoDecimal(memberCount);
@@ -1578,7 +1583,7 @@ define(function(require, exports){
             guideRate = Count.changeTwoDecimal(guideRate);
             realCount = Count.changeTwoDecimal(realCount);
             realReduceMoney = Count.changeTwoDecimal(realReduceMoney);
-            incomeMoney = Count.changeTwoDecimal(incomeMoney);
+            realGetMoney = Count.changeTwoDecimal(realGetMoney);
             var needSum = parseFloat(realCount) * parseFloat(price)-parseFloat(realReduceMoney);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算应收（单价*（实际数量-计划数量））
@@ -1592,41 +1597,23 @@ define(function(require, exports){
 
 			//报账/审核
 			var needIncome = $parent.find('.needIncome');
-            if ($obj.is('[name="needCount"]'))  {
-            	// 如果修改的是数量--计算现收、应收和现收相等
-            	var incomeMoney = (incomeCount.val()*marketPrice);
-            	incomeMoney = Count.changeTwoDecimal(incomeMoney);
-            	incomeMoney = parseFloat(incomeMoney);
-            	incomeMoneyObj.val(incomeMoney);
-        		needIncome.text(incomeMoney);
-            	
-            } else if ($obj.is('[name="realGetMoney"]')) {
             	// 如果修改的是现收--计算应收数量
-            	var count = (incomeMoney/marketPrice);
+            	var count = (realGetMoney/marketPrice);
             	count = Count.changeTwoDecimal(count);
             	count = parseFloat(count);
-            	incomeCount.val(count);
-            	needIncome.text(incomeMoney);
-            };
+            	sumNeedCount.text(count);
+            	needIncome.text(realGetMoney);
             //计算自费费用
             var $selfSum = parseFloat(realCount*price-realReduceMoney);
             $parent.find('.selfMoney').val($selfSum);
 			//导游佣金= (应收数量)*(单价-低价)*导佣比例
-			var needCountSum = 0;
-			if($parent.find('input[name=needCount]').length>0){
-				needCountSum = $parent.find('input[name=needCount]').val();
-			}else{
-				needCountSum = $parent.find('.needIncomeCount').text();
-			}
-            
-			//导游佣金= (实际数量-计划数量)*(单价-低价)*导佣比例
-			var guideRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
+			var guideRebateMoney = count * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(guideRate)/100;
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
 			//旅行社佣金= (应收数量)*(单价-低价)*社佣比例
-			var travelAgencyRebateMoney = needCountSum * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
+			var travelAgencyRebateMoney = count * (parseFloat(marketPrice)-parseFloat(price)) * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
 			$parent.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
@@ -3458,7 +3445,11 @@ define(function(require, exports){
 				return;
 			}
 		}
-
+		var submitStatus =  Count.checkShopArrange(saveJsonStr.shopArrangeList);
+		if(submitStatus){
+			showMessageDialog($( "#confirm-dialog-message" ),"您在同一天，安排了同一家购物店，请检查");
+			return;
+		};
 		var addSelfList = saveJsonStr.addSelfPayArrangeList;
 		for(var i = 0;i<addSelfList.length;i++){
 			if(addSelfList[i].selfPayId == "" || addSelfList[i].selfPayItemId == ""){
@@ -3750,7 +3741,7 @@ define(function(require, exports){
 					for(var j = 0;j<$tr.length;j++){
 						var $thisTr = $tr.eq(j),turnFlag = false;
 						if(!!$that.attr('shopId')){
-							if($that.attr('shopId') == $thisTr.attr('shopId') && !!$thisTr.attr('shopId')){
+							if($that.attr('shopId') == $thisTr.attr('shopId') && $that.attr('whichDay') == $thisTr.attr('whichDay')){
 								shopArrange = {
 									id:id,
 									shopId:shopId,
@@ -3846,7 +3837,6 @@ define(function(require, exports){
 				};
 				saveJson.shopArrangeList.push(shopArrange);
 		});
-		console.log(saveJson.shopArrangeList);
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
@@ -4255,6 +4245,17 @@ define(function(require, exports){
 			};
 		}
 		return remarkList;
+	};
+	Count.checkShopArrange = function(dataArr){
+		var submitStatus = false;
+		for(var i = 0 ;i<dataArr.length;i++){
+			for(var j = i+1;j<dataArr.length;j++){
+				if(dataArr[i].shopId == dataArr[j].shopId && dataArr[i].whichDay == dataArr[j].whichDay){
+					submitStatus = true
+				}
+			}
+		}
+		return submitStatus;
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
