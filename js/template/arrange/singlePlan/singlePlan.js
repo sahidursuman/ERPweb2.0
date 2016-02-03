@@ -187,7 +187,7 @@ define(function(require, exports) {
 					}
 				};
 
-				var singleHrml = singleListTemplate(data);
+				var singleHrml = filterUnAuth(singleListTemplate(data));
 				$tab.find('.T-tripPlan-singleList').html(singleHrml);
 				// 绑定翻页组件
 				laypage({

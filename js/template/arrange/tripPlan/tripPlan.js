@@ -155,7 +155,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				data.result = JSON.parse(data.result);
-				var groupHtml = listTemplate(data);
+				var groupHtml = filterUnAuth(listTemplate(data));
 				$tab.find('.T-tripPlan-groupList').html(groupHtml);
 				// 绑定翻页组件
 				laypage({
