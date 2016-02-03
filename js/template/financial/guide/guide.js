@@ -448,7 +448,7 @@ define(function(require, exports) {
             voucher:voucher,
             billTime:billTime
         }
-        if(payType == 1 && IndexData.userInfo.onlinePay == 1){
+        if(payType == 1 && IndexData.userInfo.onlinePay == 1 && $tab.find('.T-saveClear').data('borrow') != "borrow"){
             if(!Dsave){
                 args.resourceId = $tab.find('.T-saveClear').data('id');
                 args.resourceName = $tab.find(".T-guideName").text();
