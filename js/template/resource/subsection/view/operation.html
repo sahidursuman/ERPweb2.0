@@ -91,7 +91,7 @@
                        <!--  <input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}" />
                        <input class="{{if subList.status == 1}}T-chooseLineProduct{{/if}} col-sm-12" name="lineProduct" {{if subList.status !=1 }}readonly="readonly" {{/if}} type="text" value="{{subList.lineProduct.name}}" /> -->
 
-                        <div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value=""><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value=""></div>
+                        <div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value="{{subList.lineProduct.name}}"><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}"></div>
                     </td>
                     <td>
                         <input type="text" name="customerType" class="col-sm-12" readonly="readonly" value="{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}" />
@@ -169,7 +169,30 @@
                          {{/if}}
                          {{/each}}
                         </td>
-                     {{/if}}
+                    {{else}}
+                    <td>
+                        <div class="clearfix" style="margin-top:1px">
+                            <select data-index="0" name="type" class="T-type col-sm-8 pull-left">
+                                <option value="1">大人结算价</option>
+                                <option value="2">小孩结算价</option>
+                                <option value="4">车辆费用</option>
+                                <option value="5">餐厅费用</option>
+                                <option value="6">保险费用</option>
+                                <option value="7">导服费</option>
+                                <option value="8">酒店费用</option>
+                                <option value="9">景区费用</option>
+                                <option value="10">自费费用</option>
+                                <option value="11">票务费用</option>
+                                <option value="12">其他费用</option>
+                            </select>
+                            <label style="float:right;padding-top:0px;">
+                                <button class="btn btn-success btn-sm btn-white T-action T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                            </label>
+                        </div>
+                    </td>
+                    <td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>
+                    <td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>
+                    {{/if}}
                     <!--费用项end-->
 
                     <td>      
