@@ -261,14 +261,21 @@
 		    if (r != null) return unescape(r[2]); 
 		    return null;
 		}
+		var imgUrl = function () {
+			var host = window.location.host, url = '';
+			if(host.indexOf("192.168.0.") >= -1
+				|| host.indexOf("localhost") >= -1){
+				url = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试或开发的图片地址
+			}else{
+				url = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
+			}
+		}();
 		$.ajax({
 			url : "/huochaitou/base.do?method=findNoteById",
 			data : {noteId : getQueryString("noteId"), fromOut : 1},
 			type : "POST",
 			success : function(data){
 				if(!!data){
-					var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
-						imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 					data.imgUrl = imgUrl;
 				    var html = template('groupTravel', data);
 				    document.getElementById('groupTravelContent').innerHTML = html;
