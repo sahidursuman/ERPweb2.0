@@ -1232,13 +1232,6 @@ define(function(require, exports){
 			Count.autoShopSum($(this),$parentObj);
 			}
 		});
-		//填写金额带出社佣、导佣
-		$bodyObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val() || $(this).attr('policyid');
-			var consumeMoney = $(this).val();
-			var date =$parentObj.find('.tripPlanStartTime').val();
-			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
-		});
 	};
 	//新增商品
 	Count.addShop = function($obj,$parentObj){
