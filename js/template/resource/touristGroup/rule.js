@@ -177,23 +177,23 @@ define(function(require, exports) {
                         type: 'null',
                         errMsg: '接团时间不能为空'
                     }]
-                },{ //送离日期
+                }, { //地点
                     $ele: $obj.find('input[name="leaveTime"]'),
                     rules: [{
                         type: 'null',
                         errMsg: '送团时间不能为空'
                     }]
-                },{ //地点
-                    $ele: $obj.find('input[name="receptionAddress"]'),
+                }, { //送离日期
+                    $ele: $obj.find('input[name="arrivePosition"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '地点不能为空'
+                        errMsg: '接团地点不能为空'
                     }]
                 }, { //地点
-                    $ele: $obj.find('input[name="sendAddress"]'),
+                    $ele: $obj.find('input[name="leavePosition"]'),
                     rules: [{
                         type: 'null',
-                        errMsg: '地点不能为空'
+                        errMsg: '送团地点不能为空'
                     }]
                 }
 

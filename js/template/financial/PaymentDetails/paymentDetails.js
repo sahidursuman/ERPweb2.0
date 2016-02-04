@@ -13,7 +13,9 @@ define(function(require, exports){
 
 	var Payment = {
 		$tab : false,
-		total : {}
+		total : {},
+		subList0 : false,
+		subList1 : false
 	};
 	/**
 	 * 初始化模块
@@ -34,13 +36,7 @@ define(function(require, exports){
 		data = {
 			searchParam : args
 		};
-		Tools.addTab(menuKey, "现金日记", listTemplate(data));
-		$tab = $('#tab-' + menuKey + '-content');
-		FinancialService.initPayEvent($tab);
-		Payment.getTotal(args,$tab);
-		Payment.ajaxInit(args);
 		Payment.initSearch(args,bankNo);
-		Payment.$tab = $tab;
 	};
 	/**
 	 * 获取收/付款合计
@@ -101,8 +97,14 @@ define(function(require, exports){
 			data.total = Payment.total;
 			data.searchParam = args;
 			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-			var html = listSearchTemplate(data);
-			Payment.$tab.find('.T-search-area').html(html);
+
+			Tools.addTab(menuKey, "现金日记", listTemplate(data));
+			$tab = $('#tab-' + menuKey + '-content');
+			FinancialService.initPayEvent($tab);
+			Payment.getTotal(args,$tab);
+			Payment.ajaxInit(args);
+			Payment.$tab = $tab;
+
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
 				Payment.$tab.find(".T-card-number").val(bankNo);
@@ -188,6 +190,8 @@ define(function(require, exports){
 					    content: html,
 					    scrollbar: false,
 					    success:function(){
+					    	Payment.subList0 = data.subjectdata0;
+					    	Payment.subList1 = data.subjectdata1;
 					    	var $container = $(".T-addPayment-container"),
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
@@ -198,6 +202,10 @@ define(function(require, exports){
 						        todayHighlight: true,
 						        format: 'L',
 						        language: 'zh-CN'
+					    	});
+
+					    	$container.find(".T-moneyType").off().on("change",function(){
+					    		Payment.loadSubjectHtml($(this).val(),$container);
 					    	});
 
 					    	$bankCountList.find("li").on("click",function(){
@@ -235,7 +243,16 @@ define(function(require, exports){
 				}
 			}
 		});
-		
+	};
+
+	Payment.loadSubjectHtml = function(type,$container){
+		var subList = type == 0 ? Payment.subList0 : Payment.subList1,
+			subjectHtml = "";
+		for(var i = 0; i < subList.length; i++){
+			subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+		}
+		$container.find(".T-subject").html(subjectHtml);
+		$container.find("input[name=subjectName]").val(subList[0].subjectName);
 	};
 
 	Payment.submitPayment = function(){

@@ -3815,7 +3815,7 @@ define(function(require, exports) {
 	                }
 	            });
             }else{
-				layer.tips('请选择客户来源', obj, {
+				layer.tips('请选择客户', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});

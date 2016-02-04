@@ -1,0 +1,33 @@
+{{each lineProductDayList as rs}}
+<tr>
+	<td name="dateDays" data-which-day={{rs.whichDay}}>
+		<input type="text" class="col-xs-12 datepicker" name="whichDayDate" value="">
+	</td>
+	<td><input type="text" class="col-xs-12" name="title" value="{{rs.title}}"></td>
+	<td>
+		<label class="control-label">
+			<input type="checkbox" name="repastDetailM" class="ace" {{if rs.m == "1"}}checked{{/if}}>
+			<span class="lbl">早餐</span>
+		</label>
+		<label class="control-label mar-l-10">
+			<input type="checkbox" name="repastDetailN" class="ace" {{if rs.n == "1"}}checked{{/if}}>
+			<span class="lbl">午餐</span>
+		</label>
+		<label class="control-label mar-l-10">
+			<input type="checkbox" name="repastDetailE" class="ace" {{if rs.e == "1"}}checked{{/if}}>
+			<span class="lbl">晚餐</span>
+		</label>
+	</td>
+	<td><input type="text" class="col-xs-12" name="restPosition" value="{{rs.restPosition}}"></td>
+	<td><input type="text" class="col-xs-12 T-action T-scenicItem" name="scenicItemNames" data-propover="{{rs.scenicItemIds}}" readonly value="{{rs.roadScenic}}"></td>
+	<td>
+		<a class="cursor T-action T-update-detail" title="编辑行程详情" data-detail="{{rs.detail}}">
+            编辑行程详情
+            <label style="padding-left:10px;">|</label>
+        </a>
+        <a class="cursor T-action T-delete" title="删除">
+            删除
+        </a>
+	</td>
+</tr>
+{{/each}}

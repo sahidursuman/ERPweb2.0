@@ -237,6 +237,10 @@ FinancialService.updateSumPayMoney = function($tab,rule){
         sumPayMoney = parseFloat(sumPayMoney) + parseFloat(newVal-oldVal);
         $sumPayMoney.data("money",sumPayMoney);
         $sumPayMoney.val(sumPayMoney);
+        if($tab.find('.T-saveClear').length > 0 && $tab.find('.T-saveClear').data("borrow") == "borrow"){
+            var $preMoney = $this.closest('tr').find('.T-preMoney');
+            $preMoney.text($preMoney.text()*1 + parseFloat(newVal-oldVal));
+        }
 
         if(!validator.form()){ return false; }
         $this.data("oldVal",$this.val());

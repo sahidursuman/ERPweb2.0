@@ -24,7 +24,7 @@
             <th class="th-border">单据</th>
             <th class="th-border">差额</th>
             <th class="th-border">导游报账备注</th>
-            {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+            <th class="th-border" rowspan="2">是否对账</th>
         </tr>
     </thead>
     <tbody class="T-count-restaurant"> 
@@ -52,7 +52,7 @@
         {{else}}{{if arrange.billUpdateTime != null}}
         {{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
         <td>{{arrange.type}}</td> 
-        <td>{{if tripPlan.billStatus == -1}}{{if arrange.isChoose == 1}}<input value="{{arrange.price}}" type="text" name="price"/>
+        <td>{{if tripPlan.billStatus == -1}}{{if arrange.isChoose == 1}}<input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.price}}" type="text" name="price" />
         <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">{{else}}
             <span class="F-float F-money">{{arrange.price}}</span>
         {{/if}}{{else}}{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}{{/if}}
@@ -61,7 +61,8 @@
         {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
+        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"
+        {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
         <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}
         <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
@@ -76,8 +77,8 @@
             {{/if}}
         </td>
         <td><span class="difference"></span></td>
-        <td><span class="billRemark">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" />{{else}}{{arrange.billRemark}}{{/if}}</span></td>
-        {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+        <td><span class="billRemark">{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}</span></td>
+        <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
     </tr>
     {{/if}}
     {{/each}}

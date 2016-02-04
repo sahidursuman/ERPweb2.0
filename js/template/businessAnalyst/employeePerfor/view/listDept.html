@@ -23,9 +23,9 @@
 		{{each result as deptL}}
 		   <tr>
 	   		    <td>{{deptL.name}}</td>
-	   			<td>{{deptL.getCount}}</td>
+	   			<td>{{deptL.getAdultCount}}大{{deptL.getChildCount}}小</td>
 	   			<td>{{deptL.tripPlanCount}}</td>
-	   			<td>{{deptL.tripPlanMemberCount}}</td>
+	   			<td>{{deptL.tripPlanAdultCount}}大{{deptL.tripPlanChildCount}}小</td>
 	   			<td>{{deptL.transCount}}</td>
 	   			<td>{{deptL.innerCount}}</td>
 	   			<td>{{deptL.orderCount}}</td>		
