@@ -28,7 +28,7 @@
         <th class="th-border">单据</th>
         <th class="th-border">差额</th>
         <th class="th-border">导游报账备注</th>
-        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
+        <th class="th-border" rowspan="2">是否对账</th>
     </tr>
     </thead>
     <tbody class="T-count-ticket">
@@ -47,7 +47,9 @@
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" class="F-float F-count" name="realCount" type="text" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5" 
         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/>{{/if}}
+        <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}" 
+        {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
+        />{{/if}}
         </td>
         <td>{{if arrange.badStatus == 1}}<span class="ticketneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="ticketneedPayMoney F-float F-money"></span>{{/if}}
         <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
@@ -62,8 +64,8 @@
             {{/if}}
         </td>
         <td><span class="difference"></span></td>
-        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text"></td>
-        {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}></td>
+        <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
     </tr>
     {{/each}}
     {{/each}}
