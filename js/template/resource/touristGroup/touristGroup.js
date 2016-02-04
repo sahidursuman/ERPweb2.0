@@ -1958,12 +1958,8 @@ define(function(require, exports) {
     };
     //时间控件
     touristGroup.formatTime = function($obj) {
-        $obj.find('.datepicker').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
+        Tools.setDatePicker($obj.find('.datepicker'), true);
+        
         $obj.find(".datetimepicker").datetimepicker({
             autoclose: true,
             todayHighlight: true,
