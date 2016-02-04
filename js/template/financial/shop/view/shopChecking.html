@@ -31,7 +31,7 @@
             <label>{{totalList.sumCount}}</label>
         </div>
         <div class="form-group marginLeft-30">
-            <label>购物金额合计：</label>
+            <label>打单金额合计：</label>
             <label class="F-float F-money">{{totalList.sumConsumeMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
@@ -41,14 +41,6 @@
         <div class="form-group marginLeft-30">
             <label>导佣合计：</label>
             <label class="F-float F-money">{{totalList.sumGuideRebateMoney}}</label>
-        </div>
-        <div class="form-group marginLeft-30">
-            <label>人数返佣合计：</label>
-            <label class="F-float F-money">{{totalList.sumCustomerRebateMoney}}</label>
-        </div>
-        <div class="form-group marginLeft-30">
-            <label>停车返佣合计：</label>
-            <label class="F-float F-money">{{totalList.sumParkingRebateMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
             <label>返佣金额合计：</label>
@@ -68,7 +60,7 @@
         </div>
     </div>
 </div>
-<div class="row" style="margin-top: 20px;">
+<div class="row">
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
@@ -76,11 +68,9 @@
                 <th class="th-border">进店日期（账期）</th>
                 <th class="th-border">人数</th>
                 <th class="th-border">商品</th>
-                <th class="th-border">购物金额</th>
+                <th class="th-border">打单金额</th>
                 <th class="th-border">社佣</th>
                 <th class="th-border">导佣</th>
-                <th class="th-border">人数返佣</th>
-                <th class="th-border">停车返佣</th>
                 <th class="th-border">单据</th>
                 <th class="th-border">返佣金额</th>
                 <th class="th-border">已收金额</th>
@@ -102,8 +92,6 @@
                 <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.travelAgencyRebateMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.guideRebateMoney}}</span></td>
-                <td><span class="F-float F-money">{{rs.customerRebateMoney}}</span></td>
-                <td><span class="F-float F-money">{{rs.parkingRebateMoney}}</span></td>
                 <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billimage="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
                 <td><a class="cursor T-action T-payDetails T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a>

@@ -1,37 +1,45 @@
-<div class="row T-search-area border" style="padding: 0 20px;">
-    <form class="form-inline" role="form" onsubmit="return false" style="padding-top: 10px;">
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group">
             <label class="control-label">客户：</label>
             <label class="control-label T-partnerAgencyName">{{partnerAgencyName}}</label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
             <label class="control-label">账期：</label>
             <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
             <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
+            <label class="control-label">收客单号：</label>
+            <input type="text" class="form-control T-search-orderNumber" placeholder="收客单号" value="{{searchParam.orderNumber}}">
+        </div> 
+        <div class="form-group mar-l-10">
             <label class="control-label">组团单号：</label>
             <input type="text" class="form-control T-search-number" placeholder="组团单号" value="{{searchParam.otaOrderNumber}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
             <label class="control-label">线路名称：</label>
             <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
             <label class="control-label">录入人：</label>
             <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
+            <label class="control-label">客户联系人：</label>
+            <input type="text" class="form-control T-search-contact" placeholder="客户联系人" data-id="{{searchParam.fromPartnerAgencyContactId}}" value="{{searchParam.contactRealname}}">
+        </div>
+        <div class="form-group mar-l-10">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索 
             </button>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-10">
             <button class="btn-sm search-btn T-btn-export">导出报表</button>
         </div>
     </form>
-    <div class="form-inline T-sum-area" style="padding-top: 10px;">
+    <div class="form-inline T-sum-area">
         <div class="form-group">
             <label class="control-label">人数合计：</label>
             <label class="control-label F-float F-count">{{totalList.sumCount}}</label>
@@ -62,14 +70,15 @@
         </div>
     </div>
 </div>
-<div class="row" style="margin-top: 30px">
+<div class="row">
     <table class="table table-striped table-bordered table-hover hct_align_middle">
         <thead>
-            <tr>
+            <tr><th class="th-border">收客单号</th>
                 <th class="th-border">组团单号</th>
                 <th class="th-border">线路产品</th>
                 <th class="th-border">出游日期（账期）</th>
-                <th class="th-border">联系人</th>
+                <th class="th-border">客户联系人</th>
+                <th class="th-border">游客联系人</th>
                 <th class="th-border">人数</th>
                 <th class="th-border">录入人</th>
                 <th class="th-border">录入时间</th>
@@ -89,9 +98,11 @@
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs index}}
             <tr class="T-checkTr" data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" data-status="{{rs.status}}">
+                <td rowspan="{{rs.rowLen}}">{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.startTime}}</td>
+                <td rowspan="{{rs.rowLen}}">{{if !!rs.partnerAgencyContact}}{{rs.partnerAgencyContact.contactRealname}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.contactName}}</td>
                 <td rowspan="{{rs.rowLen}}">
                     <a class="cursor T-action T-viewGroup" title="查看小组">

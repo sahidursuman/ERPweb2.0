@@ -1,5 +1,5 @@
 /**
- * 发团管理--同行管理
+ * 发团管理--客户管理
  * 
  */
 define(function(require,exports){
@@ -19,12 +19,12 @@ define(function(require,exports){
 		$searchArea:false
 	};
 	/**
-	 * 同行管理的初始化
+	 * 客户管理的初始化
 	 */
 	 PartnerAgency.initModule = function(){
 	 	PartnerAgency.listPartnerAgency(0,"",1);
 	 };
-	//同行管理的list页面
+	//客户管理的list页面
 	PartnerAgency.listPartnerAgency = function(pageNo,partnerAgencyName,status){
 		if(PartnerAgency.$searchArea && arguments.length === 1){
 			partnerAgencyName = PartnerAgency.$searchArea.find('input[name=partnerAgency_travelAgencyName]').val();
@@ -48,8 +48,8 @@ define(function(require,exports){
 					data.partnerAgencyList = JSON.parse(data.partnerAgencyList);
 					PartnerAgency.searcData = data.searchParam;
 					var html = listTempLate(data);
-					addTab(menuKey,'同行管理',html);
-					//初始化同行管理资源对象
+					addTab(menuKey,'客户管理',html);
+					//初始化客户管理资源对象
 					PartnerAgency.$tab = $("#"+tabId);
 					PartnerAgency.$searchArea = PartnerAgency.$tab.find(".search-area");
 					PartnerAgency.init_event();

@@ -10,6 +10,8 @@ define(function(require, exports) {
 	    listTemplate = require("./view/list"),
 	    rule = require("./rule"),
 	    operationTemplate = require("./view/operation"),
+	    lineproductSearchList = require("./view/lineproductSearchList"),
+	    searchListTemplate = require("./view/searchList"),
 	    tabId = "tab-"+menuKey+"-content",
 		validator;
 	/**
@@ -20,7 +22,8 @@ define(function(require, exports) {
 		$tab: false,
 		$tabSub: false,
 		$searchArea: false,
-		$tbody:false
+		$tbody:false,
+		searchTravelLinelayer:false
 	};
 	var autocompleteData = {};
 
@@ -48,15 +51,16 @@ define(function(require, exports) {
 
 					subsection.$tab = $("#tab-resource_subsection-content");
 					subsection.$searchArea = subsection.$tab.find(".T-subsectionSearchForm");
-					subsection.initMain_event();
+					subsection.initMain_event(subsection.$tab);
 				}
 			}
 		})
 	};
 
-	subsection.initMain_event = function() {
+	subsection.initMain_event = function($tab) {
 		//时间控件
-		subsection.datePicker("T-subsectionStartTime");
+		Tools.setDatePicker($tab.find('.T-subsectionStartTime'));
+		Tools.setDatePicker($tab.find('.T-date-range').find('input[type="text"]'), true);
 		//搜索按钮事件
 		subsection.$searchArea.find('.T-btn-subsection-search').on('click', function(event) {
 			event.preventDefault();
@@ -65,7 +69,7 @@ define(function(require, exports) {
 		});
 		//模糊查询
 		subsection.getPartnerAgencyList();
-		subsection.getLineProductList();
+		//subsection.getLineProductList();
 		subsection.getCreatorList();
 		//初始化列表
 		subsection.subsectionList(0);
@@ -85,36 +89,28 @@ define(function(require, exports) {
 	 * @param  {[type]} operationEndDate    [操作日期-结束]
 	 * @return {[type]}                     [description]
 	 */
-	subsection.subsectionList = function(page,lineProduct,lineProductId,fromPartnerAgency,fromPartnerAgencyId,creator,creatorId,travelDate,operationStartDate,operationEndDate) {
+	subsection.subsectionList = function(page) {
 		if (subsection.$searchArea && arguments.length == 1) {
-			lineProduct = subsection.$searchArea.find("input[name=lineProduct]").val();
-			lineProductId = subsection.$searchArea.find("input[name=lineProductId]").val();
-			fromPartnerAgency = subsection.$searchArea.find("input[name=fromPartnerAgency]").val();
-			fromPartnerAgencyId = subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val();
-			creator = subsection.$searchArea.find("input[name=creator]").val();
-			creatorId = subsection.$searchArea.find("input[name=creatorId]").val();
-			travelDate = subsection.$searchArea.find("input[name=travelDate]").val();
-			operationStartDate = subsection.$searchArea.find("input[name=operationStartDate]").val();
-			operationEndDate = subsection.$searchArea.find("input[name=operationEndDate]").val();
+			var args = {
+				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
+				lineProduct:subsection.$searchArea.find("input[name=lineProduct]").val(),
+				lineProductId:subsection.$searchArea.find("input[name=lineProductId]").val(),
+				fromPartnerAgency:subsection.$searchArea.find("input[name=fromPartnerAgency]").val(),
+				fromPartnerAgencyId:subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+				creator:subsection.$searchArea.find("input[name=creator]").val(),
+				creatorId:subsection.$searchArea.find("input[name=creatorId]").val(),
+				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),
+				operationStartDate:subsection.$searchArea.find("input[name=operationStartDate]").val(),
+				operationEndDate:subsection.$searchArea.find("input[name=operationEndDate]").val(),
+			}
 		}
 		// 修正页码
 		page = page || 0;
-
+		args.pageNo = page;
 		$.ajax({
 			url: KingServices.build_url('innerTransferOperation', "listTransitSubTgroup"),
 			type: 'POST',
-			data: {
-				pageNo: page,
-				lineProduct: lineProduct,
-				lineProductId: lineProductId,
-				fromPartnerAgency: fromPartnerAgency,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				creator: creator,
-				creatorId: creatorId,
-				travelDate: travelDate,
-				operationStartDate: operationStartDate,
-				operationEndDate: operationEndDate
-			},
+			data: args,
 			success: function(data){
 				data.transitSubTgroupList = JSON.parse(data.transitSubTgroupList);
 				var result = showDialog(data);
@@ -144,17 +140,7 @@ define(function(require, exports) {
 		$.ajax({
 			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
 			type: 'POST',
-			data: {
-				lineProduct: lineProduct,
-				lineProductId: lineProductId,
-				fromPartnerAgency: fromPartnerAgency,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				creator: creator,
-				creatorId: creatorId,
-				travelDate: travelDate,
-				operationStartDate: operationStartDate,
-				operationEndDate: operationEndDate
-			},
+			data: args,
 			success: function(data){
 				subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
 				subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
@@ -255,7 +241,7 @@ define(function(require, exports) {
 
 		subsection.datePicker("T-startTime");
 
-		subsection.lineProductChoose();
+		/*subsection.lineProductChoose();*/
 
 		// 删除
 		subsection.$tabSub.find(".T-btn-operation-delete").on("click",function(){
@@ -264,6 +250,15 @@ define(function(require, exports) {
 			subsection.$tabSub.data('isEdited', true);
 		});
 		
+		//删除费用项
+		subsection.$tbody.find('.T-del').on('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $this = $(this);
+			subsection.delFeeItem($this);
+		});
+
+		subsection.$tbody.find('.T-calc').trigger('change'/*,subsection.feeItemChange()*/);
 		subsection.$tabSub.find(".T-btn-operation-add").click(function(){
 			//新增中转分段
 		     subsection.addOperation($(this));
@@ -332,6 +327,22 @@ define(function(require, exports) {
 	    subsection.$tbody.find('.T-price').trigger('change');
 
 
+
+
+	    //搜索线路
+	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-option', function(event) {
+	    	event.preventDefault();
+	    	/* Act on the event */
+	    	var $that=$(this),$tr = $that.closest("tr"), id = $tr.data("entity-id");
+	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
+	    		subsection.getLayerProductList($tr);
+	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
+				subsection.deleteOperation(id,$that);
+				subsection.$tabSub.data('isEdited', true);
+	    	};
+	    });
+
+
 		/**
 		 * [startIntime 中转分段初日期
 		 * @param  {[type]} whichDay  [description]
@@ -376,7 +387,7 @@ define(function(require, exports) {
 			}
 			var html = ''
 			+ '<tr data-entity-id="">'
-			+ '<td><input type="hidden" name="lineProductId" value="" /><input class="T-chooseLineProduct col-sm-12" name="lineProduct" type="text" value="" /></td>'
+			+ '<td><div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value=""><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value=""></div></td>'
 			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
 			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
 			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
@@ -410,9 +421,8 @@ define(function(require, exports) {
 				subsection.deleteOperation(id,$this);
 			})
 			subsection.datePicker("T-startTime");
-			subsection.lineProductChoose();
+			/*subsection.lineProductChoose();*/
 			validator = rule.checkdSaveSubsection($tbody);
-
 			$tbody.data('isEdited', true);
 	};
 
@@ -685,72 +695,103 @@ define(function(require, exports) {
 			return value;
 		}
 	};
-	/**
-	 * 线路产品选择
-	 * @param  {[type]}  [description]
-	 */
-	subsection.lineProductChoose = function() {
-		var chooseLineProduct = subsection.$tabSub.find(".T-chooseLineProduct");
-		chooseLineProduct.autocomplete({
-			minLength:0,
-			change :function(event,ui){
-				if(ui.item == null){
-					var $this = $(this),$parents = $this.closest('tr');
-					$this.val("");
-					$parents.find("input[name=lineProductId]").val("");
-					$parents.find("input[name=days]").val("");
-					$parents.find("input[name=customerType]").val("");
-				}
-			},
-			select :function(event,ui){
-				var $this = $(this),$parents = $this.closest('tr');
-				$this.val(ui.item.name);
-				$parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-				if(ui.item.customerType == 0){
-					$parents.find("input[name=customerType]").val("散客");
-				}else{
-					$parents.find("input[name=customerType]").val("团体");
-				}
-				$parents.find("input[name=days]").val(ui.item.days);
-				var currentDays = ui.item.days;
-				    currentTime = $parents.find('.T-startTime').val();
-				if ($parents.next('tr').length > 0 && !!currentTime && !!currentDays) {
-					$parents.next('tr').find('.T-startTime').val(subsection.startIntime(currentDays,currentTime));
-				};
-				validator = rule.updateCheckdSaveSubsection(validator);
 
-				var sum = 0;
-				$parents.siblings('tr').each(function() {
-					sum += ($(this).find('[name="needPayAllMoney"]').val() || 0)*1;
-				});
-			}
-		}).unbind("click").click(function(){
-			var obj =this;
-			$.ajax({
-				url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
-				type: 'POST',
-                showLoading: false,
-                success: function(data) {
-					var result = showDialog(data);
-					if(result){
-						var lineProductList = data.lineProductList;
-						if(lineProductList && lineProductList.length > 0){
-							for(var i=0; i < lineProductList.length; i++){
-								lineProductList[i].value = "("+lineProductList[i].days+"天)"+lineProductList[i].name;
-							}
-							$(obj).autocomplete('option','source', lineProductList);
-							$(obj).autocomplete('search', '');
-						}else{
-							layer.tips('没有线路信息', obj, {
-							    tips: [1, '#3595CC'],
-							    time: 2000
-							});
-						}
-					}
-                }
-			})
+	//初始化线路Layer层
+	subsection.getLayerProductList = function($tr){
+		var html=searchListTemplate({});  
+		subsection.searchTravelLinelayer = layer.open({
+			type: 1,
+			title: '请选择线路产品',
+			skin: 'layui-layer-rim', //加上边框
+			area: '85%', //宽高
+			zIndex:1029,
+			content: html,
+			scrollbar: false,
+		});
+		var $dialog = $('.T-subsection-lineproduct-search');
+		//初始化线路产品数据
+		subsection.getLineProductList($tr,$dialog, 0, '');
+	};
+
+	/**
+	 * 获取线路产品数据，并填入选择线路产品的对话框
+	 * @param  {object} $dialog dialog的Jquery对象
+	 * @param  {int} type    0：新增 1：更新
+	 * @param  {int} page    页码
+	 * @param  {string} name    搜索关键字
+	 * @return {[type]}         [description]
+	 */
+	subsection.getLineProductList = function($tr, $dialog, page, name) {
+		page = page || 0;
+		$.ajax({
+			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
+			type: 'POST',
+            showLoading: false,
+			data: "name=" + name + "&pageNo=" + page
 		})
-	}
+		.done(function(data) {
+			if (showDialog(data)) {
+				data.lineProductList = data.lineProductList;
+				var listHtml = lineproductSearchList(data);
+				$tbody=$dialog.find('.T-normal-list');
+				$tbody.html(listHtml);
+				$tbody.closest('.tab-pane').find('.T-total').text(data.totalCount);
+
+				//线路产品搜索
+				$dialog.find('.T-btn-search').off().on('click', function(event) {
+					/* Act on the event */
+					var $that = $(this), 
+						$searchLine = $that.closest('.form-inline'),
+						name=$searchLine.find('.T-name').val();
+						
+					subsection.getLineProductList($tr, $dialog, 0, name);
+				});
+
+				//提交选中线路
+				$dialog.find('.T-btn-submit').on('click', function(event) {
+					/* Act on the event */
+					var $lineProTr=$dialog.find('.T-normal-list').children('tr'),lineProductJson={};
+					$lineProTr.each(function(index) {
+						if ($lineProTr.eq(index).find('.T-choice-ProLine').is(':checked')) {
+							lineProductJson = {
+								lineProductId : $lineProTr.eq(index).data('id'),
+							　　name : $lineProTr.eq(index).data('name'),
+							    customerType : $lineProTr.eq(index).attr('data-customerType'),
+							    days : $lineProTr.eq(index).data('days')
+							};
+						};
+					});
+					//若没有选中线路
+					if (!lineProductJson.lineProductId) {
+						showMessageDialog($( "#confirm-dialog-message" ),"请选择选择线路产品");
+			            return;
+					}else{
+						layer.close(subsection.searchTravelLinelayer);
+						$tr.find('input[name=lineProductName]').val(lineProductJson.name);
+						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
+						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
+						$tr.find('input[name=days]').val(lineProductJson.days);
+						
+					};
+				});
+
+				// 绑定翻页组件
+				laypage({
+				    cont: $tbody.closest('.tab-pane').find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+				    pages: data.totalPage, //总页数
+				    curr: (data.pageNo + 1),
+				    jump: function(obj, first) {
+				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							subsection.getLineProductList($tr, $dialog, obj.curr -1, name);
+				    	}
+				    }
+				});	
+				// 让对话框居中
+				$(window).trigger('resize');
+			}
+		});			
+	};
+
 	/**
 	 * 撤销分段操作
 	 * @return {[type]} id [id]
@@ -796,34 +837,6 @@ define(function(require, exports) {
 			}
 		}
 			$(obj).autocomplete('option','source',fromGuideObj);
-			$(obj).autocomplete('search', '');
-		});
-	},
-
-	//线路产品模糊查询
-	subsection.getLineProductList = function(){
-		var getPartnerAgencyList = subsection.$tab.find(".T-chooseLineProduct");
-		getPartnerAgencyList.autocomplete({
-			minLength: 0,
-			change: function(event, ui) {
-				if (ui.item == null)  {
-					$(this).closest("div").find("input[name=lineProductId]").val("");
-				}
-			},
-			select: function(event, ui) {
-				$(this).blur();
-				var obj = this;
-				$(obj).closest("div").find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-			}
-		}).click(function(){
-		var obj = this;
-		var lineProductObj = autocompleteData.lineProductList;
-		if(lineProductObj !=null && lineProductObj.length>0){
-			for(var i=0;i<lineProductObj.length;i++){
-				lineProductObj[i].value = lineProductObj[i].name;
-			}
-		}
-			$(obj).autocomplete('option','source',lineProductObj);
 			$(obj).autocomplete('search', '');
 		});
 	},
