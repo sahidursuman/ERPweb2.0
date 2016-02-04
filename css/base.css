@@ -848,3 +848,7 @@ input.datepicker {
 #cnzz_stat_icon_1257382061 {
 	display: none;
 }
+
+.inline-flex {
+	display: inline-flex;
+}

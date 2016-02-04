@@ -393,7 +393,7 @@
 					{{each touristGroupFeeList as rs}}
 					<tr data-id="{{rs.id}}">
 						<td><!-- <input type="text" class="col-xs-12" name="describeInfo" value="{{rs.describeInfo}}"> -->
-							<select class="col-xs-12 T-calculate" name="type">
+							<select class="col-xs-12 T-calculate" name="type" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}disabled{{/if}}>
 								<option value="1" {{if rs.type == 1}}selected{{/if}}>大人结算价</option>
 								<option value="2" {{if rs.type == 2}}selected{{/if}}>小孩结算价</option>
 								<option value="4" {{if rs.type == 4}}selected{{/if}}>车辆费用</option>
@@ -407,8 +407,8 @@
 								<option value="12" {{if rs.type == 12}}selected{{/if}}>其它费用</option>
 							</select>
 						</td>
-						<td><input type="text" class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
-						<td><input type="text" class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
+						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
+						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
 						<td><input type="text" class="col-xs-12" name="feeRemark" value="{{rs.remark}}" maxlength="100"></td>
 						<td>{{if !!touristGroup.orderNumber == false  &&  !!tripPlan.quoteNumber == false}}<a class="cursor T-action T-delete" title="删除">删除</a>{{/if}}</td>

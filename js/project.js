@@ -4,8 +4,6 @@ var ASSETS_ROOT = '/';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
-var imgUrl = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
-imgUrl  = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
@@ -14,7 +12,19 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event';
-
+/**
+ * 图片地址
+ */
+var imgUrl = function () {
+	var host = window.location.host, url = '';
+	if(host.indexOf("192.168.0.") > -1
+		|| host.indexOf("localhost") > -1){
+		url = "http://7xlw2q.com2.z0.glb.qiniucdn.com/"; //测试或开发的图片地址
+	}else{
+		url = "http://7xlg3o.com2.z0.glb.qiniucdn.com/";//正式的图片地址
+	}
+	return url;
+}();
 function addTab(tabId,tabName,html){
 	var $current_li = $tabList.find('.active'),
 		$next_li = $tabList.find('.tab-'+tabId);
@@ -660,6 +670,7 @@ var modalScripts = {
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
     'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
+    'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
@@ -712,7 +723,9 @@ var modalScripts = {
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
-    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js" //并团转客
+    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js", //并团转客
+    'arrange_groupTransfer': "js/template/arrange/arrangeGroupTransfer/arrangeGroupTransfer.js", //团散转客
+    'arrange_individual': "js/template/arrange/arrangeIndividual/arrangeIndividual.js" //散客拼团
 };
 
 

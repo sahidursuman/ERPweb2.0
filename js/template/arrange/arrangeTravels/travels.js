@@ -84,7 +84,7 @@ define(function(require, exports) {
 
         $tab.find('.T-list').find('.T-share').hover(function() {
             var $that = $(this),
-                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/groupTravelList.html?lineProductId='+$that.closest('tr').data('id'),
+                url = location.origin + '/share/groupTravelList.html?lineProductId='+$that.closest('tr').data('id'),
                 bdText = $that.closest('tr').find('td').eq(0).text();
 
             window._bd_share_config = {
@@ -263,7 +263,7 @@ define(function(require, exports) {
             var $that = $(this),
                 type = $that.data('type'),
                 parem = type == 'singleEvaluation' ? 'noteItemId' : 'noteId',
-                url = /*location.origin*/'http://djs.huochaitou.com' + '/share/'+type+'.html?'+parem+'='+$that.data('id');
+                url = location.origin + '/share/'+type+'.html?'+parem+'='+$that.data('id');
 
             window._bd_share_config = {
                 common : {

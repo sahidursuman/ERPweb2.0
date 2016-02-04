@@ -1,70 +1,42 @@
 <div class="search-area T-subsectionSearchForm subsectionSearchForm">
-	 <div class="form-horizontal">
-		<label class="pull-left text-right control-label no-padding-right">来源:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-sm-12 T-choosePartnerAgency width110" placeholder="来源" name="fromPartnerAgency" value="{{}}"/>
-			<input type="hidden" name="fromPartnerAgencyId" value="{{}}">
+	<form class="form-inline" role="form" onsubmit="return false">
+	    <div class="form-group">
+	        <label>收客单号</label>
+	        <input type="text" name="orderNumber" class="form-control T-orderNumber" style="width:150px;" />
+	    </div>
+	    <div class="form-group mar-l-15">
+	        <label>客户</label>
+	        <input type="text" name="choosePartnerAgency" class="form-control T-choosePartnerAgency" style="width:120px;" />
+            <input type="hidden" name="fromPartnerAgencyId" value="{{}}">
+	    </div>
 
-		</div>
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">线路:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-sm-12 T-chooseLineProduct width110" placeholder="线路产品" name="lineProduct" value="{{}}" />
-			<input type="hidden" name="lineProductId" value="{{}}">
-		</div>
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">出游时间:</label>
-		<div class="col-sm-1">
-			<div class="input-group">
-				<input class="col-xs-12 datepicker T-subsectionStartTime width110" name="travelDate" value="" type="text" />	
-				<span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
-			</div>
-		</div>  
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">操作人:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-xs-12 T-creatorUserChoose width110" placeholder="操作人" name="creator" value="{{}}"/>
-			<input type="hidden" name="creatorId" value="{{}}" />
-			<!--<select name="creatorId" class="col-sm-12">-->
-				<!--<option value=''>全部</option>-->
-				<!--{{each creatorList as creator}}-->
-				<!--<option value="{{creator.id}}">{{creator.realName}}</option>-->
-				<!--{{/each}}-->
-			<!--</select>-->
-		</div>
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">操作日期:</label>
-		<div class="col-sm-1">
-			<div class="input-group col-sm-12">
-				<input class="col-sm-12 datepicker T-subsectionStartTime width110" name="operationStartDate" value="" type="text" />	
-				<span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
-			</div>
-		</div>
-		<label class="pull-left text-right control-label no-padding-right marginLeftSub" >--</label>
-		<div class="col-sm-1">
-			<div class="input-group col-sm-12 subsection-width-time">
-				<input class="col-sm-12 datepicker T-subsectionStartTime width110" name="operationEndDate" value="" type="text" />	
-				<span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
-			</div>
-		</div>
-		<div class="col-sm-1" style="width:100px;margin-left: 38px;">
-			<button class=" btn-sm  T-btn-subsection-search search-btn">
-				<i class="ace-icon fa fa-search"></i>
-				 搜索
-			</button>
-		</div>
+	    <div class="form-group mar-l-15">
+	        <label>出游时间</label>
+	        <input type="text" name="travelDate" class="datepicker T-subsectionStartTime" />
+	    </div>
 
-		<div style="clear: both;height: 0px;line-height: 0px;"></div>
-		<div class="form-horizontal col-sm-12 clearfix" style="margin-top:20px;">
-			<label class="control-label T-search-memberCount">人数合计：0大0小</label>
-			<label class="control-label T-search-currentNeedPayMoney" style="padding-left: 30px">现收款合计：0元</label>
-		</div>
-		<div style="clear: both;height: 1px;line-height: 1px;"></div>
-	</div>
+	    <div class="form-group mar-l-15">
+	        <label>操作人</label>
+	        <input type="text" class="T-creatorUserChoose" name="creator" value="{{}}" style="width:110px;"/>
+	        <input type="hidden" name="creatorId" value="{{}}" />
+	    </div>
+
+	    <div class="form-group mar-l-15 T-date-range">
+            <label>操作日期</label>
+            <input type="text" name="operationStartDate" class="datepicker T-subsectionStartTime">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" name="operationEndDate" class="datepicker T-subsectionEndTime">
+        </div>
+	    <div class="form-group mar-l-15">
+	        <button class="btn-sm search-btn T-btn-subsection-search">
+	            <i class="ace-icon fa fa-search"></i> 搜索
+	        </button>
+	    </div>
+	</form>
+    <div class="form-horizontal">
+        <label class="control-label T-search-memberCount">人数合计：0大0小</label>
+        <label class="control-label T-search-currentNeedPayMoney" style="padding-left: 30px">现收款合计：0元</label>
+    </div>
 </div>
-
 <div class="row T-subsectionList">
-
 </div>

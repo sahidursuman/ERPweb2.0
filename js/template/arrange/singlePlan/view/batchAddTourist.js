@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":2,"md5":"0fc801e5860c7a72e9fa70ddc8dda839"}*/
+define(function(require) {
+    return require("../../../template")("arrange/singlePlan/view/batchAddTourist", '<div class="col-xs-12 T-batchAddTouristGroupMemberContainer" style="margin-top:10px"> <div> <div class="red">批量添加格式为：游客姓名 手机号码 证件号(用空格隔开，一行一条)</div> <div> 举例：<br/> 张三 &nbsp;&nbsp;&nbsp;&nbsp;138****8888&nbsp;&nbsp;&nbsp;&nbsp; 510***19891002****<br/> 李四 &nbsp;&nbsp;&nbsp;&nbsp;137****7777&nbsp;&nbsp;&nbsp;&nbsp; 510***19881003**** </div> <div class="space-10"> </div> <div><textarea class="form-control" name="batchTouristGroupMember" style="height:200px"></textarea></div> <div class="space-10"> </div> <button class="btn btn-block btn-primary T-submit-batchTouristGroupMember"> <i class="ace-icon fa fa-check"></i>提交信息 </button> </div> </div>');
+});
