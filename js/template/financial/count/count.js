@@ -1222,7 +1222,7 @@ define(function(require, exports){
 		//新增获取购物店数据
 		Count.getShopData($bodyObj,$parentObj);
 		//设置下拉框
-		Count.setChooseDays($bodyObj,$parentObj);
+		Count.setChooseDays($bodyObj,$parentObj,'shop');
 		$bodyObj.find('input[type=text]').off('change').on('change',function(){
 			
 			var $nameFlag = $(this).attr('name');
@@ -1231,13 +1231,6 @@ define(function(require, exports){
 			//计算金额
 			Count.autoShopSum($(this),$parentObj);
 			}
-		});
-		//填写金额带出社佣、导佣
-		$bodyObj.find('input[name=consumeMoney]').off('blur').on('blur',function() {
-			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val() || $(this).attr('policyid');
-			var consumeMoney = $(this).val();
-			var date =$parentObj.find('.tripPlanStartTime').val();
-			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$parentObj);
 		});
 	};
 	//新增商品
@@ -3339,7 +3332,7 @@ define(function(require, exports){
 		return Count.changeForInstall($val)+"";
 	};
 	//设置下拉框的日期
-	Count.setChooseDays = function($obj,$parentObj){
+	Count.setChooseDays = function($obj,$parentObj,type){
 		var days = $parentObj.find('.T-ProductDays').text();
 		var startTime = $parentObj.find('.tripPlanStartTime').val();
         if(parseInt(days) < 1)return;
@@ -3350,7 +3343,12 @@ define(function(require, exports){
                 selectText += '<option value="'+(i+1)+'">'+Tools.addDay(startTime, i)+'</option>';
             }
             selectText += '</select>';
-            tr.eq(tr.length-2).find(".countWhichDaysContainer").html(selectText);
+            if(!!type){
+            	tr.eq(tr.length-2).find(".countWhichDaysContainer").html(selectText);
+            }else{
+            	tr.eq(tr.length-1).find(".countWhichDaysContainer").html(selectText);
+            }
+            
         }else{
             $("td.whichDaysContainer").each(function(index){
                 var val = $(this).attr("value");
