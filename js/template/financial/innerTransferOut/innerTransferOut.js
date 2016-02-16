@@ -346,7 +346,7 @@ define(function(require,exports) {
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
         	if(typeFlag == 1){
-        		var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial')
+        		var checkBoxList = $obj.find(".T-checkList").find('.T-checkbox')
         		result =false;
         		checkBoxList.each(function(i){
 	        		var $this = $(this),
