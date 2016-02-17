@@ -376,6 +376,7 @@ define(function(require, exports) {
 				// 团队
 	        	var tabKey = menuKey + "_group_update";
 	        	data.touristGroup = JSON.parse(data.touristGroup);
+	        	data.isGuest = 1;
 	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
 	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
