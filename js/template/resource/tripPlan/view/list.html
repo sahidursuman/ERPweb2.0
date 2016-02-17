@@ -41,7 +41,7 @@
                 </label>
                 {{/if}}
 			</td>
-			<td>{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
+			<td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
 			<!-- 导 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td> 
 			<!-- 车 -->
