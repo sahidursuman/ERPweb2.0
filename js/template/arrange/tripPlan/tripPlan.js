@@ -376,6 +376,7 @@ define(function(require, exports) {
 				// 团队
 	        	var tabKey = menuKey + "_group_update";
 	        	data.touristGroup = JSON.parse(data.touristGroup);
+	        	data.isGuest = 1;
 	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
 	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
@@ -723,9 +724,9 @@ define(function(require, exports) {
 		arge.shopIds = tripPlan.jsonToString($tab.find('[name="shopNames"]').data("propover"));
 		arge.selfPayItemIds = tripPlan.jsonToString($tab.find('[name="selfPayItemNames"]').data("propover"));
 		//应收&预收款&计划现收
-		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val();
-		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
-		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
+		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val() || 0;
+		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val() || 0;
+		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val() || 0;
 		arge.outTransferIncome = 0;//$tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
@@ -742,28 +743,39 @@ define(function(require, exports) {
 		arge.touristGroupFeeJson = JSON.stringify(arge.touristGroupFeeJson);
 		arge.touristGroupFeeDelJson = $tab.find('.T-fee-list').data('deleteIds');
 
-		$.ajax({
-			url : KingServices.build_url("tripPlan","saveTripPlanByT"),
-			type : "POST",
-			data : arge
-		})
-		.done(function(data){
-			if(showDialog(data)){
-				$tab.data('isEdited', false);
-				showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
-					if(!!tabArgs){
-						if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
-                        	tripPlan.initEdit($("#tab-"+tabArgs[0]+"-content"));
-						};
-					}else{
-						Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-						if(!!tripPlan.$tab){
-							tripPlan.$tab.find('.T-search-tripPlan-group .T-btn-tripPlan-search').trigger('click');
+		if (arge.needPayAllMoney < ( arge.preIncomeMoney +  arge.currentNeedPayMoney)) {
+			showConfirmMsg($( "#confirm-dialog-message" ), "预收款和计划现收之和大于应收金额，是否继续?",function(){
+				saveAjax();
+			},function(){
+			},'否','是')
+		}else{
+			saveAjax();
+		}
+
+		function saveAjax() {
+			$.ajax({
+				url : KingServices.build_url("tripPlan","saveTripPlanByT"),
+				type : "POST",
+				data : arge
+			})
+			.done(function(data){
+				if(showDialog(data)){
+					$tab.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
+						if(!!tabArgs){
+							if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
+	                        	tripPlan.initEdit($("#tab-"+tabArgs[0]+"-content"));
+							};
+						}else{
+							Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+							if(!!tripPlan.$tab){
+								tripPlan.$tab.find('.T-search-tripPlan-group .T-btn-tripPlan-search').trigger('click');
+							}
 						}
-					}
-				});
-			}
-		});
+					});
+				}
+			});
+		}
 	};
 
 	/**
