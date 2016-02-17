@@ -96,6 +96,32 @@
 					<div class="pull-left note-date">{{rs.time}}</div>
 				</div>
 				<div class="note-details-container">
+					{{if rs.playItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>游玩</h3>
+						</div>
+						{{each rs.playItemList as play}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!play.itemImage}}<img src="{{imgUrl + play.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#play.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{play.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{play.likeCount}}</label>
+			        				<a class="control-label mar-l-10" href="singleEvaluation.html?noteItemId={{play.id}}" data-id="{{play.id}}"><i class="fa fa-comment"></i>{{play.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
 					{{if rs.traficItemList.length > 0}}
 					<div class="note-details-item">
 						<div class="note-details-header">
