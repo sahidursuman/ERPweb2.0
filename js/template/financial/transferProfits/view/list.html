@@ -1,10 +1,10 @@
-{{each results as rs}}
+{{each result as rs}}
 <tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">
 	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
 	<td><a class="cursor T-option T-viewLineproduct" title="查看线路产品">{{rs.lineProductName}}</a></td>
 	<td>{{rs.customerType}}</td>
 	<td>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-	<td>{{if rs.realName == null || rs.realName == ""}}-{{else}}{{rs.realName}}{{/if}}</td>
+	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>
 	<td><a class="cursor T-option T-viewGroup" title="查看小组">
 			<span class="F-float F-count">{{rs.adultCount}}</span> 大
 			<span class="F-float F-count">{{rs.childCount}}</span> 小
@@ -12,14 +12,7 @@
 	</td> 
 	<td>{{rs.fromPartnerAgencyName}}</td>
 	<td><span class="F-float F-money">{{rs.needIncomeMoney}}</span></td>
-	<td>{{if rs.isNeedArriveService == 1}}接团
-			{{if rs.isNeedLeaveService == 1 || rs.isNeedBus == 1}}、{{/if}}
-		{{/if}}
-		{{if rs.isNeedLeaveService == 1}}送团
-			{{if rs.isNeedBus == 1}}、{{/if}}
-		{{/if}}
-		{{if rs.isNeedBus == 1}}小车{{/if}}
-	</td>
+	<td>{{rs.service}}</td>
 	<td><a class="cursor T-option T-costDetail" title="查看明细">
 			<span class="F-float F-money">{{rs.needPayedMoney}}</span>
 		</a>
