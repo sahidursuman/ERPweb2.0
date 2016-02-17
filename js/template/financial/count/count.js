@@ -1562,7 +1562,6 @@ define(function(require, exports){
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
 			var incomeCount = $parent.find('input[name=needCount]').val();
-			var incomeMoneyObj = $parent.find('input[name=realGetMoney]').val();
 			var realGetMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
