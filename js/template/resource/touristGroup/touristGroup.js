@@ -2287,7 +2287,7 @@ define(function(require, exports) {
                 }
             }],
             open: function(event, ui) {
-                $(this).find("p").text("预收款和计划现收之和大于应收金额，是否继续！");
+                $(this).find("p").text("预收款与计划现收之和大于应收金额，是否继续！");
             }
         });
     };
