@@ -667,7 +667,7 @@ define(function(require, exports) {
 				arrangeId: $parents.data('entity-arrangeid'),
 				count: $parents.find('[name=memberCount]').val(),
 				hotelId: $parents.find('[name=hotelId]').val(),
-				price: $parents.find('[name=fee]').val(),
+				price: $parents.find('[name=price]').val(),
 				tripPlanId: $tab.find('[name=tripPlanId]').val(),
 				type: $parents.find('[name=hotelRoom]').val(),
 				whichDay: $parents.find('[name=whichDay]').val(),
@@ -705,7 +705,7 @@ define(function(require, exports) {
 						arrangeId: $tr.eq(i).data('entity-arrangeid'),
 						count: $tr.eq(i).find('[name=memberCount]').val(),
 						hotelId: $tr.eq(i).find('[name=hotelId]').val(),
-						price: $tr.eq(i).find('[name=fee]').val(),
+						price: $tr.eq(i).find('[name=price]').val(),
 						type: $tr.eq(i).find('[name=hotelRoom]').val(),
 						whichDay: $tr.eq(i).find('[name=whichDay]').val(),
 						hotelRoomId: $tr.eq(i).find('[name=hotelRoomId]').val()
@@ -2429,7 +2429,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=hotelRoomId]").val("");
-                	$parents.find("input[name=fee]").val("");
+                	$parents.find("input[name=price]").val("");
 				}
 			},
 			select:function(event,ui){
