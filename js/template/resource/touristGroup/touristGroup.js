@@ -2160,7 +2160,7 @@ define(function(require, exports) {
         }
 
         var buyInsurance = buyInsuranceS;
-        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService;
+        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id;
         //游客json串
         var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm, id, typeFlag);
 
