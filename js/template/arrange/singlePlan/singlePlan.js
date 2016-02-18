@@ -1108,8 +1108,8 @@ define(function(require, exports) {
 					group[i].accompanyGuideName+'</td><td>'+
 					group[i].accompanyGuideMobile+'</td><td>'+
 					group[i].welcomeBoard+'</td><td>'+
-					group[i].remark+'</td><td>'+
 					group[i].sendPosition+'</td><td>'+
+					group[i].remark+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
