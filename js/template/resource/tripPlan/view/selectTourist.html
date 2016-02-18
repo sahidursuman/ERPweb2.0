@@ -23,6 +23,7 @@
 								<th class="th-border">全陪</th>
 								<th class="th-border">全陪电话</th>
 								<th class="th-border">接站牌</th>
+								<th class="th-border">送客地点</th>
 								<th class="th-border">备注</th>
 								<th class="th-border">集合时间</th>
 								<th class="th-border">集合地点</th>
@@ -48,6 +49,7 @@
 								<td>{{rs.accompanyGuideName}}</td>
 								<td>{{rs.accompanyGuideMobile}}</td>
 								<td>{{rs.welcomeBoard}}</td>
+								<td>{{rs.sendPosition}}</td>
 								<td>{{rs.remark}}</td>
 								<td><input type="text" name="setPlaceTime" class="T-dateTimePicker col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlaceTime}}{{else}}{{busData.setPlaceTime}}{{/if}}"></td>
 								<td><input type="text" name="setPlacePosition" class="col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlacePosition}}{{else}}{{busData.setPlacePosition}}{{/if}}"></td>
