@@ -11,7 +11,9 @@
 
 	        <label>收客单号：</label>
 	        <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly" style="width:160px;"  maxlength="9" placeholder="系统自动生成" >  
-        </div>
+        </div> 
+
+        <input type="hidden"  class="T-isEditStatus" value="{{touristGroupDetail.status}}">
 </div>
 <form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
 	<div class="form-inline">

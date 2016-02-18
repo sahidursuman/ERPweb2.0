@@ -451,6 +451,17 @@ define(function(require, exports) {
         Tools.inputCtrolFloat($adultCount);
         Tools.inputCtrolFloat($childCount);
 
+        $groupInfoForm.find('.T-customerType').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            if($updateTabId.find('.T-isEditStatus').val()==0 || $updateTabId.find('.T-isEditStatus').val()==2){
+               showMessageDialog($("#confirm-dialog-message"), "该游客小组已生成发团计划不可修改");
+               return;
+            }
+        });
+
+       
+
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
@@ -2029,7 +2040,7 @@ define(function(require, exports) {
             $receptionObj = $arrangeForm.find('.T-recive'),
             $sendObj = $arrangeForm.find('.T-send'),
             $touristSendObj = $arrangeForm.find('input[name=touristSend]'),
-            $insuranceStatus = $lineInfoForm.find('input[name=buyInsurance]'),
+            $insuranceStatus = $obj.find('input[name=buyInsurance]'),
             //获取游客名单住宿、星级、自费、备注
             $visiForm = $obj.find(".T-touristGroupMainFormMember"),
             expectLevel = touristGroup.getVal($visiForm, "level"),
@@ -2265,7 +2276,7 @@ define(function(require, exports) {
         if(transitChekedLength>0 && needTransitFee<=0){
             //中转信息Tip
             touristGroup.TransitInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
-        }else if(needTotalMoney > needPayAllMoney && typeFlag==undefined){  //预收款与计划现收之和不能大于应收
+        }else if(needTotalMoney > needPayAllMoney){  //预收款与计划现收之和不能大于应收
          touristGroup.preNeedPayMoneyInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
         }else{
              touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
