@@ -56,7 +56,7 @@
 			 	{{each subList.subTouristGroupDetails as subDetails index}}
 			 	{{if index == 0}}
 			 	<tr class="T-tr_{{indexA}}" style="display: none;">
-			 		<td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
+			 		<td rowspan="{{subList.subTouristGroupDetails.length}}" colspan="2"></td>
 			 		<td>{{subDetails.lineProductName}}</td>
 			 		<td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
