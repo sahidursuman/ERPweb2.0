@@ -2,6 +2,12 @@
 	<h5>
 		<span class="badge badge-primary">1</span>
 		<label class="middle title-size">小组信息</label>
+
+		<div class="form-group fixed-width-1" style="float:right; dispaly:inline-block;">
+            <label>收客单号：</label>
+            <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly"  maxlength="9" placeholder="系统自动生成" >    
+        </div>
+
 	</h5>
 </div>
 <form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
@@ -137,9 +143,10 @@
 			</label>
 		</div>
 
-         <div class="form-group fixed-width-1">
-            <label>收客单号：</label>
-            <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly"  maxlength="9" placeholder="系统自动生成" >    
+		<div class="form-group fixed-width-1">
+            <label class="control-label no-padding-right">送客地点：
+                <input  type="text"  value="{{touristGroupDetail.sendPosition}}" name="sendPosition" maxlength="100">
+            </label>
         </div>
     </div>
 

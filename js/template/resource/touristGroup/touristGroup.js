@@ -172,6 +172,51 @@ define(function(require, exports) {
             touristGroup.typeFlag = 1;
             touristGroup.addTouristGroup("", "");
         });
+
+        //导出游客名单
+        $searchAreaObj.find('.T-export').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var startTime=$searchAreaObj.find('input[name=startTime]').val();
+
+            console.info($.param(touristGroup.getSearParam($searchAreaObj)));
+
+            if (!!startTime && startTime!=null) {
+                var exportUrl="" + KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(touristGroup.getSearParam($searchAreaObj));
+                //window.location.href=exportUrl;
+                exportXLS(exportUrl);
+            }else{
+                showMessageDialog($("#confirm-dialog-message"), "请选择出游时间");
+                return;
+            };
+        });
+    };
+
+    //封装参数
+    touristGroup.getSearParam = function($searchAreaObj){
+        touristGroup.args = {
+            pageNo: 0,
+            type: touristGroup.$searchArea.find('.T-choosePorB').val(),
+            lineProductName: touristGroup.$searchArea.find('input[name=lineProductName]').val(),
+            lineProductId: touristGroup.$searchArea.find('input[name=lineProductId]').val(),
+            fromBussinessGroupName: touristGroup.$searchArea.find('input[name=fromBussinessGroupName]').val(),
+            fromBussinessGroupId: touristGroup.$searchArea.find('input[name=fromBussinessGroupId]').val(),
+            fromPartnerAgencyName:  touristGroup.$searchArea.find('input[name=fromPartnerAgencyName]').val(),
+            fromPartnerAgencyId: touristGroup.$searchArea.find('input[name=fromPartnerAgencyId]').val(),
+            realName: touristGroup.$searchArea.find('input[name=realName]').val(),
+            outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
+            otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
+            welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
+            startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
+            createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
+            createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
+            statusSearch: touristGroup.$searchArea.find('.T-select-status').find("button").data("value"),
+            customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
+            memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
+            orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
+            sortType: 'auto'
+        }
+        return touristGroup.args;         
     };
 
     //报表事件
@@ -2178,10 +2223,6 @@ define(function(require, exports) {
         needPayAllMoney = parseFloat(needPayAllMoney);
         //预收款、计划现收之和    
         needTotalMoney = touristGroup.calcNeedTotalMoney(preIncomeMoney, currentNeedPayMoney);
-        if (needTotalMoney > needPayAllMoney) {
-            showMessageDialog($("#confirm-dialog-message"), "预收款与计划现收之和不能大于应收");
-            return;
-        };
 
         //客户来源不能是地接社
         if (!!type && type == "0") {
@@ -2224,9 +2265,11 @@ define(function(require, exports) {
         if(transitChekedLength>0 && needTransitFee<=0){
             //中转信息Tip
             touristGroup.TransitInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
-        }else{  
-            touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
-        }
+        }else if(needTotalMoney > needPayAllMoney && typeFlag==undefined){  //预收款与计划现收之和不能大于应收
+         touristGroup.preNeedPayMoneyInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+        }else{
+             touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+         }
        
     };
 
@@ -2267,6 +2310,35 @@ define(function(require, exports) {
             }
         });
     };
+
+
+    //预收款和计划现收之和大于应收金额，是否继续
+    touristGroup.preNeedPayMoneyInfo = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+        $("#confirm-dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+            title_html: true,
+            draggable: false,
+            buttons: [{
+                text: "否",
+                "class": "btn btn-minier",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }, {
+                text: "是",
+                "class": "btn btn-primary btn-minier",
+                click: function() {
+                    touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+                    $(this).dialog("close");
+                }
+            }],
+            open: function(event, ui) {
+                $(this).find("p").text("预收款和计划现收之和大于应收金额，是否继续！");
+            }
+        });
+    };
+
 
     //提交数据
     touristGroup.submitData = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
