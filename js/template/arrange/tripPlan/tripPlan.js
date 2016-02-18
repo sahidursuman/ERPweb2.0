@@ -377,6 +377,7 @@ define(function(require, exports) {
 	        	var tabKey = menuKey + "_group_update";
 	        	data.touristGroup = JSON.parse(data.touristGroup);
 	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
+	        	data.isGuest = 1;
 	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
 	        	data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
 	        	data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
