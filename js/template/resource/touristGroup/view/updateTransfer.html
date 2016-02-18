@@ -1,17 +1,18 @@
 <div class="group-info-area form-inline">
-	
+	<div class="form-group fixed-width-1">
 		<span class="badge badge-primary">1</span>
 		<label class="middle title-size">小组信息</label>
+	</div>
 
-		<div class="form-group fixed-width-1" style="float:right; dispaly:inline-block;">
-			<label class="control-label no-padding-right  mar-r-10">是否购买保险：
-			    <input type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance"  {{if touristGroupDetail.buyInsurance==1}}checked="checked"{{/if}}/>
-			    <span class="lbl"></span>
-			</label>
+	<div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:665px;">
+		<label class="control-label no-padding-right  mar-r-10">是否购买保险：
+		    <input type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance"  {{if touristGroupDetail.buyInsurance==1}}checked="checked"{{/if}}/>
+		    <span class="lbl"></span>
+		</label>
 
-            <label>收客单号：</label>
-            <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly"  maxlength="9" placeholder="系统自动生成" >    
-        </div>
+        <label>收客单号：</label>
+        <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly"  maxlength="9" placeholder="系统自动生成" >    
+    </div>
 </div>
 
 <form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
