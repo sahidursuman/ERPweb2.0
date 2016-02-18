@@ -564,7 +564,7 @@ define(function(require, exports) {
             voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
             billTime : Insure.$clearTab.find('input[name=tally-date]').val()
         };
-
+        var isAutoPay = Insure.$clearTab.find('input[name=isAutoPay]').val();
         clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -586,7 +586,7 @@ define(function(require, exports) {
                         }else if(argumentsLen === 3){
                             Insure.saveFlag = false;    
                             Insure.$clearTab.data('isEdited',false);
-                            Insure.getClearing(0,page,id,name);
+                            Insure.getClearing(isAutoPay,page,id,name);
                         } else {
                             Insure.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
