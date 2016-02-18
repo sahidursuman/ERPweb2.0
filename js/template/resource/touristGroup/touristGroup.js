@@ -2177,12 +2177,7 @@ define(function(require, exports) {
         currentNeedPayMoney = parseFloat(currentNeedPayMoney);
         needPayAllMoney = parseFloat(needPayAllMoney);
         //预收款、计划现收之和    
-        needTotalMoney = touristGroup.calcNeedTotalMoney(preIncomeMoney, currentNeedPayMoney);
-        if (needTotalMoney > needPayAllMoney) {
-            showMessageDialog($("#confirm-dialog-message"), "预收款与计划现收之和不能大于应收");
-            return;
-        };
-
+       needTotalMoney = touristGroup.calcNeedTotalMoney(preIncomeMoney, currentNeedPayMoney);
         //客户来源不能是地接社
         if (!!type && type == "0") {
             showMessageDialog($("#confirm-dialog-message"), "客户来源不能是地接社");
@@ -2224,7 +2219,9 @@ define(function(require, exports) {
         if(transitChekedLength>0 && needTransitFee<=0){
             //中转信息Tip
             touristGroup.TransitInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
-        }else{  
+        }else if(needTotalMoney > needPayAllMoney){  //预收款与计划现收之和不能大于应收
+            touristGroup.preNeedPayMoneyInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+        }else{
             touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
         }
        
@@ -2267,6 +2264,34 @@ define(function(require, exports) {
             }
         });
     };
+
+    //预收款和计划现收之和大于应收金额，是否继续
+    touristGroup.preNeedPayMoneyInfo = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+        $("#confirm-dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+            title_html: true,
+            draggable: false,
+            buttons: [{
+                text: "否",
+                "class": "btn btn-minier",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }, {
+                text: "是",
+                "class": "btn btn-primary btn-minier",
+                click: function() {
+                    touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+                    $(this).dialog("close");
+                }
+            }],
+            open: function(event, ui) {
+                $(this).find("p").text("预收款与计划现收之和大于应收金额，是否继续！");
+            }
+        });
+    };
+
 
     //提交数据
     touristGroup.submitData = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
