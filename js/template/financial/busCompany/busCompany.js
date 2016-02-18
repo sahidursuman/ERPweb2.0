@@ -749,7 +749,7 @@ define(function(require, exports) {
     };
 
     busCompany.initPay = function(options){
-        busCompany.busCompanyClear(2,0,options.id,options.name,"","",options.startDate,options.endDate); 
+        busCompany.busCompanyClear(2,0,options.id,options.name,"", "", options.startDate,options.endDate); 
     };
 
 	exports.init = busCompany.initModule;
