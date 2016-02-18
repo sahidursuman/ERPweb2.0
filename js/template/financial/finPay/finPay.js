@@ -105,6 +105,8 @@ define(function(require, exports) {
 				break;
 			case 4:  //车队账务
 				options.url = KingServices.build_url('account/financialBusCompany', 'listSumFinancialBusCompany');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate;
 				resArgs.busCompanyName = args.name;
 				break;
 			case 5:  //票务账务
