@@ -6,7 +6,6 @@
 define(function(require, exports){
 	var listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
-		listSearchTemplate = require("./view/search"),
 		addTemplate = require("./view/add"),
 		rule = require("./rule"),
 		menuKey = "financial_payment_details";
