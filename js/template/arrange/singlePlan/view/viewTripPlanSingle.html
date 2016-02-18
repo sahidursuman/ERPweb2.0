@@ -617,7 +617,7 @@
 				<thead>
 					<tr>
 						<th class="th-border">小组</th>
-						<th class="th-border">外联销售</th>
+						<!-- <th class="th-border">外联销售</th>
 						<th class="th-border">线路产品</th>
 						<th class="th-border">联系人</th>
 						<th class="th-border">联系电话</th>
@@ -627,24 +627,47 @@
 						<th class="th-border">现收团款</th>
 						<th class="th-border">住宿标准</th>
 						<th class="th-border">包含自费</th>
+						<th class="th-border">备注</th> -->
+						<th class="th-border">收客单号</th>
+						<th class="th-border">外联销售</th>
+						<th class="th-border">线路产品</th>
+						<th class="th-border">客户</th>
+						<th class="th-border">联系人</th>
+						<th class="th-border">联系电话</th>
+						<th class="th-border">客源地</th>
+						<th class="th-border">年龄</th>
+						<th class="th-border">人数</th>
+						<th class="th-border">现收团款</th>
+						<th class="th-border">住宿标准</th>
+						<th class="th-border">包含自费</th>
+						<th class="th-border">全陪</th>
+						<th class="th-border">全陪电话</th>
+						<th class="th-border">接站牌</th>
+						<th class="th-border">送客地点</th>
 						<th class="th-border">备注</th>
 					</tr>
 				</thead>
 				<tbody>
-				{{each touristGroupList as rs index}}
+				{{each touristGroupList as group index}}
 					<tr>
 						<td>{{index + 1}}</td>
-						<td>{{if rs.outOPUser}}{{rs.outOPUser.realName}}{{/if}}</td>
-						<td>{{if rs.lineProduct}}{{rs.lineProduct.name}}{{/if}}</td>
-						<td>{{if rs.contactMember}}{{rs.contactMember.name}}{{/if}}</td>
-						<td>{{if rs.contactMember}}{{rs.contactMember.mobileNumber}}{{/if}}</td>
-						<td>{{if rs.contactMember}}{{rs.contactMember.area}}{{/if}}</td>
-						<td>{{if rs.contactMember}}{{rs.contactMember.age}}{{/if}}</td>
-						<td><span class="F-float F-count">{{rs.adultCount}}</span> 大 <span class="F-float F-count">{{rs.childCount}}</span>小</td>
-						<td class="F-float F-money">{{rs.currentNeedPayMoney}}</td>
-						<td>{{rs.hotelLevel | getHotelLevelDesc}}</td>
-						<td>{{rs.includeSelfPay}}</td>
-						<td>{{rs.remark}}</td>
+						<td>{{group.orderNumber}}</td>
+						<td>{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
+						<td>{{group.lineProduct.name}}</td>
+						<td>{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+						<td>{{group.contactMember.name}}</td>
+						<td>{{group.contactMember.mobileNumber}}</td>
+						<td>{{group.areaData}}</td>
+						<td>{{group.ageData}}</td>
+						<td>{{group.adultCount}}大{{group.childCount}}小</td>
+						<td>{{group.currentNeedPayMoney}}</td>
+						<td>{{group.hotelLevel | getHotelLevelDesc}}</td>
+						<td>{{group.includeSelfPay}}</td>
+						<td>{{group.accompanyGuideName}}</td>
+						<td>{{group.accompanyGuideMobile}}</td>
+						<td>{{group.welcomeBoard}}</td>
+						<td>{{group.sendPosition}}</td>
+						<td>{{group.remark}}</td>
 					</tr>
 				{{/each}}
 				</tbody>
