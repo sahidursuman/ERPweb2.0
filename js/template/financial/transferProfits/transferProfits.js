@@ -107,20 +107,18 @@ define(function(require, exports) {
             sortType: 'auto'
         };
 
-        var searchParam = JSON.stringify(transfer.searchData);
         $.ajax({
-            url:KingServices.build_url("profitOutRemark","listProfitOut"),
+            url:KingServices.build_url("profitOutRemark","findPager"),
             type: "POST",
-            data: { searchParam : searchParam},
+            data: transfer.searchData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.results = JSON.parse(data.results);
                     var html = listTemplate(data);
 
                     $("#tab-" + menuKey + "-content").find(".T-transfer-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
-                    $tab.find(".T-totalSize").text("共计 " + data.totalCount + " 条记录");
+                    $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
                     transfer.getSumData($tab,transfer.searchData);
                     transfer.getQuery($tab);
@@ -206,17 +204,17 @@ define(function(require, exports) {
 
     transfer.getSumData = function($tab,args){
         $.ajax({
-            url: KingServices.build_url("profitOutRemark","listProfitOutCount"),
+            url: KingServices.build_url("profitOutRemark","findTotal"),
             type: 'POST',
-            data: {searchParam : JSON.stringify(args)},
+            data: args,
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find(".T-totalCount").text((data.countMap.adultCount ? data.countMap.adultCount : 0) + " 大" + (data.countMap.childCount ? data.countMap.childCount : 0) + " 小");
-                $tab.find(".T-totalNeed").text(data.countMap.needIncomeMoney);
-                $tab.find(".T-totalCost").text(data.countMap.totalPayMoney);
-                $tab.find(".T-totalProfit").text(data.countMap.grossProfitMoney);
-                $tab.find(".T-perProfit").text(data.countMap.perGrossProfitMoney);
+                $tab.find(".T-totalCount").text((data.total.adultCount ? data.total.adultCount : 0) + " 大" + (data.total.childCount ? data.total.childCount : 0) + " 小");
+                $tab.find(".T-totalNeed").text(data.total.transitPaySMoney);
+                $tab.find(".T-totalCost").text(data.total.transitSMoney);
+                $tab.find(".T-totalProfit").text(data.total.grossProfit);
+                $tab.find(".T-perProfit").text(data.total.perGrossProfit);
             }
         });
     };

@@ -2271,12 +2271,12 @@ KingServices.viewOptionalScenic = function($this){
 
 //发团计划--散客
 KingServices.updateSingleTripPlan = function(id,mergeTouristGroupIdJson){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_singlePlan,function(module){
 		module.updateSingleTripPlan(id,mergeTouristGroupIdJson);
 	});
 }
 KingServices.addTripPlan = function(args,mergeTouristGroupIdJson){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_singlePlan,function(module){
 		module.addTripPlan(false,args,mergeTouristGroupIdJson);
 	});
 }
