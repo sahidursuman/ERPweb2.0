@@ -439,12 +439,7 @@ define(function(require, exports) {
 					index = $div.length,
 					entityId = $this.closest('div').find('.T-type').data("id");
 					flag = $this.closest('div').find('.T-type').attr("data-Flag");
-				$div.closest('tr').find('div:not(.delete)').find('.T-count').eq(divIndex).fadeOut(function(){
-					$(this).closest('div').remove();
-				});
-				$div.closest('tr').find('div:not(.delete)').find('.T-price').eq(divIndex).fadeOut(function(){
-					$(this).closest('div').remove();
-				});
+				
 
 				//及时删除
 				if (entityId != null && entityId != "") {
@@ -458,7 +453,8 @@ define(function(require, exports) {
 							if(showDialog(data)){
 								showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
 									$div.fadeOut(function(){
-										$(this).remove();
+										//节点移除计算
+										subsection.nodeRemoveCaculate($div, divIndex, $(this));
 									});
 								})	
 							}
@@ -466,14 +462,35 @@ define(function(require, exports) {
 				});
 				}else{
 					$div.fadeOut(function(){
-						var payMoney = subsection.totalPayMoney($this.closest('tr'),$this.closest('div').closest('td').find('div').length);
-						$div.closest('tr').find('.T-payedMoney').val(payMoney);
-						$(this).remove();
+						//节点移除计算
+						subsection.nodeRemoveCaculate($div, divIndex, $(this));
 					});
-				}
-			}
+				}	
+	    }
 	};
 
+	/**
+	 * [nodeRemoveCaculate 移除节点并自动计算
+	 * @param  {[type]} $div     [description]
+	 * @param  {[type]} divIndex [description]
+	 * @param  {[type]} $that    [description]
+	 * @return {[type]}          [description]
+	 */
+	subsection.nodeRemoveCaculate = function($div, divIndex, $that){		
+		var $price=$div.closest('tr').find('div:not(.delete)').find('.T-price'),
+		    $count=$div.closest('tr').find('div:not(.delete)').find('.T-count'),count=0,price=0;
+		price=$price.eq(divIndex).val()*1 || 0;
+		count=$count.eq(divIndex).val()*1 || 0;
+		payedMoney=$div.closest('tr').find('.T-payedMoney').val()*1 || 0;
+		$div.closest('tr').find('.T-payedMoney').val(payedMoney-(price*count));
+		$div.closest('tr').find('div:not(.delete)').find('.T-count').eq(divIndex).fadeOut(function(){
+			$(this).closest('div').remove();
+		});
+		$div.closest('tr').find('div:not(.delete)').find('.T-price').eq(divIndex).fadeOut(function(){
+			$(this).closest('div').remove();
+		});
+		$that.remove();
+	};
 
 
 	/**
