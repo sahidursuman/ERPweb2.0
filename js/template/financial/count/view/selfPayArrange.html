@@ -12,7 +12,7 @@
 <table class="table overflow-table table-striped table-bordered table-hover ">
     <thead>
     <tr>
-        <th class="th-border" colspan="15">消费</th>
+        <th class="th-border" colspan="16">消费</th>
         <th class="th-border" colspan="2">社佣</th>
         <th class="th-border" colspan="2">导佣</th>
         <!-- <th class="th-border" colspan="2">人数返佣</th> -->
@@ -25,6 +25,7 @@
       <th class="th-border"><span class="necessary">*</span>项目</th>
       <th class="th-border"><span class="necessary">*</span>单价</th>
       <th class="th-border"><span class="necessary">*</span>应收数量</th>
+      <th class="th-border">应收优惠</th>
       <th class="th-border">应收</th>
       <th class="th-border">现收</th>
       <th class="th-border"><span class="necessary">*</span>底价</th>
@@ -55,7 +56,9 @@
             {{if arrange.badStatus == 1}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{else}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{/if}}
             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
             
-            <td><span class="needCount"></span></td>
+            <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text"></td>
+
+             <td><span class="needInReduceMoney"></span></td>
             
             <td>{{if arrange.badStatus == 1}}<span class="needIncome F-float F-money"></span>{{else}}<span class="needIncome F-float F-money"></span>{{/if}}
             </td>
