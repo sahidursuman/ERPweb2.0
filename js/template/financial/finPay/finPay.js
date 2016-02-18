@@ -117,7 +117,10 @@ define(function(require, exports) {
 				break;
 			case 7:  //自费账务
 				options.url = KingServices.build_url('account/selfPayFinancial', 'listFinancialSummaryOfSelfPay');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate;
 				resArgs.selfPayName = args.name;
+				beJson = false;
 				break;
 			case 8:  //保险账务
 				options.url = KingServices.build_url('account/insuranceFinancial', 'listSumFinancialInsurance');
