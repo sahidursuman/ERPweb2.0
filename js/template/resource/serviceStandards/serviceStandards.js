@@ -99,7 +99,7 @@ define(function(require, exports){
 			type: 1,
 			title:"新增服务标准",
 			skin: 'layui-layer-rim', //加上边框
-			area: '600px', //宽高
+			area: '800px', //宽高
 			zIndex:1028,
 			content: html,
 			scrollbar: false,
@@ -124,7 +124,7 @@ define(function(require, exports){
 			type: 1,
 			title:"修改服务标准",
 			skin: 'layui-layer-rim', //加上边框
-			area: '600px', //宽高
+			area: '800px', //宽高
 			zIndex:1028,
 			content: html,
 			scrollbar: false,
