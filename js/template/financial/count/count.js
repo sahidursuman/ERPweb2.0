@@ -1566,9 +1566,6 @@ define(function(require, exports){
             //计算应付
             var needPayMoney = $parent.find(".needPayMoney");
             var realReduceMoney = $parent.find('input[name="realReduceMoney"]').val();
-
-            
-            
             //规范数据
             realCount = Count.changeTwoDecimal(realCount);
             memberCount = Count.changeTwoDecimal(memberCount);
@@ -1607,8 +1604,7 @@ define(function(require, exports){
 			//计算应付
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算自费费用
-            var $selfSum = parseFloat(realCount*price-realGetMoney);
-            $parent.find('.selfMoney').val($selfSum);
+            $parent.find('.selfMoney').val(needSum);
 			//导游佣金= (现收-应收数量*低价)*导佣比例
 			var publiSum = realGetMoney-(incomeCount*price);
 			var guideRebateMoney = publiSum * parseFloat(guideRate)/100;
@@ -1635,8 +1631,8 @@ define(function(require, exports){
 				shopRebateMoney += totalSum;
 			});
 			$mainTr.find('.guideRebateMoney').each(function() {
-				var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
-				$guideRebateMoney += totalSum;
+				var t = Count.changeTwoDecimal(parseFloat($(this).text()));
+				$guideRebateMoney += t;
 			});
 			shopRebateMoney = Count.changeTwoDecimal(shopRebateMoney);
 			$bodyObj.find('.tripIncome-selfPayTravelAgencyRebateMoney').text(shopRebateMoney);
