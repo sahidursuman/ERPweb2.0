@@ -1657,7 +1657,8 @@ define(function(require, exports){
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
 		'<td><input name="selfPayItem" style="width:90px;" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" style="width:60px;" type="text"></td>'+
-		'<td><span class="needCount"></span></td>'+
+		'<td><input name="needCount" type="text"></td>'+
+		'<td><span class="needInReduceMoney"></span></td>'+
 		'<td><span class="needIncome"></span></td>'+
 		'<td><input name="realGetMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="price" style="width:60px;" type="text"></td>'+
