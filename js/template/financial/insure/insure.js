@@ -350,10 +350,11 @@ define(function(require, exports) {
 
         //搜索事件
         Insure.$clearTab.find(".T-search").click(function(){
+            var isAutoPay = Insure.$clearTab.find('input[name=isAutoPay]').val();
             Insure.clearTempSumDate = false;
             Insure.clearTempData = false;
             Insure.$clearTab.data('isEdited',false);
-            Insure.getClearing(0,0,id,name);
+            Insure.getClearing(isAutoPay,0,id,name);
         });
 
         FinancialService.initPayEvent(Insure.$clearTab.find('.T-summary'));
