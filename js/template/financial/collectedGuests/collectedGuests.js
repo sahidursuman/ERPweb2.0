@@ -14,8 +14,8 @@ define(function(require, exports) {
         var dateJson = FinancialService.getInitDate();
         ColGuest.searchData = {
             pageNo : 0,
-            startDate : dateJson.startDate,
-            endDate : dateJson.endDate,
+            startTime : dateJson.startDate,
+            endTime : dateJson.endDate,
         };
         var data = {};
         data.searchParam = ColGuest.searchData;
@@ -34,8 +34,8 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startDate : startTime,
-            endDate : endTime,
+            startTime : startTime,
+            endTime : endTime,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(ColGuest.searchData);
@@ -129,8 +129,8 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startDate : startTime,
-            endDate : endTime,
+            startTime : startTime,
+            endTime : endTime,
             order : "desc",
             sortType: 'startTime'
         };
