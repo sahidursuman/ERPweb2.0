@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":33,"md5":"4590af82f07bee53075bb6df3e154765"}*/
+/*TMODJS:{"debug":true,"version":34,"md5":"4590af82f07bee53075bb6df3e154765"}*/
 define(function(require) {
     return require("../../../template")("resource/serviceStandards/view/update", function($data, $filename) {
         try {
