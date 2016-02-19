@@ -725,9 +725,9 @@ define(function(require, exports) {
 		arge.shopIds = tripPlan.jsonToString($tab.find('[name="shopNames"]').data("propover"));
 		arge.selfPayItemIds = tripPlan.jsonToString($tab.find('[name="selfPayItemNames"]').data("propover"));
 		//应收&预收款&计划现收
-		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val() || 0;
-		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val() || 0;
-		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val() || 0;
+		arge.needPayAllMoney = $tab.find('[name="needPayAllMoney"]').val()-0 || 0;
+		arge.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val()-0 || 0;
+		arge.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val()-0 || 0;
 		arge.outTransferIncome = 0;//$tab.find('[name="transitNeedPayMoney"]').val();
 		//
 		arge.touristGroupId = $tab.find('[name="partnerAgencyName"]').data("id") || "";
