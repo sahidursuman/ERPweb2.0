@@ -1,8 +1,18 @@
-<div class="group-info-area">
-	<h5   class="form-inline">
-		<span class="badge badge-primary">1</span>
-		<label class="middle title-size">小组信息</label>
-	</h5>
+<div class="group-info-area form-inline">
+    <div class="form-group fixed-width-1">
+        <span class="badge badge-primary">1</span>
+        <label class="middle title-size">小组信息</label>
+    </div>
+    <div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:665px;">
+        <label class="control-label no-padding-right mar-r-10">是否购买保险：  
+            <input type="checkbox" class="ace buyInsurance-status" value="1" checked="checked" name="buyInsurance"/>
+            <span class="lbl"></span>
+        </label>
+
+        <label>收客单号：</label>
+        <input type="text" name="orderNumber" value="" readonly="readonly" style="width:160px;"  maxlength="9" placeholder="系统自动生成" >  
+    </div> 
+
 </div>
 <form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
 	<div class="form-inline">
@@ -128,16 +138,11 @@
             <input type="text" name="welcomeBoard" value="" maxlength="20" >
         </div>
 
-        <div class="form-group">
-            <label class="control-label no-padding-right">是否购买保险：
-                <input checked="checked" type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance">
-                <span class="lbl"></span>
-            </label>
+         <div class="form-group fixed-width-1">
+            <label>送客地点：</label>
+            <input  type="text"  value="" name="sendPosition" maxlength="100">
         </div>
-
     </div>
-
-
 
     <div class="form-group clearfix">
         <label class="pull-left control-label no-padding-right" style="margin-left:42px;">备注:</label>
