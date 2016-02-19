@@ -667,7 +667,7 @@ define(function(require, exports) {
 				arrangeId: $parents.data('entity-arrangeid'),
 				count: $parents.find('[name=memberCount]').val(),
 				hotelId: $parents.find('[name=hotelId]').val(),
-				price: $parents.find('[name=fee]').val(),
+				price: $parents.find('[name=price]').val(),
 				tripPlanId: $tab.find('[name=tripPlanId]').val(),
 				type: $parents.find('[name=hotelRoom]').val(),
 				whichDay: $parents.find('[name=whichDay]').val(),
@@ -705,7 +705,7 @@ define(function(require, exports) {
 						arrangeId: $tr.eq(i).data('entity-arrangeid'),
 						count: $tr.eq(i).find('[name=memberCount]').val(),
 						hotelId: $tr.eq(i).find('[name=hotelId]').val(),
-						price: $tr.eq(i).find('[name=fee]').val(),
+						price: $tr.eq(i).find('[name=price]').val(),
 						type: $tr.eq(i).find('[name=hotelRoom]').val(),
 						whichDay: $tr.eq(i).find('[name=whichDay]').val(),
 						hotelRoomId: $tr.eq(i).find('[name=hotelRoomId]').val()
@@ -2356,7 +2356,7 @@ define(function(require, exports) {
 			$parents.find("input[name=hotelRoomId]").val("");
 			$parents.find("input[name=mobileNumber]").val("");
 			$parents.find("input[name=managerName]").val("");
-        	$parents.find("input[name=fee]").val("");
+        	$parents.find("input[name=price]").val("");
 		});
 		
 		hotelChoose.autocomplete({
@@ -2370,7 +2370,7 @@ define(function(require, exports) {
 					$parents.find("input[name=hotelRoomId]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=managerName]").val("");
-                	$parents.find("input[name=fee]").val("");
+                	$parents.find("input[name=price]").val("");
 				}
 			},
 			select: function(event,ui){
@@ -2389,7 +2389,7 @@ define(function(require, exports) {
 							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
-	                    	$parents.find("input[name=fee]").val("");
+	                    	$parents.find("input[name=price]").val("");
 						}
                     }
 				});
@@ -2429,7 +2429,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=hotelRoomId]").val("");
-                	$parents.find("input[name=fee]").val("");
+                	$parents.find("input[name=price]").val("");
 				}
 			},
 			select:function(event,ui){
@@ -2494,7 +2494,7 @@ define(function(require, exports) {
 					$parents.find("input[name=scenicId]").val("");
 					$parents.find("input[name=chargingProjects]").val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=fee]").val("");
+					$parents.find("input[name=price]").val("");
 				}
 			},
 			select: function(event,ui){
@@ -2502,7 +2502,7 @@ define(function(require, exports) {
 				$parents.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 				$parents.find("input[name=chargingProjects]").val("");
 				$parents.find("input[name=scenicItemId]").val("");
-				$parents.find("input[name=fee]").val("");
+				$parents.find("input[name=price]").val("");
 				$parents.find("input[name=orderNumber]").val("");
 				$parents.find("input[name=price]").val(0);
 				tripPlan.calculatePrice($tab);
@@ -2563,7 +2563,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=fee]").val("");
+					$parents.find("input[name=price]").val("");
 				}
 			}
 		}).off("click").on("click", function(){
@@ -2724,7 +2724,7 @@ define(function(require, exports) {
 					$parents.find("input[name=selfPayId]").val("");
 					$parents.find("input[name=managerName]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
-					$parents.find("input[name=fee]").val("");
+					$parents.find("input[name=price]").val("");
 					$parents.find("input[name=selfPayItemId]").val("");
 					$parents.find("input[name=selfitem]").val("");
 				}
@@ -3120,7 +3120,7 @@ define(function(require, exports) {
 			});
 			if (isFirst) {
 				//加载时自动计算
-				tripPlan.plusPrice($this.find('input[name=fee], input[name=memberCount], input[name=reduceMoney], input[name=prePayMoney]'), $tab ,isFirst);
+				tripPlan.plusPrice($this.find('input[name=price], input[name=memberCount], input[name=reduceMoney], input[name=prePayMoney]'), $tab ,isFirst);
 			}else{
 				tripPlan.plusPrice($(this), $tab);
 			}
