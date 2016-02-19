@@ -1992,7 +1992,7 @@ define(function(require, exports) {
     //选择组团社与业务部
     touristGroup.choosePartnerAgencyOrBussiness = function($obj) {
         var $this = $obj,
-            $parents = $this.closest('div'),
+            $parents = $this.closest('form'),
             $value = $this.val();
         if ($value == 1) {
             $parents.find('.T-choosePAB').hide();
