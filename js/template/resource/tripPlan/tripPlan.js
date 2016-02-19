@@ -3344,6 +3344,11 @@ define(function(require, exports) {
 					if (!!tripPlan.$tab) {  // 未打开发团安排
 						tripPlan.listTripPlan(0);
 					}
+					if(!!$("#tab-arrange_plan-content")) {
+						seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+							module.listTripPlanGroup(0, $("#tab-arrange_plan-content"));
+						});
+					}
 
 					Tools.refreshTab($tab.find('.T-tab-id').text());
 
