@@ -107,8 +107,8 @@
 						<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 						<label class="mar-l-15">上车地点：{{arrivePosition}}</label>
 					</div>
-                    <p>原车辆要求：{{receiveGroup.oldBusRequire}}</p>
-                    <p>现车辆要求：{{receiveGroup.nowBusRequire}}</p>
+                    {{if !!receiveGroup.oldBusRequire}}<p>原车辆要求：{{receiveGroup.oldBusRequire}}</p>{{/if}}
+                    {{if !!receiveGroup.nowBusRequire}}<p>现车辆要求：{{receiveGroup.nowBusRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
@@ -242,8 +242,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原酒店要求：{{receiveGroup.oldHotelRequire}}</p>
-                    <p>现酒店要求：{{receiveGroup.nowHotelRequire}}</p>
+                    {{if !!receiveGroup.oldHotelRequire}}<p>原酒店要求：{{receiveGroup.oldHotelRequire}}</p>{{/if}}
+                    {{if !!receiveGroup.nowHotelRequire}}<p>现酒店要求：{{receiveGroup.nowHotelRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
@@ -328,8 +328,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原餐厅要求：{{receiveGroup.oldRestaurantRequire}}</p>
-                    <p>现餐厅要求：{{receiveGroup.nowRestaurantRequire}}</p>
+                    {{if !!receiveGroup.oldRestaurantRequire}}<p>原餐厅要求：{{receiveGroup.oldRestaurantRequire}}</p>{{/if}}
+                    {{if !!receiveGroup.nowRestaurantRequire}}<p>现餐厅要求：{{receiveGroup.nowRestaurantRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
@@ -409,8 +409,8 @@
 						<label>票务时间：{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 						<label class="mar-l-15">票务班次：{{arriveShift}}</label>
 					</div>
-                    <p>原票务要求：{{receiveGroup.oldTicketRequire}}</p>
-                    <p>现票务要求：{{receiveGroup.nowTicketRequire}}</p>
+                    {{if !!receiveGroup.oldTicketRequire}}<p>原票务要求：{{receiveGroup.oldTicketRequire}}</p>{{/if}}
+                    {{if !!receiveGroup.nowTicketRequire}}<p>现票务要求：{{receiveGroup.nowTicketRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
@@ -526,8 +526,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原其它要求：{{receiveGroup.oldOtherRequire}}</p>
-                    <p>现其它要求：{{receiveGroup.nowOtherRequire}}</p>
+                    {{if !!receiveGroup.oldOtherRequire}}<p>原其它要求：{{receiveGroup.oldOtherRequire}}</p>{{/if}}
+                    {{if !!receiveGroup.nowOtherRequire}}<p>现其它要求：{{receiveGroup.nowOtherRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
@@ -590,8 +590,8 @@
 						<label>送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 						<label class="mar-l-15">上车地点：{{leavePosition}}</label>
 					</div>
-                    <p>原车辆要求：{{sendGroup.oldBusRequire}}</p>
-                    <p>现车辆要求：{{sendGroup.nowBusRequire}}</p>
+                    {{if !!sendGroup.oldBusRequire}}<p>原车辆要求：{{sendGroup.oldBusRequire}}</p>{{/if}}
+                    {{if !!sendGroup.nowBusRequire}}<p>现车辆要求：{{sendGroup.nowBusRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
@@ -726,8 +726,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原酒店要求：{{sendGroup.oldHotelRequire}}</p>
-                    <p>现酒店要求：{{sendGroup.nowHotelRequire}}</p>
+                    {{if !!sendGroup.oldHotelRequire}}<p>原酒店要求：{{sendGroup.oldHotelRequire}}</p>{{/if}}
+                    {{if !!sendGroup.nowHotelRequire}}<p>现酒店要求：{{sendGroup.nowHotelRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
@@ -811,8 +811,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原餐厅要求：{{sendGroup.oldRestaurantRequire}}</p>
-                    <p>现餐厅要求：{{sendGroup.nowRestaurantRequire}}</p>
+                    {{if !!sendGroup.oldRestaurantRequire}}<p>原餐厅要求：{{sendGroup.oldRestaurantRequire}}</p>{{/if}}
+                    {{if !!sendGroup.nowRestaurantRequire}}<p>现餐厅要求：{{sendGroup.nowRestaurantRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
@@ -892,8 +892,8 @@
 						<label>票务时间：{{leaveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
 						<label class="mar-l-15">票务班次：{{leaveShift}}</label>
 					</div>
-                    <p>原票务要求：{{sendGroup.oldTicketRequire}}</p>
-                    <p>现票务要求：{{sendGroup.nowTicketRequire}}</p>
+                    {{if !!sendGroup.oldTicketRequire}}<p>原票务要求：{{sendGroup.oldTicketRequire}}</p>{{/if}}
+                    {{if !!sendGroup.nowTicketRequire}}<p>现票务要求：{{sendGroup.nowTicketRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
@@ -976,8 +976,8 @@
 										</td>
 										<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
-										<td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{leaveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
+										<td><input class="col-sm-12" name="ticketShift" value="{{leaveShift}}" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
 										<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
@@ -1009,8 +1009,8 @@
 							</button>
 						</a>
 					</h5>
-                    <p>原其他要求：{{sendGroup.oldOtherRequire}}</p>
-                    <p>现其他要求：{{sendGroup.nowOtherRequire}}</p>
+                    {{if !!sendGroup.oldOtherRequire}}<p>原其他要求：{{sendGroup.oldOtherRequire}}</p>{{/if}}
+                    {{if !!sendGroup.nowOtherRequire}}<p>现其他要求：{{sendGroup.nowOtherRequire}}</p>{{/if}}
 					<div class="widget-body">
 						<div class="widget-main no-padding">
 							<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
