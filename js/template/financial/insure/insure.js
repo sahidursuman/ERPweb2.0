@@ -350,10 +350,11 @@ define(function(require, exports) {
 
         //搜索事件
         Insure.$clearTab.find(".T-search").click(function(){
+            var isAutoPay = Insure.$clearTab.find('input[name=isAutoPay]').val();
             Insure.clearTempSumDate = false;
             Insure.clearTempData = false;
             Insure.$clearTab.data('isEdited',false);
-            Insure.getClearing(0,0,id,name);
+            Insure.getClearing(isAutoPay,0,id,name);
         });
 
         FinancialService.initPayEvent(Insure.$clearTab.find('.T-summary'));
@@ -563,7 +564,7 @@ define(function(require, exports) {
             voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
             billTime : Insure.$clearTab.find('input[name=tally-date]').val()
         };
-
+        var isAutoPay = Insure.$clearTab.find('input[name=isAutoPay]').val();
         clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);
         $.ajax({
@@ -585,7 +586,7 @@ define(function(require, exports) {
                         }else if(argumentsLen === 3){
                             Insure.saveFlag = false;    
                             Insure.$clearTab.data('isEdited',false);
-                            Insure.getClearing(0,page,id,name);
+                            Insure.getClearing(isAutoPay,page,id,name);
                         } else {
                             Insure.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
