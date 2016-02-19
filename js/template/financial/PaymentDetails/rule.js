@@ -23,6 +23,15 @@ define(function(require, exports) {
     	    	        	errMsg: '记账日期不能为空'
     	    	        }
 	    	        ]
+	    	    },
+	    	    {	//记账日期
+	    	    	$ele: $obj.find('input[name="card-number"]'),
+	    	    	rules: [
+    	    	        {
+    	    	        	type: 'null', 
+    	    	        	errMsg: '银行账号不能为空'
+    	    	        }
+	    	        ]
 	    	    }
             ]);
 			return validator;
