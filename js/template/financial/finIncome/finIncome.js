@@ -84,8 +84,8 @@ define(function(require, exports) {
 		switch(FinIncome.currentType) {
 			case 0:  //客户账务
 				options.url = KingServices.build_url('financial/customerAccount', 'listPager');
-				resArgs.startTime = args.startTime;
-				resArgs.endTime = args.endTime;
+				resArgs.startDate = args.startTime;
+				resArgs.endDate = args.endTime;
 				resArgs.fromPartnerAgencyName = args.name;
 				break;
 			case 1:  //内转转入

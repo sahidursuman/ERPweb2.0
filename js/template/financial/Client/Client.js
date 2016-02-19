@@ -93,6 +93,7 @@ define(function(require, exports) {
             if(showDialog(data)){
                 Tools.addTab(menuKey, "客户账务", listTemplate(data));
                 Client.initList();
+                Client.getListSumData(args,$('#' + tabId));
                 // 绑定翻页组件
                 laypage({
                     cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -155,6 +156,24 @@ define(function(require, exports) {
                 Client.ClientClear(0, options);
             }
         });
+    };
+
+    Client.getListSumData = function(args,$tab){
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'listPagerTotal'),
+            type: 'POST',
+            data: args,
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $tab.find('.T-sumCount').text(data.sumCount);
+                $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
+                $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
+                $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+                $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+            }
+        });
+        
     };
 
     Client.ClientCheck = function(pageNo, args, $tab){
