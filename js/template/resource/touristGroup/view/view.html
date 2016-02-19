@@ -72,8 +72,13 @@
 						</td>
 
 						<td class="style-myself">针对客源</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5">
+						<td style="text-align: left;padding: 0px 0px 0px 10px">
 						{{if touristGroupDetail.customerType == 0}}散客{{/if}}{{if touristGroupDetail.customerType == 1}}团体{{/if}}
+						</td>
+
+						<td class="style-myself">送客地点</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">
+						{{touristGroupDetail.sendPosition}}
 						</td>
 
 					</tr>

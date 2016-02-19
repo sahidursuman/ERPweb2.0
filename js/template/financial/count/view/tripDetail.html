@@ -329,7 +329,7 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border" colspan="15">消费</th>
+                        <th class="th-border" colspan="16">消费</th>
                         <th class="th-border" colspan="2">社佣</th>
                         <th class="th-border" colspan="2">导佣</th>
                         <!-- <th class="th-border" colspan="2">人数返佣</th> -->
@@ -342,6 +342,7 @@
                       <th class="th-border">项目</th>
                       <th class="th-border">单价</th>
                       <th class="th-border">应收数量</th>
+                      <th class="th-border">应收优惠</th>
                       <th class="th-border">应收</th>
                       <th class="th-border">现收</th>
                       <th class="th-border">底价</th>
@@ -370,11 +371,15 @@
                             <td>{{if arrange.badStatus == 1}}<span>{{arrange.marketPrice}}</span>{{else}}{{arrange.marketPrice}}{{/if}}
                             <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
                             
-                            <td><span class="needIncomeCount"></span></td>
+                            <td><span class="needIncomeCount">{{arrange.needIncomeCount}}</span></td>
+                            
+                            <td><span class="needInReduceMoney"></span></td>
+
                             <td>
                             {{if arrange.badStatus == 1}}<span class="needIncome">{{arrange.realGetMoney}}</span>{{else}}<span class="needIncome">{{arrange.realGetMoney}}</span>{{/if}}</td>
                             <td>
-                            {{if arrange.badStatus == 1}}<span>{{arrange.realGetMoney}}</span>{{else}}<span>{{arrange.realGetMoney}}</span>{{/if}}
+                            {{if arrange.badStatus == 1}}<span class="realGetMoney">{{arrange.realGetMoney}}</span>{{else}}
+                            <span class="realGetMoney">{{arrange.realGetMoney}}</span>{{/if}}
                             </td>
 
                             <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}{{arrange.price}}{{/if}}
