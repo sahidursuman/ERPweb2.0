@@ -792,7 +792,7 @@ define(function(require, exports) {
 						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
 						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
 						$tr.find('input[name=days]').val(lineProductJson.days);
-						console.info($tr.prev());
+
 						if (!!$tr.prev().length>0) {
 							var days=$tr.prev().find('input[name=days]').val(),
 							    startTime=$tr.prev().find('input[name=startTime]').val();
@@ -800,6 +800,14 @@ define(function(require, exports) {
 								$tr.find('input[name=startTime]').val(subsection.startIntime(days,startTime));
 							};
 						  
+						};
+
+						if (!!$tr.next().length>0) {
+							var days=$tr.find('input[name=days]').val(),
+							    startTime=$tr.find('input[name=startTime]').val();
+							if (!!days && !!startTime) {
+								$tr.next().find('input[name=startTime]').val(subsection.startIntime(days,startTime));
+							};
 						};
 						
 					};
