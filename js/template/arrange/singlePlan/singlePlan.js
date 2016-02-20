@@ -713,6 +713,11 @@ define(function(require, exports) {
 							singlePlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
 						}
 					}
+
+					if(!!$('#tab-arrange_individual-content').find('.T-visitorTourist-search')){
+						$('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+					}
+					
 				});				
 			}
 		});
