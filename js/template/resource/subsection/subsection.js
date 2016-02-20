@@ -658,10 +658,6 @@ define(function(require, exports) {
 		});
 
 		var operateCurPayLength = $tbody.children('tr').find("input[name=operateCurrentNeedPayMoney]:checked").length;
-		if (operateCurPayLength==0 && $tbody.data('neepayallmoney')<=num) {
-			showMessageDialog($( "#confirm-dialog-message" ),"费用项金额应等于应收与中转结算价之差");
-			return;
-        };
 
 
         if(operateCurPayLength==0 && subsection.$tabSub.find('.T-currentNeedPayMoney').val()!=0){
@@ -677,11 +673,20 @@ define(function(require, exports) {
 			return;
 		}
 
-		if ($tbody.data('neepayallmoney') != receivables) {
+		//没有选中本段核算中转
+		var needTransitFee=0;
+		if ($tbody.children('tr').find("input[name=operateCalculteOut]:checked").length==0) {
+			var $innerOutEditTr=subsection.$tabSub.find('.T-innerOutEditFeeTbody').children('tr');
+			$innerOutEditTr.each(function(index, el) {
+				if ($innerOutEditTr.eq(index).data('type')*1==3) {
+					needTransitFee+=$innerOutEditTr.eq(index).find('.T-transitMoney').text()*1;
+				};	
+			});
+		};
+		if ($tbody.data('neepayallmoney')-needTransitFee != receivables) {
 			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
 			return;
 		}
-
 		subTouristGroup = JSON.stringify(subTouristGroup);
 
 		$.ajax({
