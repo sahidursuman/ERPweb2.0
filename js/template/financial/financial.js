@@ -128,7 +128,7 @@ FinancialService.checkSaveJson = function($tab,rule){
             if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
                 var checkRecord = {
                     id : $this.data("id"),
-                    settlementMoney : getValue($this,"settlementMoney"),
+                    settlementMoney : $this.find("input[name=settlementMoney]").val(),
                     unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
                     checkRemark : $this.find("[name=checkRemark]").val(),
                     isConfirmAccount : isConfirmAccount
@@ -519,14 +519,6 @@ function isAllChecked(checkboxList){
     });
     return isAll;
 }
-
-function getValue($obj,name){
-    var result = $obj.find("[name="+name+"]").val();
-    if (result == "") {//所有空字符串变成0
-        result = 0;
-    }
-    return result;
-} 
 
 /**
  * 财务校验方法
