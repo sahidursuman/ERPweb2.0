@@ -1480,6 +1480,13 @@ define(function(require, exports) {
     //批量添加游客保存
     touristGroup.saveVisitorMore = function($panelObj, addVisotorMoreLayer, $obj) {
         var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
+        function numReg(str) {
+            if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
+                idCardNumber = str;
+            } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
+                mobileNumber = str;
+            }
+        }
         if (data == "") {
             showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
         } else {
@@ -1503,13 +1510,7 @@ define(function(require, exports) {
                         numReg(memberInfoArray[2]);
                     }
 
-                    function numReg(str) {
-                        if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
-                            idCardNumber = str;
-                        } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
-                            mobileNumber = str;
-                        }
-                    }
+                    
                     // 如果第一行数据为空，则删除第一行
                     var html =
                         "<tr>" +

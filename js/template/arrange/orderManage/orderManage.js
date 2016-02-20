@@ -546,6 +546,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var parents = $(this).parent();
 					parents.find("input[name=hotelName]").val("");
+					parents.find("input[name=hotelId]").val("");
 				}
 			},
 			select :function(event, ui){
