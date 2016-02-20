@@ -714,7 +714,10 @@ define(function(require, exports) {
 						}
 					}
 
-					$('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+					if(!!$('#tab-arrange_individual-content').find('.T-visitorTourist-search')){
+						$('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+					}
+					
 				});				
 			}
 		});
