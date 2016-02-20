@@ -312,16 +312,11 @@ define(function(require, exports) {
                     //外转确认需清空线路产品
                     if (status == undefined || status == null || status == "") {
                         if (Tools.addTab(updateTabId, "添加游客", html)) {
-                            var $updateTabId = $('#' + updateTab),
-                                $reciveObj=$updateTabId.find('.T-recive'),
-                                $sendObj=$updateTabId.find('.T-send');
+                            var $updateTabId = $('#' + updateTab);
                             $updateTabId.find('input[name=accompanyGuideName]').val("");
                             $updateTabId.find('input[name=accompanyGuideMobile]').val("");
                             $updateTabId.find('input[name=otaOrderNumber]').val("");
                             $updateTabId.find('input[name=orderNumber]').val("");
-                            //清空中转勾选
-                            $reciveObj.find('input[type=checkbox]').prop('checked',false);
-                            $sendObj.find('input[type=checkbox]').prop('checked',false);
                             touristGroup.updateEvents(typeOut);
                         }
                     } else if (!!status && !!InnerTransfer) {
