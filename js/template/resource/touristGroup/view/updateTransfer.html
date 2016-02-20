@@ -419,7 +419,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
-							            <div class="require-commons">
+							            <div class="require-commons {{if type=='out'}}hide{{/if}}">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
 										           <span class="necessary">*</span>
@@ -572,7 +572,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
-								       <div class="require-commons">
+								       <div class="require-commons {{if type=='out'}}hide{{/if}}">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
 										            <span class="necessary">*</span>
