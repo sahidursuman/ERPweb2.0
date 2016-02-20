@@ -792,6 +792,15 @@ define(function(require, exports) {
 						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
 						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
 						$tr.find('input[name=days]').val(lineProductJson.days);
+						console.info($tr.prev());
+						if (!!$tr.prev().length>0) {
+							var days=$tr.prev().find('input[name=days]').val(),
+							    startTime=$tr.prev().find('input[name=startTime]').val();
+							if (!!days && !!startTime) {
+								$tr.find('input[name=startTime]').val(subsection.startIntime(days,startTime));
+							};
+						  
+						};
 						
 					};
 				});
