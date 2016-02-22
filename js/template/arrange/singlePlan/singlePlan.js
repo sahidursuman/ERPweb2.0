@@ -1808,4 +1808,5 @@ define(function(require, exports) {
 	//散客发团计划编辑
 	exports.updateSingleTripPlan = singlePlan.updateSingleTripPlan;
 	exports.addTripPlan = singlePlan.addTripPlan;
+	exports.listTripPlanSingle = singlePlan.listTripPlanSingle;
 });
