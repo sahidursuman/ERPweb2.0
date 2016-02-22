@@ -638,13 +638,13 @@ define(function(require, exports) {
 				}
 
 				//费用项目$feeItemTr
-				$feeItemTr.each(function() {
+				$feeItemTr.each(function(index) {
 						var $that = $(this),divIndex = $(this).data('index');
 						var touristGroupFeeJson = {
 							id : $(this).data("id") || '',
 							type :   $(this).val(),     
-							count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
-						    price : $(this).closest('tr').find(".T-price-" + divIndex).val()
+							count : $(this).closest('tr').find(".T-count").eq(index).val(),
+						    price : $(this).closest('tr').find(".T-price").eq(index).val()
 						};
 					subTouristGroupJson.touristGroupSubFeeList.push(touristGroupFeeJson);
 				});
