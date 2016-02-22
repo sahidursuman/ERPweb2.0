@@ -419,10 +419,10 @@ table tr td {
     margin-top: 20px;
 }
 
+
 .mar-t-10 {
     margin-top: 10px;
 }
-
 
 .mar-l-10 {
     margin-left: 10px;
@@ -1188,6 +1188,10 @@ select {
     width: 260px;
 }
 
+.font-w{
+     color: #576373;
+    font-weight: bold !important;
+}
 
 /*中转分段*/
 
@@ -1675,6 +1679,14 @@ p#back-top a span {
 .group-info .form-group {
     margin-right: 25px;
 }
+.requirementsPlan{
+     font-weight:bold;
+     color: #576373;
+     background-color:#EFEFEF;
+     padding: 8px 5px 8px 5px;width: auto; 
+     border-radius: 3px;
+}
+
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
