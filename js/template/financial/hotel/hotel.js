@@ -60,9 +60,17 @@ define(function(require, exports) {
                     hotel.hotelList = data.hotelNameList;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"酒店账务",html);
-
+                    hotel.$tab = $('#tab-' + menuKey + "-content");
+                    hotel.$searchArea = hotel.$tab.find('.T-search-area');
                     hotel.initList(startDate,endDate);
-
+                    //获取合计数据
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    hotel.getSumMoney(sumMoneyData,hotel.$tab);
                     // 绑定翻页组件
 					laypage({
 					    cont: hotel.$tab.find('.T-pagenation'),
@@ -78,10 +86,15 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取合计金额
+    hotel.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     hotel.initList = function(startDate,endDate){
-    	hotel.$tab = $('#tab-' + menuKey + "-content");
-        hotel.$searchArea = hotel.$tab.find('.T-search-area');
+    	
 
         hotel.getQueryList();
         Tools.setDatePicker(hotel.$tab.find(".date-picker"),true);

@@ -85,7 +85,8 @@ define(function(require, exports) {
 
         restaurant.getQueryList();
         Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
-
+        //获取金额合计数据
+        restaurant.getSumMoney(args,restaurant.$tab);
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
@@ -109,7 +110,20 @@ define(function(require, exports) {
             }
         });
     };
+    //获取金额合计
+    restaurant.getSumMoney = function(args,tab_id){
+        $.ajax({
+            url:KingServices.build_url(),
+            data:args,
+            type:'POST',
+            showLoading:false,
+            success:function(data){
+                if(showDialog(data)){
 
+                }
+            }
+        });
+    };
     //对账
     restaurant.restaurantCheck = function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
         if (restaurant.$checkSearchArea && arguments.length === 3) {

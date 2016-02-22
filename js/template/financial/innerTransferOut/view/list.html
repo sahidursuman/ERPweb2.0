@@ -12,71 +12,93 @@
             <button class="marginLeft-30 btn-sm search-btn T-search" style="margin-top:2px;"> <i class="ace-icon fa fa-search"></i> 搜索 </button> 
         </div>
     </div>
+</div>
+<div class="form-inline T-sum-area">
+    <div class="form-group">
+        <label class="control-label">总人数合计：</label>
+        <label class="control-label F-float F-count T-sumCount"></label>
     </div>
-    <div class="row innerTransferOutList">
-        <div class="col-xs-12">
-            <table class="table table-striped table-bordered table-hover T-showHighLight">
-                <thead>
-                <tr class="bg-blur">
-                    <th>部门</th>
-                    <th>总人数</th>
-                    <th>内转应付</th>
-                    <th>结算金额</th>
-                    <th>已付金额</th>
-                    <th>未付金额</th>
-                    <th>对账进度</th>
-                    <th>付款进度</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody class="T-innerTransferOutList">
-                {{each list as innerTransferOut}}
-                <tr businessGroupId="{{innerTransferOut.businessGroupId}}" businessGroupName="{{innerTransferOut.businessGroupName}}" endDate="{{endDate}}" startDate="{{startDate}}">
-                    <td>{{innerTransferOut.businessGroupName}}</td>
-                    <td><span class="F-float F-count">{{innerTransferOut.sumTransAdultCount}}</span>大
-                        <span class="F-float F-count">{{innerTransferOut.sumTransChildCount}}</span>小
-                    </td>
-                    <td><span class="F-float F-money">{{innerTransferOut.sumTransNeedPayMoney}}</span></td>
-                    <td><span class="F-float F-money">{{innerTransferOut.sumSettlementMoney}}</span></td>
-                    <td><span class="F-float F-money">{{innerTransferOut.sumPayedMoney}}</span></td>
-                    <td><span class="F-float F-money" style="color:#FF0000">{{innerTransferOut.sumUnPayedMoney}}</span></td>
-                     <td >
-                        {{if innerTransferOut.checkFCount != innerTransferOut.sumFCount}}
-                        <span style="color:#ff9900">{{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
-                          {{else}}
-                          <span style="color:#00CC00"> {{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
-                        {{/if}}
-                    </td>
-                   
-                    <td >
-                        {{if innerTransferOut.payFCount != innerTransferOut.sumFCount}}
-                          <span style="color:#ff9900"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
-                          {{else}}
-                          <span style="color:#00CC00"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
-                        {{/if}}
-                    </td>
-                    <td>
-                        <a class="cursor T-action T-check R-right" data-right="1370001">
-                                对账
-                        </a>
-                        <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
-                        <a class="cursor T-action T-balance R-right" data-right="1370002">
-                                付款
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
-            <div class="row pageMode">
-                <div class="col-xs-6">
-                    <small>共计 {{recordSize}} 条记录</small>
-                </div>
-                <div class="col-xs-6">
-                    <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-                    </div>
+    <div class="form-group marginLeft-30">
+        <label class="control-label">内转转出合计：</label>
+        <label class="control-label F-float F-money T-sumContractMoney"></label>
+    </div>
+    <div class="form-group marginLeft-30">
+        <label class="control-label">结算金额合计：</label>
+        <label class="control-label F-float F-money T-sumStMoney"></label>
+    </div>
+    <div class="form-group marginLeft-30">
+        <label class="control-label">已付金额合计：</label>
+        <label class="control-label F-float F-money T-sumReceiveMoney"></label>
+    </div>
+    <div class="form-group marginLeft-30">
+        <label class="control-label">未付金额合计：</label>
+        <label class="control-label F-float F-money T-sumUnReceivedMoney"></label>
+    </div>
+</div>
+<div class="row innerTransferOutList">
+    <div class="col-xs-12">
+        <table class="table table-striped table-bordered table-hover T-showHighLight">
+            <thead>
+            <tr class="bg-blur">
+                <th>部门</th>
+                <th>总人数</th>
+                <th>内转应付</th>
+                <th>结算金额</th>
+                <th>已付金额</th>
+                <th>未付金额</th>
+                <th>对账进度</th>
+                <th>付款进度</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="T-innerTransferOutList">
+            {{each list as innerTransferOut}}
+            <tr businessGroupId="{{innerTransferOut.businessGroupId}}" businessGroupName="{{innerTransferOut.businessGroupName}}" endDate="{{endDate}}" startDate="{{startDate}}">
+                <td>{{innerTransferOut.businessGroupName}}</td>
+                <td><span class="F-float F-count">{{innerTransferOut.sumTransAdultCount}}</span>大
+                    <span class="F-float F-count">{{innerTransferOut.sumTransChildCount}}</span>小
+                </td>
+                <td><span class="F-float F-money">{{innerTransferOut.sumTransNeedPayMoney}}</span></td>
+                <td><span class="F-float F-money">{{innerTransferOut.sumSettlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{innerTransferOut.sumPayedMoney}}</span></td>
+                <td><span class="F-float F-money" style="color:#FF0000">{{innerTransferOut.sumUnPayedMoney}}</span></td>
+                 <td >
+                    {{if innerTransferOut.checkFCount != innerTransferOut.sumFCount}}
+                    <span style="color:#ff9900">{{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
+                      {{else}}
+                      <span style="color:#00CC00"> {{innerTransferOut.checkFCount}}/{{innerTransferOut.sumFCount}}</span>
+                    {{/if}}
+                </td>
+               
+                <td >
+                    {{if innerTransferOut.payFCount != innerTransferOut.sumFCount}}
+                      <span style="color:#ff9900"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
+                      {{else}}
+                      <span style="color:#00CC00"> {{innerTransferOut.payFCount}}/{{innerTransferOut.sumFCount}}</span>
+                    {{/if}}
+                </td>
+                <td>
+                    <a class="cursor T-action T-check R-right" data-right="1370001">
+                            对账
+                    </a>
+                    <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
+                    <a class="cursor T-action T-balance R-right" data-right="1370002">
+                            付款
+                    </a>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="row pageMode">
+            <div class="col-xs-6">
+                <small>共计 {{recordSize}} 条记录</small>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers T-pagenation">
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
