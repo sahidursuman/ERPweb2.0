@@ -75,6 +75,8 @@ define(function(require,exports) {
 						InnerTransferOut.inieEvent($tabId);
 						//获取搜索框的数据
 						InnerTransferOut.getToBusinessGroupName(InnerTransferOut.$searchArea,data.searchParam);
+						//获取合计数据
+						InnerTransferOut.getSumMoney(data.sumFinancialInnerTransferOutList[0],InnerTransferOut.$tab);
 						//绑定翻页组件
 						laypage({
 						cont:InnerTransferOut.$tab.find(".T-pagenation"),
@@ -89,6 +91,15 @@ define(function(require,exports) {
 				}
 			}
 		});
+	};
+	//获取合计金额
+	InnerTransferOut.getSumMoney = function(data,tabId){
+		var totalPeople = data.sumAllTransAdultCount+data.sumAllTransChildCount;
+		tabId.find('.T-sumCount').text(totalPeople);
+        tabId.find('.T-sumInnerOutMoney').text(data.sumAllTransNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.sumAllSettlementMoney);
+        tabId.find('.T-sumPaiedMoney').text(data.sumAllPayedMoney);
+        tabId.find('.T-sumUnPaiedMoney').text(data.sumAllUnPayedMoney);
 	};
 	//list页面事件
 	InnerTransferOut.inieEvent = function($obj){
