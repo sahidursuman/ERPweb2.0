@@ -26,6 +26,7 @@ define(function(require, exports) {
 			FinIncome.initEvent();
 		}
 
+		FinIncome.currentType = 0;
 		FinIncome.getList();
 	};
 
