@@ -204,7 +204,7 @@
                             <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
                         </tr>
                     {{/each}}
-                {{else rs.detailList.otherFee.otherFeeList.length > 0}}
+                {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
                     <tr><td>{{each rs.detailList.otherFee.otherFeeList as of}}
                             {{of.name}}：
                             <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x

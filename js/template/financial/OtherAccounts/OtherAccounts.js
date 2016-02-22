@@ -66,13 +66,7 @@ define(function(require, exports) {
                     });
                     //时间控件
                     var $container = $(".T-other");
-                    $container.find(".T-time").datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        format: 'yyyy-mm-dd',
-                        language: 'zh-CN'
-                    });
-
+                    Tools.setDatePicker($container.find(".T-time"),true);
                 }
             }
         })

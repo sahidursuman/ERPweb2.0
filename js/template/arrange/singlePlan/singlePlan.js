@@ -235,7 +235,7 @@ define(function(require, exports) {
 	}
 
 	//新增计划
-	singlePlan.addTripPlan = function(planType, args, groupIds){
+	singlePlan.addTripPlan = function(planType, args, groupIds, isInnerSinglePlan){
 		var tabKey = menuKey + "_single_add";
         if(!args){
         	args = {}
@@ -245,7 +245,7 @@ define(function(require, exports) {
 
         if (Tools.addTab(tabKey, "新增散客计划", addSingleTripPlanTemplate(args))) {
         	var $tab = $("#tab-" + tabKey + "-content");
-            singlePlan.initSigleEvent($tab) 
+            singlePlan.initSigleEvent($tab, isInnerSinglePlan) 
             if(!$.isEmptyObject(args)) {
             	args.mergeTouristGroupIdJson = groupIds;
             	singlePlan.initNormalLineProduct($tab, args.id);
@@ -527,7 +527,7 @@ define(function(require, exports) {
 	 * @param  {int} id 计划ID
 	 * @return {[type]}    [description]
 	 */
-	singlePlan.updateSingleTripPlan = function(id, groupIds) {
+	singlePlan.updateSingleTripPlan = function(id, groupIds, isInnerSinglePlan) {
 		if (!!id) {
 			$.ajax({
 				url: KingServices.build_url('tripController', 'editTripPlan'),
@@ -549,7 +549,7 @@ define(function(require, exports) {
 					
 					if (Tools.addTab(tabKey, '编辑散客计划', updateSingleTripPlanTemplate(data))) {
 						var $tab = $("#tab-" + tabKey + "-content");
-	            		singlePlan.initSigleEvent($tab) 
+	            		singlePlan.initSigleEvent($tab, isInnerSinglePlan) 
 			            if(!$.isEmptyObject(groupIds)) {
 			            	singlePlan.getTouristGroup({mergeTouristGroupIdJson:groupIds}, $tab);
 			            }
@@ -608,7 +608,7 @@ define(function(require, exports) {
 		}
 	};
 
-	singlePlan.initSigleEvent = function($tab) {
+	singlePlan.initSigleEvent = function($tab,isInnerSinglePlan) {
 		var validate = singlePlan.bindCommonEvent($tab, 0);
         //搜索线路
     	$tab.find(".T-search-line").on('click', function(){
@@ -640,7 +640,7 @@ define(function(require, exports) {
     	// 保存
     	$tab.find('.T-savePlan').on('click', function(event) {
     		event.preventDefault();
-    		singlePlan.saveSinglePlan($tab, validate);
+    		singlePlan.saveSinglePlan($tab, validate, isInnerSinglePlan);
     	});
 	};
 	singlePlan.jsonToString = function(jTs) {
@@ -654,7 +654,7 @@ define(function(require, exports) {
 	 * @param  {object} $tab 父容器
 	 * @return {[type]}      [description]
 	 */
-	singlePlan.saveSinglePlan = function($tab, validate, tabArgs) {
+	singlePlan.saveSinglePlan = function($tab, validate, tabArgs,isInnerSinglePlan) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
 		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
@@ -713,6 +713,12 @@ define(function(require, exports) {
 							singlePlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
 						}
 					}
+
+					//散客拼团
+					if(!isInnerSinglePlan){
+						$('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+					}
+					
 				});				
 			}
 		});
