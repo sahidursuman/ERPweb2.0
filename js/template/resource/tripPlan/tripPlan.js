@@ -3349,6 +3349,11 @@ define(function(require, exports) {
 							module.listTripPlanGroup(0, $("#tab-arrange_plan-content"));
 						});
 					}
+					if (!!$("#tab-arrange_singleplan-content")) {
+						seajs.use("" + ASSETS_ROOT + modalScripts.arrange_singlePlan,function(module){
+							module.listTripPlanSingle(0, $("#tab-arrange_singleplan-content"));
+						});
+					}
 
 					Tools.refreshTab($tab.find('.T-tab-id').text());
 
