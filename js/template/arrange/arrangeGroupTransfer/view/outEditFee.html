@@ -76,15 +76,15 @@
 										</td>   
 										
 										<td>
-											<input name="count" value="{{if subsection==0}}{{transferList.count}}{{/if}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count" />
+											<input name="count" value="{{transferList.count}}" type="text" class="col-sm-12  no-padding-right count T-count T-calc F-float F-count" />
 										</td>
 										<td>
-											<input name="price" value="{{if subsection==0}}{{transferList.price}}{{/if}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc F-float F-money" />
+											<input name="price" value="{{transferList.price}}" type="text" class="col-sm-12  no-padding-right price  T-price T-calc F-float F-money" />
 										</td>
 								
 
 										<td>
-										<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money" />
+										<input name="payMoney" value="{{transferList.count*transferList.price}}" readonly="readonly" type="text" class="col-sm-12  no-padding-right T-payMoney F-float F-money" />
 										</td>
 										<td>
 											<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-12  no-padding-right" />
