@@ -315,10 +315,10 @@ define(function(require, exports) {
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('change', '.T-calc', function(event) {
            var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
 	            if ($that.hasClass('T-count')) {  //若数量改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	        };
         });
@@ -575,21 +575,18 @@ define(function(require, exports) {
      * @return {[type]} 
      */
     subsection.totalPayMoney =function($tr,tdIndex){
-    	var totalPayMoney = 0;
-	    	$tr.each(function() {
-	    		var $_that = $(this),$countTr = $_that.find('.T-count'),payMoney=0;
-	    		$countTr.each(function(index) {
-	    			if(index <= tdIndex ){
-	    				var count = $(this).closest('tr').find(".T-count-" + index).val(),
-					        price = $(this).closest('tr').find(".T-price-" + index).val();
+    	var totalPayMoney = 0, $countTr = $tr.find('.T-count'), $priceTr = $tr.find('.T-price');
+    	    for (var i = 0; i < $countTr.length; i++) {
+    	    	for (var j = 0; j < $priceTr.length; j++) {
+    	    		if (i==j) {
+    	    			var count = $countTr.eq(i).val(),
+					        price = $priceTr.eq(j).val();
 					    if (!isNaN(count) && !isNaN(price)) {
 					    	totalPayMoney +=count*price;
 					    };
-					   
-	    			}
-				    
-			    });
-	    	});
+    	    		};
+    	    	};
+    	    };
     	return totalPayMoney;
     };
 
