@@ -605,7 +605,7 @@ define(function(require, exports) {
 		}
 	};
 
-	singlePlan.initSigleEvent = function($tab,isInnerSinglePlan,args,groupIds) {
+	singlePlan.initSigleEvent = function($tab,isInnerSinglePlan) {
 		var validate = singlePlan.bindCommonEvent($tab, 0);
         //搜索线路
     	$tab.find(".T-search-line").on('click', function(){
