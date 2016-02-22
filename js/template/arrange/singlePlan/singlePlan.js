@@ -242,15 +242,12 @@ define(function(require, exports) {
         }else{
         	args.endTime = Tools.addDay(args.startTime, args.days);
         }
+        args.groupIds = JSON.stringify(groupIds);
+        args.args = JSON.stringify(args);
 
         if (Tools.addTab(tabKey, "新增散客计划", addSingleTripPlanTemplate(args))) {
         	var $tab = $("#tab-" + tabKey + "-content");
             singlePlan.initSigleEvent($tab, isInnerSinglePlan) 
-            if(!$.isEmptyObject(args)) {
-            	args.mergeTouristGroupIdJson = groupIds;
-            	singlePlan.initNormalLineProduct($tab, args.id);
-            	singlePlan.getTouristGroup(args, $tab);
-            }
         }
 	};
 
@@ -642,6 +639,15 @@ define(function(require, exports) {
     		event.preventDefault();
     		singlePlan.saveSinglePlan($tab, validate, isInnerSinglePlan);
     	});
+
+    	var args = $tab.find('[name=args]').data('val'),
+    		groupIds = $tab.find('[name=groupIds]').data('val');
+
+        if(!$.isEmptyObject(args)) {
+        	args.mergeTouristGroupIdJson = groupIds;
+        	singlePlan.initNormalLineProduct($tab, args.id);
+        	singlePlan.getTouristGroup(args, $tab);
+        }
 	};
 	singlePlan.jsonToString = function(jTs) {
 		if (typeof jTs != 'string') {
@@ -1814,4 +1820,5 @@ define(function(require, exports) {
 	//散客发团计划编辑
 	exports.updateSingleTripPlan = singlePlan.updateSingleTripPlan;
 	exports.addTripPlan = singlePlan.addTripPlan;
+	exports.listTripPlanSingle = singlePlan.listTripPlanSingle;
 });
