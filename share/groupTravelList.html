@@ -235,10 +235,23 @@
 			border-top: 1px solid #dfdfdf;
 			padding: 10px 0;
 		}
+		.company-logo{
+			padding: 10px 10px 0 10px;
+		}
+ 		.company-logo img{
+ 			display: block;
+ 			width: auto;
+ 			height: auto;
+ 			max-width: 80px;
+ 		}
 	</style>
 </head>
-<body>
+<body> 
 	<div class="hct-top-header">
+ 		<div class="col-xs-12">
+ 			<div class="company-logo T-companyLogo">
+ 			</div>
+ 		</div>
 		<div class="col-xs-12">
 			<div class="line-name"></div>
 			<div class="line-info">
@@ -301,6 +314,7 @@
 								$(".sumCommentCount").text(data.lineProduct.sumCommentCount);
 								$(".sumShareCount").text(data.lineProduct.sumShareCount);
 								$(".sumViewCount").text(data.lineProduct.sumViewCount);
+								$(".T-companyLogo").html('<img src="'+imgUrl + data.companyLogo +'" alt="'+data.travelAgencyName+'">');
 								setShare(data.lineProduct.name);
 							}
 							var images = [];
