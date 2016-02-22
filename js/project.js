@@ -1865,7 +1865,7 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
 
     // 设置起始控制
     if (isInputRange && $obj.length === 2) {
-        $obj.eq(0).on('changeDate', function(event) {
+        var $first = $obj.eq(0).on('changeDate', function(event) {
              event.preventDefault();
              var start = $(this).val();
          	 if(options.moreDay && start != ""){
@@ -1876,7 +1876,11 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
              if ($end.val() < start) {
                  $end.val(start);
              }
-         }).trigger('changeDate');
+         });
+
+        if (!!$first.val()) {
+        	$first.trigger('changeDate');
+        }
     }
 
     return $obj;
