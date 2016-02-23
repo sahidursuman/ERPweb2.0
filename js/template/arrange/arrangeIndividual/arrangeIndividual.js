@@ -257,8 +257,7 @@ define(function(require, exports) {
      */
     arrangeIndividual.mergenTripPlan = function() {
         var $mergenTripPlan = $("#mergenTripPlan"),
-            $data = arrangeIndividual.touristGroupMergeData.touristGroupMergeList;
-
+            $data = arrangeIndividual.touristGroupMergeData;
         //散客拼团,选择多个相同线路产品的游客小组，进行拼团时，若【线路产品】、【类别】、【天数】、【出游日期】均相同则只显示一条
         //[days: "3"lineProductId: "133"lineProductName: "天府广场三日游"lineProductType: "精品"startTime: "2016-02-25"touristGroupId: 12919],[]
         function uniqueArrJson(arr){
@@ -278,7 +277,7 @@ define(function(require, exports) {
             }
             return res;
         }
-        $data = uniqueArrJson($data);
+        $data.touristGroupMergeList = uniqueArrJson(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
         if (!!$data.touristGroupMergeList && $data.touristGroupMergeList.length > 0) {
             var html = chooseMergeTemplate($data);
             $mergenTripPlan.find('.T-mergenTripPlan-Content').html(html);
