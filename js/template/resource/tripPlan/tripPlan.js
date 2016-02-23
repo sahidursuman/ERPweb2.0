@@ -3426,12 +3426,33 @@ define(function(require, exports) {
 				isThere = 1;
 				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
 				var $container = $("#"+menukeyId);
-				if (!!target) {
+				/*if (!!target) {
 					if (target == "T-hotel") {
 						$container.find('.T-hotelTarget').trigger('click');
 					}else if (target == "T-bus") {
 						$container.find('.T-busTarget').trigger('click');
+					}else {
+						$target = $nav.find('[href='+ target +']');
 					}
+				}*/
+				// 激活第一个菜单
+				var $nav = quoteContent.find('.T-arrange-tabs'), $target;
+				if (!!target) {
+					if (target == 'T-bus') {
+						$target = $tab.find('.T-busTarget');
+					}else if (target == 'T-hotel') {
+						$target = $tab.find('.T-hotelTarget');
+					} else {
+						$target = $nav.find('[href='+ target +']');
+					}
+				}
+				if (!$target || !$target.length) {
+					$target = $nav.find('a').eq(0);
+				}
+				$target.trigger('click');
+				if (!$nav.find('.active').length) {
+
+					$nav.find('a').eq(0).trigger('click');
 				}
 			}
 		})
