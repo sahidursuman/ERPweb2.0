@@ -49,7 +49,14 @@ define(function(require, exports) {
 				Ticket.$tab = $tab || $("#tab-"+menuKey+"-content");
 				//绑定事件
 				Ticket.init_event(Ticket.$tab);
-
+				//获取合计数据
+				var sumMoneyData = {
+                    settlementMoneySum:data.settlementMoneySum,
+                    unPayedMoneySum:data.unPayedMoneySum,
+                    payedMoneySum:data.payedMoneySum,
+                    needPayMoneySum:data.needPayMoneySum
+                };
+                Ticket.getSumMoney(sumMoneyData,Ticket.$tab);
 				// 绑定翻页组件
 				laypage({
 				    cont: Ticket.$tab.find('.T-pagenation'), 
@@ -64,7 +71,13 @@ define(function(require, exports) {
 			}
 		});
 	};
-
+	//获取合计金额
+    Ticket.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
 	Ticket.init_event = function($tab){
 		/**
 		 * 搜索顶部的事件绑定

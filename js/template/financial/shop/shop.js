@@ -55,6 +55,8 @@ define(function(require, exports){
 				// 绑定事件
 				FinShop.$tab = $tab = $('#tab-' + menuKey + '-content');
 				FinShop.init_event($tab);
+				//获取合计金额
+				FinShop.getSumMoney(args,$tab);
 				// 缓存页面
 				FinShop.listPageNo = args.pageNo;
 				// 绑定翻页组件
@@ -71,7 +73,24 @@ define(function(require, exports){
 			}
 		});
 	};
-
+	//获取合计金额
+	FinShop.getSumMoney = function(args,tabId){
+		$.ajax({
+			url:KingServices.build_url('financial/shopAccount', 'listPagerTotal'),
+			data:args,
+			type:"POST",
+			success:function(data){
+				if(showDialog(data)){
+	                tabId.find('.T-sumCount').text(data.sumCount);
+	                tabId.find('.T-sumOrderMoney').text(data.sumContractMoney);
+	                tabId.find('.T-sumContractMoney').text(data.sumRebateMoney);
+	                tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
+	                tabId.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+	                tabId.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+	            }
+			}
+		});
+	};
 	/**
 	 * 初始化列表页面的事件绑定
 	 */
