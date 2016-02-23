@@ -28,6 +28,7 @@ define(function(require, exports) {
 			FinPay.initEvent();
 		}
 
+		FinPay.currentType = 0;
 		FinPay.getList();
 	};
 

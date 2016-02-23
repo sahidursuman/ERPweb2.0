@@ -499,7 +499,7 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="price"){
+			if($nameFlag != "billRemark"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额

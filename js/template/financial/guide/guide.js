@@ -323,7 +323,7 @@ define(function(require, exports) {
             FinancialService.updateSumPayMoney($tab, validator);
             FinancialService.initPayEvent($tab.find('.T-summary'));
         } else {
-            FinancialService.updateUnpayMoney($tab, validator);
+            FinancialService.updateUnpayMoney($tab, new FinRule(0));
             $searchArea.find('.T-btn-export').on('click', function(event) {
                 event.preventDefault();
                 var $btn = $tab.find('.T-saveClear'),
@@ -597,7 +597,7 @@ define(function(require, exports) {
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
                         }
-                        $tab.find('.T-checkList').html(html);
+                        var $tbody = $tab.find('.T-checkList').html(html);
 
                         if (!type) {
                             //给全选按钮绑定事件: 未去重
@@ -618,6 +618,17 @@ define(function(require, exports) {
                                 }
                             }
                         });
+
+                        // 当存在预支款时，触发change，以便可直接保存
+                        if ($tab.find('.T-saveClear').data('borrow') === 'borrow') {
+                            $tbody.find('input[name="payMoney"]').each(function() {
+                                var $that = $(this);
+
+                                if (!!$that.val())  {
+                                    $that.trigger('change');
+                                }
+                            });
+                        }
                     }
                 });
 

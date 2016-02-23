@@ -1751,8 +1751,7 @@ $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
 })
 .on('focusout.format-float.api', 'input.F-float', function(event) {
 	if ($(this).data('old-value-format-float.api') !== this.value
-		&& !!this.value && this.value.split(',').length > 1
-		&& navigator.userAgent.toUpperCase().indexOf("FIREFOX") < 0) {
+		&& !!this.value && navigator.userAgent.toUpperCase().indexOf("FIREFOX") < 0) {
 		// 处理千分位存在时丢失change事件的问题
 		console.info('change')
 		$(this).trigger('change');
@@ -1866,7 +1865,7 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
 
     // 设置起始控制
     if (isInputRange && $obj.length === 2) {
-        $obj.eq(0).on('changeDate', function(event) {
+        var $first = $obj.eq(0).on('changeDate', function(event) {
              event.preventDefault();
              var start = $(this).val();
          	 if(options.moreDay && start != ""){
@@ -1877,7 +1876,11 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
              if ($end.val() < start) {
                  $end.val(start);
              }
-         }).trigger('changeDate');
+         });
+
+        if (!!$first.val()) {
+        	$first.trigger('changeDate');
+        }
     }
 
     return $obj;
