@@ -618,6 +618,14 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-delete')){
     			var id = $that.closest('tr').data('id');
 
+    			function removeDay() {
+    				$that.closest('tr').remove();
+    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
+    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
+    				if(whichDay == lenWhichDay){
+	    				F.arrangeDate($tab);
+    				}
+    			}
     			if (!!id) {
     				showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
     					$.ajax({
@@ -637,14 +645,6 @@ define(function(require, exports) {
     				removeDay();
     			}
 
-    			function removeDay() {
-    				$that.closest('tr').remove();
-    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
-    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
-    				if(whichDay == lenWhichDay){
-	    				F.arrangeDate($tab);
-    				}
-    			}
     		}else if($that.hasClass('T-scenicItem')){
     			KingServices.chooseScenic($that);
     		}
