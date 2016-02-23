@@ -72,10 +72,19 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 data.guideName = data.guideName || '全部';
                 Tools.addTab(menuKey, "导游账务", listTemplate(data));
+                FinGuide.$tab = $('#tab-' + menuKey + '-content');
                 // 绑定事件
                 FinGuide.init_event();
                 // 缓存页面
                 FinGuide.listPageNo = args.pageNo;
+                //获取合计数据
+                var sumMoneyData = {
+                    carryingOutSum:data.carryingOutSum,
+                    settlementMoneySum:data.settlementMoneySum,
+                    payedMoneySum:data.payedMoneySum,
+                    unPayedMoneySum:data.unPayedMoneySum
+                };
+                FinGuide.getSumMoney(sumMoneyData,FinGuide.$tab);
                 // 绑定翻页组件
                 laypage({
                     cont: FinGuide.$tab.find('.T-pagenation'),
@@ -90,12 +99,18 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取合计金额
+    FinGuide.getSumMoney = function(data,tabId){
+        tabId.find('.T-carryingOutSum').text(data.carryingOutSum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     /**
      * 初始化列表页面的事件绑定
      */
     FinGuide.init_event = function() {
-        FinGuide.$tab = $('#tab-' + menuKey + '-content');
+        
         //搜索顶部的事件绑定
         var $searchArea = FinGuide.$tab.find('.T-search-area'),
             $datepicker = $searchArea.find('.datepicker');

@@ -61,8 +61,16 @@ define(function(require, exports) {
                     restaurant.restaurantList = data.restaurantNameList;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"餐厅账务",html);
-
+                    restaurant.$tab = $('#tab-' + menuKey + "-content");
+                    restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
                     restaurant.initList(startDate,endDate);
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    restaurant.getSumMoney(sumMoneyData,restaurant.$tab);
                     // 绑定翻页组件
                     laypage({
                         cont: restaurant.$tab.find('.T-pagenation'),
@@ -78,14 +86,18 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取合计金额
+    restaurant.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     restaurant.initList = function(startDate,endDate){
-        restaurant.$tab = $('#tab-' + menuKey + "-content");
-        restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
+        
 
         restaurant.getQueryList();
         Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
-
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
@@ -109,7 +121,6 @@ define(function(require, exports) {
             }
         });
     };
-
     //对账
     restaurant.restaurantCheck = function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
         if (restaurant.$checkSearchArea && arguments.length === 3) {

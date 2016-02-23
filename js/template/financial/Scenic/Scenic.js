@@ -61,9 +61,16 @@ define(function(require, exports) {
                     data.searchParam.scenicName = scenicName || '全部';
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"景区账务",html);
-
+                    scenic.$tab = $('#tab-' + menuKey + "-content");
+                    scenic.$searchArea = scenic.$tab.find('.T-search-area');
                     scenic.initList(startDate,endDate);
-
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    scenic.getSumMoney(sumMoneyData,scenic.$tab);
                     // 绑定翻页组件
 					laypage({
 					    cont: scenic.$tab.find('.T-pagenation'),
@@ -79,10 +86,15 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取合计金额
+    scenic.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     scenic.initList = function(startDate,endDate){
-    	scenic.$tab = $('#tab-' + menuKey + "-content");
-        scenic.$searchArea = scenic.$tab.find('.T-search-area');
+    	
 
         scenic.getQueryList();
         Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);

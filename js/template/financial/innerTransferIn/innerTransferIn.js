@@ -72,6 +72,7 @@ define(function(require,exports) {
 							InnerTransferIn.$searchArea = $tabId.find(".T-search-area");
 						//获取搜索框的数据
 						InnerTransferIn.getToBusinessGroupName(InnerTransferIn.$searchArea,data.searchParam);
+						InnerTransferIn.getSumMoney(data.sumInnerTransferIncomeList[0],InnerTransferIn.$tab);
 						//页面操作事件
 						InnerTransferIn.inieEvent($tabId);
 						//绑定翻页组件
@@ -89,6 +90,16 @@ define(function(require,exports) {
 			}
 		});
 	};
+	//获取合计金额
+	InnerTransferIn.getSumMoney = function(data,tabId){
+		var totalPeople = data.sumChildCount+data.sumAdultCount;
+		tabId.find('.T-sumCount').text(totalPeople);
+        tabId.find('.T-sumInnerInMoney').text(data.sumTransNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
+        tabId.find('.T-sumReceiveMoney').text(data.sumAlreadyIncomeMoney);
+        tabId.find('.T-sumUnReceivedMoney').text(data.sumUnIncomeMoney);
+	};
+	
 	//list页面事件
 	InnerTransferIn.inieEvent = function($obj){
 		//格式化日期控件
