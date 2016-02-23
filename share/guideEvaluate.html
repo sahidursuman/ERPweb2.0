@@ -32,6 +32,15 @@
 			color: #313131;
 			font-weight: normal;
 		}
+		.company-logo{
+			padding: 10px 10px 0 10px;
+		}
+		.company-logo img{
+			display: block;
+			width: auto;
+			height: auto;
+			max-width: 80px;
+		}
 	</style>
 </head>
 <body>
@@ -39,6 +48,11 @@
 </div>
 <script id="guideEvaluation" type="text/html">
 	<div class="row hct-top-header">
+		<div class="col-xs-12">
+			<div class="company-logo T-companyLogo">
+				<img src="{{companyLogo}}" alt="{{travelAgencyName}}">
+			</div>
+		</div>
 		<div class="col-xs-12 yj-title">
 			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
 			<label class="control-label mar-l-10">{{note.title}}</label>
