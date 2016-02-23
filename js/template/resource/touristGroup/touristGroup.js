@@ -655,9 +655,11 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
-            if (!!startTime) {
+            if (!!startTime && !!$obj.find('.T-days').val()) {
                 $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-days').val() - 1));
-            };
+            }else{
+                $row.find('.T-endTime').val(Tools.addDay(startTime, 0));
+            }
                
         });
 
