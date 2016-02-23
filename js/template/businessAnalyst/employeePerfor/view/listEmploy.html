@@ -10,8 +10,8 @@
 	<thead>
 		<tr class="bg-blur">
 			<th class="col-sm-1">员工</th>
-			<th class="col-sm-2">收客量</th>
 			<th class="col-sm-1">发团量</th>
+			<th class="col-sm-2">发客量</th>
 			<th class="col-sm-1">外转客量</th>
 			<th class="col-sm-1">内转客量</th>
 			<th class="col-sm-2">代订单量</th>
@@ -21,14 +21,13 @@
 		{{each result as empL}}
 		   <tr>
 	   		    <td>{{empL.name}}</td>
+	   		    <td>{{empL.tripCount}}</td>
 	   			<td>{{empL.adultCount}}大{{empL.childCount}}小</td>
-	   			<td>{{empL.tripCount}}</td>
 	   			<td>{{empL.transAdultCount}}大{{empL.transChildCount}}小</td>
 	   		    <td>{{empL.innerAdultCount}}大{{empL.innerChildCount}}小</td>
 	   			<td>{{empL.orderCount}}</td>	
 		   	</tr>
 		{{/each}}
-
 	</tbody>
 </table>
 <div class="row pageMode">
