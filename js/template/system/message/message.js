@@ -70,7 +70,7 @@ define(function(require, exports) {
 					});
 
 					// read all
-					message.$tab.find('.T-set-read-all').on('click', function(event) {
+					message.$tab.find('.operation-area').off('click').on('click', '.T-set-read-all',function(event) {
 						event.preventDefault();
 						message.setReadAll();
 					});
