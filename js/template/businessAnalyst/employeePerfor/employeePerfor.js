@@ -74,8 +74,16 @@ define(function(require, exports) {
 		   	    type=employeePerforObj.$tab.find('button').attr('data-value'),
 		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
 		   	    partnerAgencyType = employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value');
-	   		employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
-
+		   	    opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
+		   	    if (type==1 && opUserType==0) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
+		   	    };
+		   	    if (type==1 && opUserType==1) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
+		   	    };
+		   	    if (type==2) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
+		   	    };
     	}); 	
     	//trigger事件
     	employeePerforObj.$tab.find('.T-employeePerfor-search').trigger('click');
@@ -122,8 +130,8 @@ define(function(require, exports) {
 			var isEmployee = $that.closest('div').prev('div').children('button').attr('data-value')
 				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
-			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').data('value');
+			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'),
+			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
 			if (isEmployee==1) {
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
@@ -156,9 +164,11 @@ define(function(require, exports) {
 			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
 				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
-			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value'),
-			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').data('value');
+			    partnerAgencyType=$that.data('value'),
+			    customerType=$that.data('value'),
+			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
+
+			console.info('isEmployee----'+isEmployee);
 			if (isEmployee==1) {
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
@@ -211,7 +221,7 @@ define(function(require, exports) {
 	
 	    	if (type==1) {
 	    		$.ajax({
-	    			url : KingServices.build_url("performanceOfUser","findTotal"),
+	    			url : KingServices.build_url("performanceOfUser","findUserPager"),
 					type : "POST",
 					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
 					success : function(data){

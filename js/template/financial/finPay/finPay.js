@@ -134,7 +134,8 @@ define(function(require, exports) {
 			case 9:  //其它账务
 				options.url = KingServices.build_url('account/arrangeOtherFinancial', 'listFinancialOther');
 				resArgs.name = args.name;
-
+				resArgs.startAccountTime = args.startDate;
+				resArgs.endAccountTime = args.endDate;
 				beJson = false;
 				break;
 			case 10:  //导游账务
