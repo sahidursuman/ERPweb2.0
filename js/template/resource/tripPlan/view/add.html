@@ -861,21 +861,27 @@
                                         <td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" /></td>
                                         <td>
                                             {{if !!shop.shopArrangeItemSet}}
-                                            {{if shop.shopArrangeItemSet.length > 0}}
-                                            {{each shop.shopArrangeItemSet as rs index}}
-                                            <div data-entity-id="{{rs.id}}" {{if index > 0}}class="mar-t-10"{{/if}}>
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
-                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}"/>
-                                            <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
-                                            </div>
-                                            {{/each}}
-                                            {{/if}}
+                                                {{if shop.shopArrangeItemSet.length > 0}}
+                                                {{each shop.shopArrangeItemSet as rs index}}
+                                                <div data-entity-id="{{rs.id}}" {{if index > 0}}class="mar-t-10"{{/if}}>
+                                                <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
+                                                <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}"/>
+                                                <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
+                                                </div>
+                                                {{/each}}
+                                                {{else}}
+                                                <div data-entity-id="">
+                                                <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                                <input type="hidden" name="shopPolicyId" value=""/>
+                                                <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                                </div>
+                                                {{/if}}
                                             {{else}}
-                                            <div data-entity-id="">
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
-                                            <input type="hidden" name="shopPolicyId" value=""/>
-                                            <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
-                                            </div>
+                                                <div data-entity-id="">
+                                                <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                                <input type="hidden" name="shopPolicyId" value=""/>
+                                                <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                                </div>
                                             {{/if}}
                                         </td>
                                         <td><input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500"/></td>
