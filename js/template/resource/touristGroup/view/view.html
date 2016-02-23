@@ -291,7 +291,7 @@
 						            </label>
 						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}
+						            {{if touristGroupDetail.outRemarkArrange.receiveTicketStatus!=0}}
 						            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
 						                <input type="checkbox" class="ace" checked disabled>
 						                <span class="lbl">票务</span>
@@ -316,6 +316,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
+						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
 							            <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -370,6 +371,7 @@
 					                    </div>
 					                    {{/if}}
 								     {{/each}}
+								     {{/if}}
 						            </div>
 						    </div>
 					    {{/if}}
@@ -438,8 +440,8 @@
 						                <span class="lbl">其他</span>
 						            </label>
 						            {{/if}}
-
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
 								       <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -466,6 +468,7 @@
 										        </div>
 										    </div>
 										</div>
+
 									      {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
 		                                    {{if send.requireType =='sendBus'}}
 			                                 <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
@@ -494,6 +497,7 @@
 						                    </div>
 						                    {{/if}}
 									    {{/each}}
+									    {{/if}}
 						            </div>
 						        </div>
 					    {{/if}}

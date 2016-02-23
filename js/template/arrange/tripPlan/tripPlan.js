@@ -376,6 +376,7 @@ define(function(require, exports) {
 				// 团队
 	        	var tabKey = menuKey + "_group_update";
 	        	data.touristGroup = JSON.parse(data.touristGroup);
+	        	data.isGuest = 1;
 	        	data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
 	        	data.isGuest = 1;
 	        	data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
@@ -401,6 +402,28 @@ define(function(require, exports) {
             	$(this).trigger('change').nextAll('[name="fromPartnerAgencyId"]').val(ui.item.id)
             	.closest('.T-tab').find('[name="contactRealname"]').val("")
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
+            	var $parent = $(this).closest('.T-basic-info');
+            	 $.ajax({
+                    url: KingServices.build_url("partnerAgency", "getContactListByPartnerAgencyId"),
+                    data: {
+                        partnerAgencyId: ui.item.id
+                    },
+                    showLoading: false,
+                    type: 'POST',
+                    success: function(data) {
+                        var result = showDialog(data);
+                        if (result) {
+                            var contactList = JSON.parse(data.partnerAgencyContactList);
+                            if (contactList != null && contactList.length) {
+                                for (var i = 0; i < contactList.length; i++) {
+                                    contactList[i].value = contactList[i].contactRealname + " - [" + contactList[i].contactMobileNumber + "]";
+                                }
+                            }
+                            $parent.find('[name=contactRealname]').val(contactList[0].value)
+                            $parent.find('[name=fromPartnerAgencyContactId]').val(contactList[0].id)
+                        }
+                    }
+                });
             }
         })
         $that.off('click').on('click', function() {
@@ -617,6 +640,14 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-delete')){
     			var id = $that.closest('tr').data('id');
 
+    			function removeDay() {
+    				$that.closest('tr').remove();
+    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
+    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
+    				if(whichDay == lenWhichDay){
+	    				F.arrangeDate($tab);
+    				}
+    			}
     			if (!!id) {
     				showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
     					$.ajax({
@@ -636,14 +667,6 @@ define(function(require, exports) {
     				removeDay();
     			}
 
-    			function removeDay() {
-    				$that.closest('tr').remove();
-    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
-    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
-    				if(whichDay == lenWhichDay){
-	    				F.arrangeDate($tab);
-    				}
-    			}
     		}else if($that.hasClass('T-scenicItem')){
     			KingServices.chooseScenic($that);
     		}
@@ -2032,4 +2055,5 @@ define(function(require, exports) {
 
 	exports.init = tripPlan.initModule;
 	exports.addTripPlan = tripPlan.addTripPlan;
+	exports.listTripPlanGroup = tripPlan.listTripPlanGroup;
 });

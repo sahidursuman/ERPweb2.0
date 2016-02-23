@@ -1615,6 +1615,7 @@ define(function(require, exports) {
 			var busJson = {//touristGroup.getArrangeTrValue(outBusTr.eq(i),""),
 				id : obj.eq(i).attr("data-entity-id"),
 				seatCount : transit.getArrangeTrValue(obj.eq(i),"seatCount"),
+				brand : transit.getArrangeTrValue(obj.eq(i),"busbrand"),
 				serviceType : transit.getArrangeTrValue(obj.eq(i),"serviceType"),
 				busCompanyId : transit.getArrangeTrValue(obj.eq(i),"busCompanyId"),
 				busId : transit.getArrangeTrValue(obj.eq(i),"busLicenseNumberId"),

@@ -273,7 +273,7 @@
 													<div class="scheduleContainer">
 														<h5 class="header">行程详情：</h5>
 														<script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
-															{{#travelLineDay.detail | decode}}
+															{{if travelLineDay.detail != null}}{{#travelLineDay.detail | decode}}{{/if}}
 														</script>
 													</div>
 												</div>

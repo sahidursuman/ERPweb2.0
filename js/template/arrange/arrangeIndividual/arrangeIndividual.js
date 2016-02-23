@@ -257,13 +257,33 @@ define(function(require, exports) {
      */
     arrangeIndividual.mergenTripPlan = function() {
         var $mergenTripPlan = $("#mergenTripPlan"),
-            $data = arrangeIndividual.touristGroupMergeData;
+            $data={
+                touristGroupMergeList:[]
+            };
+        //散客拼团,选择多个相同线路产品的游客小组，进行拼团时，若【线路产品】、【类别】、【天数】、【出游日期】均相同则只显示一条
+        function uniqueArrJson(arr){
+            var res = [arr[0]];
+            for(var i = 1; i < arr.length; i++){
+              var repeat = false;
+                  for(var j = 0; j < res.length; j++){
+                       if(arr[i].lineProductName===arr[j].lineProductName && arr[i].lineProductType===arr[j].lineProductType  
+                        && arr[i].days===arr[j].days && arr[i].startTime===arr[j].startTime){
+                            repeat = true;
+                            break;
+                       }
+                  }
+                  if(!repeat){
+                   res.push(arr[i]);
+                  }
+            }
+            return res;
+        }
+        $data.touristGroupMergeList = uniqueArrJson(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
         if (!!$data.touristGroupMergeList && $data.touristGroupMergeList.length > 0) {
             var html = chooseMergeTemplate($data);
             $mergenTripPlan.find('.T-mergenTripPlan-Content').html(html);
             arrangeIndividual.mergTripP_Event($mergenTripPlan);
         }
-
     };
 
 
@@ -301,6 +321,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var $chooseMergeTr = $chooseTipPlan.find(".T-chosenTrip-list").children('tr');
+            arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab,1);
             $chooseMergeTr.each(function(i) {
                 if ($chooseMergeTr.eq(i).find(".ridioCheck").is(":checked") == true) {
                     tripPlanId = $chooseMergeTr.eq(i).data("value");
@@ -352,7 +373,7 @@ define(function(require, exports) {
             var mergeDataList = arrangeIndividual.touristGroupMergeData.touristGroupMergeList,
                 mergeTouristGroupIdJson = [];
 
-
+            arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab,1);
             //组装游客小组Id
             if (mergeDataList.length > 0) {
                 for (var i = 0; i < mergeDataList.length; i++) {
@@ -494,7 +515,7 @@ define(function(require, exports) {
      * choosenAdultAndChildCount 已选人数的计算
      * @return {[type]} [description]
      */
-    arrangeIndividual.choosenAdultAndChildCount = function($tab) {
+    arrangeIndividual.choosenAdultAndChildCount = function($tab, merge) {
         var sumAdultCount = 0,
             sumChildCount = 0,
             $trList = $tab.find("tbody").children('tr');
@@ -506,6 +527,10 @@ define(function(require, exports) {
             }
         });
         $tab.find(".T-chosenAdultAndChildCount").text("大人" + sumAdultCount + "小孩" + sumChildCount + "");
+        //生成、选择计划清零操作
+        if (!!merge && merge==1) {
+            $tab.find(".T-chosenAdultAndChildCount").text("大人" + 0 + "小孩" + 0 + "");
+        };
     };
 
     /**

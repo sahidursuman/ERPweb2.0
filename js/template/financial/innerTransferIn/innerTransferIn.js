@@ -72,6 +72,7 @@ define(function(require,exports) {
 							InnerTransferIn.$searchArea = $tabId.find(".T-search-area");
 						//获取搜索框的数据
 						InnerTransferIn.getToBusinessGroupName(InnerTransferIn.$searchArea,data.searchParam);
+						InnerTransferIn.getSumMoney(data.sumInnerTransferIncomeList[0],InnerTransferIn.$tab);
 						//页面操作事件
 						InnerTransferIn.inieEvent($tabId);
 						//绑定翻页组件
@@ -89,6 +90,16 @@ define(function(require,exports) {
 			}
 		});
 	};
+	//获取合计金额
+	InnerTransferIn.getSumMoney = function(data,tabId){
+		var totalPeople = data.sumChildCount+data.sumAdultCount;
+		tabId.find('.T-sumCount').text(totalPeople);
+        tabId.find('.T-sumInnerInMoney').text(data.sumTransNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
+        tabId.find('.T-sumReceiveMoney').text(data.sumAlreadyIncomeMoney);
+        tabId.find('.T-sumUnReceivedMoney').text(data.sumUnIncomeMoney);
+	};
+	
 	//list页面事件
 	InnerTransferIn.inieEvent = function($obj){
 		//格式化日期控件
@@ -245,7 +256,7 @@ define(function(require,exports) {
                     		checkDisabled(fiList,checkTr,rightCode);
 						} else {
 							if(!!args.autoAccount && args.autoAccount == 1){
-								InnerTransferIn.$checkId.data("isEdited",true);
+								$checkId.data("isEdited",true);
 							}else{
 								InnerTransferIn.$checkId.data("isEdited",false);
 							};
@@ -393,7 +404,7 @@ define(function(require,exports) {
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
-		var $checkBoxList = $checkList.find('.innerTransferFinancial');
+		var $checkBoxList = $checkList.find('.T-checkbox');
 		FinancialService.initCheckBoxs($checkAll,$checkBoxList);
 		//查看游客小组
 		$obj.find('.'+$list).on('click','.T-seeGroup',function(event){
@@ -477,7 +488,7 @@ define(function(require,exports) {
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
         	if(typeFlag == 1){
-        		var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial'),
+        		var checkBoxList = $obj.find(".T-checkList").find('.T-checkbox'),
         		result = false,
         		unCheckList = [];
 	        	checkBoxList.each(function(i){
@@ -499,8 +510,6 @@ define(function(require,exports) {
         		Tools.closeTab(settleId);
         	}
         });
-
-        $obj.data('isEdited', false);
 	};
 
 	//自动计算本次收款金额

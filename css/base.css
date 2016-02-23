@@ -832,6 +832,9 @@ input.datepicker {
 	font-size: 16px;
 	padding-top: 20px;
 }
+.page-content{
+	overflow: hidden;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

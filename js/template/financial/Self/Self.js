@@ -57,8 +57,16 @@ define(function(require, exports) {
                 if (result) {
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
+                    Self.$tab = $('#' + tabId);
+                    Self.$searchArea = Self.$tab.find('.T-search-area');
                     Self.initList(startDate,endDate);
-
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    Self.getSumMoney(sumMoneyData,Self.$tab);
                     // 绑定翻页组件
                     laypage({
                         cont: Self.$tab.find('.T-pagenation'),
@@ -73,11 +81,17 @@ define(function(require, exports) {
                 }
             }
         });
-    }
+    };
+    //获取合计金额
+    Self.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     Self.initList = function(startDate,endDate) {
         // 初始化jQuery 对象
-        Self.$tab = $('#' + tabId);
-        Self.$searchArea = Self.$tab.find('.T-search-area');
+        
 
         Self.getQueryList();
         Tools.setDatePicker(Self.$tab.find(".date-picker"),true);

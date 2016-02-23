@@ -7,6 +7,7 @@
 define(function(require, exports) {
 	var menuKey = 'financial_income',
 		listTemplate = require('./view/list'),
+		listHeaderTemplate = require('./view/listHeader'),
 		listTableTemplate = require('./view/listTable');
 
 	var FinIncome = {
@@ -26,6 +27,7 @@ define(function(require, exports) {
 			FinIncome.initEvent();
 		}
 
+		FinIncome.currentType = 0;
 		FinIncome.getList();
 	};
 
@@ -51,8 +53,25 @@ define(function(require, exports) {
 		.done(function(data) {
 			if (showDialog(data)) {
 				data = FinIncome.covertResponse(data);
+				
 				FinIncome.$tab.find('.T-list').html(listTableTemplate(data));
-
+				//获取合计数据
+				var type = FinIncome.$tab.find('select[name=T-business-type]').val(),
+					path = '';
+				if(type != 1){
+					FinIncome.$tab.find('.T-sum-area').html(listHeaderTemplate());
+					
+					if(type == 0){
+						path = 'financial/customerAccount';
+					}else if(type == 2){
+						path = 'financial/shopAccount';
+					}else if(type == 3){
+						path = 'financial/bookingAccount';
+					};
+					FinIncome.getSumMoney(FinIncome.$tab,args,path);
+				}else{
+					FinIncome.getSumMoney(FinIncome.$tab,args,path,data.sumInnerTransferIncome);
+				}
 				FinIncome.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
 				// 绑定翻页组件
 				laypage({
@@ -68,7 +87,34 @@ define(function(require, exports) {
 			}
 		});		
 	};
-
+	//获取合计数据
+	FinIncome.getSumMoney = function(tabid,args,path,finData){
+		if(!!finData){
+			tabid.find('.T-sumNeedInMoney').text(finData.sumSettlementMoney);
+           	tabid.find('.T-sumReceiveMoney').text(finData.sumAlreadyIncomeMoney);
+           	tabid.find('.T-sumUnReceivedMoney').text(finData.sumUnIncomeMoney);
+		}else{
+			var params = {
+				pageNo:args.pageNo,
+				startDate : args.startTime,
+				endDate : args.endTime,
+			};//
+			 $.ajax({
+	            url: KingServices.build_url(path, 'listPagerTotal'),
+	            type: 'POST',
+	            data: params,
+	            showLoading:false
+	        })
+	        .done(function(data) {
+	            if(showDialog(data)){
+	               	tabid.find('.T-sumNeedInMoney').text(data.sumSettlementMoney);
+	               	tabid.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+	               	tabid.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+	            }
+	        });
+		}
+		
+	};
 	/**
 	 * 处理查询参数，适应不同接口的需要
 	 * @param  {object} args 页面参数
@@ -151,7 +197,7 @@ define(function(require, exports) {
 							id: tmp.businessGroupId
 						})
 					}
-
+					data.sumInnerTransferIncome	= data.sumInnerTransferIncomeList[0];
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;

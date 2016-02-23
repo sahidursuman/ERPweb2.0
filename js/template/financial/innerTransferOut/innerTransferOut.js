@@ -75,6 +75,8 @@ define(function(require,exports) {
 						InnerTransferOut.inieEvent($tabId);
 						//获取搜索框的数据
 						InnerTransferOut.getToBusinessGroupName(InnerTransferOut.$searchArea,data.searchParam);
+						//获取合计数据
+						InnerTransferOut.getSumMoney(data.sumFinancialInnerTransferOutList[0],InnerTransferOut.$tab);
 						//绑定翻页组件
 						laypage({
 						cont:InnerTransferOut.$tab.find(".T-pagenation"),
@@ -89,6 +91,15 @@ define(function(require,exports) {
 				}
 			}
 		});
+	};
+	//获取合计金额
+	InnerTransferOut.getSumMoney = function(data,tabId){
+		var totalPeople = data.sumAllTransAdultCount+data.sumAllTransChildCount;
+		tabId.find('.T-sumCount').text(totalPeople);
+        tabId.find('.T-sumInnerOutMoney').text(data.sumAllTransNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.sumAllSettlementMoney);
+        tabId.find('.T-sumPaiedMoney').text(data.sumAllPayedMoney);
+        tabId.find('.T-sumUnPaiedMoney').text(data.sumAllUnPayedMoney);
 	};
 	//list页面事件
 	InnerTransferOut.inieEvent = function($obj){
@@ -316,7 +327,7 @@ define(function(require,exports) {
 		});
 		//全选事件
 		var $checkAll = $obj.find(".T-selectAll");
-		var $checkBoxList = $checkList.find('.innerTransferFinancial');
+		var $checkBoxList = $checkList.find('.T-checkbox');
 		FinancialService.initCheckBoxs($checkAll,$checkBoxList);
 		//展开事件
 		$obj.find('.'+$list).on('click', '.T-seeGroup' ,function(event){
@@ -346,7 +357,7 @@ define(function(require,exports) {
         //关闭事件
         $obj.find(".T-close").on('click',function(event){
         	if(typeFlag == 1){
-        		var checkBoxList = $obj.find(".T-checkList").find('.innerTransferFinancial')
+        		var checkBoxList = $obj.find(".T-checkList").find('.T-checkbox')
         		result =false;
         		checkBoxList.each(function(i){
 	        		var $this = $(this),

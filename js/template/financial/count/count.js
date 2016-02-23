@@ -499,7 +499,7 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.find('input[type="text"]').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag !="price"){
+			if($nameFlag != "billRemark"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额
@@ -1345,9 +1345,6 @@ define(function(require, exports){
 		var guideRate = $parent.find('input[name=guideRate]').val();
 		var guideRateMoney = $parent.find('input[name=guideRateMoney]').val();
 		
-		if(consumeMoney.length == 0) {
-			consumeMoney = 0;
-		}
 		consumeMoney = parseFloat(consumeMoney);
 		travelAgencyRate = parseFloat(travelAgencyRate);
 		travelAgencyRateMoney = parseFloat(travelAgencyRateMoney);
@@ -1647,11 +1644,7 @@ define(function(require, exports){
 	};
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
-		var billStatus = $parentObj.find('input[name=billStatus]').val(), 
-			td = '';
-		if(billStatus == 2){
-			td = '<td>未对账</td>'
-		};
+		
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
@@ -3859,7 +3852,8 @@ define(function(require, exports){
 						"travelAgencyRate":Count.changeToString(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
 						"travelAgencyRebateMoney":Count.changeToString($(this).find('input[name=travelAgencyRebateMoney]').val()),
 						"guideRate":Count.changeToString(parseFloat($(this).find('input[name=guideRate]').val())/100),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
+						"needIncomeCount":$(this).find('input[name=needCount]').val(),
 						"guideRebateMoney":Count.changeToString($(this).find('input[name=guideRebateMoney]').val())
 				}
 				saveJson.selfPayArrangeList.push(selfPayArrange);
@@ -3891,6 +3885,7 @@ define(function(require, exports){
 					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
+					needIncomeCount:$(this).find('input[name=needCount]').val()
 				}
 				saveJson.addSelfPayArrangeList.push(addSelfArrange)	
 			};

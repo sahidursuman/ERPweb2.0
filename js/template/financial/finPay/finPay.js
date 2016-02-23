@@ -7,6 +7,7 @@
 define(function(require, exports) {
 	var menuKey = 'financial_pay',
 		listTemplate = require('./view/list'),
+		listHeaderTemplate = require('./view/listHeader'),
 		listTableTemplate = require('./view/listTable');
 
 	var FinPay = {
@@ -27,6 +28,7 @@ define(function(require, exports) {
 			FinPay.initEvent();
 		}
 
+		FinPay.currentType = 0;
 		FinPay.getList();
 	};
 
@@ -54,7 +56,7 @@ define(function(require, exports) {
 				data = FinPay.covertResponse(data);
 				data.currentType = FinPay.currentType;
 				FinPay.$tab.find('.T-list').html(listTableTemplate(data));
-
+				FinPay.$tab.find('.T-sum-area').html(Tools.filterUnPoint(listHeaderTemplate(data)));
 				FinPay.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
 				// 绑定翻页组件
 				laypage({
@@ -132,7 +134,8 @@ define(function(require, exports) {
 			case 9:  //其它账务
 				options.url = KingServices.build_url('account/arrangeOtherFinancial', 'listFinancialOther');
 				resArgs.name = args.name;
-
+				resArgs.startAccountTime = args.startDate;
+				resArgs.endAccountTime = args.endDate;
 				beJson = false;
 				break;
 			case 10:  //导游账务
@@ -177,10 +180,12 @@ define(function(require, exports) {
 							id: tmp.businessGroupId
 						})
 					}
-
+					var sum = data.sumFinancialInnerTransferOutList[0];
+					data.sumNeedPayMoney = sum.sumAllSettlementMoney;
+					data.sumPaiedMoney = sum.sumAllPayedMoney;
+					data.sumUnPaiedMoney = sum.sumAllUnPayedMoney;
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
-					break;
 					break;
 				case 1:  //外转转出账务
 					var src = data.financialTransferList;
@@ -195,7 +200,10 @@ define(function(require, exports) {
 							id: tmp.partnerAgencyId
 						})
 					}
-
+					var sum = data.totalStatisticsData[0];
+					data.sumNeedPayMoney = sum.totalSettlementMoney;
+					data.sumPaiedMoney = sum.totalPayedMoney;
+					data.sumUnPaiedMoney = sum.totalUnPayedMoney
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -212,7 +220,10 @@ define(function(require, exports) {
 							id: tmp.restaurantId
 						})
 					}
-
+					//var sum = data.totalStatisticsData[0];
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -229,7 +240,9 @@ define(function(require, exports) {
 							id: tmp.hotelId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -246,7 +259,9 @@ define(function(require, exports) {
 							id: tmp.busCompanyId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -263,7 +278,9 @@ define(function(require, exports) {
 							id: tmp.ticketId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -280,7 +297,9 @@ define(function(require, exports) {
 							id: tmp.scenicId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -297,7 +316,9 @@ define(function(require, exports) {
 							id: tmp.id
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
@@ -314,7 +335,9 @@ define(function(require, exports) {
 							id: tmp.insuranceId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -331,7 +354,10 @@ define(function(require, exports) {
 							id: ''
 						})
 					}
-
+					var sum = data.totalFinancialOtherData[0];
+					data.sumNeedPayMoney = sum.sumSettlementMoney;
+					data.sumPaiedMoney = sum.sumPayedMoney;
+					data.sumUnPaiedMoney = sum.sumUnPayedMoney
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
@@ -348,7 +374,9 @@ define(function(require, exports) {
 							id: tmp.guideId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;

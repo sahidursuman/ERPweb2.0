@@ -60,7 +60,8 @@ define(function(require, exports) {
         touristGroup.$searchArea = false;
         touristGroup.listTouristGroup({
             pageNo: 0,
-            type: 0
+            type: 0,
+            statusSearch:1
         });
     };
     touristGroup.listTouristGroup = function($args) {
@@ -99,7 +100,8 @@ define(function(require, exports) {
                 customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
-                sortType: 'auto'
+                sortType: 'startTime',
+                'order':'desc'
             }
         }
         //保存查询数据
@@ -653,9 +655,11 @@ define(function(require, exports) {
             var $that = $(this),
                 startTime = $that.val(),
                 $row = $that.closest('.form-inline');
-            if (!!startTime) {
+            if (!!startTime && !!$obj.find('.T-days').val()) {
                 $row.find('.T-endTime').val(Tools.addDay(startTime, $row.find('.T-days').val() - 1));
-            };
+            }else{
+                $row.find('.T-endTime').val(Tools.addDay(startTime, 0));
+            }
                
         });
 
@@ -1480,6 +1484,13 @@ define(function(require, exports) {
     //批量添加游客保存
     touristGroup.saveVisitorMore = function($panelObj, addVisotorMoreLayer, $obj) {
         var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
+        function numReg(str) {
+            if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
+                idCardNumber = str;
+            } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
+                mobileNumber = str;
+            }
+        }
         if (data == "") {
             showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
         } else {
@@ -1503,13 +1514,7 @@ define(function(require, exports) {
                         numReg(memberInfoArray[2]);
                     }
 
-                    function numReg(str) {
-                        if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
-                            idCardNumber = str;
-                        } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
-                            mobileNumber = str;
-                        }
-                    }
+                    
                     // 如果第一行数据为空，则删除第一行
                     var html =
                         "<tr>" +
@@ -1751,6 +1756,7 @@ define(function(require, exports) {
                 $parent.find("input[name=type]").val("");
                 $form.find("input[name=partnerAgencyNameList]").val("");
                 $form.find('input[name=partnerAgencyContactId]').val("");
+                touristGroup.getContactList($form,1);
             }
         }).off('click').on('click', function() {
             var $that = $(this);
@@ -1781,7 +1787,7 @@ define(function(require, exports) {
         });
     };
     //获取同行联系人
-    touristGroup.getContactList = function($obj) {
+    touristGroup.getContactList = function($obj,isPartnerClick) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1792,7 +1798,7 @@ define(function(require, exports) {
             select: function(event, ui) {
                 $(this).nextAll("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
             }
-        }).off('click').on('click', function() {
+        }).off().on('click', function() {
             if (!!$(this).attr('readonly')) return;
             var objM = this;
             var $parentsObj = $obj.closest('.form-inline');
@@ -1816,8 +1822,13 @@ define(function(require, exports) {
                                         contactList[i].value = contactList[i].contactRealname + " - [" + contactList[i].contactMobileNumber + "]";
                                     }
                                 }
-                                $(objM).autocomplete('option', 'source', contactList);
-                                $(objM).autocomplete('search', '');
+                                if (!!isPartnerClick) {
+                                	$obj.find('input[name=partnerAgencyNameList]').val(contactList[0].value);
+                                	$obj.find('input[name=partnerAgencyContactId]').val(contactList[0].id);
+                                } else{
+                                	$(objM).autocomplete('option', 'source', contactList);
+                                    $(objM).autocomplete('search', '');
+                                };
                             } else {
                                 layer.tips('该组团社没有联系人，请添加！', objM, {
                                     tips: [1, '#3595CC'],
@@ -1835,6 +1846,10 @@ define(function(require, exports) {
             }
 
         });
+        
+         if(!!isPartnerClick){
+            $obj.trigger('click');
+        };
     };
     //获取业务部数据
     touristGroup.getBussinessList = function($obj) {
@@ -1992,7 +2007,7 @@ define(function(require, exports) {
     //选择组团社与业务部
     touristGroup.choosePartnerAgencyOrBussiness = function($obj) {
         var $this = $obj,
-            $parents = $this.closest('div'),
+            $parents = $this.closest('form'),
             $value = $this.val();
         if ($value == 1) {
             $parents.find('.T-choosePAB').hide();
@@ -2536,18 +2551,11 @@ define(function(require, exports) {
         var endTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
         return endTime;
     }
-
-
-
-
-
-
     exports.init = touristGroup.initModule;
     exports.updateTouristGroup = touristGroup.updateTouristGroup;
     exports.addTouristGroup = touristGroup.addTouristGroup;
     //内外转方法的暴露
     exports.updateTransferIn = touristGroup.updateTransferIn;
     exports.updateTransfer = touristGroup.updateTransfer;
-
     exports.viewTouristGroup = touristGroup.viewTouristGroupDetails;
 });

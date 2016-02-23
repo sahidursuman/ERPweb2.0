@@ -36,6 +36,20 @@
 			font-size: 14px;
 			color: #313131;
 		}
+		.company-logo{
+			padding: 10px 10px 0 20px;
+		}
+		.company-logo img{
+			display: block;
+			width: auto;
+			height: auto;
+			max-width: 80px;
+		}
+		.company-logo h3{
+			padding-left: 10px;
+			color: #333;
+			font-size: 20px;
+		}
 	</style>
 </head>
 <body>
@@ -44,6 +58,15 @@
 	</div>
 	<script id="groupTravel" type="text/html">
 		<div class="row hct-top-header">
+			<div class="col-xs-12">
+				<div class="company-logo T-companyLogo">
+					{{if !!travelAgencyName}}
+					<img src="{{imgUrl + travelAgencyName}}" alt="{{companyLogo}}">
+					{{else}}
+					<h3>{{companyLogo}}</h3>
+					{{/if}}
+				</div>
+			</div>
 			<div class="col-xs-12 yj-title">
 				<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
 				<label class="control-label mar-l-10">{{note.title}}</label>
@@ -96,6 +119,32 @@
 					<div class="pull-left note-date">{{rs.time}}</div>
 				</div>
 				<div class="note-details-container">
+					{{if rs.playItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>游玩</h3>
+						</div>
+						{{each rs.playItemList as play}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!play.itemImage}}<img src="{{imgUrl + play.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#play.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{play.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{play.likeCount}}</label>
+			        				<a class="control-label mar-l-10" href="singleEvaluation.html?noteItemId={{play.id}}" data-id="{{play.id}}"><i class="fa fa-comment"></i>{{play.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
 					{{if rs.traficItemList.length > 0}}
 					<div class="note-details-item">
 						<div class="note-details-header">
