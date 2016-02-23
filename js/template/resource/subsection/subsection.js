@@ -611,12 +611,15 @@ define(function(require, exports) {
 				touristGroupSubFeeList : []
 			},
 			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
-			receivables = 0, tmp;
+			receivables = 0, tmp, isError = 0;
 
 		// get table data
 		$tbody.children('tr').each(function() {
-			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type');
+			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type'), status = $tr.data('status');
 			     num+=$(this).find('.T-payedMoney').val();
+			if (status == 3 || status == 6 || status == 0) {
+				isError = 1;
+			}
 
 			if ($tr.hasClass('del')) {
 				subTouristGroup.delSubTouristGroupIdList.push({id: id});
@@ -667,6 +670,10 @@ define(function(require, exports) {
 		}
 		if(isCheckNeedPayMoney == 0 && currentNeedPayMoney > 0){
 			showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
+			return;
+		}
+		if (isError == 1) {
+			showMessageDialog($( "#confirm-dialog-message" ),"分段游客小组有已内转/已外转/已发团，不能修改");
 			return;
 		}
 

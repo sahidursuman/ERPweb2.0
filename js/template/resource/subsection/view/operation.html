@@ -86,7 +86,7 @@
             <tbody class="T-subsectionOperationTbody" data-neePayAllMoney="{{ptGroup.needPayAllMoney}}">
             {{each subtGroupList as subList indexA}}
               {{if subList.id != null}}
-                <tr data-entity-id="{{subList.id}}">
+                <tr data-entity-id="{{subList.id}}" data-status="{{subList.status}}">
                     <td>
                        <!--  <input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}" />
                        <input class="{{if subList.status == 1}}T-chooseLineProduct{{/if}} col-sm-12" name="lineProduct" {{if subList.status !=1 }}readonly="readonly" {{/if}} type="text" value="{{subList.lineProduct.name}}" /> -->
