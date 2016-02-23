@@ -74,8 +74,16 @@ define(function(require, exports) {
 		   	    type=employeePerforObj.$tab.find('button').attr('data-value'),
 		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
 		   	    partnerAgencyType = employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value');
-	   		employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
-
+		   	    opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
+		   	    if (type==1 && opUserType==0) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
+		   	    };
+		   	    if (type==1 && opUserType==1) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
+		   	    };
+		   	    if (type==2) {
+		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
+		   	    };
     	}); 	
     	//trigger事件
     	employeePerforObj.$tab.find('.T-employeePerfor-search').trigger('click');
