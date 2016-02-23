@@ -1754,7 +1754,7 @@ define(function(require, exports) {
                 $parent.find("input[name=type]").val("");
                 $form.find("input[name=partnerAgencyNameList]").val("");
                 $form.find('input[name=partnerAgencyContactId]').val("");
-                touristGroup.getContactList($form.trigger('click'),1);
+                touristGroup.getContactList($form,1);
             }
         }).off('click').on('click', function() {
             var $that = $(this);
@@ -1796,7 +1796,7 @@ define(function(require, exports) {
             select: function(event, ui) {
                 $(this).nextAll("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
             }
-        }).off('click').on('click', function() {
+        }).off().on('click', function() {
             if (!!$(this).attr('readonly')) return;
             var objM = this;
             var $parentsObj = $obj.closest('.form-inline');
@@ -1844,6 +1844,10 @@ define(function(require, exports) {
             }
 
         });
+        
+         if(!!isPartnerClick){
+            $obj.trigger('click');
+        };
     };
     //获取业务部数据
     touristGroup.getBussinessList = function($obj) {
