@@ -213,6 +213,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
+                $tab.find(".T-touristCount").text(data.total.adultCount + " 大 " + data.total.childCount + " 小");
                 $tab.find(".T-totalIncome").text(data.total.income);
                 $tab.find(".T-totalTrip").text(data.total.cost);
                 $tab.find(".T-totalProfit").text(data.total.profit);
