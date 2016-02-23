@@ -13,14 +13,14 @@
 		{{each result as salePerL}}
 		   <tr>
 	   		    <td>{{salePerL.name}}</td>
-	   			<td>{{salePerL.getAdultCount}}大{{salePerL.getChildCount}}小</td>
+	   			<td>{{salePerL.adultCount}}大{{salePerL.childCount}}小</td>
 	   		</tr>
 	   	{{/each}}
 	</tbody>
 </table>
 <div class="row pageMode">
 	<div class="col-xs-6">
-		<small>共计 {{searchParam.totalCount}}  条记录</small>
+		<small>共计 {{searchParam.totalCount}} 条记录</small>
 	</div>
 	<div class="col-xs-6">
 		<div class="dataTables_paginate paging_simple_numbers T-listSalePer-pagenation">
