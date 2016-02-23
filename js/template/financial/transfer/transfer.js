@@ -208,7 +208,7 @@ define(function(require, exports) {
 
         Transfer.init_event(page,id,name,Transfer.$checkTab,"check");
         Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
-        Transfer.updateUnpayMoney();
+        FinancialService.updateMoney_checking(Transfer.$checkTab,3);
 
         //表单验证
         var validator = new FinRule(0);
@@ -754,33 +754,6 @@ define(function(require, exports) {
             }
         });
     };
-    //对账-自动计算未付金额
-	Transfer.updateUnpayMoney = function(){
-	    Transfer.$checkTab.find('input[name="settlementMoney"]').on('focusin',function() {
-	        $(this).data("oldVal",$(this).val());
-	    })
-	    .on('change',function() {
-	        var $this = $(this),
-	            $tr = $this.closest('tr');
-	        var punishMoney = ($this.val() || 0) * 1;
-
-	        //计算结算金额修改前后差值
-	        var spread = punishMoney - $this.data("oldVal")*1;
-
-	        // 设置结算、未付金额
-            var settlementMoney = $tr.find("td[name=settlementMoney]").text(),
-                unPayedMoney = $tr.find("td[name=unPayedMoney]").text(); 
-	        $tr.find("td[name=settlementMoney]").text(settlementMoney - spread);
-	        $tr.find("td[name=unPayedMoney]").text(unPayedMoney - spread);	        
-	        //统计数据更新
-	        var $pm = Transfer.$checkTab.find(".T-punishMoney"),
-	        	$st = Transfer.$checkTab.find(".T-stMoney"),
-	            $unpay = Transfer.$checkTab.find(".T-unpayMoney");
-	        $pm.text($pm.text()*1 + spread);
-	        $st.text($st.text()*1 - spread);
-	        $unpay.text($unpay.text()*1 - spread);
-	    });
-	};
 
     //查看小组
     Transfer.viewGroup = function($obj){
