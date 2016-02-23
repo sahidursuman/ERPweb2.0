@@ -53,12 +53,8 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="planTouristCount"]'),
                 rules : [
                     {
-                        type: 'null',
-                        errMsg: '计划人数不能为空'
-                    },
-                    {
                         type: 'nonnegative-int',
-                        errMsg: '计划人数只能为正整数'
+                        errMsg: '计划人数只能为非负整数'
                     }
                 ]
             },

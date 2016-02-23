@@ -1365,6 +1365,12 @@ define(function(require, exports) {
 		if ($tab.find('.T-status').text() != 0) {
 			$tr.find('[name="isAccountGuide"]').prop('disabled', true)
 		}
+		
+		var $trs = $tbody.find('tr'), startTime = $tab.find('.T-startTime').text(), endTime = $tab.find('.T-endTime').text();
+		if ($trs.length == 1) {
+			$trs.eq(0).find('input[name=startTime]').val(startTime);
+			$trs.eq(0).find('input[name=endTime]').val(endTime);
+		}
 	}
 
 	/**
