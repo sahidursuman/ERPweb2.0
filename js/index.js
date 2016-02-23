@@ -76,11 +76,14 @@
 					window.location.href = "login.html";
 				}
 				else{
+					var $login = $('#loginUserInfo');
+
+					$login.prev().toggleClass('hidden', !data.messageStatus);
 					if(data.realName != ""){//department
 						$(".navbar .light-blue .userName").text(data.realName);
-						$("#loginUserInfo").find(".userName").text(data.realName);
-						$("#loginUserInfo").find(".phoneNumber").text(data.mobileNumber); 
-						$("#loginUserInfo").find(".department").text(data.groupName);  
+						$login.find(".userName").text(data.realName);
+						$login.find(".phoneNumber").text(data.mobileNumber); 
+						$login.find(".department").text(data.groupName);  
 					}
 					else{
 						$(".navbar .light-blue .userName").text(data.userName);
