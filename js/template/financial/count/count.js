@@ -1345,9 +1345,6 @@ define(function(require, exports){
 		var guideRate = $parent.find('input[name=guideRate]').val();
 		var guideRateMoney = $parent.find('input[name=guideRateMoney]').val();
 		
-		if(consumeMoney.length == 0) {
-			consumeMoney = 0;
-		}
 		consumeMoney = parseFloat(consumeMoney);
 		travelAgencyRate = parseFloat(travelAgencyRate);
 		travelAgencyRateMoney = parseFloat(travelAgencyRateMoney);
