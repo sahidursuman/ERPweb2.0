@@ -528,9 +528,6 @@
                             <th class="th-border">进店日期</th>
                             <th class="th-border">购物店</th>
                             <th class="th-border">总金额</th>
-                            <th class="th-border">金额返佣</th>
-                            <th class="th-border">人数返佣</th>
-                            <th class="th-border">停车返佣</th>
                             <th class="th-border">购物佣金</th>
                             <th class="th-border">导游购物返佣</th>
                             <th class="th-border">单据</th>
@@ -542,9 +539,6 @@
                             <td>{{item.time}}</td>
                             <td>{{item.shopName}}</td>
                             <td><span class="F-float F-money">{{item.sumConsumeMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.sumRebateMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.sumCustomerRebateMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.sumParkingRebateMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.sumBuyRebateMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.sumGuideRebateMoney}}</span></td>
                             <td>{{if item.billImage != null && item.billImage !=""}}<a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
