@@ -257,7 +257,9 @@ define(function(require, exports) {
      */
     arrangeIndividual.mergenTripPlan = function() {
         var $mergenTripPlan = $("#mergenTripPlan"),
-            $data = arrangeIndividual.touristGroupMergeData;
+            $data={
+                touristGroupMergeList:[]
+            };
         //散客拼团,选择多个相同线路产品的游客小组，进行拼团时，若【线路产品】、【类别】、【天数】、【出游日期】均相同则只显示一条
         function uniqueArrJson(arr){
             var res = [arr[0]];
@@ -282,7 +284,6 @@ define(function(require, exports) {
             $mergenTripPlan.find('.T-mergenTripPlan-Content').html(html);
             arrangeIndividual.mergTripP_Event($mergenTripPlan);
         }
-
     };
 
 
