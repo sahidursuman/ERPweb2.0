@@ -308,7 +308,7 @@ define(function(require, exports) {
             FinancialService.updateSumPayMoney($tab, validator);
             FinancialService.initPayEvent($tab.find('.T-summary'));
         } else {
-            FinancialService.updateUnpayMoney($tab, validator);
+            FinancialService.updateUnpayMoney($tab, new FinRule(0));
             $searchArea.find('.T-btn-export').on('click', function(event) {
                 event.preventDefault();
                 var $btn = $tab.find('.T-saveClear'),

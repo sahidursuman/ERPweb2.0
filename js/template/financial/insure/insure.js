@@ -181,7 +181,7 @@ define(function(require, exports) {
         Insure.init_event(page,id,name,Insure.$checkTab,"check");
         Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
         var checkRule = new FinRule(0);
-        FinancialService.updateUnpayMoney(Insure.$checkTab,new FinRule(1));
+        FinancialService.updateUnpayMoney(Insure.$checkTab,new FinRule(0));
 
         //搜索按钮事件
         Insure.$checkSearchArea.find('.T-search').on('click', function(event) {
