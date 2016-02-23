@@ -258,6 +258,19 @@ define(function(require, exports) {
     arrangeIndividual.mergenTripPlan = function() {
         var $mergenTripPlan = $("#mergenTripPlan"),
             $data = arrangeIndividual.touristGroupMergeData;
+        //散客拼团,选择多个相同线路产品的游客小组，进行拼团时，若【线路产品】、【类别】、【天数】、【出游日期】均相同则只显示一条
+        //days: "3"lineProductId: "133"lineProductName: "天府广场三日游"lineProductType: "精品"startTime: "2016-02-25"touristGroupId: 12919
+        var min=0;
+        for (var i = 1; i < $data.length; i++) {
+            if ($data[i].lineProductName===$data[min].lineProductName 
+            && $data[i].lineProductType===$data[min].lineProductType  
+            && $data[i].days===$data[min].days 
+            && $data[i].startTime===$data[min].startTime) {
+                $data.splice(i,1);
+            }; 
+        };
+
+        console.info('$data----'+$data);
         if (!!$data.touristGroupMergeList && $data.touristGroupMergeList.length > 0) {
             var html = chooseMergeTemplate($data);
             $mergenTripPlan.find('.T-mergenTripPlan-Content').html(html);
