@@ -256,7 +256,7 @@ define(function(require,exports) {
                     		checkDisabled(fiList,checkTr,rightCode);
 						} else {
 							if(!!args.autoAccount && args.autoAccount == 1){
-								InnerTransferIn.$checkId.data("isEdited",true);
+								$checkId.data("isEdited",true);
 							}else{
 								InnerTransferIn.$checkId.data("isEdited",false);
 							};
@@ -510,8 +510,6 @@ define(function(require,exports) {
         		Tools.closeTab(settleId);
         	}
         });
-
-        $obj.data('isEdited', false);
 	};
 
 	//自动计算本次收款金额
