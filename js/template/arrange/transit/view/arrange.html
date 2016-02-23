@@ -145,8 +145,8 @@
 	                                            </span>
 	                                        </div>
 										</td>
-										<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
+										<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{outBus.seatCount}}" /></td>
+										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{outBus.brand}}" /></td>
 										<td>
 											<div class="col-sm-12">
 												<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" />
@@ -628,8 +628,8 @@
                                                 </span>
                                             </div>
 										</td>
-										<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{if outBus.bus != null}}{{outBus.bus.seatCount}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}" /></td>
+										<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="{{outBus.seatCount}}" /></td>
+										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="{{outBus.brand}}" /></td>
 										<td>
 											<div class="col-sm-12">
 												<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" />

@@ -69,7 +69,7 @@
 									<!--初始化游客小组费用start--> 
 									{{each touristGroupFeeList as transferList}} 
 
-									{{if subsection==0}}
+									{{if touristGroup.operateCalculteOut==0}}
 											{{if transferList.type!=3}}    
 												<tr  data-entity-id="{{transferList.id}}">
 													<td>
@@ -157,7 +157,6 @@
 		</div>
 	</form>
 
-  {{if subsection==0}}
 	<!--收客信息 start-->
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
@@ -244,8 +243,7 @@
 			</div>   
 		</div>  
 	</form>     
-	<!--收客信息 end--> 
-	{{/if}}
+	<!--收客信息 end-->
 
 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">

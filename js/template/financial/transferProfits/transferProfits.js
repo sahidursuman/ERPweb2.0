@@ -211,8 +211,8 @@ define(function(require, exports) {
         .done(function(data) {
             if(showDialog(data)){
                 $tab.find(".T-totalCount").text((data.total.adultCount ? data.total.adultCount : 0) + " 大" + (data.total.childCount ? data.total.childCount : 0) + " 小");
-                $tab.find(".T-totalNeed").text(data.total.transitPaySMoney);
-                $tab.find(".T-totalCost").text(data.total.transitSMoney);
+                $tab.find(".T-totalNeed").text(data.total.transitSMoney);
+                $tab.find(".T-totalCost").text(data.total.transitPaySMoney);
                 $tab.find(".T-totalProfit").text(data.total.grossProfit);
                 $tab.find(".T-perProfit").text(data.total.perGrossProfit);
             }

@@ -152,13 +152,13 @@ define(function(require, exports) {
                     errMsg: '请输入正确的手机号码'
                 }]
             },
-            {
+            /*{
                 $ele: $obj.find('input[name="requireContent"]'),
                 rules: [{
                     type: 'null',
                     errMsg: '计划要求不能为空'
                 }]
-            },
+            },*/
             {
                 $ele: $obj.find('input[name="describeInfo"]'),
                 rules: [{

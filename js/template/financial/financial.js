@@ -77,7 +77,9 @@ FinancialService.initPayEvent = function($container,rule)  {
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
+        if(!$(this).data("oldVal")){
+            $(this).data("oldVal",$(this).val());
+        }
     })
     .on('change', 'input[name="settlementMoney"]', function(event) {
         var $this = $(this),
@@ -97,6 +99,8 @@ FinancialService.updateUnpayMoney = function($tab,rule){
             $unpay = $tab.find(".T-unpayMoney");
         $st.text(Tools.toFixed($st.text()*1 + spread));
         $unpay.text(Tools.toFixed($unpay.text()*1 + spread));
+
+        $(this).data("oldVal",$(this).val());
     });
 };
 
@@ -636,7 +640,9 @@ FinRule.prototype.check = function($obj) {
 //minTdLen 子行td数量
 FinancialService.updateMoney_checking = function($tab,minTdLen){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
+        if(!$(this).data("oldVal")){
+            $(this).data("oldVal",$(this).val());
+        }
     })
     .on('change', 'input[name="settlementMoney"]', function(event) {
         var $this = $(this),
@@ -662,6 +668,8 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
         $tab.find(".T-sumBackMoney").text($tab.find(".T-sumBackMoney").text()*1 + spread);
         $tab.find(".T-sumSettlementMoney").text($tab.find(".T-sumSettlementMoney").text()*1 - spread);
         $tab.find(".T-sumUnReceivedMoney").text($tab.find(".T-sumUnReceivedMoney").text()*1 - spread);
+
+        $(this).data("oldVal",$(this).val());
     });
 };
 
