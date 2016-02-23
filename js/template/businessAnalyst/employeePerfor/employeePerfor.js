@@ -6,6 +6,7 @@ define(function(require, exports) {
         listMainTemplate = require("./view/listMain"),
         listDeptTemplate=require("./view/listDept"),
         listEmployTemplate=require("./view/listEmploy"),
+        listSalePerforTemplate=require("./view/listSalePer"),
         tabId="tab-"+menuKey+"-content";
     /**
 	 * 定义产品销量管理对象
@@ -20,6 +21,7 @@ define(function(require, exports) {
 			endTime:"",
 			type:"",
 			customerType:"",
+			partnerAgencyType:"",
 			pageNo:""
 		}
 	};
@@ -70,8 +72,9 @@ define(function(require, exports) {
 		   	var startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	    endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
 		   	    type=employeePerforObj.$tab.find('button').attr('data-value'),
-		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value');
-	   		employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,0);
+		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
+		   	    partnerAgencyType = employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value');
+	   		employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
 
     	}); 	
     	//trigger事件
@@ -81,19 +84,33 @@ define(function(require, exports) {
 		employeePerforObj.$tab.find('.T-select-employeerDept').on('click', 'a', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			var $that=$(this),customerType;
+			var $that=$(this),customerType,partnerAgencyType,opUserType,startTime,endTime;
 			$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
 			$that.closest('ul').prev().attr('data-value');
-			customerType = $that.closest('div').next('div').children('button').data('value');
-			if ($that.closest('ul').prev().attr('data-value')==1) {
+			startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
+		   	endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
+			customerType = $that.closest('div').find('.T-select-customerType').children('button').data('value');
+			partnerAgencyType = $that.closest('div').find('.T-select-partnerAgencyType').children('button').data('value'); //客户类型
+			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
+				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",1,customerType,0);
-			} else{
+				opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').data('value');//责任计调
+				if (opUserType==0) { //责任计调
+				    employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
+				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
+					employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0);
+				};
+				if (opUserType==1) { //外联计调--销售业绩
+					employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				    employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
+					employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
+				};
+			} else{//部门
 				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept("","",2,customerType,0);
-
+				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
+				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
+				employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,partnerAgencyType,0);
 			};
 		});
 
@@ -106,22 +123,74 @@ define(function(require, exports) {
 			if (isEmployee==1) {//员工
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",1,$that.data('value'),0);
+				employeePerforObj.getListEmpDept("","",1,$that.data('value'),"",0);
 			}else{//部门
 				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept("","",2,$that.data('value'),0);
+				employeePerforObj.getListEmpDept("","",2,$that.data('value'),"",0);
 			};
 			   
 		});
 
+
+		//客户类型
+		employeePerforObj.$tab.find('.T-select-partnerAgencyType').on('click', 'a', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
+				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
+		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
+			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
+			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value'),
+			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').data('value');
+			if (isEmployee==1) {
+				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
+				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
+				var opUserType=employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
+				if (opUserType==0) { //责任计调
+					employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
+				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
+					employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0);
+				};
+				if (opUserType==1) { //外联计调--销售业绩
+					employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				    employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
+					employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
+				};
+			}else if(isEmployee==2){//部门--无责任计调
+			    employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
+				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
+				employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,partnerAgencyType,0);
+			};
+		});
+
+		//责任计调
+		employeePerforObj.$tab.find('.T-select-opUserList').on('click', 'a', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
+			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
+			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value');
+			if ($that.data('value')==0) {//责任计调
+				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
+				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
+				employeePerforObj.getListEmpDept("","",1,customerType,partnerAgencyType,0); 
+			}else{//外联计调--销售业绩
+				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
+				employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
+				employeePerforObj.getListEmpDept("","",3,customerType,partnerAgencyType,0);
+			};
+		});
     };
 
-    employeePerforObj.getListEmpDept=function(startTime,endTime,type,customerType,page){
+    employeePerforObj.getListEmpDept=function(startTime,endTime,type,customerType,partnerAgencyType,page){
     		employeePerforObj.$searchParam.startTime=startTime;
     		employeePerforObj.$searchParam.endTime=endTime;
     		employeePerforObj.$searchParam.type=type;
     		employeePerforObj.$searchParam.customerType=customerType;
+    		employeePerforObj.$searchParam.partnerAgencyType=partnerAgencyType;
     		employeePerforObj.$searchParam.pageNo=page;
 	
 	    	if (type==1) {
@@ -178,6 +247,36 @@ define(function(require, exports) {
 
 				});
 	    	};
+
+	    	if(type==3){
+	    		$.ajax({
+	    			url : KingServices.build_url("performanceOfUser","findPager"),
+					type : "POST",
+					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
+					success : function(data){
+						var result = showDialog(data);
+						if(result){
+						   var html=listSalePerforTemplate(data);
+						   employeePerforObj.$tab.find('.T-salePerfor-list').html(html);
+
+						   // 绑定翻页组件
+							laypage({
+							    cont: employeePerforObj.$tab.find('.T-listSalePer-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.searchParam.totalPage, //总页数 
+							    curr: (page + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,obj.curr -1);
+							    	}
+							    }
+							});
+						   
+						}
+					}
+
+				});
+	    	};
+
     };
 
 
