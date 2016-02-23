@@ -37,13 +37,18 @@
 			color: #313131;
 		}
 		.company-logo{
-			padding: 10px 10px 0 10px;
+			padding: 10px 10px 0 20px;
 		}
 		.company-logo img{
 			display: block;
 			width: auto;
 			height: auto;
 			max-width: 80px;
+		}
+		.company-logo h3{
+			padding-left: 10px;
+			color: #333;
+			font-size: 20px;
 		}
 	</style>
 </head>
@@ -55,7 +60,11 @@
 		<div class="row hct-top-header">
 			<div class="col-xs-12">
 				<div class="company-logo T-companyLogo">
-					<img src="{{companyLogo}}" alt="{{travelAgencyName}}">
+					{{if !!travelAgencyName}}
+					<img src="{{imgUrl + travelAgencyName}}" alt="{{companyLogo}}">
+					{{else}}
+					<h3>{{companyLogo}}</h3>
+					{{/if}}
 				</div>
 			</div>
 			<div class="col-xs-12 yj-title">

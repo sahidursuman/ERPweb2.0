@@ -236,13 +236,18 @@
 			padding: 10px 0;
 		}
 		.company-logo{
-			padding: 10px 10px 0 10px;
+			padding: 10px 10px 0 20px;
 		}
 		.company-logo img{
 			display: block;
 			width: auto;
 			height: auto;
 			max-width: 80px;
+		}
+		.company-logo h3{
+			padding-left: 10px;
+			color: #333;
+			font-size: 20px;
 		}
 	</style>
 </head>
@@ -314,7 +319,12 @@
 								$(".sumCommentCount").text(data.lineProduct.sumCommentCount);
 								$(".sumShareCount").text(data.lineProduct.sumShareCount);
 								$(".sumViewCount").text(data.lineProduct.sumViewCount);
-								$(".T-companyLogo").html('<img src="'+imgUrl + data.companyLogo +'" alt="'+data.travelAgencyName+'">');
+								if(!!data.travelAgencyName){
+									$(".T-companyLogo").html('<img src="'+imgUrl + data.travelAgencyName +'" alt="'+data.companyLogo+'">');
+								}else{
+									$(".T-companyLogo").html('<h3>'+data.companyLogo+'</h3>');
+								}
+								
 								setShare(data.lineProduct.name);
 							}
 							var images = [];
