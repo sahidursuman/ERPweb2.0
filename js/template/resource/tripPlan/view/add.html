@@ -29,7 +29,7 @@
                     <span class="fix-w-4">出游日期:</span><span class="T-startTime">{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="fix-w-4">完团日期:</span>{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}
+                    <span class="fix-w-4">完团日期:</span><span class="T-endTime">{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}</span>
                 </div>
             </div>
 
@@ -188,8 +188,8 @@
                             </button>
                         </h5>
 
-                        {{if basicInfo.oldInsuranceRequire}}<p>原保险计划要求：{{basicInfo.oldInsuranceRequire}}</p>{{/if}}
-                        {{if basicInfo.nowInsuranceRequire}}<p>现保险计划要求：{{basicInfo.nowInsuranceRequire}}</p>{{/if}}
+                        {{if basicInfo.oldInsuranceRequire}}<p class="requirementsPlan">原保险计划要求：{{basicInfo.oldInsuranceRequire}}</p>{{/if}}
+                        {{if basicInfo.nowInsuranceRequire}}<p class="requirementsPlan">现保险计划要求：{{basicInfo.nowInsuranceRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup>
                                 <col style="width:200px"/>
@@ -257,8 +257,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldGuideRequire}}<p>原导游计划要求：{{basicInfo.oldGuideRequire}}</p>{{/if}}
-                        {{if basicInfo.nowGuideRequire}}<p>现导游计划要求：{{basicInfo.nowGuideRequire}}</p>{{/if}}
+                        {{if basicInfo.oldGuideRequire}}<p class="requirementsPlan">原导游计划要求：{{basicInfo.oldGuideRequire}}</p>{{/if}}
+                        {{if basicInfo.nowGuideRequire}}<p class="requirementsPlan">现导游计划要求：{{basicInfo.nowGuideRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup>
                                <col style="width:120px">
@@ -334,8 +334,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldBusRequire}}<p>原车辆计划要求：{{basicInfo.oldBusRequire}}</p>{{/if}}
-                        {{if basicInfo.nowBusRequire}}<p>现车辆计划要求：{{basicInfo.nowBusRequire}}</p>{{/if}}
+                        {{if basicInfo.oldBusRequire}}<p class="requirementsPlan">原车辆计划要求：{{basicInfo.oldBusRequire}}</p>{{/if}}
+                        {{if basicInfo.nowBusRequire}}<p class="requirementsPlan">现车辆计划要求：{{basicInfo.nowBusRequire}}</p>{{/if}}
                         <div style="overflow-x:auto;">
                             <div style="min-width:2500px;">
                                 <table class="table table-striped table-bordered table-hover table-tripPlan-container">
@@ -484,8 +484,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldRestaurantRequire}}<p>原餐饮计划要求：{{basicInfo.oldRestaurantRequire}}</p>{{/if}}
-                        {{if basicInfo.nowRestaurantRequire}}<p>现餐饮计划要求：{{basicInfo.nowRestaurantRequire}}</p>{{/if}}
+                        {{if basicInfo.oldRestaurantRequire}}<p class="requirementsPlan">原餐饮计划要求：{{basicInfo.oldRestaurantRequire}}</p>{{/if}}
+                        {{if basicInfo.nowRestaurantRequire}}<p class="requirementsPlan">现餐饮计划要求：{{basicInfo.nowRestaurantRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                                 <col style="width:110px"> 
@@ -589,8 +589,8 @@
                             </button> 
                         </h5>
 
-                        {{if basicInfo.oldHotelRequire}}<p>原酒店计划要求：{{basicInfo.oldHotelRequire}}</p>{{/if}}
-                        {{if basicInfo.nowHotelRequire}}<p>现酒店计划要求：{{basicInfo.nowHotelRequire}}</p>{{/if}}
+                        {{if basicInfo.oldHotelRequire}}<p class="requirementsPlan">原酒店计划要求：{{basicInfo.oldHotelRequire}}</p>{{/if}}
+                        {{if basicInfo.nowHotelRequire}}<p class="requirementsPlan">现酒店计划要求：{{basicInfo.nowHotelRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                                 <col style="width:110px"> 
@@ -703,8 +703,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldScenicRequire}}<p>原景区计划要求：{{basicInfo.oldScenicRequire}}</p>{{/if}}
-                        {{if basicInfo.nowScenicRequire}}<p>现景区计划要求：{{basicInfo.nowScenicRequire}}</p>{{/if}}
+                        {{if basicInfo.oldScenicRequire}}<p class="requirementsPlan">原景区计划要求：{{basicInfo.oldScenicRequire}}</p>{{/if}}
+                        {{if basicInfo.nowScenicRequire}}<p class="requirementsPlan">现景区计划要求：{{basicInfo.nowScenicRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                              <colgroup> 
                                <col style="width:110px"> 
@@ -819,8 +819,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldShopRequire}}<p>原购物计划要求：{{basicInfo.oldShopRequire}}</p>{{/if}}
-                        {{if basicInfo.nowShopRequire}}<p>现购物计划要求：{{basicInfo.nowShopRequire}}</p>{{/if}}
+                        {{if basicInfo.oldShopRequire}}<p class="requirementsPlan">原购物计划要求：{{basicInfo.oldShopRequire}}</p>{{/if}}
+                        {{if basicInfo.nowShopRequire}}<p class="requirementsPlan">现购物计划要求：{{basicInfo.nowShopRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                               <col style="width:110px"> 
@@ -903,8 +903,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldSelfPayRequire}}<p>原自费计划要求：{{basicInfo.oldSelfPayRequire}}</p>{{/if}}
-                        {{if basicInfo.nowSelfPayRequire}}<p>现自费计划要求：{{basicInfo.nowSelfPayRequire}}</p>{{/if}}
+                        {{if basicInfo.oldSelfPayRequire}}<p class="requirementsPlan">原自费计划要求：{{basicInfo.oldSelfPayRequire}}</p>{{/if}}
+                        {{if basicInfo.nowSelfPayRequire}}<p class="requirementsPlan">现自费计划要求：{{basicInfo.nowSelfPayRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                                <col style="width:110px"> 
@@ -990,8 +990,8 @@
                                 新增
                             </button>
                         </h5>
-                        {{if basicInfo.oldTicketRequire}}<p>原票务计划要求：{{basicInfo.oldTicketRequire}}</p>{{/if}}
-                        {{if basicInfo.nowTicketRequire}}<p>现票务计划要求：{{basicInfo.nowTicketRequire}}</p>{{/if}}
+                        {{if basicInfo.oldTicketRequire}}<p class="requirementsPlan">原票务计划要求：{{basicInfo.oldTicketRequire}}</p>{{/if}}
+                        {{if basicInfo.nowTicketRequire}}<p class="requirementsPlan">现票务计划要求：{{basicInfo.nowTicketRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                                <col style="width:120px"> 
@@ -1089,8 +1089,8 @@
                             </button>
                             </a>
                         </h5>
-                        {{if basicInfo.oldOtherRequire}}<p>原其它计划要求：{{basicInfo.oldOtherRequire}}</p>{{/if}}
-                        {{if basicInfo.nowOtherRequire}}<p>现其它计划要求：{{basicInfo.nowOtherRequire}}</p>{{/if}}
+                        {{if basicInfo.oldOtherRequire}}<p class="requirementsPlan">原其它计划要求：{{basicInfo.oldOtherRequire}}</p>{{/if}}
+                        {{if basicInfo.nowOtherRequire}}<p class="requirementsPlan">现其它计划要求：{{basicInfo.nowOtherRequire}}</p>{{/if}}
                         <table class="table table-striped table-bordered table-hover table-tripPlan-container">
                             <colgroup> 
                                 <col style="width:110px"> 
@@ -1165,7 +1165,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_restaurant">
                 <label>
                     <input name="restaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeItemsStauts.restaurantStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 餐饮安排完成</span>
+                    <span class="lbl font-w"> 餐饮安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1174,7 +1174,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_insurance">
                 <label>
                     <input name="insuranceStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.insuranceStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 保险安排完成</span>
+                    <span class="lbl font-w"> 保险安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1183,7 +1183,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_selfPay">
                 <label>
                     <input name="selfPayStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.selfPayStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 自费安排完成</span>
+                    <span class="lbl font-w"> 自费安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1192,7 +1192,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_ticket">
                 <label>
                     <input name="ticketStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.ticketStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 票务安排完成</span>
+                    <span class="lbl font-w"> 票务安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1201,7 +1201,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_scenic">
                 <label>
                     <input name="scenicStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.scenicStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 景区安排完成</span>
+                    <span class="lbl font-w"> 景区安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1210,7 +1210,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_shop">
                 <label>
                     <input name="shopStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.shopStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 购物安排完成</span>
+                    <span class="lbl font-w"> 购物安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1219,7 +1219,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_guide">
                 <label>
                     <input name="guideStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.guideStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 导游安排完成</span>
+                    <span class="lbl font-w"> 导游安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1228,7 +1228,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_bus">
                 <label>
                     <input name="busStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.busStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 车辆安排完成</span>
+                    <span class="lbl font-w"> 车辆安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1237,7 +1237,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_other">
                 <label>
                     <input name="otherStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.otherStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 其它安排完成</span>
+                    <span class="lbl font-w"> 其它安排完成</span>
                 </label>
             </div>
             {{/if}}
@@ -1246,7 +1246,7 @@
             <div class="checkbox checkbox-inline mar-0 hidden" data-target="#tripPlan_addPlan_hotel">
                 <label>
                     <input name="hotelStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeItemsStauts.hotelStatus == 3}}checked{{/if}}>
-                    <span class="lbl"> 酒店安排完成</span>
+                    <span class="lbl font-w"> 酒店安排完成</span>
                 </label>
             </div>
             {{/if}}

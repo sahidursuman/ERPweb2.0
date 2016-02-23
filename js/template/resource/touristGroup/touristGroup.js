@@ -60,7 +60,8 @@ define(function(require, exports) {
         touristGroup.$searchArea = false;
         touristGroup.listTouristGroup({
             pageNo: 0,
-            type: 0
+            type: 0,
+            statusSearch:1
         });
     };
     touristGroup.listTouristGroup = function($args) {
@@ -99,7 +100,8 @@ define(function(require, exports) {
                 customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
-                sortType: 'auto'
+                sortType: 'startTime',
+                'order':'desc'
             }
         }
         //保存查询数据
@@ -1752,6 +1754,7 @@ define(function(require, exports) {
                 $parent.find("input[name=type]").val("");
                 $form.find("input[name=partnerAgencyNameList]").val("");
                 $form.find('input[name=partnerAgencyContactId]').val("");
+                touristGroup.getContactList($form.trigger('click'),1);
             }
         }).off('click').on('click', function() {
             var $that = $(this);
@@ -1782,7 +1785,7 @@ define(function(require, exports) {
         });
     };
     //获取同行联系人
-    touristGroup.getContactList = function($obj) {
+    touristGroup.getContactList = function($obj,isPartnerClick) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1817,8 +1820,13 @@ define(function(require, exports) {
                                         contactList[i].value = contactList[i].contactRealname + " - [" + contactList[i].contactMobileNumber + "]";
                                     }
                                 }
-                                $(objM).autocomplete('option', 'source', contactList);
-                                $(objM).autocomplete('search', '');
+                                if (!!isPartnerClick) {
+                                	$obj.find('input[name=partnerAgencyNameList]').val(contactList[0].value);
+                                	$obj.find('input[name=partnerAgencyContactId]').val(contactList[0].id);
+                                } else{
+                                	$(objM).autocomplete('option', 'source', contactList);
+                                    $(objM).autocomplete('search', '');
+                                };
                             } else {
                                 layer.tips('该组团社没有联系人，请添加！', objM, {
                                     tips: [1, '#3595CC'],
@@ -2537,18 +2545,11 @@ define(function(require, exports) {
         var endTime = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
         return endTime;
     }
-
-
-
-
-
-
     exports.init = touristGroup.initModule;
     exports.updateTouristGroup = touristGroup.updateTouristGroup;
     exports.addTouristGroup = touristGroup.addTouristGroup;
     //内外转方法的暴露
     exports.updateTransferIn = touristGroup.updateTransferIn;
     exports.updateTransfer = touristGroup.updateTransfer;
-
     exports.viewTouristGroup = touristGroup.viewTouristGroupDetails;
 });

@@ -63,8 +63,17 @@ define(function(require, exports) {
 	            	Insure.insureList = data.insuranceNameList;
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
+                    Insure.$tab = $('#' + tabId);
+                    Insure.$searchArea=Insure.$tab.find('.T-search-area');
 	                Insure.initList(startDate,endDate);
-
+                    //获取合计数据
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    Insure.getSumMoney(sumMoneyData,Insure.$tab);
 	                // 绑定翻页组件
                     laypage({
                         cont: Insure.$tab.find('.T-pagenation'),
@@ -80,11 +89,16 @@ define(function(require, exports) {
         	}
     	});
   	};
-
+    //获取合计金额
+    Insure.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
   	Insure.initList = function(startDate,endDate){
         // 初始化jQuery 对象
-        Insure.$tab = $('#' + tabId);
-        Insure.$searchArea=Insure.$tab.find('.T-search-area');
+        
 
         Insure.getQueryList();
         Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);

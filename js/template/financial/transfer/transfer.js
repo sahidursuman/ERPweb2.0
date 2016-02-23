@@ -60,8 +60,11 @@ define(function(require, exports) {
                 	Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转账务",html);
-
+                    Transfer.$tab = $('#tab-' + menuKey + "-content");
+                    Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
+                    
                     Transfer.initList(startDate,endDate);
+                    Transfer.getSumMoney(data.totalStatisticsData[0],Transfer.$tab);
                     // 绑定翻页组件
                     laypage({
                         cont: Transfer.$tab.find('.T-pagenation'),
@@ -77,10 +80,17 @@ define(function(require, exports) {
             }
         });
 	};
+    //获取合计金额
+    Transfer.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumCount').text(data.totalPeople);
+        tabId.find('.T-sumTransMoney').text(data.totalNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.totalSettlementMoney);
+        tabId.find('.T-sumPaiedMoney').text(data.totalPayedMoney);
+        tabId.find('.T-sumUnPaiedMoney').text(data.totalUnPayedMoney);
 
+    };
 	Transfer.initList = function(startDate,endDate){
-        Transfer.$tab = $('#tab-' + menuKey + "-content");
-        Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
+        
 
         Transfer.getQueryList();
         Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);

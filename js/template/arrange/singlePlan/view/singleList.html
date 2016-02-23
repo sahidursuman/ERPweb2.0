@@ -43,7 +43,7 @@
                     {{/if}}
                 </td>
                 <td>{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
-                <td style="vertical-align:middle">{{rs.surplusSeat}}</td>
+                <td style="vertical-align:middle">{{if !!rs.surplusSeat}}{{rs.surplusSeat}}{{else}}-{{/if}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
