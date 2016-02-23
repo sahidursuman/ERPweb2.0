@@ -205,7 +205,14 @@
                     </td>
                     <td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" {{if subList.operateCalculteOut==1 }}checked="checked" {{/if}} /></td>
                     <td>
-                        {{if subList.status == 0}} 已发团 {{else if subList.status == 1}} 未分团 {{else if subList.status == 2}} 已分团 {{else if subList.status == 3}} 已转客 {{else if subList.status == 4}} 已取消 {{else if subList.status == 5}} 已分段 {{else if subList.status == 6}} 已内转 {{/if}}
+                        {{if subList.status == 0}} 已发团 
+                        {{else if subList.status == 1}} 未分团 
+                        {{else if subList.status == 2}} 已分团 
+                        {{else if subList.status == 3}} 已外转 
+                        {{else if subList.status == 4}} 已取消 
+                        {{else if subList.status == 5}} 已分段 
+                        {{else if subList.status == 6}} 已内转 
+                        {{/if}}
                     </td>
                     <td>
                         <div class="hidden-sm hidden-xs btn-group">
