@@ -99,7 +99,7 @@ define(function(require,exports) {
         tabId.find('.T-sumReceiveMoney').text(data.sumAlreadyIncomeMoney);
         tabId.find('.T-sumUnReceivedMoney').text(data.sumUnIncomeMoney);
 	};
-	InnerTransferIn.getSumMoney
+	
 	//list页面事件
 	InnerTransferIn.inieEvent = function($obj){
 		//格式化日期控件
