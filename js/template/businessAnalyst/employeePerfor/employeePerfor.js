@@ -211,7 +211,7 @@ define(function(require, exports) {
 	
 	    	if (type==1) {
 	    		$.ajax({
-	    			url : KingServices.build_url("performanceOfUser","findTotal"),
+	    			url : KingServices.build_url("performanceOfUser","findUserPager"),
 					type : "POST",
 					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
 					success : function(data){
