@@ -77,7 +77,7 @@
 
      	<div class="form-group">
     		<label><span class="necessary">*</span>客户：</label>
-            <input type="text" name="fromPartnerAgency" class="form-control bind-change {{if !(touristGroupDetail.payedMoney>0)}}T-fromPartnerAgencyName{{/if}}" placeholder="请输入客户来源" style="width:133px;" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type }} readonly {{/if}}  >
+            <input type="text" name="fromPartnerAgency" class="form-control bind-change {{if !(touristGroupDetail.payedMoney>0)}}T-fromPartnerAgencyName{{/if}}" placeholder="请输入客户来源" style="width:133px;" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}" {{if !!touristGroupDetail.quoteId || !!type || touristGroupDetail.payedMoney>0 }} readonly {{/if}}  >
 			<input type="hidden" name="fromPartnerAgencyId" class="T-fromPartnerAgencyId" value="{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.id}}{{/if}}">
 			<input type="hidden" name="type" value="">
 			</label>
