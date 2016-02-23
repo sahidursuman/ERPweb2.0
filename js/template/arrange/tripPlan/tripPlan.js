@@ -402,6 +402,28 @@ define(function(require, exports) {
             	$(this).trigger('change').nextAll('[name="fromPartnerAgencyId"]').val(ui.item.id)
             	.closest('.T-tab').find('[name="contactRealname"]').val("")
             	.nextAll('[name="fromPartnerAgencyContactId"]').val("");
+            	var $parent = $(this).closest('.T-basic-info');
+            	 $.ajax({
+                    url: KingServices.build_url("partnerAgency", "getContactListByPartnerAgencyId"),
+                    data: {
+                        partnerAgencyId: ui.item.id
+                    },
+                    showLoading: false,
+                    type: 'POST',
+                    success: function(data) {
+                        var result = showDialog(data);
+                        if (result) {
+                            var contactList = JSON.parse(data.partnerAgencyContactList);
+                            if (contactList != null && contactList.length) {
+                                for (var i = 0; i < contactList.length; i++) {
+                                    contactList[i].value = contactList[i].contactRealname + " - [" + contactList[i].contactMobileNumber + "]";
+                                }
+                            }
+                            $parent.find('[name=contactRealname]').val(contactList[0].value)
+                            $parent.find('[name=fromPartnerAgencyContactId]').val(contactList[0].id)
+                        }
+                    }
+                });
             }
         })
         $that.off('click').on('click', function() {
