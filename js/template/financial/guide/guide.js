@@ -597,7 +597,7 @@ define(function(require, exports) {
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
                         }
-                        $tab.find('.T-checkList').html(html);
+                        var $tbody = $tab.find('.T-checkList').html(html);
 
                         if (!type) {
                             //给全选按钮绑定事件: 未去重
@@ -618,6 +618,17 @@ define(function(require, exports) {
                                 }
                             }
                         });
+
+                        // 当存在预支款时，触发change，以便可直接保存
+                        if ($tab.find('.T-saveClear').data('borrow') === 'borrow') {
+                            $tbody.find('input[name="payMoney"]').each(function() {
+                                var $that = $(this);
+
+                                if (!!$that.val())  {
+                                    $that.trigger('change');
+                                }
+                            });
+                        }
                     }
                 });
 
