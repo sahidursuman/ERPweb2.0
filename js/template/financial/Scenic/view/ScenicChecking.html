@@ -36,7 +36,7 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+    <table class="table table-striped table-bordered table-hover all hct_align_middle" style="margin-top: 30px">
         <thead>
             <tr>
                 <th class="th-border">账务类别</th>
@@ -72,7 +72,7 @@
 				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td ><input type="text" name="settlementMoney" class="F-float F-money" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
-                <td><input type="text" name="checkRemark" value="{{rs.checkRemark}}" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}/></td>
+                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>{{rs.checkRemark}}</textarea></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>

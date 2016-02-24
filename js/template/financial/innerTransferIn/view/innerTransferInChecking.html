@@ -92,7 +92,9 @@
                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
                 <td><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
-                <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}<input type="text" maxlength="1000"  name="checkRemark" value="{{checking.checkRemark}}" style="text-align:center">{{/if}}</td>
+                <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}
+                    <textarea class="col-sm-12 hct-textarea" maxlength="1000" name="checkRemark">{{checking.checkRemark}}</textarea>{{/if}}
+                </td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
                 <td>

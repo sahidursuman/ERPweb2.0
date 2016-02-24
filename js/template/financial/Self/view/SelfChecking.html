@@ -32,7 +32,7 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-	<table class="table table-striped table-bordered table-hover all" style="margin-top: 30px">
+	<table class="table table-striped table-bordered table-hover all hct_align_middle" style="margin-top: 30px">
 		<thead>
 			<tr >
                 <th class="th-border">团信息</th>
@@ -73,7 +73,7 @@
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a class="T-option T-selfPayImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money F-float F-money" style="text-align:center" /></td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
-                <td><input type="text" maxlength="1000" name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center" /></td>
+                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUser == null || rs.checkUser == ""}}-{{else}}{{rs.checkUser}}{{/if}}</td>
 				<td>

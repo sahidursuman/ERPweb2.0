@@ -154,6 +154,7 @@ function checkDisabled(checkList,checkTr,rightCode){
     for(var i = 0;i < checkList.length; i++){
         if(checkList[i].isConfirmAccount == 1){
             checkTr.eq(i).find('input[type=text]').prop("disabled",true);
+            checkTr.eq(i).find('textarea').prop("disabled",true);
             if(!auth){
             	checkTr.eq(i).find('input[type=checkbox]').prop("disabled",true);
             }
