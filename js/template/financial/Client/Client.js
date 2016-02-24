@@ -576,6 +576,7 @@ define(function(require, exports) {
             if ($that.hasClass('btn-primary')) {
                 if (autoValidator.form()) {
                     Client.autoFillData($tab);
+                    $tab.data('isEdited', true);
                 }
             } else {
                 Client.clearDataArray = [];
@@ -583,7 +584,7 @@ define(function(require, exports) {
                 Client.setAutoFillEdit($tab, false);
             }
         });
-        //确认对账按钮事件
+        //确认付款按钮事件
         $tab.find(".T-saveClear").click(function(){ 
             var check =  new FinRule(5).check($tab);
             if(!check.form()){ return false; }

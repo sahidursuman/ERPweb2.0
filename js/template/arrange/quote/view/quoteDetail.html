@@ -20,9 +20,9 @@
                         <span style="margin-left: 20px; ">出游日期：{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</span>
                         <span style="margin-left: 20px; ">出游人数：<span class="F-float F-count">{{quote.adultCount}}</span>大<span class="F-float F-count">{{quote.childCount}}</span>小</span>
                     </p>
-                    <p style="margin-top: -5px;"><span>导服费：<span class="F-float F-money">￥{{guideQuote.price}}</span></span>
+                    <!-- <p style="margin-top: -5px;"><span>导服费：<span class="F-float F-money">￥{{guideQuote.price}}</span></span>
                         <span style="margin-left: 20px; " class="F-float F-money">管理费：￥{{guideQuote.manageFee}}</span>
-                    </p>
+                    </p> -->
                     <table class="whereQ whereTwo quoteTable" style="width: 100%;margin-bottom: 10px;">
                         <tr style="font-weight: bold;background-color: #F3F3F3;">
                             <td class="style-myself"></td>
@@ -46,14 +46,14 @@
                      <!-- 导游 -->
 
                     <p style="margin-left: 55px;">导游：
-                    <span>导服费￥{{guideQuote.price}}。</span>
+                    <span>导服费￥{{guideQuote.quotePrice}}。</span>
                     </p>
 
                     <!-- 保险 -->
                     <div style="margin-left: 55px;">保险：
                      <p style="width: 70%;margin-left: 42px;margin-top: -18px;">
                     {{each insuranceQuote as insuranceList}}
-                    <span>{{insuranceList.insurance.name}}，</span><span>{{insuranceList.insuranceItem.name}}，</span><span>单价￥{{insuranceList.insuranceItem.price}}。</span><br> 
+                    <span>{{insuranceList.insurance.name}}，</span><span>{{insuranceList.insuranceItem.name}}，</span><span>单价￥{{insuranceList.quotePrice}}。</span><br> 
                     {{/each}}
                     </p>
                     </div>
@@ -65,7 +65,7 @@
                     {{if !!busCompanyQuote}}
                         <span>{{busCompany.brand}}</span>
                         <span><span class="F-float F-count">{{busCompany.needSeatCount}}</span>座，</span>
-                        <span>价格￥{{busCompany.price}}。</span>
+                        <span>座位价￥{{busCompany.quotePrice}}。</span>
                         <span>{{busCompany.remark}}</span> <br>
                     {{/if}}
                     {{/each}}

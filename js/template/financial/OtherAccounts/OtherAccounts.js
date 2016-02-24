@@ -52,7 +52,10 @@ define(function(require, exports) {
                     data.endAccountTime = endAccountTime
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "其它账务", html);
+                    OtherAccounts.$tab = $('#' + tabId);
+                    OtherAccounts.$searchArea = OtherAccounts.$tab.find('.T-search-area');
                     OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime);
+                    OtherAccounts.getSumMoney(data.totalFinancialOtherData[0],OtherAccounts.$tab);
                     //翻页
                     laypage({
                         cont: OtherAccounts.$tab.find('.T-pagenation'),
@@ -66,22 +69,23 @@ define(function(require, exports) {
                     });
                     //时间控件
                     var $container = $(".T-other");
-                    $container.find(".T-time").datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        format: 'yyyy-mm-dd',
-                        language: 'zh-CN'
-                    });
-
+                    Tools.setDatePicker($container.find(".T-time"),true);
                 }
             }
         })
     };
+    //获取合计金额
+    OtherAccounts.getSumMoney = function(data,tabId){
+        console.log(data);
+        tabId.find('.T-sumNeedPay').text(data.sumNeedPayMoney);
+        tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
+        tabId.find('.T-sumPaiedMoney').text(data.sumPayedMoney);
+        tabId.find('.T-sumUnPaiedMoney').text(data.sumUnPayedMoney);
+    };
     OtherAccounts.initList = function(pageNo, name, startAccountTime, endAccountTime) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
-        OtherAccounts.$tab = $('#' + tabId);
-        OtherAccounts.$searchArea = OtherAccounts.$tab.find('.T-search-area');
+        
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
         OtherAccounts.getTravelAgencyList($obj);
         //搜索按钮事件

@@ -56,10 +56,13 @@ define(function(require, exports) {
 		}).done(function(data){
 			if(showDialog(data)){
 				Tools.addTab(menuKey, "代订账务", listTemplate(data));
+				Replace.$tab = $('#tab-' + menuKey + '-content');
 				//绑定事件
 				Replace.init_event();
 				// 缓存页面
 				Replace.listPageNo = args.pageNo;
+				//获取统计金额
+				Replace.getSumMoney(args,Replace.$tab);
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$tab.find('.T-pagenation'), 
@@ -79,7 +82,7 @@ define(function(require, exports) {
 	 * 初始化列表页面的事件绑定
 	 */
 	Replace.init_event = function(){
-		Replace.$tab = $('#tab-' + menuKey + '-content');
+		
 		//搜索顶部的事件绑定
 		var $searchArea = Replace.$tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
@@ -90,6 +93,7 @@ define(function(require, exports) {
 			event.preventDefault();
 			Replace.getList();
 		});
+		
 		// 报表内的操作
 		Replace.$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -103,7 +107,23 @@ define(function(require, exports) {
 			}
 		});
 	};
-
+	//获取统计金额
+	Replace.getSumMoney = function(args,tabId){
+		$.ajax({
+			url:KingServices.build_url('financial/bookingAccount', 'listPagerTotal'),
+			data:args,
+			type:"POST",
+			success:function(data){
+				if(showDialog(data)){
+					console.log(data);
+	                tabId.find('.T-sumMoney').text(data.sumContractMoney);
+	                tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
+	                tabId.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+	                tabId.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+	            }
+			}
+		});
+	};
 	Replace.chooseCustomer = function($obj){
 		$obj.autocomplete({
 			minLength: 0,

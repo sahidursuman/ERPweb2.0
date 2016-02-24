@@ -832,6 +832,19 @@ input.datepicker {
 	font-size: 16px;
 	padding-top: 20px;
 }
+.page-content{
+	overflow: hidden;
+}
+.hct-textarea{
+    padding: 0 5px;
+    height: 100%;
+	outline: none;
+	resize: none;
+}
+.hct-textarea:disabled{
+	color: #848484!important;
+    background-color: #eee!important;
+}
 /*财务样式兼容*/
 .financial-search-planProfit{
 	display: inline-block;

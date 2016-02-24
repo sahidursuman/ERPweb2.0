@@ -77,7 +77,9 @@ FinancialService.initPayEvent = function($container,rule)  {
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
+        if(!$(this).data("oldVal")){
+            $(this).data("oldVal",$(this).val());
+        }
     })
     .on('change', 'input[name="settlementMoney"]', function(event) {
         var $this = $(this),
@@ -97,6 +99,8 @@ FinancialService.updateUnpayMoney = function($tab,rule){
             $unpay = $tab.find(".T-unpayMoney");
         $st.text(Tools.toFixed($st.text()*1 + spread));
         $unpay.text(Tools.toFixed($unpay.text()*1 + spread));
+
+        $(this).data("oldVal",$(this).val());
     });
 };
 
@@ -128,7 +132,7 @@ FinancialService.checkSaveJson = function($tab,rule){
             if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
                 var checkRecord = {
                     id : $this.data("id"),
-                    settlementMoney : getValue($this,"settlementMoney"),
+                    settlementMoney : $this.find("input[name=settlementMoney]").val(),
                     unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
                     checkRemark : $this.find("[name=checkRemark]").val(),
                     isConfirmAccount : isConfirmAccount
@@ -520,14 +524,6 @@ function isAllChecked(checkboxList){
     return isAll;
 }
 
-function getValue($obj,name){
-    var result = $obj.find("[name="+name+"]").val();
-    if (result == "") {//所有空字符串变成0
-        result = 0;
-    }
-    return result;
-} 
-
 /**
  * 财务校验方法
  * 使用方法：var rule = new FinRule(0);
@@ -644,7 +640,9 @@ FinRule.prototype.check = function($obj) {
 //minTdLen 子行td数量
 FinancialService.updateMoney_checking = function($tab,minTdLen){
     $tab.find('.T-checkList').on('focusin', 'input[name="settlementMoney"]', function(event) {
-        $(this).data("oldVal",$(this).val());
+        if(!$(this).data("oldVal")){
+            $(this).data("oldVal",$(this).val());
+        }
     })
     .on('change', 'input[name="settlementMoney"]', function(event) {
         var $this = $(this),
@@ -670,6 +668,8 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
         $tab.find(".T-sumBackMoney").text($tab.find(".T-sumBackMoney").text()*1 + spread);
         $tab.find(".T-sumSettlementMoney").text($tab.find(".T-sumSettlementMoney").text()*1 - spread);
         $tab.find(".T-sumUnReceivedMoney").text($tab.find(".T-sumUnReceivedMoney").text()*1 - spread);
+
+        $(this).data("oldVal",$(this).val());
     });
 };
 
