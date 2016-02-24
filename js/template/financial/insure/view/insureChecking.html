@@ -30,7 +30,7 @@
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="clearfix"></div>
-    <table class="table table-striped table-bordered table-hover all">
+    <table class="table table-striped table-bordered table-hover all hct_align_middle">
         <thead>
             <tr>
                 <th class="th-border">团信息</th>
@@ -74,9 +74,7 @@
                     <input type="text" class="F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money">
                 </td>
                 <td class="F-float F-money" name="unPayedMoney">{{rs.unPayedMoney}}</td>
-                <td>
-                    <input type="text" maxlength="1000" name="checkRemark" style="text-align:center" value="{{rs.checkRemark}}" />
-                </td>
+                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td>
