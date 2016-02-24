@@ -1346,6 +1346,9 @@ define(function(require, exports) {
             $name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
         });
 
+        $mainForm.find('label.T-addPartner').addClass('hide');
+        $mainForm.find('label.T-addPartnerManager').addClass('hide');
+
         $mainForm.find('input[name="childPrice"]').trigger('change');
     };
     //获取线路产品
