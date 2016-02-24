@@ -210,9 +210,6 @@ define(function(require, exports) {
 				if(showDialog(data)){
 					var html = operationTemplate(data);
 					Tools.addTab(menuKey+"-operation","分段操作",html);
-
-					subsection.$tabSub = $("#tab-resource_subsection-operation-content");
-					subsection.$tbody = subsection.$tabSub.find('.T-subsectionOperationTbody');
 					subsection.init_section_event();
 				}
 			}
@@ -223,6 +220,8 @@ define(function(require, exports) {
 	 * 分段操作事件绑定
 	 */
 	subsection.init_section_event = function() {
+		subsection.$tabSub = $("#tab-resource_subsection-operation-content");
+		subsection.$tbody = subsection.$tabSub.find('.T-subsectionOperationTbody');
 		subsection.$tabSub.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
 		.on('change', function(event) {
 			subsection.$tabSub.data('isEdited', true);
