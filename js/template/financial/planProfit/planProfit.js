@@ -172,7 +172,7 @@ define(function(require, exports) {
                     // });
 
                     //核算中转
-                    plan.$tab.find(".T-checkTurn").on("click",function(){
+                    plan.$tab.find(".T-checkTurn").off().on("click",function(){
                         plan.listPlan(0); 
                     });
 

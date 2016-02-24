@@ -1365,6 +1365,12 @@ define(function(require, exports) {
 		if ($tab.find('.T-status').text() != 0) {
 			$tr.find('[name="isAccountGuide"]').prop('disabled', true)
 		}
+		
+		var $trs = $tbody.find('tr'), startTime = $tab.find('.T-startTime').text(), endTime = $tab.find('.T-endTime').text();
+		if ($trs.length == 1) {
+			$trs.eq(0).find('input[name=startTime]').val(startTime);
+			$trs.eq(0).find('input[name=endTime]').val(endTime);
+		}
 	}
 
 	/**
@@ -3205,6 +3211,7 @@ define(function(require, exports) {
 						busId : tripPlan.getVal(bus.eq(i), "busId"),
 						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
 						setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
+						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
 						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
@@ -3249,6 +3256,7 @@ define(function(require, exports) {
 						needPayMoney : tripPlan.getVal(restaurant.eq(i), "needPayMoney"),
 						prePayMoney : tripPlan.getVal(restaurant.eq(i), "prePayMoney"),
 						guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
+						payType : tripPlan.getVal(restaurant.eq(i), "payType"),
 						remark : tripPlan.getVal(restaurant.eq(i), "remark"),
 						type : restaurant.eq(i).find("[name=type]").val(),
 						isChoose : isChoose,
@@ -3344,6 +3352,16 @@ define(function(require, exports) {
 					if (!!tripPlan.$tab) {  // 未打开发团安排
 						tripPlan.listTripPlan(0);
 					}
+					if(!!$("#tab-arrange_plan-content")) {
+						seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+							module.listTripPlanGroup(0, $("#tab-arrange_plan-content"));
+						});
+					}
+					if (!!$("#tab-arrange_singleplan-content")) {
+						seajs.use("" + ASSETS_ROOT + modalScripts.arrange_singlePlan,function(module){
+							module.listTripPlanSingle(0, $("#tab-arrange_singleplan-content"));
+						});
+					}
 
 					Tools.refreshTab($tab.find('.T-tab-id').text());
 
@@ -3414,12 +3432,33 @@ define(function(require, exports) {
 				isThere = 1;
 				Tools.addTab(menukeyId.substring(menukeyId.indexOf('tab-')+4,menukeyId.lastIndexOf('-content')));
 				var $container = $("#"+menukeyId);
-				if (!!target) {
+				/*if (!!target) {
 					if (target == "T-hotel") {
 						$container.find('.T-hotelTarget').trigger('click');
 					}else if (target == "T-bus") {
 						$container.find('.T-busTarget').trigger('click');
+					}else {
+						$target = $nav.find('[href='+ target +']');
 					}
+				}*/
+				// 激活第一个菜单
+				var $nav = quoteContent.find('.T-arrange-tabs'), $target;
+				if (!!target) {
+					if (target == 'T-bus') {
+						$target = $tab.find('.T-busTarget');
+					}else if (target == 'T-hotel') {
+						$target = $tab.find('.T-hotelTarget');
+					} else {
+						$target = $nav.find('[href='+ target +']');
+					}
+				}
+				if (!$target || !$target.length) {
+					$target = $nav.find('a').eq(0);
+				}
+				$target.trigger('click');
+				if (!$nav.find('.active').length) {
+
+					$nav.find('a').eq(0).trigger('click');
 				}
 			}
 		})

@@ -235,22 +235,19 @@ define(function(require, exports) {
 	}
 
 	//新增计划
-	singlePlan.addTripPlan = function(planType, args, groupIds){
+	singlePlan.addTripPlan = function(planType, args, groupIds, isInnerSinglePlan){
 		var tabKey = menuKey + "_single_add";
         if(!args){
         	args = {}
         }else{
         	args.endTime = Tools.addDay(args.startTime, args.days);
         }
+        args.groupIds = JSON.stringify(groupIds);
+        args.args = JSON.stringify(args);
 
         if (Tools.addTab(tabKey, "新增散客计划", addSingleTripPlanTemplate(args))) {
         	var $tab = $("#tab-" + tabKey + "-content");
-            singlePlan.initSigleEvent($tab) 
-            if(!$.isEmptyObject(args)) {
-            	args.mergeTouristGroupIdJson = groupIds;
-            	singlePlan.initNormalLineProduct($tab, args.id);
-            	singlePlan.getTouristGroup(args, $tab);
-            }
+            singlePlan.initSigleEvent($tab, isInnerSinglePlan) 
         }
 	};
 
@@ -482,6 +479,14 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-delete')){
     			var id = $that.closest('tr').data('id');
 
+    			function removeDay() {
+    				$that.closest('tr').remove();
+    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
+    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
+    				if(whichDay == lenWhichDay){
+	    				F.arrangeDate($tab);
+    				}
+    			}
     			if (!!id) {
     				showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
     					$.ajax({
@@ -501,14 +506,6 @@ define(function(require, exports) {
     				removeDay();
     			}
 
-    			function removeDay() {
-    				$that.closest('tr').remove();
-    				var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
-    					lenWhichDay = $tab.find('.T-days').data('length-whichDay');
-    				if(whichDay == lenWhichDay){
-	    				F.arrangeDate($tab);
-    				}
-    			}
     		}else if($that.hasClass('T-scenicItem')){
     			KingServices.chooseScenic($that);
     		}
@@ -527,7 +524,7 @@ define(function(require, exports) {
 	 * @param  {int} id 计划ID
 	 * @return {[type]}    [description]
 	 */
-	singlePlan.updateSingleTripPlan = function(id, groupIds) {
+	singlePlan.updateSingleTripPlan = function(id, groupIds, isInnerSinglePlan) {
 		if (!!id) {
 			$.ajax({
 				url: KingServices.build_url('tripController', 'editTripPlan'),
@@ -549,7 +546,7 @@ define(function(require, exports) {
 					
 					if (Tools.addTab(tabKey, '编辑散客计划', updateSingleTripPlanTemplate(data))) {
 						var $tab = $("#tab-" + tabKey + "-content");
-	            		singlePlan.initSigleEvent($tab) 
+	            		singlePlan.initSigleEvent($tab, isInnerSinglePlan) 
 			            if(!$.isEmptyObject(groupIds)) {
 			            	singlePlan.getTouristGroup({mergeTouristGroupIdJson:groupIds}, $tab);
 			            }
@@ -608,7 +605,7 @@ define(function(require, exports) {
 		}
 	};
 
-	singlePlan.initSigleEvent = function($tab) {
+	singlePlan.initSigleEvent = function($tab,isInnerSinglePlan) {
 		var validate = singlePlan.bindCommonEvent($tab, 0);
         //搜索线路
     	$tab.find(".T-search-line").on('click', function(){
@@ -640,8 +637,17 @@ define(function(require, exports) {
     	// 保存
     	$tab.find('.T-savePlan').on('click', function(event) {
     		event.preventDefault();
-    		singlePlan.saveSinglePlan($tab, validate);
+    		singlePlan.saveSinglePlan($tab, validate, isInnerSinglePlan);
     	});
+
+    	var args = $tab.find('[name=args]').data('val'),
+    		groupIds = $tab.find('[name=groupIds]').data('val');
+
+        if(!$.isEmptyObject(args)) {
+        	args.mergeTouristGroupIdJson = groupIds;
+        	singlePlan.initNormalLineProduct($tab, args.id);
+        	singlePlan.getTouristGroup(args, $tab);
+        }
 	};
 	singlePlan.jsonToString = function(jTs) {
 		if (typeof jTs != 'string') {
@@ -654,7 +660,7 @@ define(function(require, exports) {
 	 * @param  {object} $tab 父容器
 	 * @return {[type]}      [description]
 	 */
-	singlePlan.saveSinglePlan = function($tab, validate, tabArgs) {
+	singlePlan.saveSinglePlan = function($tab, validate, tabArgs,isInnerSinglePlan) {
 		if(!validate.form())return;
 		var args = $tab.find('.T-basic-info').serializeJson();
 		args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
@@ -713,6 +719,12 @@ define(function(require, exports) {
 							singlePlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
 						}
 					}
+
+					//散客拼团
+					if(!isInnerSinglePlan){
+						$('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+					}
+					
 				});				
 			}
 		});
@@ -1808,4 +1820,5 @@ define(function(require, exports) {
 	//散客发团计划编辑
 	exports.updateSingleTripPlan = singlePlan.updateSingleTripPlan;
 	exports.addTripPlan = singlePlan.addTripPlan;
+	exports.listTripPlanSingle = singlePlan.listTripPlanSingle;
 });

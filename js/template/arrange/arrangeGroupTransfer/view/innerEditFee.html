@@ -68,13 +68,39 @@
 							    {{if touristGroup.innerTransferFeeStatus==0}}
 									<!--初始化游客小组费用start--> 
 									{{each touristGroupFeeList as transferList}} 
-									          
+
+									{{if touristGroup.operateCalculteOut==0}}
+											{{if transferList.type!=3}}    
+												<tr  data-entity-id="{{transferList.id}}">
+													<td>
+														 <select name="type" class="col-sm-10 col-sm-offset-1">
+						                                    {{#transferList.type | getFeeItemType: false}}
+						                                 </select>
+													</td>  
+													
+													<td>
+														<input name="count" value="{{transferList.count}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc F-float F-count"  maxlength="10"/>
+													</td>
+													<td>
+														<input name="price" value="{{transferList.price}}" type="text" class="col-sm-10  no-padding-right price T-price T-calc F-float F-money"  maxlength="10" />
+													</td>
+
+													<td>
+														<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10  no-padding-right T-payMoney F-float F-money"/>
+													</td>
+													<td>
+														<input name="remark" value="{{transferList.remark}}" type="text" class="col-sm-10  no-padding-right"  maxlength="500" />
+													</td>
+													<td><a class="T-delete cursor">删除</a></td>
+												</tr>
+											{{/if}}
+										{{else}}
 										<tr  data-entity-id="{{transferList.id}}">
 											<td>
 												 <select name="type" class="col-sm-10 col-sm-offset-1" {{if transferList.type==3}}disabled{{/if}}>
 				                                    {{#transferList.type | getFeeItemType: true}}
 				                                 </select>
-											</td>  
+											</td> 
 											
 											<td>
 												<input name="count" value="{{transferList.count}}" type="text" class="col-sm-10  no-padding-right count T-count T-calc F-float F-count"  maxlength="10" {{if transferList.type==3}}readonly{{/if}}/>
@@ -91,6 +117,7 @@
 											</td>
 											<td> {{if transferList.type!=3}}<a class="T-delete cursor">删除</a>{{/if}}</td>
 										</tr>
+									{{/if}}
 										
 									{{/each}}
 									<!--游客小组费end-->
@@ -130,7 +157,6 @@
 		</div>
 	</form>
 
-  {{if subsection==0}}
 	<!--收客信息 start-->
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
@@ -217,8 +243,7 @@
 			</div>   
 		</div>  
 	</form>     
-	<!--收客信息 end--> 
-	{{/if}}
+	<!--收客信息 end-->
 
 
 	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">

@@ -60,7 +60,7 @@
 							<div class=" ui-sortable-handle">
 									<h5 class="">
 										<span class="badge badge-primary">1</span>
-										<label class="middle title-size">接团车俩</label>
+										<label class="middle title-size">接团车辆</label>
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
@@ -88,7 +88,7 @@
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{outBus.seatCount}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
-													<td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
+													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
 													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
@@ -384,7 +384,7 @@
 							<div class=" ui-sortable-handle">
 									<h5 class="">
 										<span class="badge badge-primary">1</span>
-										<label class="middle title-size">送团车俩</label>
+										<label class="middle title-size">送团车辆</label>
 									</h5>
 								<div class="widget-body">
 									<div class="widget-main no-padding">
@@ -412,7 +412,7 @@
 													<td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
 													<td>{{outBus.seatCount}}</td>
 													<td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
-													<td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
+													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
 													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>

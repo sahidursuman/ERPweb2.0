@@ -35,22 +35,25 @@
     {{if arrange != null}}
     <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
-        {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
-        {{if tripPlan.billStatus == -1}}
-            {{if arrange.isChoose == 1}}
-                <select name="chooseRest">
-                    <option value="">导游自选</option>
-                    {{each arrange.restaurantChooseArrangeList as rs}}
-                        <option value="{{rs.restaurantId}}">{{rs.name}}</option>
-                    {{/each}}
-                </select>
-            {{else}}
-                {{if arrange.restaurant != null}}
-                    <span>{{arrange.restaurant.name}}</span>
+        {{if index == 0}}
+            <td rowspan="{{arrangeList.restaurantArrangeList.length}}">
+            {{if tripPlan.billStatus == -1}}
+                {{if arrange.isChoose == 1}}
+                    <select name="chooseRest">
+                        <option value="">导游自选</option>
+                        {{each arrange.restaurantChooseArrangeList as rs}}
+                            <option value="{{rs.restaurantId}}">{{rs.name}}</option>
+                        {{/each}}
+                    </select>
+                {{else}}
+                    {{if arrange.restaurant != null}}
+                        <span>{{arrange.restaurant.name}}</span>
+                    {{/if}}
                 {{/if}}
-            {{/if}}
-        {{else}}{{if arrange.billUpdateTime != null}}
-        {{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
+            {{else}}{{if arrange.billUpdateTime != null}}
+            {{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}{{/if}}
+            </td>
+        {{/if}}
         <td>{{arrange.type}}</td> 
         <td>{{if tripPlan.billStatus == -1}}{{if arrange.isChoose == 1}}<input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.price}}" type="text" name="price" />
         <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">{{else}}
