@@ -941,7 +941,7 @@ define(function(require, exports) {
 		$.ajax({
 			url : KingServices.build_url('touristGroup', 'getTouristGroupListByT'),
 			type : 'POST',
-			data : {pageNo : page || 0, orderNumber : orderNumber}
+			data : {pageNo : page || 0, orderNumber : orderNumber || ""}
 		}).done(function(data){
 			if(showDialog(data)){
 				var $team = $(".T-team-search");
