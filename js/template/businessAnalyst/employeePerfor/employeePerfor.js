@@ -165,7 +165,7 @@ define(function(require, exports) {
 				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
 			    partnerAgencyType=$that.data('value'),
-			    customerType=$that.data('value'),
+			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
 			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
 
 			console.info('isEmployee----'+isEmployee);
