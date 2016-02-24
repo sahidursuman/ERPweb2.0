@@ -27,7 +27,7 @@
    </colgroup> -->
     <thead>
         <tr class="bg-blur">
-            <th rowspan="2">中转单号</th>
+            <th rowspan="2">中转单号<br>(收客单号)</th>
             <th rowspan="2">客户</th>
             <th rowspan="2">线路产品</th>
             <th rowspan="2">出游日期</th>
@@ -59,7 +59,11 @@
     </thead>
     <tbody>{{each outRemarkArrangeList as transit}}
         <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" data-isEdit="{{transit.touristGroupOutRemark.isEdit}}">
-            <td>{{transit.orderNumber}}</td>
+            <td>
+              {{transit.orderNumber}}
+              <br>
+              {{if !!transit.touristGroupOutRemark && !!transit.touristGroupOutRemark.orderNumber}}({{transit.touristGroupOutRemark.orderNumber}}){{/if}}
+            </td>
             <td>{{transit.partnerAgencyName}}</td>
             <td>{{transit.lineProductName}}</td>
             <td>{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
