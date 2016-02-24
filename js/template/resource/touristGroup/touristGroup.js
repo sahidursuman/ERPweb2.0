@@ -802,6 +802,9 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
             $tab.find('.T-startTime').data('days',$tr.data('days'));
             $tab.find('.T-days').val($tr.data('days'));
+            $tab.find('.T-addPartner').removeClass('hide');
+            $tab.find('.T-addPartnerManager').removeClass('hide');
+
             startTime = $tab.find('.T-startTime').val();
             if (!!startTime) {
                 $tab.find('.T-endTime').val(Tools.addDay(startTime, $tr.data('days') - 1));
@@ -1173,6 +1176,8 @@ define(function(require, exports) {
                 touristGroup.setTimePicRe($addTabId, "endTime");
                 touristGroup.setReadonly($addTabId, "fromPartnerAgency");
                 touristGroup.setReadonly($addTabId, "partnerAgencyNameList");
+                $addTabId.find('.T-addPartner').addClass('hide');
+                $addTabId.find('.T-addPartnerManager').addClass('hide');
                 layer.close(touristGroup.chooseQuoteProlayer);
 
             } else {
@@ -1345,10 +1350,6 @@ define(function(require, exports) {
                 val = $mainForm.hasClass('.T-update') ? $name.data('old') : '';
             $name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
         });
-
-        $mainForm.find('label.T-addPartner').addClass('hide');
-        $mainForm.find('label.T-addPartnerManager').addClass('hide');
-
         $mainForm.find('input[name="childPrice"]').trigger('change');
     };
     //获取线路产品
