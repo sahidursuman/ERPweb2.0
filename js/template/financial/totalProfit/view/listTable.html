@@ -1,9 +1,9 @@
 {{each result as rs}}
     <tr data-id="{{rs.id}}" lineProductId="{{rs.lineProductId}}">
-        <td>{{if rs.tripNumber == null || rs.tripNumber == ""}}-{{else}}{{rs.tripNumber}}{{/if}}</td>
+        <td>{{if rs.orderNumber  == null || rs.orderNumber  == ""}}-{{else}}{{rs.orderNumber }}{{/if}}</td>
         <td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-{{else}}<a class="T-option T-transfer" data-id="{{rs.lineProductId}}">{{rs.lineProductName}}</a>{{/if}}</td>
         <td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
-        <td>{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
+        <td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>
         <td>{{if (rs.adultCount == null || rs.adultCount == "") && (rs.childCount == null || rs.childCount == "")}}
                 -
             {{else}}
@@ -16,15 +16,15 @@
             {{/if}}
         </td>
         <td>{{if rs.fromPartnerAgencyName == null || rs.fromPartnerAgencyName == ""}}-{{else}}{{rs.fromPartnerAgencyName}}{{/if}}</td>
-        <td>{{if rs.totalIncome == null || rs.totalIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.totalIncome}}</span>{{/if}}</td>
-        <td>{{if rs.totalOtherIncome == null || rs.totalOtherIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.totalOtherIncome}}</span>{{/if}}</td>
-        <td>{{if rs.orderIncome == null || rs.orderIncome == ""}}-{{else}}<span class="F-float F-money">{{rs.orderIncome}}</span>{{/if}}</td>
-        <td>{{if rs.totalOut == null || rs.totalOut == ""}}-{{else}}<span class="F-float F-money">{{rs.totalOut}}</span>{{/if}}</td>
-        <td>{{if rs.totalTrip == null || rs.totalTrip == ""}}-{{else}}<span class="F-float F-money">{{rs.totalTrip}}</span>{{/if}}</td>
-        <td>{{if rs.totalTransfer == null || rs.totalTransfer == ""}}-{{else}}<span class="F-float F-money">{{rs.totalTransfer}}</span>{{/if}}</td>
-        <td>{{if rs.orderPay == null || rs.orderPay == ""}}-{{else}}<span class="F-float F-money">{{rs.orderPay}}</span>{{/if}}</td>
-        <td>{{if rs.incomeTrip == null || rs.incomeTrip == ""}}-{{else}}<span class="F-float F-money">{{rs.incomeTrip}}</span>{{/if}}</td>
-        <td>{{if rs.payTrip == null || rs.payTrip == ""}}-{{else}}<span class="F-float F-money">{{rs.payTrip}}</span>{{/if}}</td>
-        <td>{{if rs.profit == null || rs.profit == ""}}-{{else}}<span class="F-float F-money">{{rs.profit}}</span>{{/if}}</td>
+        <td>{{if rs.tripIncome == null || rs.tripIncome === ""}}-{{else}}<span class="F-float F-money">{{rs.tripIncome}}</span>{{/if}}</td>
+        <td>{{if rs.otherIncome == null || rs.otherIncome === ""}}-{{else}}<span class="F-float F-money">{{rs.otherIncome}}</span>{{/if}}</td>
+        <td>{{if rs.orderIncome == null || rs.orderIncome === ""}}-{{else}}<span class="F-float F-money">{{rs.orderIncome}}</span>{{/if}}</td>
+        <td>{{if rs.outCost == null || rs.outCost === ""}}-{{else}}<span class="F-float F-money">{{rs.outCost}}</span>{{/if}}</td>
+        <td>{{if rs.tripCost == null || rs.tripCost === ""}}-{{else}}<span class="F-float F-money">{{rs.tripCost}}</span>{{/if}}</td>
+        <td>{{if rs.transferCost == null || rs.transferCost === ""}}-{{else}}<span class="F-float F-money">{{rs.transferCost}}</span>{{/if}}</td>
+        <td>{{if rs.orderCost == null || rs.orderCost === ""}}-{{else}}<span class="F-float F-money">{{rs.orderCost}}</span>{{/if}}</td>
+        <td>{{if rs.income == null || rs.income === ""}}-{{else}}<span class="F-float F-money">{{rs.income}}</span>{{/if}}</td>
+        <td>{{if rs.cost == null || rs.cost === ""}}-{{else}}<span class="F-float F-money">{{rs.cost}}</span>{{/if}}</td>
+        <td>{{if rs.profit == null || rs.profit === ""}}-{{else}}<span class="F-float F-money">{{rs.profit}}</span>{{/if}}</td>
     </tr>
 {{/each}}

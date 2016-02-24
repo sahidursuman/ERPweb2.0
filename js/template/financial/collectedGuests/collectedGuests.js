@@ -14,8 +14,8 @@ define(function(require, exports) {
         var dateJson = FinancialService.getInitDate();
         ColGuest.searchData = {
             pageNo : 0,
-            startDate : dateJson.startDate,
-            endDate : dateJson.endDate,
+            startTime : dateJson.startDate,
+            endTime : dateJson.endDate,
         };
         var data = {};
         data.searchParam = ColGuest.searchData;
@@ -34,8 +34,8 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startDate : startTime,
-            endDate : endTime,
+            startTime : startTime,
+            endTime : endTime,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(ColGuest.searchData);
@@ -77,11 +77,7 @@ define(function(require, exports) {
                     ColGuest.partnerAgencyList = partnerAgencyList;
 
                     ColGuest.listGuest(0);
-
-                    $tab.find(".T-totalIncome").text(data.sumIncomeTrip);
-                    $tab.find(".T-totalTrip").text(data.sumPayTrip);
-                    $tab.find(".T-totalProfit").text(data.sumProfit);
-                    $tab.find(".T-AvgProfit").text(data.sumAvgProfit);
+                    ColGuest.getSumData($tab,ColGuest.searchData);
 
                     Tools.setDatePicker($tab.find(".date-picker"),true);
                     //搜索按钮事件
@@ -133,15 +129,15 @@ define(function(require, exports) {
             fromPartnerAgencyId : fromPartnerAgencyId,
             customerType : customerType,
             orderNumber : orderNumber,
-            startDate : startTime,
-            endDate : endTime,
+            startTime : startTime,
+            endTime : endTime,
             order : "desc",
             sortType: 'startTime'
         };
         $.ajax({
-            url:KingServices.build_url("receiveProfit","listReceiveProfit"),
+            url:KingServices.build_url("receiveProfit","findPager"),
             type: "POST",
-            data: { searchParam : JSON.stringify(ColGuest.searchData)},
+            data: ColGuest.searchData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
@@ -207,6 +203,24 @@ define(function(require, exports) {
         }).on("click",function(){
             $partner.autocomplete('search', '');
         });
+    };
+
+    ColGuest.getSumData = function($tab,args){
+        $.ajax({
+            url:KingServices.build_url("receiveProfit","findTotal"),
+            type: "POST",
+            data: args,
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $tab.find(".T-touristCount").text(data.total.adultCount + " 大 " + data.total.childCount + " 小");
+                $tab.find(".T-totalIncome").text(data.total.income);
+                $tab.find(".T-totalTrip").text(data.total.cost);
+                $tab.find(".T-totalProfit").text(data.total.profit);
+                $tab.find(".T-AvgProfit").text(data.total.avgProfit);
+            }  
+        });
+        
     };
 
     exports.init = ColGuest.initModule;

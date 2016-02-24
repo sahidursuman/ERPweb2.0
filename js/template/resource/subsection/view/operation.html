@@ -47,7 +47,7 @@
                             <td class="T-price F-float F-money">
                                 {{transferList.price}}
                             </td>
-                            <td class="F-float F-money">{{transferList.price*transferList.count}}</td>
+                            <td class="F-float F-money T-transitMoney">{{transferList.price*transferList.count}}</td>
 
                             <td>
                                 {{transferList.remark}}
@@ -86,7 +86,7 @@
             <tbody class="T-subsectionOperationTbody" data-neePayAllMoney="{{ptGroup.needPayAllMoney}}">
             {{each subtGroupList as subList indexA}}
               {{if subList.id != null}}
-                <tr data-entity-id="{{subList.id}}">
+                <tr data-entity-id="{{subList.id}}" data-status="{{subList.status}}">
                     <td>
                        <!--  <input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}" />
                        <input class="{{if subList.status == 1}}T-chooseLineProduct{{/if}} col-sm-12" name="lineProduct" {{if subList.status !=1 }}readonly="readonly" {{/if}} type="text" value="{{subList.lineProduct.name}}" /> -->
@@ -205,7 +205,14 @@
                     </td>
                     <td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" {{if subList.operateCalculteOut==1 }}checked="checked" {{/if}} /></td>
                     <td>
-                        {{if subList.status == 0}} 已发团 {{else if subList.status == 1}} 未分团 {{else if subList.status == 2}} 已分团 {{else if subList.status == 3}} 已转客 {{else if subList.status == 4}} 已取消 {{else if subList.status == 5}} 已分段 {{else if subList.status == 6}} 已内转 {{/if}}
+                        {{if subList.status == 0}} 已发团 
+                        {{else if subList.status == 1}} 未分团 
+                        {{else if subList.status == 2}} 已分团 
+                        {{else if subList.status == 3}} 已外转 
+                        {{else if subList.status == 4}} 已取消 
+                        {{else if subList.status == 5}} 已分段 
+                        {{else if subList.status == 6}} 已内转 
+                        {{/if}}
                     </td>
                     <td>
                         <div class="hidden-sm hidden-xs btn-group">

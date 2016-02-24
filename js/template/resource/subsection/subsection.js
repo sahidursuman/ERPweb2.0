@@ -315,10 +315,10 @@ define(function(require, exports) {
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('change', '.T-calc', function(event) {
            var $that=$(this),divIndex = $that.closest('td').children('div').length, $tr = $that.closest('tr');
 	            if ($that.hasClass('T-count')) {  //若数量改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	            }else if($that.hasClass('T-price')){ //若价格改变
-	                var payMoney = subsection.totalPayMoney($tr,divIndex);
+	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
 	        };
         });
@@ -426,7 +426,7 @@ define(function(require, exports) {
 			$tbody.data('isEdited', true);
 	};
 
-	/**
+   /**
 	 * delFeeItem 删除中转费用项目
 	 * @param  {[type]} $this 当前对象
 	 * @return {[type]}      [description]
@@ -491,7 +491,6 @@ define(function(require, exports) {
 		});
 		$that.remove();
 	};
-
 
 	/**
 	 * [checkedTransitFee 将中转结算接待到费用项目中
@@ -576,21 +575,18 @@ define(function(require, exports) {
      * @return {[type]} 
      */
     subsection.totalPayMoney =function($tr,tdIndex){
-    	var totalPayMoney = 0;
-	    	$tr.each(function() {
-	    		var $_that = $(this),$countTr = $_that.find('.T-count'),payMoney=0;
-	    		$countTr.each(function(index) {
-	    			if(index <= tdIndex ){
-	    				var count = $(this).closest('tr').find(".T-count-" + index).val(),
-					        price = $(this).closest('tr').find(".T-price-" + index).val();
+    	var totalPayMoney = 0, $countTr = $tr.find('.T-count'), $priceTr = $tr.find('.T-price');
+    	    for (var i = 0; i < $countTr.length; i++) {
+    	    	for (var j = 0; j < $priceTr.length; j++) {
+    	    		if (i==j) {
+    	    			var count = $countTr.eq(i).val(),
+					        price = $priceTr.eq(j).val();
 					    if (!isNaN(count) && !isNaN(price)) {
 					    	totalPayMoney +=count*price;
 					    };
-					   
-	    			}
-				    
-			    });
-	    	});
+    	    		};
+    	    	};
+    	    };
     	return totalPayMoney;
     };
 
@@ -615,12 +611,15 @@ define(function(require, exports) {
 				touristGroupSubFeeList : []
 			},
 			$tbody = subsection.$tabSub.find(".T-subsectionOperationTbody"),
-			receivables = 0, tmp;
+			receivables = 0, tmp, isError = 0;
 
 		// get table data
 		$tbody.children('tr').each(function() {
-			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type');
+			var $tr = $(this), id = $tr.data('entity-id'),$feeItemTr = $tr.find('.T-type'), status = $tr.data('status');
 			     num+=$(this).find('.T-payedMoney').val();
+			if (status == 3 || status == 6 || status == 0) {
+				isError = 1;
+			}
 
 			if ($tr.hasClass('del')) {
 				subTouristGroup.delSubTouristGroupIdList.push({id: id});
@@ -642,13 +641,13 @@ define(function(require, exports) {
 				}
 
 				//费用项目$feeItemTr
-				$feeItemTr.each(function() {
+				$feeItemTr.each(function(index) {
 						var $that = $(this),divIndex = $(this).data('index');
 						var touristGroupFeeJson = {
 							id : $(this).data("id") || '',
 							type :   $(this).val(),     
-							count : $(this).closest('tr').find(".T-count-" + divIndex).val(),
-						    price : $(this).closest('tr').find(".T-price-" + divIndex).val()
+							count : $(this).closest('tr').find(".T-count").eq(index).val(),
+						    price : $(this).closest('tr').find(".T-price").eq(index).val()
 						};
 					subTouristGroupJson.touristGroupSubFeeList.push(touristGroupFeeJson);
 				});
@@ -659,10 +658,6 @@ define(function(require, exports) {
 		});
 
 		var operateCurPayLength = $tbody.children('tr').find("input[name=operateCurrentNeedPayMoney]:checked").length;
-		if (operateCurPayLength==0 && $tbody.data('neepayallmoney')<=num) {
-			showMessageDialog($( "#confirm-dialog-message" ),"费用项金额应等于应收与中转结算价之差");
-			return;
-        };
 
 
         if(operateCurPayLength==0 && subsection.$tabSub.find('.T-currentNeedPayMoney').val()!=0){
@@ -677,12 +672,25 @@ define(function(require, exports) {
 			showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
 			return;
 		}
-
-		if ($tbody.data('neepayallmoney') != receivables) {
-			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
+		if (isError == 1) {
+			showMessageDialog($( "#confirm-dialog-message" ),"分段游客小组有已内转/已外转/已发团，不能修改");
 			return;
 		}
 
+		//没有选中本段核算中转
+		var needTransitFee=0;
+		if ($tbody.children('tr').find("input[name=operateCalculteOut]:checked").length==0) {
+			var $innerOutEditTr=subsection.$tabSub.find('.T-innerOutEditFeeTbody').children('tr');
+			$innerOutEditTr.each(function(index, el) {
+				if ($innerOutEditTr.eq(index).data('type')*1==3) {
+					needTransitFee+=$innerOutEditTr.eq(index).find('.T-transitMoney').text()*1;
+				};	
+			});
+		};
+		if ($tbody.data('neepayallmoney')-needTransitFee != receivables) {
+			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
+			return;
+		}
 		subTouristGroup = JSON.stringify(subTouristGroup);
 
 		$.ajax({
@@ -788,6 +796,23 @@ define(function(require, exports) {
 						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
 						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
 						$tr.find('input[name=days]').val(lineProductJson.days);
+
+						if (!!$tr.prev().length>0) {
+							var days=$tr.prev().find('input[name=days]').val(),
+							    startTime=$tr.prev().find('input[name=startTime]').val();
+							if (!!days && !!startTime) {
+								$tr.find('input[name=startTime]').val(subsection.startIntime(days,startTime));
+							};
+						  
+						};
+
+						if (!!$tr.next().length>0) {
+							var days=$tr.find('input[name=days]').val(),
+							    startTime=$tr.find('input[name=startTime]').val();
+							if (!!days && !!startTime) {
+								$tr.next().find('input[name=startTime]').val(subsection.startIntime(days,startTime));
+							};
+						};
 						
 					};
 				});

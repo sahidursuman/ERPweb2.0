@@ -60,9 +60,17 @@ define(function(require, exports) {
                 	busCompany.busCompanyList = data.busCompanyNameList;
 					var html = listTemplate(data);
 					Tools.addTab(menuKey,"车队账务",html);
-
+                    busCompany.$tab = $('#tab-' + menuKey + "-content");
+                    busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
 					busCompany.initList(startDate,endDate);
-
+                     //获取合计数据
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    busCompany.getSumMoney(sumMoneyData,busCompany.$tab);
 					// 绑定翻页组件
 					laypage({
 					    cont: busCompany.$tab.find('.T-pagenation'),
@@ -78,10 +86,15 @@ define(function(require, exports) {
             }
         });
     };
-
+    //获取合计金额
+    busCompany.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
     busCompany.initList = function(startDate,endDate){
-    	busCompany.$tab = $('#tab-' + menuKey + "-content");
-        busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
+    	
 
         busCompany.getQueryList();
         Tools.setDatePicker(busCompany.$tab.find(".date-picker"),true);
