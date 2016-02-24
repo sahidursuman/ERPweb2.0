@@ -908,13 +908,18 @@ define(function(require, exports) {
 	}
 
 	tripPlan.initTeamSearch = function($tab){
+		var html = '<div class="col-xs-12 form-inline" style="padding-top:10px;">'+
+						'<label class="pull-left control-label">收客单号</label>'+
+						'<input type="text" class="form-control pull-left mar-l-10 T-orderNumber" placeholder="请输入收客单号" name="orderNumber">'+
+						'<button class=" btn-sm T-btn-search search-btn "> <i class="ace-icon fa fa-search"></i> 搜索 </button>'+
+					'</div><div class="col-xs-12 T-team-search globalAdd" style="padding-top: 10px;"></div>';
 		var searchTravelLinelayer = layer.open({
 			type: 1,
 			title: "收客单号",
 			skin: 'layui-layer-rim', //加上边框
 			area: '85%', //宽高
 			zIndex:1029,
-			content: '<div class="col-xs-12 T-team-search globalAdd" style="padding-top: 10px;"></div>',
+			content: html,
 			scrollbar: false,
 		});
 		tripPlan.getTouristGroupList(0);
@@ -925,12 +930,18 @@ define(function(require, exports) {
 			tripPlan.getTouristsList($tab, $tr.data("id"));
 			layer.close(searchTravelLinelayer);
 		});
+		var $layer = $("#layui-layer"+searchTravelLinelayer);
+		$layer.find('.T-btn-search').on('click', function(event) {
+			event.preventDefault();
+			var orderNumber = $layer.find('[name="orderNumber"]').val();
+			tripPlan.getTouristGroupList(0, orderNumber);
+		});
 	};
-	tripPlan.getTouristGroupList = function(page){
+	tripPlan.getTouristGroupList = function(page, orderNumber){
 		$.ajax({
 			url : KingServices.build_url('touristGroup', 'getTouristGroupListByT'),
 			type : 'POST',
-			data : {pageNo : page || 0}
+			data : {pageNo : page || 0, orderNumber : orderNumber || ""}
 		}).done(function(data){
 			if(showDialog(data)){
 				var $team = $(".T-team-search");
