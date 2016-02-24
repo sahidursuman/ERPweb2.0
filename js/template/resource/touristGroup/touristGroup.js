@@ -2322,13 +2322,13 @@ define(function(require, exports) {
             draggable: false,
             buttons: [{
                 text: "否",
-                "class": "btn btn-minier",
+                "class": "btn btn-minier btn-heightMall",
                 click: function() {
                     $(this).dialog("close");
                 }
             }, {
                 text: "是",
-                "class": "btn btn-primary btn-minier",
+                "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
                     touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
                     $(this).dialog("close");
@@ -2350,13 +2350,13 @@ define(function(require, exports) {
             draggable: false,
             buttons: [{
                 text: "否",
-                "class": "btn btn-minier",
+                "class": "btn btn-minier btn-heightMall",
                 click: function() {
                     $(this).dialog("close");
                 }
             }, {
                 text: "是",
-                "class": "btn btn-primary btn-minier",
+                "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
                     touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
                     $(this).dialog("close");
