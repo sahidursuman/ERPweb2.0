@@ -189,6 +189,7 @@ define(function(require,exports) {
 			var $receiveUserName = InnerTransferIn.$checkSearchArea.find('input[name=receiveUserName]').val();
 			args.businessGroupId = InnerTransferIn.$checkSearchArea.find('input[name=businessGroupId]').val();
 			args.businessGroupName = InnerTransferIn.$checkSearchArea.find('input[name=businessGroupName]').val();
+			args.orderNumber = InnerTransferIn.$checkSearchArea.find('input[name=orderNumber]').val();
 			args.lineProductId = $lineProductId;
 			args.lineProductName = $lineProductName == "全部"?"":$lineProductName;
 			args.receiveUserId= $receiveUserId;
@@ -393,6 +394,7 @@ define(function(require,exports) {
 					businessGroupId:$obj.find('input[name=businessGroupId]').val(),
 					lineProductId:$obj.find('input[name=lineProductId]').val(),
 					lineProductName:$obj.find('input[name=lineProductName]').val() == ""?"全部":$obj.find('input[name=lineProductName]').val(),
+					orderNumber:$obj.find('input[name=orderNumber]').val(),
 					receiveUserId:$obj.find('input[name=receiveUserId]').val(),
 					receiveUserName:$obj.find('input[name=receiveUserName]').val() == ""?"全部":$obj.find('input[name=receiveUserName]').val(),
                     startAccountTime: $obj.find('input[name=startDate]').val(),

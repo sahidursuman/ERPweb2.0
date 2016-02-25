@@ -27,7 +27,7 @@ define(function(require,exports) {
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate);
+		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,'');
 	};
 	/**
 	 * 初始化list页面
@@ -35,7 +35,7 @@ define(function(require,exports) {
 	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate){
 		if(InnerTransferOut.$searchArea && arguments.length === 1){
 			var $toBusinessGroupId = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupId]').val();
-			var $toBusinessGroupName = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupName]').val();
+			var $toBusinessGroupName = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupName]').val(),
 			toBusinessGroupId = $toBusinessGroupId;
 			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
 			startDate = InnerTransferOut.getValueForInput(InnerTransferOut.$searchArea,'input',"startDate");
@@ -121,7 +121,7 @@ define(function(require,exports) {
 				endDate = $tr.attr("endDate");
 			if($that.hasClass('T-check')){
 				//对账处理
-				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate);
+				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate,"");
 			}else if($that.hasClass('T-balance')){
 				//付款处理
 				InnerTransferOut.btnSatus = 0;
@@ -131,6 +131,7 @@ define(function(require,exports) {
 					lineProductId:"",
 					lineProductName:"",
 					operateUserId:"",
+					orderNumber:"",
 					startDate:startDate,
 					endDate:endDate
 				};
@@ -139,7 +140,7 @@ define(function(require,exports) {
 		});
 	};
 	//对账处理
-	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate){
+	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate,orderNumber){
 
 		if(InnerTransferOut.$checkSearchArea && arguments.length === 1){
 			var $lineProductId = InnerTransferOut.$checkSearchArea.find('input[name=lineProductId]').val();
@@ -147,6 +148,7 @@ define(function(require,exports) {
 			toBusinessGroupId = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupId]').val();
 			toBusinessGroupName = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupName]').val();
 			lineProductId = $lineProductId;
+			orderNumber = InnerTransferOut.$checkSearchArea.find('input[name=orderNumber]').val();
 			lineProductName = $lineProductId == ""?"":$lineProductName;
 			operateUserId= InnerTransferOut.$checkSearchArea.find('select[name=operater]').val();
 			startDate = InnerTransferOut.$checkSearchArea.find('input[name=startDate]').val();
@@ -158,6 +160,7 @@ define(function(require,exports) {
 				toBusinessGroupId:toBusinessGroupId,
 				toBusinessGroupName:toBusinessGroupName,
 				lineProductId:lineProductId,
+				orderNumber:orderNumber,
 				lineProductName:lineProductName,
 				startDate:startDate,
 				operateUserId:operateUserId,
@@ -623,10 +626,11 @@ define(function(require,exports) {
 	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && pageNo == 0){
 			args = {
-				toBusinessGroupId : nnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
+				toBusinessGroupId : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
 				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
 				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
 				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
+				orderNumber: InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val(),
 				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
 				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
 				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
