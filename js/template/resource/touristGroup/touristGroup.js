@@ -61,7 +61,9 @@ define(function(require, exports) {
         touristGroup.listTouristGroup({
             pageNo: 0,
             type: 0,
-            statusSearch:1
+            statusSearch:1,
+            sortType: 'startTime',
+            order:'asc'
         });
     };
     touristGroup.listTouristGroup = function($args) {
