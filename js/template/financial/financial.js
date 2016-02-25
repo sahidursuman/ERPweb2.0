@@ -299,7 +299,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : $this.find("input[name=payMoney]").val(),
-                    payRemark : $this.find("input[name=payRemark]").val()
+                    payRemark : $this.find("textarea[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
             }
