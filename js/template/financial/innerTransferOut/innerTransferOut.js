@@ -621,7 +621,7 @@ define(function(require,exports) {
 
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
-		if(InnerTransferOut.$settlementSearchArea && args == ""){
+		if(InnerTransferOut.$settlementSearchArea && pageNo == 0){
 			args = {
 				toBusinessGroupId : nnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
 				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
