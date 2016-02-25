@@ -101,7 +101,7 @@ define(function(require, exports) {
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
                 sortType: 'startTime',
-                'order':'desc'
+                'order':'asc'
             }
         }
         //保存查询数据
