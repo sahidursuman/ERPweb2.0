@@ -121,11 +121,12 @@ define(function(require, exports) {
     };
 
     //对账
-    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate){
+    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber){
         if (Transfer.$checkSearchArea && arguments.length === 3) {
             lineProductName = Transfer.$checkSearchArea.find("input[name=lineProductName]").val(),
             operateId = Transfer.$checkSearchArea.find("input[name=operateId]").val(),
             operateName = Transfer.$checkSearchArea.find("input[name=operateName]").val(),
+            orderNumber = Transfer.$checkSearchArea.find("input[name=orderNumber]").val(),
             startDate = Transfer.$checkSearchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$checkSearchArea.find("input[name=endDate]").val()
         }
@@ -144,6 +145,7 @@ define(function(require, exports) {
             lineProductName : lineProductName,
             operateId : operateId,
             operateName : operateName,
+            orderNumber : orderNumber,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto"
@@ -262,13 +264,14 @@ define(function(require, exports) {
     };
 
     //付款
-    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate){
+    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber){
         if (Transfer.$clearSearchArea && arguments.length === 4) {
             lineProductName = Transfer.$clearSearchArea.find("input[name=lineProductName]").val(),
             operateId = Transfer.$clearSearchArea.find("input[name=operateId]").val(),
             operateName = Transfer.$clearSearchArea.find("input[name=operateName]").val(),
             startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val()
+            endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val(),
+            orderNumber = Transfer.$clearSearchArea.find("input[name=orderNumber]").val()
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -284,6 +287,7 @@ define(function(require, exports) {
             lineProductName : lineProductName,
             operateId : operateId,
             operateName : operateName,
+            orderNumber : orderNumber,
             startDate : startDate,
             endDate : endDate,
             sortType : "auto",
