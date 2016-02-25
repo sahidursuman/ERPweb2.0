@@ -497,8 +497,8 @@ define(function(require,exports) {
 		   	    if(tr.attr("data-confirm") == 0 ){
 		   	    	var checkData = {
 					    id:tr.data("id"),
-					    checkRemark:tr.find('input[name=checkRemark]').val(),
-					    punishMoney:tr.find('textarea[name=settlementMoney]').val()
+					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
+					    punishMoney:tr.find('input[name=settlementMoney]').val()
  			    	}
 			    	JsonStr.push(checkData)
 		   	    }
@@ -506,8 +506,8 @@ define(function(require,exports) {
  			    if(tr.attr("data-confirm") == 1){
  				    var checkData = {
 	 					    id:tr.data("id"),
-	 					    checkRemark:tr.find('input[name=checkRemark]').val(),
-	 					    punishMoney:tr.find('textarea[name=settlementMoney]').val()
+	 					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
+	 					    punishMoney:tr.find('input[name=settlementMoney]').val()
 	     			    }
  				    JsonStr.push(checkData)
  			    }
