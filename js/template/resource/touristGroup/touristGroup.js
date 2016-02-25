@@ -802,6 +802,9 @@ define(function(require, exports) {
             $tab.find('input[name="lineProductId"]').val($tr.data('id'));
             $tab.find('.T-startTime').data('days',$tr.data('days'));
             $tab.find('.T-days').val($tr.data('days'));
+            $tab.find('.T-addPartner').removeClass('hide');
+            $tab.find('.T-addPartnerManager').removeClass('hide');
+
             startTime = $tab.find('.T-startTime').val();
             if (!!startTime) {
                 $tab.find('.T-endTime').val(Tools.addDay(startTime, $tr.data('days') - 1));
@@ -1173,6 +1176,8 @@ define(function(require, exports) {
                 touristGroup.setTimePicRe($addTabId, "endTime");
                 touristGroup.setReadonly($addTabId, "fromPartnerAgency");
                 touristGroup.setReadonly($addTabId, "partnerAgencyNameList");
+                $addTabId.find('.T-addPartner').addClass('hide');
+                $addTabId.find('.T-addPartnerManager').addClass('hide');
                 layer.close(touristGroup.chooseQuoteProlayer);
 
             } else {
@@ -1345,7 +1350,6 @@ define(function(require, exports) {
                 val = $mainForm.hasClass('.T-update') ? $name.data('old') : '';
             $name.val(val).prop('readonly', false).prop('disabled', false).nextAll('span,.fa').removeClass('hidden');
         });
-
         $mainForm.find('input[name="childPrice"]').trigger('change');
     };
     //获取线路产品
@@ -1756,7 +1760,7 @@ define(function(require, exports) {
                 $parent.find("input[name=type]").val("");
                 $form.find("input[name=partnerAgencyNameList]").val("");
                 $form.find('input[name=partnerAgencyContactId]').val("");
-                touristGroup.getContactList($form,1);
+                touristGroup.getContactList($form.find('[name=partnerAgencyNameList]'),true);
             }
         }).off('click').on('click', function() {
             var $that = $(this);
@@ -1798,11 +1802,10 @@ define(function(require, exports) {
             select: function(event, ui) {
                 $(this).nextAll("input[name=partnerAgencyContactId]").val(ui.item.id).trigger('change');
             }
-        }).off().on('click', function() {
-            if (!!$(this).attr('readonly')) return;
-            var objM = this;
-            var $parentsObj = $obj.closest('.form-inline');
-            var partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
+        }).off('click').on('click', function() {
+            var $that = $(this),
+                $parentsObj = $that.closest('.form-inline'),
+                 partnerAgencyId = $parentsObj.find('input[name=fromPartnerAgencyId]').val();
             if (partnerAgencyId) {
                 $.ajax({
                     url: KingServices.build_url("partnerAgency", "getContactListByPartnerAgencyId"),
@@ -1823,14 +1826,15 @@ define(function(require, exports) {
                                     }
                                 }
                                 if (!!isPartnerClick) {
-                                	$obj.find('input[name=partnerAgencyNameList]').val(contactList[0].value);
-                                	$obj.find('input[name=partnerAgencyContactId]').val(contactList[0].id);
+                                	$parentsObj.find('input[name=partnerAgencyNameList]').val(contactList[0].value);
+                                	$parentsObj.find('input[name=partnerAgencyContactId]').val(contactList[0].id);
+                                    isPartnerClick=false;
                                 } else{
-                                	$(objM).autocomplete('option', 'source', contactList);
-                                    $(objM).autocomplete('search', '');
+                                	$obj.autocomplete('option', 'source', contactList);
+                                    $obj.autocomplete('search', '');
                                 };
                             } else {
-                                layer.tips('该组团社没有联系人，请添加！', objM, {
+                                layer.tips('该组团社没有联系人，请添加！', $obj, {
                                     tips: [1, '#3595CC'],
                                     time: 2000
                                 });
@@ -1839,7 +1843,7 @@ define(function(require, exports) {
                     }
                 });
             } else {
-                layer.tips('请选择客户来源', objM, {
+                layer.tips('请选择客户来源', $obj, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });
@@ -2319,13 +2323,13 @@ define(function(require, exports) {
             draggable: false,
             buttons: [{
                 text: "否",
-                "class": "btn btn-minier",
+                "class": "btn btn-minier btn-heightMall",
                 click: function() {
                     $(this).dialog("close");
                 }
             }, {
                 text: "是",
-                "class": "btn btn-primary btn-minier",
+                "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
                     touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
                     $(this).dialog("close");
@@ -2347,13 +2351,13 @@ define(function(require, exports) {
             draggable: false,
             buttons: [{
                 text: "否",
-                "class": "btn btn-minier",
+                "class": "btn btn-minier btn-heightMall",
                 click: function() {
                     $(this).dialog("close");
                 }
             }, {
                 text: "是",
-                "class": "btn btn-primary btn-minier",
+                "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
                     touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
                     $(this).dialog("close");
