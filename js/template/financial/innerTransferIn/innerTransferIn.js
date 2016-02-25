@@ -527,29 +527,7 @@ define(function(require,exports) {
 		sumPayMoney.val(sumMoney);
 		return sumMoney;
 	};
-	// //自动计算返款
-	// InnerTransferIn.autoSumBackMoney = function($obj,$parentObj){
-	// 	var $tr = $parentObj.find('input[name=settlementMoney]');
-	// 	var sum = 0;
-	// 	var backMoneyObj = $parentObj.find('.T-sumBackMoney');
-	// 	var backMoney = backMoneyObj.find('.T-sumBackMoney').text();
-	// 	$tr.each(function(){
-	// 		var $that = $(this);
-	// 		var tr = $(this).closest('tr');
-	// 		var settlementMoney = tr.find('.T-settlementMoney').text();
-	// 		var unIncomeMoney = tr.find('.T-unReceivedMoney').text();
-	// 		var transInMoney = tr.find('.transInMoney').text();
-	// 		var transGetedMoney = tr.find('.transGetedMoney').text();
-	// 		var sumMoney = transInMoney-$that.val();
-	// 		var unIncome = sumMoney-transGetedMoney
-	// 		tr.find('.T-settlementMoney').text(InnerTransferIn.changeTwoDecimal(sumMoney));
-	// 		tr.find('.T-unReceivedMoney').text(unIncome);
-			
-	// 		sum += parseFloat($that.val());
-	// 	});
-	// 	var result = sum+backMoney;
-	// 	backMoneyObj.text(InnerTransferIn.changeTwoDecimal(result));
-	// };
+
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
@@ -618,7 +596,7 @@ define(function(require,exports) {
 		   	    	var checkData = {
 					    id:tr.attr("data-entity-id"),
 					    backMoney:tr.find('input[name=settlementMoney]').val(),
-					    checkRemark:tr.find('input[name=checkRemark]').val()
+					    checkRemark:tr.find('textarea[name=checkRemark]').val()
  			    	}
 			    	JsonStr.push(checkData)
 		   	    }
@@ -627,7 +605,7 @@ define(function(require,exports) {
  				    var checkData = {
  					    id:tr.attr("data-entity-id"),
 				    	backMoney:tr.find('input[name=settlementMoney]').val(),
-				    	checkRemark:tr.find('input[name=checkRemark]').val()
+				    	checkRemark:tr.find('textarea[name=checkRemark]').val()
 	     			    }
  				    JsonStr.push(checkData)
  			    }
