@@ -146,9 +146,9 @@ define(function(require, exports) {
 				}
 			}
 		})
-		.on('click', '.fa', function(event) {
+		.on('click', 'td', function(event) {
 			event.preventDefault();
-			var $that = $(this),
+			var $that = $(this).find('.fa'),
 				$tr = $that.closest('tr'),
 				$planAction = $tr.find('.T-plan'),
 				target = $that.parent().data('target');

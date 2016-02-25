@@ -140,9 +140,9 @@ define(function(require, exports) {
         	$tab.find('.tab-pane.active').find('.T-btn-tripPlan-search').trigger('click');
         });
 
-		$tab.find('[class*="T-tripPlan-"]').on('click', '.ace-icon', function(event){
+		$tab.find('[class*="T-tripPlan-"]').on('click', 'td', function(event){
 			event.preventDefault();
-			var $that = $(this), $parent = $that.closest('tr'),
+			var $that = $(this).find('.ace-icon'), $parent = $that.closest('tr'),
 				billStatus = $parent.data("bill-status");
 			if(!$that.hasClass('fa-minus')){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){

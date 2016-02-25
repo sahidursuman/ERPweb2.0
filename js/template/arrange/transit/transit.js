@@ -186,9 +186,9 @@ define(function(require, exports) {
 					    }
 					});	
 
-				    transit.$tab.find('.T-arrangeTransitList').off('click.ace-icon').on('click.ace-icon', '.ace-icon', function(event){
+				    transit.$tab.find('.T-arrangeTransitList').off('click.ace-icon').on('click.ace-icon', 'td', function(event){
 						event.preventDefault();
-						var $this = $(this);
+						var $this = $(this).find('.ace-icon');
 						if(!$this.hasClass('fa-minus')){
 							transit.pageNo = page;
 							transit.updateTransit($this.closest('tr').data('entity-id'),'','',$this.closest('td').data("target"));
