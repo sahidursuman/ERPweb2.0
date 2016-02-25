@@ -1938,7 +1938,7 @@ define(function(require, exports) {
 					$tr.find('input[name="busId"]').val('');
 				case 'CompanyName':
 					$tr.find('input[name="CompanyName"]').val('');
-					$tr.find('input[name="CompanyId"]').val('');
+					$tr.find('input[name="busCompanyId"]').val('');
 					$tr.find('input[name="mobileNumber"]').val('');
 				case 'driverName':
 					$tr.find('input[name="driverName"]').val('');
@@ -3227,6 +3227,9 @@ define(function(require, exports) {
 
 					}
 					busCompanyArrange.push(busJson);
+				}else {
+					showMessageDialog($("#confirm-dialog-message"),'车辆安排中所属车队不能为空')
+					return;
 				}
 			}
 		}
