@@ -227,13 +227,20 @@
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
-                                {{if touristGroup.touristGroupFeeList.length > 0}}
+                                {{if touristGroup.subStatus == 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
+                                    {{else}}
+                                    {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
+                                        {{touristGroupFee.name}} ：
+                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                    {{/each}}
                                 {{/if}}
+                            </td>
                             </td>
                         </tr>
                     {{/each}}
