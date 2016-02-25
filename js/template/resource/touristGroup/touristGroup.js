@@ -514,7 +514,7 @@ define(function(require, exports) {
     touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
         $.ajax({
             url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id+"&type=" + isTransferIn +"",
+            data: "id=" + id+"&type=" + isTransferIn +"&action=view",
             type: 'POST',
             success: function(data) {
                 var result = showDialog(data);
