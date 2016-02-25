@@ -782,7 +782,18 @@ function listMenu(menuTemplate){
 						collectDetail.listCollectDetail();
 					});
 				});
+				//table 点击选中radio事件
+				$(document).on('click', '.T-chex-radio tbody tr', function(event) {
+					var $that = $(this);
+						$that.toggleClass('success').find('input[type="radio"]').prop('checked',true);
+						$that.siblings().removeClass('success');
+				});
+				$(document).on('click', '.T-chex-radio tbody input[type="radio"]', function(event) {
+					var $that = $(this),$tr = $that.closest('tr');
+						$tr.toggleClass('success');
+						$tr.siblings().removeClass('success');
 
+				});
 				// table 点击选中事件
 				$(document).on('click','tbody tr', function(event) {
 					var event = event ? event :window.event,
@@ -793,7 +804,6 @@ function listMenu(menuTemplate){
 
 					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]'),
 						targetIsCheckbox = $target.is('input[type="checkbox"]');
-
 					if ($that.closest('table').hasClass('T-showHighLight')) {	
 							if (targetIsCheckbox)  {	// 点击了checkbox
 								// $that.toggleClass('success', $target.prop('checked'));
