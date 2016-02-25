@@ -120,7 +120,7 @@ define(function(require, exports) {
 			event.preventDefault();
 			var $that = $(this).find('.ace-icon'), $parent = $that.closest('tr'),
 				billStatus = $parent.data("bill-status");
-			if(!$that.hasClass('fa-minus')){
+			if(!$that.hasClass('fa-minus') && $that.length > 0){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
 					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));
 				});
@@ -553,6 +553,22 @@ define(function(require, exports) {
         });
 
         //绑定操作计划新增事件
+        $tab.find('.T-action-plan .T-add-all').on('change', 'input[type="checkbox"]', function(event){
+        	var $this = $(this), $parent = $this.closest('div.T-action-plan'),checkBoxs = $parent.find('input[type="checkbox"]');
+        	if ($this.is(':checked')) {
+        		checkBoxs.each(function(index) {
+        			if (!checkBoxs.eq(index).is(':checked')) {
+        				checkBoxs.eq(index).trigger('click');
+        			}
+        		});
+        	}else{
+        		checkBoxs.each(function(index) {
+        			if (checkBoxs.eq(index).is(':checked')) {
+        				checkBoxs.eq(index).trigger('click');
+        			}
+        		});
+        	}
+        });
         $tab.find('.T-action-plan .T-add-action').on('change', 'input[type="checkbox"]', function(event){
             event.preventDefault();
             var $that = $(this), 

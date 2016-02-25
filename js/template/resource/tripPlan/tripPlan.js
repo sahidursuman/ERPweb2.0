@@ -153,7 +153,7 @@ define(function(require, exports) {
 				$planAction = $tr.find('.T-plan'),
 				target = $that.parent().data('target');
 
-			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target) {
+			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target && $that.length > 0) {
 				tripPlan.updateTripPlanArrange($tr.data('entity-id'), $planAction.attr('billStatus'), target);
 			}
 		});		
