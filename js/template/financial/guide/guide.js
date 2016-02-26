@@ -593,6 +593,7 @@ define(function(require, exports) {
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
                             data.isOuter = FinGuide.isOuter;
+                            data.borrow = ($tab.find('.T-saveClear').data('borrow') == "borrow") ? true : false;
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
