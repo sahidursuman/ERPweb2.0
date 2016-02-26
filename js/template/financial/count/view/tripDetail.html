@@ -401,7 +401,18 @@
                             <td><span class="needPayMoney" >{{arrange.needPayMoney}}</span><input type="hidden" class="selfMoney"></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
-                            {{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            {{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
+                            <span>
+                            {{if arrange.payType == 0}}
+                                现金
+                                {{else if arrange.payType == 1}}
+                                刷卡
+                                {{else if arrange.payType == 2}}
+                                签单
+                            {{/if}}
+                        </span>
+                        &nbsp;&nbsp;
+                            <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             </td>
                            
                             <td>{{if arrange.billImage != null && arrange.billImage != ""}}
