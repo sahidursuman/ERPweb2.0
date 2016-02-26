@@ -411,7 +411,7 @@ define(function(require, exports) {
 	                }
 	            } else {
 	            	Replace.payingJson = [];
-	                Replace.setAutoFillEdit($tab, false);
+	                Replace.setAutoFillEdit($tab, false,isCheck);
 	            }
 			});
 
@@ -477,7 +477,7 @@ define(function(require, exports) {
             });
 		}
 	}
-	Replace.setAutoFillEdit = function($tab, disable) {
+	Replace.setAutoFillEdit = function($tab, disable,isCheck) {
         var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
         if (!disable) {
             $sum.val(0);
@@ -486,7 +486,9 @@ define(function(require, exports) {
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
 
         Replace.getOperationList(0, $tab);
-
+        $tab.data('isEdited', true);
+        var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1));
+        FinancialService.updateSumPayMoney($tab, validator);
     };
 
     /**
