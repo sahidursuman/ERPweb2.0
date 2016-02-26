@@ -27,7 +27,10 @@
         <div class="col-sm-12 widget-container-col" >
             <div class="pull-left" style="margin-left: -15px">预支款：<span class="F-float F-money"><span class="F-float F-money">{{tripPlanMainInfo.guideAllPreMoney}}</span></div>
             <div class="pull-left" style="margin-left: 50px;">现收：<span class="F-float F-money">{{tripPlanMainInfo.guideAllNowIncomeMoney}}</span></div>
-            <div class="pull-left" style="margin-left: 50px;">现付：<span class="F-float F-money">{{tripPlanMainInfo.guideAllNowPayMoney}}</span></div>
+            <div class="pull-left" style="margin-left: 50px;">现付：
+            (现金：<span class="F-float F-money">{{tripPlanMainInfo.sumCashMoney}}</span>&nbsp;&nbsp;
+            刷卡：<span class="F-float F-money">{{tripPlanMainInfo.sumCardMoney}}</span>&nbsp;&nbsp;
+            签单：<span class="F-float F-money">{{tripPlanMainInfo.sumSignMoney}}</span>)</div>
             <div class="pull-left" style="margin-left: 20px;">导服费：<span class="F-float F-money">{{tripPlanMainInfo.guideFee}}</span></div>
             <div class="pull-left" style="margin-left: 20px;">管理费：<span class="F-float F-money">{{tripPlanMainInfo.guideManageFee}}</span></div>
             <div class="pull-left" style="margin-left: 50px;">导游购物返佣：<span class="F-float F-money">{{tripPlanMainInfo.shoppingRebateMoney}}</span></div>
@@ -236,7 +239,18 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                            {{if item.payType == 0}}
+                                现金
+                                {{else if item.payType == 1}}
+                                刷卡
+                                {{else if item.payType == 2}}
+                                签单
+                            {{/if}}
+                        </span>
+                        &nbsp;&nbsp;
+                        <span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -281,7 +295,18 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;
+                            <span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -325,7 +350,17 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;<span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}} 
@@ -371,7 +406,17 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;<span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -415,7 +460,17 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;<span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -457,7 +512,17 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;<span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}
@@ -498,7 +563,17 @@
                             <td><span class="F-float F-money">{{item.reduceMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.needPayMoney}}</span></td>
                             <td><span class="F-float F-money">{{item.agencyPayedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
+                            <td>
+                            <span>
+                                {{if item.payType == 0}}
+                                    现金
+                                    {{else if item.payType == 1}}
+                                    刷卡
+                                    {{else if item.payType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;<span class="F-float F-money">{{item.guidePayedMoney}}</span></td>
                             <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                         </tr>
                         {{/each}}

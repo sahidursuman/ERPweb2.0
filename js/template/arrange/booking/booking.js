@@ -564,8 +564,7 @@ define(function(require, exports) {
 	                data: "id=" + ui.item.id,
 	                success: function(data) {
 						if(showDialog(data)){
-							var hotel = JSON.parse(data.hotel);
-							parents.find(".T-hotelStar").val(hotel.level);
+							parents.find(".T-hotelStar").val(data.hotel.level);
 						}
 	                }
 				});
