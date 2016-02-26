@@ -631,7 +631,7 @@
                             <tbody>
                                 {{each hotelList as hotel}}
                                 {{if hotel != "[]" || hotel != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{hotel.hotelRoom.id}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}}{{/if}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
                                         <td class="T-whichDaysContainer T-whichDays"  value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
                                         <td>
                                             <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled"{{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
