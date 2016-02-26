@@ -751,8 +751,12 @@ define(function(require, exports){
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input[type=text]').off('change').on('change',function(){
-			Count.autoBusSum($(this),$obj);
-			Count.formatDays($(this),$obj);
+			var $nameFlag = $(this).attr('name');
+			if($nameFlag != "billRemark"){
+				Count.autoBusSum($(this),$obj);
+				Count.formatDays($(this),$obj);
+			}
+			
 		});
 		//新增车费
 		$listObj.find('.T-buspay-add').off('click').on('click',function(){
@@ -782,9 +786,13 @@ define(function(require, exports){
 		//景区处理--计算、新增
 		var $scenicObj = $listObj.find('.T-count-scenic');
 		$scenicObj.find('input[type=text]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			Count.autoScenicSum($(this),$obj);
-			Count.formatDays($(this),$obj);
+			var $nameFlag = $(this).attr('name');
+			if($nameFlag != "billRemark"){
+				Count.calculateCost($(this));
+				Count.autoScenicSum($(this),$obj);
+				Count.formatDays($(this),$obj);
+			}
+			
 		});
 		//新增景区
 		$listObj.find('.T-scenic-add').off('click').on('click',function(){
@@ -793,9 +801,13 @@ define(function(require, exports){
 		//票务处理--计算、新增
 		var $ticketObj = $listObj.find('.T-count-ticket');
 		$ticketObj.find('input[type=text]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			Count.autoTicketSum($(this),$obj);
-			Count.formatDays($(this),$obj);
+			var $nameFlag = $(this).attr('name');
+			if($nameFlag != "billRemark"){
+				Count.calculateCost($(this));
+				Count.autoTicketSum($(this),$obj);
+				Count.formatDays($(this),$obj);
+			}
+			
 		});
 		//新增票务
 		$listObj.find('.T-ticket-add').off('click').on('click',function(){
@@ -1025,8 +1037,9 @@ define(function(require, exports){
 	//审核通过事件
 	Count.accountCheck = function(id, billStatus, financialTripPlanId,$obj){
 		var method = billStatus==0?"opVerify":"financialVerify";
-		var saveJson = Count.saveTripCount(id,financialTripPlanId,$obj,1);
-		saveJson = JSON.stringify(saveJson);
+		var saveJsonStr = Count.installData(id,$obj);
+		Count.saveTripCount(id,financialTripPlanId,$obj,1);
+		saveJson = JSON.stringify(saveJsonStr);
 		$.ajax({
         	url:KingServices.build_url('financialTripPlan',method),
         	type:"POST",
@@ -4093,7 +4106,7 @@ define(function(require, exports){
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.scenicArrangeList.push(scenicArrange);
@@ -4132,7 +4145,7 @@ define(function(require, exports){
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.ticketArrangeList.push(ticketArrange);

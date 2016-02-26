@@ -1937,7 +1937,7 @@ define(function(require, exports) {
 					$tr.find('input[name="licenseNumber"]').val('');
 					$tr.find('input[name="busId"]').val('');
 				case 'CompanyName':
-					$tr.find('input[name="CompanyName"]').val('');
+					$tr.find('input[name="companyName"]').val('');
 					$tr.find('input[name="busCompanyId"]').val('');
 					$tr.find('input[name="mobileNumber"]').val('');
 				case 'driverName':
@@ -2069,7 +2069,7 @@ define(function(require, exports) {
 			change :function(event, ui){
 				if(ui.item == null){
 					var $that = $(this).val("");
-					clearData($that.closest('tr'), 'companyName');
+					clearData($that.closest('tr'), 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
