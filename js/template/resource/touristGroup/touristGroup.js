@@ -61,7 +61,9 @@ define(function(require, exports) {
         touristGroup.listTouristGroup({
             pageNo: 0,
             type: 0,
-            statusSearch:1
+            statusSearch:1,
+            sortType: 'startTime',
+            order:'asc'
         });
     };
     touristGroup.listTouristGroup = function($args) {
@@ -101,7 +103,7 @@ define(function(require, exports) {
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
                 sortType: 'startTime',
-                'order':'desc'
+                'order':'asc'
             }
         }
         //保存查询数据
@@ -512,7 +514,7 @@ define(function(require, exports) {
     touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
         $.ajax({
             url: touristGroup.url("viewTouristGroupDetails", "view"),
-            data: "id=" + id+"&type=" + isTransferIn +"",
+            data: "id=" + id+"&type=" + isTransferIn +"&action=view",
             type: 'POST',
             success: function(data) {
                 var result = showDialog(data);

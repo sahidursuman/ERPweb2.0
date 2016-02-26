@@ -325,6 +325,12 @@ define(function(require, exports) {
             // 只处理对账状态改变的数据
             if ($that.hasClass('T-checkbox')) {
                 $that.closest('tr').data('change', true);
+                var rowpan = $that.closest('td').attr('rowspan') - 1,
+                    $theTr = $that.closest('tr');
+                for (var i = 0; i < rowpan; i++) {
+                    $theTr.next().data('change', 'true');
+                    $theTr =  $theTr.next();
+                }
             }
             $tab.data('isEdited', true);
         });
@@ -562,6 +568,12 @@ define(function(require, exports) {
 
             $that.closest('tr').data('change', true);
             $tab.data('isEdited', true);
+            var rowpan = $that.closest('td').attr('rowspan') - 1,
+                $theTr = $that.closest('tr');
+            for (var i = 0; i < rowpan; i++) {
+                $theTr.next().data('change', 'true');
+                $theTr =  $theTr.next();
+            }
 
             if ($that.hasClass('T-reciveMoney')) {
                 // 反算金额

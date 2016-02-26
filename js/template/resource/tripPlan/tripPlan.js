@@ -146,14 +146,14 @@ define(function(require, exports) {
 				}
 			}
 		})
-		.on('click', '.fa', function(event) {
+		.on('click', 'td', function(event) {
 			event.preventDefault();
-			var $that = $(this),
+			var $that = $(this).find('.fa'),
 				$tr = $that.closest('tr'),
 				$planAction = $tr.find('.T-plan'),
 				target = $that.parent().data('target');
 
-			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target) {
+			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target && $that.length > 0) {
 				tripPlan.updateTripPlanArrange($tr.data('entity-id'), $planAction.attr('billStatus'), target);
 			}
 		});		
@@ -1937,7 +1937,7 @@ define(function(require, exports) {
 					$tr.find('input[name="licenseNumber"]').val('');
 					$tr.find('input[name="busId"]').val('');
 				case 'CompanyName':
-					$tr.find('input[name="CompanyName"]').val('');
+					$tr.find('input[name="companyName"]').val('');
 					$tr.find('input[name="busCompanyId"]').val('');
 					$tr.find('input[name="mobileNumber"]').val('');
 				case 'driverName':
@@ -2069,7 +2069,7 @@ define(function(require, exports) {
 			change :function(event, ui){
 				if(ui.item == null){
 					var $that = $(this).val("");
-					clearData($that.closest('tr'), 'companyName');
+					clearData($that.closest('tr'), 'licenseNumber');
 				}
 			},
 			select :function(event, ui){

@@ -116,11 +116,11 @@ define(function(require, exports) {
         	$tab.find('.tab-pane.active').find('.T-btn-tripPlan-search').trigger('click');
         });
 
-		$tab.find('[class*="T-tripPlan-"]').on('click', '.ace-icon', function(event){
+		$tab.find('[class*="T-tripPlan-"]').on('click', 'td', function(event){
 			event.preventDefault();
-			var $that = $(this), $parent = $that.closest('tr'),
+			var $that = $(this).find('.ace-icon'), $parent = $that.closest('tr'),
 				billStatus = $parent.data("bill-status");
-			if(!$that.hasClass('fa-minus')){
+			if(!$that.hasClass('fa-minus') && $that.length > 0){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
 					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));
 				});
@@ -553,6 +553,58 @@ define(function(require, exports) {
         });
 
         //绑定操作计划新增事件
+        $tab.find('.T-action-plan .T-add-all').on('change', 'input[type="checkbox"]', function(event){
+        	var $this = $(this), $parent = $this.closest('div.T-action-plan'),checkBoxs = $parent.find('input[type="checkbox"]');
+        	if ($this.is(':checked')) {
+        		checkBoxs.each(function(index) {
+        			if (!checkBoxs.eq(index).is(':checked')) {
+        				checkBoxs.eq(index).trigger('click');
+        			}
+        		});
+        	}else{
+        		var $list = $tab.find('.T-action-plan-list .hct-plan-ask'), isAlert = 0;
+        		$list.each(function(index) {
+        			var $that = $list.eq(index), id = $that.data('id');
+        			if (!!id) {
+        				isAlert = 1;
+        			}
+        		});
+        		if (isAlert == 1) {
+        			var tripPlanId = $tab.find('.T-tab').data('id');
+        			showConfirmDialog($('#confirm-dialog-message'), '您将删除所有计划，是否继续？', function() {
+						$.ajax({
+							url: KingServices.build_url('tripPlan', 'deleteTripPlanRequireByBatch'),
+							type: 'post',
+							data: 'tripPlanId=' +  tripPlanId,
+						})
+						.done(function(data) {
+							if (showDialog(data)) {
+								showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+					        		$tab.find('.T-action-plan-list .hct-plan-ask').each(function(index) {
+					        			var $that = $(this), id = $that.data('id');
+					        			if (!!id) {
+					        				$that.remove();
+					        			}
+					        		});
+					        		checkBoxs.each(function(index) {
+					        			if (checkBoxs.eq(index).is(':checked')) {
+					        				checkBoxs.eq(index).trigger('click');
+					        			}
+					        		});
+								});
+							}
+						});
+					},function(){
+					});
+        		}else {
+	        		checkBoxs.each(function(index) {
+	        			if (checkBoxs.eq(index).is(':checked')) {
+	        				checkBoxs.eq(index).trigger('click');
+	        			}
+	        		});
+        		}
+        	}
+        });
         $tab.find('.T-action-plan .T-add-action').on('change', 'input[type="checkbox"]', function(event){
             event.preventDefault();
             var $that = $(this), 
@@ -1008,11 +1060,12 @@ define(function(require, exports) {
 				$tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
 				$tab.find('[name="getType"]').val(groupData.getType);
 				$tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
-				$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());
+				/*$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());*/
 				$tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
 				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
 				$tab.find('[name="memberType"]').val(groupData.memberType);
 				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
+				$tab.find('[name=sendPosition]').val(groupData.sendPosition);
 				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
 				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
 				if(!!groupData.buyInsurance){
@@ -1688,6 +1741,25 @@ define(function(require, exports) {
 						$tab.find('input[name="lineProductName"]').trigger('change');
 						//KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
 						F.arrangeDate($tab);
+
+						$tab.find('.T-action-plan .T-add-action [type=checkbox]').each(function(index) {
+							if ($(this).is(':checked')) {
+								$(this).trigger('click');
+							}
+						});
+						if(data.requireList.length > 0) {
+							for (var i = 0; i < data.requireList.length; i++) {
+								var $this = data.requireList[i], $label = $tab.find('.T-action-plan .T-add-action');
+								$label.each(function(index) {
+									var type = $label.eq(index).data('type');
+									if (type == $this) {
+										if (!$label.eq(index).find('input[type=checkbox]').is(':checked')) {
+											$label.eq(index).find('input[type=checkbox]').trigger('click');
+										}
+									}
+								});
+							}
+						}
 					}
 				}
     		})

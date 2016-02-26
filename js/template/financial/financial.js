@@ -290,7 +290,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
                     clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                    clearSaveJson[i].payRemark = $this.find("input[name=payRemark]").val();
+                    clearSaveJson[i].payRemark = $this.find("[name=payRemark]").val();
                     return;
                 }
             }
@@ -299,7 +299,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : $this.find("input[name=payMoney]").val(),
-                    payRemark : $this.find("input[name=payRemark]").val()
+                    payRemark : $this.find("[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
             }
