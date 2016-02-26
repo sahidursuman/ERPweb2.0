@@ -724,7 +724,6 @@ var modalScripts = {
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
-    'arrange_tourist': "js/template/arrange/arrangeTourist/arrangeTourist.js", //并团转客
     'arrange_groupTransfer': "js/template/arrange/arrangeGroupTransfer/arrangeGroupTransfer.js", //团散转客
     'arrange_individual': "js/template/arrange/arrangeIndividual/arrangeIndividual.js" //散客拼团
 };
