@@ -43,7 +43,7 @@
 			display: block;
 			width: auto;
 			height: auto;
-			max-width: 80px;
+			max-width: 300px;
 		}
 		.company-logo h3{
 			padding-left: 10px;
@@ -60,10 +60,10 @@
 		<div class="row hct-top-header">
 			<div class="col-xs-12">
 				<div class="company-logo T-companyLogo">
-					{{if !!travelAgencyName}}
-					<img src="{{imgUrl + travelAgencyName}}" alt="{{companyLogo}}">
+					{{if !!companyLogo}}
+					<img src="{{imgUrl + companyLogo}}" alt="{{travelAgencyName}}">
 					{{else}}
-					<h3>{{companyLogo}}</h3>
+					<h3>{{travelAgencyName}}</h3>
 					{{/if}}
 				</div>
 			</div>
@@ -267,7 +267,6 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
-					data.imgUrl = imgUrl;
 				    var html = template('groupTravel', data);
 				    document.getElementById('groupTravelContent').innerHTML = html;
 					setShare()
