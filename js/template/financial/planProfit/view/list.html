@@ -48,7 +48,7 @@
 		{{/if}}
 	</tr>
 </thead>
-<tbody class="T-planProfit-list">
+<tbody>
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
 		<td>{{rs.tripNumber}}</td>
@@ -101,4 +101,47 @@
 		<td><span class="F-float F-money">{{rs.perCapitaProfit}}</span></td>
 	</tr>
 	{{/each}}
+	{{if result.length > 0}}
+	<tr style="background: #fffff6;">
+		<td>小计</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><span class="F-float F-count">{{subtotal.adultCount}}</span> 大 <span class="F-float F-count">{{subtotal.childCount}}</span> 小</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><span class="F-float F-money">{{subtotal.needPayAllMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.shopMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.selfIncome}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.incomeMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.guideMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.guideTip}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.insuranceMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.busMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.restaurantMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.hotelMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.scenicMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.ticketMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.selfPayMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.otherMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.shopCostMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.selfMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.guideDeductions}}</span></td>
+		{{if isTurn == 1}}
+		<td><span class="F-float F-money">{{subtotal.outBusMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.outRestaurantMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.outHotelMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.outTicketMoney}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.outOtherMoney}}</span></td>
+		{{/if}}
+		<td><span class="F-float F-money">{{subtotal.totalIncome}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.totalTrip}}</span></td>
+		{{if isTurn == 1}}
+		<td><span class="F-float F-money">{{subtotal.totalOut}}</span></td>
+		{{/if}}
+		<td><span class="F-float F-money">{{subtotal.profit}}</span></td>
+		<td><span class="F-float F-money">{{subtotal.perCapitaProfit}}</span></td>
+	</tr>
+	{{/if}}
 </tbody>

@@ -105,6 +105,7 @@ define(function(require, exports) {
             arrangeStartTime = transit.$searchArea.find("input[name=arrangeStartTime]").val(),
             arrangeEndTime = transit.$searchArea.find("input[name=arrangeEndTime]").val(),
             status = transit.$searchArea.find(".T-transitState button").data("status"),
+            tgOrderNumber = transit.$searchArea.find(".T-orderNumber").val(),
             shuttleType = transit.$searchArea.find("[name=shuttleType]").val(),
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
             arrangeItem = transit.$searchArea.find("[name=arrangeItem]").val(),
@@ -131,6 +132,7 @@ define(function(require, exports) {
 				arrangeStartTime: arrangeStartTime,
 				arrangeEndTime: arrangeEndTime,
 				status: status,
+				tgOrderNumber: tgOrderNumber,
 				shuttleType: shuttleType,
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
@@ -1243,10 +1245,9 @@ define(function(require, exports) {
 					data:"id=" + ui.item.id,
 					success: function(data) {
 						if(showDialog(data)){
-							var hotel = JSON.parse(data.hotel);
-							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
-							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
-							parents.find("select[name=hotelLevel]").val(hotel.level);
+							parents.find("input[name=hotelMobileNumber]").val(data.hotel.mobileNumber);
+							parents.find("input[name=hotelManagerName]").val(data.hotel.managerName);
+							parents.find("select[name=hotelLevel]").val(data.hotel.level);
 							parents.find("input[name=hotelRoomType]").val("");
 							parents.find("input[name=hotelRoomTypeId]").val("");
 						}

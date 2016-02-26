@@ -396,8 +396,13 @@
                                                 <td><input type="text" name="startTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                                 <td><input type="text" name="endTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                                 <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
+<<<<<<< HEAD
                                                 <td><input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
                                                 <td><input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled"{{/if}}  value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
+=======
+                                                <td><input type="text" name="needSeatCount" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
+                                                <td><input type="text" name="brand" {{if !!busCompany.offerId}}readonly="readonly"{{/if}}  value="{{busCompany.brand}}" class="col-sm-12"/></td>
+>>>>>>> remotes/origin/release-1.9.2
                                                 <td>
                                                     <div class="col-xs-12 feild-relative">
                                                         <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 T-busPriceC"/>
@@ -631,7 +636,7 @@
                             <tbody>
                                 {{each hotelList as hotel}}
                                 {{if hotel != "[]" || hotel != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId={{hotel.hotel.id}} data-entity-roomId={{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}}{{/if}} data-entity-offerId={{hotel.offerId}} data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId="{{hotel.hotel.id}}" data-entity-roomId="{{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}} {{/if}}" data-entity-offerId="{{hotel.offerId}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}">
                                         <td class="T-whichDaysContainer T-whichDays"  value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
                                         <td>
                                             <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled"{{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">

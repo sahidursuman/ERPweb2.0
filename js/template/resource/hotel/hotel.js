@@ -139,7 +139,7 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel = data.hotel;
 					if(data.hotel.province != null )var provinceId = data.hotel.province.id;
 					if(data.hotel.city != null )var cityId = data.hotel.city.id;
 					if(data.hotel.district != null ) var districtId = data.hotel.district.id;

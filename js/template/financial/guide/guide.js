@@ -593,6 +593,7 @@ define(function(require, exports) {
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
                             data.isOuter = FinGuide.isOuter;
+                            data.borrow = ($tab.find('.T-saveClear').data('borrow') == "borrow") ? true : false;
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
                             html = filterUnAuth(checkingTableTemplate(data));
@@ -603,7 +604,8 @@ define(function(require, exports) {
                             //给全选按钮绑定事件: 未去重
                             FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
                         }
-
+                        var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 3);
+                        FinancialService.updateSumPayMoney($tab, validator);
                         // 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
                         $tab.find('.T-saveClear').data('pageNo', args.pageNo);

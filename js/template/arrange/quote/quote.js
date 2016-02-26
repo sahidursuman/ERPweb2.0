@@ -2335,9 +2335,8 @@ define(function(require, exports) {
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							var hotel = JSON.parse(data.hotel);
-							$tr.find("input[name=mobileNumber]").val(hotel.mobileNumber);
-							$tr.find('.resourceHotelStar').val(hotel.level);
+							$tr.find("input[name=mobileNumber]").val(data.hotel.mobileNumber);
+							$tr.find('.resourceHotelStar').val(data.hotel.level);
 							//objParent.find("input[name=payType]").val(hotel.payType == 0? "现付" : "账期" + (hotel.payPeriod ? "(" + hotel.payPeriod.month + "个月)" : "" ));
 							// 更新表单验证的配置
 							validator = rule.quoteUpdate(validator);

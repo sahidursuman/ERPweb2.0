@@ -58,23 +58,14 @@
 				</ul>		
 			</div>
 	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
-	    </div>
 
-	    <div style="margin:8px 0px;">
-	    	<label>总人数：<span class="T-personCount"></span></label>
-            <label class="marginLeft-30">团数：<span class="F-float F-count T-tripCount"></span></label>
-            <label class="marginLeft-30">收入合计：<span class="T-totalIncome"></span></label>
-            <label class="marginLeft-30">发团成本合计：<span class="F-float F-money T-totalTrip"></span></label>
-            <label class="marginLeft-30 T-turn">中转成本合计：<span class="F-float F-money T-totalOut"></span></label>
-            <label class="marginLeft-30">毛利：<span class="F-float F-money T-profit"></span></label>
-            <label class="marginLeft-30">人均毛利：<span class="F-float F-money T-perCapitaProfit"></span></label>
-            <label class="pos-rel pull-right">
+	        <label class="pos-rel pull-right">
                 <input type="checkbox" class="ace T-checkTurn" {{if searchParam.operateCalculteOut == 1}}checked="checked"{{/if}}/>
                 <span class="lbl"> 核算中转</span>
             </label>
-        </div>
+	    </div>
     </div>
-    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight T-planProfit-list">
+    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight T-planProfit-list hct_align_middle" style="margin-top:15px;">
 		
 	</table>
 </div>
