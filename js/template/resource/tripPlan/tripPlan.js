@@ -658,6 +658,25 @@ define(function(require, exports) {
 				tripPlan.busBookingView($this, $tab, saveJson);
 			}
 		});
+		//车费查询
+		$tab.find('#tripPlan_addPlan_bus').off('change').on('change','.T-busPriceC',function () {
+			var $this = $(this), $parent = $this.closest('tr');
+			var busStartTime = $parent.find('[name=startTime]').val(),
+				busEndTime = $parent.find('[name=endTime]').val(),
+				busId = $parent.find('[name=busId]').val(),
+				busDays = tripPlan.daysDifference(busStartTime, busEndTime);
+
+			$.ajax({
+				url: KingServices.build_url('busCompany','getBusContractPrice'),
+				type: 'POST',
+				showLoading: false,
+				data: {busId: busId, startTime: busStartTime},
+			})
+			.done(function(data) {
+				$parent.find('[name=price]').val(data.contractPrice * busDays);
+			});
+		})
+
 		//酒店询价、预订操作
 		$tab.find('#tripPlan_addPlan_hotel').off('click.hotelAction').on('click.hotelAction', '.T-hotel-action', function(event) {
 			event.preventDefault();
@@ -1381,12 +1400,12 @@ define(function(require, exports) {
 	 */
 	tripPlan.addBus = function($btn, validator, $tab) {
 		var $tbody = $btn.closest('.ui-sortable-handle').find('tbody'),
-			html = '<tr> <td><input type="text" name="startTime" class="datepicker"></td>'
-					+ '<td><input type="text" name="endTime" class="datepicker"></td>'
+			html = '<tr> <td><input type="text" name="startTime" class="datepicker T-busPriceC"></td>'
+					+ '<td><input type="text" name="endTime" class="datepicker T-busPriceC"></td>'
 					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option><option value="6">小车接客</option></select></td>'
 					+ '<td><input type="text" name="needSeatCount" class="col-sm-12 F-float F-count" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="brand" class="col-sm-12"></td>'
-					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
+					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12 T-busPriceC"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>'
@@ -2076,9 +2095,11 @@ define(function(require, exports) {
 				var $tr = $(this).blur().closest('tr');
 				$tr.find("input[name=busId]").val(ui.item.id).trigger('change');
 				checkBusCompay($tr, 'companyName');
+				$(this).trigger('change');
 			}
 		}).unbind("click").click(function(){
-			var $that = $(this), $tr = $that.closest('tr');
+			var $that = $(this), $tr = $that.closest('tr'),
+				startTime = $tr.find('input[name=startTime]').val();
 			$.ajax({
 				url: KingServices.build_url('busCompany','getLicenseNumbers'),
 				data: {
@@ -3195,7 +3216,8 @@ define(function(require, exports) {
 		if(bus.length > 0){
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
-					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup');
+					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup'),
+						offerId = bus.eq(i).attr('data-entity-offerId');
 					if(typeof annouceTouristGroupIds != 'string'){
 						annouceTouristGroupIds = JSON.stringify(annouceTouristGroupIds)
 					}
@@ -3222,7 +3244,8 @@ define(function(require, exports) {
 						remark: tripPlan.getVal(bus.eq(i), "remark"),
 						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
-						annouceTouristGroupIds: annouceTouristGroupIds
+						annouceTouristGroupIds: annouceTouristGroupIds,
+						offerId: offerId
 
 					}
 					busCompanyArrange.push(busJson);
@@ -3489,6 +3512,27 @@ define(function(require, exports) {
 			type : "tr"
 		}, KingServices.addBusDriverFunction);
 	};
+
+
+	/**
+	 * 计算日期差
+	 * @param  {[type]} sDate1 [description]
+	 * @param  {[type]} sDate2 [description]
+	 * @return {[type]}        [description]
+	 */
+	tripPlan.daysDifference = function(sDate1, sDate2) {
+		if (!!sDate1 && !!sDate2) {
+			var aDate, oDate1, oDate2, iDays   
+			aDate = sDate1.split("-")   
+			oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式   
+			aDate = sDate2.split("-")   
+			oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])   
+			iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 /24) //把相差的毫秒数转换为天数   
+			return iDays + 1;   
+		}else {
+			return 0;
+		}
+	}
 
 	exports.init = tripPlan.initModule;
 	exports.updatePlanInfo = tripPlan.updatePlanInfo;
