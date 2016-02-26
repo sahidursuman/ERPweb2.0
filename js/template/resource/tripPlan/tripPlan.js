@@ -146,14 +146,14 @@ define(function(require, exports) {
 				}
 			}
 		})
-		.on('click', '.fa', function(event) {
+		.on('click', 'td', function(event) {
 			event.preventDefault();
-			var $that = $(this),
+			var $that = $(this).find('.fa'),
 				$tr = $that.closest('tr'),
 				$planAction = $tr.find('.T-plan'),
 				target = $that.parent().data('target');
 
-			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target) {
+			if ($that.css('cursor') === 'pointer' && $planAction.length && !!target && $that.length > 0) {
 				tripPlan.updateTripPlanArrange($tr.data('entity-id'), $planAction.attr('billStatus'), target);
 			}
 		});		
@@ -2389,10 +2389,9 @@ define(function(require, exports) {
                     data: "id=" + ui.item.id,
                     success: function(data) {
 						if(showDialog(data)){
-							var hotel = JSON.parse(data.hotel);
-							$parents.find("input[name=mobileNumber]").val(hotel.mobileNumber);
-							$parents.find("input[name=managerName]").val(hotel.managerName);
-							$parents.find(".T-tripPlanHotelStar").val(hotel.level);
+							$parents.find("input[name=mobileNumber]").val(data.hotel.mobileNumber);
+							$parents.find("input[name=managerName]").val(data.hotel.managerName);
+							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
 	                    	$parents.find("input[name=price]").val("");

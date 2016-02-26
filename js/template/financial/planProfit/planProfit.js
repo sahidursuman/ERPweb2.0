@@ -163,7 +163,7 @@ define(function(require, exports) {
                     }
                     plan.$tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
-			    	plan.getSumData();
+			    	plan.getSumData(plan.$tab,operateCalculteOut);
                     plan.getQuery();
 
                     // plan.$tab.find(".T-tripDetail").on("click",function(){
@@ -192,7 +192,7 @@ define(function(require, exports) {
         });
     };
 
-    plan.getSumData = function(){
+    plan.getSumData = function($tab,operateCalculteOut){
         var searchParam = JSON.stringify(plan.searchData);
         $.ajax({
             url: KingServices.build_url('financialTrip', 'findTotal'),
@@ -202,13 +202,20 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     var total = data.total;
-                    plan.$tab.find(".T-totalIncome").text(total.totalIncome);
-                    plan.$tab.find(".T-totalTrip").text(total.totalTrip);
-                    plan.$tab.find(".T-totalOut").text(total.totalOut);
-                    plan.$tab.find(".T-profit").text(total.profit);
-                    plan.$tab.find(".T-perCapitaProfit").text(total.perCapitaProfit);
-                    plan.$tab.find(".T-personCount").text(total.adultCount + " 大 " + total.childCount + " 小");
-                    plan.$tab.find(".T-tripCount").text(total.tripCount);
+                    var totalDataHtml = "<tr style='background: #effef4;'><td>合计</td><td></td><td></td><td></td><td>" + total.adultCount + " 大 " + total.childCount + " 小" + "</td><td></td><td></td><td></td><td>" + total.needPayAllMoney + "</td><td>" +
+                                        total.shopMoney + "</td><td>" + total.selfIncome + "</td><td>" + total.incomeMoney + "</td><td>" + total.guideMoney + "</td><td>" + total.guideTip + "</td><td>" + total.insuranceMoney + "</td><td>" +
+                                        total.busMoney + "</td><td>" + total.restaurantMoney + "</td><td>" + total.hotelMoney + "</td><td>" + total.scenicMoney + "</td><td>" + total.ticketMoney + "</td><td>" + total.selfPayMoney + "</td><td>" +
+                                        total.otherMoney + "</td><td>" + total.shopCostMoney + "</td><td>" + total.selfMoney + "</td><td>" + total.guideDeductions + "</td>";
+                    if(operateCalculteOut){
+                        totalDataHtml += "<td>" + total.outBusMoney + "</td><td>" + total.outRestaurantMoney + "</td><td>" + total.outHotelMoney + 
+                                         "</td><td>" + total.outTicketMoney + "</td><td>" + total.outOtherMoney + "</td>";
+                    }
+                    totalDataHtml += "<td>" + total.totalIncome + "</td><td>" + total.totalTrip + "</td>";
+                    if(operateCalculteOut){
+                        totalDataHtml += "<td>" + total.totalOut + "</td>";
+                    }
+                    totalDataHtml += "<td>" + total.profit + "</td><td>" + total.perCapitaProfit + "</td></tr>";
+                    $tab.find(".T-planProfit-list").append(totalDataHtml);
                 }
             }
         });
