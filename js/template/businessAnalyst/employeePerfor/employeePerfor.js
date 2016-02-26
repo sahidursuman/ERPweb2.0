@@ -197,16 +197,18 @@ define(function(require, exports) {
 			event.preventDefault();
 			/* Act on the event */
 			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
+				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
+		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
 			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
 			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value');
 			if ($that.data('value')==0) {//责任计调
 				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",1,customerType,partnerAgencyType,0); 
+				employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0); 
 			}else{//外联计调--销售业绩
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept("","",3,customerType,partnerAgencyType,0);
+				employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
 			};
 		});
     };
