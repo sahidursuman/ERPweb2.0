@@ -402,11 +402,47 @@ define(function(require, exports) {
         			}
         		});
         	}else{
-        		checkBoxs.each(function(index) {
-        			if (checkBoxs.eq(index).is(':checked')) {
-        				checkBoxs.eq(index).trigger('click');
+        		var $list = $tab.find('.T-action-plan-list .hct-plan-ask'), isAlert = 0;
+        		$list.each(function(index) {
+        			var $that = $list.eq(index), id = $that.data('id');
+        			if (!!id) {
+        				isAlert = 1;
         			}
         		});
+        		if (isAlert == 1) {
+        			var tripPlanId = $tab.find('input[name=id]').val();
+        			showConfirmDialog($('#confirm-dialog-message'), '您将删除所有计划，是否继续？', function() {
+						$.ajax({
+							url: KingServices.build_url('tripPlan', 'deleteTripPlanRequireByBatch'),
+							type: 'post',
+							data: 'tripPlanId=' +  tripPlanId,
+						})
+						.done(function(data) {
+							if (showDialog(data)) {
+								showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+					        		$tab.find('.T-action-plan-list .hct-plan-ask').each(function(index) {
+					        			var $that = $(this), id = $that.data('id');
+					        			if (!!id) {
+					        				$that.remove();
+					        			}
+					        		});
+					        		checkBoxs.each(function(index) {
+					        			if (checkBoxs.eq(index).is(':checked')) {
+					        				checkBoxs.eq(index).trigger('click');
+					        			}
+					        		});
+								});
+							}
+						});
+					},function(){
+					});
+        		}else{
+	        		checkBoxs.each(function(index) {
+	        			if (checkBoxs.eq(index).is(':checked')) {
+	        				checkBoxs.eq(index).trigger('click');
+	        			}
+	        		});
+        		}
         	}
         });
         $tab.find('.T-action-plan .T-add-action').on('change', 'input[type="checkbox"]', function(event){
@@ -1483,6 +1519,25 @@ define(function(require, exports) {
 						$tab.find('input[name="lineProductName"]').trigger('change');
 						//KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
 						F.arrangeDate($tab);
+
+						$tab.find('.T-action-plan .T-add-action [type=checkbox]').each(function(index) {
+							if ($(this).is(':checked')) {
+								$(this).trigger('click');
+							}
+						});
+						if(data.requireList.length > 0) {
+							for (var i = 0; i < data.requireList.length; i++) {
+								var $this = data.requireList[i], $label = $tab.find('.T-action-plan .T-add-action');
+								$label.each(function(index) {
+									var type = $label.eq(index).data('type');
+									if (type == $this) {
+										if (!$label.eq(index).find('input[type=checkbox]').is(':checked')) {
+											$label.eq(index).find('input[type=checkbox]').trigger('click');
+										}
+									}
+								});
+							}
+						}
 					}
 				}
     		})
