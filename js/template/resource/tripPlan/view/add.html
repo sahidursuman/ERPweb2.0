@@ -392,15 +392,15 @@
                                     <tbody>
                                         {{each busCompanyList as busCompany}}
                                         {{if busCompany != "[]" || busCompany != null}}
-                                            <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId={{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}} data-entity-busId={{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}} data-entity-offerId={{busCompany.offerId}}>
-                                                <td><input type="text" name="startTime" class="datepicker" value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
-                                                <td><input type="text" name="endTime" class="datepicker" value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
+                                            <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId="{{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}}" data-entity-busId="{{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}}" data-entity-offerId="{{busCompany.offerId}}">
+                                                <td><input type="text" name="startTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}"></td>
+                                                <td><input type="text" name="endTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}"></td>
                                                 <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
-                                                <td><input type="text" name="needSeatCount" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
-                                                <td><input type="text" name="brand" {{if !!busCompany.offerId}}readonly="readonly"{{/if}}  value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
+                                                <td><input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;"/></td>
+                                                <td><input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled"{{/if}}  value="{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}" class="col-sm-12"/></td>
                                                 <td>
                                                     <div class="col-xs-12 feild-relative">
-                                                        <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 "/>
+                                                        <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 T-busPriceC"/>
                                                         <input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId"/>
                                                         <span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -410,7 +410,7 @@
 
                                                 <td>
                                                     <div class="col-xs-12 feild-relative">
-                                                        <input type="text" name="companyName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12"/>
+                                                        <input type="text" name="companyName" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12"/>
                                                         <input type="hidden" name="id" value="{{busCompany.id}}">
                                                         <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/>
                                                         <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
@@ -425,7 +425,7 @@
                                                 <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
                                                 <td>
                                                     <div class="col-xs-12 feild-relative">
-                                                        <input type="text" name="driverName" {{if !!busCompany.offerId}}readonly="readonly"{{/if}} value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>
+                                                        <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12"/>
                                                         <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
                                                         <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
