@@ -1672,7 +1672,14 @@ define(function(require, exports){
 		'<td><input name="realReduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
-		'<td><input name="guidePayMoney" style="width:60px;" type="text"></td>'+
+		'<td>'+
+		'<div class="inline-flex col-xs-12">'+
+		'<select name="payType">'+
+		'<option value="0">现金</option>'+
+		'<option value="1">刷卡</option>'+
+		'<option value="2">签单</option>'+
+		'</select>&nbsp;'+
+		'<input type="text" name="guidePayMoney" style="width:60px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
 		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
@@ -3911,6 +3918,7 @@ define(function(require, exports){
 						"guideRate":Count.changeToString(parseFloat($(this).find('input[name=guideRate]').val())/100),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"needIncomeCount":$(this).find('input[name=needCount]').val(),
+						"payType":$(this).find('[name=payType]').val(),
 						"guideRebateMoney":Count.changeToString($(this).find('input[name=guideRebateMoney]').val())
 				}
 				saveJson.selfPayArrangeList.push(selfPayArrange);
@@ -3942,6 +3950,7 @@ define(function(require, exports){
 					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
+					payType:$(this).find('[name=payType]').val(),
 					needIncomeCount:$(this).find('input[name=needCount]').val()
 				}
 				saveJson.addSelfPayArrangeList.push(addSelfArrange)	
