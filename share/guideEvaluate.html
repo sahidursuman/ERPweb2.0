@@ -163,6 +163,7 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
+					data.imgUrl = imgUrl;
 				    var html = template('guideEvaluation', data);
 				    document.getElementById('guideEvaluationContent').innerHTML = html;
 					setShare()

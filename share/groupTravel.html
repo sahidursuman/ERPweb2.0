@@ -267,6 +267,7 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
+					data.imgUrl = imgUrl;
 				    var html = template('groupTravel', data);
 				    document.getElementById('groupTravelContent').innerHTML = html;
 					setShare()

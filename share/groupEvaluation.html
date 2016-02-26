@@ -169,6 +169,7 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
+					data.imgUrl = imgUrl;
 					var commentList = data.note.noteCommentList;
 	                for(var i=0; i<commentList.length; i++){
 	                    if(!!commentList[i].commentImages){

@@ -212,6 +212,7 @@
 			type : "POST",
 			success : function(data){
 				if(!!data){
+					data.imgUrl = imgUrl;
 					var commentList = data.noteItem.noteItemCommentList;
 	                for(var i=0; i<commentList.length; i++){
 	                    if(!!commentList[i].commentImages){
