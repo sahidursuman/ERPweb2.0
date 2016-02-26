@@ -3983,6 +3983,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
+						"payType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.busCompanyArrangeList.push(busCompanyArrange);
@@ -4008,6 +4009,7 @@ define(function(require, exports){
 					price:obj.find('input[name=price]').val(),
 					realGuidePayMoney:obj.find('input[name=guidePayMoney]').val(),
 					realReduceMoney:obj.find('input[name=realReduceMoney]').val(),
+					payType:$(this).find('[name=payType]').val(),
 					billRemark:obj.find('input[name=billRemark]').val()
 				};
 				saveJson.addBusArrangeList.push(busArrange);
@@ -4028,6 +4030,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
+						"payType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.restaurantArrangeList.push(restaurantArrange);
@@ -4053,6 +4056,7 @@ define(function(require, exports){
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
+					payType:$(this).find('[name=payType]').val()
 				}
 				saveJson.addRestArrangeList.push(addRestArrange);
 			}
@@ -4067,7 +4071,8 @@ define(function(require, exports){
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
-						billRemark:$(this).find('input[name=billRemark]').val(),
+						"billRemark":$(this).find('input[name=billRemark]').val(),
+						"payType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.hotelArrangeList.push(hotelArrange);
@@ -4091,6 +4096,7 @@ define(function(require, exports){
 					realReduceMoney:$(this).find('input[name=realReduceMoney]').val(),
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
+					payType:$(this).find('[name=payType]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val()
 				}
 				saveJson.addHotelArrangeList.push(addHotelArrange);
@@ -4107,6 +4113,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
+						"payType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.scenicArrangeList.push(scenicArrange);
@@ -4130,6 +4137,7 @@ define(function(require, exports){
 					realReduceMoney:$(this).find('input[name=realReduceMoney]').val(),
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
+					payType:$(this).find('[name=payType]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val()
 				}
 				saveJson.addScenicArrangeList.push(addScenic);
@@ -4189,6 +4197,7 @@ define(function(require, exports){
                     "count":$(this).find('input[name="realCount"]').val(),
                     "realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
                     "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
+                    "payType":$(this).find('[name=payType]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val()
                 }
                 saveJson.otherArrangeList.push(otherArrange);
@@ -4201,6 +4210,7 @@ define(function(require, exports){
                     "realReduceMoney":$(this).find('input[name="realReduceMoney"]').val(),
                     "payedMoney":$(this).find('input[name="payedMoney"]').val(),
                     "realGuidePayMoney":$(this).find('input[name="guidePayMoney"]').val(),
+                    "payType":$(this).find('[name=payType]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val()
                 }
                 saveJson.otherArrangeList.push(otherArrange);
