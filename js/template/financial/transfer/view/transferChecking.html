@@ -18,6 +18,10 @@
                     <input name="operateName" type="text" value="{{if searchParam.operateName == ""}}全部{{else}}{{searchParam.operateName}}{{/if}}" style="width:100px;" />
                     <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
 
+
+                    <label class="marginLeft-30">收客单号：</label>
+                    <input name="orderNumber" type="text" value="{{searchParam.orderNumber}}" style="width:100px;" />
+
                     <button class="marginLeft-30 btn-sm search-btn T-search" >
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
@@ -39,7 +43,8 @@
     <div class="clearfix"></div>
         <table class="table table-striped table-bordered table-hover all hct_align_middle">
             <thead>
-                <tr><th class="th-border">线路产品</th>
+                <tr><th class="th-border">收客单号</th>
+                    <th class="th-border">线路产品</th>
                      <th class="th-border" width="110">出游日期</th>
                      <th class="th-border">联系人</th>
                      <th class="th-border">人数</th>
@@ -60,6 +65,7 @@
             <tbody class="T-checkList" data-right="1300005">
                 {{each financialTransferList as rs}}
                 <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.outFeeList.length > 0}}data-trans="trans"{{/if}}>                
+                    <td rowspan="{{rs.rowLen}}">{{rs.orderNumber}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td rowspan="{{rs.rowLen}}">{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
@@ -101,7 +107,7 @@
                         <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                     {{/if}}
                     <td rowspan="{{rs.rowLen}}"><span class="T-unReceivedMoney F-float F-money">{{rs.unPayedMoney}}</span></td>
-    	            <td rowspan="{{rs.rowLen}}"><input type="text" maxlength="1000"  name="checkRemark" value="{{rs.checkRemark}}" style="text-align:center"></td>
+    	            <td rowspan="{{rs.rowLen}}"><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
     				<td rowspan="{{rs.rowLen}}">{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
     	            <td rowspan="{{rs.rowLen}}">{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
     				<td rowspan="{{rs.rowLen}}">
