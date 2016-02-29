@@ -1176,8 +1176,8 @@ define(function(require, exports) {
                 touristGroup.setReadonly($addTabId, "childCount");
                 touristGroup.setTimePicRe($addTabId, "startTime");
                 touristGroup.setTimePicRe($addTabId, "endTime");
-                touristGroup.setReadonly($addTabId, "fromPartnerAgency");
-                touristGroup.setReadonly($addTabId, "partnerAgencyNameList");
+                touristGroup.setTimePicRe($addTabId, "fromPartnerAgency");
+                touristGroup.setTimePicRe($addTabId, "partnerAgencyNameList");
                 $addTabId.find('.T-addPartner').addClass('hide');
                 $addTabId.find('.T-addPartnerManager').addClass('hide');
                 layer.close(touristGroup.chooseQuoteProlayer);
