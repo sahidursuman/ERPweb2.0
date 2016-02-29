@@ -83,7 +83,7 @@
         </label>
     </div>
 </div>
-<table class="table table-striped table-bordered table-hover all margin-top">
+<table class="table table-striped table-bordered table-hover all margin-top hct_align_middle">
     <thead>
         <tr><th class="th-border">账务类别</th>
             <th class="th-border" width="170">用车时间(账期)</th>
@@ -144,7 +144,7 @@
             <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
             <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
             <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money" maxlength="9" data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}} /></td>
-            <td class="col-sm-1" ><input name="payRemark" type="text" value="{{rs.payRemark}}" maxlength="1000" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}} /></td>
+            <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}>{{rs.payRemark}}</textarea></td>
             <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
             <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
             <td>
