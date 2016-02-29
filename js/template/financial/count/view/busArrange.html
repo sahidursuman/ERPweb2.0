@@ -61,14 +61,33 @@
         <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
         <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
         
-        <td><div class="inline-flex col-xs-12">{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realGuidePayMoney}}</span>{{else}}
+        <td><div class="inline-flex col-xs-12">
+
+        {{if busCompany.badStatus == 1}}
+        <span>
+            {{if busCompany.payType == 0}}
+                现金
+                {{else if busCompany.payType == 1}}
+                刷卡
+                {{else if busCompany.payType == 2}}
+                签单
+            {{/if}}
+        </span>
+        &nbsp;
+        <span class="F-float F-money">
+        {{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
+        </span>{{else}}
         <select name="payType">
             <option value="0" {{if busCompany.payType == 0}}selected="selected"{{/if}}>现金</option>
             <option value="1" {{if busCompany.payType == 1}}selected="selected"{{/if}}>刷卡</option>
             <option value="2" {{if busCompany.payType == 2}}selected="selected"{{/if}}>签单</option>
         </select>
         &nbsp;
-        <input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" {{if busCompany.billUpdateTime != null}}value="{{busCompany.realGuidePayMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}} old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
+        <input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" 
+        {{if busCompany.billUpdateTime != null}}{{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}"{{/if}}{{else}}
+        {{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}
+        {{/if}} 
+        old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
             <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></div></td>
          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
