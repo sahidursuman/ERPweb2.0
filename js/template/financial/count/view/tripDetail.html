@@ -167,13 +167,20 @@
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
                             <td>
-                                {{if touristGroup.touristGroupFeeList.length > 0}}
+                                {{if touristGroup.subStatus == 0}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
+                                    {{else}}
+                                    {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
+                                        {{touristGroupFee.name}} ：
+                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                    {{/each}}
                                 {{/if}}
+                            </td>
                             </td>
                         </tr>
                     {{/each}}
@@ -290,11 +297,11 @@
                     {{/if}}
                 </td>
                 
-                <td>{{itemSet.travelAgencyRate*100}}<input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 
                 <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
-                <td>{{itemSet.guideRate*100}}<input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="F-float F-count">{{itemSet.guideRate * 100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
                 <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
                 {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
