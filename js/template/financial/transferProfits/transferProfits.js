@@ -141,7 +141,7 @@ define(function(require, exports) {
                     //绑定翻页组件
                     laypage({
                         cont: $tab.find('.T-pagenation'),
-                        pages: data.totalPage,
+                        pages: data.searchParam.totalPage,
                         curr: (pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 

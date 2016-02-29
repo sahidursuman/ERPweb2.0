@@ -2,14 +2,12 @@
     <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
         <td>{{rs.tripMessage}}</td>
         <td>{{rs.accountTime}}</td>
-        <td><span class="F-float F-count">{{rs.count}}</span></td>
+        <td><span>{{rs.count}}</span></td>
         <td>{{if rs.shopItem.length >0}}{{rs.shopItem[0].itemName}}{{if rs.shopItem.length >1}}...{{/if}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
         <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
         <td><span class="F-float F-money">{{rs.travelAgencyRebateMoney}}</span></td>
         <td><span class="F-float F-money">{{rs.guideRebateMoney}}</span></td>
-        <td><span class="F-float F-money">{{rs.customerRebateMoney}}</span></td>
-        <td><span class="F-float F-money">{{rs.parkingRebateMoney}}</span></td>
-        <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
+        <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billimage="{{rs.billImage}}">查看</a>{{/if}}</td>
         <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
         <td><a class="cursor T-action T-payDetails F-float F-money">{{rs.receiveMoney}}</a>
         <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>

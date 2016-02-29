@@ -111,7 +111,7 @@
     </div>
 </div>
 <div class="row">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover hct_align_middle">
         <thead>
             <tr>
                 <th class="th-border">团信息</th>
@@ -149,7 +149,7 @@
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
                 <td><input type="text" class="col-sm-12 T-reciveMoney F-float F-money" name="payMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-                <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.IncomeRemark}}"></td>
+                <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}}>{{rs.IncomeRemark}}</textarea></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkName}}</td>
                 <td>

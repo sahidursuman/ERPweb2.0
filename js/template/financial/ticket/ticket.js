@@ -574,7 +574,8 @@ define(function(require, exports) {
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
 
         Ticket.getOperationList(args, $tab);
-
+        FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
+        $tab.data("isEdited",true);
     };
     /**
      * 获取付款列表数据

@@ -14,7 +14,7 @@
         <td class="F-float F-money">{{rs.settlementMoney}}</td>
         <td class="F-float F-money">{{rs.unPayedMoney}}</td>
         <td class="F-float F-money"><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" data-le="{{rs.unPayedMoney}}" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-        <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
+        <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}}></textarea></td>
         <td>{{rs.checkTime}}</td>
         <td>{{rs.checkUserName}}</td>
         <td>
