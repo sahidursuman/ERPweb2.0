@@ -81,14 +81,26 @@
             
             <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
             
-            <td><div  class="inline-flex col-xs-12">{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}
+            <td><div  class="inline-flex col-xs-12">{{if arrange.badStatus == 1}}
+            <span>
+                {{if arrange.payType == 0}}
+                    现金
+                    {{else if arrange.payType == 1}}
+                    刷卡
+                    {{else if arrange.payType == 2}}
+                    签单
+                {{/if}}
+            </span>
+            &nbsp;
+            <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
             <select name="payType">
                 <option value="0" {{if arrange.payType == 0}}selected="selected"{{/if}}>现金</option>
                 <option value="1" {{if arrange.payType == 1}}selected="selected"{{/if}}>刷卡</option>
                 <option value="2" {{if arrange.payType == 2}}selected="selected"{{/if}}>签单</option>
             </select>
             &nbsp;
-            <input style="width:60px;" type="text" class="F-float F-money" name="realGuidePayMoney" {{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />{{/if}}
+            <input style="width:60px;" type="text" class="F-float F-money" name="realGuidePayMoney" 
+            {{if arrange.payType == 2}}value="{{arrange.signMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} {{/if}}/>{{/if}}
                 
                 <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                 <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
@@ -119,7 +131,7 @@
             <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.guideRebateMoney}}</span>{{else}} <span class="guideRebateMoney F-float F-money">{{arrange.guideRebateMoney}}</span>{{/if}}
                 <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
             
-            <td>{{if editStatus == 1}}<input name="billRemark" value="{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}</td>
+            <td>{{if editStatus == 1}}<input name="billRemark" value="{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.remark}}{{else}}{{arrange.billRemark}}{{/if}}{{/if}}&nbsp;&nbsp;{{if arrange.selfPayItem == null}}<a href="javascript:void(0)" class="T-selfArrDel">删除</a>{{/if}}</td>
             
             <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>                             
     </tr>

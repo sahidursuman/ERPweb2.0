@@ -151,7 +151,6 @@ define(function(require, exports) {
                 if(result){
                     if(innerProfit.clickFlag == 2){
                         data.income = JSON.parse(data.income);
-                        console.log(data);
                         var html = visitorGroupMainInfo(data);
                         layer.open({
                             type : 1,
@@ -300,7 +299,6 @@ define(function(require, exports) {
                             }
                         },
                         select:function(evevt,ui){
-                            console.log(ui);
                             $(this).blur();
                             $(this).next().val(ui.item.id);
                         }

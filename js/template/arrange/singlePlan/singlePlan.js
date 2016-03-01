@@ -144,7 +144,6 @@ define(function(require, exports) {
 			event.preventDefault();
 			var $that = $(this).find('.ace-icon'), $parent = $that.closest('tr'),
 				billStatus = $parent.data("bill-status");
-			console.log($that.length)
 			if(!$that.hasClass('fa-minus') && $that.length > 0){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
 					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));

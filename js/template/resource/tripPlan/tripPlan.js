@@ -804,7 +804,6 @@ define(function(require, exports) {
 		if (!!thatJson && typeof thatJson == 'string') {
 			thatJson = JSON.parse(thatJson);
 		}
-		console.log(thatJson)
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
@@ -1418,7 +1417,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
-					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="col-sm-12 F-float F-money"></td>'
+					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -1450,7 +1449,7 @@ define(function(require, exports) {
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input name="prePayMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
@@ -1479,7 +1478,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="col-sm-12 F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="orderStatus"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
@@ -1511,7 +1510,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1561,7 +1560,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1592,7 +1591,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1621,7 +1620,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
@@ -2488,7 +2487,6 @@ define(function(require, exports) {
                 data: "id=" + id,
                 success: function(data) {
 					if(showDialog(data)) {
-						console.log(data)
 						var hotelRommList = JSON.parse(data.hotelRommList);
 						if(hotelRommList && hotelRommList.length > 0){
 							for(var i=0; i < hotelRommList.length; i++){
@@ -3523,10 +3521,10 @@ define(function(require, exports) {
 	tripPlan.daysDifference = function(sDate1, sDate2) {
 		if (!!sDate1 && !!sDate2) {
 			var aDate, oDate1, oDate2, iDays   
-			aDate = sDate1.split("-")   
-			oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式   
+			aDate = sDate1.split("-")
+			oDate1 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2]) //转换为12-18-2002格式   
 			aDate = sDate2.split("-")   
-			oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])   
+			oDate2 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2])   
 			iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 /24) //把相差的毫秒数转换为天数   
 			return iDays + 1;   
 		}else {

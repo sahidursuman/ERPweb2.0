@@ -674,7 +674,6 @@ define(function(require, exports) {
                         Client.clearDataArray.voucher = voucher;
                         Client.clearDataArray.billTime = billTime;
                         Client.clearDataArray.bankNumber = bankNumber;
-                        console.log(Client.clearDataArray);
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
@@ -1097,7 +1096,6 @@ define(function(require, exports) {
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             contactRealname : $tab.find('.T-search-contact').val()
         }
-        console.log(args.lineProductId);
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
         }

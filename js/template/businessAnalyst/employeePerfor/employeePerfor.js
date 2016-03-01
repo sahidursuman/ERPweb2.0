@@ -167,8 +167,6 @@ define(function(require, exports) {
 			    partnerAgencyType=$that.data('value'),
 			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
 			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
-
-			console.info('isEmployee----'+isEmployee);
 			if (isEmployee==1) {
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');

@@ -507,7 +507,6 @@ define(function(require, exports) {
 				inner.PayMoneyF();
 			});
 			$obj.find("input[name=transAdultPrice]").keyup(function(){
-				console.log("keyup");
 				inner.PayMoneyF();
 			});
 			//给新增费用绑定事件
@@ -946,7 +945,6 @@ define(function(require, exports) {
 			});
 		},
 		save : function(saveType){
-			console.log(saveType);
 			if(saveType == "edit"){
 				inner.saveEditTranIn(1);
 			} 

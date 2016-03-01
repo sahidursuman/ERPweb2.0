@@ -171,7 +171,6 @@ define(function(require,exports){
 					if(checkStatus == true){
 						status = 1;
 					};
-					console.log(status);
 					var form = $mainObj.serialize()+"&status="+status+"",
 						formData = $mainObj.serializeJson();
 					//车辆数据的组装
@@ -388,7 +387,6 @@ define(function(require,exports){
 										status = 1;
 									}
 									var form = $updateObj.serialize()+"&status="+status+"";
-									console.log(form);
 									//return
 									var busJsonAdd = [],
 										busJsonDel = [],
@@ -559,13 +557,11 @@ define(function(require,exports){
 			   	  if (!isNaN(minPrice)) {
 			   	  	 $obj.find('.T-lowestPrice').val(minPrice);
 			   	  };
-			   	  console.log('endTime'+minPrice);
 			    }else if($that.hasClass('T-endTime')){//包车时限结束日期--基数按天数
 			   	  var minPrice=BusCompany.minBusPrice($obj);
 			   	  if (!isNaN(minPrice)) {
 			   	  	 $obj.find('.T-lowestPrice').val(minPrice);
 			   	  };
-			   	  console.log('endTime'+minPrice);
 			    }else if($that.hasClass('T-minPrice')){//包车价格
 			        var minPrice = BusCompany.minBusPrice($obj);
 			        //最低价
@@ -603,7 +599,6 @@ define(function(require,exports){
 		var $td = $obj.closest('td');
 		var $tr=$obj.closest('tr');
 		var index = $td.find('div').length;
-		//console.log(index);
 		var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker T-startTime T-calc\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker T-endTime T-calc\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white T-del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
 		var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\"width:100px;\" name=\"contractPrice\" class=\"F-float F-money T-minPrice T-calc\" type=\"text\" maxlength=\"9\"/><label>&nbsp;元</label></div>";
 		$td.next().append(contractPriceInput);
@@ -765,7 +760,6 @@ define(function(require,exports){
 	   			  	 // 计算时间区间天数
 	   	    	     var days = Tools.getDateDiff(startTime,endTime);    
 	   	    	         temp.push(minPrice/days);
-	   	    	     console.log('zhang..isNaN=======================');
 	   			  }
 	   			 
 	   			}

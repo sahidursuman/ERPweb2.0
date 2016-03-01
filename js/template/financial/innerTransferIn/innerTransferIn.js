@@ -221,7 +221,6 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
-					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -375,9 +374,11 @@ define(function(require,exports) {
 			if(typeFlag == 2){
 				InnerTransferIn.btnSatus = 0 ;
 				$obj.data('isEdited', false);
+				$listSearchData.pageNo = 0;
 				InnerTransferIn.chenking($listSearchData,2,"settle");
 			}else{
 				$obj.data('isEdited', false);
+				$listSearchData.pageNo = 0;
 				InnerTransferIn.chenking($listSearchData,1,"check");
 			}
 			

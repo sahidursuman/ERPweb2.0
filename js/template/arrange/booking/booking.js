@@ -229,7 +229,6 @@ define(function(require, exports) {
 		//搜索操作人查询
 		BookingArrange.choose(BookingArrange.$searchArea.find('.T-operateUserChoose'),function(obj){
 			var operationUserList = BookingArrange.autocompleteDate.operationUserList;
-			console.log(operationUserList);
 			if(operationUserList && operationUserList.length > 0){
 				for(var i=0; i < operationUserList.length; i++){
 					operationUserList[i].value = operationUserList[i].realName

@@ -76,7 +76,6 @@ define(function(require, exports) {
     };
     //获取合计金额
     OtherAccounts.getSumMoney = function(data,tabId){
-        console.log(data);
         tabId.find('.T-sumNeedPay').text(data.sumNeedPayMoney);
         tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
         tabId.find('.T-sumPaiedMoney').text(data.sumPayedMoney);

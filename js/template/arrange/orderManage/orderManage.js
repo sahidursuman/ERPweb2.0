@@ -717,7 +717,6 @@ define(function(require, exports) {
 								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
 								success:function(data){
 									orderManage.listBusCompanyOrder(0);
-									console.info(type);
 								}
 							});
 						}else if(type==2){
@@ -727,8 +726,6 @@ define(function(require, exports) {
 								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
 								success:function(data){
 									orderManage.listHotelOrder(0);
-									console.info(type);
-
 								}
 							});
 						};
