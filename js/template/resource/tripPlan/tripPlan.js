@@ -410,6 +410,7 @@ define(function(require, exports) {
 				success:function(data){
 					if(showDialog(data)){
 						data.basicInfo = JSON.parse(data.basicInfo);
+						data.touristGroupList = JSON.parse(data.touristGroupList);
 						data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
 						data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
 						data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
@@ -467,8 +468,8 @@ define(function(require, exports) {
 
 		tripPlan.addResource($tab);
 
-		$tab.find('.T-toggle-tripPlanDayList').off('click.toggle').on('click.toggle', function() {
-			var $this = $(this), $tbody = $tab.find('.T-tripPlanDayList-tbody');
+		$tab.find('.T-toggle-List').off('click.toggle').on('click.toggle', function() {
+			var $this = $(this), $tbody = $this.closest('h5').next();/*$tab.find('.T-tripPlanDayList-tbody')*/;
 			if ($this.hasClass('T-show')) {
 				$this.addClass('T-hide');
 				$tbody.hide();
@@ -587,6 +588,11 @@ define(function(require, exports) {
 				$this.text('已设置');
 			}
 		})
+
+		$tab.find('.T-touristGroupList').on('click', '.T-groupView', function() {
+			var $this = $(this), $parent = $this.closest('tr'), id = $parent.data('id');
+			tripPlan.viewTouristGroup(id);
+		})
 		
 		// 激活第一个菜单
 		if (!!target) {
@@ -674,6 +680,7 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				$parent.find('[name=price]').val(data.contractPrice * busDays);
+				tripPlan.plusPrice($this,$tab)
 			});
 		})
 
@@ -2120,7 +2127,7 @@ define(function(require, exports) {
 							$that.autocomplete('option','source', licenseList);
 							$that.autocomplete('search', '');
 						}else{
-							layer.tips('无数据', obj, {
+							layer.tips('无数据', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
