@@ -674,6 +674,7 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				$parent.find('[name=price]').val(data.contractPrice * busDays);
+				tripPlan.plusPrice($this,$tab)
 			});
 		})
 
@@ -2120,7 +2121,7 @@ define(function(require, exports) {
 							$that.autocomplete('option','source', licenseList);
 							$that.autocomplete('search', '');
 						}else{
-							layer.tips('无数据', obj, {
+							layer.tips('无数据', $that, {
 							    tips: [1, '#3595CC'],
 							    time: 2000
 							});
