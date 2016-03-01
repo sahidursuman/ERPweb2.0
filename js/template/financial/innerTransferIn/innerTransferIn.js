@@ -318,12 +318,12 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					$searchObj.find('.sumTransCount').text(data.totalCount);
-					$searchObj.find('.sumTransNeedPayMoney').text(data.transInMoney);
-					$searchObj.find('.sumPayedMoney').text(data.getedMoney);
+					$searchObj.find('.T-sumTransCount').text(data.totalCount);
+					$searchObj.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
+					$searchObj.find('.T-sumPayedMoney').text(data.getedMoney);
 					$searchObj.find('.T-sumBackMoney').text(data.backMoney);
 					$searchObj.find('.T-sumSettlementMoney').text(data.settlementMoney);
-					$searchObj.find('.sumUnPayedMoney').text(data.confirmedMoney);
+					$searchObj.find('.T-sumUnPayedMoney').text(data.confirmedMoney);
 					$searchObj.find('.T-sumUnReceivedMoney').text(data.unIncomeMoney);
 				}
 			}
