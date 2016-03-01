@@ -103,7 +103,7 @@ define(function(require,exports) {
 	//list页面事件
 	InnerTransferIn.inieEvent = function($obj){
 		//格式化日期控件
-		FinancialService.initDate($obj.find(".T-search-area"));
+		Tools.setDatePicker($obj.find(".T-search-area .date-picker"), true);
 		//搜索事件
 		$obj.find(".T-search").on('click',function(event){
 			event.preventDefault();
@@ -388,7 +388,7 @@ define(function(require,exports) {
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
-		FinancialService.initDate(InnerTransferIn.$checkSearchArea);
+		Tools.setDatePicker($obj.find(".T-search-area .date-picker"), true);
 		//导出报表事件
 		$obj.find(".T-btn-export").on('click',function(event){
 			var args = { 
