@@ -639,7 +639,24 @@
                     <tr badStatus = "{{arrange.badStatus}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
-                        {{if arrange.billUpdateTime != null}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}</td>{{/if}}
+                        {{if arrange.billUpdateTime != null}}
+                            {{if arrange.restaurantId == -1}}
+                                导游自选
+                            {{else}}
+                                {{if arrange.restaurant != null}}
+                                    {{arrange.restaurant.name}}
+                                {{/if}}
+                            {{/if}}
+                        {{else}}
+                            {{if arrange.restaurantId == -1}}
+                                导游自选
+                            {{else}}
+                                {{if arrange.restaurant != null}}
+                                    {{arrange.restaurant.name}}
+                                {{/if}}
+                            {{/if}}
+                        {{/if}}
+                        </td>{{/if}}
                         <td>{{arrange.type}}</td> 
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span class="price">{{arrange.price}}</span>{{/if}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}<input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 

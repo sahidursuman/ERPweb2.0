@@ -50,8 +50,25 @@
                         <span>{{arrange.restaurant.name}}</span>
                     {{/if}}
                 {{/if}}
-            {{else}}{{if arrange.billUpdateTime != null}}
-            {{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{else}}{{if arrange.isChoose == 1}}自选{{else}}{{if arrange.restaurant != null}}{{arrange.restaurant.name}}{{/if}}{{/if}}{{/if}}{{/if}}
+            {{else}}
+                {{if arrange.billUpdateTime != null}}
+                    {{if arrange.restaurantId == -1}}
+                        导游自选
+                    {{else}}
+                        {{if arrange.restaurant !=null}}
+                            {{arrange.restaurant.name}}
+                        {{/if}}
+                    {{/if}}
+                {{else}}
+                    {{if arrange.restaurantId == -1}}
+                        导游自选
+                    {{else}}
+                        {{if arrange.restaurant !=null}}
+                            {{arrange.restaurant.name}}
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            {{/if}}
             </td>
         {{/if}}
         <td>{{arrange.type}}</td> 
