@@ -851,19 +851,11 @@ input.datepicker {
     padding-left: 15px;
 }
 /**公共方法**/
-.sidebar{
-	width: 140px;
-}
-.sidebar+.main-content{
-	margin-left: 140px;
-}
-.main-content-inner > .page-content{
-	padding: 8px 12px 24px;
-}
+
 @media (min-width: 992px){
-	.sidebar+.main-content .breadcrumbs-fixed {
+	/* .sidebar+.main-content .breadcrumbs-fixed {
 	    left: 140px;
-	}
+	} */
 	.breadcrumbs-fixed+.page-content{
 		padding-top: 49px;
 	}
@@ -873,6 +865,23 @@ input.datepicker {
 		display: inline-block;
 	    padding-left: 0px;
 	    padding-top: 8px;
+	}
+}
+@media (max-width: 1499px){
+	.sidebar{
+		width: 140px;
+	}
+	.sidebar+.main-content .breadcrumbs-fixed {
+	    left: 140px;
+	}
+	.main-content-inner > .page-content{
+		padding: 8px 12px 24px;
+	}
+	.breadcrumbs-fixed+.page-content{
+		padding-top: 49px;
+	}
+	.sidebar+.main-content {
+		margin-left: 140px;
 	}
 }
 
