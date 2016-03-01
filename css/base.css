@@ -852,14 +852,14 @@ input.datepicker {
 }
 /**公共方法**/
 
-@media (min-width: 992px){
+/* @media (min-width: 992px){
 	.sidebar+.main-content .breadcrumbs-fixed {
-	    left: 0px;
+	    left: 140px;
 	}
 	.breadcrumbs-fixed+.page-content{
 		padding-top: 49px;
 	}
-}
+} */
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
