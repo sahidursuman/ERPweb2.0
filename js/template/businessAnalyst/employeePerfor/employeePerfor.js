@@ -96,7 +96,7 @@ define(function(require, exports) {
 			$that.closest('ul').prev().attr('data-value');
 			startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			customerType = $that.closest('div').find('.T-select-customerType').children('button').data('value');
+			customerType = employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value'),
 			partnerAgencyType = $that.closest('div').find('.T-select-partnerAgencyType').children('button').data('value'); //客户类型
 			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
@@ -113,6 +113,8 @@ define(function(require, exports) {
 					employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
 				};
 			} else{//部门
+
+				console.log("customerType"+customerType)
 				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
