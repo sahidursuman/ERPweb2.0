@@ -1084,10 +1084,13 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				var group = JSON.parse(data.touristGroupJson),
 					hotelLevel = ['三星以下', '三星', '准四星', '四星', '准五星', '五星', '五星以上'];
+
 				var html = "";
 				for(var i=0; i<group.length; i++){
+					console.log(group[i].sendPosition)
+					console.log(typeof group[i].sendPosition)
 					html += '<tr data-id="'+group[i].id+'"><td>'+
-					group[i].orderNumber+'</td><td>'+
+					(!!group[i].orderNumber?group[i].orderNumber:"")+'</td><td>'+
 					(group[i].outOPUser ? group[i].outOPUser.realName : "")+'</td><td>'+
 					group[i].lineProduct.name+'</td><td>'+
 					group[i].partnerAgency.travelAgencyName+'</td><td>'+
@@ -1098,12 +1101,12 @@ define(function(require, exports) {
 					group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
 					group[i].currentNeedPayMoney+'</td><td>'+
 					hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
-					group[i].includeSelfPay+'</td><td>'+
-					group[i].accompanyGuideName+'</td><td>'+
-					group[i].accompanyGuideMobile+'</td><td>'+
-					group[i].welcomeBoard+'</td><td>'+
-					group[i].sendPosition+'</td><td>'+
-					group[i].remark+'</td><td>'+
+					(!!group[i].includeSelfPay?group[i].includeSelfPay:"")+'</td><td>'+
+					(!!group[i].accompanyGuideName?group[i].accompanyGuideName:"")+'</td><td>'+
+					(!!group[i].accompanyGuideMobile?group[i].accompanyGuideMobile:"")+'</td><td>'+
+					(!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+
+					(!!group[i].sendPosition?group[i].sendPosition:"")+'</td><td>'+
+					(!!group[i].remark?group[i].remark:"")+'</td><td>'+
 					'<div class="hidden-sm hidden-xs btn-group">'+
 					'<a class="cursor T-action T-groupView">查看</a>'+
 					'<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
