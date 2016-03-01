@@ -311,10 +311,8 @@ define(function(require, exports) {
     				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     				var $fee = $tab.find('.T-fee-list');
     				deleteIds = $fee.data('deleteIds');
-    				console.log(deleteIds)
     				if(deleteIds){
     					deleteIds = JSON.parse(deleteIds);
-    					console.log(deleteIds, 1)
     					deleteIds.push({id : id});
     				}else{
     					deleteIds = [{id : id}]
@@ -343,9 +341,8 @@ define(function(require, exports) {
     		if($that.hasClass('T-count') || $that.hasClass('T-price')){
     			var count = $tr.find('[name="count"]').val() || 0,
     				price = $tr.find('[name="price"]').val() || 0;
-    			console.log(count, price);
-    			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
-    			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+	    			$tr.find('[name="money"]').val(Tools.toFixed(count * price));
+	    			$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
     		}
 			var money = 0;
 			$tab.find('.T-fee-list tr').each(function(index){

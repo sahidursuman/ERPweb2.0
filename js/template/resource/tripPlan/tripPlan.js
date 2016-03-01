@@ -804,7 +804,6 @@ define(function(require, exports) {
 		if (!!thatJson && typeof thatJson == 'string') {
 			thatJson = JSON.parse(thatJson);
 		}
-		console.log(thatJson)
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
@@ -2488,7 +2487,6 @@ define(function(require, exports) {
                 data: "id=" + id,
                 success: function(data) {
 					if(showDialog(data)) {
-						console.log(data)
 						var hotelRommList = JSON.parse(data.hotelRommList);
 						if(hotelRommList && hotelRommList.length > 0){
 							for(var i=0; i < hotelRommList.length; i++){
