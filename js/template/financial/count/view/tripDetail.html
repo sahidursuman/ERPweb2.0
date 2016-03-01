@@ -401,7 +401,6 @@
                             <td><span class="needPayMoney" >{{arrange.needPayMoney}}</span><input type="hidden" class="selfMoney"></td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
-                            {{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
                             <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -410,8 +409,10 @@
                                 {{else if arrange.payType == 2}}
                                 签单
                             {{/if}}
-                        </span>
-                        &nbsp;&nbsp;
+                            </span>
+                            &nbsp;&nbsp;
+                            {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                            
                             <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             </td>
                            
@@ -566,7 +567,7 @@
                         <input type="hidden" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/></td>
                         <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}</td>
                         <td>{{busCompany.payedMoney}}</td>
-                        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realGuidePayMoney}}</span>{{else}}
+                        <td>
                         <span>
                             {{if busCompany.payType == 0}}
                                 现金
@@ -577,6 +578,7 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if busCompany.badStatus == 1}}<span>{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}</span>{{else}}
                         <span>
                         {{if busCompany.billUpdateTime != null}}{{busCompany.realGuidePayMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span>{{/if}}  
                             <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
@@ -646,7 +648,7 @@
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}<input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/></td>
                         <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}<input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
+                        <td>
                         <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -657,6 +659,8 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        
                         <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
@@ -729,7 +733,7 @@
                         <td>{{if arrange.badStatus == 1}}<span class="hotelneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="hotelneedPayMoney"></span>{{/if}}
                         <input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
+                        <td>
                         <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -740,6 +744,8 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        
                         <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
@@ -812,7 +818,7 @@
                         <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}<span>
+                        <td>
                         <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -823,6 +829,8 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}<span>
+                        
                         {{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
@@ -898,7 +906,7 @@
                         <td>{{if arrange.badStatus == 1}}<span class="ticketneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="ticketneedPayMoney"></span>{{/if}}
                         <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
+                        <td>
                         <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -909,6 +917,8 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        
                         <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -974,7 +984,7 @@
                         <td>{{if arrange.badStatus == 1}}<span class="otherOutNeedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="otherOutNeedPayMoney"></span>{{/if}}
                         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
                         <td>{{arrange.payedMoney}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realGuidePayMoney}}</span>{{else}}
+                        <td>
                         <span>
                             {{if arrange.payType == 0}}
                                 现金
@@ -985,6 +995,8 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
+                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        
                         <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
