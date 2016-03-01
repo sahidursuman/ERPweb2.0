@@ -514,7 +514,7 @@ define(function(require, exports) {
 					layer.close(hotel.$updateLayer);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
-							data.hotel =data.hotel;
+							data.hotel = JSON.parse(data.hotel);
 							formData.id = data.hotel.id;
 							fn(formData);
 						}else{
