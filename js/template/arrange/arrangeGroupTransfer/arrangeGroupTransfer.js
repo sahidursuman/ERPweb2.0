@@ -952,7 +952,7 @@ define(function(require, exports) {
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel),
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherFeeListDel),
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);
