@@ -690,33 +690,11 @@ define(function(require, exports) {
         //删除原有费用项
         if (typeFlag == 2) {
             //addCost-delete
-            $obj.find(".T-addCostTbody").on('click', ".T-delete", function() {
-                $tr = $(this).closest('tr');
-                var costListTrId = $tr.attr("data-entity-id");
-                if (costListTrId != null && costListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                        touristGroup.autoSumNeedPay($obj);
-                    })
-                }else {
-                  $tr.fadeOut(function() {
-                    $tr.remove();
-                  }) 
-                };
-                touristGroup.autoSumNeedPay($obj);
-            });
+            var $tbody=$obj.find('.T-addCostTbody');
+            touristGroup.deleteTr($tbody, $obj);
         } else {
-            $obj.find('.T-addCostTbody').on('click', ".T-delete", function(event) {
-                event.preventDefault();
-                /* Act on the event */
-                var $that = $(this),
-                    $tr = $that.closest('tr');
-                $tr.fadeOut(function() {
-                    $(this).remove();
-                    touristGroup.autoSumNeedPay($obj);
-                })
-            });
+            var $tbody=$obj.find('.T-addCostTbody');
+            touristGroup.deleteTr($tbody, $obj);
         };
 
         //根据单价数量计算金额
@@ -724,6 +702,24 @@ define(function(require, exports) {
         //数量、单价改变
         $obj.find('.T-count').trigger('change', touristGroup.calcPayMoney($obj));
         $obj.find('.T-price').trigger('change', touristGroup.calcPayMoney($obj));
+    };
+
+
+
+    touristGroup.deleteTr =function($tbody, $obj){
+        $tbody.off('click').on('click', ".T-delete", function() {
+            $tr = $(this).closest('tr');
+            var costListTrId = $tr.attr("data-entity-id");
+            if (costListTrId != null && costListTrId != "") {
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $(this).hide();
+                    touristGroup.autoSumNeedPay($obj);
+                })
+            }
+            touristGroup.autoSumNeedPay($obj);
+        });
+
     };
 
 
@@ -1639,10 +1635,15 @@ define(function(require, exports) {
         //删除事件
         $tableObj.find(".T-delete").off('click').on('click', function() {
             var $tr = $(this).closest('tr');
-            $tr.fadeOut(function() {
-                $(this).remove();
-                touristGroup.autoSumNeedPay($obj);
-            });
+            if (!!$tr.attr('data-entity-id')) {
+
+            }else{
+                $tr.fadeOut(function() {
+                    $(this).remove();
+                    touristGroup.autoSumNeedPay($obj);
+                });
+            };
+            
         })
     };
 
