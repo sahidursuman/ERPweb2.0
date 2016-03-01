@@ -182,9 +182,6 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var startTime=$searchAreaObj.find('input[name=startTime]').val();
-
-            console.info($.param(touristGroup.getSearParam($searchAreaObj)));
-
             if (!!startTime && startTime!=null) {
                 var exportUrl="" + KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(touristGroup.getSearParam($searchAreaObj));
                 //window.location.href=exportUrl;
