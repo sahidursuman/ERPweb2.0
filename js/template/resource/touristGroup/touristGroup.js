@@ -713,8 +713,7 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr');
                 $tr.fadeOut(function() {
-                    $(this).hide();
-                    $tr.addClass("deleted");
+                    $(this).remove();
                     touristGroup.autoSumNeedPay($obj);
                 })
             });
