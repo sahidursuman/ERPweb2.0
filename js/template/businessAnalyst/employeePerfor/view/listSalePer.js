@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":74,"md5":"fed2f42962eeac833855f664bdc06682"}*/
+/*TMODJS:{"debug":true,"version":99,"md5":"c0558ca48933e2d2807c41df887faa8a"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/employeePerfor/view/listSalePer", function($data, $filename) {
         try {
@@ -9,7 +9,7 @@ define(function(require) {
                 $out += " <tr> <td>", $line = 15, $out += $escape(salePerL.name), $out += "</td> <td>", 
                 $line = 16, $out += $escape(salePerL.adultCount), $out += "大", $line = 16, $out += $escape(salePerL.childCount), 
                 $out += "小</td> </tr> ", $line = 18;
-            }), $out += ' <tr style="background-color:#effef4"> <td>合计</td> <td>XX</td> </tr> </tbody> </table> <div class="row pageMode"> <div class="col-xs-6"> <small>共计 ', 
+            }), $out += ' <tr style="background-color:#effef4"> <td>合计</td> <td class="T-totalCount">12280</td> </tr> </tbody> </table> <div class="row pageMode"> <div class="col-xs-6"> <small>共计 ', 
             $line = 29, $out += $escape(searchParam.totalCount), $out += ' 条记录</small> </div> <div class="col-xs-6"> <div class="dataTables_paginate paging_simple_numbers T-listSalePer-pagenation"> </div> </div> </div>', 
             new String($out);
         } catch (e) {
@@ -18,7 +18,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">\r\n	<colgroup>\r\n		<col style="width:50%;"></col>\r\n		<col style="width:50%;"></col>\r\n	</colgroup>\r\n	<thead>\r\n		<tr class="bg-blur">\r\n			<th class="col-sm-1">员工</th>\r\n			<th class="col-sm-2">收客量</th>\r\n		</tr>\r\n	</thead>\r\n	<tbody>\r\n		{{each result as salePerL}}\r\n		   <tr>\r\n	   		    <td>{{salePerL.name}}</td>\r\n	   			<td>{{salePerL.adultCount}}大{{salePerL.childCount}}小</td>\r\n	   		</tr>\r\n	   	{{/each}}\r\n\r\n	   	<tr style="background-color:#effef4">\r\n	   		<td>合计</td>\r\n	   		<td>XX</td>\r\n	   	</tr>\r\n\r\n	</tbody>\r\n</table>\r\n<div class="row pageMode">\r\n	<div class="col-xs-6">\r\n		<small>共计 {{searchParam.totalCount}} 条记录</small>\r\n	</div>\r\n	<div class="col-xs-6">\r\n		<div class="dataTables_paginate paging_simple_numbers T-listSalePer-pagenation">\r\n		</div>\r\n	</div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">\r\n	<colgroup>\r\n		<col style="width:50%;"></col>\r\n		<col style="width:50%;"></col>\r\n	</colgroup>\r\n	<thead>\r\n		<tr class="bg-blur">\r\n			<th class="col-sm-1">员工</th>\r\n			<th class="col-sm-2">收客量</th>\r\n		</tr>\r\n	</thead>\r\n	<tbody>\r\n		{{each result as salePerL}}\r\n		   <tr>\r\n	   		    <td>{{salePerL.name}}</td>\r\n	   			<td>{{salePerL.adultCount}}大{{salePerL.childCount}}小</td>\r\n	   		</tr>\r\n	   	{{/each}}\r\n\r\n	   	<tr style="background-color:#effef4">\r\n	   		<td>合计</td>\r\n	   		<td class="T-totalCount">12280</td>\r\n	   	</tr>\r\n\r\n	</tbody>\r\n</table>\r\n<div class="row pageMode">\r\n	<div class="col-xs-6">\r\n		<small>共计 {{searchParam.totalCount}} 条记录</small>\r\n	</div>\r\n	<div class="col-xs-6">\r\n		<div class="dataTables_paginate paging_simple_numbers T-listSalePer-pagenation">\r\n		</div>\r\n	</div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

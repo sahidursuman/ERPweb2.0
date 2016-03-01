@@ -36,7 +36,6 @@ define(function(require, exports) {
 
 	//产品销量页面list
 	employeePerforObj.listemployeePerfor=function(){
-
 	    var html=listMainTemplate();
 		addTab(menuKey,"员工业绩",html);
 		employeePerforObj.initJQueryDateObj();
@@ -229,6 +228,7 @@ define(function(require, exports) {
 						if(result){
 						   var html=listEmployTemplate(data);
 						   employeePerforObj.$tab.find('.T-employeePerfor-list').html(html);
+						   employeePerforObj.initFindUserTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
 						   // 绑定翻页组件
 							laypage({
 							    cont: employeePerforObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -255,7 +255,7 @@ define(function(require, exports) {
 						if(result){
 						   var html=listDeptTemplate(data);
 						   employeePerforObj.$tab.find('.T-deptPerfor-list').html(html);
-
+						   employeePerforObj.initFindBusinessGroupTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
 						   // 绑定翻页组件
 							laypage({
 							    cont: employeePerforObj.$tab.find('.T-listDept-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -284,7 +284,7 @@ define(function(require, exports) {
 						if(result){
 						   var html=listSalePerforTemplate(data);
 						   employeePerforObj.$tab.find('.T-salePerfor-list').html(html);
-
+						   employeePerforObj.initFindTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
 						   // 绑定翻页组件
 							laypage({
 							    cont: employeePerforObj.$tab.find('.T-listSalePer-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -302,9 +302,55 @@ define(function(require, exports) {
 
 				});
 	    	};
-
     };
 
+
+    //外联销售统计
+     employeePerforObj.initFindTotal=function($searchParams, $tab){
+     	$.ajax({
+     		url: KingServices.build_url("performanceOfUser","totalFindPager"),
+     		type: 'POST',
+		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
+     	})
+     	.done(function(data) {
+     		var totalCount=data.adultCount*1+data.childCount*1;
+     		$tab.find('.T-totalCount').text(totalCount);
+     	})
+     }
+
+    //员工业绩统计
+    employeePerforObj.initFindUserTotal=function($searchParams, $tab){
+     	$.ajax({
+     		url: KingServices.build_url("performanceOfUser","totalFindUserPager"),
+     		type: 'POST',
+		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
+     	})
+     	.done(function(data) {
+     		$tab.find('.T-tripTotalCount').text(data.sumTripCount);
+     		$tab.find('.T-adChilTotalCount').text(data.sumAdultCount*1+data.sumChildCount*1);
+     		$tab.find('.T-transAdChilTotalCount').text(data.sumTransAdultCount*1+data.sumTransChildCount*1);
+     		$tab.find('.T-innerAdChilTotalCount').text(data.sumInnerAdultCount*1+data.sumInnerChildCount*1);
+     		$tab.find('.T-orderTotalCount').text(data.sumOrderCount);
+     	})
+     }
+
+
+    //部门统计
+    employeePerforObj.initFindBusinessGroupTotal=function($searchParams, $tab){
+     	$.ajax({
+     		url: KingServices.build_url("performanceOfUser","totalFindTotalByBusinessGroup"),
+     		type: 'POST',
+		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
+     	})
+     	.done(function(data) {
+     		$tab.find('.T-tripTotalCount').text(data.sumTripPlanCount);
+     		$tab.find('.T-tripAdChildCount').text(data.sumTripPlanChildCount*1+data.sumTripPlanAdultCount*1);
+     		$tab.find('.T-sumAdultCount').text(data.sumAdultCount*1+data.sumChildCount*1);
+     		$tab.find('.T-transAdChilTotalCount').text(data.sumTransAdultCount*1+data.sumTransChildCount*1);
+     		$tab.find('.T-innerAdChilTotalCount').text(data.sumInnerAdultCount*1+data.sumInnerChildCount*1);
+     		$tab.find('.T-orderTotalCount').text(data.sumOrderCount*1);
+     	})
+    }
 
 	//时间控件初始化
 	employeePerforObj.datepicker = function($obj){
