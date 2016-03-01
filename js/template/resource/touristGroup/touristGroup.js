@@ -529,6 +529,10 @@ define(function(require, exports) {
                     touristGroup.innerTransferDispose($innerTransferForm, 2);
                     //游客的序号
                     touristGroup.memberNumber($groupMemberForm);
+
+                    if (!!isTransferIn) {
+                        $('#inner-TransferIn').find('.T-T-transferIn-search').trigger('click');
+                    };
                 }
             }
         });
@@ -661,9 +665,6 @@ define(function(require, exports) {
             }
                
         });
-
-
-
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -698,8 +699,12 @@ define(function(require, exports) {
                         $(this).hide();
                         touristGroup.autoSumNeedPay($obj);
                     })
-                    touristGroup.autoSumNeedPay($obj);
+                }else {
+                  $tr.fadeOut(function() {
+                    $tr.remove();
+                  }) 
                 };
+                touristGroup.autoSumNeedPay($obj);
             });
         } else {
             $obj.find('.T-addCostTbody').on('click', ".T-delete", function(event) {
@@ -2120,7 +2125,8 @@ define(function(require, exports) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
-                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
+                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()),//说明
+                id=$addFeeItemTr.eq(i).attr('data-entity-id');
 
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
@@ -2132,6 +2138,10 @@ define(function(require, exports) {
                 isReturn=true;
             };
             if (count!= "" && price== "") {
+                isReturn=true;
+            };
+       
+            if (id!="" && count== "" && price== "") {
                 isReturn=true;
             };
             if (count!= "" && price!= "") {
@@ -2165,7 +2175,7 @@ define(function(require, exports) {
         //删除费用项
         if (typeFlag == 2) {
             touristGroupFeeJsonDel = [];
-            var $delFeeTtr = $lineInfoForm.find(".T-addCostTbody tr.deleted");
+            var $delFeeTtr = $lineInfoForm.find('tbody').children('tr.deleted');
             $delFeeTtr.each(function(i) {
                 var idDel = $delFeeTtr.eq(i).attr("data-entity-id");
                 touristGroupFeeJson = {
