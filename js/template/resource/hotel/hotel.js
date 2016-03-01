@@ -199,6 +199,7 @@ define(function(require, exports) {
                            
                             //获取酒店最低价
 							$tbody.find('.T-minPrice').trigger('change');
+							$tbody.find('[name="normalMarketPrice"]').trigger('change');
 
 							//删除时间区间
 							$tbody.find(".T-del").on("click",function(){

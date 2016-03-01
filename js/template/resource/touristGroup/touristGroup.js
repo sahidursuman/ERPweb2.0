@@ -1633,7 +1633,7 @@ define(function(require, exports) {
         var $count = $tableObj.find('.T-count');
         Tools.inputCtrolFloat($count);
         //删除事件
-        $tableObj.find(".T-delete").off('click').on('click', function() {
+        $tableObj.find(".T-delete").last().on('click', function() {
             var $tr = $(this).closest('tr');
             if (!!$tr.attr('data-entity-id')) {
 
