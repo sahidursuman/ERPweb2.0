@@ -96,8 +96,8 @@ define(function(require, exports) {
 			$that.closest('ul').prev().attr('data-value');
 			startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			customerType = employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value'),
-			partnerAgencyType = $that.closest('div').find('.T-select-partnerAgencyType').children('button').data('value'); //客户类型
+			customerType = employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
+			partnerAgencyType = $that.closest('div').find('.T-select-partnerAgencyType').children('button').attr('data-value'); //客户类型
 			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
@@ -198,8 +198,8 @@ define(function(require, exports) {
 			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
 				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').data('value'),
-			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').data('value');
+			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'),
+			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value');
 			if ($that.data('value')==0) {//责任计调
 				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
 				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
