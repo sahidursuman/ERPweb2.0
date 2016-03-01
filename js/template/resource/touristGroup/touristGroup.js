@@ -1731,10 +1731,10 @@ define(function(require, exports) {
                         $countBody = $listObj.find('.T-countData'),
                         $statistics = data.statistics;
                     $countBody.find(".allPerson").text($statistics.adultCount + "大" + $statistics.childCount + "小");
-                    $countBody.find(".needIncome").text($statistics.needPay + "小");
-                    $countBody.find(".payedMoney").text($statistics.payedMoney + "小");
-                    $countBody.find(".currentNeedPay").text($statistics.currentNeedPay + "小");
-                    $countBody.find(".unIncome").text($statistics.unIncomeMoney + "小");
+                    $countBody.find(".needIncome").text($statistics.needPay + "元");
+                    $countBody.find(".payedMoney").text($statistics.payedMoney + "元");
+                    $countBody.find(".currentNeedPay").text($statistics.currentNeedPay + "元");
+                    $countBody.find(".unIncome").text($statistics.unIncomeMoney + "元");
 
                 }
             }
@@ -2390,8 +2390,7 @@ define(function(require, exports) {
                                 }
                             } else {
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
-                                Tools.closeTab(tabId);
-
+                               
                                 //外转确认
                                 if (!!typeInner && typeInner=='out') {
                                     touristGroup.freshTransferList($obj);
@@ -2399,11 +2398,13 @@ define(function(require, exports) {
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
-                                } else {
+                                }else {
                                     touristGroup.freshHeader(touristGroup.$freshData);
                                     //刷新列表数据
                                     touristGroup.getListData(touristGroup.$freshData);
                                 };
+
+                                Tools.closeTab(tabId);
 
                             };
                             if (innerStatus) {
@@ -2488,10 +2489,11 @@ define(function(require, exports) {
         var transferId = touristGroup.getVal($obj,"transferId");
         $.ajax({
             url:KingServices.build_url("transfer","saveTourist"),
-            data: "transferId="+transferId,
+            data: "id="+transferId,
             type: 'POST'
         })
         .done(function(data) {
+            $('#Transfer-In').find('.T-transferIn-search').trigger('click');
         })     
     };
 
