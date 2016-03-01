@@ -1744,7 +1744,7 @@ define(function(require, exports) {
 								$(this).trigger('click');
 							}
 						});
-						if(data.requireList.length > 0) {
+						if(!!data.requireList && data.requireList.length > 0) {
 							for (var i = 0; i < data.requireList.length; i++) {
 								var $this = data.requireList[i], $label = $tab.find('.T-action-plan .T-add-action');
 								$label.each(function(index) {
