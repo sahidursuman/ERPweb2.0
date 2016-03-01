@@ -1574,9 +1574,10 @@ define(function(require, exports){
 				detailNeedReaduce.text(income);
 				needInObj.text(getMoney);
             };
-			//计算应付                      needInReduceMoney
-			var needReduce = $parent.find('.needInReduceMoney').text();
-			var needSum = parseFloat(incomeCount) * parseFloat(price)-parseFloat(needReduce);
+			//计算应付                      
+			var needReduce = $parent.find('[name=realReduceMoney]').val();
+			var selfRealCount = $parent.find('[name=realCount]').val();
+			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算自费费用
             $parent.find('.selfMoney').val(needSum);
@@ -3554,7 +3555,7 @@ define(function(require, exports){
 				return;
 			}
 		}
-		//导游自选餐厅
+		/*//导游自选餐厅
 		if(typeFlag == 3){
 			var restaurantList= saveJsonStr.restaurantArrangeList;
 			for(var i = 0;i<restaurantList.length;i++){
@@ -3564,7 +3565,7 @@ define(function(require, exports){
 					return;
 				}
 			}
-		};
+		};*/
 		var addHotelList = saveJsonStr.addHotelArrangeList;
 		for(var i = 0;i<addHotelList.length;i++){
 			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
