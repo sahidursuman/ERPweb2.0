@@ -804,7 +804,6 @@ define(function(require, exports) {
 		if (!!thatJson && typeof thatJson == 'string') {
 			thatJson = JSON.parse(thatJson);
 		}
-		console.log(thatJson)
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTouristGroupInTrip'),
 			type: 'POST',
@@ -2488,7 +2487,6 @@ define(function(require, exports) {
                 data: "id=" + id,
                 success: function(data) {
 					if(showDialog(data)) {
-						console.log(data)
 						var hotelRommList = JSON.parse(data.hotelRommList);
 						if(hotelRommList && hotelRommList.length > 0){
 							for(var i=0; i < hotelRommList.length; i++){
@@ -3523,10 +3521,10 @@ define(function(require, exports) {
 	tripPlan.daysDifference = function(sDate1, sDate2) {
 		if (!!sDate1 && !!sDate2) {
 			var aDate, oDate1, oDate2, iDays   
-			aDate = sDate1.split("-")   
-			oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式   
+			aDate = sDate1.split("-")
+			oDate1 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2]) //转换为12-18-2002格式   
 			aDate = sDate2.split("-")   
-			oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])   
+			oDate2 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2])   
 			iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 /24) //把相差的毫秒数转换为天数   
 			return iDays + 1;   
 		}else {
