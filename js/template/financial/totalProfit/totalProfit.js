@@ -1,3 +1,8 @@
+/**
+ * 财务管理--总利润表
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
     var menuKey = "financial_totalProfit",
     listTemplate = require("./view/list"),
