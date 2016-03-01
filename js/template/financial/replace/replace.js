@@ -115,7 +115,6 @@ define(function(require, exports) {
 			type:"POST",
 			success:function(data){
 				if(showDialog(data)){
-					console.log(data);
 	                tabId.find('.T-sumMoney').text(data.sumContractMoney);
 	                tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
 	                tabId.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);

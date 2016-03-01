@@ -240,7 +240,6 @@ define(function(require, exports) {
             arrangeGroupTransfer.transferId.push(transferIds);
         } else {
             for (var i = 0; i < arrangeGroupTransfer.transferId.length; i++) {
-                console.info(arrangeGroupTransfer.transferId[i].transferIds);
                 if (arrangeGroupTransfer.transferId[i].id == id) {
                     arrangeGroupTransfer.transferId.splice(i, 1);
                     break;

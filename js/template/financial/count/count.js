@@ -648,7 +648,6 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
-					console.log(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
@@ -3456,7 +3455,6 @@ define(function(require, exports){
 		var method = typeFlag == 1?'update':'webGuideAccountUpdate';
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		console.log(saveJsonStr);
 		var addShopList = saveJsonStr.addShopArrangeList;
 		for(var i = 0;i<addShopList.length;i++){
 			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
@@ -3513,8 +3511,7 @@ define(function(require, exports){
 			var restaurantList= saveJsonStr.restaurantArrangeList;
 			for(var i = 0;i<restaurantList.length;i++){
 				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
-					message = "请选择导游自选餐厅"
-					console.log(message);
+					message = "请选择导游自选餐厅";
 					showMessageDialog($("#confirm-dialog-message"),message);
 					return;
 				}
