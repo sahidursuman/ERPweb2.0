@@ -492,7 +492,7 @@
                                                 <td><input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price F-float F-money" maxlength="9"/></td>
                                                 <td><input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money"/></td>
                                                 <td><input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9"/></td>
-                                                <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption}}<input name="guidePayMoney" type="text" value="{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money"/></td>
+                                                <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption}}<input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money"/></td>
                                                 <td><input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500"/></td>
                                                 <td>
                                                     <select name="orderStatus">
