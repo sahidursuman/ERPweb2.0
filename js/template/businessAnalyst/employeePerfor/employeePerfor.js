@@ -36,7 +36,6 @@ define(function(require, exports) {
 
 	//产品销量页面list
 	employeePerforObj.listemployeePerfor=function(){
-
 	    var html=listMainTemplate();
 		addTab(menuKey,"员工业绩",html);
 		employeePerforObj.initJQueryDateObj();
@@ -285,6 +284,7 @@ define(function(require, exports) {
 						   var html=listSalePerforTemplate(data);
 						   employeePerforObj.$tab.find('.T-salePerfor-list').html(html);
 
+						   employeePerforObj.initFindTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
 						   // 绑定翻页组件
 							laypage({
 							    cont: employeePerforObj.$tab.find('.T-listSalePer-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -304,6 +304,20 @@ define(function(require, exports) {
 	    	};
 
     };
+
+
+
+     employeePerforObj.initFindTotal=function($searchParams, $tab){
+     	$.ajax({
+     		url: KingServices.build_url("performanceOfUser","totalFindPager"),
+     		type: 'POST',
+		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
+     	})
+     	.done(function(data) {
+     		var totalCount=data.adultCount*1+data.childCount*1;
+     		$tab.find('.T-totalCount').text(totalCount);
+     	})
+     }
 
 
 	//时间控件初始化
