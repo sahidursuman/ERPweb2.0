@@ -942,6 +942,7 @@ define(function(require, exports) {
 				tripPlan.dateTimePicker($container);
 		    	//提交事件
 		    	$container.find(".T-btn-submit-expiryTime").off('click').on("click",function() {
+		    		var $parent = $this.closest('tr');
 		    		saveJson.expiryTime = $container.find('[name=expiryTime]').val();
 		    		if (!!saveJson.expiryTime) {
 						$.ajax({
@@ -950,8 +951,10 @@ define(function(require, exports) {
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
 								if (showDialog(data)) {
-									showMessageDialog($( "#confirm-dialog-message" ), data.message);
-									layer.close(tripPlan.$expiryTimeLayer);
+									showMessageDialog($( "#confirm-dialog-message" ), data.message,function() {
+										$parent.attr('data-entity-offerId', data.offerId);
+										layer.close(tripPlan.$expiryTimeLayer);
+									});
 								}
 							}
 						})
@@ -3215,7 +3218,8 @@ define(function(require, exports) {
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
 					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup'),
-						offerId = bus.eq(i).attr('data-entity-offerId');
+						offerId = bus.eq(i).attr('data-entity-offerId'),
+						arrangeId =  bus.eq(i).attr('data-entity-arrangeid');
 					if(typeof annouceTouristGroupIds != 'string'){
 						annouceTouristGroupIds = JSON.stringify(annouceTouristGroupIds)
 					}
