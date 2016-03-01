@@ -1,3 +1,8 @@
+/**
+ * 财务管理--单团利润
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
 	var menuKey = "financial_planProfit",
         listMainTemplate = require("./view/listMain"),
