@@ -599,7 +599,7 @@ define(function(require, exports) {
                         }else if(argumentsLen === 3){
                             Insure.saveFlag = false;    
                             Insure.$clearTab.data('isEdited',false);
-                            Insure.getClearing(isAutoPay,page,id,name);
+                            Insure.getClearing(isAutoPay == 1 ? 0: isAutoPay,page,id,name);
                         } else {
                             Insure.$clearTab.data('isEdited',false);
                             Tools.addTab(tab_id, title, html);
