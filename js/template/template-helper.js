@@ -262,13 +262,14 @@ template.helper("getTaskSelect", function(status, isCar) {
 });
 template.helper("getHotelLevelDesc", function(level) {
     switch (level * 1) {
+        case 1:     return '三星以下';
         case 2:     return '三星';
         case 3:     return '准四星';
         case 4:     return '四星';
         case 5:     return '准五星';
         case 6:     return '五星';
         case 7:     return '五星以上';
-        default:     return '三星以下';
+        default:     return '';
     }
 });
 

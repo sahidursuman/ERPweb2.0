@@ -680,7 +680,7 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				$parent.find('[name=price]').val(data.contractPrice * busDays);
-				tripPlan.plusPrice($this,$tab)
+				tripPlan.plusPrice($this,$tab,false)
 			});
 		})
 
