@@ -97,7 +97,7 @@ define(function(require, exports) {
 			startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
 		   	endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
 			customerType = employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
-			partnerAgencyType = $that.closest('div').find('.T-select-partnerAgencyType').children('button').attr('data-value'); //客户类型
+			partnerAgencyType =employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'); //客户类型
 			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
