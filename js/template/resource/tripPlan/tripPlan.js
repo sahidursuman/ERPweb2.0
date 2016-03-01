@@ -952,7 +952,6 @@ define(function(require, exports) {
 							success: function(data) {
 								if (showDialog(data)) {
 									showMessageDialog($( "#confirm-dialog-message" ), data.message,function() {
-										console.log($parent)
 										$parent.attr('data-entity-offerId', data.offerId);
 										layer.close(tripPlan.$expiryTimeLayer);
 									});
