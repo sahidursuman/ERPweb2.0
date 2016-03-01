@@ -221,7 +221,6 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
-					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
