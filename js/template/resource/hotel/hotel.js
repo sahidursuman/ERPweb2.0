@@ -114,7 +114,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel =data.hotel;
 					var html = viewTemplate(data);
 					var updateHotel = layer.open({
 					    type: 1,
@@ -517,7 +517,7 @@ define(function(require, exports) {
 					layer.close(hotel.$updateLayer);
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if (typeof fn === "function") {
-							data.hotel = JSON.parse(data.hotel);
+							data.hotel =data.hotel;
 							formData.id = data.hotel.id;
 							fn(formData);
 						}else{
