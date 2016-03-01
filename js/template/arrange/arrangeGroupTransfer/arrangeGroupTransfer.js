@@ -812,14 +812,10 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.delTransferData = function(id, $tr, $tab) {
         if (id != null && id != "") {
-            $.ajax({
-                url: KingServices.build_url("innerTransferOperation", "deleteInTransferFee"),
-                type: "POST",
-                data: "id=" + id,
-                success: function(data) {
-                    $tr.remove();
-                    arrangeGroupTransfer.PayMoneyF($tab);
-                }
+            $tr.fadeOut(function() {
+                $tr.addClass('deleted');
+                $tr.hide();
+                arrangeGroupTransfer.PayMoneyF($tab);
             });
         } else {
             //移除空的其他费用
@@ -838,7 +834,7 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     arrangeGroupTransfer.delOutTransfer = function(id, $tr, $tab) {
-        if (!!id && 　id != null) {
+        if (!!id && id!= null) {
             //移除空的其他费用
             $tr.fadeOut(function() {
                 $tr.addClass('deleted');
@@ -938,8 +934,8 @@ define(function(require, exports) {
 
 
         var otherFeeListDel = [];
-        if (transferFeeStatus == 1) {
-            $tbodyFee.find(" tr.deleted").each(function(i) {
+        if (transferFeeStatus == 1 || innerTransferFeeStatus==1) {
+            $tbodyFee.find("tr.deleted").each(function(i) {
                 var otherFeeDel = {
                     "id": $(this).attr("data-entity-id")
                 };
@@ -956,7 +952,7 @@ define(function(require, exports) {
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "",
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherFeeListDel),
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);

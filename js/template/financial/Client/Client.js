@@ -109,15 +109,6 @@ define(function(require, exports) {
         });
     };
 
-    Client.datepicker = function($tab){
-        $tab.find('.date-picker').datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
-    };
-
     Client.initList = function(){
         // 初始化jQuery 对象
         Client.$tab = $('#' + tabId);
@@ -125,7 +116,7 @@ define(function(require, exports) {
         Client.$searchArea = Client.$tab.find('.T-search-area');
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
         Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
-        Client.datepicker(Client.$searchArea);
+        Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -274,7 +265,7 @@ define(function(require, exports) {
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
         Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'),args);
 
-        Client.datepicker(Client.$checkSearchArea);
+        Tools.setDatePicker(Client.$checkSearchArea.find(".date-picker"), true);
 
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
@@ -538,7 +529,7 @@ define(function(require, exports) {
             }
         });
 
-        Client.datepicker(Client.$clearSearchArea);
+        Tools.setDatePicker(Client.$clearSearchArea.find(".date-picker"), true);
         FinancialService.initPayEvent(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项

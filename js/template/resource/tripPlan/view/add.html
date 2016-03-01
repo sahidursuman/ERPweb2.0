@@ -411,7 +411,7 @@
                                                 <td>
                                                     <div class="col-xs-12 feild-relative">
                                                         <input type="text" name="companyName" {{if !!busCompany.offerId}}disabled="disabled"{{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12"/>
-                                                        <input type="hidden" name="id" value="{{busCompany.id}}">
+                                                        <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}">
                                                         <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}"/>
                                                         <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
