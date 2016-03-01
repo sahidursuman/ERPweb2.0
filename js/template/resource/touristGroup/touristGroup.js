@@ -2123,17 +2123,18 @@ define(function(require, exports) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
-                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()), //说明
-                payMoney=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
+                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
 
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
                 var transitFee=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
                 needTransitFee=needTransitFee+transitFee;
             };
-
             //数量&&单价校验
-            if (parseInt(payMoney)==0) {
+            if (count== "" && price!= "") {
+                isReturn=true;
+            };
+            if (count!= "" && price== "") {
                 isReturn=true;
             };
             if (count!= "" && price!= "") {
