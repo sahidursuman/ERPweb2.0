@@ -1046,7 +1046,7 @@ define(function(require, exports){
 	Count.accountCheck = function(id, billStatus, financialTripPlanId,$obj){
 		var method = billStatus==0?"opVerify":"financialVerify";
 		var saveJsonStr = Count.installData(id,$obj);
-		Count.saveTripCount(id,financialTripPlanId,$obj,1);
+		//Count.saveTripCount(id,financialTripPlanId,$obj,1);
 		saveJson = JSON.stringify(saveJsonStr);
 		$.ajax({
         	url:KingServices.build_url('financialTripPlan',method),
