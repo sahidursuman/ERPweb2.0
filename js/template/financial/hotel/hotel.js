@@ -1,3 +1,8 @@
+/**
+ * 财务管理--酒店账务
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
 	var menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
