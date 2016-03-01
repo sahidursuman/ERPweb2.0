@@ -1,3 +1,8 @@
+/**
+ * 财务管理--在线支付
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
     var menuKey = "financial_onlinePayment",
     listTemplate = require("./view/list");

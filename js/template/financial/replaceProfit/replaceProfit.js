@@ -1,3 +1,8 @@
+/**
+ * 财务管理--代订利润
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
     var menuKey = "financial_replaceProfit",
         listMain = require("./view/listMain"),

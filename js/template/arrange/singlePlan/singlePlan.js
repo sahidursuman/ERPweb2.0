@@ -144,7 +144,6 @@ define(function(require, exports) {
 			event.preventDefault();
 			var $that = $(this).find('.ace-icon'), $parent = $that.closest('tr'),
 				billStatus = $parent.data("bill-status");
-			console.log($that.length)
 			if(!$that.hasClass('fa-minus') && $that.length > 0){
 				seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
 					module.updatePlanInfo($that.closest('tr').data("id"),billStatus, $that.closest('td').data("target"), $tab.prop('id'));
@@ -835,76 +834,6 @@ define(function(require, exports) {
 		return args;
 	};
 
-	singlePlan.getTouristsList = function($tab, id, feeList){
-		$.ajax({
-			url: KingServices.build_url('touristGroup', 'getMembersByTouristGroupId'),
-			type: 'POST',
-			data: {id: id}
-		})
-		.done(function(data) {
-			if(showDialog(data)){
-				var groupData = JSON.parse(data.touristGroup);
-				data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
-				data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
-				data.isGuest = 1;
-				data.isTrans = true;
-				$tab.find('.T-tourists-list').html(T.touristsList(data));
-				$tab.find('.T-fee-list').html(T.feeList(data));
-				$tab.find('[name="partnerAgencyName"]').val(groupData.orderNumber).data("id", groupData.id);
-				if(!!groupData.quote){
-					$tab.find('[name="quoteOrderName"]').val(groupData.quote.quoteNumber);
-					$tab.find('[name="quoteId"]').val(groupData.quote.id);
-					if (!!feeList == false || feeList.length == 0) { 
-						singlePlan.initNormalLineProduct($tab, groupData.lineProduct.id, groupData.quote.id, 1, 1);
-					}
-				}else{
-					$tab.find('[name="quoteOrderName"]').val("");
-					$tab.find('[name="quoteId"]').val("");
-				}
-				if(!!groupData.lineProduct){
-					$tab.find('[name="lineProductName"]').val(groupData.lineProduct.name);
-					$tab.find('[name="lineProductId"]').val(groupData.lineProduct.id);
-					if(!groupData.quote){
-						singlePlan.initNormalLineProduct($tab, groupData.lineProduct.id);
-					}
-				}else{
-					$tab.find('[name="lineProductName"]').val("");
-					$tab.find('[name="lineProductId"]').val("");
-				}
-				$tab.find('[name="accompanyGuideName"]').val(groupData.accompanyGuideName);
-				$tab.find('[name="accompanyGuideMobile"]').val(groupData.accompanyGuideMobile);
-				$tab.find('[name="adultCount"]').val(groupData.adultCount).attr('readonly', 'readonly');
-				$tab.find('[name="childCount"]').val(groupData.childCount).attr('readonly', 'readonly');
-				$tab.find('[name="startTime"]').val(groupData.startTime ? groupData.startTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
-				$tab.find('[name="endTime"]').val(groupData.endTime ? groupData.endTime.replace(/(\d+)(\s\d{2}:\d{2}:\d{2})/, '$1') : "");
-				$tab.find('[name="travelAgencyName"]').val(groupData.partnerAgency ? groupData.partnerAgency.travelAgencyName : "");
-				$tab.find('[name="fromPartnerAgencyId"]').val(groupData.partnerAgency ? groupData.partnerAgency.id : "");
-				$tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
-				$tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
-				$tab.find('[name="getType"]').val(groupData.getType);
-				$tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
-				$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());
-				$tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
-				$tab.find('[name="outOPUserId"]').val(groupData.outOPUserId);
-				$tab.find('[name="memberType"]').val(groupData.memberType);
-				$tab.find('[name="welcomeBoard"]').val(groupData.welcomeBoard);
-				$tab.find('[name="preIncomeMoney"]').val(groupData.preIncomeMoney).attr('readonly', 'readonly');
-				$tab.find('[name="currentNeedPayMoney"]').val(groupData.currentNeedPayMoney).attr('readonly', 'readonly');
-				if(!!groupData.buyInsurance){
-					$tab.find('[name="buyInsurance"]').attr('checked', 'checked');
-				}
-				$tab.find('[name="remark"]').val(groupData.remark)
-				$tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
-				$tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
-
-				$tab.find('.T-add-fee').hide();
-				var listTr = $tab.find('.T-fee-list tr');
-				listTr.each(function(i) {
-					listTr.find('.T-delete').hide();
-				})
-			}
-		});
-	};
 	singlePlan.daysUpdateDetail = function($that){
 		var html = T.updateDetail({detail : $that.data('detail')});
 		var daysLayer = layer.open({
@@ -1472,27 +1401,6 @@ define(function(require, exports) {
 					data.lineProductDayList = JSON.parse(data.lineProductDayList);
                 	var result =showDialog(data);
 					if(result){
-						if(!!data.touristGroupId && !isGroup){
-							singlePlan.getTouristsList($tab, data.touristGroupId, feeList);
-
-							$tab.find('.T-add-fee').hide();
-							var listTr = $tab.find('.T-fee-list tr');
-							listTr.each(function(i) {
-								listTr.find('.T-delete').hide();
-							})
-						}else if(type == 1){
-							$tab.find('[name="preIncomeMoney"]').removeAttr('readonly');
-							$tab.find('[name="currentNeedPayMoney"]').removeAttr('readonly');
-							$tab.find('[name="adultCount"]').removeAttr('readonly');
-							$tab.find('[name="childCount"]').removeAttr('readonly');
-							/*if(!!result.isContainSelfPay){
-								$tab.find('[name="isContainSelfPay"]').attr('checked', 'checked');
-							}*/
-							if (!!feeList) {
-							$tab.find('.T-fee-list').html(T.feeList(feeList));
-							$tab.find('.T-calculate').trigger('blur');
-							}
-						}
 						
 						if(!$.isEmptyObject(data.quote)){
 							var quote = data.quote;
@@ -1546,53 +1454,6 @@ define(function(require, exports) {
     		})
 		}
 	}
-
-	/**
-	 * 设置报价产品数据到游客小组
-	 * @param {object} $mainForm 游客小组的父容器
-	 * @param {object} data 报价产品的数据
-	 */
-	singlePlan.setQuoteData = function($mainForm, data) {
-		if (!!data) {
-			var isUpdate = $mainForm.hasClass('T-update'), tmp = '';
-			setData('startTime', data.quoteLinePorduct.startTime);   //出游日期
-			
-			if (!!data.busCompanyArrange && !!data.busCompanyArrange.needSeatCount) {
-				tmp = data.busCompanyArrange.needSeatCount;
-			}
-			setData('seatCount', tmp);   //车坐数
-			if (!!data.busCompany) {
-				setData('busCompany', data.busCompany.companyName || '');   //车队
-				setData('busCompanyId', data.busCompany.id || '');   //车队索引
-			} else {
-				setData('busCompany', '');   //车队
-				setData('busCompanyId', '');   //车队索引
-			}
-
-			$mainForm.find('input[name="childPrice"]').trigger('change');
-		}
-
-		function setData(name, val) {
-			var $name = $mainForm.find('[name="'+ name +'"]');
-
-			if (!!isUpdate)  {
-				$name.data('old', $name.val());
-			}
-
-			if (!!val) {
-				$name.prop('readonly', true);
-			}
-			
-			$name.val(val || '');
-		}
-	};
-
-	singlePlan.setValue = function(name,value){
-		$(".T-plan-container").find("[name="+name+"]").attr("value",value);
-	};
-	singlePlan.setAreaValue = function(name,value){
-		$(".T-plan-container").find("[name="+name+"]").text(value);
-	};
 
 	//查看旅游小组成员
 	singlePlan.viewTouristGroup = function(id){
@@ -1667,138 +1528,6 @@ define(function(require, exports) {
 		});
 	};
 
-	//团号模糊查询
-	singlePlan.tripNumberListChoose = function($obj){
-		var tripNumberListChoose = $obj.find(".T-choosePlan");
-		tripNumberListChoose.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).parent().parent().find("input[name=tripId]").val("");
-				}
-			},
-			select:function(event,ui){
-				$(this).blur();
-				var obj = this;
-				$(obj).parent().parent().find("input[name=tripId]").val(ui.item.id).trigger('change');
-			}
-		}).click(function(){
-			var obj = this;
-			var listObj = singlePlan.autocompleteDate.tripNumberList;
-			if(listObj !=null && listObj.length>0){
-				for(var i=0;i<listObj.length;i++){
-					listObj[i].value = listObj[i].tripNumber;
-				}
-			}
-			$(obj).autocomplete('option','source', listObj);
-			$(obj).autocomplete('search', '');
-		})
-	};
-	//导游模糊查询
-	singlePlan.guideListChoose = function($obj){
-		var guideListChoose = $obj.find(".T-chooseGuide");
-		guideListChoose.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).parent().parent().find("input[name=guideId]").val("");
-				}
-			},
-			select:function(event,ui){
-            $(this).blur();
-				var obj = this;
-				$(obj).parent().parent().find("input[name=guideId]").val(ui.item.id).trigger('change');
-			}
-
-		}).click(function(){
-			var obj = this;
-			var listGuideObj = singlePlan.autocompleteDate.guideList;
-			if(listGuideObj !=null && listGuideObj.length>0){
-				for(var i=0;i<listGuideObj.length;i++){
-					listGuideObj[i].value = listGuideObj[i].realname;
-				}
-			}
-			$(obj).autocomplete('option','source',listGuideObj);
-			$(obj).autocomplete('search', '');
-		});
-	};
-
-	//车牌号模糊查询
-	singlePlan.busListChoose = function($obj){
-		var busListChoose = $obj.find(".T-chooseBus");
-		busListChoose.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).parent().parent().find("input[name=busId]").val("");
-				}
-			},
-			select:function(event,ui){
-				$(this).blur();
-				var obj = this;
-				$(obj).parent().parent().find("input[name=busId]").val(ui.item.id).trigger('change');
-			}
-
-		}).click(function(){
-			var obj = this;
-			var listBusObj = singlePlan.autocompleteDate.busList;
-			if(listBusObj !=null && listBusObj.length>0){
-				for(var i=0;i<listBusObj.length;i++){
-					listBusObj[i].value = listBusObj[i].licenseNumber;
-				}
-			}
-			$(obj).autocomplete('option','source',listBusObj);
-			$(obj).autocomplete('search', '');
-		});
-	};
-    //创建人模糊查询
-	singlePlan.creatorListChoose = function($obj){
-		var creatorListChoose = $obj.find(".T-chooseCreator");
-		creatorListChoose.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					$(this).parent().parent().find("input[name=creatorId]").val("");
-				}
-			},
-			select:function(event,ui){
-				$(this).blur();
-				var obj = this;
-				$(obj).parent().parent().find("input[name=creatorId]").val(ui.item.id).trigger('change');
-			}
-
-		}).click(function(){
-			var obj = this;
-			var listCreatorObj = singlePlan.autocompleteDate.creatorList;
-			if(listCreatorObj !=null && listCreatorObj.length>0){
-				for(var i=0;i<listCreatorObj.length;i++){
-					listCreatorObj[i].value = listCreatorObj[i].realName;
-				}
-			}
-			$(obj).autocomplete('option','source',listCreatorObj);
-			$(obj).autocomplete('search', '');
-		});
-	};
-
-	singlePlan.isMessageStatus = function(isSendMessageStatus,isCheckedStatus,$tab){
-		var $Obj=$tab.find(".T-plan-container");
-		if (isSendMessageStatus==1) {
-			$Obj.find("input[name=executeTimeType]").prop("disabled",true);
-		} else{
-			$Obj.find("input[name=executeTimeType]").prop("disabled",false);
-		}
-
-		if (isCheckedStatus==0) {//立即发送
-			$Obj.find("input[name=executeTimeType]").eq(0).prop("checked",true);
-		} else{//定时发送
-			$Obj.find("input[name=executeTimeType]").eq(1).prop("checked",true);
-			$Obj.find("input[name=executeTime]").show();
-			
-			if(isSendMessageStatus==1){
-				$Obj.find("input[name=executeTime]").prop("disabled",true);
-			}
-		}
-	};
 	/**
 	 * 公用方法
 	 */

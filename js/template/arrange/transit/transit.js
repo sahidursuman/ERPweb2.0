@@ -1134,7 +1134,6 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.info(data);
 						var busCompanyList = JSON.parse(data.busCompanyList);
 						if(busCompanyList && busCompanyList.length > 0){
 							for(var i=0; i < busCompanyList.length; i++){
@@ -1592,7 +1591,6 @@ define(function(require, exports) {
 				if(showDialog(data)){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(isClose ==1){
-							console.log(argumentsLen);
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");
 								transit.listTransit(transit.pageNo);

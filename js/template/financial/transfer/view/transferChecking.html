@@ -46,7 +46,7 @@
                 <tr><th class="th-border">收客单号</th>
                     <th class="th-border">线路产品</th>
                      <th class="th-border" width="110">出游日期</th>
-                     <th class="th-border">联系人</th>
+                     <th class="th-border">客户</th>
                      <th class="th-border">人数</th>
                      <th class="th-border">操作人</th>
                      <th class="th-border" width="110">操作时间</th>
@@ -68,7 +68,7 @@
                     <td rowspan="{{rs.rowLen}}">{{rs.orderNumber}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                    <td rowspan="{{rs.rowLen}}">{{if rs.contactName == null || rs.contactName == ""}}-{{else}}{{rs.contactName}}{{/if}}</td>
+                    <td rowspan="{{rs.rowLen}}">{{if rs.partnerAgencyName == null || rs.partnerAgencyName == ""}}-{{else}}{{rs.partnerAgencyName}}{{/if}}</td>
                     <td rowspan="{{rs.rowLen}}"><a href="#" class="T-option T-viewGroup" data-list="{{rs.memberList}}" title="查看小组">
                             <span class="F-float F-count">{{rs.adultCount}}</span> 大 
                             <span class="F-float F-count">{{rs.childCount}}</span> 小
