@@ -3218,7 +3218,8 @@ define(function(require, exports) {
 			for(var i=0; i<bus.length; i++){
 				if(tripPlan.getVal(bus.eq(i), "busCompanyId")){
 					var annouceTouristGroupIds = bus.eq(i).find('.T-noticeTourists').data('entity-touristgroup'),
-						offerId = bus.eq(i).attr('data-entity-offerId');
+						offerId = bus.eq(i).attr('data-entity-offerId'),
+						arrangeId =  bus.eq(i).attr('data-entity-arrangeid');
 					if(typeof annouceTouristGroupIds != 'string'){
 						annouceTouristGroupIds = JSON.stringify(annouceTouristGroupIds)
 					}
