@@ -101,7 +101,7 @@ define(function(require, exports) {
 			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
 				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
 				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
-				opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').data('value');//责任计调
+				opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');//责任计调
 				if (opUserType==0) { //责任计调
 				    employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
 				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
