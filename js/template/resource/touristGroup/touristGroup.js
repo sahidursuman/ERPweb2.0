@@ -2118,12 +2118,13 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var needTransitFee=0;
+        var needTransitFee=0,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
-                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
+                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()), //说明
+                payMoney=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
 
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
@@ -2131,6 +2132,10 @@ define(function(require, exports) {
                 needTransitFee=needTransitFee+transitFee;
             };
 
+            //数量&&单价校验
+            if (parseInt(payMoney)==0) {
+                isReturn=true;
+            };
             if (count!= "" && price!= "") {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
@@ -2153,6 +2158,11 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
+
+        if (isReturn) {
+            showMessageDialog($("#confirm-dialog-message"), "数量或单价不能为空！");
+            return;
+        };
 
         //删除费用项
         if (typeFlag == 2) {
