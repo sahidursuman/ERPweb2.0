@@ -452,6 +452,7 @@ define(function(require, exports){
 				Count.formatDays($(this),$obj);
 			}
 		});
+		//删除只安排了自费点没有安排自费项目的数据
 		$selfObj.on('click','.T-selfArrDel',function(){
 			
 			Count.delSelfArrange($(this),$obj);
@@ -726,6 +727,11 @@ define(function(require, exports){
 				Count.autoSelfSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
+		});
+		//删除只安排了自费点没有安排自费项目的数据
+		$selfObj.on('click','.T-selfArrDel',function(){
+			
+			Count.delSelfArrange($(this),$obj);
 		});
 		//新增自费安排
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
