@@ -104,7 +104,7 @@ define(function(require,exports) {
 	//list页面事件
 	InnerTransferOut.inieEvent = function($obj){
 		//格式化日期控件
-		FinancialService.initDate(InnerTransferOut.$searchArea);
+		Tools.setDatePicker(InnerTransferOut.$searchArea.find(".date-picker"), true);
 		//搜索事件
 		$obj.find(".T-search").on('click',function(event){
 			event.preventDefault();
@@ -302,7 +302,7 @@ define(function(require,exports) {
 			});
 		};
 		//页面时间控件格式化
-		FinancialService.initDate($checkSearchArea);
+		Tools.setDatePicker($checkSearchArea.find(".date-picker"), true);
 		FinancialService.initPayEvent($obj.find('.T-summary'));
 		//搜索事件
 		$checkSearchArea.find(".T-checking-search").on('click',function(event){

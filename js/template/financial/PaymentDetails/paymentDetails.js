@@ -1,7 +1,5 @@
 /**
- * 财务管理--购物账务
- *
- * by David Bear 2015-11-24
+ * 财务管理--现金日记
  */
 define(function(require, exports){
 	var listTemplate = require("./view/list"),
@@ -64,7 +62,7 @@ define(function(require, exports){
 	 */
 	Payment.init_event = function($tab){
 		var $searchArea = $tab.find('.T-search-area'),
-			$datepicker = $searchArea.find('.datepicker');
+			$datepicker = $searchArea.find('.T-search-time');
 		Tools.setDatePicker($datepicker, true);
 
 		$searchArea.on('click',".T-btn-search",function(event){
