@@ -36,15 +36,6 @@ define(function(require, exports) {
 
 	//产品销量页面list
 	employeePerforObj.listemployeePerfor=function(){
-		var person={
-			name:'BilgATES',
-			age:'22',
-			job:'Web'
-		};
-
-		var personJson=JSON.stringify(person);
-		console.log('undefined======='+personJson.name)
-
 	    var html=listMainTemplate();
 		addTab(menuKey,"员工业绩",html);
 		employeePerforObj.initJQueryDateObj();
