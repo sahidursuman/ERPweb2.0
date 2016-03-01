@@ -105,7 +105,6 @@ define(function(require, exports) {
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    console.log(data);
                     TotalProfit.$tab.find('.income').text(data.total.income);
                     TotalProfit.$tab.find('.cost').text(data.total.cost);
                     TotalProfit.$tab.find('.profit').text(data.total.profit);

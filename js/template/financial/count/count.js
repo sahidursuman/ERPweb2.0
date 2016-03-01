@@ -451,6 +451,8 @@ define(function(require, exports){
 				Count.autoSelfSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
+		}).on('click','.T-selfArrDel',function(){
+			Count.delSelfArrange();
 		});
 
 		if($selfObj.find('input[name=selfPayItemName]').length>0){
@@ -646,7 +648,6 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
-					console.log(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
@@ -1141,51 +1142,6 @@ define(function(require, exports){
 				}   
 			}
     	});
-	};
-	//中转明细
-	Count.ViewOutDetail = function(id){
-		$.ajax({
-			url:KingServices.build_url('touristGroup','findTouristGroupArrangeById'),
-			type:"POST",
-			data:{
-				tripPlanId:id
-			},
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-	                data.receiveGroup = JSON.parse(data.receiveGroup);
-	                data.isNeedArriveService = hasData(data.receiveGroup);
-	                data.bus = JSON.parse(data.bus);
-	                data.isNeedBus = (data.bus.length > 0)? 1 : 0;
-	                data.sendGroup = JSON.parse(data.sendGroup);
-	                data.isNeedLeaveService = hasData(data.sendGroup);
-
-					var html = outDetailTempLate(data);
-					var financialOutDetail = addTab(outDetailId, "中转明细", html);
-					var $tabid = $("#tab-"+outDetailId+"-content")
-					$tabid.find('.T-download').off('click').on('click',function(){
-						Count.exportOutDetail(id);
-					});
-	                function hasData(src)  {
-	                    var res = 0;
-	                    if (!!src)  {
-	                        if (!!src.outBusList && src.outBusList.length) {    res = 1; }
-	                        else if (!!src.outHotelList && src.outHotelList.length) {    res = 1; }
-	                        else if (!!src.outOtherList && src.outOtherList.length) {    res = 1; }
-	                        else if (!!src.outRestaurantList && src.outRestaurantList.length) {    res = 1; } 
-	                        else if (!!src.outTicketList && src.outTicketList.length) {    res = 1; } 
-	                    }
-	                    return res;
-	                }
-				}
-			}
-		});
-	};
-	//导出电子表格
-	Count.exportOutDetail = function(id){
-		var url = KingServices.build_url('export','exportOutDetail');
-		url +="&tripPlanId="+id;
-		exportXLS(url);
 	};
 	//质量统计
 	Count.getquality = function(id){
@@ -1702,12 +1658,22 @@ define(function(require, exports){
 			}
 			
 		});
-		//删除新增的购物安排
+		//删除新增的自费安排
 		$obj.find('.T-del').off('click').on('click',function(){
-		 	var $tr = $(this).closest('tr');
+			var $tr = $(this).closest('tr');
 		 	$tr.fadeOut(function(){
               $(this).remove();
             });
+		 	Count.autoSumAfterDel($tr,$parentObj);
+		});
+	};
+	//删除自费安排
+	Count.delSelfArrange = function($obj,$parentObj){
+
+	};
+	//删除自费安排重新计算金额
+	Count.autoSumAfterDel = function($tr,$parentObj){
+		
 			var $sumIncome = $tr.find('.needIncome').text();
 			var $tripIncome = $parentObj.find('.tripIncome-selfPayTravelAgencyRebateMoney');
 			var $newTripIncome = parseFloat(parseFloat($tripIncome.text()-$sumIncome));
@@ -1730,7 +1696,6 @@ define(function(require, exports){
 			Count.tripIncome($parentObj);
 			//计算团成本
 			Count.tripCost($parentObj);
-		});
 	};
 	//其他收入金额计算
 	Count.autoOtherInSum = function($obj,$parentObj){
@@ -3490,7 +3455,6 @@ define(function(require, exports){
 		var method = typeFlag == 1?'update':'webGuideAccountUpdate';
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		console.log(saveJsonStr);
 		var addShopList = saveJsonStr.addShopArrangeList;
 		for(var i = 0;i<addShopList.length;i++){
 			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
@@ -3547,8 +3511,7 @@ define(function(require, exports){
 			var restaurantList= saveJsonStr.restaurantArrangeList;
 			for(var i = 0;i<restaurantList.length;i++){
 				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
-					message = "请选择导游自选餐厅"
-					console.log(message);
+					message = "请选择导游自选餐厅";
 					showMessageDialog($("#confirm-dialog-message"),message);
 					return;
 				}
