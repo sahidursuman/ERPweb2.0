@@ -86,7 +86,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象
         innerProfit.$tab = $('#' + tabId);
         innerProfit.$searchArea = innerProfit.$tab.find('.T-search-area');
-        innerProfit.formatTime(innerProfit.$searchArea);
+        Tools.setDatePicker(innerProfit.$searchArea.find('.datepicker'), true);
         innerProfit.searchAreaList();
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
@@ -124,15 +124,6 @@ define(function(require, exports) {
                 //查看线路产品
                 KingServices.viewInnerInfo(transferId,1)
             }
-        });
-    };
-    //时间控件格式化
-    innerProfit.formatTime = function($obj){
-         $obj.find(".date-picker").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
         });
     };
     //查看游客小组、收客团款明细
