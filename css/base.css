@@ -850,6 +850,10 @@ input.datepicker {
 	display: inline-block;
     padding-left: 15px;
 }
+/**公共方法**/
+.sidebar{
+	width: 140px;
+}
 @media (max-width: 1485px) {
 	.financial-search-planProfit{
 		display: inline-block;
