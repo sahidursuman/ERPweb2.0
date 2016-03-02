@@ -207,7 +207,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     var total = data.total;
-                    var totalDataHtml = "<tr style='background: #fcf8e4;'><td>合计</td><td></td><td></td><td></td><td>" + total.adultCount + " 大 " + total.childCount + " 小" + "</td><td></td><td></td><td></td><td>" + total.needPayAllMoney + "</td><td>" +
+                    var totalDataHtml = "<tr style='background: #e0effd;'><td>合计</td><td></td><td></td><td></td><td>" + total.adultCount + " 大 " + total.childCount + " 小" + "</td><td></td><td></td><td></td><td>" + total.needPayAllMoney + "</td><td>" +
                                         total.shopMoney + "</td><td>" + total.selfIncome + "</td><td>" + total.incomeMoney + "</td><td>" + total.guideMoney + "</td><td>" + total.guideTip + "</td><td>" + total.insuranceMoney + "</td><td>" +
                                         total.busMoney + "</td><td>" + total.restaurantMoney + "</td><td>" + total.hotelMoney + "</td><td>" + total.scenicMoney + "</td><td>" + total.ticketMoney + "</td><td>" + total.selfPayMoney + "</td><td>" +
                                         total.otherMoney + "</td><td>" + total.shopCostMoney + "</td><td>" + total.selfMoney + "</td><td>" + total.guideDeductions + "</td>";
