@@ -1,3 +1,8 @@
+/**
+ * 财务管理--餐厅账务
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
     var rule = require("./rule"),
     	menuKey = "financial_restaurant",

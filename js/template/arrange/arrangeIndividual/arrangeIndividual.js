@@ -465,7 +465,6 @@ define(function(require, exports) {
                     lineProductType: lineProductType
                 };
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
-            console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
             arrangeIndividual.touristGroupId.push(touristGroupIds);
 
         } else {
