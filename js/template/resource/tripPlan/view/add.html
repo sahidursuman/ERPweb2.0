@@ -118,8 +118,8 @@
             <thead>
                 <tr>
                     <th class="th-border">收客单号</th>
-                    <th class="th-border">线路产品</th>
                     <th class="th-border">客户</th>
+                    <th class="th-border">线路产品</th>
                     <th class="th-border">联系人</th>
                     <th class="th-border">联系电话</th>
                     <th class="th-border">人数</th>
@@ -137,8 +137,8 @@
                 {{each touristGroupList as group}}
                 <tr data-id="{{group.id}}">
                     <td>{{group.orderNumber}}</td>
-                    <td name="lineProductName">{{group.lineProduct.name}}</td>
                     <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+                    <td name="lineProductName">{{group.lineProduct.name}}</td>
                     <td name="contactMemberName">{{group.partnerAgencyContact.contactRealname}}</td>
                     <td name="contactMemberMobileNumber">{{group.partnerAgencyContact.contactMobileNumber}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
