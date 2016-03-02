@@ -114,7 +114,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel =data.hotel;
 					var html = viewTemplate(data);
 					var updateHotel = layer.open({
 					    type: 1,
@@ -139,7 +139,7 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel = data.hotel;
 					if(data.hotel.province != null )var provinceId = data.hotel.province.id;
 					if(data.hotel.city != null )var cityId = data.hotel.city.id;
 					if(data.hotel.district != null ) var districtId = data.hotel.district.id;
@@ -199,6 +199,7 @@ define(function(require, exports) {
                            
                             //获取酒店最低价
 							$tbody.find('.T-minPrice').trigger('change');
+							$tbody.find('[name="normalMarketPrice"]').trigger('change');
 
 							//删除时间区间
 							$tbody.find(".T-del").on("click",function(){
@@ -462,17 +463,14 @@ define(function(require, exports) {
 					priceJsonAddList : [],//时间区间新增和删除的数组
 					priceJsonDelList : []
 				};
-			console.log(priceJsonTr.length);
 			priceJsonTr.each(function(){
 				if($(this).hasClass('delete')){
-					console.log("has");
 					var $the = $(this),
 						priceJsonDel = {
 							id : $the.data("entity-id")
 						};
 					hotelRoomJson.priceJsonDelList.push(priceJsonDel);
 				} else {
-					console.log("no");
 					var $that = $(this),
 						divIndex = $that.data("index"),
 						priceJsonAdd = {
@@ -497,7 +495,6 @@ define(function(require, exports) {
 		});
 		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
 		hotelRoomJsonDel = JSON.stringify(hotelRoomJsonDel);
-		console.log(hotelRoomJsonDel);
 		var method = "",operation = "";
 		if (type == 1) {
 			method = "addHotel";

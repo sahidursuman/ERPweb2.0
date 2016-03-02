@@ -712,11 +712,6 @@ define(function(require, exports) {
                                     isTransferIn = 'inner';
                                 //查看内转
                                 KingServices.viewTouristGroup(touristGroupId, isTransferIn);
-                                //刷新data
-                                var divId = "inner-TransferIn",
-                                    type = "2";
-                                innerTransfer.getSearchParam(divId, type);
-                                innerTransfer.innerList(divId, type, 0);
                             }
                         })
                     $(this).dialog("close");

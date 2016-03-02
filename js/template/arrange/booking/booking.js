@@ -229,7 +229,6 @@ define(function(require, exports) {
 		//搜索操作人查询
 		BookingArrange.choose(BookingArrange.$searchArea.find('.T-operateUserChoose'),function(obj){
 			var operationUserList = BookingArrange.autocompleteDate.operationUserList;
-			console.log(operationUserList);
 			if(operationUserList && operationUserList.length > 0){
 				for(var i=0; i < operationUserList.length; i++){
 					operationUserList[i].value = operationUserList[i].realName
@@ -564,8 +563,7 @@ define(function(require, exports) {
 	                data: "id=" + ui.item.id,
 	                success: function(data) {
 						if(showDialog(data)){
-							var hotel = JSON.parse(data.hotel);
-							parents.find(".T-hotelStar").val(hotel.level);
+							parents.find(".T-hotelStar").val(data.hotel.level);
 						}
 	                }
 				});

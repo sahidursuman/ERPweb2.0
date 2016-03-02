@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":17,"md5":"6bd9ea6034a16f6376c3b4f8cd513565"}*/
+/*TMODJS:{"debug":true,"version":26,"md5":"6bd9ea6034a16f6376c3b4f8cd513565"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeGroupTransfer/view/outEditFee", function($data, $filename) {
         try {

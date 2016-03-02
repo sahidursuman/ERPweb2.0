@@ -67,6 +67,7 @@ define(function(require, exports) {
 							sub = true;
 						}
 						message.viewMsg($(this).closest('tr').data('id'), sub);
+						message.listMainMsg();
 					});
 
 					// read all

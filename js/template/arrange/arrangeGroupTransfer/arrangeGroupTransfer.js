@@ -240,7 +240,6 @@ define(function(require, exports) {
             arrangeGroupTransfer.transferId.push(transferIds);
         } else {
             for (var i = 0; i < arrangeGroupTransfer.transferId.length; i++) {
-                console.info(arrangeGroupTransfer.transferId[i].transferIds);
                 if (arrangeGroupTransfer.transferId[i].id == id) {
                     arrangeGroupTransfer.transferId.splice(i, 1);
                     break;
@@ -602,10 +601,8 @@ define(function(require, exports) {
     arrangeGroupTransfer.innerEditFee_Event = function(type) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
 
-            //精度限制
-            $price = $editFeeObj.find('.T-price'),
-            $count = $editFeeObj.find('.T-count');
-        Tools.inputCtrolFloat($price);
+        //精度限制
+        $count = $editFeeObj.find('.T-count');
         Tools.inputCtrolFloat($count);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
@@ -655,9 +652,7 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     arrangeGroupTransfer.outEditFee_Event = function(type) {
-
         var $outFeeObj = $("#T-outEditFeeMain"),
-
             //精度限制
             $price = $outFeeObj.find('.T-price'),
             $count = $outFeeObj.find('.T-count');
@@ -763,7 +758,9 @@ define(function(require, exports) {
         //精度限制
         var $price = $tbody.find('.T-price'),
             $count = $tbody.find('.T-count');
-        Tools.inputCtrolFloat($price);
+        if (!!type && type==2) {
+           Tools.inputCtrolFloat($price);
+        };
         Tools.inputCtrolFloat($count);
         // 更新表单验证的事件绑定
         //rule.update(validator);   
@@ -813,14 +810,10 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.delTransferData = function(id, $tr, $tab) {
         if (id != null && id != "") {
-            $.ajax({
-                url: KingServices.build_url("innerTransferOperation", "deleteInTransferFee"),
-                type: "POST",
-                data: "id=" + id,
-                success: function(data) {
-                    $tr.remove();
-                    arrangeGroupTransfer.PayMoneyF($tab);
-                }
+            $tr.fadeOut(function() {
+                $tr.addClass('deleted');
+                $tr.hide();
+                arrangeGroupTransfer.PayMoneyF($tab);
             });
         } else {
             //移除空的其他费用
@@ -839,7 +832,7 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     arrangeGroupTransfer.delOutTransfer = function(id, $tr, $tab) {
-        if (!!id && 　id != null) {
+        if (!!id && id!= null) {
             //移除空的其他费用
             $tr.fadeOut(function() {
                 $tr.addClass('deleted');
@@ -939,8 +932,8 @@ define(function(require, exports) {
 
 
         var otherFeeListDel = [];
-        if (transferFeeStatus == 1) {
-            $tbodyFee.find(" tr.deleted").each(function(i) {
+        if (transferFeeStatus == 1 || innerTransferFeeStatus==1) {
+            $tbodyFee.find("tr.deleted").each(function(i) {
                 var otherFeeDel = {
                     "id": $(this).attr("data-entity-id")
                 };
@@ -957,7 +950,7 @@ define(function(require, exports) {
         if (type == 1) {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "",
+                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherFeeListDel),
                 type: "POST",
                 success: function(data) {
                     var result = showDialog(data);

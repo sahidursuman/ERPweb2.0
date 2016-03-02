@@ -664,7 +664,6 @@ define(function(require, exports) {
                
             },
             select: function(event,ui) {
-                console.log(ui);
                 $(this).next().val(ui.item.lineProductId);
             }
         }).on("click",function(){

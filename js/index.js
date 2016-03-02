@@ -180,4 +180,8 @@
 			$(document).find("#sidebar-collapse").trigger('click')
 		}
 	});
+
+	$(document).find("#sidebar-collapse").on('click', function(){
+		$(document).trigger('resize');
+	});
 }(window.jQuery);
