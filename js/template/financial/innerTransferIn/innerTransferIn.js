@@ -103,7 +103,7 @@ define(function(require,exports) {
 	//list页面事件
 	InnerTransferIn.inieEvent = function($obj){
 		//格式化日期控件
-		FinancialService.initDate($obj.find(".T-search-area"));
+		Tools.setDatePicker($obj.find(".T-search-area .date-picker"), true);
 		//搜索事件
 		$obj.find(".T-search").on('click',function(event){
 			event.preventDefault();
@@ -221,7 +221,6 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
-					    console.log(data);
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -318,12 +317,12 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					$searchObj.find('.sumTransCount').text(data.totalCount);
-					$searchObj.find('.sumTransNeedPayMoney').text(data.transInMoney);
-					$searchObj.find('.sumPayedMoney').text(data.getedMoney);
+					$searchObj.find('.T-sumTransCount').text(data.totalCount);
+					$searchObj.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
+					$searchObj.find('.T-sumPayedMoney').text(data.getedMoney);
 					$searchObj.find('.T-sumBackMoney').text(data.backMoney);
 					$searchObj.find('.T-sumSettlementMoney').text(data.settlementMoney);
-					$searchObj.find('.sumUnPayedMoney').text(data.confirmedMoney);
+					$searchObj.find('.T-sumUnPayedMoney').text(data.confirmedMoney);
 					$searchObj.find('.T-sumUnReceivedMoney').text(data.unIncomeMoney);
 				}
 			}
@@ -375,9 +374,11 @@ define(function(require,exports) {
 			if(typeFlag == 2){
 				InnerTransferIn.btnSatus = 0 ;
 				$obj.data('isEdited', false);
+				$listSearchData.pageNo = 0;
 				InnerTransferIn.chenking($listSearchData,2,"settle");
 			}else{
 				$obj.data('isEdited', false);
+				$listSearchData.pageNo = 0;
 				InnerTransferIn.chenking($listSearchData,1,"check");
 			}
 			
@@ -387,7 +388,7 @@ define(function(require,exports) {
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
-		FinancialService.initDate(InnerTransferIn.$checkSearchArea);
+		Tools.setDatePicker($obj.find(".T-search-area .date-picker"), true);
 		//导出报表事件
 		$obj.find(".T-btn-export").on('click',function(event){
 			var args = { 

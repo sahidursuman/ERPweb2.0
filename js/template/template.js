@@ -283,6 +283,9 @@
         return str.push("</select>"), str.join("");
     }), template.helper("getHotelLevelDesc", function(level) {
         switch (1 * level) {
+          case 1:
+            return "三星以下";
+
           case 2:
             return "三星";
 
@@ -302,7 +305,7 @@
             return "五星以上";
 
           default:
-            return "三星以下";
+            return "";
         }
     }), template.helper("getOrderStatusDesc", function(status) {
         switch (1 * status) {

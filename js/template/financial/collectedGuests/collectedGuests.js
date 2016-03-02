@@ -1,3 +1,8 @@
+/**
+ * 财务管理--收客利润
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
 	var menuKey = "financial_collectedGuests",
         listMainTemplate = require("./view/listMain"),

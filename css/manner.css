@@ -1439,13 +1439,14 @@ select {
     height: auto;
     padding-bottom: 70px;
     background-color: #FFFFFF;
+    /*background-color: red;*/
     margin: auto;
     font-family: '微软雅黑';
     color: #444;
 }
 
 .quote-title-style {
-    width: 1000px;
+    width:1000px;
     height: 135px;
     background-color: #48A2D2;
 }
@@ -1517,7 +1518,9 @@ select {
     color: #444;
     margin-left: 490px;
 }
-
+.share-agency-times{
+   margin-left:560px;color: #444;margin-top: -5px;
+}
 .share-dividing {
     color: #48a2d2;
     font-size: 18px;
@@ -1544,7 +1547,9 @@ select {
     /*overflow:scroll;*/
     /*background-color: red;*/
 }
-
+.share-detailedContent-div{
+    width: 960px;margin: auto;overflow: scroll;
+}
 .share-startTime-divid {
     display: block;
     width: 90px;
@@ -1565,6 +1570,13 @@ select {
     border-top: 1px solid #DFDFDF;
     /*border-bottom: 1px solid red;*/
     margin-top: 30px;
+}
+.share-anchor{
+     width: 30px;height: 170px;
+     background-color: #eaeaea;
+     position: fixed;top: 340px;
+     border-radius: 20px;
+     margin-left: -45px;
 }
 .share-anchor-ul{
     width: 20px;
@@ -1653,7 +1665,10 @@ p#back-top a span {
     border: 0!important;
     padding-right: 6px;
 }
-
+.quoteTable-arrange {
+        width:100%;
+       margin-bottom: 30px;
+    }
 .quoteTable-arrange td {
     padding-left: 17px;
 }
@@ -2111,7 +2126,140 @@ p#back-top a span {
     
 }
 
+/*//分享报价手机自适应*/
+@media screen and (max-width:1080px) {
+    .share-anchor{
+         width: 30px;height: 170px;
+         background-color: #eaeaea;
+         position: fixed;top: 340px;
+         border-radius: 20px;
+         margin-left: -36px;
+    } 
+}
 
+
+@media screen and (max-width:720px) {
+   .shareQuoteS{
+        width: 100%;
+        height: auto;
+        padding-bottom: 70px;
+        background-color: #FFFFFF;
+        /*background-color: red;*/
+        margin: auto;
+        font-family: '微软雅黑';
+        color: #444;
+    }
+   .quote-title-style {
+        width: 100%;
+        height: 135px;
+        background-color: #48A2D2;
+    }
+
+    .share-quote-offer {
+        width: 94%;
+        height: auto;
+        /*border: 1px solid #666;*/
+        margin:40px auto 0px;
+    }
+
+    .share-quote-offerdetails {
+        width: 94%;
+        height: auto;
+        border-top: 1px solid #DFDFDF;
+        margin-top: 30px;
+    }
+
+    .share-quote-arrange {
+       width: 94%;
+        height: auto;
+        padding-bottom: 10px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid red;*/
+        margin-top: 30px;
+    }
+
+    .share-quote-schedule {
+        width: 94%;
+        height: auto;
+        padding-bottom: 20px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid #666;*/
+        margin-top: 30px;
+    }
+    .share-detailedContent {
+        width: 97%;
+        height: auto;
+        margin: auto;
+        /*overflow:scroll;*/
+        /*background-color: red;*/
+    }
+    .share-detailedContent-div{
+        width: 97%;margin: auto;
+        overflow: scroll;
+    }
+    .quoteTable-arrange {
+        width: 94%;
+       margin-bottom: 30px;
+    }
+    .share-quote-origin {
+        width: 94%;
+        height: auto;
+        border-bottom: 1px solid #DFDFDF;
+        padding-bottom: 20px;
+        margin: 20px auto 0px;
+    }
+    .share-needing-attention {
+        width: 94%;
+        height: auto;
+        padding-bottom: 20px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid red;*/
+        margin:30px auto 0px;
+    }
+    .share-dividing {
+        color: #48a2d2;
+        font-size: 18px;
+        width: 110px;
+        height: 40px;
+        background-color: #fff;
+        margin-top: -15px;
+        margin-left:42%;
+        text-align: center;
+    }
+    .share-agency-name {
+        font-size: 14px;
+        color: #444;
+        margin-left: 62%;
+    }
+    .share-agency-times{
+       margin-left:75%;
+       color: #444;
+       margin-top: -5px;
+    }
+    .share-title-h5 {
+        font-size: 27px;
+        font-family: '宋体';
+        color: #fff;
+        text-align: center;
+        line-height: 135px;
+        height: 40px;
+    }
+    p#back-top {
+        position: fixed;
+        bottom: 100px;
+        margin-left: 85%;
+    }
+    .share-anchor{
+         width: 30px;height: 170px;
+         background-color: #eaeaea;
+         position: fixed;top: 60%;
+         border-radius: 20px;
+         margin-left: 0px;
+    }
+    .share-anchor ul li a{
+        color:#FF8B19; 
+    }
+}
 /* 控制宽度*/
 .group-info {
     min-width: 1116px;
@@ -2237,3 +2385,5 @@ a.gray span{
 .table-inner-list li:first-child{
     border:none;
 }
+
+

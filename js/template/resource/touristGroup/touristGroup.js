@@ -182,9 +182,6 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var startTime=$searchAreaObj.find('input[name=startTime]').val();
-
-            console.info($.param(touristGroup.getSearParam($searchAreaObj)));
-
             if (!!startTime && startTime!=null) {
                 var exportUrl="" + KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(touristGroup.getSearParam($searchAreaObj));
                 //window.location.href=exportUrl;
@@ -532,6 +529,10 @@ define(function(require, exports) {
                     touristGroup.innerTransferDispose($innerTransferForm, 2);
                     //游客的序号
                     touristGroup.memberNumber($groupMemberForm);
+
+                    if (!!isTransferIn) {
+                        $('#inner-TransferIn').find('.T-T-transferIn-search').trigger('click');
+                    };
                 }
             }
         });
@@ -664,9 +665,6 @@ define(function(require, exports) {
             }
                
         });
-
-
-
         //客户来源
         var $partnerAgencyObj = $obj.find('input[name=fromPartnerAgency]');
         touristGroup.getPartnerAgencyList($partnerAgencyObj);
@@ -692,30 +690,11 @@ define(function(require, exports) {
         //删除原有费用项
         if (typeFlag == 2) {
             //addCost-delete
-            $obj.find(".T-addCostTbody").on('click', ".T-delete", function() {
-                $tr = $(this).closest('tr');
-                var costListTrId = $tr.attr("data-entity-id");
-                if (costListTrId != null && costListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                        touristGroup.autoSumNeedPay($obj);
-                    })
-                    touristGroup.autoSumNeedPay($obj);
-                };
-            });
+            var $tbody=$obj.find('.T-addCostTbody');
+            touristGroup.deleteTr($tbody, $obj);
         } else {
-            $obj.find('.T-addCostTbody').on('click', ".T-delete", function(event) {
-                event.preventDefault();
-                /* Act on the event */
-                var $that = $(this),
-                    $tr = $that.closest('tr');
-                $tr.fadeOut(function() {
-                    $(this).hide();
-                    $tr.addClass("deleted");
-                    touristGroup.autoSumNeedPay($obj);
-                })
-            });
+            var $tbody=$obj.find('.T-addCostTbody');
+            touristGroup.deleteTr($tbody, $obj);
         };
 
         //根据单价数量计算金额
@@ -723,6 +702,29 @@ define(function(require, exports) {
         //数量、单价改变
         $obj.find('.T-count').trigger('change', touristGroup.calcPayMoney($obj));
         $obj.find('.T-price').trigger('change', touristGroup.calcPayMoney($obj));
+    };
+
+
+
+    touristGroup.deleteTr =function($tbody, $obj){
+        $tbody.off('click').on('click', ".T-delete", function() {
+            $tr = $(this).closest('tr');
+            var costListTrId = $tr.attr("data-entity-id");
+            if (costListTrId != null && costListTrId != "") {
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $(this).hide();
+                    touristGroup.autoSumNeedPay($obj);
+                })
+            }else{
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $(this).hide();
+                })
+            }
+            touristGroup.autoSumNeedPay($obj);
+        });
+
     };
 
 
@@ -1176,8 +1178,8 @@ define(function(require, exports) {
                 touristGroup.setReadonly($addTabId, "childCount");
                 touristGroup.setTimePicRe($addTabId, "startTime");
                 touristGroup.setTimePicRe($addTabId, "endTime");
-                touristGroup.setReadonly($addTabId, "fromPartnerAgency");
-                touristGroup.setReadonly($addTabId, "partnerAgencyNameList");
+                touristGroup.setTimePicRe($addTabId, "fromPartnerAgency");
+                touristGroup.setTimePicRe($addTabId, "partnerAgencyNameList");
                 $addTabId.find('.T-addPartner').addClass('hide');
                 $addTabId.find('.T-addPartnerManager').addClass('hide');
                 layer.close(touristGroup.chooseQuoteProlayer);
@@ -1636,12 +1638,17 @@ define(function(require, exports) {
         var $count = $tableObj.find('.T-count');
         Tools.inputCtrolFloat($count);
         //删除事件
-        $tableObj.find(".T-delete").off('click').on('click', function() {
+        $tableObj.find(".T-delete").last().on('click', function() {
             var $tr = $(this).closest('tr');
-            $tr.fadeOut(function() {
-                $(this).remove();
-                touristGroup.autoSumNeedPay($obj);
-            });
+            if (!!$tr.attr('data-entity-id')) {
+
+            }else{
+                $tr.fadeOut(function() {
+                    $(this).remove();
+                    touristGroup.autoSumNeedPay($obj);
+                });
+            };
+            
         })
     };
 
@@ -1734,10 +1741,10 @@ define(function(require, exports) {
                         $countBody = $listObj.find('.T-countData'),
                         $statistics = data.statistics;
                     $countBody.find(".allPerson").text($statistics.adultCount + "大" + $statistics.childCount + "小");
-                    $countBody.find(".needIncome").text($statistics.needPay + "小");
-                    $countBody.find(".payedMoney").text($statistics.payedMoney + "小");
-                    $countBody.find(".currentNeedPay").text($statistics.currentNeedPay + "小");
-                    $countBody.find(".unIncome").text($statistics.unIncomeMoney + "小");
+                    $countBody.find(".needIncome").text($statistics.needPay + "元");
+                    $countBody.find(".payedMoney").text($statistics.payedMoney + "元");
+                    $countBody.find(".currentNeedPay").text($statistics.currentNeedPay + "元");
+                    $countBody.find(".unIncome").text($statistics.unIncomeMoney + "元");
 
                 }
             }
@@ -2118,24 +2125,31 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var isReturn=false,needTransitFee=0;
+        var needTransitFee=0,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
                 price = trim($addFeeItemTr.eq(i).find(".T-price").val()), //单价
-                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()); //说明
-
-            if (type!=3 && count=="" || price=="") {
-                isReturn = true;
-            };
+                remark = trim($addFeeItemTr.eq(i).find("input[name=remark]").val()),//说明
+                id=$addFeeItemTr.eq(i).attr('data-entity-id');
 
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
                 var transitFee=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
                 needTransitFee=needTransitFee+transitFee;
             };
-
-            if ((type != "") || (count != "") || (price != "")) {
+            //数量&&单价校验
+            if (count== "" && price!= "") {
+                isReturn=true;
+            };
+            if (count!= "" && price== "") {
+                isReturn=true;
+            };
+       
+            if (!!id && count== "" && price== "") {
+                isReturn=true;
+            };
+            if (count!= "" && price!= "") {
                 var touristGroupFeeJson = {};
                 if (typeFlag == 2) {
                     var id = $addFeeItemTr.eq(i).data("entity-id");
@@ -2157,17 +2171,20 @@ define(function(require, exports) {
                 touristGroupFeeJsonAdd.push(touristGroupFeeJson);
             }
         });
-    
-        //非空校验
+
         if (isReturn) {
-             showMessageDialog($("#confirm-dialog-message"), "费用项数量与单价不能为空！");
-             return;
+            showMessageDialog($("#confirm-dialog-message"), "数量或单价不能为空！");
+            return;
         };
+        if(touristGroupFeeJsonAdd.length < 1){
+            showMessageDialog($("#confirm-dialog-message"), "至少填写一条费用项！");
+            return;
+        }
 
         //删除费用项
         if (typeFlag == 2) {
             touristGroupFeeJsonDel = [];
-            var $delFeeTtr = $lineInfoForm.find(".T-addCostTbody tr.deleted");
+            var $delFeeTtr = $lineInfoForm.find('tbody').children('tr.deleted');
             $delFeeTtr.each(function(i) {
                 var idDel = $delFeeTtr.eq(i).attr("data-entity-id");
                 touristGroupFeeJson = {
@@ -2392,8 +2409,7 @@ define(function(require, exports) {
                                 }
                             } else {
                                 var $arrangeForm = $obj.find(".T-touristGroupMainFormRS");
-                                Tools.closeTab(tabId);
-
+                               
                                 //外转确认
                                 if (!!typeInner && typeInner=='out') {
                                     touristGroup.freshTransferList($obj);
@@ -2401,11 +2417,13 @@ define(function(require, exports) {
                                 if (!!typeInner && ($arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length>0)) {
                                     // 内外转确认之后，在游客小组选择了中转，需要调整到中转安排的列表界面
                                     KingServices.updateTransit(touristGroup.visitorId);
-                                } else {
+                                }else {
                                     touristGroup.freshHeader(touristGroup.$freshData);
                                     //刷新列表数据
                                     touristGroup.getListData(touristGroup.$freshData);
                                 };
+
+                                Tools.closeTab(tabId);
 
                             };
                             if (innerStatus) {
@@ -2490,10 +2508,11 @@ define(function(require, exports) {
         var transferId = touristGroup.getVal($obj,"transferId");
         $.ajax({
             url:KingServices.build_url("transfer","saveTourist"),
-            data: "transferId="+transferId,
+            data: "id="+transferId,
             type: 'POST'
         })
         .done(function(data) {
+            $('#Transfer-In').find('.T-transferIn-search').trigger('click');
         })     
     };
 
