@@ -188,10 +188,10 @@ define(function(require, exports) {
 					    }
 					});	
 
-				    transit.$tab.find('.T-arrangeTransitList').off('click.ace-icon').on('click.ace-icon', '.ace-icon', function(event){
+				    transit.$tab.find('.T-arrangeTransitList').off('click.ace-icon').on('click.ace-icon', 'td', function(event){
 						event.preventDefault();
-						var $this = $(this);
-						if(!$this.hasClass('fa-minus')){
+						var $this = $(this).find('.ace-icon');
+						if(!$this.hasClass('fa-minus') && $this.length > 0){
 							transit.pageNo = page;
 							transit.updateTransit($this.closest('tr').data('entity-id'),'','',$this.closest('td').data("target"));
 						}
@@ -1134,7 +1134,6 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						console.info(data);
 						var busCompanyList = JSON.parse(data.busCompanyList);
 						if(busCompanyList && busCompanyList.length > 0){
 							for(var i=0; i < busCompanyList.length; i++){
@@ -1245,10 +1244,9 @@ define(function(require, exports) {
 					data:"id=" + ui.item.id,
 					success: function(data) {
 						if(showDialog(data)){
-							var hotel = JSON.parse(data.hotel);
-							parents.find("input[name=hotelMobileNumber]").val(hotel.mobileNumber);
-							parents.find("input[name=hotelManagerName]").val(hotel.managerName);
-							parents.find("select[name=hotelLevel]").val(hotel.level);
+							parents.find("input[name=hotelMobileNumber]").val(data.hotel.mobileNumber);
+							parents.find("input[name=hotelManagerName]").val(data.hotel.managerName);
+							parents.find("select[name=hotelLevel]").val(data.hotel.level);
 							parents.find("input[name=hotelRoomType]").val("");
 							parents.find("input[name=hotelRoomTypeId]").val("");
 						}
@@ -1593,7 +1591,6 @@ define(function(require, exports) {
 				if(showDialog(data)){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 						if(isClose ==1){
-							console.log(argumentsLen);
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");
 								transit.listTransit(transit.pageNo);

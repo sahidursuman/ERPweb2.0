@@ -202,8 +202,8 @@
 					<tr>
 						<th class="th-border">收客单号</th>
 						<th class="th-border">外联销售</th>
-						<th class="th-border">线路产品</th>
 						<th class="th-border">客户</th>
+						<th class="th-border">线路产品</th>
 						<th class="th-border">联系人</th>
 						<th class="th-border">联系电话</th>
 						<th class="th-border">客源地</th>
@@ -225,8 +225,8 @@
 					<tr data-id="{{group.id}}">
 						<td>{{group.orderNumber}}</td>
 						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
-						<td name="lineProductName">{{group.lineProduct.name}}</td>
 						<td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+						<td name="lineProductName">{{group.lineProduct.name}}</td>
 						<td name="contactMemberName">{{group.contactMember.name}}</td>
 						<td name="contactMemberMobileNumber">{{group.contactMember.mobileNumber}}</td>
 						<td name="areaData">{{group.areaData}}</td>
@@ -302,6 +302,10 @@
 				<label data-type="other" class="control-label T-add-action mar-l-10">
 					<input type="checkbox" class="ace" {{if hasData.other}}checked="true"{{/if}}>
 					<span class="lbl">其它</span>
+				</label>
+				<label data-type="all" class="control-label T-add-all mar-l-15">
+					<input type="checkbox" class="ace">
+					<span class="lbl">全选</span>
 				</label>
 			</div>
 		</div>

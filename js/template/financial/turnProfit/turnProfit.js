@@ -92,12 +92,7 @@ define(function(require, exports) {
         TurnProfit.$searchArea = TurnProfit.$tab.find('.T-search-area');
 
         TurnProfit.searchAreaList();
-        $("#" + tabId + " .date-picker").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
+        Tools.setDatePicker(TurnProfit.$tab.find(".date-picker"), true);
         //搜索按钮事件
         TurnProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
