@@ -716,6 +716,11 @@ define(function(require, exports) {
                     $(this).hide();
                     touristGroup.autoSumNeedPay($obj);
                 })
+            }else{
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $(this).hide();
+                })
             }
             touristGroup.autoSumNeedPay($obj);
         });
