@@ -10,12 +10,12 @@
 			</tr>
 		</thead>
 		<tbody class="chooseMergeTbody">
-			{{each touristGroupMergeList as touristGroupMerge}}
-				<tr data-entity-id="{{touristGroupMerge.lineProductId}}" data-entity-startTime="{{touristGroupMerge.startTime}}" data-linePro-name = "{{touristGroupMerge.lineProductName}}" data-days="{{touristGroupMerge.days}}">
+			{{each touristGroupMergeList as touristGroupMerge}} 
+				<tr data-entity-id="{{touristGroupMerge.lineProductId}}" data-entity-startTime="{{touristGroupMerge.startTime | dateFormat: 'yyyy-MM-dd'}}" data-linePro-name = "{{touristGroupMerge.lineProductName}}" data-days="{{touristGroupMerge.days}}">
 					<td>{{touristGroupMerge.lineProductName}}</td>
 					<td>{{touristGroupMerge.lineProductType}}</td>
 					<td class="F-float F-count">{{touristGroupMerge.days}}</td>
-					<td>{{touristGroupMerge.startTime}}</td>
+					<td>{{touristGroupMerge.startTime  | dateFormat: 'yyyy-MM-dd' }}</td>
 					<td>
 						<label class="pos-rel"> <input type="radio" class="ace ridioCheck" name="form-field-radio"> <span class="lbl"></span> </label> </span>
 					</td>
