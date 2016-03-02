@@ -630,8 +630,8 @@
 						<th class="th-border">备注</th> -->
 						<th class="th-border">收客单号</th>
 						<th class="th-border">外联销售</th>
-						<th class="th-border">线路产品</th>
 						<th class="th-border">客户</th>
+						<th class="th-border">线路产品</th>
 						<th class="th-border">联系人</th>
 						<th class="th-border">联系电话</th>
 						<th class="th-border">客源地</th>
@@ -652,8 +652,8 @@
 					<tr>
 						<td>{{index + 1}}</td>
 						<td>{{group.orderNumber}}</td>
-						<td>{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
 						<td>{{group.lineProduct.name}}</td>
+						<td>{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
 						<td>{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td>{{group.contactMember.name}}</td>
 						<td>{{group.contactMember.mobileNumber}}</td>
