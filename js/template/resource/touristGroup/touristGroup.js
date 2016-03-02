@@ -2146,7 +2146,7 @@ define(function(require, exports) {
                 isReturn=true;
             };
        
-            if (id!="" && count== "" && price== "") {
+            if (!!id && count== "" && price== "") {
                 isReturn=true;
             };
             if (count!= "" && price!= "") {
@@ -2176,6 +2176,10 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"), "数量或单价不能为空！");
             return;
         };
+        if(touristGroupFeeJsonAdd.length < 1){
+            showMessageDialog($("#confirm-dialog-message"), "至少填写一条费用项！");
+            return;
+        }
 
         //删除费用项
         if (typeFlag == 2) {
