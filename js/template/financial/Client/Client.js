@@ -61,7 +61,7 @@ define(function(require, exports) {
                 pageNo : (page || 0),
                 startDate : Client.$tab.find('.T-search-start-date').val(),
                 endDate : Client.$tab.find('.T-search-end-date').val(),
-                accountStatus:Client.$tab.find(".T-select-status").find("button").data("value")
+                accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value")
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -125,7 +125,7 @@ define(function(require, exports) {
             Client.listClient(0);
         });
         //状态框选择事件
-        Client.$searchArea.find(".T-select-status").on('click','a',function(event){
+        Client.$searchArea.find(".T-finance-status").on('click','a',function(event){
             event.preventDefault();//阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
@@ -143,6 +143,7 @@ define(function(require, exports) {
                     fromPartnerAgencyName : $tr.children('td').eq(1).text(),
                     fromPartnerAgencyId: $tr.data('id'),
                     name: $tr.children('td').eq(1).text(),
+                    accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
                     endDate : Client.$tab.find('.T-search-end-date').val()
                 };

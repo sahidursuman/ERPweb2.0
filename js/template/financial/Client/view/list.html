@@ -14,7 +14,7 @@
             <label>&nbsp;至&nbsp;</label>
             <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
-        <div class="form-group btn-status btn-group marginLeft-30 T-select-status" style="margin-left: 20px;">
+        <div class="form-group btn-status btn-group marginLeft-30 T-finance-status" style="margin-left: 20px;">
             <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
                 <span>
                     {{if searchParam.accountStatus == 0}}
@@ -86,7 +86,7 @@
         </thead>
         <tbody class="T-list">
         {{each customerAccountList as rs}}
-            <tr data-id='{{rs.fromPartnerAgencyId}}'>
+            <tr data-id='{{rs.fromPartnerAgencyId}}' accountStatus = '{{searchParam.accountStatus}}'>
                 <td>{{rs.headerAgencyName}}</td>
                 <td>{{rs.fromPartnerAgencyName}}</td>
                 <td><span class="F-float F-count">{{rs.sumAdultCount}}</span>大
