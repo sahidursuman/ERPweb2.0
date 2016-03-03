@@ -909,31 +909,38 @@ define(function(require, exports) {
                         id = $inputParent.data('id');
                     if(type === thisType){
                         if(!!id){
-                            showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
-                                $.ajax({
-                                    url: KingServices.build_url('touristGroup', 'deleteRequire'),
-                                    type: 'post',
-                                    data: {requireId: id},
-                                })
-                                .done(function(data) {
-                                    if (showDialog(data)) {
-                                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                            $inputParent.remove();
-                                        });
-                                    }
+                            $.ajax({
+                                url: KingServices.build_url('touristGroup', 'deleteRequire'),
+                                type: 'post',
+                                data: {requireId: id},
+                            })
+                            .done(function(data) {
+                                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                    if (data.success!=0) { //没有有中转安排,可以删除
+                                        $inputParent.remove();
+                                        //当复选框未全部不选--移除共用选项
+                                        if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                            $div.find('.T-action-require-list').children('div.require-commons').remove();
+                                        };
+                                    }else{
+                                        $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>');
+                                    };
+                                    //当复选框未全部不选--移除共用选项
+                                    if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                        $div.find('.T-action-require-list').children('div.require-commons').remove();
+                                    };
                                 });
-                            },function(){
-                                $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>')
                             });
                         }else{
                             $inputParent.remove();
+                            //当复选框未全部不选--移除共用选项
+                            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                $div.find('.T-action-require-list').children('div.require-commons').remove();
+                            };
                         }
                     }
                 });
-            }//当复选框未全部不选--移除共用选项
-            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
-                $div.find('.T-action-require-list').children('div.require-commons').remove();
-            };
+            }
         };
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
     };
