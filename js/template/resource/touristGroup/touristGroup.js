@@ -1785,7 +1785,6 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         var formParObj = JSON.parse(data.partnerAgencyList);
-
                         if (formParObj != null && formParObj.length > 0) {
                             for (var i = 0; i < formParObj.length; i++) {
                                 formParObj[i].value = formParObj[i].travelAgencyName
@@ -1805,7 +1804,7 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    $(this).find("input[name=partnerAgencyContactId]").val("");
+                   $(this).val("").nextAll('[name="partnerAgencyContactId"]').val("");
                 }
             },
             select: function(event, ui) {
