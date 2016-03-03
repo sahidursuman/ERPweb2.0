@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":76,"md5":"a53ae403a8bb452dc40d57ca61f84457"}*/
+/*TMODJS:{"debug":true,"version":77,"md5":"a53ae403a8bb452dc40d57ca61f84457"}*/
 define(function(require) {
     return require("../../../template")("financial/finIncome/view/list", function($data, $filename) {
         try {

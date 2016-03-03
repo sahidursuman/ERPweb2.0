@@ -472,7 +472,6 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
-
                 //费用明细处理
                 var resultList = data.customerAccountList;
                 for(var i = 0; i < resultList.length; i++){
@@ -1093,6 +1092,7 @@ define(function(require, exports) {
             creatorName : $tab.find('.T-search-enter').val(),
             startDate : $tab.find('.T-search-start-date').val(),
             endDate : $tab.find('.T-search-end-date').val(),
+            accountStatus : $tab.find('[name=accountStatus]').val(),
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             contactRealname : $tab.find('.T-search-contact').val()
         }

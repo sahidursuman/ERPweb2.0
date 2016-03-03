@@ -113,7 +113,7 @@ define(function(require, exports) {
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
         // 修正页码
-			pageNo: (page || 0)
+		pageNo = (page || 0)
 		
 
         $.ajax({
