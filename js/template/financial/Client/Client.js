@@ -181,7 +181,6 @@ define(function(require, exports) {
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
-            accountStatus 
         } else {
             partnerAgencyName = args.name;
         }
