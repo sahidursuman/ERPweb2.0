@@ -133,7 +133,7 @@ define(function(require,exports) {
 				endDate = $tr.attr("endDate");
 			if($that.hasClass('T-check')){
 				//对账处理
-				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate,"");
+				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate,"",accountStatus);
 			}else if($that.hasClass('T-balance')){
 				//付款处理
 				InnerTransferOut.btnSatus = 0;
@@ -153,7 +153,7 @@ define(function(require,exports) {
 		});
 	};
 	//对账处理
-	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate,orderNumber){
+	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate,orderNumber,accountStatus){
 
 		if(InnerTransferOut.$checkSearchArea && arguments.length === 1){
 			var $lineProductId = InnerTransferOut.$checkSearchArea.find('input[name=lineProductId]').val();
@@ -161,6 +161,7 @@ define(function(require,exports) {
 			toBusinessGroupId = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupId]').val();
 			toBusinessGroupName = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupName]').val();
 			lineProductId = $lineProductId;
+			accountStatus = InnerTransferOut.$checkSearchArea.find('input[name=accountStatus]').val();
 			orderNumber = InnerTransferOut.$checkSearchArea.find('input[name=orderNumber]').val();
 			lineProductName = $lineProductId == ""?"":$lineProductName;
 			operateUserId= InnerTransferOut.$checkSearchArea.find('select[name=operater]').val();
@@ -177,6 +178,7 @@ define(function(require,exports) {
 				lineProductName:lineProductName,
 				startDate:startDate,
 				operateUserId:operateUserId,
+				accountStatus:accountStatus,
 				endDate:endDate
 			};
 		if(startDate > endDate){
@@ -638,16 +640,14 @@ define(function(require,exports) {
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && pageNo == 0){
-			args = {
-				toBusinessGroupId : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
-				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
-				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
-				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
-				orderNumber: InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val(),
-				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
-				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
-				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
-			};
+			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
+			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
+			args.lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
+			args.lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
+			args.orderNumber = InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val();
+			args.operateUserId = InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
+			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
+			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
 		};
 		args.pageNo = pageNo || 0;
 		if(args.startDate > args.endDate){
