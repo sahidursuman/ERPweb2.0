@@ -160,6 +160,9 @@ define(function(require, exports) {
                 if (result) {
                     data.isTurn = operateCalculteOut;
                 	var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
 			    	$("#tab-" + menuKey + "-content").find(".T-planProfit-list").html(html);
                     if(operateCalculteOut == 0){
                         plan.$tab.find(".T-turn").hide();
@@ -206,20 +209,36 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
-                    var total = data.total;
-                    var totalDataHtml = "<tr style='background: #e0effd;'><td>合计</td><td></td><td></td><td></td><td>" + total.adultCount + " 大 " + total.childCount + " 小" + "</td><td></td><td></td><td></td><td>" + total.needPayAllMoney + "</td><td>" +
-                                        total.shopMoney + "</td><td>" + total.selfIncome + "</td><td>" + total.incomeMoney + "</td><td>" + total.guideMoney + "</td><td>" + total.guideTip + "</td><td>" + total.insuranceMoney + "</td><td>" +
-                                        total.busMoney + "</td><td>" + total.restaurantMoney + "</td><td>" + total.hotelMoney + "</td><td>" + total.scenicMoney + "</td><td>" + total.ticketMoney + "</td><td>" + total.selfPayMoney + "</td><td>" +
-                                        total.otherMoney + "</td><td>" + total.shopCostMoney + "</td><td>" + total.selfMoney + "</td><td>" + total.guideDeductions + "</td>";
+                    var total = data.total
+                        moneys = total.list[0];
+                    var totalDataHtml = "<tr style='background: #e0effd;'><td rowspan='3'>合计</td><td rowspan='3'></td><td>应收/付</td><td>" + moneys.needPayAllMoney + "</td><td>" +
+                                        moneys.shopMoney + "</td><td>" + moneys.selfIncome + "</td><td>" + moneys.incomeMoney + "</td><td>" + moneys.guideMoney + "</td><td>" + moneys.guideTip + "</td><td>" + moneys.insuranceMoney + "</td><td>" +
+                                        moneys.busMoney + "</td><td>" + moneys.restaurantMoney + "</td><td>" + moneys.hotelMoney + "</td><td>" + moneys.scenicMoney + "</td><td>" + moneys.ticketMoney + "</td><td>" + moneys.selfPayMoney + "</td><td>" +
+                                        moneys.otherMoney + "</td><td>" + moneys.shopCostMoney + "</td><td>" + moneys.selfMoney + "</td><td>" + moneys.guideDeductions + "</td>";
                     if(operateCalculteOut){
-                        totalDataHtml += "<td>" + total.outBusMoney + "</td><td>" + total.outRestaurantMoney + "</td><td>" + total.outHotelMoney + 
-                                         "</td><td>" + total.outTicketMoney + "</td><td>" + total.outOtherMoney + "</td>";
+                        totalDataHtml += "<td>" + moneys.outBusMoney + "</td><td>" + moneys.outRestaurantMoney + "</td><td>" + moneys.outHotelMoney + 
+                                         "</td><td>" + moneys.outTicketMoney + "</td><td>" + moneys.outOtherMoney + "</td>";
                     }
-                    totalDataHtml += "<td>" + total.totalIncome + "</td><td>" + total.totalTrip + "</td>";
+                    totalDataHtml += "<td rowspan='3'>导游退补小计</td><td rowspan='3'>" + total.totalIncome + "</td><td rowspan='3'>" + total.totalTrip + "</td>";
                     if(operateCalculteOut){
-                        totalDataHtml += "<td>" + total.totalOut + "</td>";
+                        totalDataHtml += "<td rowspan='3'>" + total.totalOut + "</td>";
                     }
-                    totalDataHtml += "<td>" + total.profit + "</td><td>" + total.perCapitaProfit + "</td></tr>";
+                    totalDataHtml += "<td rowspan='3'>" + total.profit + "</td><td rowspan='3'>" + total.perCapitaProfit + "</td></tr>";
+
+                    for(var i = 1; i <= 2; i++){
+                        moneys = total.list[i]
+                        totalDataHtml += "<tr style='background: #e0effd;'><td>";
+                        totalDataHtml += (i == 1) ? "已" : "未";
+                        totalDataHtml += "收/付</td><td>" + moneys.needPayAllMoney + "</td><td>" +
+                                        moneys.shopMoney + "</td><td>" + moneys.selfIncome + "</td><td>" + moneys.incomeMoney + "</td><td>" + moneys.guideMoney + "</td><td>" + moneys.guideTip + "</td><td>" + moneys.insuranceMoney + "</td><td>" +
+                                        moneys.busMoney + "</td><td>" + moneys.restaurantMoney + "</td><td>" + moneys.hotelMoney + "</td><td>" + moneys.scenicMoney + "</td><td>" + moneys.ticketMoney + "</td><td>" + moneys.selfPayMoney + "</td><td>" +
+                                        moneys.otherMoney + "</td><td>" + moneys.shopCostMoney + "</td><td>" + moneys.selfMoney + "</td><td>" + moneys.guideDeductions + "</td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td>" + moneys.outBusMoney + "</td><td>" + moneys.outRestaurantMoney + "</td><td>" + moneys.outHotelMoney + 
+                                             "</td><td>" + moneys.outTicketMoney + "</td><td>" + moneys.outOtherMoney + "</td>";
+                        }
+                    }
+                    
                     $tab.find(".T-planProfit-list").append(totalDataHtml);
                 }
             }
