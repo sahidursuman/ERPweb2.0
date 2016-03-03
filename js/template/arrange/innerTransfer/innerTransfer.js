@@ -80,12 +80,12 @@ define(function(require, exports) {
                     innerTransfer.allData.toBusinessGroup = JSON.parse(data.toBusinessGroup)
                     innerTransfer.allData.toUser = JSON.parse(data.toUser);
                     var html = listMainTemplate(innerTransfer.allData);
-                    Tools.addTab(menuKey, "内转管理", html);
+                    if (Tools.addTab(menuKey, "内转管理", html)) {
+                        innerTransfer.$tab = $('#tab-arrange_inner_Transfer-content');
 
-                    //内转管理页面绑定事件
-                    innerTransfer.initActionEvent();
-
-
+                        //内转管理页面绑定事件
+                        innerTransfer.initActionEvent();                        
+                    }
                 }
             }
         });
@@ -712,6 +712,7 @@ define(function(require, exports) {
                                     isTransferIn = 'inner';
                                 //查看内转
                                 KingServices.viewTouristGroup(touristGroupId, isTransferIn);
+                                innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
                             }
                         })
                     $(this).dialog("close");
@@ -775,7 +776,7 @@ define(function(require, exports) {
                 }
             }
         }
-        
+
         chooseLineProduct.autocomplete({
             minLength: 0,
             change: function(event, ui) {
