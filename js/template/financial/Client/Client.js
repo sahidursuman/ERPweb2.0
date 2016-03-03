@@ -439,6 +439,7 @@ define(function(require, exports) {
             name: options.name,
             startDate: options.startDate,
             endDate: options.endDate,
+            accountStatus : options.accountStatus,
             type: 1
         });
     }

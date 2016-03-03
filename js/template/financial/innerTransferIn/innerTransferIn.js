@@ -939,6 +939,7 @@ define(function(require,exports) {
 				receiveUserName:'',
 				startAccountTime:options.startDate,
 				endAccountTime:options.endDate,
+				accountStatus : options.accountStatus,
 				btnShowStatus:true
 			}
         InnerTransferIn.chenking(args,2); 

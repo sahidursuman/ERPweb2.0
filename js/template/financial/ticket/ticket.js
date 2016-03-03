@@ -429,7 +429,7 @@ define(function(require, exports) {
 		Ticket.clearingId = args.id;
 		Ticket.balanceName = args.name;
 		Ticket.isBalanceSource = true;
-		Ticket.clearingList(0, args.id, args.startDate, args.endDate,1);
+		Ticket.clearingList(0, args.id, args.startDate, args.endDate,1,args.accountStatus);
 	};
 	Ticket.clearingList = function(page, id, start, end,type,accountStatus){
 		var args = {

@@ -195,6 +195,7 @@ define(function(require, exports) {
         FinShop.settlementName = args.name;
         FinShop.isBalanceSource = !args.source;
         args.page = 0;
+        //args.accountStatus = 
         FinShop.initOperationList(args, true);
     };
     /**

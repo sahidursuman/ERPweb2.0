@@ -749,7 +749,7 @@ define(function(require, exports) {
     };
 
     hotel.initPay = function(options){
-        hotel.hotelClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        hotel.hotelClear(2,0,options.id,options.name,"",options.startDate,options.endDate,options.accountStatus); 
     };
 
     exports.init = hotel.initModule;
