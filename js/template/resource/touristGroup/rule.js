@@ -45,14 +45,7 @@ define(function(require, exports) {
                             type: 'float',
                             errMsg: '预收款不合法'
                         }]
-                    },{ //联系人
-                        $ele: $obj.find('input[name="partnerAgencyNameList"]'),
-                        $valObj: $obj.find('input[name="partnerAgencyContactId"]'), // 默认是undefined，用于autocomplete之类的插件
-                        rules: [{
-                            type: 'null',
-                            errMsg: '同行联系人不能为空'
-                        }]
-                    }, { //已收  
+                    },{ //已收  
 
                         $ele: $obj.find('input[name="payedMoney"]'),
                         rules: [{
