@@ -31,7 +31,7 @@ define(function(require, exports) {
             scenicId = scenic.$searchArea.find("input[name=scenicId]").val();
             startDate = scenic.$searchArea.find("input[name=startDate]").val();
             endDate = scenic.$searchArea.find("input[name=endDate]").val();
-            accountStatus = scenic.$searchArea.find(".T-finance-status").find("button").data("value")
+            accountStatus = scenic.$searchArea.find(".T-finance-status").find("button").data("value");
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");

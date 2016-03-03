@@ -24,6 +24,7 @@ define(function(require, exports) {
 		FinPay.$tab = false;
 
 		var data = FinancialService.getInitDate();
+			data.accountStatus = 2;
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();
 		}
@@ -40,7 +41,8 @@ define(function(require, exports) {
 		if (FinPay.$tab) {
 			var args = {
 				startDate: FinPay.$tab.find('.T-start').val(),
-				endDate: FinPay.$tab.find('.T-end').val()
+				endDate: FinPay.$tab.find('.T-end').val(),
+				accountStatus : FinPay.$tab.find(".T-finance-status").find("button").data("value")
 			},
 			org = FinPay.$tab.find('.T-org-name').val();
 
@@ -84,7 +86,7 @@ define(function(require, exports) {
 		}, resArgs = {}, beJson = true;
 
 		resArgs.pageNo = args.pageNo;
-
+		resArgs.accountStatus = args.accountStatus;
 		switch(FinPay.currentType) {
 			case 0:  //内转转出账务
 				options.url = KingServices.build_url('account/innerTransferOutFinancial', 'listSumFinancialInnerTransferOut');
@@ -418,6 +420,15 @@ define(function(require, exports) {
 		    event.preventDefault();
 		    FinPay.getList();
 		});
+
+		//状态框选择事件
+        $tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            FinPay.getList();
+        });
 
 		// 收款
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
