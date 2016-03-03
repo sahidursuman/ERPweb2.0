@@ -768,9 +768,14 @@ define(function(require, exports) {
         list = innerTransfer.allData.lineProduct;
         if (!!list && list.length > 0) {
             for (var i = 0; i < list.length; i++) {
-                list[i].value = list[i].name;
+                if (!!list[i]) {
+                    list[i].value = list[i].name;
+                } else {
+                    list.splice(i, 1);
+                }
             }
         }
+        
         chooseLineProduct.autocomplete({
             minLength: 0,
             change: function(event, ui) {
