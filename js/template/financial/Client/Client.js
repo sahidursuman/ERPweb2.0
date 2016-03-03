@@ -47,16 +47,15 @@ define(function(require, exports) {
     };	
     
     Client.listClient = function(page){
-        var date = new Date(),
-            year = date.getFullYear(),
-            month = Tools.addZero2Two(date.getMonth() + 1),
-            day = Tools.addZero2Two(date.getDate()),
+        var date = FinancialService.getInitDate(),
+
             args = {
                 pageNo : (page || 0),
-                startDate : year + '-' + month + '-' + '01',
-                endDate : year + '-' + month + '-' + day,
+                startDate : date.startDate,
+                endDate : date.endDate,
                 accountStatus:2
             };
+
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
