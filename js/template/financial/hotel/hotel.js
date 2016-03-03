@@ -27,15 +27,16 @@ define(function(require, exports) {
 
   	hotel.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate);
+        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
 
-    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate){
+    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate,accountStatus){
     	if (hotel.$searchArea && arguments.length === 1) {
-            hotelName = hotel.$searchArea.find("input[name=hotelName]").val(),
-            hotelId = hotel.$searchArea.find("input[name=hotelId]").val(),
-            startDate = hotel.$searchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$searchArea.find("input[name=endDate]").val()
+            hotelName = hotel.$searchArea.find("input[name=hotelName]").val();
+            hotelId = hotel.$searchArea.find("input[name=hotelId]").val();
+            startDate = hotel.$searchArea.find("input[name=startDate]").val();
+            endDate = hotel.$searchArea.find("input[name=endDate]").val();
+            accountStatus = hotel.$searchArea.find(".T-finance-status").find("button").data("value")
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -50,6 +51,7 @@ define(function(require, exports) {
             hotelId : hotelId,
             startTime : startDate,
             endTime : endDate,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
 
@@ -67,7 +69,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey,"酒店账务",html);
                     hotel.$tab = $('#tab-' + menuKey + "-content");
                     hotel.$searchArea = hotel.$tab.find('.T-search-area');
-                    hotel.initList(startDate,endDate);
+                    hotel.initList(startDate,endDate,accountStatus);
                     //获取合计数据
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
@@ -98,7 +100,7 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    hotel.initList = function(startDate,endDate){
+    hotel.initList = function(startDate,endDate,accountStatus){
     	
 
         hotel.getQueryList();
@@ -107,6 +109,15 @@ define(function(require, exports) {
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
+            hotel.listHotel(0);
+        });
+
+        //状态框选择事件
+        hotel.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             hotel.listHotel(0);
         });
 
@@ -119,21 +130,22 @@ define(function(require, exports) {
             if ($that.hasClass('T-check')) {
                 // 对账
                
-                hotel.hotelCheck(0,id,name,"",startDate,endDate);
+                hotel.hotelCheck(0,id,name,"",startDate,endDate,accountStatus);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 
-                hotel.hotelClear(0,0,id,name,"",startDate,endDate);
+                hotel.hotelClear(0,0,id,name,"",startDate,endDate,accountStatus);
             }
         });
     };
 
     //对账
-    hotel.hotelCheck = function(page,hotelId,hotelName,accountInfo,startDate,endDate){
+    hotel.hotelCheck = function(page,hotelId,hotelName,accountInfo,startDate,endDate,accountStatus){
         if (hotel.$checkSearchArea && arguments.length === 3) {
-            accountInfo = hotel.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startDate = hotel.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$checkSearchArea.find("input[name=endDate]").val()
+            accountInfo = hotel.$checkSearchArea.find("input[name=accountInfo]").val();
+            startDate = hotel.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = hotel.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = hotel.$checkSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -148,6 +160,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startTime : startDate,
             endTime : endDate,
+            accountStatus : accountStatus,
             sortType : "accountTime"
         };
         searchParam = JSON.stringify(searchParam);
@@ -239,11 +252,12 @@ define(function(require, exports) {
     };
 
     //结算
-    hotel.hotelClear = function(isAutoPay,page,hotelId,hotelName,accountInfo,startDate,endDate){
+    hotel.hotelClear = function(isAutoPay,page,hotelId,hotelName,accountInfo,startDate,endDate,accountStatus){
         if (hotel.$clearSearchArea && arguments.length === 4) {
-            accountInfo = hotel.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$clearSearchArea.find("input[name=endDate]").val()
+            accountInfo = hotel.$clearSearchArea.find("input[name=accountInfo]").val();
+            startDate = hotel.$clearSearchArea.find("input[name=startDate]").val();
+            endDate = hotel.$clearSearchArea.find("input[name=endDate]").val();
+            accountStatus = hotel.$clearSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -257,6 +271,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startTime : startDate,
             endTime : endDate,
+            accountStatus : accountStatus,
             sortType : "accountTime"
         }, args = arguments;
         if(isAutoPay == 1){
