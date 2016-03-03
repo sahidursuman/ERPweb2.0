@@ -46,12 +46,14 @@ define(function(require, exports) {
         var args = FinancialService.getInitDate();
 
         args.pageNo = page || 0;
+        args.accountStatus = 2;
         if (!!FinGuide.$tab) {
             args = {
                 pageNo: (page || 0),
                 guideId: FinGuide.$tab.find('.T-search-name').data('id'),
                 startDate: FinGuide.$tab.find('.T-search-start-date').val(),
                 endDate: FinGuide.$tab.find('.T-search-end-date').val(),
+                accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value")
             }
 
             var guideName = FinGuide.$tab.find('.T-search-name').val();
@@ -123,6 +125,15 @@ define(function(require, exports) {
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
+            FinGuide.getList();
+        });
+        
+        //状态框选择事件
+        $searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             FinGuide.getList();
         });
         

@@ -27,12 +27,18 @@ define(function(require, exports) {
 	Ticket.getList = function(page, $tab){
 		var args = FinancialService.getInitDate();
 		args.pageNo = page || 0;
+		args.accountStatus = 2;
 		if(!!$tab){
-			var name = $tab.find('.T-search-name').val();
+			var Name = $tab.find('.T-search-name').val().trim();
+
+			if(Name == "全部"){
+				Name = "" ;
+			}
 			args.ticketId = $tab.find('.T-search-name').data('id');
-			args.ticketName = name == "全部" ? '' : name;
+			args.ticketName = Name;
 			args.startDate = $tab.find('.T-search-start-date').val();
 			args.endDate = $tab.find('.T-search-end-date').val();
+			args.accountStatus = $tab.find(".T-finance-status").find("button").data("value")
 		}
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
@@ -92,6 +98,16 @@ define(function(require, exports) {
 			event.preventDefault();
 			Ticket.getList(0, $tab);
 		});
+
+		//状态框选择事件
+        $searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Ticket.getList(0, $tab);
+        });
+
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -139,18 +155,20 @@ define(function(require, exports) {
 		Ticket.checkingList(0, id);
 		Ticket.checkingName = name;
 	};
-	Ticket.checkingList = function(page, id, start, end){
+	Ticket.checkingList = function(page, id, start, end,accountStatus){
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.checkingId,
 			accountInfo : "",
 			startDate : start || Ticket.$tab.find('.T-search-start-date').val(),
-			endDate : end || Ticket.$tab.find('.T-search-end-date').val()
+			endDate : end || Ticket.$tab.find('.T-search-end-date').val(),
+			accountStatus : accountStatus || Ticket.$tab.find(".T-finance-status").find("button").data("value")
 		};
 		if(!!Ticket.$checkingTab){
 			args.accountInfo = Ticket.$checkingTab.find('.T-search-type').val();
 			args.startDate = start || Ticket.$checkingTab.find('.T-search-start-date').val();
 			args.endDate = end || Ticket.$checkingTab.find('.T-search-end-date').val();
+			args.accountStatus = accountStatus || Ticket.$checkingTab.find('[name=accountStatus]').val();
 		}
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
@@ -402,7 +420,8 @@ define(function(require, exports) {
 		Ticket.clearingId = id;
 		Ticket.isBalanceSource = false;
 		Ticket.balanceName = name;
-		Ticket.clearingList(0, id, Ticket.$tab.find('.T-search-start-date').val(), Ticket.$tab.find('.T-search-end-date').val());
+		var accountStatus = Ticket.$tab.find(".T-finance-status").find("button").data("value");
+		Ticket.clearingList(0, id, Ticket.$tab.find('.T-search-start-date').val(), Ticket.$tab.find('.T-search-end-date').val(),"",accountStatus);
 	};
 
 	Ticket.initPay = function(args){
@@ -412,13 +431,15 @@ define(function(require, exports) {
 		Ticket.isBalanceSource = true;
 		Ticket.clearingList(0, args.id, args.startDate, args.endDate,1);
 	};
-	Ticket.clearingList = function(page, id, start, end,type){
+	Ticket.clearingList = function(page, id, start, end,type,accountStatus){
 		var args = {
 			pageNo : (page || 0),
 			ticketId : id || Ticket.clearingId,
 			startDate : start,
 			endDate : end,
-			accountInfo : ""
+			accountInfo : "",
+			accountStatus : accountStatus
+
 		};
 		if(Ticket.$clearingTab){
 			args = {
@@ -426,7 +447,8 @@ define(function(require, exports) {
 				ticketId : id || Ticket.clearingId,
 				startDate : Ticket.$clearingTab.find('.T-search-start-date').val(),
 				endDate : Ticket.$clearingTab.find('.T-search-end-date').val(),
-				accountInfo : Ticket.$clearingTab.find('.T-search-type').val()
+				accountInfo : Ticket.$clearingTab.find('.T-search-type').val(),
+				accountStatus : Ticket.$clearingTab.find('[name=accountStatus]').val()
 			};
 		}
 

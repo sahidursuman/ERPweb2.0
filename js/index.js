@@ -124,6 +124,7 @@
 				seajs.use("" + ASSETS_ROOT + modalScripts[target],function(module){
 					// module.listGuide(0,"",1);
 					module.init();
+					IndexData.current_model = modalScripts[target];
 				});
 			}
 		});
