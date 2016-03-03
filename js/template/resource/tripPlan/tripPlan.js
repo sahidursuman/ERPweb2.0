@@ -445,6 +445,11 @@ define(function(require, exports) {
 		tripPlan.$editTab = $tab;
 		// 计算导付
 		tripPlan.moneyTripPlan($tab);
+		window.onbeforeunload=function(){
+			if ($tab.data('isEdited')) {
+				window.event.returnValue='发团安排数据已经被修改，未保存'
+			}
+		}
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
