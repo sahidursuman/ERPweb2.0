@@ -116,7 +116,7 @@
         <tbody class="T-clearList">
             {{each financialTransferList as rs}}
             <tr data-id="{{rs.id}}">
-                <td rowspan="{{rs.rowLen}}">{{rs.orderNumber}}</td>
+                <td rowspan="{{rs.rowLen}}"><a class="T-option T-orderNumber" data-id="{{rs.arrangeId}}">{{rs.orderNumber}}</a></td>
                 <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td rowspan="{{rs.rowLen}}">{{if rs.partnerAgencyName == null || rs.partnerAgencyName == ""}}-{{else}}{{rs.partnerAgencyName}}{{/if}}</td>

@@ -65,7 +65,7 @@
             <tbody class="T-checkList" data-right="1300005">
                 {{each financialTransferList as rs}}
                 <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.outFeeList.length > 0}}data-trans="trans"{{/if}}>                
-                    <td rowspan="{{rs.rowLen}}">{{rs.orderNumber}}</td>
+                    <td rowspan="{{rs.rowLen}}"><a class="T-option T-orderNumber" data-id="{{rs.arrangeId}}">{{rs.orderNumber}}</a></td>
                     <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td rowspan="{{rs.rowLen}}">{{if rs.partnerAgencyName == null || rs.partnerAgencyName == ""}}-{{else}}{{rs.partnerAgencyName}}{{/if}}</td>
