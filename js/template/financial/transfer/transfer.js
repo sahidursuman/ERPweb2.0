@@ -755,6 +755,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-viewGroup')) {
                 // 游客明细
                 Transfer.viewGroup($(this));
+            }else if($that.hasClass('T-orderNumber')){
+                KingServices.viewTurnInfo($that.data("id"));
             }
         });
     };
