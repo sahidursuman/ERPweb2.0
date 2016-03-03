@@ -54,13 +54,15 @@ define(function(require, exports) {
             args = {
                 pageNo : (page || 0),
                 startDate : year + '-' + month + '-' + '01',
-                endDate : year + '-' + month + '-' + day
+                endDate : year + '-' + month + '-' + day,
+                accountStatus:2
             };
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
                 startDate : Client.$tab.find('.T-search-start-date').val(),
-                endDate : Client.$tab.find('.T-search-end-date').val()
+                endDate : Client.$tab.find('.T-search-end-date').val(),
+                accountStatus:Client.$tab.find(".T-select-status").find("button").data("value")
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -123,7 +125,14 @@ define(function(require, exports) {
             event.preventDefault();
             Client.listClient(0);
         });
-
+        //状态框选择事件
+        Client.$searchArea.find(".T-select-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Client.listClient(0);
+        });
         // 报表内的操作
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
