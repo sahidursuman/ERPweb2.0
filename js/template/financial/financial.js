@@ -404,23 +404,10 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
 
 //获取当月第一天日期和当前日期
 FinancialService.getInitDate = function(){
-    var date = new Date(),
-        year = date.getFullYear(),
-        month = date.getMonth()+1,
-        day = date.getDate();
-    if(month < 10){
-        month = "0" + month;
-    }
-    if(day < 10){
-        day = "0" + day;
-    }
-    var startDate = year + "-" + month + "-01",
-        endDate = year + "-" + month + "-" + day;
-    var dateJson = { 
-        startDate : startDate,
-        endDate : endDate
+    return { 
+        startDate : Tools.addDay(new Date(), -30),
+        endDate : Tools.addDay(new Date(), 30)
     };
-    return dateJson;
 };
 
 //时间控件初始化
