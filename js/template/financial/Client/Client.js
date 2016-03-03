@@ -143,6 +143,7 @@ define(function(require, exports) {
                     fromPartnerAgencyName : $tr.children('td').eq(1).text(),
                     fromPartnerAgencyId: $tr.data('id'),
                     name: $tr.children('td').eq(1).text(),
+                    accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
                     endDate : Client.$tab.find('.T-search-end-date').val()
                 };

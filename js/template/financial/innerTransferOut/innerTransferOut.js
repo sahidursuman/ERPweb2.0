@@ -27,12 +27,12 @@ define(function(require,exports) {
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,'');
+		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
 	};
 	/**
 	 * 初始化list页面
 	 */
-	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate){
+	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate,accountStatus){
 		if(InnerTransferOut.$searchArea && arguments.length === 1){
 			var $toBusinessGroupId = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupId]').val();
 			var $toBusinessGroupName = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupName]').val(),
@@ -40,6 +40,7 @@ define(function(require,exports) {
 			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
 			startDate = InnerTransferOut.getValueForInput(InnerTransferOut.$searchArea,'input',"startDate");
 			endDate = InnerTransferOut.getValueForInput(InnerTransferOut.$searchArea,'input',"endDate");
+			accountStatus = InnerTransferOut.$searchArea.find(".T-finance-status").find("button").data("value");
 		};
 		pageNo = pageNo || 0;
 		if(startDate > endDate){
@@ -54,6 +55,7 @@ define(function(require,exports) {
 				toBusinessGroupName:toBusinessGroupName,
 				startDate:startDate,
 				endDate:endDate,
+				accountStatus:accountStatus,
 				sortType:'auto'
 			},
 			type:'POST',
@@ -64,6 +66,7 @@ define(function(require,exports) {
 							toBusinessGroupId:toBusinessGroupId,
 							toBusinessGroupName:toBusinessGroupName,
 							startDate:startDate,
+							accountStatus:accountStatus,
 							endDate:endDate,
 						};
 						var html = listTemplate(data);
@@ -110,6 +113,14 @@ define(function(require,exports) {
 			event.preventDefault();
 			InnerTransferOut.listInnerTransfer(0);
 		});
+		//状态框选择事件
+        InnerTransferOut.$searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            InnerTransferOut.listInnerTransfer(0);
+        });
 		//报表事件
 		$obj.find('.T-innerTransferOutList').on('click','.T-action',function(event){
 			event.preventDefault();
@@ -118,6 +129,7 @@ define(function(require,exports) {
 				id = $tr.attr("businessGroupId"),
 				name = $tr.attr("businessGroupName"),
 				startDate = $tr.attr("startDate"),
+				accountStatus = $tr.attr('accountStatus'),
 				endDate = $tr.attr("endDate");
 			if($that.hasClass('T-check')){
 				//对账处理
@@ -133,6 +145,7 @@ define(function(require,exports) {
 					operateUserId:"",
 					orderNumber:"",
 					startDate:startDate,
+					accountStatus:accountStatus,
 					endDate:endDate
 				};
 				InnerTransferOut.settlement(args,0);
