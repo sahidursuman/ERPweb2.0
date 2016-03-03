@@ -213,6 +213,7 @@ define(function(require, exports) {
                 endDate: args.end || $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val()
             };
+            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.sortType = 'accountTime';
         args.order = 'asc';
