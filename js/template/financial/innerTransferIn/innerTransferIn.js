@@ -345,6 +345,8 @@ define(function(require,exports) {
 	InnerTransferIn.chenkingEvent = function($obj,$listSearchData,typeFlag){
 		var $list = typeFlag == 2?"T-clearList":"T-checkList";
 		var $checkList = $obj.find('.'+$list);
+		//格式化日期控件
+		Tools.setDatePicker($obj.find(".T-search .date-picker"), true);
 		//$obj.data('isEdited', false);
 		//切换tab事件
 		
