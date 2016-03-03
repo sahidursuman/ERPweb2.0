@@ -63,6 +63,54 @@ FinancialService.initPayEvent = function($container,rule)  {
             $that.autocomplete('search', '');
         }
     });
+
+    //现金账户(接口调用未改)
+    var $cash = $container.find('input[name="cash-number"]');
+    $cash.autocomplete({
+        minLength:0,
+        change :function(event, ui){
+            if(ui.item == null){
+                $(this).val('').nextAll('input[name="cash-id"]').val('');
+            }
+        },
+        select :function(event, ui){
+            $(this).nextAll('input[name="cash-id"]').val(ui.item.id).trigger('change');
+        }
+    }).one("click", function(){
+        var $this = $(this);
+        $.ajax({
+            url:KingServices.build_url('financialIncomeOrPay','getBankList'),
+            showLoading:false,
+            success:function(data){
+                if(showDialog(data)){
+                    var cardNumberJson = [];
+                    var bankList = data.bankList;
+                    if(bankList && bankList.length > 0){
+                        for(var i=0; i < bankList.length; i++){
+                            var seatCount = {
+                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
+                                id: bankList[i].id
+                            }
+                            cardNumberJson.push(seatCount);
+                        }
+                        $this.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
+                        $this.autocomplete('search', '');
+                    }else{
+                        layer.tips('没有内容', $that, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                }
+            }
+        })
+    })
+    .on('click', function() {
+        var $this = $(this);
+        if ($this.data('ajax')) {
+            $this.autocomplete('search', '');
+        }
+    });
     $container.find('select').on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
@@ -70,6 +118,7 @@ FinancialService.initPayEvent = function($container,rule)  {
             var check =  new FinRule(5).check($card.closest('div'));
         }
         $card.closest('div').toggleClass('hidden', val != 1);
+        $cash.closest('div').toggleClass('hidden', val != 0);
     }).trigger('change');
 };
 
@@ -620,6 +669,15 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'null',
                             errMsg: '银行账号不能为空'
+                        },
+                    ]
+                },
+                {   
+                    $ele: $obj.find('input[name=cash-number]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '现金账号不能为空'
                         },
                     ]
                 },
