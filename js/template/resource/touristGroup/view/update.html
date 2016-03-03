@@ -355,7 +355,7 @@
 
 					<div class="form-inline col-sm-12">
 					    <!--接团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedArriveService!=0 && touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedArriveService!=0}}
 					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
 						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
 						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus!=0}}
@@ -418,6 +418,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
+						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
 							            <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -474,6 +475,7 @@
 					                    </div>
 					                    {{/if}}
 								     {{/each}}
+								     {{/if}}
 						            </div>
 						    </div>
 					    	{{else}}
@@ -508,7 +510,7 @@
 
 
 						<!--送团start-->
-					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedLeaveService!=0 && touristGroupDetail.outTransferRequire.sendTrip.length>0}}
+					    {{if touristGroupDetail.outRemarkArrange!=null && touristGroupDetail.isNeedLeaveService!=0}}
 					          <div class="form-group fixed-width T-send col-sm-6">
 						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
 						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus!=0}}
@@ -571,6 +573,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
 								       <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -627,6 +630,7 @@
 						                    </div>
 						                    {{/if}}
 									    {{/each}}
+									    {{/if}}
 						            </div>
 						        </div>
 					    	{{else}}
