@@ -9,7 +9,25 @@
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
             <label>&nbsp;至&nbsp;</label>
             <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
-
+           <div class="btn-group T-select-status" style="margin-left: 20px;">
+                <button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
+                    <span>
+               未结清
+            </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a data-value="" href="javascript:void(0)">全部</a>
+                    </li>
+                    <li>
+                        <a data-value="1" href="javascript:void(0)">未结清</a>
+                    </li>
+                    <li>
+                        <a data-value="0" href="javascript:void(0)">已结清</a>
+                    </li>
+                </ul>
+            </div>
             <button class="btn-sm marginLeft-30 T-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索 
             </button> 
