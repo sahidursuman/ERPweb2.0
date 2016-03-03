@@ -94,6 +94,16 @@ define(function(require, exports) {
             event.preventDefault();
             OtherAccounts.listFinancialOtherAccounts(0);
         });
+
+        //状态框选择事件
+        OtherAccounts.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            OtherAccounts.listFinancialOtherAccounts(0);
+        });
+        
         // 报表内的操作
         OtherAccounts.$tab.find('.T-other').on('click', '.T-option', function(event) {
             event.preventDefault();
