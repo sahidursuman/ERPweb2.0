@@ -919,6 +919,10 @@ define(function(require, exports) {
                                     if (showDialog(data)) {
                                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                                             $inputParent.remove();
+                                            //当复选框未全部不选--移除共用选项
+                                            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                                $div.find('.T-action-require-list').children('div.require-commons').remove();
+                                            };
                                         });
                                     }
                                 });
@@ -927,13 +931,14 @@ define(function(require, exports) {
                             });
                         }else{
                             $inputParent.remove();
+                            //当复选框未全部不选--移除共用选项
+                            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                $div.find('.T-action-require-list').children('div.require-commons').remove();
+                            };
                         }
                     }
                 });
-            }//当复选框未全部不选--移除共用选项
-            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
-                $div.find('.T-action-require-list').children('div.require-commons').remove();
-            };
+            }
         };
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
     };
