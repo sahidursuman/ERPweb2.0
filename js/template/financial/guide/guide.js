@@ -73,6 +73,7 @@ define(function(require, exports) {
         }).done(function(data) {
             if (showDialog(data)) {
                 data.guideName = data.guideName || '全部';
+                data.accountStatus = args.accountStatus;
                 Tools.addTab(menuKey, "导游账务", listTemplate(data));
                 FinGuide.$tab = $('#tab-' + menuKey + '-content');
                 // 绑定事件
@@ -145,7 +146,8 @@ define(function(require, exports) {
                     guideId: $tr.data('id'),
                     guideName: $tr.children('td').first().text(),
                     startDate: $datepicker.eq(0).val(),
-                    endDate: $datepicker.eq(1).val()
+                    endDate: $datepicker.eq(1).val(),
+                    accountStatus: $tr.data('accountstatus'),
                 };
 
             if ($that.hasClass('T-check')) {
@@ -210,6 +212,7 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     FinGuide.initOperationModule = function(args, type, $tab) {
+        
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
             args = {
@@ -218,7 +221,7 @@ define(function(require, exports) {
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
                 lineProductId: $line.data('id'),
-                lineProductName: $line.val(),
+                lineProductName: $line.val()
             };
 
             if (args.lineProductName === '全部') {
@@ -230,6 +233,7 @@ define(function(require, exports) {
 
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
+            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
 
         if(type == 1){
@@ -243,9 +247,12 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     //data.guideName = args.name;
+                    console.log(args);
                     data.id = args.guideId;
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
+                    data.accountStatus = args.accountStatus;
+
                     // 临时缓存
                     FinGuide.checkingTabLineProduct = data.lineProductList;
 
@@ -297,7 +304,9 @@ define(function(require, exports) {
                 guideId: $btn.data('id'), 
                 guideName:$btn.data('name'),
                 startDate: $datePicker.eq(0).val(),
-                endDate: $datePicker.eq(1).val()
+                endDate: $datePicker.eq(1).val(),
+                accountstatus : $tab.find('[name=accountStatus]').val()
+
             };
             if(type){
                 args.isOuter = FinGuide.isOuter;
