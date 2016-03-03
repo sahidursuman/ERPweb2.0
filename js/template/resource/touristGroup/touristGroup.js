@@ -366,7 +366,8 @@ define(function(require, exports) {
                     if (Tools.addTab(updateTabId, '编辑小组', html)) {
                         touristGroup.visitorId = id;
                         var typeInner = type;
-                        touristGroup.updateEvents(typeInner);
+                        var status = data.touristGroupDetail.status;
+                        touristGroup.updateEvents(typeInner, status);
                     }
                 }
             }
@@ -435,7 +436,7 @@ define(function(require, exports) {
         });
     };
     //修改小组的事件绑定
-    touristGroup.updateEvents = function(typeInner) {
+    touristGroup.updateEvents = function(typeInner, status) {
         var id = touristGroup.visitorId,
             $updateTabId = $("#tab-resource_touristGroup-update-content"),
             $groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"), //小组信息对象
@@ -506,6 +507,13 @@ define(function(require, exports) {
 
 
         $updateTabId.data('isEdited', false);
+
+        //内装状态时   部分不可编辑
+        if (status == 6) {
+            $updateTabId.find('input[name=buyInsurance], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
+            $updateTabId.find('.T-addPartner, .T-addPartnerManager, .T-touristGroup-addOtherCost, .T-add-tourist, .T-add-tourist-more, .oldbtnDeleteTourist').hide()
+        }
+
     };
     //查看小组信息
     touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
