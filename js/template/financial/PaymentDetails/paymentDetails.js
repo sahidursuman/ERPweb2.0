@@ -5,6 +5,7 @@ define(function(require, exports){
 	var listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
 		addTemplate = require("./view/add"),
+		detailsTemplate = require("./view/viewDetails"),
 		rule = require("./rule"),
 		menuKey = "financial_payment_details";
 
@@ -72,6 +73,10 @@ define(function(require, exports){
 		})
 		.on('click',".T-btn-add",function(event){
 			Payment.addPayment();
+		});
+
+		$tab.on("click",".T-viewDetails",function(){
+			Payment.viewDetails($(this).closest('tr').data("id"));
 		});	
 
 		Payment.getSubjectList($tab);
@@ -182,7 +187,7 @@ define(function(require, exports){
 					    type: 1,
 					    title:"新增现金日记账",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: '750px', //宽高
+					    area: '1000px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false,
@@ -202,7 +207,14 @@ define(function(require, exports){
 					    	});
 
 					    	$container.find(".T-moneyType").off().on("change",function(){
-					    		Payment.loadSubjectHtml($(this).val(),$container);
+					    		if($(this).val() != 2){Payment.loadSubjectHtml($(this).val(),$container);}
+					    		if($(this).val() == 2){
+					    			$container.find(".T-Ntransfer").addClass('hidden');
+					    			$container.find(".T-transfer").removeClass('hidden');
+					    		} else {
+					    			$container.find(".T-Ntransfer").removeClass('hidden');
+					    			$container.find(".T-transfer").addClass('hidden');
+					    		}
 					    	});
 
 					    	$bankCountList.find("li").on("click",function(){
@@ -236,6 +248,28 @@ define(function(require, exports){
 					    		$container.find('input[name=subjectName]').val(subjectName);
 					    	});
 					    }
+					});
+				}
+			}
+		});
+	};
+
+	//查看收/付款金额明细
+	Payment.viewDetails = function(){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","addIncomeorPay"),
+			type:"POST",
+			success:function(data){
+				if(showDialog(data)){
+					var html = detailsTemplate();
+					var addGuideLayer = layer.open({
+					    type: 1,
+					    title:"收/付款金额明细",
+					    skin: 'layui-layer-rim',
+					    area: '800px',
+					    zIndex:1028,
+					    content: html,
+					    scrollbar: false
 					});
 				}
 			}

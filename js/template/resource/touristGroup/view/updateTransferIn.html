@@ -62,7 +62,7 @@
     	</div>
 
     	<div class="form-group">
-    		<label><span class="necessary">*</span>客户联系人：</label>
+    		<label>客户联系人：</label>
             <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" readonly="readonly" type="text"  style="width:133px;" 
             value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" readonly="readonly" />
 			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" />
