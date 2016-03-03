@@ -889,6 +889,7 @@ define(function(require,exports) {
 			operateUserId:"",
 			startDate:options.startDate,
 			endDate:options.endDate,
+			accountStatus:options.accountStatus,
 			showBtnFlag:true
 		};
         InnerTransferOut.settlement(args,0); 

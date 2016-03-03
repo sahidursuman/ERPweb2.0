@@ -855,7 +855,7 @@ define(function(require, exports) {
     };
 
     Transfer.initPay = function(options){
-        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate); 
+        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate,"",options.accountStatus); 
     };
 
     exports.init = Transfer.initModule;

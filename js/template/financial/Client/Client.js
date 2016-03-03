@@ -181,6 +181,7 @@ define(function(require, exports) {
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
             partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
+            accountStatus 
         } else {
             partnerAgencyName = args.name;
         }
@@ -439,6 +440,7 @@ define(function(require, exports) {
             name: options.name,
             startDate: options.startDate,
             endDate: options.endDate,
+            accountStatus : options.accountStatus,
             type: 1
         });
     }

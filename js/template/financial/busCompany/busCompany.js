@@ -150,10 +150,10 @@ define(function(require, exports) {
     busCompany.busCompanyCheck = function(page, busCompanyId, busCompanyName, accountInfo, licenseNumber, startDate, endDate,accountStatus) {
         if (busCompany.$checkSearchArea && arguments.length === 3) {
             accountInfo = busCompany.$checkSearchArea.find("input[name=accountInfo]").val();
-                licenseNumber = busCompany.$checkSearchArea.find("input[name=licenseNumber]").val();
-                startDate = busCompany.$checkSearchArea.find("input[name=startDate]").val();
-                endDate = busCompany.$checkSearchArea.find("input[name=endDate]").val();
-                accountStatus = busCompany.$searchArea.find(".T-finance-status").find("button").data("value");
+            licenseNumber = busCompany.$checkSearchArea.find("input[name=licenseNumber]").val();
+            startDate = busCompany.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = busCompany.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = busCompany.$searchArea.find(".T-finance-status").find("button").data("value");
         }
         if (startDate > endDate) {
             showMessageDialog($("#confirm-dialog-message"), "开始时间不能大于结束时间，请重新选择！");
@@ -264,10 +264,11 @@ define(function(require, exports) {
     //付款
     busCompany.busCompanyClear = function(isAutoPay, page, busCompanyId, busCompanyName, accountInfo, licenseNumber, startDate, endDate,accountStatus) {
         if (busCompany.$clearSearchArea && arguments.length === 4) {
-            accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val(),
-                licenseNumber = busCompany.$clearSearchArea.find("input[name=licenseNumber]").val(),
-                startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val()
+            accountInfo = busCompany.$clearSearchArea.find("input[name=accountInfo]").val();
+                licenseNumber = busCompany.$clearSearchArea.find("input[name=licenseNumber]").val();
+                startDate = busCompany.$clearSearchArea.find("input[name=startDate]").val();
+                endDate = busCompany.$clearSearchArea.find("input[name=endDate]").val();
+                accountStatus = busCompany.$clearSearchArea.find("input[name=accountStatus]").val();
         }
         if (startDate > endDate) {
             showMessageDialog($("#confirm-dialog-message"), "开始时间不能大于结束时间，请重新选择！");
@@ -281,6 +282,7 @@ define(function(require, exports) {
                 accountInfo: accountInfo,
                 licenseNumber: licenseNumber,
                 startTime: startDate,
+                accountStatus : accountStatus,
                 endTime: endDate,
                 sortType: "startTime"
             },
@@ -785,7 +787,8 @@ define(function(require, exports) {
     };
 
     busCompany.initPay = function(options) {
-        busCompany.busCompanyClear(2, 0, options.id, options.name, "", "", options.startDate, options.endDate);
+        //isAutoPay, page, busCompanyId, busCompanyName, accountInfo, licenseNumber, startDate, endDate,accountStatus
+        busCompany.busCompanyClear(2, 0, options.id, options.name, "", "", options.startDate, options.endDate,options.accountStatus);
     };
 
     exports.init = busCompany.initModule;

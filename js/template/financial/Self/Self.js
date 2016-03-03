@@ -749,7 +749,7 @@ define(function(require, exports) {
 
     Self.initPay = function(options){
         Self.showBtnFlag = true;
-        Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate,options.accountStatus); 
     };
 
     exports.init = Self.initModule;

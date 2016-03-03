@@ -438,7 +438,8 @@ define(function(require, exports) {
 				id: $tr.data('id'),
 				name: $tr.children('td').eq(0).text(),
 				startDate: $tab.find('.T-start').val(),
-				endDate: $tab.find('.T-end').val()
+				endDate: $tab.find('.T-end').val(),
+				accountStatus : $tab.find(".T-finance-status").find("button").data("value")
 			}
 			if($(this).hasClass('T-pay-borrow')){
 				options.borrow = true;
