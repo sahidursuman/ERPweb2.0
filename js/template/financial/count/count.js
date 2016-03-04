@@ -878,6 +878,11 @@ define(function(require, exports){
 			
 			KingServices.viewTripDetail(id);
 		});
+		//按钮事件--单团核算表
+		$obj.on('click','.T-tripAccount',function(){
+			var id = $obj.find('.financial-tripPlanId').val();
+			Count.viewTripAccount(id);
+		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			var $that = $(this);
@@ -1150,6 +1155,11 @@ define(function(require, exports){
 				}   
 			}
     	});
+	};
+	//单团核算表
+	Count.viewTripAccount = function(id){
+		var html = outDetailTempLate();
+		Tools.addTab(menuKey+'-outDetail','单团核算',html);
 	};
 	//质量统计
 	Count.getquality = function(id){
