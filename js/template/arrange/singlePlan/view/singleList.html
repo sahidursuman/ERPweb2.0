@@ -3,9 +3,6 @@
         <thead>
             <tr class="bg-blur">
                 <th>团号</th>
-                <th>出游日期</th>
-                <th>完团日期</th>
-                <th>线路产品</th>
                 <th>团队人数</th>
                 <th>剩余座位</th>
                 <th>导</th>
@@ -18,8 +15,6 @@
                 <th>购</th>
                 <th>娱</th>
                 <th>它</th>
-                <th>责任计调</th>
-                <th>责任部门</th>
                 <th style="width:80px;">状态</th>
                 <th style="min-width:230px;">操作</th>
             </tr>
@@ -27,22 +22,14 @@
         <tbody>
             {{each result as rs}}
             <tr data-id="{{rs.id}}">
-                <td style="vertical-align:middle">{{rs.tripNumber}}</td>
-                <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td class="hct-absolute-group">
-                    <span class="hct-span-left">
-                        {{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}
-                    </span>
-                    {{if rs.tripPlanTouristList.length != 0}}
-                    <label class="T-action T-showLineInfo hct-button-right"> 
-                        <button class="btn btn-success btn-sm btn-white show" index="0"> 
-                            <i class="fa fa-plus bigger-110 icon-only"></i>
-                        </button> 
-                    </label>
-                    {{/if}}
+                <td class="h-touristGroupInfo">
+                    <p class="h-orderNumber">{{rs.tripNumber}}</p>
+                    <p class="h-lineName">{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}</p>
+                    <p class="h-startTime"><span>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>- <span>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span> </p>
+                    <p class="h-memberName">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
+                    <p class="h-OPUser">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
                 </td>
-                <td>{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
+                <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
                 <td style="vertical-align:middle">{{if !!rs.surplusSeat}}{{rs.surplusSeat}}{{else}}-{{/if}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
@@ -54,8 +41,6 @@
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
-                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
                 <td style="vertical-align:middle">
                     {{if rs.status == 0}}
                     <span style="color: #ff9900;">待确定</span>
