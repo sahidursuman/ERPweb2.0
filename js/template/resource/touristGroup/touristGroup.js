@@ -617,7 +617,7 @@ define(function(require, exports) {
             .done(function(data) {
                 if (data.success == 0) {
                     $this.val('');
-                    layer.tips('该团号已存在', $this, {
+                    layer.tips('该收客单号已存在', $this, {
                         tips: [1, '#3595CC'],
                         time: 2000
                     });
