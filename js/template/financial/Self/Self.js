@@ -330,8 +330,8 @@ define(function(require, exports) {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
                                     sumPayRemark : sumPayRemark,
-                                    bankNo : Self.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                                    bankNo : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-number]').val() : Self.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-id]').val() : Self.$clearTab.find('input[name=card-id]').val(),
                                     voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Self.$clearTab.find('input[name=tally-date]').val()
                                 }
@@ -407,12 +407,13 @@ define(function(require, exports) {
                             Self.$clearTab.find(".T-cancel-auto").toggle();
                             Self.$clearTab.data('isEdited',false);
                             Self.clearTempData = data.autoPayList;
+                            var payType = Self.$clearTab.find('select[name=sumPayType]').val();
                             Self.clearTempSumDate = {
                                 sumPayMoney : Self.$clearTab.find('input[name=sumPayMoney]').val(),
-                                sumPayType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                                sumPayType : payType,
                                 sumPayRemark : Self.$clearTab.find('input[name=sumPayRemark]').val(),
-                                bankNo : Self.$clearTab.find('input[name=card-number]').val(),
-                                bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                                bankNo : (payType == 0) ? Self.$clearTab.find('input[name=cash-number]').val() : Self.$clearTab.find('input[name=card-number]').val(),
+                                bankId : (payType == 0) ? Self.$clearTab.find('input[name=cash-id]').val() : Self.$clearTab.find('input[name=card-id]').val(),
                                 voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
                                 billTime : Self.$clearTab.find('input[name=tally-date]').val()
                             };
@@ -576,7 +577,8 @@ define(function(require, exports) {
         }
 
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
+            clearSaveJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1)),
+            payType = Self.$clearTab.find('select[name=sumPayType]').val();
         clearSaveJson = JSON.stringify(clearSaveJson);
         $.ajax({
             url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
@@ -584,9 +586,9 @@ define(function(require, exports) {
             data:{
                 selfPayPaymentJson : clearSaveJson,
                 selfPayId : id,
-                payType : Self.$clearTab.find('select[name=sumPayType]').val(),
+                payType : payType,
                 payRemark : Self.$clearTab.find('input[name=sumPayRemark]').val(),
-                bankId : Self.$clearTab.find('input[name=card-id]').val(),
+                bankId : (payType == 0) ? Self.$clearTab.find('input[name=cash-id]').val() : Self.$clearTab.find('input[name=card-id]').val(),
                 voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
                 billTime : Self.$clearTab.find('input[name=tally-date]').val()
             },

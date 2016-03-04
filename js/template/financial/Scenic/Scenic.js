@@ -361,8 +361,8 @@ define(function(require, exports) {
                                         sumPayMoney : sumPayMoney,
                                         sumPayType : sumPayType,
                                         sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                                        bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
-                                        bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                                        bankNo : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                                         voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                                         billTime : scenic.$clearTab.find('input[name=tally-date]').val()
                                     }
@@ -417,13 +417,14 @@ define(function(require, exports) {
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = scenic.$clearTab.find('select[name=sumPayType]').val();
                 scenic.clearTempSumDate = {
                     id : id,
                     sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                    bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
-                    bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                     voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : scenic.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -587,11 +588,12 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            payType = scenic.$clearTab.find('select[name=sumPayType]').val();
             searchParam = {
                 sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                payType : payType,
                 payRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                bankId : (payType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                 voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                 billTime : scenic.$clearTab.find('input[name=tally-date]').val()
             };

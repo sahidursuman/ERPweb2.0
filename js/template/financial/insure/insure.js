@@ -355,8 +355,8 @@ define(function(require, exports) {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
                                     sumPayRemark : sumPayRemark,
-                                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
+                                    bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
                                     voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Insure.$clearTab.find('input[name=tally-date]').val()
                                 }
@@ -410,13 +410,14 @@ define(function(require, exports) {
             var startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = Insure.$clearSearchArea.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = Insure.$clearTab.find('select[name=sumPayType]').val();
                 Insure.clearTempSumDate = {
                     id : id,
                     sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
-                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
-                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
                     voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : Insure.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -584,15 +585,16 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,saveRule);
-        var searchParam = {
-            insuranceId : id,
-            sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
-            bankId : Insure.$clearTab.find('input[name=card-id]').val(),
-            voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-            billTime : Insure.$clearTab.find('input[name=tally-date]').val()
-        };
+        var payType = Insure.$clearTab.find('select[name=sumPayType]').val(),
+            searchParam = {
+                insuranceId : id,
+                sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : payType,
+                payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
+                bankId : (payType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
+                voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+            };
         var isAutoPay = Insure.$clearTab.find('input[name=isAutoPay]').val();
         clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);

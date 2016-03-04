@@ -307,7 +307,7 @@ define(function(require,exports) {
 			});
 			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
-				InnerTransferOut.setAutoFillEdit($obj,true);
+				//InnerTransferOut.setAutoFillEdit($obj,true);
 
 			};
 		}else{
@@ -427,7 +427,7 @@ define(function(require,exports) {
         		InnerTransferOut.setAutoFillEdit($obj,false);
         		InnerTransferOut.saveJson = [];
         		InnerTransferOut.btnSatus = 0;
-        		InnerTransferOut.settlement($data);
+        		InnerTransferOut.getListData($obj, $data, 2);
         	}
         });
 		var payingCheck = new FinRule(2).check($obj);
@@ -478,11 +478,15 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
 						InnerTransferOut.btnSatus = 1;
-						$obj.data("isEdited",false);
-						InnerTransferOut.settlement($data);
+						args.pageNo = 0;
+						args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
+						args.orderNumber = InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val();
+						args.operateUserId = InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
+						InnerTransferOut.getListData($obj,args,2);
+						$obj.data("isEdited",true);
+						InnerTransferOut.setAutoFillEdit($obj,true);
 						//设置按钮样式
 					});
 				}
@@ -494,7 +498,7 @@ define(function(require,exports) {
 		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
 		if (!disable) {
 			$sum.val(0);
-		}
+		}console.log(disable);
 		$tab.find('.T-btn-autofill').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
 	};
 	//确认对账
@@ -705,7 +709,7 @@ define(function(require,exports) {
             	payJson:JsonStr,
             	payType:payType,
             	remark:sumRemark,
-            	bankId : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
+            	bankId : (payType == 0) ? InnerTransferOut.$settlementTab.find('input[name=cash-id]').val() : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
 	            voucher : InnerTransferOut.$settlementTab.find('input[name=credentials-number]').val(),
 	            billTime : InnerTransferOut.$settlementTab.find('input[name=tally-date]').val()
             },

@@ -102,6 +102,7 @@ define(function(require, exports){
 
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content');
+			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
@@ -288,7 +289,7 @@ define(function(require, exports){
 
 	Payment.submitPayment = function(){
 		var form = $(".T-addPayment-container .T-form").serializeJson();
-		form.bankId = form['card-id'];
+		form.bankId = form['card-id'] || form['cash-id'];
 		delete(form['card-id']);
 		delete(form['card-number']);
 		

@@ -8,30 +8,50 @@ FinancialService.initPayEvent = function($container,rule)  {
     var currDate = new Date();
     var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
-    var $card = $container.find('input[name="card-number"]').val();
     $container.find('input[name="tally-date"]').datetimepicker({
         autoclose:true,
         todayHighlight:true,
         format:'L',
         language:'zh-CN'
-     });
-    var $card = $container.find('input[name="card-number"]').autocomplete({
+    });
+
+    var $cash = $container.find('input[name=cash-number]'),
+        $card = $container.find('input[name=card-number]');
+    getBankList($cash,0);
+    getBankList($card,1);
+    $container.find('select').on('change', function(event) {
+        event.preventDefault();
+        var val = $(this).val();
+        if(val == 1){
+            var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
+        }
+        $cash.closest('div').toggleClass('hidden', val != 0);
+        $card.closest('div').toggleClass('hidden', val != 1);
+    }).trigger('change');
+};
+
+function getBankList($obj,payType){
+    $obj.autocomplete({
         minLength:0,
         change :function(event, ui){
             if(ui.item == null){
-                $(this).val('').nextAll('input[name="card-id"]').val('');
+                $(this).val('').nextAll('.T-accountId').val('');
             }
         },
         select :function(event, ui){
-
-             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
-             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
-
+            if(payType == 0){
+                $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
+                $(this).closest('div').next().find('input').val("");
+            } else if(payType == 1){
+                $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
+                $(this).closest('div').prev().find('input').val("");
+            }
         }
     }).one("click", function(){
         var $that = $(this);
         $.ajax({
             url:KingServices.build_url('financialIncomeOrPay','getBankList'),
+            data : {payType : payType},
             showLoading:false,
             success:function(data){
                 if(showDialog(data)){
@@ -63,65 +83,7 @@ FinancialService.initPayEvent = function($container,rule)  {
             $that.autocomplete('search', '');
         }
     });
-
-    //现金账户(接口调用未改)
-    var $cash = $container.find('input[name="cash-number"]');
-    $cash.autocomplete({
-        minLength:0,
-        change :function(event, ui){
-            if(ui.item == null){
-                $(this).val('').nextAll('input[name="cash-id"]').val('');
-            }
-        },
-        select :function(event, ui){
-            $(this).nextAll('input[name="cash-id"]').val(ui.item.id).trigger('change');
-        }
-    }).one("click", function(){
-        var $this = $(this);
-        $.ajax({
-            url:KingServices.build_url('financialIncomeOrPay','getBankList'),
-            showLoading:false,
-            success:function(data){
-                if(showDialog(data)){
-                    var cardNumberJson = [];
-                    var bankList = data.bankList;
-                    if(bankList && bankList.length > 0){
-                        for(var i=0; i < bankList.length; i++){
-                            var seatCount = {
-                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
-                                id: bankList[i].id
-                            }
-                            cardNumberJson.push(seatCount);
-                        }
-                        $this.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
-                        $this.autocomplete('search', '');
-                    }else{
-                        layer.tips('没有内容', $that, {
-                            tips: [1, '#3595CC'],
-                            time: 2000
-                        });
-                    }
-                }
-            }
-        })
-    })
-    .on('click', function() {
-        var $this = $(this);
-        if ($this.data('ajax')) {
-            $this.autocomplete('search', '');
-        }
-    });
-    $container.find('select').on('change', function(event) {
-        event.preventDefault();
-        var val = $(this).val();
-        if(val == 1){
-            var check =  new FinRule(5).check($card.closest('div'));
-        }
-        $card.closest('div').toggleClass('hidden', val != 1);
-        $cash.closest('div').toggleClass('hidden', val != 0);
-    }).trigger('change');
-};
-
+}
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
