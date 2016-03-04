@@ -910,9 +910,19 @@ input.datepicker {
 	width: 80px;
 }
 
+/*时间input的宽度*/
+.w-100 {
+	width: 100px;
+}
+
 /*自费table的宽度*/
 .w-1400 {
 	width: 1400px;
+}
+
+/*车辆安排table的宽度*/
+.w-1500 {
+	width: 1500px;
 }
 
 
