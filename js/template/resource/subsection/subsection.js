@@ -325,22 +325,25 @@ define(function(require, exports) {
         //计算
 	    subsection.$tbody.find('.T-price').trigger('change');
 
-
-
-
 	    //搜索线路
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-option', function(event) {
 	    	event.preventDefault();
 	    	/* Act on the event */
 	    	var $that=$(this),$tr = $that.closest("tr"), id = $tr.data("entity-id");
 	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
-	    		subsection.getLayerProductList($tr);
+		    	var linProInfoJson={
+		    		name:subsection.$tabSub.find('.T-lineProName').text(),
+		    		type:subsection.$tabSub.find('.T-lineProType').text(),
+		    		custumerType:subsection.$tabSub.find('.T-lineProcusType').text(),
+		    		days:subsection.$tabSub.find('.T-lineProDays').text(),
+		    		startTime:subsection.$tabSub.find('.T-lineProStartTime').text()
+		    	};
+	    		subsection.getLayerProductList($tr,linProInfoJson);
 	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
 				subsection.deleteOperation(id,$that);
 				subsection.$tabSub.data('isEdited', true);
 	    	};
 	    });
-
 
 		/**
 		 * [startIntime 中转分段初日期
@@ -721,7 +724,7 @@ define(function(require, exports) {
 	};
 
 	//初始化线路Layer层
-	subsection.getLayerProductList = function($tr){
+	subsection.getLayerProductList = function($tr,linProInfoJson){
 		var html=searchListTemplate({});  
 		subsection.searchTravelLinelayer = layer.open({
 			type: 1,
@@ -734,7 +737,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-subsection-lineproduct-search');
 		//初始化线路产品数据
-		subsection.getLineProductList($tr,$dialog, 0, '');
+		subsection.getLineProductList($tr,$dialog, 0, '',linProInfoJson);
 	};
 
 	/**
@@ -745,7 +748,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	subsection.getLineProductList = function($tr, $dialog, page, name) {
+	subsection.getLineProductList = function($tr, $dialog, page, name, linProInfoJson) {
 		page = page || 0;
 		$.ajax({
 			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
@@ -768,8 +771,15 @@ define(function(require, exports) {
 						$searchLine = $that.closest('.form-inline'),
 						name=$searchLine.find('.T-name').val();
 						
-					subsection.getLineProductList($tr, $dialog, 0, name);
+					subsection.getLineProductList($tr, $dialog, 0, name, linProInfoJson);
 				});
+				//显示线路信息
+				$dialog.find('.T-lineProName').text(linProInfoJson.name);
+				$dialog.find('.T-lineProType').text(linProInfoJson.type);
+				$dialog.find('.T-lineProcusType').text(linProInfoJson.custumerType);
+				$dialog.find('.T-lineProDays').text(linProInfoJson.days);
+				$dialog.find('.T-lineProStartTime').text(linProInfoJson.startTime);
+
 
 				//提交选中线路
 				$dialog.find('.T-btn-submit').on('click', function(event) {
@@ -823,7 +833,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							subsection.getLineProductList($tr, $dialog, obj.curr -1, name);
+							subsection.getLineProductList($tr, $dialog, obj.curr -1, name, linProInfoJson);
 				    	}
 				    }
 				});	
