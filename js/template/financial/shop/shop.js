@@ -103,7 +103,7 @@ define(function(require, exports) {
          */
         var $searchArea = $tab.find('.T-search-area');
         //搜索下拉事件
-        $searchArea.find('.T-finance-status').on('click', 'a', function() {
+        $searchArea.find('.T-finance-status').on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
