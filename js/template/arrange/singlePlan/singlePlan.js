@@ -380,6 +380,28 @@ define(function(require, exports) {
             $that.closest('div').find('input[name="executeTime"]').toggleClass('hidden', !$that.hasClass('T-timed'));
         });
 
+        $tab.find('.T-tripNumberChange').on('change', function() {
+        	var $this = $(this),
+        		tripNumber = $this.val(),
+        		tripPlanId = $tab.find('input[name=id]').val();
+        	$.ajax({
+        		url: KingServices.build_url('tripController','checkTripNumber'),
+        		type: 'POST',
+        		showLoading: false,
+        		data: {
+        			tripNumber: tripNumber,
+        			tripPlanId: tripPlanId},
+        	})
+        	.done(function(data) {
+        		if (data.success == 0) {
+        			$this.val('');
+	                layer.tips('该团号已存在', $this, {
+	                    tips: [1, '#3595CC'],
+	                    time: 2000
+	                });
+        		}
+        	})
+        })
 
         //行程安排
         $tab.find('.T-add-days').on('click', function(event){
