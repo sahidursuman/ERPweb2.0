@@ -875,14 +875,19 @@ input.datepicker {
 	    left: 140px;
 	}
 	.main-content-inner > .page-content{
-		padding: 8px 12px 24px;
+		padding: 8px 0 24px;
 	}
 	.breadcrumbs-fixed+.page-content{
-		padding-top: 49px;
+		padding-top: 38px;
 	}
 	.sidebar+.main-content {
 		margin-left: 140px;
 	}
+}
+
+/*内容区边界*/
+#tabContent {
+	padding: 20px 0 0 25px;
 }
 
 #cnzz_stat_icon_1257382061 {
