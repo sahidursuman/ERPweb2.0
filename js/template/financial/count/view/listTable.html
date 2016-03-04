@@ -5,7 +5,6 @@
         <th style="min-width:70px">出团日期</th>
         <th style="min-width:70px">完团日期</th>
         <th style="min-width:80px">线路产品</th>
-        <th style="min-width:40px">人数</th>
         <th style="min-width:80px">团队人数</th>
         <th style="min-width:50px">导游</th>
         <th style="min-width:40pxpx">收入</th>
@@ -37,7 +36,6 @@
             {{/if}}
         {{/each}}
         {{/if}}
-        <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{financialTripPlan.tripPlan.touristAdultCount+financialTripPlan.tripPlan.touristChildCount}}</td>
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}>{{if financialTripPlan.tripPlan.guide != null}}{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</td>
         
         <td style="vertical-align:middle" {{if financialTripPlan.tripPlan.tripPlanDetails.length > 1}}rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length}}"{{/if}}><span class="F-float F-money">{{financialTripPlan.getAllMoney}}</span></td>
