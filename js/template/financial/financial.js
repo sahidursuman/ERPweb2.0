@@ -60,7 +60,7 @@ function getBankList($obj,payType){
                     if(bankList && bankList.length > 0){
                         for(var i=0; i < bankList.length; i++){
                             var seatCount = {
-                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
+                                value : "账户："+ bankList[i].accountName+",余额："+ bankList[i].balance,
                                 id: bankList[i].id
                             }
                             cardNumberJson.push(seatCount);
