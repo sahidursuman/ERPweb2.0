@@ -424,6 +424,8 @@ define(function(require, exports) {
             touristGroup.chooseQuoteProduct(lineProductId, addType);
         });
 
+        touristGroup.orderNumberChange($addTabId)
+
         //提交按钮事件
         $addTabId.find(".T-submit-addTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
@@ -460,9 +462,7 @@ define(function(require, exports) {
                showMessageDialog($("#confirm-dialog-message"), "该游客小组已生成发团计划不可修改");
                return;
             }
-        });
-
-       
+        });       
 
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
@@ -481,6 +481,8 @@ define(function(require, exports) {
         //外联计调Autocomplate
         $opUserList = $updateTabId.find('.T-choose-opUserList');
         touristGroup.getopUserList($opUserList);
+
+        touristGroup.orderNumberChange($updateTabId)
 
         //报价单号
         $updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
@@ -510,7 +512,7 @@ define(function(require, exports) {
 
         //内转状态时   部分不可编辑
         if (status == 6) {
-            $updateTabId.find('input[name=buyInsurance], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
+            $updateTabId.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
             $updateTabId.find('.T-addPartner, .T-addPartnerManager, .T-touristGroup-addOtherCost, .T-add-tourist, .T-add-tourist-more, .oldbtnDeleteTourist, .T-delete').hide()
         }
     };
@@ -598,6 +600,32 @@ define(function(require, exports) {
 
     };
 
+
+    //检查收客单号重复性
+    touristGroup.orderNumberChange = function($tab) {
+        $tab.find('.T-orderNumberChange').on('change', function() {
+            var $this = $(this),
+                orderNumber = $this.val(),
+                touristGroupId = $tab.find('.T-submit-updateTouristGroup').data('entity-id');
+            $.ajax({
+                url: KingServices.build_url('touristGroup','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: {
+                    orderNumber: orderNumber,
+                    id: touristGroupId},
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该团号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 
     //删除小组
@@ -2403,7 +2431,7 @@ define(function(require, exports) {
     //提交数据
     touristGroup.submitData = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
         if (status == 6) {
-            $obj.find('input[name=buyInsurance], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').removeAttr('disabled');
+            $obj.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').removeAttr('disabled');
         } 
         var formData = $lineInfoForm.serialize();
         data += form + formData;
