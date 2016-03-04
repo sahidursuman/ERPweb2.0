@@ -90,7 +90,7 @@
     	</div>
 
     	<div class="form-group">
-    		<label><span class="necessary">*</span>客户联系人：</label>
+    		<label>客户联系人：</label>
             <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text"  style="width:133px;"value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
 			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" class="T-partnerAgencyContactId" />
 
@@ -343,6 +343,7 @@
 					</div>
 				</div>
 			</div>
+		</div>
 	</form>
 	<form class="form-horizontal touristGroupMainFormRS T-touristGroupMainFormRS" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
@@ -418,6 +419,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
+						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
 							            <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -474,6 +476,7 @@
 					                    </div>
 					                    {{/if}}
 								     {{/each}}
+								     {{/if}}
 						            </div>
 						    </div>
 					    	{{else}}
@@ -571,6 +574,7 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
 								       <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
@@ -627,6 +631,7 @@
 						                    </div>
 						                    {{/if}}
 									    {{/each}}
+									    {{/if}}
 						            </div>
 						        </div>
 					    	{{else}}

@@ -23,15 +23,16 @@ define(function(require, exports) {
 
     Transfer.initModule = function() {
     	var dateJson = FinancialService.getInitDate();
-        Transfer.listTransfer(0,"","",dateJson.startDate,dateJson.endDate);
+        Transfer.listTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
 
-    Transfer.listTransfer = function(page,partnerAgencyId,partnerAgencyName,startDate,endDate){
+    Transfer.listTransfer = function(page,partnerAgencyId,partnerAgencyName,startDate,endDate,accountStatus){
     	if (Transfer.$searchArea && arguments.length === 1) {
             partnerAgencyName = Transfer.$searchArea.find("input[name=partnerAgencyName]").val(),
             partnerAgencyId = Transfer.$searchArea.find("input[name=partnerAgencyId]").val(),
             startDate = Transfer.$searchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$searchArea.find("input[name=endDate]").val();
+            accountStatus = Transfer.$searchArea.find(".T-finance-status").find("button").data("value")
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -46,6 +47,7 @@ define(function(require, exports) {
             partnerAgencyId : partnerAgencyId,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
 
@@ -63,7 +65,7 @@ define(function(require, exports) {
                     Transfer.$tab = $('#tab-' + menuKey + "-content");
                     Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
                     
-                    Transfer.initList(startDate,endDate);
+                    Transfer.initList(startDate,endDate,accountStatus);
                     Transfer.getSumMoney(data.totalStatisticsData[0],Transfer.$tab);
                     // 绑定翻页组件
                     laypage({
@@ -90,7 +92,7 @@ define(function(require, exports) {
         tabId.find('.T-sumUnPaiedMoney').text(data.totalUnPayedMoney);
 
     };
-	Transfer.initList = function(startDate,endDate){
+	Transfer.initList = function(startDate,endDate,accountStatus){
         
 
         Transfer.getQueryList();
@@ -101,7 +103,14 @@ define(function(require, exports) {
             event.preventDefault();
             Transfer.listTransfer(0);
         });
-
+        //状态框选择事件
+        Transfer.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Transfer.listTransfer(0);
+        });
         // 报表内的操作
         Transfer.$tab.find('.T-list').on('click','.T-option',function(event) {
             event.preventDefault();
@@ -110,25 +119,26 @@ define(function(require, exports) {
             	name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
-                Transfer.transferCheck(0,id,name,"","","",startDate,endDate);
+                Transfer.transferCheck(0,id,name,"","","",startDate,endDate,"",accountStatus);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
                 Transfer.clearTempSumDate = false;
                 Transfer.clearTempData = false;
-                Transfer.transferClear(0,0,id,name,"","","",startDate,endDate);
+                Transfer.transferClear(0,0,id,name,"","","",startDate,endDate,"",accountStatus);
             }
         });
     };
 
     //对账
-    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber){
+    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber,accountStatus){
         if (Transfer.$checkSearchArea && arguments.length === 3) {
-            lineProductName = Transfer.$checkSearchArea.find("input[name=lineProductName]").val(),
-            operateId = Transfer.$checkSearchArea.find("input[name=operateId]").val(),
-            operateName = Transfer.$checkSearchArea.find("input[name=operateName]").val(),
-            orderNumber = Transfer.$checkSearchArea.find("input[name=orderNumber]").val(),
-            startDate = Transfer.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = Transfer.$checkSearchArea.find("input[name=endDate]").val()
+            lineProductName = Transfer.$checkSearchArea.find("input[name=lineProductName]").val();
+            operateId = Transfer.$checkSearchArea.find("input[name=operateId]").val();
+            operateName = Transfer.$checkSearchArea.find("input[name=operateName]").val();
+            orderNumber = Transfer.$checkSearchArea.find("input[name=orderNumber]").val();
+            startDate = Transfer.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = Transfer.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = Transfer.$checkSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -148,6 +158,7 @@ define(function(require, exports) {
             orderNumber : orderNumber,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType : "auto"
         };
         searchParam = JSON.stringify(searchParam);
@@ -264,14 +275,15 @@ define(function(require, exports) {
     };
 
     //付款
-    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber){
+    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber,accountStatus){
         if (Transfer.$clearSearchArea && arguments.length === 4) {
             lineProductName = Transfer.$clearSearchArea.find("input[name=lineProductName]").val(),
             operateId = Transfer.$clearSearchArea.find("input[name=operateId]").val(),
             operateName = Transfer.$clearSearchArea.find("input[name=operateName]").val(),
             startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val(),
-            orderNumber = Transfer.$clearSearchArea.find("input[name=orderNumber]").val()
+            orderNumber = Transfer.$clearSearchArea.find("input[name=orderNumber]").val();
+            accountStatus = Transfer.$clearSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -291,7 +303,8 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             sortType : "auto",
-            isAutoPay : isAutoPay
+            isAutoPay : isAutoPay,
+            accountStatus : accountStatus
         };
         if(isAutoPay == 1){
            searchParam.isAutoPay = isAutoPay;
@@ -755,6 +768,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-viewGroup')) {
                 // 游客明细
                 Transfer.viewGroup($(this));
+            }else if($that.hasClass('T-orderNumber')){
+                KingServices.viewTurnInfo($that.data("id"));
             }
         });
     };
@@ -842,7 +857,7 @@ define(function(require, exports) {
     };
 
     Transfer.initPay = function(options){
-        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate); 
+        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate,"",options.accountStatus); 
     };
 
     exports.init = Transfer.initModule;

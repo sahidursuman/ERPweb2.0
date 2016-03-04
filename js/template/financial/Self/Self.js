@@ -25,14 +25,15 @@ define(function(require, exports) {
     };
     Self.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        Self.listSelf(0,"","",dateJson.startDate,dateJson.endDate);
+        Self.listSelf(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
-    Self.listSelf = function(page,selfPayName,selfPayId,startDate,endDate) {
+    Self.listSelf = function(page,selfPayName,selfPayId,startDate,endDate,accountStatus) {
         if (Self.$searchArea && arguments.length === 1) {
-            selfPayName = Self.$searchArea.find("input[name=selfPayName]").val(),
-            selfPayId = Self.$searchArea.find("input[name=selfPayId]").val(),
-            startDate = Self.$searchArea.find("input[name=startDate]").val(),
-            endDate = Self.$searchArea.find("input[name=endDate]").val()
+            selfPayName = Self.$searchArea.find("input[name=selfPayName]").val();
+            selfPayId = Self.$searchArea.find("input[name=selfPayId]").val();
+            startDate = Self.$searchArea.find("input[name=startDate]").val();
+            endDate = Self.$searchArea.find("input[name=endDate]").val();
+            accountStatus = Self.$searchArea.find(".T-finance-status").find("button").data("value");
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -46,6 +47,7 @@ define(function(require, exports) {
             selfPayId: selfPayId,
             startTime: startDate,
             endTime: endDate,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
         $.ajax({
@@ -59,7 +61,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);
                     Self.$searchArea = Self.$tab.find('.T-search-area');
-                    Self.initList(startDate,endDate);
+                    Self.initList(startDate,endDate,accountStatus);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -89,7 +91,7 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    Self.initList = function(startDate,endDate) {
+    Self.initList = function(startDate,endDate,accountStatus) {
         // 初始化jQuery 对象
         
 
@@ -102,6 +104,15 @@ define(function(require, exports) {
             Self.listSelf(0);
         });
 
+        //状态框选择事件
+        Self.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Self.listSelf(0);
+        });
+
         // 报表内的操作
         Self.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
@@ -110,22 +121,23 @@ define(function(require, exports) {
                 name = $that.closest("tr").data("name");
             if ($that.hasClass('T-check')) {
                 // 对账
-                Self.Getcheck(0,id,name,"",startDate,endDate);
+                Self.Getcheck(0,id,name,"",startDate,endDate,accountStatus);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 Self.showBtnFlag = false;
                 Self.clearTempSumDate = false;
                 Self.clearTempData = false;
-                Self.GetClear(0,0,id,name,"",startDate,endDate);
+                Self.GetClear(0,0,id,name,"",startDate,endDate,accountStatus);
             }
         });
     };
 
-    Self.Getcheck = function(page,selfPayId,selfPayName,tripInfo,startDate,endDate) {
+    Self.Getcheck = function(page,selfPayId,selfPayName,tripInfo,startDate,endDate,accountStatus) {
         if (Self.$checkSearchArea && arguments.length === 3) {
-            tripInfo = Self.$checkSearchArea.find("input[name=tripInfo]").val(),
-            startDate = Self.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = Self.$checkSearchArea.find("input[name=endDate]").val()
+            tripInfo = Self.$checkSearchArea.find("input[name=tripInfo]").val();
+            startDate = Self.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = Self.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = Self.$checkSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -143,6 +155,7 @@ define(function(require, exports) {
                 tripInfo : tripInfo,
                 startTime: startDate,
                 endTime: endDate,
+                accountStatus : accountStatus,
                 sortType: "auto"
             },
             success: function(data) {
@@ -151,6 +164,7 @@ define(function(require, exports) {
                     data.sumData = Self.getSumData(selfPayId,tripInfo,startDate,endDate);
                     var fsList = data.list;
                     data.selfPayName = selfPayName;
+                    data.searchParam.accountStatus = accountStatus;
                     var html = SelfChecking(data);
                     
                     // 初始化页面
@@ -229,11 +243,12 @@ define(function(require, exports) {
          });
     };
         // 结算
-    Self.GetClear = function(isAutoPay,page,selfPayId,selfPayName,tripInfo,startDate,endDate) {
+    Self.GetClear = function(isAutoPay,page,selfPayId,selfPayName,tripInfo,startDate,endDate,accountStatus) {
         if (Self.$clearSearchArea && arguments.length === 4) {
-            tripInfo = Self.$clearSearchArea.find("input[name=tripInfo]").val(),
-            startDate = Self.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = Self.$clearSearchArea.find("input[name=endDate]").val()
+            tripInfo = Self.$clearSearchArea.find("input[name=tripInfo]").val();
+            startDate = Self.$clearSearchArea.find("input[name=startDate]").val();
+            endDate = Self.$clearSearchArea.find("input[name=endDate]").val();
+            accountStatus = Self.$clearSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -250,6 +265,7 @@ define(function(require, exports) {
                 tripInfo : tripInfo,
                 startTime: startDate,
                 endTime: endDate,
+                accountStatus : accountStatus,
                 sortType: "auto"
             },
             success: function(data) {
@@ -275,6 +291,7 @@ define(function(require, exports) {
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
                     data.isAutoPay = isAutoPay;
+                    data.searchParam.accountStatus = accountStatus;
                     var html = SelfClearing(data);
                     data.isAutoPay = isAutoPay;
                     // 初始化页面
@@ -732,7 +749,7 @@ define(function(require, exports) {
 
     Self.initPay = function(options){
         Self.showBtnFlag = true;
-        Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        Self.GetClear(2,0,options.id,options.name,"",options.startDate,options.endDate,options.accountStatus); 
     };
 
     exports.init = Self.initModule;

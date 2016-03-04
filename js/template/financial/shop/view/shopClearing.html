@@ -19,6 +19,7 @@
                 <i class="ace-icon fa fa-search"></i> 搜索 
             </button>
         </div>
+        <input  name="accountStatus" type="hidden" value="{{searchParam.accountStatus}}">
     </form>
     <div class="form-inline">
         <div class="form-group">
@@ -82,6 +83,13 @@
             </select>
         </div>
 
+        <div class="form-group mar-l-10">
+            <label class="control-label">现金账号：</label>
+            <label class="control-label">
+                <input type="text" name="cash-number" class="money" style="width:300px;">
+                <input type="hidden" name="cash-id">
+            </label>
+        </div>
         <div class="form-group mar-l-10">
             <label class="control-label">银行账号：</label>
             <label class="control-label">

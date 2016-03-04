@@ -24,21 +24,23 @@ define(function(require, exports) {
         var dateJson = FinancialService.getInitDate();
         OtherAccounts.listFinancialOtherAccounts(0, "", dateJson.startDate, dateJson.endDate);
     };
-    OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime) {
+    OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime, accountStatus) {
         if (OtherAccounts.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             var itemName = OtherAccounts.$searchArea.find("input[name=otherId]").val();
             name = itemName == "全部" ? "" : itemName;
             startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
             endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
-
+            accountStatus = OtherAccounts.$searchArea.find(".T-finance-status").find('button').data('value');
         }
+        
         //重置搜索条件
         OtherAccounts.searchData = {
             pageNo: pageNo,
             name: name,
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
+            accountStatus : accountStatus == undefined ? "2" : accountStatus,
             sortType: 'auto'
         }
         $.ajax({
@@ -54,7 +56,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey, "其它账务", html);
                     OtherAccounts.$tab = $('#' + tabId);
                     OtherAccounts.$searchArea = OtherAccounts.$tab.find('.T-search-area');
-                    OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime);
+                    OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime, OtherAccounts.searchData.accountStatus);
                     OtherAccounts.getSumMoney(data.totalFinancialOtherData[0],OtherAccounts.$tab);
                     //翻页
                     laypage({
@@ -81,10 +83,10 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.sumPayedMoney);
         tabId.find('.T-sumUnPaiedMoney').text(data.sumUnPayedMoney);
     };
-    OtherAccounts.initList = function(pageNo, name, startAccountTime, endAccountTime) {
+    OtherAccounts.initList = function(pageNo, name, startAccountTime, endAccountTime, accountStatus) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
-        
+        console.log(accountStatus);
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
         OtherAccounts.getTravelAgencyList($obj);
         //搜索按钮事件
@@ -92,6 +94,16 @@ define(function(require, exports) {
             event.preventDefault();
             OtherAccounts.listFinancialOtherAccounts(0);
         });
+
+        //状态框选择事件
+        OtherAccounts.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            OtherAccounts.listFinancialOtherAccounts(0);
+        });
+        
         // 报表内的操作
         OtherAccounts.$tab.find('.T-other').on('click', '.T-option', function(event) {
             event.preventDefault();
@@ -99,23 +111,30 @@ define(function(require, exports) {
             var name = $(this).closest('tr').attr("data-name");
             if ($that.hasClass('T-checking')) {
                 //对账
-                OtherAccounts.AccountsChecking(0, name, "", startAccountTime, endAccountTime);
+                OtherAccounts.AccountsChecking(0, name, "", startAccountTime, endAccountTime, accountStatus);
             } else if ($that.hasClass('T-payment')) {
                 // 付款
                 OtherAccounts.showBtnFlag = false;
-                OtherAccounts.AccountsPayment(0, name, "", startAccountTime, endAccountTime);
+                OtherAccounts.AccountsPayment(0, name, "", startAccountTime, endAccountTime, accountStatus);
             }
+        });
+        var status = OtherAccounts.$tab.find(".T-finance-status");
+        status.on('click', '.dropdown-menu a', function(event){
+            event.preventDefault();
+            var $that = $(this);
+            status.find('button').data('value', $that.data('value')).find("span").text($that.text());
         });
     };
 
     // 对账
-    OtherAccounts.AccountsChecking = function(pageNo, name, info, startAccountTime, endAccountTime) {
+    OtherAccounts.AccountsChecking = function(pageNo, name, info, startAccountTime, endAccountTime, accountStatus) {
 
         if (OtherAccounts.$checkSearchArea && arguments.length === 1) {
             startAccountTime = OtherAccounts.$checkSearchArea.find(".T-startTime").val();
             endAccountTime = OtherAccounts.$checkSearchArea.find(".T-endTime").val();
             name = OtherAccounts.$checkSearchArea.find("input[name=itemName]").val();
             info = OtherAccounts.$checkSearchArea.find('.T-creatorUserChoose').val();
+            accountStatus = OtherAccounts.$checkSearchArea.data('account-status');
         }
 
         pageNo = pageNo || 0;
@@ -126,6 +145,7 @@ define(function(require, exports) {
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             info: info,
+            accountStatus : accountStatus,
             sortType: 'auto'
         }
         $.ajax({
@@ -142,6 +162,7 @@ define(function(require, exports) {
                         type: "POST",
                         data: OtherAccounts.CheckingData,
                         success: function(data) {
+                            dataTable.accountStatus = accountStatus;
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                             if (showDialog(data)) {
@@ -172,7 +193,6 @@ define(function(require, exports) {
             checkRule = new FinRule(0);
         OtherAccounts.$checkSearchArea = $checkTab.find('.T-search-area');
         FinancialService.updateUnpayMoney($checkTab, checkRule);
-
         //翻页
         laypage({
             cont: $checkTab.find('.T-pagenation'),
@@ -354,13 +374,15 @@ define(function(require, exports) {
         }
     };
     //付款
-    OtherAccounts.AccountsPayment = function(pageNo, name, info, startAccountTime, endAccountTime) {
+    OtherAccounts.AccountsPayment = function(pageNo, name, info, startAccountTime, endAccountTime, accountStatus) {
         if (OtherAccounts.$clearSearchArea && arguments.length === 1) {
             startAccountTime = OtherAccounts.$clearSearchArea.find(".T-startTime").val();
             endAccountTime = OtherAccounts.$clearSearchArea.find(".T-endTime").val();
             name = OtherAccounts.$clearSearchArea.find("input[name=itemName]").val();
             info = OtherAccounts.$clearSearchArea.find('.T-creatorUserChoose').val();
+            accountStatus = OtherAccounts.$clearSearchArea.data('account-status');
         }
+        console.log(accountStatus);
         pageNo = pageNo || 0;
         //重置搜索条件
         OtherAccounts.PaymentData = {
@@ -369,6 +391,7 @@ define(function(require, exports) {
             info: info,
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
 
@@ -389,6 +412,7 @@ define(function(require, exports) {
                         data.voucher = OtherAccounts.saveJson.voucher;
                         data.billTime = OtherAccounts.saveJson.billTime;
                     } 
+                    data.accountStatus = accountStatus;
                     if (OtherAccounts.saveJson.autoPayList) {
                         var saveJson = OtherAccounts.saveJson.autoPayList;
                         for (var i = 0; i < data.financialOtherDetailsList.length; i++) {
@@ -759,7 +783,7 @@ define(function(require, exports) {
     //暴露方法
     OtherAccounts.initPayModule = function(options) {
         OtherAccounts.showBtnFlag = true;
-        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate);
+        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate, options.accountStatus);
     };
     exports.init = OtherAccounts.initModule;
     exports.initPay = OtherAccounts.initPayModule;

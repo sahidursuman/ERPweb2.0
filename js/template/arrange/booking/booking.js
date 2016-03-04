@@ -464,7 +464,8 @@ define(function(require, exports) {
     		event.preventDefault();
     		BookingArrange.save($tab, validator);
     	});
-
+    	//外联销售下拉
+		BookingArrange.getOPUserList($tab.find(".T-outOPUserName")).trigger('click');
     	// 通知财务初始化
 		$tab.find('.T-btn-financial').on('click', function(event) {
 			event.preventDefault();
@@ -1447,6 +1448,55 @@ define(function(require, exports) {
 				BookingArrange.calculation($thatPar);
 			})
 		}
+	};
+
+	/**
+	 * 绑定责任计调的选择
+	 * @param  {object} $target 绑定选择的Jquery对象
+	 * @return {[type]}         [description]
+	 */
+	BookingArrange.getOPUserList = function($target){
+		return $target.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$target.val('').data("id", "");
+				}
+			},
+			select:function(event,ui){
+				var item = ui.item;
+				$target.blur().data("id", item.id);
+			}
+		}).one('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			$.ajax({
+				url: KingServices.build_url('tripPlan', 'getOPUserList'),
+				type: 'post',
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					if($target.val() == ""){
+						$target.val(data.realName).data('id', data.userId)
+					}
+					
+					var userList = JSON.parse(data.userList || false);
+					if (!!userList) {
+						for (var i = 0, len = userList.length;i < len; i++) {
+							userList[i].value = userList[i].realName;
+						}
+
+						$target.autocomplete('option', 'source', userList).data('ajax', true);;
+					}
+				}
+			});
+		})
+		.on('click', function(event) {
+			event.preventDefault();
+			if ($target.data('ajax')) {
+				$target.autocomplete('search', '');
+			}
+		})
 	};
 
 	exports.init = BookingArrange.initModule;
