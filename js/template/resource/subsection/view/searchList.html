@@ -1,20 +1,18 @@
 <div class="col-sm-12 T-subsection-lineproduct-search globalAdd" style="margin-top:10px;">
-	<div class="tabbable">
-		<ul id="myTab" class="nav nav-tabs">
-			<li class="active">
-				<a data-toggle="tab" aria-expanded="true">
-					<i class="blue ace-icon fa fa-flag bigger-120"></i>
-					选择路线
-				</a>
-			</li>
-		</ul>
-
-		<div class="tab-content col-xs-12" style="padding:10px 0 0 0;position: relative;top:-2px">
+		<div class="col-xs-12" style="padding:10px 0 0 0;position: relative;top:-2px">
+	        <div class="form-inline col-xs-12 search-area">
+	            <label class="pull-left">线路产品：<span class='T-lineProName'></span></label>
+	            <label class="control-label col-sm-1">类别：<span class='T-lineProType'></span></label>
+	            <label class="control-label col-sm-1">针对客源：<span class='T-lineProcusType'></span></label>
+	            <label class="control-label col-sm-1">天数：<span class='F-float F-count T-lineProDays'></span>天</label>
+	            <label class="control-label col-sm-2">出游日期：<span class="T-lineProStartTime"></span></label>
+	        </div>
 	        <div class="form-inline col-xs-12 search-area">
 	            <label class="pull-left">线路产品</label>
 	            <input type="text" class="form-control col-sm-1 pull-left mar-l-10 T-name" placeholder="请输入线路产品名称" name="lineProductName" value="" />
 	            <button class=" btn-sm T-btn-search search-btn "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
 	        </div>
+	        
 			<div class="tab-pane fade active in col-xs-12">
 				<table class="table table-striped table-bordered T-chex-radio table-hover search-travelLineList-table">
 					<thead>
@@ -38,7 +36,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 
 	<div class="space-10"></div>
 	<button class="btn btn-block btn-primary T-btn-submit guideSubmit">
