@@ -216,6 +216,28 @@ define(function(require, exports) {
         $tab.find(".T-search-line").off('click').on('click', function(){
         	tripPlan.initLineProductSearch($tab, 0);
         });
+        $tab.find('.T-tripNumberChange').on('change', function() {
+        	var $this = $(this),
+        		tripNumber = $this.val(),
+        		tripPlanId = $tab.find('.T-tab').data('id');
+        	$.ajax({
+        		url: KingServices.build_url('tripController','checkTripNumber'),
+        		type: 'POST',
+        		showLoading: false,
+        		data: {
+        			tripNumber: tripNumber,
+        			tripPlanId: tripPlanId},
+        	})
+        	.done(function(data) {
+        		if (data.success == 0) {
+        			$this.val('');
+	                layer.tips('该团号已存在', $this, {
+	                    tips: [1, '#3595CC'],
+	                    time: 2000
+	                });
+        		}
+        	})
+        })
 		//搜索报价单号
     	$tab.find(".T-search-quote-order").off('click').on('click', function(){
     		tripPlan.initLineProductSearch($tab, 1);

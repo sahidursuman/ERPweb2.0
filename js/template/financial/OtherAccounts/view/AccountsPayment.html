@@ -1,7 +1,7 @@
 <div class="row T-AccountsPayment globalAdd">
     <div class="col-xs-12 ">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="T-search-area">
+            <div class="T-search-area" data-account-status="{{accountStatus}}">
                 <div class="form-group">
                     <label>项目名称: <span class="T-name">{{searchParam.name}}</span></label>
                     <input type="hidden" name="itemName" value="{{searchParam.name}}">
