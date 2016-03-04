@@ -617,7 +617,7 @@ define(function(require, exports) {
             .done(function(data) {
                 if (data.success == 0) {
                     $this.val('');
-                    layer.tips('该团号已存在', $this, {
+                    layer.tips('该收客单号已存在', $this, {
                         tips: [1, '#3595CC'],
                         time: 2000
                     });
@@ -2248,7 +2248,7 @@ define(function(require, exports) {
         }
 
         var buyInsurance = buyInsuranceS;
-        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id+ "&orderNumber=" +orderNumber+"";
+        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id+ "&orderNumber=" +orderNumber+"&";
         //游客json串
         var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm, id, typeFlag);
 
