@@ -12,7 +12,7 @@
         <tr class="bg-blur">
             <th>时间</th>
             <th>班次</th>
-            <th>酒店需求</th>
+            <th>酒店要求</th>
             <th>车</th>
             <th>房</th>
             <th>餐</th>
@@ -20,7 +20,7 @@
             <th>它</th>
             <th>时间</th>
             <th>班次</th>
-            <th>酒店需求</th>
+            <th>酒店要求</th>
             <th>车</th>
             <th>房</th>
             <th>餐</th>
@@ -32,18 +32,23 @@
         <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" data-isEdit="{{transit.touristGroupOutRemark.isEdit}}">
             <td class="h-touristGroupInfo">
               {{if !!transit.orderNumber}}
-                <span class="h-orderNumber">中转单号：{{transit.orderNumber}}</span><br>
+                <p><span class="h-orderNumber">中转单号：{{transit.orderNumber}}</span></p>
               {{/if}}
               {{if !!transit.lineProductName}}
-                <span class="h-lineName">{{transit.lineProductName}}</span><br>
+                <p><span class="h-lineName">{{transit.lineProductName}}</span></p>
               {{/if}}
+              <p>
               {{if transit.touristGroupOutRemark != null}}
                 <span class="h-startTime">{{transit.touristGroupOutRemark.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
               {{/if}}
               {{if transit.partnerAgencyName}}
                 <span class="h-agencyName">{{transit.partnerAgencyName}}</span>
               {{/if}}
-              <span class="h-OPUser">外联销售：还没有</span><br>
+              {{if transit.outOPUser}}
+                <span class="h-OPUser">外联销售：{{transit.outOPUser}}</span>
+              {{/if}}
+              </p>
+              <p>
               {{if !!transit.touristGroupOutRemark && !!transit.touristGroupOutRemark.orderNumber}}
                 <span class="h-orderNumber">收客单号：{{transit.touristGroupOutRemark.orderNumber}}</span>
               {{/if}}
@@ -53,28 +58,31 @@
               {{if transit.touristGroupOutRemark != null || transit.touristGroupOutRemark != null}}
                 <span class="h-peopleCount">({{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.adultCount}}大{{/if}} {{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.childCount}}小{{/if}})</span>
               {{/if}}
+              </p>
             </td>
-            <td style="vertical-align:middle;">{{transit.arriveShiftTime}}</td>
-            <td style="vertical-align:middle;">{{transit.arriveShift}}</td>
-            <td style="vertical-align:middle;" data-target="transit_receive_bus" class="receiveBusStatus" data-status="{{transit.receiveBusStatus}}"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_receive_hotel" class="receiveHotelStatus" data-status="{{transit.receiveHotelStatus}}"><i class="ace-icon fa {{transit.receiveHotelStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_receive_ticket" class="receiveTicketStatus" data-status="{{transit.receiveTicketStatus}}"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;">{{transit.leaveShiftTime}}</td>
-            <td style="vertical-align:middle;">{{transit.leaveShift}}</td>
-            <td style="vertical-align:middle;" data-target="transit_send_bus" class="sendBusStatus" data-status="{{transit.sendBusStatus}}"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_send_hotel" class="sendHotelStatus" data-status="{{transit.sendHotelStatus}}"><i class="ace-icon fa {{transit.sendHotelStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_send_restaurant" class="sendRestaurantStatus" data-status="{{transit.sendRestaurantStatus}}"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_send_ticket" class="sendTicketStatus" data-status="{{transit.sendTicketStatus}}"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;" data-target="transit_send_other" class="sendOtherStatus" data-status="{{transit.sendOtherStatus}}"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
-            <td style="vertical-align:middle;">{{if transit.arrangeUser != null}}{{transit.arrangeUser.realName}}{{else}}-{{/if}}</td>
-            <td style="vertical-align:middle;">{{if transit.arrangeTime != null}}{{transit.arrangeTime}}{{else}}-{{/if}}</td>
-            <td style="width: 100px;vertical-align:middle;">{{if transit.status == 1}}
+            <td>{{transit.arriveShiftTime}}</td>
+            <td>{{transit.arriveShift}}</td>
+            <td>{{transit.receiveHotelRequire}}</td>
+            <td data-target="transit_receive_bus" class="receiveBusStatus" data-status="{{transit.receiveBusStatus}}"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_hotel" class="receiveHotelStatus" data-status="{{transit.receiveHotelStatus}}"><i class="ace-icon fa {{transit.receiveHotelStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_ticket" class="receiveTicketStatus" data-status="{{transit.receiveTicketStatus}}"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
+            <td>{{transit.leaveShiftTime}}</td>
+            <td>{{transit.leaveShift}}</td>
+            <td>{{transit.sendHotelRequire}}</td>
+            <td data-target="transit_send_bus" class="sendBusStatus" data-status="{{transit.sendBusStatus}}"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_hotel" class="sendHotelStatus" data-status="{{transit.sendHotelStatus}}"><i class="ace-icon fa {{transit.sendHotelStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_restaurant" class="sendRestaurantStatus" data-status="{{transit.sendRestaurantStatus}}"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_ticket" class="sendTicketStatus" data-status="{{transit.sendTicketStatus}}"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
+            <td data-target="transit_send_other" class="sendOtherStatus" data-status="{{transit.sendOtherStatus}}"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
+            <td>{{if transit.arrangeUser != null}}{{transit.arrangeUser.realName}}{{else}}-{{/if}}</td>
+            <td>{{if transit.arrangeTime != null}}{{transit.arrangeTime}}{{else}}-{{/if}}</td>
+            <td style="width: 100px;">{{if transit.status == 1}}
                 <i class="ace-icon fa fa-check green bigger-130"></i> 已安排 {{else if transit.status == 0}}
                 <i class="ace-icon fa fa-times red bigger-125"></i> 未安排 {{/if}}
             </td>
-            <td style="vertical-align:middle;">
+            <td>
                 <div class="hidden-sm hidden-xs btn-group" style="width:170px;">
                     <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action T-send R-right" data-right="1160004" title="通知">
 							通知

@@ -347,5 +347,83 @@ define(function(require, exports) {
         }); 
     };
 
+    /**
+     * 绑定责任计调的选择
+     * @param  {object} $target 绑定选择的Jquery对象
+     * @return {[type]}         [description]
+     */
+    replace.getOPUserList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].outOPUserName;
+                    data[i].id = data[i].outOPUserId;
+                }
+
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        })
+    };
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    replace.getGroupMapList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].groupName;
+                    data[i].id = data[i].groupId;
+                }
+
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        });
+    };
+
     exports.init = replace.initModule;
 });
