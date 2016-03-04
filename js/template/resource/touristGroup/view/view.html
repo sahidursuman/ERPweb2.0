@@ -66,7 +66,6 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						</tr>
 					<tr>
-						
 						<td class="style-myself">完团日期</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{touristGroupDetail.endTime | dateFormat: 'yyyy-MM-dd'}}
 						</td>
@@ -80,8 +79,18 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px">
 						{{touristGroupDetail.sendPosition}}
 						</td>
-
 					</tr>
+					<tr>
+						<td class="style-myself">全陪</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{touristGroupDetail.accompanyGuideName}}</td>
+						<td class="style-myself">全陪电话</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.accompanyGuideMobile}}</td>
+						<td class="style-myself">收客单号</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">
+						    {{touristGroupDetail.orderNumber}}
+						</td>
+					</tr>
+
 
 					<tr>
 						<td class="style-myself">备注</td>
