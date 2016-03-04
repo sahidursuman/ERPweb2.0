@@ -896,18 +896,21 @@ input.datepicker {
 	overflow-x: auto;
 }
 
+/*内容区所支持的最小宽度*/
 .min-w-1050 {
 	min-width: 1050px;
 }
 
+/*数量input的宽度*/
 .w-50 {
 	width: 50px;
 }
-
+/*金额input的宽度*/
 .w-80 {
 	width: 80px;
 }
 
+/*自费table的宽度*/
 .w-1400 {
 	width: 1400px;
 }
