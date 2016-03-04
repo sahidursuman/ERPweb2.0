@@ -860,6 +860,8 @@ input.datepicker {
 		padding-top: 49px;
 	}
 } */
+/*布局全局变量*/
+
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
@@ -889,6 +891,28 @@ input.datepicker {
 #tabContent {
 	padding: 20px 0 0 25px;
 }
+
+.overflow-x {
+	overflow-x: auto;
+}
+
+.min-w-1050 {
+	min-width: 1050px;
+}
+
+.w-50 {
+	width: 50px;
+}
+
+.w-80 {
+	width: 80px;
+}
+
+.w-1400 {
+	width: 1400px;
+}
+
+
 
 #cnzz_stat_icon_1257382061 {
 	display: none;
