@@ -1,9 +1,13 @@
 <div class="row">
 	<div class="col-xs-12">
-		<div class="T-search-area" style="margin-top:-20px;">
+		<div class="T-search-area">
 			<label>客户：</label> 
             <input type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" placeholder="客户" />
             <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
+            <label class="marginLeft-30">外联销售：</label> 
+            <input type="text" value="{{searchParam.outOPUserName}}" name="outOPUserName" placeholder="外联销售" />
+            <label class="marginLeft-30">部门：</label> 
+            <input type="text" value="{{searchParam.groupName}}" name="groupName" placeholder="部门" />
             <label style="margin-left:20px;">酒店：</label>
             <input type="text" value = "{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
             <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
@@ -38,6 +42,8 @@
 				<tr class="bg-blur">
 					<th rowspan="2">代订单号</th>
 					<th rowspan="2">客户</th>
+					<th rowspan="2">外联销售</th>
+					<th rowspan="2">部门</th>
 					<th colspan="4">项目</th>
 					<th rowspan="2">应收</th>
 					<th rowspan="2">成本</th>

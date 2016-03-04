@@ -17,6 +17,10 @@
 
 	    	<label style="margin-left: 15px">收客单号：</label>
 	    	<input type="text" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}"/>
+			<label style="margin-left: 15px">外联销售：</label>
+	    	<input type="text" style="width: 100px" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}"/>
+			<label style="margin-left: 15px">部门：</label>
+	    	<input type="text" style="width: 100px" placeholder="部门" name="groupName" value="{{searchParam.groupName}}"/>
 
 			<label style="margin-left: 15px">开始日期：</label>
 	    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />	
@@ -44,6 +48,8 @@
 				<th>游客</th>
 				<th>人数</th>
 				<th>客户</th>
+				<th>外联销售</th>
+				<th>部门</th>
 				<th>团款收入</th>
 				<th>发团收入(不含团款)</th>
 				<th>中转成本</th>
