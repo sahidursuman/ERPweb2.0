@@ -2,7 +2,7 @@
     <table class="table table-striped table-bordered table-hover T-showHighLight">
         <thead>
             <tr class="bg-blur">
-                <th>团号</th>
+                <th>团信息</th>
                 <th>团队人数</th>
                 <th>剩余座位</th>
                 <th>导</th>
@@ -23,11 +23,11 @@
             {{each result as rs}}
             <tr data-id="{{rs.id}}">
                 <td class="h-touristGroupInfo">
-                    <p class="h-orderNumber">{{rs.tripNumber}}</p>
+                    <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName">{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}</p>
                     <p class="h-startTime"><span>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>- <span>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span> </p>
-                    <p class="h-memberName">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
-                    <p class="h-OPUser">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
+                    <p class="h-memberName">责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
+                    <p class="h-OPUser">责任部门：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
                 </td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
                 <td style="vertical-align:middle">{{if !!rs.surplusSeat}}{{rs.surplusSeat}}{{else}}-{{/if}}</td>

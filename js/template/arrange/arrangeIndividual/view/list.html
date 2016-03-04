@@ -15,7 +15,7 @@
 	<thead>
 		<tr class="bg-blur">
 			<th>选择</th>
-			<th>收客单号</th>
+			<th>收客信息</th>
 			<th>天数</th>
 			<th>出游日期</th>
 			<th>联系人</th>
@@ -42,8 +42,8 @@
 			 data-entity-childCount = "{{touristGroupL.childCount}}" >
 			    <td style="vertical-align:middle"><label class="pos-rel"> <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label></td>
 				 <td class="h-touristGroupInfo">
-				 	<p class="h-orderNumber">{{touristGroupL.orderNumber}}</p>
-                    <p class="h-orderNumber">{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
+				 	<p class="h-orderNumber">收客单号：{{touristGroupL.orderNumber}}</p>
+                    <p class="h-orderNumber">客户：{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
                     <p class="h-lineName"title="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}</p>
                     <p class="h-startTime">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.type}}{{/if}} </p>
                     <p class="h-memberName">

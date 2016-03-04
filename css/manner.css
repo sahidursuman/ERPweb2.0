@@ -1729,7 +1729,7 @@ p#back-top a span {
     margin-top: 15px;
 }
 .h-touristGroupInfo p{
-    /*text-align: left;*/
+    text-align: left;
     margin: 0px;
 }
 /*媒体查询-不同分辨率*/
