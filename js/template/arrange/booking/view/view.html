@@ -22,9 +22,11 @@
 			</tr>
 			<tr>
 				<td class="style-myself">游客 </td> 
-				<td style="text-align: left;padding-left: 6px;" colspan="2">{{bookingOrder.touristRealname}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristRealname}}</td>
 				<td class="style-myself">游客电话 </td>
-				<td style="text-align: left;padding-left: 6px;" colspan="4">{{bookingOrder.touristMobileNumber}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristMobileNumber}}</td>
+				<td class="style-myself">外联销售 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.outOPUser}}{{bookingOrder.outOPUser.realName}}{{/if}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">备注 </td>

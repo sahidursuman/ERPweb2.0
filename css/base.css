@@ -860,6 +860,10 @@ input.datepicker {
 		padding-top: 49px;
 	}
 } */
+.table th.h-touristGroupInfo, 
+.table td.h-touristGroupInfo{
+	text-align: left;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
