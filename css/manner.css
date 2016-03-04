@@ -141,8 +141,8 @@ label {
 .block-up {
     background: #ffffff!important;
     border: 1px solid #83bbd6!important;
-    "
- font-size: 12px;
+    font-size: 12px;
+    height: 24px!important;
 }
 
 .cursor {
