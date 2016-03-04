@@ -1708,9 +1708,19 @@ p#back-top a span {
     border:1px solid #ddd;
     margin-top: 45px;
 }
+.userUpdate-auth .btn{
+    padding: 4px 3px;
+}
+.saveAuth-user{
+        margin-bottom:-22px; 
+        /*position: absolute;*/
+        /*margin-top: 10px;*/
+        margin-left: -1px;
+        width: 160px;
+    }
 .userAuth li{
     list-style-type: none;
-    width: 170px;
+    width: 133px;
 }
 .userAuth li:hover{
     cursor: pointer;
@@ -2056,6 +2066,7 @@ p#back-top a span {
         border:1px solid #ddd;
         margin-top: 45px;
     }
+
 }
 
 /*媒体查询 1366*/
