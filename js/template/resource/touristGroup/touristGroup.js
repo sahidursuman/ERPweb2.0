@@ -925,10 +925,6 @@ define(function(require, exports) {
                                 showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                                     if (data.success!=0) { //没有有中转安排,可以删除
                                         $inputParent.remove();
-                                        //当复选框未全部不选--移除共用选项
-                                        if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
-                                            $div.find('.T-action-require-list').children('div.require-commons').remove();
-                                        };
                                     }else{
                                         $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>');
                                     };
@@ -2138,7 +2134,7 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var needTransitFee=0,isReturn=false;
+        var needTransitFee=true,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
@@ -2149,7 +2145,9 @@ define(function(require, exports) {
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
                 var transitFee=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
-                needTransitFee=needTransitFee+transitFee;
+                if (!isNaN(transitFee)) {
+                    needTransitFee=false;
+                };
             };
             //数量&&单价校验
             if (count== "" && price!= "") {
@@ -2324,7 +2322,7 @@ define(function(require, exports) {
 
        //中转选项是否打勾且中转费用项<=0
        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
-        if(transitChekedLength>0 && needTransitFee<=0){
+        if(transitChekedLength>0 && !!needTransitFee){
             //中转信息Tip
             touristGroup.TransitInfo($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
         }else if(needTotalMoney > needPayAllMoney){  //预收款与计划现收之和不能大于应收
