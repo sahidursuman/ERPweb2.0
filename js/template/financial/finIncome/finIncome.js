@@ -259,7 +259,7 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
-            FinIncome.getList(0);
+            FinIncome.getList();
         });
 
         // 搜索区域
@@ -286,7 +286,7 @@ define(function(require, exports) {
                     name: $tr.children('td').eq(0).text(),
                     startDate: $tab.find('.T-start').val(),
                     endDate: $tab.find('.T-end').val(),
-                    accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+                    accountStatus : $tr.data("accountstatus")
                 }
             FinIncome.doIncomeTask(options);
         });
