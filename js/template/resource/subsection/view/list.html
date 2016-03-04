@@ -1,16 +1,13 @@
 <div class="col-xs-12">
-	<table class="table table-striped table-bordered table-hover T-s howHighLight">
+	<table class="table table-striped table-bordered table-hover T-showHighLight">
 		<thead>
 			<tr class="bg-blur">  
 				<th>收客单号</th>
-				<th>客户</th>
 				<th>线路产品</th>
 				<th>针对客源</th>            
 				<th>出游日期</th>
 				<th>天数</th>
 				<th>现收</th>
-				<th>联系人</th>
-				<th>人数</th>
 				<th>操作人</th>
 				<th class="col-sm-1">操作时间</th>
 				<th>状态</th>
@@ -20,8 +17,17 @@
 	
 		<tbody>{{each transitSubTgroupList as subList indexA}}
 			<tr data-entity-id="{{subList.id}}">
-				<td>{{subList.orderNumber}}</td>
-				<td>{{if !!subList.partnerAgency}}{{subList.partnerAgency.travelAgencyName}}{{/if}}</td>
+				<td>
+				 	<p>
+				 	<span>	{{subList.orderNumber}}</span>
+				 	<span>{{if subList.contactMember!=null}}{{subList.contactMember.name}}{{/if}}</span>
+				 	<label><span class="F-float F-count">{{subList.adultCount}}</span>大<span class="F-float F-count">{{subList.childCount}}</span>小</label>
+				 	</p>
+				 	<p>{{if !!subList.partnerAgency}}{{subList.partnerAgency.travelAgencyName}}{{/if}}</p>
+				</td>
+
+
+
 				<td>{{subList.lineProduct.name}}
 					{{if subList.subTouristGroupDetails != null}}
 					<label class="lineProductArea" style="float: right;">
@@ -35,8 +41,6 @@
 				<td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 				<td><span class="F-float F-count">{{subList.lineProduct.days}}</span></td>
 				<td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
-				<td>{{if subList.contactMember!=null}}{{subList.contactMember.name}}{{/if}}</td>
-				<td><span class="F-float F-count">{{subList.adultCount}}</span>大<span class="F-float F-count">{{subList.childCount}}</span>小</td>
 				<td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
 				<td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
 				<td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
@@ -62,7 +66,7 @@
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 					<td><span class="F-float F-count">{{subDetails.days}}</span></td>
 			 		<td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
-					<td colspan="4"></td>
+					<td ></td>
 					<td>{{if subDetails.status == 1}}
 							未分团
 						{{else if subDetails.status == 2}}
@@ -89,7 +93,7 @@
 			 		<td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 					<td>{{subDetails.days}}</td>
 			 		<td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
-					<td colspan="4"></td>
+					<td ></td>
 					<td>{{if subDetails.status == 1}}
 							未分团
 						{{else if subDetails.status == 2}}
