@@ -2168,7 +2168,20 @@ p#back-top a span {
 
     
 }
+@media screen and (max-width:1280px) {
 
+    .busCompanyNameWidth{
+        width: 130px;
+    }
+    .hotelNameWidth{
+        width: 130px; 
+    }
+    .orderManagerTime{
+        margin-top: 10px;
+        margin-left: -23px;
+    }
+
+}
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
     .share-anchor{
