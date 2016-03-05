@@ -1,30 +1,38 @@
 <div class="row">
 	<div class="T-search-area" style="margin:0px;">  
-		<div class="form-horizontal">      
-	      	<label>线路产品：</label>
-	    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
-			<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
-
-			<label style="margin-left: 15px">客户：</label>
-	    	<input type="text" style="width: 100px" placeholder="客户" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}"/>
-			<input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}"/>
-			<label style="margin-left: 15px">针对客源：</label>
-	    	<select name="customerType">
-	    		<option value="" {{if searchParam.customerType == "" || !searchParam.customerType}}selected{{/if}}>全部</option>
-	    		<option value="0" {{if searchParam.customerType == 0}}selected{{/if}}>散客</option>
-	    		<option value="1" {{if searchParam.customerType == 1}}selected{{/if}}>团队</option>
-	    		
-	    	</select>
-
-	    	<label style="margin-left: 15px">收客单号：</label>
-	    	<input type="text" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}"/>
-
-			<label style="margin-left: 15px">开始日期：</label>
-	    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />	
-			<label style="margin-left: 15px">结束日期：</label>
-	    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />	
-			
-	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
+		<div class="form-inline">
+			<div class="form-group mar-r-10">
+		      	<label>线路产品：</label>
+		    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+				<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
+			</div>
+			<div class="form-group mar-r-10">
+				<label>客户：</label>
+		    	<input type="text" style="width: 100px" placeholder="客户" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}"/>
+				<input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}"/>
+			</div>
+			<div class="form-group mar-r-10">
+				<label>针对客源：</label>
+		    	<select name="customerType">
+		    		<option value="" {{if searchParam.customerType == "" || !searchParam.customerType}}selected{{/if}}>全部</option>
+		    		<option value="0" {{if searchParam.customerType == 0}}selected{{/if}}>散客</option>
+		    		<option value="1" {{if searchParam.customerType == 1}}selected{{/if}}>团队</option>
+		    		
+		    	</select>
+		    </div>
+			<div class="form-group mar-r-10">
+		    	<label>收客单号：</label>
+		    	<input type="text" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}"/>
+			</div>
+			<div class="form-group mar-r-10">
+				<label>开始日期：</label>
+		    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />	
+				<label>结束日期：</label>
+		    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />	
+			</div>
+			<div class="form-group">
+	        	<button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
+	        </div>
 	    </div>
 
 	    <div style="margin:8px 0px;">
