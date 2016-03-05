@@ -108,7 +108,7 @@
                         <td>
                          {{each subList.touristGroupSubFeeList as FeeList index}}
                          {{if index == 0}}
-                         <div class="clearfix" style="width: 131px;">
+                         <div class="clearfix" style="min-width: 131px;">
                             {{if FeeList.type!=3}}
                                   <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
@@ -127,7 +127,7 @@
                             </div>
                           {{/if}}
                           {{if index>0}}
-                           <div class="clearfix" style="margin-top:1px;width: 131px;">
+                           <div class="clearfix" style="margin-top:1px;min-width: 131px;">
                             {{if FeeList.type!=3}}
                                 <select name="type" data-index="{{index}}"  data-Flag="{{flag}}" {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
@@ -172,7 +172,7 @@
                         </td>
                     {{else}}
                     <td>
-                        <div class="clearfix" style="margin-top:1px;width: 131px;">
+                        <div class="clearfix" style="margin-top:1px;min-width: 131px;">
                             <select data-index="0" name="type" class="T-type w-100 pull-left">
                                 <option value="1">大人结算价</option>
                                 <option value="2">小孩结算价</option>
