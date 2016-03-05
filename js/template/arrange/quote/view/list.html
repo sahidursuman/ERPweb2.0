@@ -22,9 +22,9 @@
                 <td class="h-touristGroupInfo">
                     <p class="h-lineName">{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</p>
                     <p>
-                        <span>{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</span>
-                        <span>{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</span>
-                        <label><span class="F-float F-count">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</span></label>
+                        <span class="h-agencyName">{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</span>
+                        <span class="h-agencyName">{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</span>
+                        <label><span class="F-float F-count h-peopleCount">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</span></label>
                     </p>
                 </td>
                 <td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
@@ -39,23 +39,23 @@
                 <td>
                     <div class="hidden-sm hidden-xs btn-group">
                         <a class="cursor R-right T-action {{if !quote.touristGroupId}}T-status{{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							询价状态 <span style='margin-left:5px;'>|</span>
-						</a>
+                            询价状态 <span style='margin-left:5px;'>|</span>
+                        </a>
                         <a class="cursor R-right T-action {{if !quote.touristGroupId}} T-update {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							修改  <span style='margin-left:5px;'>|</span>
-						</a>
+                            修改  <span style='margin-left:5px;'>|</span>
+                        </a>
                         <a class="cursor R-right T-action {{if !quote.touristGroupId}} T-copy {{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							复制  <span style='margin-left:5px;'>|</span>
-						</a>
+                            复制  <span style='margin-left:5px;'>|</span>
+                        </a>
                         <a class="cursor T-action T-view">
-							查看  <span style='margin-left:5px;'>|</span>
-						</a>
+                            查看  <span style='margin-left:5px;'>|</span>
+                        </a>
                         <a class="cursor R-right T-action {{if !quote.touristGroupId}} T-delete {{/if}}" data-right="1440003" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
-							删除  <span style='margin-left:5px;'>|</span>
-						</a>
+                            删除  <span style='margin-left:5px;'>|</span>
+                        </a>
                         <a class="cursor T-action T-share">
-							分享
-						</a>
+                            分享
+                        </a>
                     </div>
                 </td>
             </tr>{{/each}}
