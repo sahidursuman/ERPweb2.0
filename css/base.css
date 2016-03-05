@@ -936,6 +936,9 @@ input.datepicker {
 .table.table-bordered>thead>tr>th:first-child{
 	border-left-color: #51B0C2;
 }
+..table>tbody>tr>td{
+	vertical-align:middle;
+}
 .h-touristGroupInfo {
 	text-align: left;
 	padding-left: 10px !important;
