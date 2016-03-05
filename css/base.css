@@ -930,10 +930,10 @@ input.datepicker {
 	width: 1500px;
 }
 /*table 标题边框颜色*/
-.table>thead>tr>th:last-child{
+.table>thead>tr.bg-blur>th:last-child{
     border-right-color: #51b0c2
 }
-.table.table-bordered>thead>tr>th:first-child{
+.table>thead>tr.bg-blur>th:first-child{
 	border-left-color: #51B0C2;
 }
 ..table>tbody>tr>td{
