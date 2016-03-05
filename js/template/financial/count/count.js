@@ -1161,14 +1161,14 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('financialTripPlan','findFinancialTripPlanById'),
 			data:{
-				id:"592"
+				id:"580"
 			},
 			type:'POST',
 			showLoading:false,
 			success:function(data){
 				if(showDialog(data)){
-					console.log(data);
 					data.dayList = JSON.parse(data.dayList);
+					console.log(data.dayList);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 				}
