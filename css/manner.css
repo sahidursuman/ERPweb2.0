@@ -2183,7 +2183,16 @@ p#back-top a span {
     .linproductName{
         width: 93px;
     }
-
+    .timeStartMore {
+        margin-left: -22px !important;
+        margin-top: 10px;
+    }
+    .addQuoteDiv{
+        margin-left: 20px;
+    }
+    .viewQuoteFdiv{
+        margin-left: 20px;
+    }
 }
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
