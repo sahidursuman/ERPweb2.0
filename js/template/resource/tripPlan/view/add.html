@@ -8,85 +8,79 @@
         <span class="T-tab-id hidden">{{tarId}}</span>
 
         <h5 class="base-title">基本信息</h5>
-        <div class="info">
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">线路产品:</span>{{basicInfo.lineProduct.name}}
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">针对客源:</span>{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4 T-touristCount" data-count="{{basicInfo.touristCount}}">人数:</span>{{basicInfo.touristAdultCount}}大人&nbsp;{{basicInfo.touristChildCount}}小孩
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">团号:</span>{{basicInfo.tripNumber}}
-                </div>
-            </div>
+     <table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
+        <tr>
+            <td class="style-myself">线路产品：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.lineProduct.name}}</td>
+            <td class="style-myself">针对客源：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
+            <td class="style-myself">人数：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px"><span  class="F-float F-count">{{basicInfo.touristAdultCount}}</span>大人&nbsp;<span  class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</td>
+            <td class="style-myself">团号：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripNumber}}</td>
+        </tr>
+        <tr>
+            <td class="style-myself">出游日期：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px"><span name="startTime_Choose">{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}</span></td>
+            <td class="style-myself">完团日期：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+            <td class="style-myself" colspan="4"></td>
+        </tr>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">出游日期:</span><span class="T-startTime">{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">完团日期:</span><span class="T-endTime">{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}</span>
-                </div>
-            </div>
+        <tr>
+            <td  class="style-myself">购物商家：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.shopNames}}</td>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">购物商家:</span>{{basicInfo.shopNames}}
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">自费商家:</span>{{basicInfo.selfPayItemNames}}
-                </div>
-                <div class="col-md-3">
-                    <div class="checkbox checkbox-inline mar-0">
-                        <label>
-                            <input type="checkbox" class="ace" disabled="disabled" type="checkbox" name="isContainSelfPay" {{if basicInfo.isContainSelfPay == 1}}checked{{/if}}>
-                            <span class="lbl"> 包含自费</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">接站牌:</span>{{basicInfo.welcomeBoard}}
-                </div>
-            </div>
+            <td class="style-myself">自费商家：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.selfPayItemNames}}</td>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">全陪:</span>{{basicInfo.accompanyGuideName}}
+            
+            <td colspan="2" style="text-align: left;padding: 0px 0px 0px 10px">
+                <div class="checkbox checkbox-inline mar-0">
+                    <label>
+                        <input type="checkbox" class="ace" disabled="disabled" type="checkbox" name="isContainSelfPay" {{if basicInfo.isContainSelfPay == 1}}checked{{/if}}>
+                        <span class="lbl"> 包含自费</span>
+                    </label>
                 </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">全陪电话:</span>{{basicInfo.accompanyGuideMobile}}
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">责任计调:</span>{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">责任部门:</span>{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}
-                </div>
-            </div>
+            </td>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="fix-w-4">备注:</span>{{basicInfo.remark}}
-                </div>
-            </div>
+            <td class="style-myself">接站牌：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{basicInfo.welcomeBoard}}</td>
+        </tr>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <span class="fix-w-4">计划现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="fix-w-5">计划预支款:</span><input type="text" name="guidePlanAllPreMoney" class="F-float F-money" value="{{basicInfo.guidePlanAllPreMoney}}">
-                </div>
-            </div>
-        </div>
+        <tr>
+            <td class="style-myself">全陪:</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.accompanyGuideName}}</td>
+            <td class="style-myself">全陪电话：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.accompanyGuideMobile}}</td>
+            <td class="style-myself">责任计调:</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}</td>
+            <td class="style-myself">责任部门:</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}</td>
+        </tr>
+
+        <tr>
+            <td  class="style-myself">备注：</td>
+            <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="9">{{basicInfo.remark}}</td>
+        </tr>
+</table>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>
+                <span class="fix-w-4">计划现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
+            </td>
+            <td> 
+                <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
+            </td>
+            <td><span class="fix-w-5">计划预支款:</span><input type="text" name="guidePlanAllPreMoney" class="F-float F-money" value="{{basicInfo.guidePlanAllPreMoney}}"></td>
+        </tr>
+    </tbody>
+</table>
     </div>
+
+
 
     <div class="trip-arrange">
         <h5 class="base-title">行程安排<a class="T-toggle-List T-show" style="font-size: 12px; color: #999; display: inline-block; margin-left: 15px; font-weight: 100;">收起</a></h5>
