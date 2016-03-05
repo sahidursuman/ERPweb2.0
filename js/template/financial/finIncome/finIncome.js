@@ -12,6 +12,7 @@ define(function(require, exports) {
 
     var FinIncome = {
         currentType: 0,
+        accountStatus:2,
         moduleKeys: ['financial_Client', 'financial_innerTransfer_in', 'financial_shop', 'financial_replace', 'financial_Other_accounts']
     };
 
@@ -22,7 +23,7 @@ define(function(require, exports) {
     FinIncome.initModule = function() {
         FinIncome.$tab = false;
         var data = FinancialService.getInitDate();
-        data.accountStatus = 2;
+        data.accountStatus = FinIncome.accountStatus;
         if (Tools.addTab(menuKey, '财务收款', listTemplate(data))) {
             FinIncome.initEvent();
         }
@@ -131,6 +132,7 @@ define(function(require, exports) {
 
         resArgs.pageNo = args.pageNo;
         resArgs.accountStatus = args.accountStatus;
+        FinIncome.accountStatus = args.accountStatus
 
         switch (FinIncome.currentType) {
             case 0: //客户账务
@@ -259,7 +261,7 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
-            FinIncome.getList(0);
+            FinIncome.getList();
         });
 
         // 搜索区域
@@ -286,7 +288,7 @@ define(function(require, exports) {
                     name: $tr.children('td').eq(0).text(),
                     startDate: $tab.find('.T-start').val(),
                     endDate: $tab.find('.T-end').val(),
-                    accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+                    accountStatus : FinIncome.accountStatus
                 }
             FinIncome.doIncomeTask(options);
         });
