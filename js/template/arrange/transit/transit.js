@@ -625,6 +625,7 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
+		'<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>'+
 		'<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
 		'<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
@@ -1621,6 +1622,7 @@ define(function(require, exports) {
 				driverId : transit.getArrangeTrValue(obj.eq(i),"driverId"),
 				useTime : transit.getArrangeTrValue(obj.eq(i),"bususeTime"),
 				boardLocation : transit.getArrangeTrValue(obj.eq(i),"boardLocation"),
+				destination : transit.getArrangeTrValue(obj.eq(i),"destination"),
 				fee : transit.getArrangeTrValue(obj.eq(i),"busFee"),
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"busReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"busNeedPayMoney"),
