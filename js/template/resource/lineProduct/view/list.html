@@ -52,9 +52,6 @@
 			<thead>
 				<tr class="bg-blur">
 					<th>线路产品名称</th>
-					<th>线路类型</th>
-					<th>针对客源</th>
-					<th>行程天数</th>
 					<th>车</th>
 					<th>险</th>
 					<th>餐</th>
@@ -68,20 +65,22 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-
 			<tbody class="T-list">
 				{{each lineProductList as lineProduct}}
 					<tr class="lineProduct-{{lineProduct.id}}" data-id="{{lineProduct.id}}">
-						<td style="width: 300px">{{lineProduct.name}}</td>
-						<td style="width: 240px">{{lineProduct.type}}</td>
-						<td>
-						{{if lineProduct.customerType == 1}}
-							团体
-						{{else}}
-							散客
-						{{/if}}
+						<td style="width: 300px">
+							<p class="h-lineName">{{lineProduct.name}}</p>
+							<p class="h-agencyName"> <span>{{lineProduct.type}}</span>
+							<span>
+								{{if lineProduct.customerType == 1}}
+									团体
+								{{else}}
+									散客
+								{{/if}}
+							</span>
+							<span class="F-float F-count">{{lineProduct.days}}</span></p>
 						</td>
-						<td><span class="F-float F-count">{{lineProduct.days}}</span></td>
+
 						<td>
 						{{if lineProduct.busCompanyStatus == 1}}
 							<i class="ace-icon fa fa-check green"></i>

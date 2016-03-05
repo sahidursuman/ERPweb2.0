@@ -2,9 +2,6 @@
 	<thead>
 		<tr class="bg-blur">
 			<th>团号</th>
-			<th>出游日期</th>
-			<th>完团日期</th>
-			<th>线路产品</th>
 			<th>团队人数</th>
 			<th>导</th>
 			<th>车</th>
@@ -16,7 +13,6 @@
 			<th>购</th>
 			<th>娱</th>
 			<th>它</th>
-			<th>责任计调</th>
 			<th>责任部门</th>
 			<th>状态</th>
 			<th>操作</th>
@@ -26,11 +22,10 @@
     	<input type="hidden" name="travelAgencyName" value="{{travelAgencyName}}">
 		{{each tripPlanList as tripPlan}}
 		<tr data-entity-id="{{tripPlan.id}}">
-			<td>{{tripPlan.tripNumber}}</td>
-			<td>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].startTime | dateFormat: 'yyyy-MM-dd'}}{{else}}{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-			<td>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].endTime | dateFormat: 'yyyy-MM-dd'}}{{else}}{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-			<td class="hct-absolute-group">
-                <span class="hct-span-left">
+			<td class="h-touristGroupInfo">
+				<p class="h-orderNumber">{{tripPlan.tripNumber}}</p>
+				<p class="hct-absolute-group h-lineName">
+				<span class="hct-span-left">
 				{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].lineProductName}}{{else}}{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}{{/if}}
 				</span>
 				{{if tripPlan.tripPlanDetails.length > 1}}
@@ -40,7 +35,12 @@
                     </button> 
                 </label>
                 {{/if}}
+                </p>
+                <p class="h-startTime"><span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].startTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span>-<span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].endTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span></p>
+                <p class="h-memberName">{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
 			</td>
+
+			
 			<td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
 			<!-- 导 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td> 
@@ -62,7 +62,6 @@
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay" class="selfPayStatus" data-status="{{tripPlan.selfPayStatus}}"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
 			<!-- 它 -->
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
-			<td>{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</td>
 			<td>{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</td>
 			{{if tripPlan.status == 0}}
 			<td class="warning-text">待确定</td>
