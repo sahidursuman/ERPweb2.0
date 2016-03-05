@@ -19,7 +19,7 @@
         <tbody>{{each quoteList as quote}}
             <tr data-entity-id="{{quote.id}}">
                 <td>{{quote.quoteNumber}}</td>
-                <td>
+                <td class="h-touristGroupInfo">
                     <p class="h-lineName">{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</p>
                     <p>
                         <span>{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</span>
