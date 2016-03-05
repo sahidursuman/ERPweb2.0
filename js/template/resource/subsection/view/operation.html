@@ -95,12 +95,12 @@
                         <div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value="{{subList.lineProduct.name}}"><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value="{{subList.lineProduct.id}}"></div>
                     </td>
                     <td>
-                        <input type="text" name="customerType" class="col-sm-12" readonly="readonly" value="{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}" />
+                        <input type="text" name="customerType" class="w-50" readonly="readonly" value="{{if subList.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}" />
                     </td>
                     <td>
-                        <input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" value="{{subList.lineProduct.days}}" /><span class="col-sm-2" style="line-height: 30px">天</span></td>
+                        <input type="text" name="days" class="w-50 F-float F-count" readonly="readonly" value="{{subList.lineProduct.days}}" /></td>
                     <td>
-                        <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker col-sm-12" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
+                        <input class="{{if subList.status == 1}}T-startTime{{/if}} datepicker w-100" name="startTime" type="text" {{if subList.status !=1 }}readonly="readonly" {{/if}} value="{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}" />
                     </td>
 
                     <!--费用项start-->
@@ -108,13 +108,13 @@
                         <td>
                          {{each subList.touristGroupSubFeeList as FeeList index}}
                          {{if index == 0}}
-                         <div class="clearfix" style="margin-top:6px">
+                         <div class="clearfix" style="width: 131px;">
                             {{if FeeList.type!=3}}
-                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                   {{else}}
-                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: true}}
                                  </select>
 
@@ -127,13 +127,13 @@
                             </div>
                           {{/if}}
                           {{if index>0}}
-                           <div class="clearfix" style="margin-top:5px">
+                           <div class="clearfix" style="margin-top:1px;width: 131px;">
                             {{if FeeList.type!=3}}
-                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}" {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                <select name="type" data-index="{{index}}"  data-Flag="{{flag}}" {{if FeeList.type==3}}disabled{{/if}}  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: false}}
                                  </select>
                                  {{else}}
-                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type col-sm-8 pull-left">
+                                  <select name="type" data-index="{{index}}"  data-Flag="{{flag}}"  {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  data-id="{{FeeList.id}}" class="T-type w-100 pull-left">
                                     {{#FeeList.type | getFeeItemType: true}}
                                  </select>
                             {{/if}}
@@ -152,10 +152,10 @@
                          <td>
                           {{each subList.touristGroupSubFeeList as FeeList index}}
                            {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
+                            <div class="clearfix" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class="w-50 F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
                             {{/if}}
                             {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  class=" F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
+                            <div class="clearfix" style="margin-top:7px" data-id='{{FeeList.id}}'><input  data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}}  data-type="{{FeeList.type}}"  class="w-50 F-float F-count T-count T-calc T-count-{{index}} " type="text" name="count"  value="{{FeeList.count}}"></div>
 
                             {{/if}}
                           {{/each}}
@@ -163,17 +163,17 @@
                          <td>
                          {{each subList.touristGroupSubFeeList as FeeList index}}
                          {{if index == 0}}
-                            <div class="clearfix" style="margin-top:6px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix"  data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class="w-80 F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{if index>0}}
-                            <div class="clearfix" style="margin-top:10px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class="F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
+                            <div class="clearfix" style="margin-top:7px" data-id='{{FeeList.id}}'><input   data-index="{{index}}" {{if FeeList.type==3}}disabled{{/if}} data-type="{{FeeList.type}}"  class="w-80 F-float F-money T-price T-calc T-price-{{index}}"  type="text" name="price" value="{{FeeList.price}}"></div>
                          {{/if}}
                          {{/each}}
                         </td>
                     {{else}}
                     <td>
-                        <div class="clearfix" style="margin-top:1px">
-                            <select data-index="0" name="type" class="T-type col-sm-8 pull-left">
+                        <div class="clearfix" style="margin-top:1px;width: 131px;">
+                            <select data-index="0" name="type" class="T-type w-100 pull-left">
                                 <option value="1">大人结算价</option>
                                 <option value="2">小孩结算价</option>
                                 <option value="4">车辆费用</option>
@@ -191,13 +191,13 @@
                             </label>
                         </div>
                     </td>
-                    <td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>
-                    <td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>
+                    <td><div class="clearfix" ><input data-index="0" type="text" name="count" class="w-50 F-float F-count T-count T-count-0 T-calc"></div></td>
+                    <td><div class="clearfix" ><input data-index="0" type="text" name="price" class="w-80 F-float F-money T-price T-price-0 T-calc"></div></td>
                     {{/if}}
                     <!--费用项end-->
 
                     <td>      
-                    <div class="clearfix" style="margin-top:6px" data-id=''><input class="F-float F-money  T-payedMoney T-calc" value="" readonly type="text" name="needPayAllMoney" value=""></div>
+                    <div class="clearfix"  data-id=''><input class="w-80 F-float F-money  T-payedMoney T-calc" value="" readonly type="text" name="needPayAllMoney" value=""></div>
                     </td>
                    
 
