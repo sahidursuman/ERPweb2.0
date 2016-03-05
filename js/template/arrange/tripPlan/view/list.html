@@ -18,7 +18,7 @@
         </colgroup>
         <thead>
             <tr class="bg-blur">
-                <th>团信息</th> 
+                <th>团信息 </th> 
                 <th>客户</th>
                 <th>导</th>
                 <th>车</th>
@@ -40,7 +40,7 @@
                 <td class="h-touristGroupInfo" style="vertical-align:middle">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-orderNumber">{{rs.lineProduct.name}}</p>
-                    <p class="h-lineName"><span>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>- <span>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span> <span>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span></p>
+                    <p class="h-lineName"><span>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>- <span>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span> <span style="margin-left: 7px;">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span></p>
                     <p class="h-startTime">销售：
                     {{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}} </p>
                     <p class="h-memberName">
