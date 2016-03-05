@@ -67,12 +67,9 @@
 			
 		</table>
 		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary T-saveAuth" style="margin-bottom:10px;">
-			<i class="ace-icon fa fa-check"></i>
-			提交信息
-		</button>
+		
 	</form>
-
+		
 <div class="userAuthWidth">
 	    {{each listMenu as menu menuIndex}}
 				{{if menu.name != "工作台" && menu.name != "消息中心"}}
@@ -88,6 +85,10 @@
         {{/if}}
         {{/each}}
 	    </ul>
+	    <button class="btn btn-block btn-primary saveAuth-user T-saveAuth">
+			<i class="ace-icon fa fa-check"></i>
+			提交信息
+		</button>
     </div>
 </div>
 

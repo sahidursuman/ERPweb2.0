@@ -424,6 +424,8 @@ define(function(require, exports) {
             touristGroup.chooseQuoteProduct(lineProductId, addType);
         });
 
+        touristGroup.orderNumberChange($addTabId)
+
         //提交按钮事件
         $addTabId.find(".T-submit-addTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
@@ -460,10 +462,7 @@ define(function(require, exports) {
                showMessageDialog($("#confirm-dialog-message"), "该游客小组已生成发团计划不可修改");
                return;
             }
-        });
-
-       
-
+        });       
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
@@ -481,6 +480,8 @@ define(function(require, exports) {
         //外联计调Autocomplate
         $opUserList = $updateTabId.find('.T-choose-opUserList');
         touristGroup.getopUserList($opUserList);
+
+        touristGroup.orderNumberChange($updateTabId)
 
         //报价单号
         $updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
@@ -510,7 +511,7 @@ define(function(require, exports) {
 
         //内转状态时   部分不可编辑
         if (status == 6) {
-            $updateTabId.find('input[name=buyInsurance], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
+            $updateTabId.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
             $updateTabId.find('.T-addPartner, .T-addPartnerManager, .T-touristGroup-addOtherCost, .T-add-tourist, .T-add-tourist-more, .oldbtnDeleteTourist, .T-delete').hide()
         }
     };
@@ -598,6 +599,32 @@ define(function(require, exports) {
 
     };
 
+
+    //检查收客单号重复性
+    touristGroup.orderNumberChange = function($tab) {
+        $tab.find('.T-orderNumberChange').on('change', function() {
+            var $this = $(this),
+                orderNumber = $this.val(),
+                touristGroupId = $tab.find('.T-submit-updateTouristGroup').data('entity-id');
+            $.ajax({
+                url: KingServices.build_url('touristGroup','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: {
+                    orderNumber: orderNumber,
+                    id: touristGroupId},
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该收客单号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 
     //删除小组
@@ -929,7 +956,7 @@ define(function(require, exports) {
                                         $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>');
                                     };
                                     //当复选框未全部不选--移除共用选项
-                                    if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                    if ($checkedbox.length==0  && data.success!=0) { //$("input[type='checkbox']:checked").length
                                         $div.find('.T-action-require-list').children('div.require-commons').remove();
                                     };
                                 });
@@ -960,22 +987,22 @@ define(function(require, exports) {
         var list = '';
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 0 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
+                        '<label class="mar-r-10">'+$.trim(textTitle)+'时间</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label class="mar-r-10">'+$.trim(textTitle)+'地点</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 20px;"><div class="fixed-width"><label class="mar-r-10">票务班次</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 0 20px;"><div class="fixed-width"><label  class="mar-r-10">票务时间</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 1 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
+                        '<label class="mar-r-10">'+$.trim(textTitle)+'时间</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label class="mar-r-10">'+$.trim(textTitle)+'地点</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 20px;"><div class="fixed-width"><label class="mar-r-10">票务班次</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 0 20px;"><div class="fixed-width"><label class="mar-r-10">票务时间</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
-            list += '<div class="col-xs-10 hct-plan-ask" data-type="'+type+'">'+
-                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求：</div>'+
+            list += '<div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-type="'+type+'">'+
+                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求</div>'+
                     '<div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent"></div>'+
                     '</div>';
         $tab.find('.T-action-require-list').append(list);
@@ -2081,13 +2108,14 @@ define(function(require, exports) {
             //获取游客名单住宿、星级、自费、备注
             $visiForm = $obj.find(".T-touristGroupMainFormMember"),
             expectLevel = touristGroup.getVal($visiForm, "level"),
-            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
+            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense"),
+            orderNumber = touristGroup.getVal($obj, "orderNumber");
 
         if ($insuranceStatus.is(":checked") == true) {
             buyInsuranceS = 1;
         } else {
             buyInsuranceS = 0;
-        }
+        };
 
         //游客小组、账单信息序列化
         var form = '',
@@ -2220,7 +2248,7 @@ define(function(require, exports) {
         }
 
         var buyInsurance = buyInsuranceS;
-        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id;
+        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id+ "&orderNumber=" +orderNumber+"&";
         //游客json串
         var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm, id, typeFlag);
 
@@ -2403,7 +2431,7 @@ define(function(require, exports) {
     //提交数据
     touristGroup.submitData = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
         if (status == 6) {
-            $obj.find('input[name=buyInsurance], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').removeAttr('disabled');
+            $obj.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').removeAttr('disabled');
         } 
         var formData = $lineInfoForm.serialize();
         data += form + formData;
