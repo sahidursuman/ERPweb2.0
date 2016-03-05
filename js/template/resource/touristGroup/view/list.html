@@ -4,13 +4,6 @@
 			<thead>
 				<tr class="bg-blur"> 
 				    <th width="8%">收客单号</th>
-					<th >客户</th>
-					<th >线路产品</th>
-					<th>针对客源</th>               
-					<th >出游日期</th>
-					<th >报价单号</th>
-					<th>联系人</th>
-					<th>人数</th>
 					<th>应收</th>
 					<th>预收款</th>
 					<th>已收</th>
@@ -18,47 +11,49 @@
 					<th>返款</th>
 					<th>未收</th>
 					<th>买保险</th>
-					<th>组团单号</th>
 					<th>客源类型</th>
 					<th>接站牌</th>
-					<th>外联销售</th>
 					<th width="160">录入时间</th>
 					<th>状态</th>
-					<th style="width:150px;">操作</th>
+					<th>操作</th>
 				</tr>
 			</thead>
-		
 			<tbody calss="T-touristGroup">{{each touristGroupList as touristGroup}}
 				<tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}">
-				    <td>{{touristGroup.orderNumber}}</td>
-					<td>
-						{{if touristGroup.partnerAgency != null}}
+				    <td>
+					    <p class="h-orderNumber">
+					   		<span > {{touristGroup.orderNumber}}</span>
+					   		<span>{{if touristGroup.customerType==0}} 散客
+							{{else if touristGroup.customerType==1}}团体  
+							{{/if}} </span>
+							<span>{{if touristGroup.touristGroupMember != null}}
+								{{touristGroup.touristGroupMember.name}}
+							{{/if}}</span>
+							<label>
+								<span class="F-float F-count">{{touristGroup.adultCount}}</span>大
+								<span class="F-float F-count">{{touristGroup.childCount}}</span>小
+							</label>
+
+					    </p>
+					    <p class="h-lineName">
+						    {{if touristGroup.lineProduct != null}}
+								{{touristGroup.lineProduct.name}}
+							{{/if}}
+						</p>
+						<p class="h-OPUser">
+							<span>{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
+							<span>{{if touristGroup.partnerAgency != null}}
 							{{touristGroup.partnerAgency.travelAgencyName}}
-						{{/if}}
-					</td>
-					<td>
-						{{if touristGroup.lineProduct != null}}
-							{{touristGroup.lineProduct.name}}
-						{{/if}}
-					</td>
-					<td>
-						{{if touristGroup.customerType==0}} 散客
-						{{else if touristGroup.customerType==1}}团体  
-						{{/if}}  
-					</td>
-					<td>
-						{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}
-					</td>
-					<td>{{if !!touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</td>
-					<td>
-						{{if touristGroup.touristGroupMember != null}}
-							{{touristGroup.touristGroupMember.name}}
-						{{/if}}
-					</td>
-					<td>
-							<span class="F-float F-count">{{touristGroup.adultCount}}</span>大
-							<span class="F-float F-count">{{touristGroup.childCount}}</span>小
-					</td>
+							{{/if}}</span>
+							<span>{{if touristGroup.outOPUser != null}}
+							{{touristGroup.outOPUser.realName}}
+							{{/if}}</span>
+						</p>
+						<p class="h-orderNumber">
+							<span>{{if !!touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</span>
+							<span>{{touristGroup.otaOrderNumber}}</span>
+						</p>
+				    </td>
 					<td>
 						<span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 					</td>
@@ -76,7 +71,6 @@
 						<i class="ace-icon fa fa-times red bigger-125"></i>
 						{{/if}}
 					</td>
-					<td>{{touristGroup.otaOrderNumber}}</td>
 					<td>
 						{{if touristGroup.memberType==0}}
 							 内宾
@@ -85,11 +79,6 @@
 						{{/if}}  	
 					</td>
 					<td>{{touristGroup.welcomeBoard}}</td>
-					<td>
-						{{if touristGroup.outOPUser != null}}
-							{{touristGroup.outOPUser.realName}}
-						{{/if}}
-					</td>
 					<td>
 						{{touristGroup.createTime}}
 					</td>
