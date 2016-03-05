@@ -64,7 +64,7 @@
 			<td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
 			<td>{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</td>
 			{{if tripPlan.status == 0}}
-			<td class="warning-text">待确定</td>
+			<td class="warning-text">待发团</td>
 			{{else if tripPlan.status == 1}}
 			<td class="success-text">已发团</td>
 			{{else if tripPlan.status == -1}}

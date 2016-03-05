@@ -584,7 +584,8 @@ define(function(require, exports) {
      */
     FinGuide.getOperationList = function(pageNo, $tab) {
         if ($tab) {
-            var $line = $tab.find('.T-lineProductName');
+            var $line = $tab.find('.T-lineProductName'),
+                accountstatus = $tab.find('[name=accountStatus]').val();
 
             var args = {
                 pageNo: pageNo || 0,
@@ -594,6 +595,7 @@ define(function(require, exports) {
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
+                accountstatus : accountstatus
             };
 
             if (args.lineProductName === '全部') {
