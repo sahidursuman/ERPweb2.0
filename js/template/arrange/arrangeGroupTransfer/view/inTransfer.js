@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":17,"md5":"6afcf73cf77830eb77dee2ed43e3cdc7"}*/
+/*TMODJS:{"debug":true,"version":19,"md5":"6afcf73cf77830eb77dee2ed43e3cdc7"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeGroupTransfer/view/inTransfer", function($data, $filename) {
         try {
