@@ -33,7 +33,8 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
 	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <table class="table overflow-table table-striped table-bordered table-hover all hct_align_middle" style="margin-top: 30px">
+<div class="overflow-x min-w-1050" style="margin-top: 30px">
+    <table class="table overflow-table table-striped table-bordered table-hover all hct_align_middle w-1500">
         <thead>
             <tr><th class="th-border">账务类别</th>
                 <th class="th-border" width="170">用车时间(账期)</th>
@@ -109,7 +110,8 @@
 		    {{/each}}
         </tbody>  
     </table>
-    <div class="row pageMode">
+</div>
+    <div class="row pageMode" style="padding-top: 15px;">
         <div class="col-xs-6">
             <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>
