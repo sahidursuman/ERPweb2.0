@@ -438,6 +438,10 @@ table tr td {
 .mar-r-20 {
     margin-right: 20px!important;
 }
+
+.mar-b-10 {
+    margin-bottom: 10px;
+}
 .pad-0 {
     padding: 0;
 }
