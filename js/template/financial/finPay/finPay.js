@@ -12,6 +12,7 @@ define(function(require, exports) {
 
 	var FinPay = {
 		currentType: 0,
+		accountStatus:2,
 		moduleKeys: ['financial_innerTransfer_out', 'financial_transfer', 'financial_restaurant', 'financial_rummery', 'financial_busCompany',
 					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide']
 	};
@@ -24,7 +25,7 @@ define(function(require, exports) {
 		FinPay.$tab = false;
 
 		var data = FinancialService.getInitDate();
-			data.accountStatus = 2;
+			data.accountStatus = FinPay.accountStatus;
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();
 		}
@@ -87,6 +88,7 @@ define(function(require, exports) {
 
 		resArgs.pageNo = args.pageNo;
 		resArgs.accountStatus = args.accountStatus;
+		FinPay.accountStatus = args.accountStatus;
 		switch(FinPay.currentType) {
 			case 0:  //内转转出账务
 				options.url = KingServices.build_url('account/innerTransferOutFinancial', 'listSumFinancialInnerTransferOut');
@@ -439,7 +441,7 @@ define(function(require, exports) {
 				name: $tr.children('td').eq(0).text(),
 				startDate: $tab.find('.T-start').val(),
 				endDate: $tab.find('.T-end').val(),
-				accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+				accountStatus : FinPay.accountStatus
 			}
 			if($(this).hasClass('T-pay-borrow')){
 				options.borrow = true;

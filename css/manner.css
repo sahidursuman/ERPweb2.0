@@ -435,7 +435,9 @@ table tr td {
 .mar-r-10 {
     margin-right: 10px;
 }
-
+.mar-r-20 {
+    margin-right: 20px!important;
+}
 .pad-0 {
     padding: 0;
 }

@@ -65,7 +65,7 @@
 			<td>{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</td>
 			<td>{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</td>
 			{{if tripPlan.status == 0}}
-			<td class="warning-text">待确定</td>
+			<td class="warning-text">待发团</td>
 			{{else if tripPlan.status == 1}}
 			<td class="success-text">已发团</td>
 			{{else if tripPlan.status == -1}}

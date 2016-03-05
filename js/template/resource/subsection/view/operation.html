@@ -4,16 +4,17 @@
         <input type="hidden" name="touristGroupStartTime" value="{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}" />
         <input type="hidden" name="touristGroupDays" value="{{ptGroup.lineProduct.days}}" />
         <div class="row">
-            <label class="control-label col-xs-2">线路产品: {{ptGroup.lineProduct.name}}</label>
-            <label class="control-label col-xs-2">类别：{{ptGroup.lineProduct.type}}</label>
-            <label class="control-label col-xs-2">针对客源：{{if ptGroup.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</label>
-            <label class="control-label col-xs-2">天数：<span class='F-float F-count'>{{ptGroup.lineProduct.days}}</span>天</label>
-            <label class="control-label col-xs-2 ">出游日期: <span class="T-startTime">{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</span></label>
+            <label class="control-label col-xs-2">线路产品:<span class='T-lineProName'> {{ptGroup.lineProduct.name}}</label>
+            <label class="control-label col-xs-2">类别：<span class='T-lineProType'>{{ptGroup.lineProduct.type}}</span></label>
+            <label class="control-label col-xs-2">针对客源：<span class='T-lineProcusType'>{{if ptGroup.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}
+            </span></label>
+            <label class="control-label col-xs-2">天数：<span class='F-float F-count T-lineProDays'>{{ptGroup.lineProduct.days}}</span>天</label>
+            <label class="control-label col-xs-2 ">出游日期: <span class="T-lineProStartTime">{{ptGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</span></label>
         </div>
         <div class="row">
-            <label class="control-label col-xs-2">客户: {{ptGroup.partnerAgency.travelAgencyName}}</label>
-            <label class="control-label col-xs-2">联系人: {{ptGroup.contactMember.name}}</label>
-            <label class="control-label col-xs-2">联系电话: {{ptGroup.contactMember.mobileNumber}}</label>
+            <label class="control-label col-xs-2">客户: {{if !!ptGroup.partnerAgency}}{{ptGroup.partnerAgency.travelAgencyName}}{{/if}}</label>
+            <label class="control-label col-xs-2">联系人: {{if !!ptGroup.contactMember}}{{ptGroup.contactMember.name}}{{/if}}</label>
+            <label class="control-label col-xs-2">联系电话: {{if !!ptGroup.contactMember}}{{ptGroup.contactMember.mobileNumber}}{{/if}}</label>
             <label class="control-label col-xs-2">人数合计: {{ptGroup.adultCount}}大{{ptGroup.childCount}}小</label>
             <label class="control-label col-xs-2">应收: <span class='F-float F-money'>{{ptGroup.needPayAllMoney}}</span></label>
         </div>

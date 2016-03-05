@@ -33,6 +33,8 @@ define(function(require, exports) {
             scenicId :"",
             ticketType : "",
             needSeatCount : "",
+            groupName : "",
+            outOPUserName : "",
             startTime : dateJson.startDate,
             endTime : dateJson.endDate,
             sortType: 'auto'
@@ -42,10 +44,10 @@ define(function(require, exports) {
         var html = listMain(data);
         addTab(menuKey,"代订利润",html);
 
-        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate);
+        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "");
     };
 
-    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate){
+    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName){
         replace.searchData = {
             partnerAgencyName : partnerAgencyName,
             partnerAgencyId : partnerAgencyId,
@@ -57,6 +59,8 @@ define(function(require, exports) {
             needSeatCount : seatCount,
             startTime : startDate,
             endTime : endDate,
+            groupName : groupName,
+            outOPUserName : outOPUserName,
             sortType: 'auto'
         };
         $.ajax({
@@ -75,6 +79,8 @@ define(function(require, exports) {
                         hotelList = conditions.hotels,
                         scenicList = conditions.scenics,
                         seatCountList = [];
+                    replace.outOPUserList = conditions.users;
+                    replace.groupList = conditions.groups;
                     if(partnerAgencyList != null && partnerAgencyList.length > 0){
                         for(var i=0;i<partnerAgencyList.length;i++){
                             partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
@@ -117,7 +123,7 @@ define(function(require, exports) {
         });
     };
 
-    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate){
+    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName){
         if (replace.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
@@ -129,7 +135,9 @@ define(function(require, exports) {
             ticketType = replace.$searchArea.find("select[name=ticketType]").val(),
             seatCount = replace.$searchArea.find("input[name=seatCount]").val(),
             startDate = replace.$searchArea.find("input[name=startDate]").val(),
-            endDate = replace.$searchArea.find("input[name=endDate]").val()
+            endDate = replace.$searchArea.find("input[name=endDate]").val(),
+            outOPUserName = replace.$searchArea.find("input[name=outOPUserName]").val(),
+            groupName = replace.$searchArea.find("input[name=groupName]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -153,6 +161,8 @@ define(function(require, exports) {
             needSeatCount : seatCount,
             startTime : startDate,
             endTime : endDate,
+            groupName : groupName,
+            outOPUserName : outOPUserName,
             sortType: 'auto'
         };
 
@@ -177,6 +187,8 @@ define(function(require, exports) {
                         event.preventDefault();
                         replace.listReplace(0);
                     });
+                    replace.getOPUserList(replace.$tab.find('[name="outOPUserName"]'), replace.outOPUserList);
+                    replace.getGroupMapList(replace.$tab.find('[name="groupName"]'), replace.groupList);
 
                     replace.$tab.find('.T-list').off().on('click','.T-option',function(event) {
                         event.preventDefault();
@@ -345,6 +357,82 @@ define(function(require, exports) {
         }).on("click",function(){
             $seat.autocomplete('search', '');
         }); 
+    };
+
+    /**
+     * 绑定责任计调的选择
+     * @param  {object} $target 绑定选择的Jquery对象
+     * @return {[type]}         [description]
+     */
+    replace.getOPUserList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].realName;
+                }
+
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        })
+    };
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    replace.getGroupMapList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].name;
+                }
+
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        });
     };
 
     exports.init = replace.initModule;

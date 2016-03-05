@@ -43,14 +43,14 @@
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle">
                     {{if rs.status == 0}}
-                    <span style="color: #ff9900;">待确定</span>
+                    <span style="color: #ff9900;">待发团</span>
                     {{else if rs.status == 1}}
                     <span style="color: #009900;">已发团</span>
                     {{else if rs.status == -1}}
                     <span style="color: #333333;">已取消</span>
-                    {{else if rs.status == 2}}
+                    {{else if rs.status == 2}} 
                     <span style="color: #333333;">已过期</span>
-                    {{/if}}
+                    {{/if}} 
                 </td>
                 <td style="vertical-align:middle" style="min-width: 230px;">
                     <a class="cursor T-action {{if rs.status == 0}}T-hair-regiment{{/if}} R-right" data-right="1460006" title="{{if rs.status == 0}}点击发团{{/if}}" data-bill-status="{{rs.billStatus}}" data-status-value="{{rs.status}}" {{if rs.status != 0}}style="color:#bbb;"{{/if}}>

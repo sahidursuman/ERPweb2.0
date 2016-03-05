@@ -44,13 +44,18 @@ define(function(require, exports) {
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
-                type: TotalProfit.$searchArea.find("select[name=type]").val()
+                type: TotalProfit.$searchArea.find("select[name=type]").val(),
+                outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
+                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val()
             };
             //获取数据列表
             TotalProfit.getListData(0, args);
             // 获取统计数据
             TotalProfit.getCountData(args);
         }).trigger('click');
+
+        TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
+        TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
        
     };
     //获取列表数据
@@ -63,6 +68,8 @@ define(function(require, exports) {
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
+                outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
+                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
                 pageNo: page || 0
             }
         }
@@ -146,6 +153,99 @@ define(function(require, exports) {
         }).on("click",function(){
             if ($obj.data('ajax')) {
                 $obj.autocomplete('search', '');
+            }
+        });
+    };
+
+    /**
+     * 绑定责任计调的选择
+     * @param  {object} $target 绑定选择的Jquery对象
+     * @return {[type]}         [description]
+     */
+    TotalProfit.getOPUserList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url('financialTotal', 'findTable'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var userList = data.outOPUser || false;
+                    if (!!userList) {
+                        for (var i = 0, len = userList.length;i < len; i++) {
+                            userList[i].value = userList[i].name;
+                        }
+
+                        $target.autocomplete('option', 'source', userList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        })
+    };
+
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @return {[type]}         [description]
+     */
+    TotalProfit.getGroupMapList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            $.ajax({
+                url: KingServices.build_url('financialTotal', 'findTable'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var userList = data.group || false;
+                    if (!!userList) {
+                        for (var i = 0, len = userList.length;i < len; i++) {
+                            userList[i].value = userList[i].name;
+                        }
+
+                        $target.autocomplete('option', 'source', userList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
             }
         });
     };
