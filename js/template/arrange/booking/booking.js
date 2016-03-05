@@ -1131,6 +1131,8 @@ define(function(require, exports) {
 			    contactMobileNumber : BookingArrange.getValue($that,"contactMobileNumber"),
 			    touristRealname : BookingArrange.getValue($that,"touristRealname"),
 			    touristMobileNumber : BookingArrange.getValue($that,"touristMobileNumber"),
+			    outOPUserName : BookingArrange.getValue($that,"outOPUserName"),
+			    outOPUserId : $that.find('[name="outOPUserName"]').data('id'),
 			    sumNeedGetMoney : BookingArrange.getValue($that,"sumNeedGetMoney"),
 			    preIncomeMoney : BookingArrange.getValue($that,"preIncomeMoney"), 
 			    sumCostMoney : BookingArrange.getValue($that,"sumCostMoney"),
