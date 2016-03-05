@@ -915,6 +915,11 @@ input.datepicker {
 	width: 100px;
 }
 
+/*线路产品*/
+.w-150 {	
+	width: 150px;
+}
+
 /*自费table的宽度*/
 .w-1400 {
 	width: 1400px;
@@ -924,8 +929,21 @@ input.datepicker {
 .w-1500 {
 	width: 1500px;
 }
-
-
+/*table 标题边框颜色*/
+.table>thead>tr.bg-blur>th:last-child{
+    border-right-color: #51b0c2
+}
+.table>thead>tr.bg-blur>th:first-child{
+	border-left-color: #51B0C2;
+}
+..table>tbody>tr>td{
+	vertical-align:middle;
+}
+.h-touristGroupInfo {
+	text-align: left;
+	padding-left: 10px !important;
+	margin-left: 20px;
+}
 
 #cnzz_stat_icon_1257382061 {
 	display: none;

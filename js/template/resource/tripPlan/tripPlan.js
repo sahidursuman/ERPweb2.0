@@ -1576,7 +1576,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1607,7 +1607,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 

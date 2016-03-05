@@ -9,99 +9,96 @@
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">报价单号：</label>
+			<label class="col-xs-4 text-right no-padding">报价单号：</label>
 			<span class="col-xs-8">{{if touristGroup.quote}}{{touristGroup.quote.quoteNumber}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">线路产品：</label>
+			<label class="col-xs-4 text-right no-padding">线路产品：</label>
 			<span class="col-xs-8">{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">人数：</label>
+			<label class="col-xs-4 text-right no-padding">人数：</label>
 			<span class="col-xs-8"><span class="F-float F-count">{{tripPlan.touristAdultCount}}</span>大人 <span class="F-float F-count">{{tripPlan.touristChildCount}}</span>小孩</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">收客单号：</label>
+			<label class="col-xs-4 text-right no-padding">收客单号：</label>
 			<span class="col-xs-8">{{touristGroup.orderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">出游日期：</label>
+			<label class="col-xs-4 text-right no-padding">出游日期：</label>
 			<span class="col-xs-8">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">完团日期：</label>
+			<label class="col-xs-4 text-right no-padding">完团日期：</label>
 			<span class="col-xs-8">{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">客户：</label>
+			<label class="col-xs-4 text-right no-padding">客户：</label>
 			<span class="col-xs-8">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">客户联系人：</label>
+			<label class="col-xs-4 text-right no-padding">客户联系人：</label>
 			<span class="col-xs-8">{{if touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪：</label>
+			<label class="col-xs-4 text-right no-padding">全陪：</label>
 			<span class="col-xs-8">{{tripPlan.accompanyGuideName}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪电话：</label>
+			<label class="col-xs-4 text-right no-padding">全陪电话：</label>
 			<span class="col-xs-8">{{tripPlan.accompanyGuideMobile}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">获得方式：</label>
+			<label class="col-xs-4 text-right no-padding">获得方式：</label>
 			<span class="col-xs-8">{{touristGroup.getType | getWayTypeText}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">组团单号：</label>
+			<label class="col-xs-4 text-right no-padding">组团单号：</label>
 			<span class="col-xs-8">{{touristGroup.otaOrderNumber}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">外联销售：</label>
+			<label class="col-xs-4 text-right no-padding">外联销售：</label>
 			<span class="col-xs-8">{{if touristGroup.outOPUser}}{{touristGroup.outOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">客源类型：</label>
+			<label class="col-xs-4 text-right no-padding">客源类型：</label>
 			<span class="col-xs-8">{{if touristGroup.memberType == "1"}}外宾{{else}}内宾{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任计调：</label>
+			<label class="col-xs-4 text-right no-padding">责任计调：</label>
 			<span class="col-xs-8">{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任部门：</label>
+			<label class="col-xs-4 text-right no-padding">责任部门：</label>
 			<span class="col-xs-8">{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">购物商家：</label>
+			<label class="col-xs-4 text-right no-padding">购物商家：</label>
 			<span class="col-xs-8">{{tripPlan.shopNames}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">自费商家：</label>
+			<label class="col-xs-4 text-right no-padding">自费商家：</label>
 			<span class="col-xs-8">{{tripPlan.selfPayItemNames}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">包含自费：</label>
-			<span class="col-xs-2">{{if tripPlan.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}</span>
-			<label class="col-xs-4 text-right">包含保险：</label>
-			<span class="col-xs-2">{{if tripPlan.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}</span>
+			<span class="col-xs-offset-1">{{if tripPlan.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}自费&nbsp;&nbsp;{{if tripPlan.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}保险</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">接站牌：</label>
+			<label class="col-xs-4 text-right no-padding">接站牌：</label>
 			<span class="col-xs-8">{{tripPlan.welcomeBoard}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">送客地点</label>
+			<label class="col-xs-4 text-right no-padding">送客地点</label>
 			<span class="col-xs-8">{{touristGroup.sendPosition}}</span>
 		</div>
 	</div>
@@ -292,18 +289,18 @@
                 <div class="tab-content" style="border: none;">
                 {{each dayList as days index}}
 					<div id="planDayListViewGroup-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
-						<div class="row">
-							<div class="col-xs-3">
+						<div class="clearfix">
+							<div class="pull-left mar-r-10">
 								<label class="control-label hct-label-overflow">简要行程：<span title="{{days.dayInfo.title}}">{{days.dayInfo.title}}</span></label>
 							</div>
-							<div class="col-xs-3 checkbox" style="margin-top: 0;">
+							<div class="pull-left mar-r-10 checkbox" style="margin-top: 0;">
 								<label class="control-label">含餐：</label>
 								{{#days.dayInfo.repastDetail | getRestaurantDesc}}
 							</div>
-							<div class="col-xs-2">
+							<div class="pull-left mar-r-10">
 								<label class="control-label hct-label-overflow">住宿地点：<span title="{{days.dayInfo.restPosition}}">{{days.dayInfo.restPosition}}</span></label>
 							</div>
-							<div class="col-xs-4">
+							<div class="pull-left mar-r-10">
 								<label class="control-label">景点：<span title="{{days.dayInfo.scenicItemNames}}">{{days.dayInfo.scenicItemNames}}</span></label>
 							</div>
 						</div>
@@ -696,19 +693,19 @@
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">应收：</label>
+			<label class="col-xs-4 text-right no-padding">应收：</label>
 			<span class="col-xs-8 F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">预收款：</label>
+			<label class="col-xs-4 text-right no-padding">预收款：</label>
 			<span class="col-xs-8 F-float F-money">{{touristGroup.preIncomeMoney}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">已收：</label>
+			<label class="col-xs-4 text-right no-padding">已收：</label>
 			<span class="col-xs-8 F-float F-money">{{touristGroup.payedMoney}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">计划现收：</label>
+			<label class="col-xs-4 text-right no-padding">计划现收：</label>
 			<span class="col-xs-8 F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 		</div>
 	</div>
@@ -754,9 +751,9 @@
 	</div>
 </div>
 <div class="container-fluid hct-view-plan">
-	<div class="form-group" style="text-align: center;">
-		<button class="btn btn-xs btn-default T-btn-close">
-			<i class="ace-icon fa fa-times-circle"></i> 关闭 
+	<div class="form-group text-center">
+		<button class="btn btn-xs btn-default T-btn-close btn-primary w100">
+			<i class="ace-icon fa fa-times"></i> 关闭 
 		</button>
 	</div>
 </div>
