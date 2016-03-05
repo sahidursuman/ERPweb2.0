@@ -1158,8 +1158,24 @@ define(function(require, exports){
 	};
 	//单团核算表
 	Count.viewTripAccount = function(id){
-		var html = outDetailTempLate();
-		Tools.addTab(menuKey+'-outDetail','单团核算',html);
+		$.ajax({
+			url:KingServices.build_url('financialTripPlan','findFinancialTripPlanById'),
+			data:{
+				id:"592"
+			},
+			type:'POST',
+			showLoading:false,
+			success:function(data){
+				if(showDialog(data)){
+					console.log(data);
+					data.dayList = JSON.parse(data.dayList);
+					var html = outDetailTempLate(data);
+					Tools.addTab(menuKey+'-outDetail','单团核算',html);
+				}
+				
+			}
+		});
+		
 	};
 	//质量统计
 	Count.getquality = function(id){
