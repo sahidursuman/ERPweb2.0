@@ -4,7 +4,7 @@
 }
 </style>
 <div class="col-xs-12 T-updateLineProductContainer">
-    <form class="form-horizontal T-mainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
+    <form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
             <h5 class=" pull-left ">
 				<i class="ace-icon fa fa-info-circle title-size"></i>
@@ -15,7 +15,7 @@
             <div class="widget-body">
                 <div class="widget-main">
                     <div class="form-group">
-                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
+                        <label class="col-sm-1 control-label no-padding-right linproductName"><span class="necessary">*</span>线路产品名称:</label>
                         <div class="col-sm-2">
                             {{if clipboardMode == false}}
                             <input type="hidden" name="lineProductId" value="{{lineProduct.id}}">{{/if}}
@@ -162,7 +162,7 @@
                                                         <th class="th-border">联系电话</th>
                                                         <th class="th-border">公司电话</th>
                                                         <th class="th-border">备注</th>
-                                                        <th class="th-border">操作</th>
+                                                        <th class="th-border" style="width: 10%;">操作</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="T-insuranceForm">
