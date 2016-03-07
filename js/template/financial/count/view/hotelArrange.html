@@ -9,8 +9,7 @@
             </a>
         </h5>
 </div>
-<div class="overflow-x min-w-1050">
-<table class="table overflow-table table-striped table-bordered table-hover w-1500">
+<table class="table overflow-table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th class="th-border"><span class="necessary">*</span>时间</th>
@@ -49,7 +48,7 @@
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 
                 <td>
-                <div class="inline-flex col-xs-12">
+                <div class="inline-flex">
                 {{if arrange.badStatus == 1}}
                 <span>
                     {{if arrange.payType == 0}}
@@ -90,7 +89,6 @@
         {{/each}}
     </tbody>
 </table>
-</div>
 {{if tripPlan.billStatus > -1}}
 <div style="width:60%;">
     <div> 
