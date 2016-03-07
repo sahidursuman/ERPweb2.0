@@ -187,7 +187,7 @@ define(function(require, exports){
 					    type: 1,
 					    title:"新增现金日记账",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: '1000px', //宽高
+					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false,
