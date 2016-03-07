@@ -39,7 +39,7 @@ define(function(require, exports) {
 			accountStatus : 2
 		};
 		if(!!Replace.$tab){
-			var name = Replace.$tab.find('.T-search-customer').val();
+			var name = Replace.$tab.find('.T-search-customer').val().trim();
 			args= {
 				pageNo : (page || 0),
 				travelAgencyName : name == '全部' ? '' : name,

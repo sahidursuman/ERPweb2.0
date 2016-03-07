@@ -644,8 +644,6 @@ define(function(require,exports) {
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && pageNo == 0){
-			args.toBusinessGroupId = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
 			args.lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
 			args.lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
 			args.orderNumber = InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val();

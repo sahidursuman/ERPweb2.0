@@ -110,6 +110,15 @@ define(function(require, exports) {
             Insure.listInsure(0);
         });
 
+        //状态框选择事件
+        Insure.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Insure.listInsure(0);
+        });
+        
         var status = Insure.$tab.find(".T-finance-status");
         status.on('click', '.dropdown-menu a', function(event){
             event.preventDefault();

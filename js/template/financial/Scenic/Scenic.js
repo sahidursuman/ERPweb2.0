@@ -285,7 +285,7 @@ define(function(require, exports) {
                 accountInfo : accountInfo,
                 startDate : startDate,
                 endDate : endDate,
-                accountStatus : accountStatus ||  scenic.$clearSearchArea.find("input[name=accountStatus]").val(),
+                accountStatus : accountStatus,
                 sortType : "auto"
             };
         }

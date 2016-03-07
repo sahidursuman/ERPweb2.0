@@ -57,6 +57,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    data.searchParam.accountStatus = Self.searchData.accountStatus;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);
@@ -271,7 +272,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.sumData = Self.getSumData(selfPayId,tripInfo,startDate,endDate);
+                    data.sumData = Self.getSumData(selfPayId,tripInfo,startDate,endDate,accountStatus);
                     data.selfPayName = selfPayName;
 
                     //暂存数据读取
@@ -720,7 +721,7 @@ define(function(require, exports) {
         });
     };
 
-    Self.getSumData = function(id,tripInfo,startDate,endDate){
+    Self.getSumData = function(id,tripInfo,startDate,endDate,accountStatus){
         var sumData = false;
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial","collectSelfPayAccount"),
@@ -730,6 +731,7 @@ define(function(require, exports) {
                 selfPayId : id,
                 tripInfo : tripInfo,
                 startTime : startDate,
+                accountStatus : accountStatus,
                 endTime : endDate
             },
             success: function(data) {
