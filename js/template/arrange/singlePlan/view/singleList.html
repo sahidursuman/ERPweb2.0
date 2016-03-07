@@ -24,8 +24,8 @@
             <tr data-id="{{rs.id}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
-                    <p class="h-lineName">{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}</p>
-                    <p class="h-startTime"><span>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>- <span>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span> </p>
+                    <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}></p>
+                    <p class="h-startTime"><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span> - <span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span> </p>
                     <p class="h-memberName">责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
                     <p class="h-OPUser">责任部门：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
                 </td>
