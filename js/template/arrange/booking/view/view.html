@@ -1,5 +1,5 @@
-<div class="col-xs-12 updateBooking">
- <button class="btn btn-sm btn-success btn-Booking-export bookingBtn T-bookingBtn ">导出信息</button>
+<div class="updateBooking">
+ <button class="btn btn-sm btn-success btn-Booking-export bookingBtn T-bookingBtn ">导出项目代订</button>
 	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 	<h5 class="">
 				<label class="middle title-size">代订信息</label>
@@ -22,9 +22,11 @@
 			</tr>
 			<tr>
 				<td class="style-myself">游客 </td> 
-				<td style="text-align: left;padding-left: 6px;" colspan="2">{{bookingOrder.touristRealname}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristRealname}}</td>
 				<td class="style-myself">游客电话 </td>
-				<td style="text-align: left;padding-left: 6px;" colspan="4">{{bookingOrder.touristMobileNumber}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristMobileNumber}}</td>
+				<td class="style-myself">外联销售 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.outOPUser}}{{bookingOrder.outOPUser.realName}}{{/if}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">备注 </td>
