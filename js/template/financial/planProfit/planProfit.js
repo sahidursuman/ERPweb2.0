@@ -212,16 +212,16 @@ define(function(require, exports) {
                     var total = data.total
                         moneys = total.list[0];
                     var totalDataHtml = "<tr style='background: #e0effd;'><td rowspan='3'>合计</td><td rowspan='3'></td><td>应收/付</td><td><span class='F-float F-money'>" + moneys.needPayAllMoney + "</span></td><td><span class='F-float F-money'>" +
-                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideTip + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideMoney + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
                                         moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
-                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + moneys.shopCostMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideDeductions + "</span></td>";
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideTip + "</span></td><td><span class='F-float F-money'>" + moneys.shopCostMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideDeductions + "</span></td>";
                     if(operateCalculteOut){
                         totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
                                          "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
                     }
-                    totalDataHtml += "<td rowspan='3'>导游退补小计<span class='F-float F-money'></span></td><td rowspan='3'><span class='F-float F-money'>" + total.totalIncome + "</span></td><td rowspan='3'><span class='F-float F-money'>" + total.totalTrip + "</span></td>";
+                    totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
                     if(operateCalculteOut){
-                        totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + total.totalOut + "</span></td>";
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
                     }
                     totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + total.profit + "</span></td><td rowspan='3'><span class='F-float F-money'>" + total.perCapitaProfit + "</span></td></tr>";
 
@@ -230,12 +230,16 @@ define(function(require, exports) {
                         totalDataHtml += "<tr style='background: #e0effd;'><td>";
                         totalDataHtml += (i == 1) ? "已" : "未";
                         totalDataHtml += "收/付</td><td><span class='F-float F-money'>" + moneys.needPayAllMoney + "</span></td><td><span class='F-float F-money'>" +
-                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideTip + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideMoney || "-") + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
                                         moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
-                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + moneys.shopCostMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideDeductions + "</span></td>";
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideTip || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.shopCostMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.selfMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.guideDeductions || "-") + "</span></td>";
                         if(operateCalculteOut){
                             totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
                                              "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
+                        }
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
                         }
                     }
                     totalDataHtml = Tools.filterCount(totalDataHtml);
