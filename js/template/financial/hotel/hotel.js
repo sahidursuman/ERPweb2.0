@@ -338,8 +338,8 @@ define(function(require, exports) {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
                                     sumPayRemark : sumPayRemark,
-                                    bankNo : hotel.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : hotel.$clearTab.find('input[name=card-id]').val(),
+                                    bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
                                     voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : hotel.$clearTab.find('input[name=tally-date]').val()
                                 }
@@ -436,13 +436,14 @@ define(function(require, exports) {
             var startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = hotel.$clearSearchArea.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = hotel.$clearTab.find('select[name=payType]').val();
                 hotel.clearTempSumDate = {
                     id : id,
                     sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : hotel.$clearTab.find('select[name=payType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : hotel.$clearTab.find('input[name=remark]').val(),
-                    bankNo : hotel.$clearTab.find('input[name=card-number]').val(),
-                    bankId : hotel.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
                     voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : hotel.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -612,15 +613,16 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,args.saveRule);
-        var searchParam = {
-            hotelId : id,
-            sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : hotel.$clearTab.find('select[name=payType]').val(),
-            payRemark : hotel.$clearTab.find('input[name=remark]').val(),
-            bankId : hotel.$clearTab.find('input[name=card-id]').val(),
-            voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-            billTime : hotel.$clearTab.find('input[name=tally-date]').val()
-        };
+        var payType = hotel.$clearTab.find('select[name=payType]').val(),
+            searchParam = {
+                hotelId : id,
+                sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
+                payType : payType,
+                payRemark : hotel.$clearTab.find('input[name=remark]').val(),
+                bankId : (payType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
+                voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
+                billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+            };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);

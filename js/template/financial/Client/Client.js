@@ -666,10 +666,10 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
-                        var bankId = $tab.find('input[name=card-id]').val();
+                        var bankId = $tab.find('input[name=card-id]').val() || $tab.find('input[name=cash-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
-                        var bankNumber = $tab.find('input[name=card-number]').val();
+                        var bankNumber = $tab.find('input[name=card-number]').val() || $tab.find('input[name=cash-number]').val();
                         Client.clearDataArray.bankId = bankId;
                         Client.clearDataArray.voucher = voucher;
                         Client.clearDataArray.billTime = billTime;
@@ -824,9 +824,10 @@ define(function(require, exports) {
 
     Client.saveClearData = function($tab,tabArgs) {
         var argLen = arguments.length;
-        var bankId = $tab.find('input[name=card-id]').val();
-        var voucher = $tab.find('input[name=credentials-number]').val();
-        var billTime = $tab.find('input[name=tally-date]').val();
+        var payType = $tab.find('.T-sumPayType').val(),
+            bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+            voucher = $tab.find('input[name=credentials-number]').val(),
+            billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
 		var JsonStr = Client.clearDataArray; 
         if(JsonStr.length==0){
@@ -841,7 +842,7 @@ define(function(require, exports) {
             data:{
                 receiveAccountList : JsonStr,
                 fromPartnerAgencyId: $tab.data('id'),
-                payType: $tab.find('.T-sumPayType').val(),
+                payType: payType,
                 bankId:bankId,
                 voucher:voucher,
                 billTime:billTime,

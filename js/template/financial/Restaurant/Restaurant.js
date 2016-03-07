@@ -369,8 +369,8 @@ define(function(require, exports) {
                         sumPayMoney : sumPayMoney,
                         sumPayType : sumPayType,
                         sumPayRemark : sumPayRemark,
-                        bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
-                        bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                        bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                        bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
                         voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
                         billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                     }
@@ -438,13 +438,14 @@ define(function(require, exports) {
             var startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = restaurant.$clearTab.find('select[name=payType]').val();
                 restaurant.clearTempSumDate = {
                     id : id,
                     sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : restaurant.$clearTab.find('select[name=payType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : restaurant.$clearTab.find('input[name=remark]').val(),
-                    bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
-                    bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
                     voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -616,12 +617,13 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args.saveRule);
-        var searchParam = {
+        var payType = restaurant.$clearTab.find('select[name=payType]').val(),
+            searchParam = {
             restaurantId : id,
             sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : restaurant.$clearTab.find('select[name=payType]').val(),
+            payType : payType,
             payRemark : restaurant.$clearTab.find('input[name=remark]').val(),
-            bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+            bankId : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
             voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
             billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
         };

@@ -248,6 +248,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-TransferOut-delete')) {
                 //撤销
                 innerTransfer.deleteTransferOut(id);
+            }else if ($that.hasClass('T-returnTransferOut-delete')) {
+                //确认退回
+                innerTransfer.returnTransferOut(id);
             };
         });
 
@@ -266,6 +269,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-TransferIn-refuse')) {
                 //拒绝
                 innerTransfer.deleteTransferIn(id);
+            }else if($that.hasClass('T-returnTransferIn-refuse')){
+                //申请退回
+                innerTransfer.returnTransferIn(id);
             };
         });
 
@@ -654,28 +660,29 @@ define(function(require, exports) {
         }
     }
 
-    //内转确认后查看内转信息
-/*    innerTransfer.saveTransferIn = function(id) {
+
+
+    /**
+     * [deleteTransferOut 确认退回操作]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    innerTransfer.returnTransferOut = function(id) {
         $.ajax({
-                url: KingServices.build_url("innerTransfer", "save"),
-                type: "POST",
-                data: "id=" + id + "&isDelete=1"
-            })
-            .done(function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var touristGroupId = data.touristGroupId,
-                        isTransferIn = 'inner';
-                    //查看内转
-                    KingServices.viewTouristGroup(touristGroupId, isTransferIn);
-                    //刷新data
-                    var divId = "inner-TransferIn",
-                        type = "2";
-                    innerTransfer.getSearchParam(divId, type);
-                    innerTransfer.innerList(divId, type, 0);
-                }
-            })
-    };*/
+            url: KingServices.build_url("innerTransfer", "confirmApplyForInnerTransferBack"),
+            type: "POST",
+            data: "innerTransferId=" + id + "",
+        })
+        .done(function(data) {
+            var result = showDialog(data);
+            if (result) {
+                var divId = "inner-TransferOut",
+                    type = "1";
+                innerTransfer.getSearchParam(divId, type);
+                innerTransfer.innerList(divId, type, 0);
+            }
+        }); 
+    };
 
 
     /**
@@ -763,6 +770,26 @@ define(function(require, exports) {
             }
         });
     };
+     
+    /**
+     * [returnTransferIn 回退功能的使用]
+     * @param  {[type]} id 游客记录Id
+     * @return {[type]}   
+     */
+    innerTransfer.returnTransferIn=function(id){
+       $.ajax({
+            url: KingServices.build_url("innerTransfer", "innerTransferBack"),
+            ype: "POST",
+            data: "innerTransferId=" + id + "",
+        })
+        .done(function(data) {
+             var result = showDialog(data);
+            if (result) {
+                 innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
+            }
+        })
+    };
+
     innerTransfer.chooseLineProduct = function(divId) {
         var chooseLineProduct = $("#" + divId).find(".T-lineProductChoose"),
             list;
