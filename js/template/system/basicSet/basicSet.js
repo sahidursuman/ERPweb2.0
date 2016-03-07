@@ -440,7 +440,7 @@ define(function(require,exports){
 		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 		var subData = {
 			type : $obj.find('select[name=type]').val(),
-			accountNames:$obj.find('input[name=accountNames]').val(),
+			aliasName:$obj.find('input[name=aliasName]').val(),
 			accountName:$obj.find('input[name=accountName]').val(),
 			bankAccountNumber:bankNumber,
 			beginningBalance:$obj.find('input[name=balanceMoney]').val(),
