@@ -3,7 +3,7 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area">
                 <div class="form-group">
-                    <label>自费商家：{{selfPayName}}</label>
+                    <label class="mar-r-20">自费商家：{{selfPayName}}</label>
                     <label class="mar-r-10">账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
@@ -19,11 +19,11 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group globalAdd T-count">
-                <label>账面应付合计：{{sumData.needPayMoney}}元 </label>
+                <label class="mar-r-20">账面应付合计：{{sumData.needPayMoney}}元 </label>
                 <label class="mar-r-20">已付金额合计：<span class="F-float F-money">{{sumData.payedMoney}} </span></label>
                 <label class="mar-r-20">结算金额合计：<span class="F-float F-money">{{sumData.settlementMoney}}</span></label>
                 <label class="mar-r-20">未付金额合计：<span class="F-float F-money">{{sumData.unPayedMoney}}</span></label>
-                <label class="mar-r-20">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{sumData.unPayedMoneyConfirmed}}</span></label>
+                <label >未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{sumData.unPayedMoneyConfirmed}}</span></label>
             </div>
         </form>
 
