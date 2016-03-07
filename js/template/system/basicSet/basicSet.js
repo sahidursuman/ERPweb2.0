@@ -145,14 +145,12 @@ define(function(require,exports){
 		'</select>';
 		$obj.find('.status').html(selectHtml);
 
-		var selected2 = '';
-		if (oldType == 1) {
-			selected2 = 'selected="selected"'
-		};
-		var typeHtml = '<select name="selectType">'+
-		'<option value="0">收入</option>'+
-		'<option value="1" '+selected2+'>支出</option>'+
-		'</select>';
+		var selected2 = 'selected="selected"';
+		var typeHtml = '<select name="selectType">'+'<option value="0">收入</option>'+'<option value="1" ';
+		if(oldType == 1){ typeHtml += selected2; }
+		typeHtml += '>支出</option><option value="2"';
+		if(oldType == 2){ typeHtml += selected2; }
+		typeHtml += '>转账</option></select>';
 		$obj.find('.T-type').html(typeHtml);
 		$obj.find('input').off('change').on('change',function(){
 			Infrastructure.installAccData($obj,args);
@@ -270,9 +268,9 @@ define(function(require,exports){
 		var html = addTemolate();
 		var addBankAccLayer = layer.open({
 			type: 1,
-			title:"新增银行账户",
+			title:"新增资金账户",
 			skin: 'layui-layer-rim', //加上边框
-			area: '600px', //宽高
+			area: '800px', //宽高
 			zIndex:1028,
 			content: html,
 			scrollbar: false,
@@ -280,6 +278,10 @@ define(function(require,exports){
 				var $addTabObj = $('.T-bankAcc-container');
 				//给添加页面绑定事件
 				Infrastructure.bankAccEvent($addTabObj,args,$obj,1);
+
+				$addTabObj.find('.T-btn-close').on("click",function(){
+					layer.close(addBankAccLayer);
+				});
 			}
 		});
 		Infrastructure.addLayer = addBankAccLayer;
@@ -339,7 +341,6 @@ define(function(require,exports){
 
 		//提交事件
 		$obj.find('.T-submit').on('click',function(){
-
 			if(!validator.form()){return;};
 			var subData = Infrastructure.installData($obj,typeFlag);
 			var method = typeFlag == 2 ? 'updateBank':'addBank'
@@ -438,6 +439,8 @@ define(function(require,exports){
 		};
 		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 		var subData = {
+			type : $obj.find('select[name=type]').val(),
+			aliasName:$obj.find('input[name=aliasName]').val(),
 			accountName:$obj.find('input[name=accountName]').val(),
 			bankAccountNumber:bankNumber,
 			beginningBalance:$obj.find('input[name=balanceMoney]').val(),
