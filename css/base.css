@@ -861,7 +861,10 @@ input.datepicker {
 	}
 } */
 /*布局全局变量*/
-
+.main-content-inner > .page-content{
+	padding: 0;
+	padding-top: 38px;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
@@ -875,12 +878,6 @@ input.datepicker {
 	}
 	.sidebar+.main-content .breadcrumbs-fixed {
 	    left: 140px;
-	}
-	.main-content-inner > .page-content{
-		padding: 8px 0 24px;
-	}
-	.breadcrumbs-fixed+.page-content{
-		padding-top: 38px;
 	}
 	.sidebar+.main-content {
 		margin-left: 140px;
@@ -938,11 +935,6 @@ input.datepicker {
 }
 ..table>tbody>tr>td{
 	vertical-align:middle;
-}
-.h-touristGroupInfo {
-	text-align: left;
-	padding-left: 10px !important;
-	margin-left: 20px;
 }
 
 #cnzz_stat_icon_1257382061 {
