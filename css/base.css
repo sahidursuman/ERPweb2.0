@@ -919,12 +919,12 @@ input.datepicker {
 
 /*自费table的宽度*/
 .w-1400 {
-	width: 1400px;
+	min-width: 1400px;
 }
 
 /*车辆安排table的宽度*/
 .w-1500 {
-	width: 1500px;
+	min-width: 1500px;
 }
 /*table 标题边框颜色*/
 .table>thead>tr.bg-blur>th:last-child{
