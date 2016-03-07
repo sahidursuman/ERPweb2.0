@@ -150,7 +150,7 @@ define(function(require, exports) {
 			};
 
 		if (page == -1) {
-			exportXLS( APP_ROOT + 'back/export.do?method=exportTripPlanBuyInsuranceMember&token='+ $.cookie("token") + '&' + $.param(idData));
+			exportXLS( APP_ROOT + 'back/export.do?method=exportTripPlanBuyInsuranceMember&token='+ $.cookie("token") + '&' + $.param(idData)+'&'+ $.param(formData));
 			return;
 		}
 
