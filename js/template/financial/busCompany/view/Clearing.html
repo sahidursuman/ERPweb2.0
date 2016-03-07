@@ -22,17 +22,17 @@
     </form>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group">
-            <div class="pull-left" style="margin:3px 30px 0px 0px;">
-                <label>账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
-                <label class="marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span> </label>
-                <label class="marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
-                <label class="marginLeft-30">未付金额合计：<span class="F-float F-money">{{sumUnPayedMoney}}</span></label>
-                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
+            <div class="pull-left">
+                <label class="mar-r-20">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
+                <label class="mar-r-20">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span> </label>
+                <label class="mar-r-20">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
+                <label class="mar-r-20">未付金额合计：<span class="F-float F-money">{{sumUnPayedMoney}}</span></label>
+                <label >未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
             </div>
         </div>
     </form>
 
-    <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
+    <div class="form-inline row globalAdd T-summary">
         <div class="form-group mar-r-10 ">
             <label class="control-label">本次付款金额合计：</label>
             <label class="control-label">
