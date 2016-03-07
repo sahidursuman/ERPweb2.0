@@ -468,7 +468,7 @@ define(function(require, exports) {
         }
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
         var payType = $tab.find('.T-sumPayType').val();
-		var bankId = $tab.find('input[name=card-id]').val();
+		var bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val(),
             borrow = $tab.find('.T-saveClear').data('borrow'),

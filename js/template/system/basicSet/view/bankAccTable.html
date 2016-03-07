@@ -33,7 +33,7 @@
 
 	<button class="btn btn-sm btn-success T-add R-right" data-right="1040002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
-		新增银行账户
+		新增资金账户
 	</button>
 </div>
 <div class="row T-hotelList">
@@ -51,6 +51,8 @@
             </colgroup>
 			<thead>
 				<tr style="background: #51b0c2;color: white">
+					<th>账户名称</th>
+					<th>类别</th>
 					<th>银行账号</th>
 					<th>开户银行</th>
 					<th>开户户名</th>
@@ -65,6 +67,8 @@
 			<tbody class="T-bankAcc-list">
 			    {{each newBankAccountList as rs}}
 					<tr bankNumId="{{rs.id}}">
+						<td>账户名称</td>
+						<td>类别</td>
 						<td>{{rs.bankAccountNumber}}</td>
 						<td>{{rs.openingBank}}</td>
 						<td>{{rs.accountName}}</td>
