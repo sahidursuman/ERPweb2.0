@@ -10,7 +10,7 @@
 									<span class="lbl"></span>
 								</label>
 							</th>
-							<th>收客单号</th>
+							<th>收客信息</th>
 							<!-- <th>客户来源</th> -->
 							<th>出游日期</th>
 							<th>联系人</th>
@@ -33,8 +33,8 @@
 									</label>
 								</td>
 								<td class="h-touristGroupInfo">
-								 	<p class="h-orderNumber">收客单号：{{touristGroup.orderNumber}}</p>
-					                <p class="">{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</p>
+								 	{{if touristGroup.orderNumber}}<p class="h-orderNumber">收客单号：{{touristGroup.orderNumber}}</p>{{/if}}
+					                {{if touristGroup.partnerAgency != null}}<p class="">{{touristGroup.partnerAgency.travelAgencyName}}</p>{{/if}}
            						</td>
 								<td>{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 								<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
