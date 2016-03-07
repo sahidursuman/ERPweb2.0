@@ -305,7 +305,7 @@ define(function(require, exports) {
                 guideName:$btn.data('name'),
                 startDate: $datePicker.eq(0).val(),
                 endDate: $datePicker.eq(1).val(),
-                accountstatus : $tab.find('[name=accountStatus]').val()
+                accountStatus : $tab.find('[name=accountStatus]').val()
 
             };
             if(type){
@@ -585,7 +585,7 @@ define(function(require, exports) {
     FinGuide.getOperationList = function(pageNo, $tab) {
         if ($tab) {
             var $line = $tab.find('.T-lineProductName'),
-                accountstatus = $tab.find('[name=accountStatus]').val();
+                accountStatus = $tab.find('[name=accountStatus]').val();
 
             var args = {
                 pageNo: pageNo || 0,
@@ -595,7 +595,7 @@ define(function(require, exports) {
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
-                accountstatus : accountstatus
+                accountStatus : accountStatus
             };
 
             if (args.lineProductName === '全部') {

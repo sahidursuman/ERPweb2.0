@@ -44,7 +44,7 @@ define(function(require, exports) {
                 endDate: $tab.find('.T-search-end-date').val(),
                 accountStatus : $tab.find(".T-finance-status").find("button").data("value")
             }
-            var shopName = $tab.find('.T-search-name').val();
+            var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;
         }
         $.ajax({

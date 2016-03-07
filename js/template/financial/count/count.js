@@ -1167,8 +1167,6 @@ define(function(require, exports){
 			showLoading:false,
 			success:function(data){
 				if(showDialog(data)){
-					data.dayList = JSON.parse(data.dayList);
-					console.log(data.dayList);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 				}
