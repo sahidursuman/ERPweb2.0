@@ -73,6 +73,12 @@ define(function(require, exports) {
 		$tab.find('.T-btn-tripPlan-search').on('click', function() {
 			singlePlan.listTripPlanSingle(0, $tab);
 		})
+
+        //导出游客名单
+        $tab.find('.T-singlePlan-export').on('click', function(event) {
+            event.preventDefault();
+            singlePlan.listTripPlanSingle(-1, $tab);
+        });
     	
     	$tab.find("[name='tripPlanStatus']").on('change', function(){
     		if($(this).val() != "1"){
@@ -166,6 +172,12 @@ define(function(require, exports) {
 				guideId : $searchArea.find('[name="realname"]').data('id'),
 				busId : $searchArea.find('[name="licenseNumber"]').data('id')
 			};
+
+		if (page == -1) {
+			exportXLS( APP_ROOT + 'back/export.do?method=exportSinglePlanBuyInsuranceMember&token='+ $.cookie("token") + '&' + $.param(idData));
+			return;
+		}
+
 		arge = $.extend({},arge, formData, idData);
 		if($searchArea.find('[name="status"]').hasClass('hide')){
 			arge.status = "";
