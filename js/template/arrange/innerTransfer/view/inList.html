@@ -10,9 +10,8 @@
 			<th>联系人</th>
 			<th>联系电话</th>
 			<th>应收</th>
-		<!-- 	<th>已收</th> -->
 			<th>我方状态</th>
-			<th width="143">操作</th>
+			<th width="15%">操作</th>
 		</tr>
 	</thead>
 	<tbody class="T-transferIn-list">{{each resultList as list}}
@@ -26,8 +25,12 @@
 			<td>{{list.user.realName}}</td>
 			<td>{{list.user.mobileNumber}}</td>
 			<td><span class=" F-float F-money">{{list.transNeedPayMoney}}</span></td>
-			<!--<td><span class=" F-float F-money">{{list.transPayedMoney}}</span></td>-->			
-			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{/if}}</td>
+			<td>
+			{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>
+			{{else if list.status == 1}}<span style="color: green;">已确认</span>
+			{{else if list.status == 4}}<span style="color: green;">申请退回</span>
+			{{/if}}
+			</td>
 			<td>
 				<div class="hidden-sm hidden-xs btn-group">
 					<a class="cursor  {{if list.status != 1}}T-TransferIn-save{{/if}} R-right T-action" data-right="1340004" {{if list.status == 1}}style="color:#bbb"{{/if}}>
@@ -40,6 +43,11 @@
 					<a class="cursor {{if list.status != 1}}T-TransferIn-refuse{{/if}} R-right T-action" data-right="1340005" {{if list.status == 1}}style="color:#bbb"{{/if}}>
 						<label class="padding-right20">|</label>
 						拒绝
+					</a>
+
+					<a class="cursor {{if list.status == 1}}T-returnTransferIn-refuse{{/if}} R-right T-action" data-right="1340005" {{if list.status != 1}}style="color:#bbb"{{/if}}>
+						<label class="padding-right20">|</label>
+						申请退回
 					</a>
 
 				</div>  
