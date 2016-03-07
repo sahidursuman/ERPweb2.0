@@ -78,7 +78,7 @@
 							确认
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status ==1 || result.status == 4}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if result.status != 1}}style="color:#bbb;"{{/if}}>
+						<a data-value="{{result.id}}" class="cursor {{if result.status == 4}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if result.status != 4}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							确认退回
 						</a>
