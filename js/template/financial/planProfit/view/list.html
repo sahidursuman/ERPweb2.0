@@ -105,7 +105,7 @@
 	{{each rs.list as list index}}
 		{{if index > 0}}
 		<tr><td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-			<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
+			<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
 			<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
 			<td><span class="F-float F-money">{{list.incomeMoney}}</span></td>
@@ -185,7 +185,7 @@
 		{{if index > 0}}
 			<tr style="background: #fcf8e4;">
 				<td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-				<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
+				<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
 				<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
 				<td><span class="F-float F-money">{{list.incomeMoney}}</span></td>
