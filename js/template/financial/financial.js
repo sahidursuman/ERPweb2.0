@@ -25,7 +25,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val == 1){
             var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
         }
-        $cash.closest('div').toggleClass('hidden', val != 0);
+        $cash.closest('div').toggleClass('hidden', val !== "0");
         $card.closest('div').toggleClass('hidden', val != 1);
     }).trigger('change');
 };

@@ -229,8 +229,13 @@ define(function(require, exports) {
                         moneys = total.list[i]
                         totalDataHtml += "<tr style='background: #e0effd;'><td>";
                         totalDataHtml += (i == 1) ? "已" : "未";
-                        totalDataHtml += "收/付</td><td><span class='F-float F-money'>" + moneys.needPayAllMoney + "</span></td><td><span class='F-float F-money'>" +
-                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideMoney || "-") + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                        totalDataHtml += "收/付</td><td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<span class='F-float F-money'>" + moneys.needPayAllMoney + "</span>";
+                        } else {
+                            totalDataHtml += "-";
+                        }
+                        totalDataHtml += "</td><td><span class='F-float F-money'>" + moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideMoney || "-") + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
                                         moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
                                         moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideTip || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.shopCostMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.selfMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.guideDeductions || "-") + "</span></td>";
                         if(operateCalculteOut){
