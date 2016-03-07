@@ -43,7 +43,8 @@
                     <select name="chooseRest">
                         <option value="">导游自选</option>
                         {{each arrange.restaurantChooseArrangeList as rs}}
-                            <option value="{{rs.restaurantId}}">{{rs.name}}</option>
+                            <option value="{{rs.restaurantId}}" 
+                            {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
                         {{/each}}
                     </select>
                 {{else}}
