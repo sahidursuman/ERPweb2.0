@@ -2,7 +2,7 @@
 	<tr class="bg-blur">
 		<th rowspan="2">团信息</th>
 		<th rowspan="2">状态</th>
-		<th rowspan="2">收/付</th>
+		<th rowspan="2" style="width:60px;">收/付</th>
 		<th colspan="5">发团收入</th>
 		<th colspan="12">发团成本</th>
 		{{if isTurn == 1}}
@@ -91,9 +91,9 @@
 		<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
 		{{/if}}
+		<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 		{{/if}}
 		{{/each}}
-		<td rowspan="3"><span class="F-float F-money">{{rs.guideBackPaySMoney}}</span></td>
 		<td rowspan="3"><span class="F-float F-money">{{rs.totalIncome}}</span></td>
 		<td rowspan="3"><span class="F-float F-money">{{rs.totalTrip}}</span></td>
 		{{if isTurn == 1}}
@@ -104,7 +104,7 @@
 	</tr>
 	{{each rs.list as list index}}
 		{{if index > 0}}
-		<tr><td>{{if index == 1}}已{{else if index == 2}}{{/if}}收/付</td>
+		<tr><td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
 			<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
@@ -129,6 +129,7 @@
 			<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
 			{{/if}}
+			<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 		</tr>
 		{{/if}}
 	{{/each}}
@@ -164,9 +165,9 @@
 		<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
 		{{/if}}
+		<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 		{{/if}}
 		{{/each}}
-		<td rowspan="3"><span class="F-float F-money">{{subtotal.guideBackPaySMoney}}</span></td>
 		<td rowspan="3"><span class="F-float F-money">{{subtotal.totalIncome}}</span></td>
 		<td rowspan="3"><span class="F-float F-money">{{subtotal.totalTrip}}</span></td>
 		{{if isTurn == 1}}
@@ -178,7 +179,7 @@
 	{{each subtotal.list as list index}}
 		{{if index > 0}}
 			<tr style="background: #fcf8e4;">
-				<td>{{if index == 1}}已{{else if index == 2}}{{/if}}收/付</td>
+				<td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
 				<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
@@ -203,6 +204,7 @@
 				<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
 				{{/if}}
+				<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 			</tr>
 		{{/if}}
 	{{/each}}

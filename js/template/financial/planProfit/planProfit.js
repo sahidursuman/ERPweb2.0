@@ -219,7 +219,7 @@ define(function(require, exports) {
                         totalDataHtml += "<td><span class='F-float F-money'>" + (moneys.outBusMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outRestaurantMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outHotelMoney || 0) + 
                                          "</span></td><td><span class='F-float F-money'>" + (moneys.outTicketMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outOtherMoney || 0) + "</span></td>";
                     }
-                    totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + (moneys.guideBackPaySMoney || 0) + "</span></td><td rowspan='3'><span class='F-float F-money'>" + (total.totalIncome || 0) + "</span></td><td rowspan='3'><span class='F-float F-money'>" + (total.totalTrip || 0) + "</span></td>";
+                    totalDataHtml += "<td><span class='F-float F-money'>" + (moneys.guideBackPaySMoney || 0) + "</span></td><td rowspan='3'><span class='F-float F-money'>" + (total.totalIncome || 0) + "</span></td><td rowspan='3'><span class='F-float F-money'>" + (total.totalTrip || 0) + "</span></td>";
                     if(operateCalculteOut){
                         totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + (total.totalOut || 0) + "</span></td>";
                     }
@@ -237,6 +237,7 @@ define(function(require, exports) {
                             totalDataHtml += "<td><span class='F-float F-money'>" + (moneys.outBusMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outRestaurantMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outHotelMoney || 0) + 
                                              "</span></td><td><span class='F-float F-money'>" + (moneys.outTicketMoney || 0) + "</span></td><td><span class='F-float F-money'>" + (moneys.outOtherMoney || 0) + "</span></td>";
                         }
+                        totalDataHtml += "<td><span class='F-float F-money'>" + (moneys.guideBackPaySMoney || 0) + "</span></td>";
                     }
                     totalDataHtml = Tools.filterCount(totalDataHtml);
                     totalDataHtml = Tools.filterMoney(totalDataHtml);
