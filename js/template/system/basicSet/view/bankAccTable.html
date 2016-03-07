@@ -67,8 +67,8 @@
 			<tbody class="T-bankAcc-list">
 			    {{each newBankAccountList as rs}}
 					<tr bankNumId="{{rs.id}}">
-						<td>账户名称</td>
-						<td>类别</td>
+						<td>{{rs.aliasName}}</td>
+						<td>{{if rs.type == 0}}现金账户{{else}}银行账户{{/if}}</td>
 						<td>{{rs.bankAccountNumber}}</td>
 						<td>{{rs.openingBank}}</td>
 						<td>{{rs.accountName}}</td>
