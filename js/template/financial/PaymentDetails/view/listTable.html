@@ -15,10 +15,10 @@
         <td><a {{if rs.subjectName == '主营业务收入' || rs.subjectName == '主营业务支出'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>
         {{else if rs.moneyType == 2}}
         <td>{{if rs.incomeDifferenceMoney == 0}}-
-            {{else}}<a class="T-viewDetails"><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>
+            {{else}}<span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></td>
             {{/if}}
         <td>{{if rs.payDifferenceMoney == 0}}-
-            {{else}}<a class="T-viewDetails"><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>
+            {{else}}<span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
             {{/if}}
         {{/if}}
         <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>

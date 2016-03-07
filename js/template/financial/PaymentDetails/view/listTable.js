@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":84,"md5":"1f5b91fee0b70cbb772a74952608cef9"}*/
+/*TMODJS:{"debug":true,"version":86,"md5":"7a229decdd9065f6d311e9498d502cba"}*/
 define(function(require) {
     return require("../../../template")("financial/PaymentDetails/view/listTable", function($data, $filename) {
         try {
@@ -25,16 +25,14 @@ define(function(require) {
                 $line = 15) : ($out += 'style="color:#000;"', $line = 15), $out += '><span class="F-float F-money">', 
                 $line = 15, $out += $escape(rs.payDifferenceMoney), $out += "</span></a></td> ", 
                 $line = 16) : 2 == rs.moneyType && ($out += " <td>", $line = 17, 0 == rs.incomeDifferenceMoney ? ($out += "- ", 
-                $line = 18) : ($out += '<a class="T-viewDetails"><span class="F-float F-money">', 
-                $line = 18, $out += $escape(rs.incomeDifferenceMoney), $out += "</span></a></td> ", 
-                $line = 19), $out += " <td>", $line = 20, 0 == rs.payDifferenceMoney ? ($out += "- ", 
-                $line = 21) : ($out += '<a class="T-viewDetails"><span class="F-float F-money">', 
-                $line = 21, $out += $escape(rs.payDifferenceMoney), $out += "</span></a></td> ", 
-                $line = 22), $out += " ", $line = 23), $out += " <td>", $line = 24, null == rs.bankName || "" == rs.bankName ? ($out += "-", 
-                $line = 24) : ($line = 24, $out += $escape(rs.bankName), $line = 24), $out += "</td> <td>", 
-                $line = 25, $out += $escape(rs.remark), $out += "</td> <td>", $line = 26, $out += $escape(rs.user.realName), 
-                $out += "</td> <td>", $line = 27, $out += $escape(rs.createTime), $out += "</td> </tr> ", 
-                $line = 29;
+                $line = 18) : ($out += '<span class="F-float F-money">', $line = 18, $out += $escape(rs.incomeDifferenceMoney), 
+                $out += "</span></td> ", $line = 19), $out += " <td>", $line = 20, 0 == rs.payDifferenceMoney ? ($out += "- ", 
+                $line = 21) : ($out += '<span class="F-float F-money">', $line = 21, $out += $escape(rs.payDifferenceMoney), 
+                $out += "</span></td> ", $line = 22), $out += " ", $line = 23), $out += " <td>", 
+                $line = 24, null == rs.bankName || "" == rs.bankName ? ($out += "-", $line = 24) : ($line = 24, 
+                $out += $escape(rs.bankName), $line = 24), $out += "</td> <td>", $line = 25, $out += $escape(rs.remark), 
+                $out += "</td> <td>", $line = 26, $out += $escape(rs.user.realName), $out += "</td> <td>", 
+                $line = 27, $out += $escape(rs.createTime), $out += "</td> </tr> ", $line = 29;
             }), new String($out);
         } catch (e) {
             throw {
@@ -42,7 +40,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each result as rs}}\r\n    <tr data-id="{{rs.id}}">\r\n        <td>{{rs.accountTime}}</td>\r\n        <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{else if rs.moneyType == 2}}转账{{/if}}</td>\r\n        <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>\r\n        <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>\r\n        <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>\r\n        <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>\r\n        <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>\r\n        {{if rs.moneyType == 0}}\r\n        <td><a {{if rs.subjectName == \'主营业务收入\' || rs.subjectName == \'主营业务支出\'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>\r\n        <td>-</td>\r\n        {{else if rs.moneyType == 1}}\r\n        <td>-</td>\r\n        <td><a {{if rs.subjectName == \'主营业务收入\' || rs.subjectName == \'主营业务支出\'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>\r\n        {{else if rs.moneyType == 2}}\r\n        <td>{{if rs.incomeDifferenceMoney == 0}}-\r\n            {{else}}<a class="T-viewDetails"><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>\r\n            {{/if}}\r\n        <td>{{if rs.payDifferenceMoney == 0}}-\r\n            {{else}}<a class="T-viewDetails"><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>\r\n            {{/if}}\r\n        {{/if}}\r\n        <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>\r\n        <td>{{rs.remark}}</td>\r\n        <td>{{rs.user.realName}}</td>\r\n        <td>{{rs.createTime}}</td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each result as rs}}\r\n    <tr data-id="{{rs.id}}">\r\n        <td>{{rs.accountTime}}</td>\r\n        <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{else if rs.moneyType == 2}}转账{{/if}}</td>\r\n        <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>\r\n        <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>\r\n        <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>\r\n        <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>\r\n        <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>\r\n        {{if rs.moneyType == 0}}\r\n        <td><a {{if rs.subjectName == \'主营业务收入\' || rs.subjectName == \'主营业务支出\'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>\r\n        <td>-</td>\r\n        {{else if rs.moneyType == 1}}\r\n        <td>-</td>\r\n        <td><a {{if rs.subjectName == \'主营业务收入\' || rs.subjectName == \'主营业务支出\'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>\r\n        {{else if rs.moneyType == 2}}\r\n        <td>{{if rs.incomeDifferenceMoney == 0}}-\r\n            {{else}}<span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></td>\r\n            {{/if}}\r\n        <td>{{if rs.payDifferenceMoney == 0}}-\r\n            {{else}}<span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>\r\n            {{/if}}\r\n        {{/if}}\r\n        <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>\r\n        <td>{{rs.remark}}</td>\r\n        <td>{{rs.user.realName}}</td>\r\n        <td>{{rs.createTime}}</td>\r\n    </tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
