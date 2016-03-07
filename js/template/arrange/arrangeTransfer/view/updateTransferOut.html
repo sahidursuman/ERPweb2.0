@@ -120,7 +120,7 @@
                         <div class="search-area">
                             <label class="col-sm-1 control-label no-padding-right">线路产品：</label>
                             <div class="col-sm-2">
-                                <input name="lineProductName" value="{{touristGroupTransfer.lineProduct.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
+                                <input name="lineProductName" value="{{if !!touristGroupTransfer.lineProduct}}{{touristGroupTransfer.lineProduct.name}}{{/if}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
                             </div>
                             <label class="col-sm-1 control-label no-padding-right">出游日期:：</label>
                             <div class="col-sm-2">
