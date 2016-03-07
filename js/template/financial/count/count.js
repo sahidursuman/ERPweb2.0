@@ -880,7 +880,7 @@ define(function(require, exports){
 		});
 		//按钮事件--单团核算表
 		$obj.on('click','.T-tripAccount',function(){
-			var id = $obj.find('.financial-tripPlanId').val();
+			var id = $obj.find('[name=financialTripPlanId]').val();
 			Count.viewTripAccount(id);
 		});
 		//查看图片事件
