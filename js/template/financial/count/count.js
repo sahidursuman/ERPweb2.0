@@ -1167,6 +1167,10 @@ define(function(require, exports){
 			showLoading:false,
 			success:function(data){
 				if(showDialog(data)){
+					//校验每个明细tab是否应该显示
+					var showJson = Count.isShowTabByData(data);
+					data.showJson = showJson;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 				}
@@ -1174,6 +1178,92 @@ define(function(require, exports){
 			}
 		});
 		
+	};
+	//校验每个明细tab是否应该显示
+	Count.isShowTabByData = function(data){
+		var showJson = {};
+		showJson.incomeShowFlag = false;
+		showJson.costShowFlag = false;
+		showJson.transitShowFlag = false;
+		showJson.tripInMapCount = 0;
+		showJson.costMapCount = 0;
+		showJson.transitMapCount = 0
+		var tripInMap = data.tripIncomeMap;
+		var tripPayMap = data.tripPayMap;
+		var tripTransitPayMap = data.tripTransitPayMap;
+		//判断发团收入明细
+		if(tripInMap.groupIncomeMap.groupIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.guideIncomeMap.guideIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.otherIncomeMap.otherIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.selfPayIncomeMap.selfPayIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.shopIncomeMap.shopIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+
+		//判断发团成本明细
+		if(tripPayMap.busPayMap.busPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.guidePayMap.guidePayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.hotelPayMap.hotelPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.insurancePayMap.insurancePayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.restaurantPayMap.restaurantPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.otherPayMap.otherPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.scenicPayMap.scenicPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.selfPayPayMap.selfpPayPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.ticketPayMap.ticketPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+
+		//判断中转成本明细
+		if(tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		//判断赋值
+		if(showJson.tripInMapCount == 5){
+			showJson.incomeShowFlag = true;
+		};
+		if(showJson.costMapCount == 9){
+			showJson.costShowFlag = true;
+		};
+		if(showJson.transitMapCount == 5){
+			showJson.transitShowFlag = true;
+		};
+		return showJson;
 	};
 	//质量统计
 	Count.getquality = function(id){
