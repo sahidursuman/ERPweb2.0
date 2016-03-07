@@ -538,8 +538,8 @@ define(function(require, exports) {
                         sumPayMoney: sumPayMoney,
                         sumPayType: sumPayType,
                         sumPayRemark: sumPayRemark,
-                        bankNo : $PaymentTabId.find('input[name=card-number]').val(),
-                        bankId : $PaymentTabId.find('input[name=card-id]').val(),
+                        bankNo : (sumPayType == 0) ? $PaymentTabId.find('input[name=cash-number]').val() : $PaymentTabId.find('input[name=card-number]').val(),
+                        bankId : (sumPayType == 0) ? $PaymentTabId.find('input[name=cash-id]').val() : $PaymentTabId.find('input[name=card-id]').val(),
                         voucher : $PaymentTabId.find('input[name=credentials-number]').val(),
                         billTime : $PaymentTabId.find('input[name=tally-date]').val()
                     }
@@ -600,10 +600,11 @@ define(function(require, exports) {
                                 OtherAccounts.saveJson.btnShowStatus = true;
                                 OtherAccounts.setAutoFillEdit($PaymentTabId, true);
                                 OtherAccounts.saveJson.sumPayMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
-                                OtherAccounts.saveJson.sumPayType = $PaymentTabId.find('select[name=sumPayType]').val();
+                                var payType = $PaymentTabId.find('select[name=sumPayType]').val();
+                                OtherAccounts.saveJson.sumPayType = payType;
                                 OtherAccounts.saveJson.sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val();
-                                OtherAccounts.saveJson.bankNo = $PaymentTabId.find('input[name=card-number]').val();
-                                OtherAccounts.saveJson.bankId = $PaymentTabId.find('input[name=card-id]').val();
+                                OtherAccounts.saveJson.bankNo = (payType == 0) ? $PaymentTabId.find('input[name=cash-number]').val() : $PaymentTabId.find('input[name=card-number]').val();
+                                OtherAccounts.saveJson.bankId = (payType == 0) ? $PaymentTabId.find('input[name=cash-id]').val() : $PaymentTabId.find('input[name=card-id]').val();
                                 OtherAccounts.saveJson.voucher = $PaymentTabId.find('input[name=credentials-number]').val();
                                 OtherAccounts.saveJson.billTime = $PaymentTabId.find('input[name=tally-date]').val();
                             }
@@ -624,11 +625,12 @@ define(function(require, exports) {
         }
         var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
         var arguementLen = arguments.length,
+            payType = tabid.find('select[name=sumPayType]').val(),
             searchParam = {
                 payMoney : tabid.find('input[name=sumPayMoney]').val(),
-                payType : tabid.find('select[name=sumPayType]').val(),
+                payType : payType,
                 payRemark : tabid.find('input[name=sumPayRemark]').val(),
-                bankId : tabid.find('input[name=card-id]').val(),
+                bankId : (payType == 0) ? tabid.find('input[name=cash-id]').val() : tabid.find('input[name=card-id]').val(),
                 voucher : tabid.find('input[name=credentials-number]').val(),
                 billTime : tabid.find('input[name=tally-date]').val()
             };

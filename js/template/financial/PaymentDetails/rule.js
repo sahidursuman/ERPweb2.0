@@ -24,7 +24,16 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	//记账日期
+	    	    {	//现金账号
+	    	    	$ele: $obj.find('input[name="cash-number"]'),
+	    	    	rules: [
+    	    	        {
+    	    	        	type: 'null', 
+    	    	        	errMsg: '现金账号不能为空'
+    	    	        }
+	    	        ]
+	    	    },
+	    	    {	//银行账号
 	    	    	$ele: $obj.find('input[name="card-number"]'),
 	    	    	rules: [
     	    	        {
@@ -33,7 +42,7 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	//记账日期
+	    	    {	//转出账户
 	    	    	$ele: $obj.find('input[name="out-number"]'),
 	    	    	rules: [
     	    	        {
@@ -42,7 +51,7 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	//记账日期
+	    	    {	//转入账户
 	    	    	$ele: $obj.find('input[name="in-number"]'),
 	    	    	rules: [
     	    	        {
