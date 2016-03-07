@@ -37,52 +37,34 @@
                 {{result.fromNumber}}
             </td>
             <td><span class="F-float F-money">{{if result.touristGroup != null}}{{result.touristGroup.transNeedPayAllMoney}}{{/if}}</span></td>
-            <!--<td><span class="F-float F-money">{{if result.touristGroup != null}}{{result.touristGroup.transPayedMoney}}{{/if}}</span></td>-->
             <td><span class="F-float F-money">{{result.touristGroup.currentNeedPayMoney}}</span></td>
-            <td class="result-status">{{if result.transName==null}}未使用{{else}}{{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>{{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>{{else}}<span style="color: red;" data-status="2">已拒收</span>{{/if}}{{/if}}</td>
+            <td class="result-status">
+            {{if result.transName==null}}未使用{{else}}
+            {{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>
+            {{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>
+            {{else if result.status == 2}}<span style="color: red;" data-status="2">已拒收</span>
+             {{else if result.status == 4}}<span style="color: green;" data-status="4">申请退回</span>
+            {{/if}}{{/if}}</td>
+            
             <td>
                 <div class="hidden-sm hidden-xs btn-group">
                     <a data-value="{{result.id}}" class="cursor T-transferIn-view T-action">
 						查看
 					</a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status == 0}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1 || result.status ==2}} color:#bbb; {{/if}}" data-right="1180007">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1}} color:#bbb; {{/if}}" data-right="1180007">
                         <label class="padding-right20">|</label>
                         确认
                     </a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=2}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==1 || result.status==2}} color:#bbb; {{/if}}" data-right="1180008">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2}} color:#bbb; {{/if}}" data-right="1180008">
                         <label class="padding-right20">|</label>
                         拒绝
                     </a>
-                </div>
-                <div class="hidden-md hidden-lg">
-                    <div class="inline pos-rel">
-                        <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                            <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                            <li>
-                                <a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transferIn-view" data-rel="tooltip">
-                                    <span class="red">
-										<i class="ace-icon fa fa-search-plus bigger-120"></i>
-									</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-success T-transferIn-confirm" data-rel="tooltip">
-                                    <span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transferIn-refuse" data-rel="tooltip">
-                                    <span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <a data-value="{{result.id}}" class="cursor  {{if result.status==1}}T-returnTransferIn-refuse{{/if}} R-right T-action" style="{{if result.status!=1}} color:#bbb; {{/if}}" data-right="1180008">
+                        <label class="padding-right20">|</label>
+                        申请退回
+                    </a>
+
                 </div>
             </td>
         </tr>
