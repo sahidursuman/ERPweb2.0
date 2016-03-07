@@ -4,13 +4,13 @@
             <div class="T-search-area">
                 <div class="form-group">
                     <label>自费商家：{{selfPayName}}</label>
-                    <label class="marginLeft-30">账期：</label>
+                    <label class="mar-r-10">账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
                     <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
-                    <label class="marginLeft-30">团信息：</label>
+                    <label class="mar-r-10">团信息：</label>
                     <input name="tripInfo" placeholder="团信息" type="text" value="{{searchParam.tripInfo}}" style="width:200px;" />
-                    <button class="btn-height btn-sm search-btn T-search marginLeft-30">
+                    <button class="btn-height btn-sm search-btn T-search">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
                 </div>
@@ -20,15 +20,15 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group globalAdd T-count">
                 <label>账面应付合计：{{sumData.needPayMoney}}元 </label>
-                <label class="marginLeft-30">已付金额合计：<span class="F-float F-money">{{sumData.payedMoney}} </span></label>
-                <label class="marginLeft-30">结算金额合计：<span class="F-float F-money">{{sumData.settlementMoney}}</span></label>
-                <label class="marginLeft-30">未付金额合计：<span class="F-float F-money">{{sumData.unPayedMoney}}</span></label>
-                <label class="marginLeft-30">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{sumData.unPayedMoneyConfirmed}}</span></label>
+                <label class="mar-r-20">已付金额合计：<span class="F-float F-money">{{sumData.payedMoney}} </span></label>
+                <label class="mar-r-20">结算金额合计：<span class="F-float F-money">{{sumData.settlementMoney}}</span></label>
+                <label class="mar-r-20">未付金额合计：<span class="F-float F-money">{{sumData.unPayedMoney}}</span></label>
+                <label class="mar-r-20">未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{sumData.unPayedMoneyConfirmed}}</span></label>
             </div>
         </form>
 
-        <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
-            <div class="form-group mar-r-10">
+        <div class="form-inline row globalAdd T-summary">
+            <div class="form-group mar-r-20">
                 <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
                     <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}"  {{if showBtnFlag == true}}readonly="true"{{/if}} >
@@ -36,7 +36,7 @@
             </div>
                 
             {{if !showBtnFlag}}
-            <div class="form-group mar-r-10">
+            <div class="form-group mar-r-20">
                 <button class="btn btn-primary T-clear-auto">
                         <i class="ace-icon fa fa-check-circle"></i> 自动下账
                     </button>
