@@ -73,6 +73,21 @@ define(function(require, exports) {
 		$tab.find('.T-btn-tripPlan-search').on('click', function() {
 			tripPlan.listTripPlanGroup(0, $tab);
 		})
+
+        //导出游客名单
+        $tab.find('.T-tripPlan-export').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var startTime=$searchAreaObj.find('input[name=startTime]').val();
+            if (!!startTime && startTime!=null) {
+                var exportUrl="" + KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(touristGroup.getSearParam($searchAreaObj));
+                //window.location.href=exportUrl;
+                exportXLS(exportUrl);
+            }else{
+                showMessageDialog($("#confirm-dialog-message"), "请选择出游时间");
+                return;
+            };
+        });
     	
     	$tab.find("[name='tripPlanStatus']").on('change', function(){
     		if($(this).val() != "1"){
