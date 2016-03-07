@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":542,"md5":"07c9c871cf3d7bd2a8e6207c5ef86f8f"}*/
+/*TMODJS:{"debug":true,"version":543,"md5":"07c9c871cf3d7bd2a8e6207c5ef86f8f"}*/
 define(function(require) {
     return require("../../../template")("financial/planProfit/view/list", function($data, $filename) {
         try {
