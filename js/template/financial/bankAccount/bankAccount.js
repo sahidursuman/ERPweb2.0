@@ -27,7 +27,7 @@ define(function(require,exports){
 						data.newBankAccountList[i].bankAccountNumber = bankNumber;
 					};
 					var html = listTemplate(data);
-					Tools.addTab(menuKey,'银行账户',html);
+					Tools.addTab(menuKey,'资金账户',html);
 					var $listTab = $("#tab-"+menuKey+"-content");
 					//设置记录数
 					var recordSize = Tools.getRecordSizeDesc(data.recordSize);

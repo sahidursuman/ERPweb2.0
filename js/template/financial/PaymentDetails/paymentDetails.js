@@ -29,7 +29,7 @@ define(function(require, exports){
 			endTime : year + "-" + month + "-" + day,
 			startTime : year + "-" + month + "-01",
 			bankId : bankId ? bankId : "",
-			payType : bankId ? 1 : ""
+			payType : ""
 		},
 		data = {
 			searchParam : args
