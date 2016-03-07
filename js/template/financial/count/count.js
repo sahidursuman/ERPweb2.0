@@ -1159,9 +1159,9 @@ define(function(require, exports){
 	//单团核算表
 	Count.viewTripAccount = function(id){
 		$.ajax({
-			url:KingServices.build_url('financialTripPlan','findFinancialTripPlanById'),
+			url:KingServices.build_url('financialTripPlan','getTripPlanAccountingDetail'),
 			data:{
-				id:"580"
+				id:id
 			},
 			type:'POST',
 			showLoading:false,
