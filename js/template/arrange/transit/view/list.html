@@ -2,8 +2,8 @@
     <thead>
         <tr class="bg-blur">
             <th rowspan="2">中转信息</th>
-            <th colspan="8">接团</th>
-            <th colspan="8">送团</th>
+            <th colspan="7">接团</th>
+            <th colspan="7">送团</th>
             <th rowspan="2">安排人</th>
             <th rowspan="2">安排时间</th>
             <th rowspan="2">状态</th>
@@ -12,7 +12,6 @@
         <tr class="bg-blur">
             <th>时间</th>
             <th>班次</th>
-            <th>酒店要求</th>
             <th>车</th>
             <th>房</th>
             <th>餐</th>
@@ -20,7 +19,6 @@
             <th>它</th>
             <th>时间</th>
             <th>班次</th>
-            <th>酒店要求</th>
             <th>车</th>
             <th>房</th>
             <th>餐</th>
@@ -62,7 +60,6 @@
             </td>
             <td>{{transit.arriveShiftTime}}</td>
             <td>{{transit.arriveShift}}</td>
-            <td>{{transit.receiveHotelRequire}}</td>
             <td data-target="transit_receive_bus" class="receiveBusStatus" data-status="{{transit.receiveBusStatus}}"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_hotel" class="receiveHotelStatus" data-status="{{transit.receiveHotelStatus}}"><i class="ace-icon fa {{transit.receiveHotelStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
@@ -70,7 +67,6 @@
             <td data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
             <td>{{transit.leaveShiftTime}}</td>
             <td>{{transit.leaveShift}}</td>
-            <td>{{transit.sendHotelRequire}}</td>
             <td data-target="transit_send_bus" class="sendBusStatus" data-status="{{transit.sendBusStatus}}"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_send_hotel" class="sendHotelStatus" data-status="{{transit.sendHotelStatus}}"><i class="ace-icon fa {{transit.sendHotelStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_send_restaurant" class="sendRestaurantStatus" data-status="{{transit.sendRestaurantStatus}}"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
