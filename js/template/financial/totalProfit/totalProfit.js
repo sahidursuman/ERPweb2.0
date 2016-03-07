@@ -183,10 +183,10 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.outOPUser || false;
+                    var userList = data.opList || false;
                     if (!!userList) {
                         for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].name;
+                            userList[i].value = userList[i].realName;
                         }
 
                         $target.autocomplete('option', 'source', userList).data('ajax', true);
@@ -230,10 +230,10 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.group || false;
+                    var userList = data.fromBusinessGroupList || false;
                     if (!!userList) {
                         for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].name;
+                            userList[i].value = userList[i].businessGroupName;
                         }
 
                         $target.autocomplete('option', 'source', userList).data('ajax', true);
