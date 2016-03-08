@@ -126,14 +126,12 @@ define(function(require, exports) {
         //导出
         $innerTrsfInObj.find(".T-transfer-export").click(function() {
             innerTransfer.$searchParam.type = 2;
-            var exportUrl = "" + KingServices.build_url("innerTransfer", "findExcel") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-            window.location.href = exportUrl;
+            exportXLS( APP_ROOT + 'back/innerTransfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)));
         });
         //导出操作 
         $innerTrsfOutObj.find(".T-transfer-export").click(function() {
             innerTransfer.$searchParam.type = 1;
-            var exportUrl = "" + KingServices.build_url("innerTransfer", "findExcel") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-            window.location.href = exportUrl;
+            exportXLS( APP_ROOT + 'back/innerTransfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)));
         });
         $innerTrsfOutObj.find(".dropdown-menu a").click(function() {
             $(this).closest('div').find("button").attr("data-value", $(this).attr("data-value"));
