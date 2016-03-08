@@ -342,7 +342,6 @@ define(function(require,exports){
 			if(incomeMoney != 0 || payMoney != 0){
 				//提示
 				$obj.find('input[type=text]').prop('disabled',true);
-				$obj.find('.T-accountType').prop('disabled',"desabled");
 			};
 		}
 		if($obj.find(".T-mainForm").data('type') != "1"){
