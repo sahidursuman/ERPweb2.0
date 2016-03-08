@@ -1172,7 +1172,6 @@ define(function(require, exports){
 					//校验每个明细tab是否应该显示
 					var showJson = Count.isShowTabByData(data);
 					data.showJson = showJson;
-					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
