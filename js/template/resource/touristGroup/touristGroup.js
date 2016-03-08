@@ -212,7 +212,7 @@ define(function(require, exports) {
             startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
             createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
             createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
-            statusSearch: touristGroup.$searchArea.find('.T-select-status').find("button").data("value"),
+            statusSearch: touristGroup.$searchArea.find('.T-select-status').val(),
             customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
             memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
             orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
