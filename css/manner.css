@@ -2476,4 +2476,12 @@ a.gray span{
         opacity: 1;
     }
     
+    .tab-content {
+        border: 0;
+        padding: 0;
+    }
+
+    #tab-financial_count-outDetail-content > div {
+        padding: 40px;
+    }
 }
