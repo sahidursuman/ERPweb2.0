@@ -64,10 +64,7 @@ define(function(require, exports) {
 	 */
 	transit.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		transit.$searchArea.find('.T-transitState').on('click', 'a', function() {
-			var $this = $(this);
-			// 设置选择状态的效果
-			$this.closest('ul').prev().data('status', $this.data('value')).children('span').text($this.text());
+		transit.$searchArea.find('.T-transitState').on('change', function() {
 			transit.listTransit(0);
 		});
 
@@ -112,7 +109,7 @@ define(function(require, exports) {
             arrangeUserName = transit.$searchArea.find("input[name=arrangeUserName]").val(),
             arrangeStartTime = transit.$searchArea.find("input[name=arrangeStartTime]").val(),
             arrangeEndTime = transit.$searchArea.find("input[name=arrangeEndTime]").val(),
-            status = transit.$searchArea.find(".T-transitState button").data("status"),
+            status = transit.$searchArea.find(".T-transitState").val(),
             tgOrderNumber = transit.$searchArea.find(".T-orderNumber").val(),
             shuttleType = transit.$searchArea.find("[name=shuttleType]").val(),
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
