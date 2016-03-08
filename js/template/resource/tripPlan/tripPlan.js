@@ -1994,8 +1994,12 @@ define(function(require, exports) {
 				})
 				.done(function(data) {
 					if(showDialog(data)){
-						data.busCompanyList = JSON.parse(data.busCompanyList);
-						if (!data.busCompanyList || !data.busCompanyList.length) {
+						if (!!data.busCompanyList) {
+							data.busCompanyList = JSON.parse(data.busCompanyList);
+							if (!data.busCompanyList || !data.busCompanyList.length || data.busCompanyList == 'null') {
+								clearData($tr, start);
+							}
+						}else {
 							clearData($tr, start);
 						}
 					}
@@ -2054,11 +2058,11 @@ define(function(require, exports) {
 			change :function(event, ui){
 				if(ui.item == null){
 					var $that = $(this).val("");
-					clearData($that.closest('tr'), 'LicenseNumber');
+					clearData($that.closest('tr'), 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
-				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
+				checkBusCompay($(this).blur().closest('tr'), 'licenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var $that = $(this), $tr = $that.closest('tr');
