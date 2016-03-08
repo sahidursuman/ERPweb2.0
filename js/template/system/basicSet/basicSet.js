@@ -300,11 +300,16 @@ define(function(require,exports){
 					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
-					console.log(data);
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '修改资金账户'
+					}else{
+						typeTitle = '修改银行账户'
+					};				
 					var html = updateTemplate(data);
 					var updateBankAccLayer = layer.open({
 						type: 1,
-						title:"修改银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,
@@ -387,10 +392,16 @@ define(function(require,exports){
 					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '查看资金账户'
+					}else{
+						typeTitle = '查看银行账户'
+					};
 					var html = viewTemplate(data);
 					var viewBankAccTemplate = layer.open({
 						type: 1,
-						title:"查看银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,

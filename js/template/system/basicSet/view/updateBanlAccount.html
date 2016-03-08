@@ -3,10 +3,20 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right">类型：</label>
 			<div class="col-sm-3">
-				<select class="col-sm-12 T-accountType" name="type">
+			{{if bankAccount.incomeMoney != 0 || bankAccount.payMoney != 0}}
+				<label>
+					{{if bankAccount.type == 0}}
+						<span>现金账户</span>
+					{{else}}
+						<span>银行账户</span>
+					{{/if}}
+				</label>
+			{{else}}
+				<select class="col-sm-12 T-accountType" name="type" >
 					<option value="0">现金账户</option>
 					<option value="1" {{if bankAccount.type == 1}}selected="selected"{{/if}}>银行账户</option>
 				</select>
+			{{/if}}
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
 			<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
