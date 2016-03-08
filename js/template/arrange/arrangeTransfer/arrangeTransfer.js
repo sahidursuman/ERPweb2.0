@@ -139,8 +139,7 @@ define(function(require, exports) {
 				var divId = "Transfer-Out",
 				    type = "1";
 				    transfer.getSearchParam(divId,type);
-				var exportUrl="" + KingServices.build_url("transfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam));
-				window.location.href=exportUrl;
+				exportXLS( APP_ROOT + 'back/transfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)));
 			});
 	    };
 

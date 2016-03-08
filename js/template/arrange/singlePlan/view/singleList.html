@@ -27,9 +27,8 @@
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}></p>
                     <p class="h-memberName">责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
-                    <p class="h-OPUser">责任部门：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
                 </td>
-                <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span> - <span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
+                <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span><br> - <br><span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
                 <td style="vertical-align:middle">{{if !!rs.surplusSeat}}{{rs.surplusSeat}}{{else}}-{{/if}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>

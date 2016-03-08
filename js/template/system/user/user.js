@@ -257,7 +257,8 @@ define(function(require, exports) {
 	};
 
 	user.initAuth = function(data,isNew){
-		var $container = $(".T-update-auth");
+		var $tab = $('#tab-tab-system_user-content-content'), 
+			$container = $tab.find(".T-update-auth");
     	//初始化选择框
     	if(isNew){
     		$container.find("input").prop("checked",true);
@@ -281,8 +282,9 @@ define(function(require, exports) {
 
     	$container.find(".meun").click(function(){
     		var toId = $(this).data('toid'),
-    			top = $container.find('#'+toId).offset().top - 170;
-	        $('body,html').animate({scrollTop: top},150);
+    			top = $container.find('#'+toId).offset().top - 180 + $tab.scrollTop();
+
+	        $tab.animate({scrollTop: top},150);
 		});
 
     	//主菜单是否勾选
