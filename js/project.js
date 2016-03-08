@@ -1097,6 +1097,12 @@ var _statusText = {
 					if($that.hasClass('F-float') && ret !== ""){						
 						ret = Tools.formatQuantile(ret);
 					}
+					if($that.hasClass('F-money') && ret !== ""){
+							ret = Tools.toFixed(ret, 2);
+					}
+					if($that.hasClass('F-count') && ret !== ""){
+							ret = Tools.toFixed(ret, 1);
+					}
 					return typeof ret === "string" ?
 						(ret.replace(rreturn, "")).replace(/(^\s*)|(\s*$)/g, "") :
 						ret == null ? "" : ret.replace(/(^\s*)|(\s*$)/g, "");
