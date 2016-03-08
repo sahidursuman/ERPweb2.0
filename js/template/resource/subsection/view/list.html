@@ -1,11 +1,12 @@
 <div class="col-xs-12">
     <table class="table table-striped table-bordered table-hover T-showHighLight">
         <thead>
-            <tr class="bg-blur">
+            <tr class="bg-blur T-tr-fixed">
                 <th>收客信息</th>
                 <th>线路产品</th>
                 <th>针对客源</th>
                 <th>出游日期</th>
+                <th>天数</th>
                 <th>现收</th>
                 <th>操作人</th>
                 <th class="col-sm-1">操作时间</th>
@@ -13,7 +14,8 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody>{{each transitSubTgroupList as subList indexA}}
+        <tbody>
+        {{each transitSubTgroupList as subList indexA}}
             <tr data-entity-id="{{subList.id}}">
                 <td class="h-touristGroupInfo">
                     <p>
@@ -34,8 +36,10 @@
                 </td>
                 <td>{{if subList.customerType == 0}}散客{{else}}团体{{/if}}</td>
                 <td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td><span class="F-float F-count">{{subList.lineProduct.days}}</span></td>
                 <td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
                 <td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
+
                 <td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
                 <td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
                 <td>
@@ -52,16 +56,16 @@
             </tr>
             {{if subList.subTouristGroupDetails != null}} {{each subList.subTouristGroupDetails as subDetails index}} {{if index == 0}}
             <tr class="T-tr_{{indexA}}" style="display: none;">
-                <td rowspan="{{subList.subTouristGroupDetails.length}}" colspan="2"></td>
+                <td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
                 <td>{{subDetails.lineProductName}}</td>
                 <td>{{if subDetails.customerType == 0}}散客{{else}}团体{{/if}}</td>
                 <td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td><span class="F-float F-count">{{subDetails.days}}</span></td>
                 <td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
-                <td></td>
+                <td colspan="2"></td>
                 <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已外转 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
                 </td>
-                <td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
+                <td rowspan="{{subList.subTouristGroupDetails.length}}" ></td>  
             </tr>
             {{else}}
             <tr class="T-tr_{{indexA}}" style="display: none;">
@@ -70,7 +74,7 @@
                 <td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{subDetails.days}}</td>
                 <td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
-                <td></td>
+                <td colspan="2"></td>
                 <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已转客 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
                 </td>
             </tr>
