@@ -2547,3 +2547,15 @@ Tools.loadPluginScript = function(pluginKey){
 		$.getScript(modulePlugin.plugin_print);
 	};	
 };
+
+window.onbeforeunload=function(e){
+	var event = e || window.event;
+	var $children = $('#tabContent').children();
+	$children.each(function(index) {
+		var $this = $(this),
+			isEdited = $this.data('isEdited');
+		if (!!isEdited) {
+			event.returnValue='重现加载页面将导致未保存的数据丢失'
+		}
+	});
+}

@@ -200,7 +200,7 @@ define(function(require,exports){
 				if(result){
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
 					for(var i = 0;i<data.newBankAccountList.length;i++){
-						var bankNumber = data.newBankAccountList[i].bankAccountNumber;
+						var bankNumber = data.newBankAccountList[i].bankAccountNumber || "";
 						bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 						data.newBankAccountList[i].bankAccountNumber = bankNumber;
 					}
@@ -297,9 +297,10 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
-					var bankNumber = data.bankAccount.bankAccountNumber;
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
+					console.log(data);
 					var html = updateTemplate(data);
 					var updateBankAccLayer = layer.open({
 						type: 1,
@@ -338,8 +339,9 @@ define(function(require,exports){
 				$obj.find('input[type=text]').prop('disabled',true);
 			};
 		}
-
-		$obj.find(".T-cashHidden").addClass('hidden');
+		if($obj.find(".T-mainForm").data('type') != "1"){
+			$obj.find(".T-cashHidden").addClass('hidden');
+		}
 		$obj.find('.T-accountType').on("change",function(){
 			if($(this).val() == 0){
 				$obj.find(".T-cashHidden").addClass('hidden');
@@ -382,7 +384,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
-					var bankNumber = data.bankAccount.bankAccountNumber;
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
 					var html = viewTemplate(data);
@@ -447,18 +449,32 @@ define(function(require,exports){
 			status = 1;
 		};
 		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
-		var subData = {
-			type : $obj.find('select[name=type]').val(),
-			aliasName:$obj.find('input[name=aliasName]').val(),
-			accountName:$obj.find('input[name=accountName]').val(),
-			bankAccountNumber:bankNumber,
-			beginningBalance:$obj.find('input[name=balanceMoney]').val(),
-			beginningTime:$obj.find('input[name=startTime]').val(),
-			openingBank:$obj.find('input[name=bankName]').val(),
-			remark:$obj.find('textarea[name=remark]').val(),
-			status:status,
-			id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
-		};
+		var type = $obj.find('select[name=type]').val();
+		if(type == 0){
+			var subData = {
+				type : $obj.find('select[name=type]').val(),
+				aliasName:$obj.find('input[name=aliasName]').val(),
+				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
+				beginningTime:$obj.find('input[name=startTime]').val(),
+				remark:$obj.find('textarea[name=remark]').val(),
+				status:status,
+				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
+			};
+		}else{
+			var subData = {
+				type : $obj.find('select[name=type]').val(),
+				aliasName:$obj.find('input[name=aliasName]').val(),
+				accountName:$obj.find('input[name=accountName]').val(),
+				bankAccountNumber:bankNumber,
+				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
+				beginningTime:$obj.find('input[name=startTime]').val(),
+				openingBank:$obj.find('input[name=bankName]').val(),
+				remark:$obj.find('textarea[name=remark]').val(),
+				status:status,
+				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
+			};
+		}
+		
 		return subData;
 	};
 	exports.init = Infrastructure.initModule;

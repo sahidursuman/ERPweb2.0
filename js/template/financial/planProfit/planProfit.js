@@ -103,12 +103,6 @@ define(function(require, exports) {
                         event.preventDefault();
                         plan.listPlan(0);
                     });
-                    plan.$tab.on('click','.T-toTripAccount',function(){
-                        var id = $(this).closest('tr').data('id');
-                        var pluginKey = 'plugin_print';
-                        Tools.loadPluginScript(pluginKey);
-                        KingServices.viewTripAccount(id);
-                    });
                 }
             }
         });
@@ -190,6 +184,13 @@ define(function(require, exports) {
                         plan.listPlan(0); 
                     });
 
+                    plan.$tab.find('.T-toTripAccount').off().on('click',function(){
+                        var id = $(this).closest('tr').data('id');
+                        var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        KingServices.viewTripAccount(id);
+                    });
+                    
 			    	// 绑定翻页组件
                     laypage({
                         cont: plan.$tab.find('.T-pagenation'),

@@ -445,13 +445,6 @@ define(function(require, exports) {
 		tripPlan.$editTab = $tab;
 		// 计算导付
 		tripPlan.moneyTripPlan($tab);
-		
-		window.onbeforeunload=function(e){
-			var event = e || window.event;
-			if ($tab.data('isEdited')) {
-				event.returnValue='发团安排数据已经被修改，未保存'
-			}
-		}
 
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
@@ -1994,15 +1987,19 @@ define(function(require, exports) {
 					busCompanyId:$tr.find('input[name=busCompanyId]').val()
 				};
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					url: KingServices.build_url('busCompany', 'selectBusCompanyList'),
 					showLoading:false,
 					type: 'post',
 					data: searchJson,
 				})
 				.done(function(data) {
 					if(showDialog(data)){
-						data.busCompanyList = JSON.parse(data.busCompanyList);
-						if (!data.busCompanyList || !data.busCompanyList.length) {
+						if (!!data.busCompanyList) {
+							data.busCompanyList = JSON.parse(data.busCompanyList);
+							if (!data.busCompanyList || !data.busCompanyList.length || data.busCompanyList == 'null') {
+								clearData($tr, start);
+							}
+						}else {
 							clearData($tr, start);
 						}
 					}
@@ -2061,11 +2058,11 @@ define(function(require, exports) {
 			change :function(event, ui){
 				if(ui.item == null){
 					var $that = $(this).val("");
-					clearData($that.closest('tr'), 'LicenseNumber');
+					clearData($that.closest('tr'), 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
-				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
+				checkBusCompay($(this).blur().closest('tr'), 'licenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var $that = $(this), $tr = $that.closest('tr');
