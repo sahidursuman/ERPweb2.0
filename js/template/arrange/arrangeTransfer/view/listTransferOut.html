@@ -62,7 +62,7 @@
 						<a data-value="{{result.id}}" class="cursor  T-transfer-view T-action">
 							查看
 						</a>
-						<a data-value="{{result.id}}" class="cursor T-transfer-edit T-action R-right"  data-right="1180003">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 4}}T-transfer-edit{{/if}} T-action R-right"  data-right="1180003" {{if result.status == 1 || result.status == 4}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
@@ -72,7 +72,7 @@
 							撤销
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 2}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status == 1 || result.status == 2}}style="color:#bbb;"{{/if}} data-right="1180004">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 4}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status == 1 || result.status == 4}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							确认
 						</a>
