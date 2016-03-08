@@ -25,8 +25,7 @@
 			{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>
 			{{else if list.status == 1}}<span style="color: green;">已确认</span>
 			{{else if list.status == 2}}<span style="color: red;">已拒收</span>
-			{{else if list.status == 4}}<span style="color: green;">申请退回</span>
-			{{else if list.status == 5}}<span style="color: red">已退回</span>
+			{{else if list.status == 4}}<span style="color: red;">已退回</span>
 			{{/if}}</td>
 			<td>
 				<div class="hidden-sm hidden-xs btn-group">
@@ -37,7 +36,7 @@
 					<a class="cursor  T-TransferOut-view T-action">
 						查看
 					</a>
-					<a class="cursor {{if list.status != 1 && list.status == 2}}T-TransferOut-delete{{/if}} R-right T-action" data-right="1340003" {{if list.status == 1 || list.status == 2}}style="color:#bbb"{{/if}}>
+					<a class="cursor {{if list.status != 1 && list.status != 4}}T-TransferOut-delete{{/if}} R-right T-action" data-right="1340003" {{if list.status == 1 || list.status == 4}}style="color:#bbb"{{/if}}>
 						<label class="padding-right20">|</label>
 						撤销
 					</a>

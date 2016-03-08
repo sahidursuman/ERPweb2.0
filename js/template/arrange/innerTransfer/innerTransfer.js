@@ -777,17 +777,20 @@ define(function(require, exports) {
      * @return {[type]}   
      */
     innerTransfer.returnTransferIn=function(id){
-       $.ajax({
-            url: KingServices.build_url("innerTransfer", "innerTransferBack"),
-            ype: "POST",
-            data: "innerTransferId=" + id + "",
-        })
-        .done(function(data) {
-             var result = showDialog(data);
-            if (result) {
-                 innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
-            }
-        })
+        showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+            $.ajax({
+                url: KingServices.build_url("innerTransfer", "innerTransferBack"),
+                ype: "POST",
+                data: "innerTransferId=" + id + "",
+            })
+            .done(function(data) {
+                 var result = showDialog(data);
+                if (result) {
+                     innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
+                }
+            });
+        });
+       
     };
 
     innerTransfer.chooseLineProduct = function(divId) {
