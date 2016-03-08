@@ -25,7 +25,6 @@ body,
 body{
 	color:#000; 
 	font-family: "microsoft yahei";
-	min-width: 1270px;
 }
 a{cursor: pointer;}
 a:hover, a:focus{text-decoration: none;}
@@ -136,7 +135,7 @@ input.datepicker {
 .hct-search-area.form-inline .form-group{
 	display: block;
 	float: left;
-	margin-bottom: 0;
+	margin-bottom: 0!important;
 	padding: 5px 10px 5px 0;
 }
 .hct-view-plan{
