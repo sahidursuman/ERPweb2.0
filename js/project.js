@@ -2550,5 +2550,12 @@ Tools.loadPluginScript = function(pluginKey){
 
 window.onbeforeunload=function(e){
 	var event = e || window.event;
-	event.returnValue='您有数据尚未保存'
+	var $children = $('#tabContent').children();
+	$children.each(function(index) {
+		var $this = $(this),
+			isEdited = $this.data('isEdited');
+		if (!!isEdited) {
+			event.returnValue='您有数据尚未保存'
+		}
+	});
 }
