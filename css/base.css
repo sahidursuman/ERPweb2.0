@@ -959,6 +959,9 @@ input.datepicker {
 .main-content-inner > .page-content > .tab-content > .tab-pane > *{
 	min-width: 1050px;
 }
+.main-content-inner > .page-content > .tab-content > .tab-pane > .row{
+	margin-right: 0;
+}
 .table{
 	position: relative;
 }
