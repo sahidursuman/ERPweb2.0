@@ -2499,7 +2499,11 @@ KingServices.inlineTemplate = function(source, option) {
 		html = render(option);
 	return html;
 }
-
+/**
+ * 表格固定在顶部功能
+ * @param  {object} obj 暂时未用上
+ * @return {[type]}     [description]
+ */
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane");
 
@@ -2526,4 +2530,14 @@ Tools.trFixed = function(obj){
 			'oTransform' : 'translateY('+(-top)+'px)'
 		});
 	});
+};
+
+//根据需要加载插件js
+var modulePlugin = {
+	"plugin_print":'components/jquery-print/jQuery.print.js'//加载打印插件
+};
+Tools.loadPluginScript = function(pluginKey){
+	if(pluginKey == 'plugin_print'){
+		$.getScript(modulePlugin.plugin_print);
+	};	
 };
