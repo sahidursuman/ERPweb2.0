@@ -37,11 +37,12 @@
             <td class="h-touristGroupInfo">
                 <p class="h-orderNumber">收客单号：{{touristGroupL.orderNumber}}</p>
                 <p class="h-orderNumber">客户：{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
-                <p class="h-lineName" title="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}</p>
-                <p class="h-startTime">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.type}}{{/if}} </p>
-                <p class="h-memberName">
-                    {{if touristGroupL.customerType == 0}}散拼 {{else if touristGroupL.customerType == 1}}团体 {{else if touristGroupL.customerType == 2}}转客 {{/if}}
+                {{if !!touristGroupL.lineProduct}}
+                <p class="h-lineName" title="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}">
+                    <span>{{touristGroupL.lineProduct.name}}</span>
+                    (<span>{{touristGroupL.lineProduct.type}}</span>)
                 </p>
+                {{/if}}
             </td>
             <td class="F-float F-count" style="vertical-align:middle">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}</td>
             <td style="vertical-align:middle">{{touristGroupL.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
