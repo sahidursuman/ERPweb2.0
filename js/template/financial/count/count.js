@@ -1180,6 +1180,14 @@ define(function(require, exports){
 					$outDetailTab.off('click').on('click','.T-export',function(){
 						Count.exportsOutDetail($outDetailTab);
 					});
+					//查看图片事件
+					$outDetailTab.find('.btn-view').off('click').on('click',function(){
+						var $that = $(this);
+						var url = $that.attr("url");
+						var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
+						var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+						Count.viewImages(url,bigImg,smallImg);
+					});
 				}
 				
 			}
