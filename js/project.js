@@ -2522,12 +2522,12 @@ Tools.trFixed = function(obj){
 		if(top >= 0){
 			top = 0;
 		}
-		$trFixed.eq(i).css({
+		$trFixed.css({
 			'transform' : 'translateY('+(-top)+'px)',
-			'webkitTransform' : 'translateY('+(-top)+'px)',
-			'mozTransform' : 'translateY('+(-top)+'px)',
+			'-webkit-transform' : 'translateY('+(-top)+'px)',
+			'-moz-transform' : 'translateY('+(-top)+'px)',
 			'msTransform' : 'translateY('+(-top)+'px)',
-			'oTransform' : 'translateY('+(-top)+'px)'
+			'-o-transform' : 'translateY('+(-top)+'px)'
 		});
 	});
 };
