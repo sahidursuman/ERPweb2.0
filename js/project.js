@@ -1090,7 +1090,7 @@ var _statusText = {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
 					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
-						return ret;
+						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
 					ret = elem.value;
@@ -1098,8 +1098,8 @@ var _statusText = {
 						ret = Tools.formatQuantile(ret);
 					}
 					return typeof ret === "string" ?
-						ret.replace(rreturn, "") :
-						ret == null ? "" : ret;
+						(ret.replace(rreturn, "")).replace(/(^\s*)|(\s*$)/g, "") :
+						ret == null ? "" : ret.replace(/(^\s*)|(\s*$)/g, "");
 				}
 
 				return;
@@ -1123,11 +1123,11 @@ var _statusText = {
 				// Treat null/undefined as ""; convert numbers to string
 				if ( val == null ) {
 					val = "";
-				} else if ( typeof val === "number" ) {
+				} else if ( typeof val === "number" ) {	
 					val += "";
 				} else if ( jQuery.isArray( val ) ) {
 					val = jQuery.map(val, function ( value ) {
-						return value == null ? "" : value + "";
+						return value == null ? "" : (value + "").replace(/(^\s*)|(\s*$)/g, "");
 					});
 				}
 
@@ -1144,7 +1144,7 @@ var _statusText = {
 						}
 						val = Tools.thousandPoint(val);						
 					}
-					this.value = val;
+					this.value = val.replace(/(^\s*)|(\s*$)/g, "");
 				}
 			});
 		},
