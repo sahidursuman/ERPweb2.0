@@ -169,9 +169,14 @@ define(function(require, exports){
 			subjectId : Payment.$tab.find('.T-search-subject').val(),
 			voucher : Payment.$tab.find('.T-search-voucher').val()
 		}
-
-		if (args.payType == 1) {
-			args.bankId = Payment.$tab.find('.T-bankId').val();
+		if(args.payType == ""){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val() || Payment.$tab.find('input[name=card-id]').val();
+		}
+		else if(args.payType == 0){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val();
+		}
+		else if (args.payType == 1) {
+			args.bankId = Payment.$tab.find('input[name=card-id]').val();
 		}
 		return args;
 	};
@@ -333,11 +338,18 @@ define(function(require, exports){
 		else if(type == 1) { subList = Payment.subList1; }
 		else if(type == 2) { subList = Payment.subList2; }
 			
-		for(var i = 0; i < subList.length; i++){
-			subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+		if(subList.length > 0){
+			for(var i = 0; i < subList.length; i++){
+				subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+			}
+			$container.find(".T-subject").html(subjectHtml);
+			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+		} else {
+			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
+				$container.find(".T-subject").html("");
+				$container.find("input[name=subjectName]").val("");
+			});
 		}
-		$container.find(".T-subject").html(subjectHtml);
-		$container.find("input[name=subjectName]").val(subList[0].subjectName);
 	};
 
 	Payment.submitPayment = function(){
