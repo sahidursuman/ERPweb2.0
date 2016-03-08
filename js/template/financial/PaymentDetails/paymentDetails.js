@@ -98,8 +98,9 @@ define(function(require, exports){
 			Payment.addPayment();
 		});
 
-		$tab.on('change', '.T-beginningBalance', function() {
-			Payment.allClac($tab);
+		$tab.on('change', '.T-beginningBalance, .T-search-payment', function() {
+			Payment.getTotal(0,$tab);
+			Payment.ajaxInit(0);
 		})
 
 		$tab.on("click",".T-viewDetails",function(event){
