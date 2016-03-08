@@ -297,7 +297,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
-					var bankNumber = data.bankAccount.bankAccountNumber;
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
 					var html = updateTemplate(data);
@@ -338,8 +338,9 @@ define(function(require,exports){
 				$obj.find('input[type=text]').prop('disabled',true);
 			};
 		}
-
-		$obj.find(".T-cashHidden").addClass('hidden');
+		if($obj.find(".T-mainForm").data('type') != "1"){
+			$obj.find(".T-cashHidden").addClass('hidden');
+		}
 		$obj.find('.T-accountType').on("change",function(){
 			if($(this).val() == 0){
 				$obj.find(".T-cashHidden").addClass('hidden');
@@ -382,7 +383,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
-					var bankNumber = data.bankAccount.bankAccountNumber;
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
 					var html = viewTemplate(data);
