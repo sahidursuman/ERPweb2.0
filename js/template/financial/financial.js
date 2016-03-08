@@ -42,14 +42,17 @@ function getBankList($obj,payType){
         change :function(event, ui){
             if(ui.item == null){
                 $(this).val('').nextAll('.T-accountId').val('');
+                $(this).nextAll('input[name=beginningBalance]').val('').trigger('change');
             }
         },
         select :function(event, ui){
             if(payType == 0){
                 $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
+                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').next().find('input').val("");
             } else if(payType == 1){
                 $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
+                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').prev().find('input').val("");
             }
         }
@@ -66,12 +69,13 @@ function getBankList($obj,payType){
                     if(bankList && bankList.length > 0){
                         for(var i=0; i < bankList.length; i++){
                             var seatCount = {
-                                value : "账户："+ bankList[i].accountName+",余额："+ bankList[i].balance,
-                                id: bankList[i].id
+                                value : "卡号："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance +",期初余额：" + bankList[i].beginningBalance,
+                                id: bankList[i].id,
+                                beginningBalance: bankList[i].beginningBalance
                             }
                             cardNumberJson.push(seatCount);
                         }
-                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
+                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);
                         $that.autocomplete('search', '');
                     }else{
                         layer.tips('没有内容', $that, {
