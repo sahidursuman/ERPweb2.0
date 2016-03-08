@@ -35,7 +35,15 @@
 
 								<td class="h-touristGroupInfo">
 								 	{{if touristGroup.orderNumber}}<p class="h-orderNumber">收客单号：{{touristGroup.orderNumber}}</p>{{/if}}
-					                {{if touristGroup.partnerAgency != null}}<p class="">{{touristGroup.partnerAgency.travelAgencyName}}</p>{{/if}}
+									{{if touristGroup.lineProduct}}
+									 <p class="h-agencyName">
+									 	{{if touristGroup.lineProduct.customerType==0}}散客
+									 	{{else if touristGroup.lineProduct.customerType==1}}团体
+									 	{{else if group.lineProduct.customerType == 2}}转客
+									 	{{/if}}
+									 </p>
+								 	{{/if}}
+								 	{{if touristGroup.lineProduct}}<p class="h-lineName">{{touristGroup.lineProduct.name}}</p>{{/if}}
            						</td>
 								
 								<td>{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
