@@ -46,7 +46,9 @@ define(function(require, exports) {
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
-                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val()
+                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
+                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id")
             };
             //获取数据列表
             TotalProfit.getListData(0, args);
@@ -183,10 +185,10 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.outOPUser || false;
+                    var userList = data.opList || false;
                     if (!!userList) {
                         for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].name;
+                            userList[i].value = userList[i].realName;
                         }
 
                         $target.autocomplete('option', 'source', userList).data('ajax', true);
@@ -230,10 +232,10 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.group || false;
+                    var userList = data.fromBusinessGroupList || false;
                     if (!!userList) {
                         for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].name;
+                            userList[i].value = userList[i].businessGroupName;
                         }
 
                         $target.autocomplete('option', 'source', userList).data('ajax', true);

@@ -878,6 +878,11 @@ define(function(require, exports){
 			
 			KingServices.viewTripDetail(id);
 		});
+		//按钮事件--单团核算表
+		$obj.on('click','.T-tripAccount',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			Count.viewTripAccount(id);
+		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			var $that = $(this);
@@ -1150,6 +1155,126 @@ define(function(require, exports){
 				}   
 			}
     	});
+	};
+	//单团核算表
+	Count.viewTripAccount = function(id){
+		$.ajax({
+			url:KingServices.build_url('financialTripPlan','getTripPlanAccountingDetail'),
+			data:{
+				id:id
+			},
+			type:'POST',
+			showLoading:false,
+			success:function(data){
+				if(showDialog(data)){
+					//校验每个明细tab是否应该显示
+					var showJson = Count.isShowTabByData(data);
+					data.showJson = showJson;
+					console.log(data);
+					var html = outDetailTempLate(data);
+					Tools.addTab(menuKey+'-outDetail','单团核算',html);
+					//打印单团核算页面
+					var $outDetailTab = $("#tab-"+menuKey+'-outDetail'+"-content");
+					$outDetailTab.on('click','.T-export',function(){
+						Count.exportsOutDetail($outDetailTab);
+					});
+				}
+				
+			}
+		});
+		
+	};
+	//校验每个明细tab是否应该显示
+	Count.isShowTabByData = function(data){
+		var showJson = {};
+		showJson.incomeShowFlag = false;
+		showJson.costShowFlag = false;
+		showJson.transitShowFlag = false;
+		showJson.tripInMapCount = 0;
+		showJson.costMapCount = 0;
+		showJson.transitMapCount = 0
+		var tripInMap = data.tripIncomeMap;
+		var tripPayMap = data.tripPayMap;
+		var tripTransitPayMap = data.tripTransitPayMap;
+		//判断发团收入明细
+		if(tripInMap.groupIncomeMap.groupIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.guideIncomeMap.guideIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.otherIncomeMap.otherIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.selfPayIncomeMap.selfPayIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+		if(tripInMap.shopIncomeMap.shopIncomeMapList.length == 0){
+			showJson.tripInMapCount += 1;
+		};
+
+		//判断发团成本明细
+		if(tripPayMap.busPayMap.busPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.guidePayMap.guidePayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.hotelPayMap.hotelPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.insurancePayMap.insurancePayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.restaurantPayMap.restaurantPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.otherPayMap.otherPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.scenicPayMap.scenicPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.selfPayPayMap.selfpPayPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+		if(tripPayMap.ticketPayMap.ticketPayMapList.length == 0){
+			showJson.costMapCount += 1;
+		};
+
+		//判断中转成本明细
+		if(tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		if(tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList.length == 0){
+			showJson.transitMapCount += 1;
+		};
+		//判断赋值
+		if(showJson.tripInMapCount == 5){
+			showJson.incomeShowFlag = true;
+		};
+		if(showJson.costMapCount == 9){
+			showJson.costShowFlag = true;
+		};
+		if(showJson.transitMapCount == 5){
+			showJson.transitShowFlag = true;
+		};
+		return showJson;
+	};
+	//打印页面
+	Count.exportsOutDetail = function($obj){
+		$obj.print({
+			globalStyles:true
+		});
 	};
 	//质量统计
 	Count.getquality = function(id){
@@ -1867,7 +1992,7 @@ define(function(require, exports){
 		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90p x;"/></td>'+
+		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
 		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
@@ -1970,7 +2095,7 @@ define(function(require, exports){
 		'</td>'+
 		'<td><input type="text" name="price" style="width:90px;"/><input type="hidden" name="standardId"></td>'+
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney"/></td>'+
 		'<td><span class="restneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
@@ -2072,7 +2197,7 @@ define(function(require, exports){
 		'<td><input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney"/></td>'+
 		'<td><span class="hotelneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+

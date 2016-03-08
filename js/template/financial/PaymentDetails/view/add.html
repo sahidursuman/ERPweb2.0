@@ -3,7 +3,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>业务类别：</label>
 			<div class="col-sm-3">
-				<select name="moneyType" class="col-sm-12 T-moneyType">
+				<select name="moneyType" class="col-sm-12 T-moneyType" style="width:226px;">
 					<option value="0">收入</option>
 					<option value="1">支出</option>
 					<option value="2">转账</option>
@@ -12,20 +12,27 @@
 			<div class="col-sm-6 T-Ntransfer">
 				<label class="col-sm-4 control-label no-padding-right">对方单位：</label> 
 				<div class="col-sm-6">
-					<input type="text" name="resourceName" class="col-sm-12" />
+					<input type="text" name="resourceName" class="col-sm-12" style="width:226px;" />
 				</div>
 			</div>
 		</div>
 		<div class="form-group T-bank-area T-Ntransfer">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>支付方式：</label>
 			<div class="col-sm-3">
-				<select name="payType" class="col-sm-12">
+				<select name="payType" class="col-sm-12" style="width:226px;">
 					<option value="0">现金</option>
 					<option value="1">银行转账</option>
 					<option value="3">支票</option>
 					<option value="4">其他</option>
 				</select>
 			</div>
+			<div>
+                <label class="col-sm-2 control-label no-padding-right">现金账号：</label>
+                <label class="col-sm-3">
+                    <input type="text" name="cash-number" class="money" style="width:226px;">
+                    <input type="hidden" name="cash-id">
+                </label>
+            </div>
 			<div class="hidden">
 				<label class="col-sm-2 control-label no-padding-right bankNum">银行账号：</label>
 				<label class="col-sm-3">
@@ -38,20 +45,20 @@
 		<div class="form-group T-transfer hidden">
 			<label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转出账户：</label>
 			<label class="col-sm-3">
-				<input type="text" name="out-number" class="money" style="width:226px;">
-                <input type="hidden" name="out-id">
+				<input type="text" name="out-number" class="money T-chooseAccount T-type-out" style="width:226px;">
+                <input type="hidden" name="out-id" class="T-accountId">
 			</label>
 			<label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转入账户：</label>
 			<label class="col-sm-3">
-				<input type="text" name="in-number" class="money" style="width:226px;">
-                <input type="hidden" name="in-id">
+				<input type="text" name="in-number" class="money T-chooseAccount T-type-in" style="width:226px;">
+                <input type="hidden" name="in-id" class="T-accountId">
 			</label>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
 			<div class="col-sm-3">
-				<select name="subjectId" class="col-sm-12 T-option T-subject">
+				<select name="subjectId" class="col-sm-12 T-option T-subject" style="width:226px;">
 					{{each subjectdata0 as sub0}}
 					<option value="{{sub0.id}}">{{sub0.subjectName}}</option>
 					{{/each}}
@@ -60,7 +67,7 @@
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">所属部门：</label>
 			<div class="col-sm-3">
-				<select name="departmentId" class="col-sm-12">
+				<select name="departmentId" class="col-sm-12" style="width:226px;">
 					{{each groupdata as group}}
 						<option value="{{group.id}}">{{group.name}}</option>
 					{{/each}}
@@ -71,24 +78,24 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账金额：</label>
 			<div class="col-sm-3">
-				<input type="text" name="incomeMoney" class="col-sm-12 F-float F-money" maxlength="9"/>
+				<input type="text" name="incomeMoney" class="col-sm-12 F-float F-money" maxlength="9" style="width:226px;"/>
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">凭证编号：</label>
 			<div class="col-sm-3">
-				<input type="text" name="voucher" class="col-sm-12" maxlength="45"/>
+				<input type="text" name="voucher" class="col-sm-12" maxlength="45" style="width:226px;"/>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账日期：</label>
 			<div class="col-sm-3">
-				<input type="text" name="billTime" class="col-sm-12 datepicker"  />
+				<input type="text" name="billTime" class="col-sm-12 datepicker" style="width: 226px;" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right">备注：</label>
-			<div class="col-sm-8">
-				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>  
+			<div class="col-sm-9">
+				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" style="width: 560px;"></textarea>  
 			</div>
 		</div>
 		

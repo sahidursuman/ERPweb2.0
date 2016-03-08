@@ -445,11 +445,14 @@ define(function(require, exports) {
 		tripPlan.$editTab = $tab;
 		// 计算导付
 		tripPlan.moneyTripPlan($tab);
-		window.onbeforeunload=function(){
+		
+		window.onbeforeunload=function(e){
+			var event = e || window.event;
 			if ($tab.data('isEdited')) {
-				window.event.returnValue='发团安排数据已经被修改，未保存'
+				event.returnValue='发团安排数据已经被修改，未保存'
 			}
 		}
+
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
@@ -1576,7 +1579,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1607,7 +1610,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 

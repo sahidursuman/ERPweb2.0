@@ -76,6 +76,14 @@ define(function(require, exports) {
 			transit.listTransit(0);
 		});
 
+		//导出安排
+		transit.$tab.on('click', '.T-transit-export', function() {
+			var recordSize =  transit.$tab.find('.T-recordSize').text();
+			showConfirmDialog($( "#confirm-dialog-message" ), '确定要导出'+ recordSize +'条中转安排？', function() {
+				transit.listTransit(-1);//page == -1，导出安排
+			})
+		})
+
 		//时间控件
 		Tools.setDatePicker(transit.$searchArea.find('.T-datePicker'));
 		Tools.setDatePicker(transit.$searchArea.find('.T-datePicker-range'), true);
@@ -112,6 +120,30 @@ define(function(require, exports) {
             arrangeItemStatus = transit.$searchArea.find("[name=arrangeItemStatus]").val(),
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
+
+        if (page == -1) {
+        	var exportData = {
+				fromPartnerAgencyName: fromPartnerAgencyName,
+				fromPartnerAgencyId: fromPartnerAgencyId,
+				lineProductName: lineProductName,
+				lineProductId: lineProductId,
+				startTime: startTime,
+				arrangeUserName: arrangeUserName,
+				arrangeUserId: arrangeUserId,
+				arrangeStartTime: arrangeStartTime,
+				arrangeEndTime: arrangeEndTime,
+				status: status,
+				tgOrderNumber: tgOrderNumber,
+				shuttleType: shuttleType,
+				shuttleTime: shuttleTime,
+				arrangeItem: arrangeItem,
+				arrangeItemStatus: arrangeItemStatus,
+				shift: shift
+			}
+        	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
+        	return;
+        }
+
         // 修正页码
 		pageNo = (page || 0)
 		

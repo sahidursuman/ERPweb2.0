@@ -48,7 +48,7 @@
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 
                 <td>
-                <div class="inline-flex col-xs-12">
+                <div class="inline-flex">
                 {{if arrange.badStatus == 1}}
                 <span>
                     {{if arrange.payType == 0}}
@@ -89,7 +89,6 @@
         {{/each}}
     </tbody>
 </table>
-
 {{if tripPlan.billStatus > -1}}
 <div style="width:60%;">
     <div> 

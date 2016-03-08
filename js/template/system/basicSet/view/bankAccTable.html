@@ -33,24 +33,28 @@
 
 	<button class="btn btn-sm btn-success T-add R-right" data-right="1040002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
-		新增银行账户
+		新增资金账户
 	</button>
 </div>
 <div class="row T-hotelList">
 	<div class="col-xs-12">
 		<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
 			<colgroup>
-            	<col style="width:20%;"></col>
-            	<col style="width:15%;"></col>
+				<col style="width:11%;"></col>
+            	<col style="width:6%;"></col>
+            	<col style="width:12%;"></col>
+            	<col style="width:13%;"></col>
+            	<col style="width:12%;"></col>
             	<col style="width:10%;"></col>
-            	<col style="width:10%;"></col>
-            	<col style="width:10%;"></col>
-            	<col style="width:20%;"></col>
             	<col style="width:8%;"></col>
-            	<col style="width:15%;"></col>
+            	<col style="width:20%;"></col>
+            	<col style="width:6%;"></col>
+            	<col style="width:10%;"></col>
             </colgroup>
 			<thead>
 				<tr style="background: #51b0c2;color: white">
+					<th>账户名称</th>
+					<th>类别</th>
 					<th>银行账号</th>
 					<th>开户银行</th>
 					<th>开户户名</th>
@@ -65,9 +69,11 @@
 			<tbody class="T-bankAcc-list">
 			    {{each newBankAccountList as rs}}
 					<tr bankNumId="{{rs.id}}">
-						<td>{{rs.bankAccountNumber}}</td>
-						<td>{{rs.openingBank}}</td>
-						<td>{{rs.accountName}}</td>
+						<td>{{rs.aliasName}}</td>
+						<td>{{if rs.type == 0}}现金账户{{else}}银行账户{{/if}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.bankAccountNumber}}{{/if}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.openingBank}}{{/if}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.accountName}}{{/if}}</td>
 						<td>{{rs.beginningTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{rs.beginningBalance}}</td>
 						<td>{{rs.remark}}</td>

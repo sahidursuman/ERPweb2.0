@@ -234,6 +234,7 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
+					    data.payType = InnerTransferIn.saveJson.payType;
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -292,10 +293,10 @@ define(function(require,exports) {
 		                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
 		                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
 		                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
-		                                    var bankId = $countObj.find('input[name=card-id]').val();
-											var voucher = $countObj.find('input[name=credentials-number]').val();
-											var billTime = $countObj.find('input[name=tally-date]').val();
-											var bankNumber = $countObj.find('input[name=card-number]').val();
+	                                    var bankId = (sumPayType == 0) ? $countObj.find('input[name=cash-id]').val() : $countObj.find('input[name=card-id]').val();
+										var voucher = $countObj.find('input[name=credentials-number]').val();
+										var billTime = $countObj.find('input[name=tally-date]').val();
+										var bankNumber = (sumPayType == 0) ? $countObj.find('input[name=cash-number]').val() : $countObj.find('input[name=card-number]').val();
 		                                InnerTransferIn.saveJson = {
 		                                    sumPayMoney : sumPayMoney,
 		                                    sumPayType : sumPayType,
@@ -547,10 +548,10 @@ define(function(require,exports) {
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
-		var bankId = $obj.find('input[name=card-id]').val();
+		var bankId = (payType == 0) ? $obj.find('input[name=cash-id]').val() : $obj.find('input[name=card-id]').val();
 		var voucher = $obj.find('input[name=credentials-number]').val();
 		var billTime = $obj.find('input[name=tally-date]').val();
-		var bankNumber = $obj.find('input[name=card-number]').val();
+		var bankNumber = (payType == 0) ? $obj.find('input[name=cash-number]').val() : $obj.find('input[name=card-number]').val();
 		var args = {
 			lineProductId:$obj.find('input[name=lineProductId]').val(),
 			lineProductName:$obj.find('input[name=lineProductName]').val(),
@@ -577,6 +578,7 @@ define(function(require,exports) {
 						InnerTransferIn.saveJson = data;
 						InnerTransferIn.saveJson.bankId = bankId;
 				        InnerTransferIn.saveJson.voucher = voucher;
+				        InnerTransferIn.saveJson.payType = payType;
                         InnerTransferIn.saveJson.billTime = billTime;
                         InnerTransferIn.saveJson.bankNumber = bankNumber;
                         InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
@@ -826,15 +828,12 @@ define(function(require,exports) {
 		
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
-		var payMoney;
-		var payType;
-		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,settleValidator);
-		var payType = tab_id.find('select[name=sumPayType]').val();
-		var sumRemark = tab_id.find('input[name=sumRemark]').val();
-		var bankId = tab_id.find('input[name=card-id]').val();
-		var voucher = tab_id.find('input[name=credentials-number]').val();
-		var billTime = tab_id.find('input[name=tally-date]').val();
+		var payType = tab_id.find('select[name=sumPayType]').val(),
+			sumRemark = tab_id.find('input[name=sumRemark]').val(),
+			bankId = (payType == 0) ? tab_id.find('input[name=cash-id]').val() : tab_id.find('input[name=card-id]').val(),
+			voucher = tab_id.find('input[name=credentials-number]').val(),
+			billTime = tab_id.find('input[name=tally-date]').val();
 		if(JsonStr.length == 0){
 			showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
 			return false;

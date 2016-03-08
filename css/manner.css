@@ -18,11 +18,19 @@
 
 
 /*table溢出*/
-
+.overflow-table {
+    width: 100%;
+}
 .overflow-table tr td,
 .overflow-table tr th {
     padding-left: 0px!important;
     padding-right: 0px!important;
+}
+
+.overflow-table tr .h-touristGroupInfo, .h-touristGroupInfo {
+    text-align: left;
+    padding-left: 10px !important;
+    margin-left: 20px;
 }
 
 .table-special {
@@ -440,6 +448,10 @@ table tr td {
 }
 .mar-r-20 {
     margin-right: 20px!important;
+}
+
+.mar-b-10 {
+    margin-bottom: 10px;
 }
 .pad-0 {
     padding: 0;
@@ -2171,7 +2183,32 @@ p#back-top a span {
 
     
 }
+@media screen and (max-width:1280px) {
 
+    .busCompanyNameWidth{
+        width: 130px;
+    }
+    .hotelNameWidth{
+        width: 130px; 
+    }
+    .orderManagerTime{
+        margin-top: 10px;
+        margin-left: -23px;
+    }
+    .linproductName{
+        width: 93px;
+    }
+    .timeStartMore {
+        margin-left: -22px !important;
+        margin-top: 10px;
+    }
+    .addQuoteDiv{
+        margin-left: 20px;
+    }
+    .viewQuoteFdiv{
+        margin-left: 20px;
+    }
+}
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
     .share-anchor{
@@ -2431,5 +2468,23 @@ a.gray span{
 .table-inner-list li:first-child{
     border:none;
 }
+/*打印时的样式*/
+@media print{
+    .T-noprint{
+        display: none;
+    }
+    .T-print{
+        display: block!important;
+        visibility: visible!important;
+        opacity: 1;
+    }
+    
+    .tab-content {
+        border: 0;
+        padding: 0;
+    }
 
-
+    #tab-financial_count-outDetail-content > div {
+        padding: 40px;
+    }
+}

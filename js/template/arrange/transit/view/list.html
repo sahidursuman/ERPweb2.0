@@ -44,8 +44,8 @@
               {{if transit.partnerAgencyName}}
                 <span class="h-agencyName">{{transit.partnerAgencyName}}</span>
               {{/if}}
-              {{if transit.outOPUser}}
-                <span class="h-OPUser">外联销售：{{transit.outOPUser}}</span>
+              {{if !!transit.touristGroupOutRemark && transit.touristGroupOutRemark.outOPUser}}
+                <span class="h-OPUser">外联销售：{{transit.touristGroupOutRemark.outOPUser.realName}}</span>
               {{/if}}
               </p>
               <p>
@@ -95,10 +95,10 @@
                     <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" class="cursor T-action T-view" title="查看安排">
 							查看
 						</a>
-                    <!-- <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" title="导出代订" class="cursor T-action T-export R-right" data-right="1160003">
+                    <a data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" title="导出代订" class="cursor T-action T-export R-right" data-right="1160003">
                         <label class="padding-right20">|</label>
                         导出
-                    </a> -->
+                    </a>
                 </div>
             </td>
         </tr>{{/each}}
@@ -106,7 +106,7 @@
 </table>
 <div class="row pageMode">
     <div class="col-xs-6">
-        <small>共计 {{recordSize}} 条记录</small>
+        <small>共计 <span class="T-recordSize">{{recordSize}}</span> 条记录</small>
     </div>
     <div class="col-xs-6">
         <div class="dataTables_paginate paging_simple_numbers T-pagenation">

@@ -274,15 +274,15 @@ define(function(require, exports) {
 		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'"  name="type"  class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+		       name = '<div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="'+ index +'"  name="type"  class="T-type w-100 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
 					  +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
                       +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + ' w-50"></div>',
+           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + ' w-80"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type  col-sm-8  pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		       		name = '<div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type w-100  pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + ' w-50"></div>',
+           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + ' w-100"></div>';
 		        }
                $td.append(name); 
     	       $td.next().append(count); 
@@ -390,15 +390,15 @@ define(function(require, exports) {
 			var html = ''
 			+ '<tr data-entity-id="">'
 			+ '<td><div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value=""><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value=""></div></td>'
-			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
-			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
-			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+			+ '<td><input type="text" name="customerType" class="w-50" readonly="readonly" /></td>'
+			+ '<td><input type="text" name="days" class="w-50 F-float F-count" readonly="readonly" /></td>'
+			+ '<td><input class="datepicker T-startTime w-100" name="startTime" type="text" value="" /></td>'
+			+ '<td><div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="0" name="type" class="T-type w-100 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
             +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
             +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc " readonly></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="w-50 F-float F-count T-count T-count-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="w-80 F-float F-money T-price T-price-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="w-80 F-float F-money T-payedMoney T-calc " readonly></div></td>'
 			+ '<td>' + radio + '</td>'
 			+ '<td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" /></td>'
 			+ '<td>-</td>'
