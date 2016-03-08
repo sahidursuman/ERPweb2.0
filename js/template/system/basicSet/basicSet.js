@@ -465,8 +465,8 @@ define(function(require,exports){
 		if(checkStatus){
 			status = 1;
 		};
-		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
-		var type = $obj.find('select[name=type]').val();
+		
+		var type = $obj.find(".T-mainForm").data('type');
 		if(type == 0){
 			var subData = {
 				type : $obj.find('select[name=type]').val(),
@@ -478,6 +478,7 @@ define(function(require,exports){
 				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
 			};
 		}else{
+			var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 			var subData = {
 				type : $obj.find('select[name=type]').val(),
 				aliasName:$obj.find('input[name=aliasName]').val(),
