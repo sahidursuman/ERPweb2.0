@@ -101,14 +101,12 @@
         </tr>
         {{if tripPlan.tripPlanDetails.length!=0}} {{each tripPlan.tripPlanDetails as tripPlanDetails index}} {{if index >= 1}}
         <tr class="hidden">
+            <td class="h-touristGroupInfo">
+                <p>{{tripPlanDetails.lineProductName}}</p>
+                <p>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</p>
+
+            </td>
             {{if index == 1}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            {{/if}}
-            <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-            <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-            <td>{{tripPlanDetails.lineProductName}}</td>
-            {{if index == 1}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>

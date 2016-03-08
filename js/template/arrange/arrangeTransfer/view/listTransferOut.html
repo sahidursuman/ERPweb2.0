@@ -72,12 +72,12 @@
 							撤销
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 &&  result.status!= 2 && result.status!= 4}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status == 1 ||  result.status== 2 ||result.status == 4}}style="color:#bbb;"{{/if}} data-right="1180004">
+						<a data-value="{{result.id}}" class="cursor {{if result.status==3}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status !=3}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							确认
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status == 4 || (result.transTravelAgencyId==null && result.status == 1)}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if result.status != 4 && result.status != 1}}style="color:#bbb;"{{/if}}>
+						<a data-value="{{result.id}}" class="cursor {{if result.status == 4 || (result.transTravelAgencyId==null && result.status == 1)}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if !(result.status == 4 || (result.status == 1 && result.transTravelAgencyId==null))}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							确认退回
 						</a>
