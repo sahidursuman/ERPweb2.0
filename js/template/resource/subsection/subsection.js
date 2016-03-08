@@ -791,7 +791,8 @@ define(function(require, exports) {
 								lineProductId : $lineProTr.eq(index).data('id'),
 							　　name : $lineProTr.eq(index).data('name'),
 							    customerType : $lineProTr.eq(index).attr('data-customerType'),
-							    days : $lineProTr.eq(index).data('days')
+							    days : $lineProTr.eq(index).data('days'),
+							    startTime:linProInfoJson.startTime
 							};
 						};
 					});
@@ -805,6 +806,7 @@ define(function(require, exports) {
 						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
 						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
 						$tr.find('input[name=days]').val(lineProductJson.days);
+						$tr.find('input[name=startTime]').val(lineProductJson.startTime);
 
 						if (!!$tr.prev().length>0) {
 							var days=$tr.prev().find('input[name=days]').val(),

@@ -14,7 +14,8 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody>{{each transitSubTgroupList as subList indexA}}
+        <tbody>
+        {{each transitSubTgroupList as subList indexA}}
             <tr data-entity-id="{{subList.id}}">
                 <td class="h-touristGroupInfo">
                     <p>
@@ -38,6 +39,7 @@
                 <td><span class="F-float F-count">{{subList.lineProduct.days}}</span></td>
                 <td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
                 <td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
+
                 <td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
                 <td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
                 <td>
@@ -61,6 +63,7 @@
                 <td><span class="F-float F-count">{{subDetails.days}}</span></td>
                 <td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
                 <td></td>
+                <td></td>
                 <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已外转 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
                 </td>
                 <td rowspan="{{subList.subTouristGroupDetails.length}}"></td>
@@ -72,6 +75,7 @@
                 <td>{{subDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{subDetails.days}}</td>
                 <td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
+                <td></td>
                 <td></td>
                 <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已转客 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
                 </td>
