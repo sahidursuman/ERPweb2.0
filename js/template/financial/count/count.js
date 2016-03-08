@@ -1178,7 +1178,7 @@ define(function(require, exports){
 
 					//打印单团核算页面
 					var $outDetailTab = $("#tab-"+menuKey+'-outDetail'+"-content");
-					$outDetailTab.on('click','.T-export',function(){
+					$outDetailTab.off('click').on('click','.T-export',function(){
 						Count.exportsOutDetail($outDetailTab);
 					});
 				}
@@ -4473,4 +4473,5 @@ define(function(require, exports){
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
+	exports.viewTripAccount = Count.viewTripAccount;
 });

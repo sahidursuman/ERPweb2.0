@@ -2361,6 +2361,12 @@ KingServices.addBusDriverFunction = function(e){
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }
+//跳转报账审核的单团核算
+KingServices.viewTripAccount = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_count,function(module){
+		module.viewTripAccount(id);
+	});
+}
 /**
  * 设置省下拉框
  * @param  {[type]} obj [description]
