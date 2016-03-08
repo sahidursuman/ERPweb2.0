@@ -1,5 +1,5 @@
-<div class="financialCount">
-    <div class="row">
+<div class="row financialCount">
+    <div>
         <div class="form-inline T-search-area">
             <div class="form-group mar-r-10">
                 <label class="control-label pull-left"><span>团号</span></label>
@@ -17,11 +17,11 @@
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label"><span>开始日期</span></label>
-                <input type="text" value="{{searchParam.startTime}}" name="startTime" class=" datepicker" style="width:100px;" placeholder="开始日期" />
+                <input type="text" value="{{searchParam.startTime}}" name="startTime" class=" datepicker" style="width:88px;" placeholder="开始日期" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label"><span>结束日期</span></label>
-                <input type="text" value="{{searchParam.endTime}}" name="endTime" class=" datepicker" style="width:100px;" placeholder="结束日期" />
+                <input type="text" value="{{searchParam.endTime}}" name="endTime" class=" datepicker" style="width:88px;" placeholder="结束日期" />
             </div>
             <div class="form-group btn-status btn-group mar-r-10">
                 <label>状态</label>
@@ -64,5 +64,5 @@
             <label class="control-label">团数：<span class="F-float F-count">{{financialTripPlan.tripNumber}}</span></label>
         </div>
     </div>
-    <div class="T-counterList" style="margin:0px -10px;"></div>
+    <div class="col-xs-12 T-counterList" style="margin:0px -10px; width: auto;"></div>
 </div>

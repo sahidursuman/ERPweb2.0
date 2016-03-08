@@ -871,24 +871,7 @@ input.datepicker {
 	padding: 0;
 	padding-top: 38px;
 }
-@media (max-width: 1485px){
-	.financial-search-planProfit{
-		display: inline-block;
-	    padding-left: 0px;
-	    padding-top: 8px;
-	}
-}
-@media (max-width: 1499px) and (min-width: 992px){
-	.sidebar{
-		width: 140px;
-	}
-	.sidebar+.main-content .breadcrumbs-fixed {
-	    left: 140px;
-	}
-	.sidebar+.main-content {
-		margin-left: 140px;
-	}
-}
+
 
 /*内容区边界*/
 /* #tabContent {
@@ -970,9 +953,11 @@ input.datepicker {
 	position: relative;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    overflow-y: auto;
+    overflow: auto;
 	padding: 20px 20px 15px 25px;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane > *{
+	min-width: 1050px;
 }
 .table{
 	position: relative;
@@ -1018,4 +1003,31 @@ input.datepicker {
 
 .inline-flex {
 	display: inline-flex;
+}
+.sidebar.menu-min+.main-content{
+	margin-left: 0;
+	padding-left: 43px;
+}
+@media (max-width: 1485px){
+	.financial-search-planProfit{
+		display: inline-block;
+	    padding-left: 0px;
+	    padding-top: 8px;
+	}
+}
+@media (max-width: 1499px) and (min-width: 992px){
+	.sidebar{
+		width: 140px;
+	}
+	.sidebar+.main-content .breadcrumbs-fixed {
+	    left: 140px;
+	}
+	.sidebar+.main-content {
+		padding-left: 140px;
+	}
+}
+@media only screen and (max-width: 991px){
+	.sidebar.responsive+.main-content {
+		padding-left: 0;
+	}
 }
