@@ -917,6 +917,10 @@ input.datepicker {
 	width: 150px;
 }
 
+.min-w-200 {	
+	min-width: 200px;
+}
+
 /*自费table的宽度*/
 .w-1400 {
 	min-width: 1400px;
