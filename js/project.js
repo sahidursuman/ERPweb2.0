@@ -2541,3 +2541,8 @@ Tools.loadPluginScript = function(pluginKey){
 		$.getScript(modulePlugin.plugin_print);
 	};	
 };
+
+window.onbeforeunload=function(e){
+	var event = e || window.event;
+	event.returnValue='您有数据尚未保存'
+}
