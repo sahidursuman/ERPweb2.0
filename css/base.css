@@ -17,6 +17,7 @@
 }
 body{
 	color:#000; 
+	background-color: white;
 	font-family: "microsoft yahei";
 	min-width: 1270px;
     overflow-x: auto;
