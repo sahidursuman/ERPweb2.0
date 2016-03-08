@@ -1054,15 +1054,17 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	transfer.returnTransferIn=function(id){
-		$.ajax({
-			url:KingServices.build_url("transfer","transferBack"),
-			data:"outTransferId="+id+"",
-		})
-		.done(function(data) {
-			showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-				transfer.$tab.find('.T-transferIn-search').trigger('click');
+		 showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+		 	$.ajax({
+				url:KingServices.build_url("transfer","transferBack"),
+				data:"outTransferId="+id+"",
 			})
-		});
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					transfer.$tab.find('.T-transferIn-search').trigger('click');
+				})
+			});
+		 });
 	};
 
 

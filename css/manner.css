@@ -432,14 +432,29 @@ table tr td {
     margin-top: 10px;
 }
 
+.mar-l-5 {
+    margin-left: 5px;
+}
+
+.mar-l-3{
+    margin-left: 3px;
+}
+.mar-l-8{
+    margin-left: 8px;
+}
 .mar-l-10 {
     margin-left: 10px;
+}
+.mar-l-23{
+    margin-left: 23px;
 }
 
 .mar-l-15 {
     margin-left: 15px;
 }
-
+.mar-1-112{
+    margin-left: 112px;
+}
 .mar-r-10 {
     margin-right: 10px;
 }
@@ -450,6 +465,11 @@ table tr td {
 .mar-b-10 {
     margin-bottom: 10px;
 }
+
+.mar-b-20 {
+    margin-bottom: 20px;
+}
+
 .pad-0 {
     padding: 0;
 }
@@ -460,6 +480,10 @@ table tr td {
 
 .pad-l-5 {
     padding-left: 5px;
+}
+
+.line-h-2 {
+    line-height: 1.9em;    
 }
 
 .label-inline-60 {
@@ -1735,6 +1759,8 @@ p#back-top a span {
 .userAuth li{
     list-style-type: none;
     width: 133px;
+    height: 30px;
+    padding: 5px 0px 5px 0px;
 }
 .userAuth li:hover{
     cursor: pointer;
@@ -2465,5 +2491,23 @@ a.gray span{
 .table-inner-list li:first-child{
     border:none;
 }
+/*打印时的样式*/
+@media print{
+    .T-noprint{
+        display: none;
+    }
+    .T-print{
+        display: block!important;
+        visibility: visible!important;
+        opacity: 1;
+    }
+    
+    .tab-content {
+        border: 0;
+        padding: 0;
+    }
 
-
+    #tab-financial_count-outDetail-content > div {
+        padding: 40px;
+    }
+}

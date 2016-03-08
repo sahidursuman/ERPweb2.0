@@ -386,6 +386,14 @@ define(function(require, exports) {
         });
 
 
+        //内转取消操作
+        $innerTransfer.find(".T-cancelTransfer").on('click', function(event) {
+            event.preventDefault();
+            //内转保存操作
+            Tools.closeTab(menuKey + "-innerTransfer");
+        });
+
+
         //绑定是否全选
         $innerTransfer.find('.all .T-CheckAllBox').on('click', function(event) {
             /* Act on the event */
@@ -438,7 +446,7 @@ define(function(require, exports) {
         $outTransfer.find('.T-cancelOutTransfer').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            closeTab(menuKey + "-outTransfer");
+            Tools.closeTab(menuKey + "-outTransfer");
         });
 
         //绑定是否全选

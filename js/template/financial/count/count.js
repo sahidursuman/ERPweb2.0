@@ -881,6 +881,8 @@ define(function(require, exports){
 		//按钮事件--单团核算表
 		$obj.on('click','.T-tripAccount',function(){
 			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
 			Count.viewTripAccount(id);
 		});
 		//查看图片事件
@@ -1173,6 +1175,12 @@ define(function(require, exports){
 					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
+
+					//打印单团核算页面
+					var $outDetailTab = $("#tab-"+menuKey+'-outDetail'+"-content");
+					$outDetailTab.on('click','.T-export',function(){
+						Count.exportsOutDetail($outDetailTab);
+					});
 				}
 				
 			}
@@ -1264,6 +1272,12 @@ define(function(require, exports){
 			showJson.transitShowFlag = true;
 		};
 		return showJson;
+	};
+	//打印页面
+	Count.exportsOutDetail = function($obj){
+		$obj.print({
+			globalStyles:true
+		});
 	};
 	//质量统计
 	Count.getquality = function(id){

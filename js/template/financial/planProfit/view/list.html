@@ -1,5 +1,5 @@
 <thead>
-	<tr class="bg-blur">
+	<tr class="bg-blur T-tr-fixed">
 		<th rowspan="2">团信息</th>
 		<th rowspan="2">状态</th>
 		<th rowspan="2" style="width:60px;">收/付</th>
@@ -17,7 +17,7 @@
 		<th rowspan="2">毛利</th>
 		<th width="80" rowspan="2">人均毛利</th>
 	</tr>
-	<tr class="bg-blur">
+	<tr class="bg-blur T-tr-fixed">
 		<th>团款</th>
 		<th>购物佣金</th>
 		<th>自费收入</th>
@@ -107,8 +107,8 @@
 		<tr><td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
 			<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
 			<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
-			<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
-			<td><span class="F-float F-money">{{list.incomeMoney}}</span></td>
+			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
+			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>
 			<td><span class="F-float F-money">{{if !!list.guideMoney}}{{list.guideMoney}}{{else}}-{{/if}}</span></td>
 			<td><span class="F-float F-money">{{list.insuranceMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.busMoney}}</span></td>
@@ -187,8 +187,8 @@
 				<td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
 				<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
 				<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
-				<td><span class="F-float F-money">{{list.selfIncome}}</span></td>
-				<td><span class="F-float F-money">{{list.incomeMoney}}</span></td>
+				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
+				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>
 				<td><span class="F-float F-money">{{if !!list.guideMoney}}{{list.guideMoney}}{{else}}-{{/if}}</span></td>
 				<td><span class="F-float F-money">{{list.insuranceMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.busMoney}}</span></td>
