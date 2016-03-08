@@ -2566,7 +2566,7 @@ window.onbeforeunload=function(e){
 		var $this = $(this),
 			isEdited = $this.data('isEdited');
 		if (!!isEdited) {
-			event.returnValue='重现加载页面将导致未保存的数据丢失'
+			event.returnValue='重新加载页面将导致未保存的数据丢失'
 		}
 	});
 }
