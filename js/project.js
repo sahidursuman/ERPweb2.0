@@ -1480,9 +1480,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		html = Tools.filterCount(html);
 		html = Tools.filterMoney(html);
 		html = Tools.filterUnPoint(html);
-		if (tab_id != 'arrange_all-update') {
-			Tools.trFixed(html);
-		}
+		Tools.trFixed(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
