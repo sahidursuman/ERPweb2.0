@@ -462,6 +462,10 @@ table tr td {
     padding-left: 5px;
 }
 
+.line-h-2 {
+    line-height: 1.9em;    
+}
+
 .label-inline-60 {
     display: inline-block;
     width: 60px;
