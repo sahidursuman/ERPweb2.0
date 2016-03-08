@@ -879,7 +879,7 @@ define(function(require, exports){
 			KingServices.viewTripDetail(id);
 		});
 		//按钮事件--单团核算表
-		$obj.on('click','.T-tripAccount',function(){
+		$obj.find('.T-tripAccount').off('click').on('click',function(){
 			var id = $obj.find('[name=financialTripPlanId]').val();
 			var pluginKey = 'plugin_print';
 			Tools.loadPluginScript(pluginKey);
