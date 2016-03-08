@@ -48,10 +48,10 @@
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
 		<td rowspan="3">
-			{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span><br />
+			<a href="javascript:void(0)" class="T-toTripAccount">{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span><br />
 			{{rs.lineProductName}}<br />
 			{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小<br />
-			导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span>
+			导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></a>
 		</td>
 		<td rowspan="3">
 			{{if rs.billStatus == -1}}
