@@ -132,6 +132,7 @@ define(function(require, exports){
 		.done(function(data){
 			if(showDialog(data)){
 				data.result = JSON.parse(data.result);
+				console.log(data);
 				var html = listTableTemplate(data);
 				Payment.$tab.find('.T-list').html(html);
 				// 设置记录条数及页面
