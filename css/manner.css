@@ -2465,5 +2465,23 @@ a.gray span{
 .table-inner-list li:first-child{
     border:none;
 }
+/*打印时的样式*/
+@media print{
+    .T-noprint{
+        display: none;
+    }
+    .T-print{
+        display: block!important;
+        visibility: visible!important;
+        opacity: 1;
+    }
+    
+    .tab-content {
+        border: 0;
+        padding: 0;
+    }
 
-
+    #tab-financial_count-outDetail-content > div {
+        padding: 40px;
+    }
+}
