@@ -338,11 +338,18 @@ define(function(require, exports){
 		else if(type == 1) { subList = Payment.subList1; }
 		else if(type == 2) { subList = Payment.subList2; }
 			
-		for(var i = 0; i < subList.length; i++){
-			subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+		if(subList.length > 0){
+			for(var i = 0; i < subList.length; i++){
+				subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+			}
+			$container.find(".T-subject").html(subjectHtml);
+			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+		} else {
+			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
+				$container.find(".T-subject").html("");
+				$container.find("input[name=subjectName]").val("");
+			});
 		}
-		$container.find(".T-subject").html(subjectHtml);
-		$container.find("input[name=subjectName]").val(subList[0].subjectName);
 	};
 
 	Payment.submitPayment = function(){
