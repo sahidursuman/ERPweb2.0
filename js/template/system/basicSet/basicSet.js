@@ -461,7 +461,7 @@ define(function(require,exports){
 	//组装数据
 	Infrastructure.installData = function($obj,typeFlag){
 		var status = 0,
-		    checkStatus = $obj.find('.T-checkStatus').is(':checked')
+		    checkStatus = $obj.find('.T-checkStatus').is(':checked'),
 		    type;
 		if(checkStatus){
 			status = 1;
