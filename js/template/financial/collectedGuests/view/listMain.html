@@ -1,5 +1,4 @@
 <div class="row">
-<<<<<<< HEAD
     <div class="T-search-area" style="margin:0px;">
         <div class="form-horizontal">
             <label>线路产品：</label>
@@ -34,59 +33,6 @@
             <label class="mar-r-20">支出合计：<span class="F-float F-money T-totalTrip"></span></label>
             <label class="mar-r-20 T-turn">毛利合计：<span class="F-float F-money T-totalProfit"></span></label>
             <label>人均毛利合计：<span class="F-float F-money T-AvgProfit"></span></label>
-=======
-	<div class="T-search-area" style="margin:0px;">  
-		<div class="form-inline">      
-            <div class="form-group mar-r-10">
-		      	<label>线路产品：</label>
-		    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
-				<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
-			</div>
-            <div class="form-group mar-r-10">
-				<label>客户：</label>
-		    	<input type="text" style="width: 100px" placeholder="客户" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}"/>
-				<input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}"/>
-			</div>
-            <div class="form-group mar-r-10">
-				<label>针对客源：</label>
-		    	<select name="customerType">
-		    		<option value="" {{if !searchParam.customerType || searchParam.customerType == ""}}selected{{/if}}>全部</option>
-		    		<option value="0" {{if searchParam.customerType == 0}}selected{{/if}}>散客</option>
-		    		<option value="1" {{if searchParam.customerType == 1}}selected{{/if}}>团队</option>
-		    	</select>
-		    </div>
-            <div class="form-group mar-r-10">
-		    	<label>收客单号：</label>
-		    	<input type="text" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}"/>
-	    	</div>
-            <div class="form-group mar-r-10">
-				<label style="margin-left: 15px">外联销售：</label>
-		    	<input type="text" style="width: 100px" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}"/>
-		    </div>
-            <div class="form-group mar-r-10">
-				<label>部门：</label>
-		    	<input type="text" style="width: 100px" placeholder="部门" name="groupName" value="{{searchParam.groupName}}"/>
-	    	</div>
-            <div class="form-group mar-r-10">
-				<label>开始日期：</label>
-		    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />	
-		    </div>
-            <div class="form-group mar-r-10">
-				<label>结束日期：</label>
-		    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />	
-			</div>
-            <div class="form-group mar-r-10">
-	        	<button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
-	    	</div>
-	    </div>
-
-	    <div style="margin:8px 0px;">
-	    	<label>总人数：<span class="F-float F-money T-touristCount"></span></label>
-            <label class="marginLeft-30">收入合计：<span class="F-float F-money T-totalIncome"></span></label>
-            <label class="marginLeft-30">支出合计：<span class="F-float F-money T-totalTrip"></span></label>
-            <label class="marginLeft-30 T-turn">毛利合计：<span class="F-float F-money T-totalProfit"></span></label>
-            <label class="marginLeft-30">人均毛利合计：<span class="F-float F-money T-AvgProfit"></span></label>
->>>>>>> c29375cd9e6048f2bd19ceb42f40db6342ff0af7
         </div>
     </div>
     <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
