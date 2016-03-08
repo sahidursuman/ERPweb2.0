@@ -2,34 +2,29 @@
     <form class="form-inline hct-search-area" role="form" onsubmit="return false">
         <div class="form-group">
             <label>客户：</label>
-            <input type="text" name="fromPartnerAgencyName" class="form-control"/>
+            <input type="text" name="fromPartnerAgencyName" class="form-control" />
             <input type="hidden" name="fromPartnerAgencyId" value="" />
         </div>
         <div class="form-group mar-r-10">
             <label>线路产品：</label>
             <input type="text" name="lineProductName" class="form-control" value="" />
             <input type="hidden" name="lineProductId" value="" />
-<<<<<<< HEAD
         </div>
         <div class="form-group mar-r-10">
             <label>出游时间：</label>
             <input class="form-control T-datePicker" name="startTime" value="" type="text" />
         </div>
-    	<div class="form-group mar-r-10">
-=======
-        </div>    
-    	<div class="form-group mar-l-15">
->>>>>>> 7e8fb49b83bf55e20cd02f1818b7bb43cebe3aaf
-    	    <label>安排人：</label>
-    	    <input type="text" name="arrangeUserName" value="" class="form-control" />
-    	    <input type="hidden" name="arrangeUserId" value="" />
-    	</div>
-    	<div class="form-group mar-r-10">
-    	    <label>安排时间：</label>
-    	    <input class="form-control T-datePicker-range" name="arrangeStartTime" placeholder="开始时间" style="width:100px;" type="text" />
-    	    <label>&nbsp;至&nbsp;</label>
-    	    <input class="form-control T-datePicker-range" name="arrangeEndTime" placeholder="结束时间" style="width:100px;" type="text" />
-    	</div>
+        <div class="form-group mar-r-10">
+            <label>安排人：</label>
+            <input type="text" name="arrangeUserName" value="" class="form-control" />
+            <input type="hidden" name="arrangeUserId" value="" />
+        </div>
+        <div class="form-group mar-r-10">
+            <label>安排时间：</label>
+            <input class="form-control T-datePicker-range" name="arrangeStartTime" placeholder="开始时间" style="width:100px;" type="text" />
+            <label>&nbsp;至&nbsp;</label>
+            <input class="form-control T-datePicker-range" name="arrangeEndTime" placeholder="结束时间" style="width:100px;" type="text" />
+        </div>
         <div class="form-group mar-r-10">
             <button class=" btn-sm  T-btn-transitList-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索
@@ -38,15 +33,15 @@
         </div>
     </form>
     <form class="form-inline" role="form" onsubmit="return false">
-    	<div class="form-group">
-    	    <select name="shuttleType">
-    	        <option value="0">接团日期</option>
-    	        <option value="1">送团日期</option>
-    	    </select>
-	    </div>
-    	<div class="form-group">
-    	    <input class="form-control T-datePicker" name="shuttleTime" placeholder="日期" value="" type="text" />
-    	</div>
+        <div class="form-group">
+            <select name="shuttleType">
+                <option value="0">接团日期</option>
+                <option value="1">送团日期</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input class="form-control T-datePicker" name="shuttleTime" placeholder="日期" value="" type="text" />
+        </div>
         <div class="form-group">
             <input class="form-control" name="shift" value="" placeholder="班次" type="text" />
         </div>
