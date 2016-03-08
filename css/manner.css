@@ -1742,7 +1742,7 @@ p#back-top a span {
 .userAuthWidth{
     width:160px;height: auto;
     position: fixed;
-    top:142px;left: 1280px; 
+    top:142px;left: 1080px; 
     border:1px solid #ddd;
     margin-top: 45px;
 }
