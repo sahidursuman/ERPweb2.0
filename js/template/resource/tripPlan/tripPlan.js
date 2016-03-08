@@ -1451,7 +1451,7 @@ define(function(require, exports) {
 	//添加餐饮安排
 	tripPlan.addRestaurant = function($this, validator, $tab){   
 		var tableContainer = $this.closest(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select name="type" class="col-sm-12 T-restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 		'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 T-chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
@@ -1478,7 +1478,7 @@ define(function(require, exports) {
 	// 添加酒店安排
 	tripPlan.addHotel = function($this, validator, $tab){
 		var tableContainer = $this.closest(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select class="col-sm-12 no-padding T-tripPlanHotelStar" style="width: 80px;"><option selected="selected" {{if hotel.hotel.level == 0}}selected="selected"{{/if}} value="">--全部--</option>'+
 		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select><input type="hidden" name="id" value="" /></td>' +
 		'<td><div class="col-sm-12"><input type="text" class="col-sm-12 T-chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
@@ -1511,7 +1511,7 @@ define(function(require, exports) {
 	// 添加景区安排
 	tripPlan.addScenic = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
 		'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 T-chooseScenic"/><input type="hidden" name="scenicId"/><span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem"/><input type="hidden" name="scenicItemId"/></td>' +
@@ -1539,7 +1539,7 @@ define(function(require, exports) {
 	// 添加购物安排
 	tripPlan.addShop = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer" value=""></td>'+
+			html = '<tr><td class="T-whichDaysContainer w-100" value=""></td>'+
         '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 T-chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
         '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
@@ -1561,7 +1561,7 @@ define(function(require, exports) {
 	// 添加自费安排
 	tripPlan.addSelfPay = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 T-chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="hidden" name="selfPayItemId" value="" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="" /></td>'+
 		'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
@@ -1623,7 +1623,7 @@ define(function(require, exports) {
 	// 添加其他
 	tripPlan.addOther = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><input type="text" name="name" maxlength="32" class="col-sm-12 T-other-name"/></td>' +
 		'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
@@ -1654,7 +1654,7 @@ define(function(require, exports) {
 
 		if(id){
 			var tr = $("#"+id+" tbody tr");
-			var selectText = '<select class="col-sm-12" name="whichDay">';
+			var selectText = '<select class="w-100" name="whichDay">';
 			for(var i = 0; i < days; i++){
 				selectText += '<option value="'+(i+1)+'">'+ Tools.addDay(startTime, i) +'</option>';
 			}
@@ -1663,7 +1663,7 @@ define(function(require, exports) {
 		}else{
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
 				var val = $(this).attr("value");
-				var selectText = '<select class="col-sm-12" name="whichDay">';
+				var selectText = '<select class="w-100" name="whichDay">';
 				for(var i = 0; i < days; i++){
 					if(val == (i+1)){
 						selectText += '<option value="'+(i+1)+'" selected="selected">'+ Tools.addDay(startTime, i) +'</option>';
