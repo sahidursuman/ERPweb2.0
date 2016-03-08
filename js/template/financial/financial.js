@@ -67,9 +67,15 @@ function getBankList($obj,payType){
                     var cardNumberJson = [];
                     var bankList = data.bankList;
                     if(bankList && bankList.length > 0){
-                        for(var i=0; i < bankList.length; i++){
+                        for(var i=0, tmp; i < bankList.length; i++){
+                            if (!!bankList[i].accountName || bankList[i].accountName === 'NULL') {
+                                tmp = "账户：" + bankList[i].accountName;
+                            } else {
+                                tmp = "账号：" + bankList[i].bankAccountNumber;
+                            }
+                            
                             var seatCount = {
-                                value : "账户："+ bankList[i].accountName+",余额："+ bankList[i].balance +",期初余额：" + bankList[i].beginningBalance,
+                                value : tmp +",余额："+ bankList[i].balance +",期初余额：" + bankList[i].beginningBalance,
                                 id: bankList[i].id,
                                 beginningBalance: bankList[i].beginningBalance
                             }
