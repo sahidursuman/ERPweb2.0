@@ -75,7 +75,7 @@
                 <td>{{subDetails.days}}</td>
                 <td>{{if subDetails.operateCurrentNeedPayMoney == 0}}-{{else}}本段现收{{/if}}</td>
                 <td colspan="2"></td>
-                <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已转客 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
+                <td>{{if subDetails.status == 1}} 未分团 {{else if subDetails.status == 2}} 已分团 {{else if subDetails.status == 3}} 已外转 {{else if subDetails.status == 4}} 已取消 {{else if subDetails.status == 5}} 已拆分 {{else if subDetails.status == 6}} 已内转 {{else}} 已发团 {{/if}}
                 </td>
             </tr>
             {{/if}} {{/each}} {{/if}} {{/each}}
