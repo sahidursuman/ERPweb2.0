@@ -16,7 +16,7 @@
     </thead>
     <tbody class="T-listTransferIn">
         {{each result as result}}
-        <tr data-value="{{result.id}}">
+        <tr data-value="{{result.id}}" data-status="{{result.status}}">
             <td class="h-touristGroupInfo">
                 {{if result.lineProduct != null}}<p class="h-orderNumber">{{result.lineProduct.name}}</p>{{/if}}
                 <p class="">
@@ -44,6 +44,7 @@
             {{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>
             {{else if result.status == 2}}<span style="color: red;" data-status="2">已拒收</span>
             {{else if result.status == 4}}<span style="color: green;" data-status="4">申请退回</span>
+            {{else if result.status == 5}}<span style="color: red">已退回</span>
             {{/if}}{{/if}}</td>
             
             <td>
@@ -51,11 +52,11 @@
                     <a data-value="{{result.id}}" class="cursor T-transferIn-view T-action">
 						查看
 					</a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1}} color:#bbb; {{/if}}" data-right="1180007">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!=5}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1 || result.status==5 }} color:#bbb; {{/if}}" data-right="1180007">
                         <label class="padding-right20">|</label>
                         确认
                     </a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2}} color:#bbb; {{/if}}" data-right="1180008">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2 && result.status!=1 && result.status!=5}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2 || result.status==1 || result.status==5}} color:#bbb; {{/if}}" data-right="1180008">
                         <label class="padding-right20">|</label>
                         拒绝
                     </a>
