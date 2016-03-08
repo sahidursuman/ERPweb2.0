@@ -27,11 +27,15 @@ FinancialService.initPayEvent = function($container,rule)  {
         }
         $cash.closest('div').toggleClass('hidden', val !== "0");
         $card.closest('div').toggleClass('hidden', val != 1);
-        if(val != 0){
-           $container.find('input[name=cash-id]').val('');
-        };
-        if(val !=1){
-            $container.find('input[name=card-id]').val('');
+        if(val != 0 || val !=1){
+            var cashId = $container.find('input[name=cash-id]'),
+                cardId = $container.find('input[name=card-id]');
+            if(cashId.length){
+                cashId.val('');
+            }
+            if(cardId.length){
+                cardId.val('');
+            }
         };
     }).trigger('change');
 };
