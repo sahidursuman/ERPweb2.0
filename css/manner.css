@@ -450,6 +450,11 @@ table tr td {
 .mar-b-10 {
     margin-bottom: 10px;
 }
+
+.mar-b-20 {
+    margin-bottom: 20px;
+}
+
 .pad-0 {
     padding: 0;
 }
