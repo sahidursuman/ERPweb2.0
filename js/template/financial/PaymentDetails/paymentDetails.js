@@ -169,9 +169,14 @@ define(function(require, exports){
 			subjectId : Payment.$tab.find('.T-search-subject').val(),
 			voucher : Payment.$tab.find('.T-search-voucher').val()
 		}
-
-		if (args.payType == 1) {
-			args.bankId = Payment.$tab.find('.T-bankId').val();
+		if(args.payType == ""){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val() || Payment.$tab.find('input[name=card-id]').val();
+		}
+		else if(args.payType == 0){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val();
+		}
+		else if (args.payType == 1) {
+			args.bankId = Payment.$tab.find('input[name=card-id]').val();
 		}
 		return args;
 	};
