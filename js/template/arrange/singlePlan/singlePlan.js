@@ -87,8 +87,8 @@ define(function(require, exports) {
                 $(this).next('[name="status"]').removeClass('hide');
             }
         });
-        $tab.off('click')
-        .on('click', '.T-btn-tripPlan-add', function(event) {
+        $tab.find('.T-btn-tripPlan-add').off('click')
+        .on('click', function(event) {
             event.preventDefault();
             singlePlan.addTripPlan($(this).data('type'));
         });
