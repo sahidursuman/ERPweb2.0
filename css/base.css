@@ -15,11 +15,17 @@
 .table th, .table td {
     text-align: center;
 }
+html,
+body,
+.main-container{
+	width: 100%;
+    overflow: hidden;
+    height: 100%;
+}
 body{
 	color:#000; 
 	font-family: "microsoft yahei";
 	min-width: 1270px;
-    overflow-x: auto;
 }
 a{cursor: pointer;}
 a:hover, a:focus{text-decoration: none;}
@@ -885,9 +891,9 @@ input.datepicker {
 }
 
 /*内容区边界*/
-#tabContent {
+/* #tabContent {
 	padding: 20px 20px 0 25px;
-}
+} */
 
 .overflow-x {
 	overflow-x: auto;
@@ -919,12 +925,12 @@ input.datepicker {
 
 /*自费table的宽度*/
 .w-1400 {
-	min-width: 1400px;
+	width: 1400px;
 }
 
 /*车辆安排table的宽度*/
 .w-1500 {
-	min-width: 1500px;
+	width: 1500px;
 }
 /*table 标题边框颜色*/
 .table>thead>tr.bg-blur>th:last-child{
@@ -936,7 +942,72 @@ input.datepicker {
 .table>tbody>tr>td{
 	vertical-align:middle;
 }
-
+.main-container{
+	padding-top: 78px;
+}
+.sidebar+.main-content{
+	margin-left: 0;
+	margin-top: 0;
+	padding-left: 190px;
+    height: 100%;
+}
+.main-content-inner,
+.main-content-inner > .page-content,
+.main-content-inner > .page-content > .tab-content{
+	height: 100%;
+}
+#tabContent{
+	padding: 0;
+}
+.main-content-inner > .page-content {
+	padding-top: 41px;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane{
+	position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+	padding: 20px 20px 15px 25px;
+}
+.table{
+	position: relative;
+}
+.T-tr-fixed{
+	position: relative;
+	z-index: 5;
+    width: 100%;
+}
+.table-bordered{
+	border:none;
+}
+.table>thead>tr.bg-blur.T-tr-fixed>th{
+	border:none;
+	position: relative;
+	border-left: 1px solid #ddd;
+}
+.table-striped>tbody>tr{
+	background-color: #fff;
+}
+.table-striped>tbody>tr:nth-child(odd){
+	background-color: #f9f9f9;
+}
+.table>thead>tr.bg-blur.T-tr-fixed>th:last-child{
+	border-right: 1px solid #51B0C2;
+}
+.table>thead>tr.bg-blur.T-tr-fixed>th:after{
+	content: '';
+	position: absolute;;
+	width: 100%;
+	height: 1px;
+	left: 0;
+	bottom: 0;
+	background-color: #ddd;
+}
+.table .btn-group, 
+.table .btn-group-vertical{
+	position: inherit;
+}
 #cnzz_stat_icon_1257382061 {
 	display: none;
 }

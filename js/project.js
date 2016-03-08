@@ -1474,6 +1474,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		html = Tools.filterCount(html);
 		html = Tools.filterMoney(html);
 		html = Tools.filterUnPoint(html);
+		Tools.trFixed(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -2498,3 +2499,28 @@ KingServices.inlineTemplate = function(source, option) {
 		html = render(option);
 	return html;
 }
+
+Tools.trFixed = function(obj){
+	$tabPane = $("#tabContent > .tab-pane");
+
+	$tabPane.off().scroll(function(event){
+		event.preventDefault();
+		
+		var $that = $(this),
+			$trFixed = $that.find('.T-tr-fixed'),
+			$table = $trFixed.closest('table'),
+			top = $table.offset().top-$that.offset().top,
+			topArr = [], heightArr = [];
+		if($trFixed.length === 0)return;
+		if(top >= 0){
+			top = 0;
+		}
+		$trFixed.eq(i).css({
+			'transform' : 'translateY('+(-top)+'px)',
+			'webkitTransform' : 'translateY('+(-top)+'px)',
+			'mozTransform' : 'translateY('+(-top)+'px)',
+			'msTransform' : 'translateY('+(-top)+'px)',
+			'oTransform' : 'translateY('+(-top)+'px)'
+		});
+	});
+};
