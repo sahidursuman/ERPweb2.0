@@ -1994,7 +1994,7 @@ define(function(require, exports) {
 					busCompanyId:$tr.find('input[name=busCompanyId]').val()
 				};
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					url: KingServices.build_url('busCompany', 'selectBusCompanyList'),
 					showLoading:false,
 					type: 'post',
 					data: searchJson,
