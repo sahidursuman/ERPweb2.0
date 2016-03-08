@@ -110,7 +110,7 @@
                                                     <td class="td-border">
                                                     <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumNeedPayAllMoney}}</span></td>
                                                     <td class="td-border">
-                                                    <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumNeedPayAllMoney}}</span></td>
+                                                    <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumSettlementMoney}}</span></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -121,7 +121,7 @@
                     </div>
                 {{/if}}
 
-                 {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList.length != 0}}
+                {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList.length != 0}}
                     <!-- 购物-->
                     <div class="form-group tripShop">
                         <div class=" widget-container-col">
@@ -370,6 +370,9 @@
                                                                 </td>
                                                                 <td>
                                                                     {{item.guideName}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.manageFee}}</span>
                                                                 </td>
                                                                 <td>
                                                                     <span class="F-float F-money">{{item.needPayAllMoney}}</span>
@@ -1527,6 +1530,9 @@
                                                                     {{item.startTime}}
                                                                 </td>
                                                                 <td>
+                                                                    {{item.restaurantName}}
+                                                                </td>
+                                                                <td>
                                                                     {{item.standardType}}
                                                                 </td>
                                                                 <td>
@@ -1625,10 +1631,10 @@
                                                                     {{item.ticketName}}
                                                                 </td>
                                                                 <td>
-                                                                    {{if item.ticketType == 1}}机票
-                                                                        {{else if item.ticketType== 2}}汽车票
-                                                                        {{else if item.ticketType == 3}}火车票
-                                                                        {{else if item.ticketType == 4}}轮船票
+                                                                    {{if item.type == 1}}机票
+                                                                        {{else if item.type== 2}}汽车票
+                                                                        {{else if item.type == 3}}火车票
+                                                                        {{else if item.type == 4}}轮船票
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
@@ -1711,7 +1717,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {{if tripTransitPayMap.otherTransitPayMapList != null}}
+                                                {{if tripTransitPayMap.otherTransitPayMap != null}}
                                                     {{if tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList != null}}
                                                         {{each tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList as item}}
                                                             <tr>
