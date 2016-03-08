@@ -2507,11 +2507,14 @@ Tools.trFixed = function(obj){
 		event.preventDefault();
 		
 		var $that = $(this),
-			$trFixed = $that.find('.T-tr-fixed'),
-			$table = $trFixed.closest('table'),
-			top = $table.offset().top-$that.offset().top,
-			topArr = [], heightArr = [];
+			$trFixed = $that.find('.T-tr-fixed');
+
 		if($trFixed.length === 0)return;
+
+		var $table = $trFixed.closest('table'),
+			top = $table.offset().top-$that.offset().top,
+			topArr = [], heightArr = [];;
+
 		if(top >= 0){
 			top = 0;
 		}
