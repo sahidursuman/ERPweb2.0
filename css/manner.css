@@ -431,6 +431,11 @@ table tr td {
 .mar-t-10 {
     margin-top: 10px;
 }
+
+.mar-l-5 {
+    margin-left: 5px;
+}
+
 .mar-l-3{
     margin-left: 3px;
 }
@@ -460,6 +465,11 @@ table tr td {
 .mar-b-10 {
     margin-bottom: 10px;
 }
+
+.mar-b-20 {
+    margin-bottom: 20px;
+}
+
 .pad-0 {
     padding: 0;
 }
@@ -470,6 +480,10 @@ table tr td {
 
 .pad-l-5 {
     padding-left: 5px;
+}
+
+.line-h-2 {
+    line-height: 1.9em;    
 }
 
 .label-inline-60 {
