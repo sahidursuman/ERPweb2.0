@@ -341,7 +341,13 @@ define(function(require,exports){
 			var payMoney = $obj.find('input[name=payMoney]').val();
 			if(incomeMoney != 0 || payMoney != 0){
 				//提示
-				$obj.find('input[type=text]').prop('disabled',true);
+				$obj.find('input[type=text]').each(function(index, el) {
+					var $that = $(this);
+
+					if ($that.hasClass('T-edit-feild')) {
+						$that.prop('disabled',true);
+					}
+				});
 			};
 		}
 		if($obj.find(".T-mainForm").data('type') != "1"){
