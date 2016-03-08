@@ -34,7 +34,6 @@
 				    <span class="F-float F-count">{{result.touristGroup.adultCount}}</span>大<span class="F-float F-money">{{result.touristGroup.childCount}}</span>小
 				</td>	
 				<td><span class="F-float F-money">{{result.touristGroup.transNeedPayAllMoney}}</span></td>
-				<!-- <td><span class="F-float F-money">{{result.touristGroup.transPayedMoney}}</span></td> -->
 				{{else}}
 				<td></td>
 				<td></td>
@@ -55,7 +54,8 @@
 					{{else if result.status == 1}}<span style="color: green;">已接收</span>
 					{{else if result.status == 2}}<span style="color: red;">已拒收</span>
 					{{else if result.status == 3}}<span style="">未使用</span>
-					{{else if result.status == 4}}<span style="">申请退回</span>
+					{{else if result.status == 4}}<span style="color: green">申请退回</span>
+					{{else if result.status == 5}}<span style="color: green">已退回</span>
 					{{/if}}
 				</td>
 				<td>
@@ -68,12 +68,12 @@
 							编辑
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status != 1}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180004">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 2}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1 || result.status == 2}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							撤销
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status != 1}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180004">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 2}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status == 1 || result.status == 2}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							确认
 						</a>

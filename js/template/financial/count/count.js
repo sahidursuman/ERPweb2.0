@@ -1173,6 +1173,11 @@ define(function(require, exports){
 					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
+					//打印单团核算页面
+					var $outDetailTab = $("#tab-"+menuKey+'-outDetail'+"-content");
+					$outDetailTab.on('click','.T-export',function(){
+						Count.exportsOutDetail($outDetailTab);
+					});
 				}
 				
 			}
@@ -1264,6 +1269,12 @@ define(function(require, exports){
 			showJson.transitShowFlag = true;
 		};
 		return showJson;
+	};
+	//打印页面
+	Count.exportsOutDetail = function($obj){
+		$obj.print({
+			globalStyles:true
+		});
 	};
 	//质量统计
 	Count.getquality = function(id){

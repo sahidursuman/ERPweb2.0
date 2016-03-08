@@ -75,7 +75,7 @@ define(function(require, exports){
 			Payment.addPayment();
 		});
 
-		$tab.on("click",".T-viewDetails",function(){
+		$tab.on("click",".T-viewDetails",function(event){
 			Payment.viewDetails($(this).closest('tr').data("id"));
 		});	
 
@@ -310,13 +310,14 @@ define(function(require, exports){
 	};
 
 	//查看收/付款金额明细
-	Payment.viewDetails = function(){
+	Payment.viewDetails = function(id){
 		$.ajax({
-			url:KingServices.build_url("financialIncomeOrPay","addIncomeorPay"),
+			url:KingServices.build_url("financialIncomeOrPay","getIncomeOrPayDetailById"),
 			type:"POST",
+			data : {id : id},
 			success:function(data){
 				if(showDialog(data)){
-					var html = detailsTemplate();
+					var html = detailsTemplate(data);
 					var addGuideLayer = layer.open({
 					    type: 1,
 					    title:"收/付款金额明细",
