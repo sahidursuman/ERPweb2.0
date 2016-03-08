@@ -69,12 +69,12 @@ define(function(require, exports) {
 		});
 
 		//中转安排搜索按钮事件绑定
-		transit.$tab.on('click', '.T-btn-transitList-search', function() {
+		transit.$searchArea.on('click', '.T-btn-transitList-search', function() {
 			transit.listTransit(0);
 		});
 
 		//导出安排
-		transit.$tab.on('click', '.T-transit-export', function() {
+		transit.$searchArea.on('click', '.T-transit-export', function() {
 			var recordSize =  transit.$tab.find('.T-recordSize').text();
 			showConfirmDialog($( "#confirm-dialog-message" ), '确定要导出'+ recordSize +'条中转安排？', function() {
 				transit.listTransit(-1);//page == -1，导出安排
@@ -176,7 +176,7 @@ define(function(require, exports) {
 
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
-					transit.$tab.off('click.action').on('click.action', '.T-action', function() {
+					transit.$tab.find('tbody').off('click').on('click', '.T-action', function() {
 						var $this = $(this),id = $this.closest('tr').data('entity-id'), $parents = $this.closest('tr');
 						if ($this.hasClass('T-send')) {
 							//通知
