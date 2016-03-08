@@ -51,11 +51,11 @@
                     <a data-value="{{result.id}}" class="cursor T-transferIn-view T-action">
 						查看
 					</a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!=5}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1 || result.status==5 }} color:#bbb; {{/if}}" data-right="1180007">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!=4}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1 || result.status==4 }} color:#bbb; {{/if}}" data-right="1180007">
                         <label class="padding-right20">|</label>
                         确认
                     </a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2 && result.status!=1 && result.status!=5}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2 || result.status==1 || result.status==5}} color:#bbb; {{/if}}" data-right="1180008">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2 && result.status!=1 && result.status!=4}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2 || result.status==1 || result.status==4}} color:#bbb; {{/if}}" data-right="1180008">
                         <label class="padding-right20">|</label>
                         拒绝
                     </a>
