@@ -461,15 +461,21 @@ define(function(require,exports){
 	//组装数据
 	Infrastructure.installData = function($obj,typeFlag){
 		var status = 0,
-		    checkStatus = $obj.find('.T-checkStatus').is(':checked');
+		    checkStatus = $obj.find('.T-checkStatus').is(':checked')
+		    type;
 		if(checkStatus){
 			status = 1;
 		};
 		
-		var type = $obj.find(".T-mainForm").data('type');
+		if ($obj.find('.T-accountType').length) {
+			type = $obj.find('.T-accountType').val();
+		} else {
+			type = $obj.find(".T-mainForm").data('type');
+		}
+
 		if(type == 0){
 			var subData = {
-				type : $obj.find('select[name=type]').val(),
+				type : type,
 				aliasName:$obj.find('input[name=aliasName]').val(),
 				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
 				beginningTime:$obj.find('input[name=startTime]').val(),
@@ -480,7 +486,7 @@ define(function(require,exports){
 		}else{
 			var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 			var subData = {
-				type : $obj.find('select[name=type]').val(),
+				type : type,
 				aliasName:$obj.find('input[name=aliasName]').val(),
 				accountName:$obj.find('input[name=accountName]').val(),
 				bankAccountNumber:bankNumber,
