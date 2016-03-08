@@ -55,8 +55,31 @@ define(function(require, exports){
 			$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
 			$tab.find('.T-payMoney').html(data.total.payMoney);
 			Payment.total = data.total;
+			Payment.allClac($tab);
 		});
 	};
+	//计算合计
+	Payment.allClac = function($tab) {
+		var beginningBalance = $tab.find('.T-beginningBalance').val()-0 || '',
+			incomeMoney = $tab.find('.T-incomeMoney').text()-0,
+			payMoney = $tab.find('.T-payMoney').text()-0;
+		if ($tab.find('.T-search-payment').val() == 1 && beginningBalance != '') {
+			var all = ((beginningBalance + incomeMoney) - payMoney).toFixed(2),
+				html = ''
+				+'<div class="form-group mar-r-10">'
+	            +'<label>合计：</label>'
+	            +'<label class="F-float F-money">'+ all +'</label>'
+	        	+'</div>';
+	        var $payMoney = $tab.find('.T-payMoney').closest('div.form-group');
+	        if ($payMoney.next('div.form-group').length) {
+				$payMoney.next('div.form-group').find('.F-float').text(all);
+	        }else {
+				$tab.find('.T-payMoney').closest('div.form-group').after(html)
+	        }
+		}else {
+			$tab.find('.T-payMoney').closest('div.form-group').next().remove();
+		}
+	}
 	/**
 	 * 初始化事件
 	 * @param  {object} $tab $tab
@@ -74,6 +97,10 @@ define(function(require, exports){
 		.on('click',".T-btn-add",function(event){
 			Payment.addPayment();
 		});
+
+		$tab.on('change', '.T-beginningBalance', function() {
+			Payment.allClac($tab);
+		})
 
 		$tab.on("click",".T-viewDetails",function(event){
 			Payment.viewDetails($(this).closest('tr').data("id"));
