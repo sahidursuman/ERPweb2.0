@@ -2517,7 +2517,12 @@ Tools.trFixed = function(obj){
 		event.preventDefault();
 		
 		var $that = $(this),
-			$trFixed = $that.find('.T-tr-fixed');
+			$trFixed = $that.find('.T-tr-fixed'),
+			$focus = $(":focus");
+
+		if ($focus.hasClass('ui-autocomplete-input')) {
+			$focus.autocomplete('close');
+		}
 
 		if($trFixed.length === 0)return;
 
