@@ -339,6 +339,15 @@ define(function(require,exports){
 			};
 		}
 
+		$obj.find(".T-cashHidden").addClass('hidden');
+		$obj.find('.T-accountType').on("change",function(){
+			if($(this).val() == 0){
+				$obj.find(".T-cashHidden").addClass('hidden');
+			} else {
+				$obj.find(".T-cashHidden").removeClass('hidden');
+			}
+		});
+
 		//提交事件
 		$obj.find('.T-submit').on('click',function(){
 			if(!validator.form()){return;};

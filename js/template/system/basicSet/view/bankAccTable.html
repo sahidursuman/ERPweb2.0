@@ -69,9 +69,9 @@
 					<tr bankNumId="{{rs.id}}">
 						<td>{{rs.aliasName}}</td>
 						<td>{{if rs.type == 0}}现金账户{{else}}银行账户{{/if}}</td>
-						<td>{{rs.bankAccountNumber}}</td>
-						<td>{{rs.openingBank}}</td>
-						<td>{{rs.accountName}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.bankAccountNumber}}{{/if}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.openingBank}}{{/if}}</td>
+						<td>{{if rs.type == 0}}-{{else}}{{rs.accountName}}{{/if}}</td>
 						<td>{{rs.beginningTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{rs.beginningBalance}}</td>
 						<td>{{rs.remark}}</td>
