@@ -1,6 +1,6 @@
 <thead>
 	<tr class="bg-blur T-tr-fixed">
-		<th rowspan="2">团信息</th>
+		<th rowspan="2" style="min-width: 180px">团信息</th>
 		<th rowspan="2">状态</th>
 		<th rowspan="2" style="width:60px;">收/付</th>
 		<th colspan="5">发团收入</th>
@@ -48,10 +48,12 @@
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
 		<td rowspan="3">
-			<a href="javascript:void(0)" class="T-toTripAccount">{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span><br />
-			{{rs.lineProductName}}<br />
-			{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小<br />
-			导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></a>
+			<a href="javascript:void(0)" class="T-toTripAccount h-touristGroupInfo">
+				<p>{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
+				<p>{{rs.lineProductName}}</p>
+				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小</p>
+				<p>导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></p>
+			</a>
 		</td>
 		<td rowspan="3">
 			{{if rs.billStatus == -1}}

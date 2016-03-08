@@ -2507,7 +2507,13 @@ a.gray span{
         padding: 0;
     }
 
-    #tab-financial_count-outDetail-content > div {
-        padding: 40px;
+    html, body, .main-container {
+        height: auto !important;
+        width: auto !important;
+        overflow: auto;
+    }
+
+    #tab-financial_count-outDetail-content {
+        width: auto !important;
     }
 }
