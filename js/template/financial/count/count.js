@@ -1172,7 +1172,6 @@ define(function(require, exports){
 					//校验每个明细tab是否应该显示
 					var showJson = Count.isShowTabByData(data);
 					data.showJson = showJson;
-					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -1754,16 +1753,16 @@ define(function(require, exports){
 		
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
-		'<td><input type="text" name="selfPayName" style="width:90px;"><input type="hidden" name="selfPayId"></td>'+
-		'<td><input name="selfPayItem" style="width:90px;" type="text"><input type="hidden" name="selfPayItemId"></td>'+
-		'<td><input name="marketPrice" style="width:60px;" type="text"></td>'+
-		'<td><input name="needCount" type="text"></td>'+
+		'<td><input type="text" name="selfPayName" class="w-80"><input type="hidden" name="selfPayId"></td>'+
+		'<td><input name="selfPayItem" class="w-80" type="text"><input type="hidden" name="selfPayItemId"></td>'+
+		'<td><input name="marketPrice" class="w-50" type="text"></td>'+
+		'<td><input name="needCount" class="w-50" type="text"></td>'+
 		'<td><span class="needInReduceMoney"></span></td>'+
 		'<td><span class="needIncome"></span></td>'+
-		'<td><input name="realGetMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="price" style="width:60px;" type="text"></td>'+
-		'<td><input name="realCount" style="width:60px;" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
-		'<td><input name="realReduceMoney" style="width:60px;" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
+		'<td><input name="realGetMoney" class="w-80" type="text"></td>'+
+		'<td><input name="price" class="w-50" type="text"></td>'+
+		'<td><input name="realCount" class="w-50" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
+		'<td><input name="realReduceMoney" class="w-80" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td>'+
@@ -1773,14 +1772,14 @@ define(function(require, exports){
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:60px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input name="allPersonMoney" style="width:60px;" type="text"></td>'+
-		'<td><input name="travelAgencyRate" style="width:60px;" type="text"></td>'+
+		'<td><input name="allPersonMoney" class="w-50" type="text"></td>'+
+		'<td><input name="travelAgencyRate" class="w-50" type="text"></td>'+
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
-		'<td><input name="guideRate" style="width:60px;" type="text"></td>'+
+		'<td><input name="guideRate" class="w-50" type="text"></td>'+
 		'<td><span class="guideRebateMoney"></span></td>'+
-		'<td><input name="billRemark" style="width:90px;" type="text"><a class="T-del" href="javascript:void(0)" style="margin-left:20px;">删除</a></td>'+
+		'<td><input name="billRemark" class="w-80" type="text"><a class="T-del" href="javascript:void(0)" style="margin-left:20px;">删除</a></td>'+
 		'<td>未对账</td>'+
 		'</tr>';
 		$obj.append(html);
@@ -1907,9 +1906,9 @@ define(function(require, exports){
 		};
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
-		'<td><input type="text" name="title" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="count" style="width:90px;"/></td>'+
+		'<td><input type="text" name="title" class="w-80"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="count" class="w-80"/></td>'+
 		'<td><span class="needPayMoney">0</span></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -1995,10 +1994,10 @@ define(function(require, exports){
 		'<td><input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 		'<td><input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 		'<td><input type="text" name="seatCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
-		'<td><input type="text" name="payedMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="payedMoney" class="w-80"/></td>'+
 		'<td>'+
 		'<div class="inline-flex col-xs-12">'+
 		'<select name="payType">'+
@@ -2011,7 +2010,7 @@ define(function(require, exports){
 		'</td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
-		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'<td>未对账</td>'+
 		'</tr>';
 		$obj.append(html);
@@ -2204,7 +2203,7 @@ define(function(require, exports){
 		'<td><span class="hotelneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
@@ -2293,7 +2292,7 @@ define(function(require, exports){
 		'<td><input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="scenicneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
@@ -2306,7 +2305,7 @@ define(function(require, exports){
 		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
-		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'<td>未对账</td>'+
 		'</tr>';
 		$obj.append(html);
@@ -2387,18 +2386,18 @@ define(function(require, exports){
 		'<option value="4">轮船票</option>'+
 		'</select>'+
 		'</td>'+
-		'<td><input type="text" name="startTime" class="date-Picker" style="width:90px;"/></td>'+
+		'<td><input type="text" name="startTime" class="date-Picker col-xs-12"/></td>'+
 		'<td><input type="text" name="startArea" style="width:60px;"/></td>'+
 		'<td><input type="text" name="endArea" style="width:60px;"/></td>'+
 		'<td><input type="text" name="shift" style="width:60px;"/></td>'+
-		'<td><input type="text" name="seatLevel" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="seatLevel" class="w-80"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-80"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="ticketneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div>'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
@@ -2407,7 +2406,7 @@ define(function(require, exports){
 		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
-		'<td><input type="text" name="billRemark" style="width:170px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'<td>未对账</td>'+
 		'</tr>';
 		$obj.append(html);
@@ -2490,17 +2489,17 @@ define(function(require, exports){
 		'<td><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
 		'<td><input type="text" name="price" style="width:90px;"/></td>'+
 		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney"/></td>'+
 		'<td><span class="otherOutNeedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div>'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:60px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+

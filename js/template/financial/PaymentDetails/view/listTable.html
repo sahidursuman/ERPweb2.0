@@ -21,7 +21,17 @@
             {{else}}<span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
             {{/if}}
         {{/if}}
-        <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>
+        <td>
+            {{if rs.bankAccount != null}}
+                {{if rs.bankAccount.bankAccountNumber == null || rs.bankAccount.bankAccountNumber == ""}}
+                        -
+                    {{else}}
+                        {{rs.bankAccount.bankAccountNumber}}
+                {{/if}}
+            {{else}}
+                -
+            {{/if}}
+        </td>
         <td>{{rs.remark}}</td>
         <td>{{rs.user.realName}}</td>
         <td>{{rs.createTime}}</td>
