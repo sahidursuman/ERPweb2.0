@@ -3,6 +3,7 @@
         <thead>
             <tr class="bg-blur">
                 <th>团信息</th>
+                <th>出游日期</th>
                 <th>团队人数</th>
                 <th>剩余座位</th>
                 <th>导</th>
@@ -17,7 +18,7 @@
                 <th>它</th>
                 <th style="width:80px;">状态</th>
                 <th style="min-width:230px;">操作</th>
-            </tr>
+            </tr>  
         </thead>
         <tbody> 
             {{each result as rs}}
@@ -25,10 +26,10 @@
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}></p>
-                    <p class="h-startTime"><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span> - <span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span> </p>
                     <p class="h-memberName">责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</p>
                     <p class="h-OPUser">责任部门：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</p>
                 </td>
+                <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span> - <span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
                 <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount }}小</td>
                 <td style="vertical-align:middle">{{if !!rs.surplusSeat}}{{rs.surplusSeat}}{{else}}-{{/if}}</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
