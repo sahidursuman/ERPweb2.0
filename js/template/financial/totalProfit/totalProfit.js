@@ -46,7 +46,9 @@ define(function(require, exports) {
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
-                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val()
+                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
+                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id")
             };
             //获取数据列表
             TotalProfit.getListData(0, args);
