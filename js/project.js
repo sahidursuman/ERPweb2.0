@@ -1474,6 +1474,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		html = Tools.filterCount(html);
 		html = Tools.filterMoney(html);
 		html = Tools.filterUnPoint(html);
+		Tools.trFixed(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -2504,6 +2505,38 @@ KingServices.inlineTemplate = function(source, option) {
 		html = render(option);
 	return html;
 }
+/**
+ * 表格固定在顶部功能
+ * @param  {object} obj 暂时未用上
+ * @return {[type]}     [description]
+ */
+Tools.trFixed = function(obj){
+	$tabPane = $("#tabContent > .tab-pane");
+
+	$tabPane.off().scroll(function(event){
+		event.preventDefault();
+		
+		var $that = $(this),
+			$trFixed = $that.find('.T-tr-fixed');
+
+		if($trFixed.length === 0)return;
+
+		var $table = $trFixed.closest('table'),
+			top = $table.offset().top-$that.offset().top,
+			topArr = [], heightArr = [];;
+
+		if(top >= 0){
+			top = 0;
+		}
+		$trFixed.css({
+			'transform' : 'translateY('+(-top)+'px)',
+			'-webkit-transform' : 'translateY('+(-top)+'px)',
+			'-moz-transform' : 'translateY('+(-top)+'px)',
+			'msTransform' : 'translateY('+(-top)+'px)',
+			'-o-transform' : 'translateY('+(-top)+'px)'
+		});
+	});
+};
 
 //根据需要加载插件js
 var modulePlugin = {
