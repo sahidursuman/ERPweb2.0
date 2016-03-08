@@ -5,7 +5,6 @@
             <th colspan="8">接团</th>
             <th colspan="8">送团</th>
             <th rowspan="2">安排人</th>
-            <th rowspan="2">安排时间</th>
             <th rowspan="2">状态</th>
             <th rowspan="2">操作</th>
         </tr>
@@ -77,7 +76,6 @@
             <td data-target="transit_send_ticket" class="sendTicketStatus" data-status="{{transit.sendTicketStatus}}"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_send_other" class="sendOtherStatus" data-status="{{transit.sendOtherStatus}}"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
             <td>{{if transit.arrangeUser != null}}{{transit.arrangeUser.realName}}{{else}}-{{/if}}</td>
-            <td>{{if transit.arrangeTime != null}}{{transit.arrangeTime}}{{else}}-{{/if}}</td>
             <td style="width: 100px;">{{if transit.status == 1}}
                 <i class="ace-icon fa fa-check green bigger-130"></i> 已安排 {{else if transit.status == 0}}
                 <i class="ace-icon fa fa-times red bigger-125"></i> 未安排 {{/if}}

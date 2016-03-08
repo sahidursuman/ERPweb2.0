@@ -41,8 +41,7 @@
             <td class="result-status">
             {{if result.transName==null}}未使用{{else}}
             {{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>
-            {{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>
-            {{else if result.status == 2}}<span style="color: red;" data-status="2">已拒收</span>
+            {{else if result.status == 1}}<span style="color: green;" data-status="1">已确认</span>
             {{else if result.status == 4}}<span style="color: red;" data-status="4">已退回</span>
             {{/if}}{{/if}}</td>
             
@@ -55,7 +54,7 @@
                         <label class="padding-right20">|</label>
                         确认
                     </a>
-                    <a data-value="{{result.id}}" class="cursor {{if result.status!=2 && result.status!=1 && result.status!=4}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==2 || result.status==1 || result.status==4}} color:#bbb; {{/if}}" data-right="1180008">
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=4}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==1 || result.status==4}} color:#bbb; {{/if}}" data-right="1180008">
                         <label class="padding-right20">|</label>
                         拒绝
                     </a>
