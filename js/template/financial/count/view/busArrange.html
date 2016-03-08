@@ -55,9 +55,9 @@
             <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
             <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
             <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>
-            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}" class="F-float F-money" 
+            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}" class="w-80 F-float F-money" 
             {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
-            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"{{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}</td>
+            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"{{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}</td>
             <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney F-float F-money">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney F-float F-money"></span>{{/if}}
             <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
             <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>

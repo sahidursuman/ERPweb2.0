@@ -38,7 +38,7 @@
                 <p>
                     <span class="h-agencyName">{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</span>
                     <span class="h-agencyName">{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</span>
-                    <label><span class="F-float F-count h-peopleCount">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}{{/if}}</span></label>
+                    <label><span class="F-float F-count h-peopleCount">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}天{{/if}}</span></label>
                 </p>
             </td>
             <td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>

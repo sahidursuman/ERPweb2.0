@@ -4,6 +4,7 @@
             <col style="width:20%;"></col>
             <col style="width:8%"></col>
             <col style="width:20%"></col>
+            <col style="width:130px"></col>
             <col style="width:50px;"></col>
             <col style="width:50px;"></col>
             <col style="width:50px;"></col>
@@ -22,6 +23,7 @@
                 <th>团信息 </th> 
                 <th>出游日期</th>
                 <th>客户</th>
+                <th>团队人数</th>
                 <th>导</th>
                 <th>车</th>
                 <th>险</th>
@@ -41,16 +43,14 @@
             <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td class="h-touristGroupInfo" style="vertical-align:middle">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
-                    <p class="h-orderNumber"><{{rs.lineProduct.name}}></p>
-                    <p class="h-lineName"> <span style="margin-left: 7px;">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span></p>
-                    <p class="h-startTime">销售：
-                    {{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}} </p>
+                    <p class="h-lineName"><{{rs.lineProduct.name}}></p>
                     <p class="h-memberName">
-                    <span>计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</span>
-                    <span style="margin-left: 8px;">部门：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</span></p>
+                        <span>责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</span>
+                    </p>
                 </td>
-                <td><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span> - <span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
+                <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
                 <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
