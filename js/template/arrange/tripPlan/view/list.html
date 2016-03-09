@@ -44,8 +44,9 @@
                 <td class="h-touristGroupInfo" style="vertical-align:middle">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName"><{{rs.lineProduct.name}}></p>
-                    <p class="h-memberName">
-                        <span>责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</span>
+                    <p>
+                        {{if !!rs.guide && rs.guide.realName}}<span class="h-memberName">导游：{{rs.guide.realName}}</span>{{/if}}
+                        {{if !!rs.dutyOPUser && rs.dutyOPUser.realName}}<span class="h-memberName">责任计调：{{rs.dutyOPUser.realName}}</span>{{/if}}
                     </p>
                 </td>
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>

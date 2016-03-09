@@ -2550,9 +2550,12 @@ Tools.trFixed = function(obj){
 		var $that = $(this),
 			$trFixed = $that.find('.T-tr-fixed'),
 			$focus = $(":focus");
-
-		if ($focus.hasClass('ui-autocomplete-input')) {
-			$focus.autocomplete('close');
+		if($focus.hasClass('datepicker')){
+			$focus.blur();
+			$focus.datepicker('hide');
+		}else if($focus.hasClass('T-dateTimePicker')){
+			$focus.blur();
+			$focus.datetimepicker('hide');
 		}
 
 		if($trFixed.length === 0)return;
