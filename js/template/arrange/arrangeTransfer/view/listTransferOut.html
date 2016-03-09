@@ -34,7 +34,6 @@
 				    <span class="F-float F-count">{{result.touristGroup.adultCount}}</span>大<span class="F-float F-money">{{result.touristGroup.childCount}}</span>小
 				</td>	
 				<td><span class="F-float F-money">{{result.touristGroup.transNeedPayAllMoney}}</span></td>
-				<!-- <td><span class="F-float F-money">{{result.touristGroup.transPayedMoney}}</span></td> -->
 				{{else}}
 				<td></td>
 				<td></td>
@@ -46,28 +45,41 @@
 					{{if result.user!=null}}  
 						{{if result.user.realName!=null}}
 					        {{result.user.realName}}
-					 	{{/if}}    
+					 	{{/if}}
 					{{/if}}
 				</td>
 				<td>{{result.createTime}}</td>        
-				<td>{{if result.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if result.status == 1}}<span style="color: green;">已接收</span>{{else if result.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
+				<td>
+					{{if result.status == 0}}<span style="color:#D2691E;">未确认</span>
+					{{else if result.status == 1}}<span style="color: green;">已接收</span>
+					{{else if result.status == 2}}<span style="color: red;">已拒收</span>
+					{{else if result.transTravelAgencyId==null && result.status == 3}}<span style="">未使用</span>
+					{{else if result.status == 4}}<span style="color: red">已退回</span>
+					{{/if}}
+				</td>
 				<td>
 					<div class="hidden-sm hidden-xs btn-group">
 						<a data-value="{{result.id}}" class="cursor  T-transfer-view T-action">
 							查看
 						</a>
-						<a data-value="{{result.id}}" class="cursor T-transfer-edit T-action R-right"  data-right="1180003">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 &&  result.status!= 2 && result.status!= 4}}T-transfer-edit{{/if}} T-action R-right"  data-right="1180003" {{if result.status == 1 || result.status== 2 || result.status == 4}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-value="{{result.id}}" class="cursor {{if result.status != 1}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180004">
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 4}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1 || result.status == 4}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							撤销
 						</a>
 
-						<a data-value="{{result.id}}" class="cursor {{if result.status == 3}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status != 3}}style="color:#bbb;"{{/if}} data-right="1180004">
+						<a data-value="{{result.id}}" class="cursor {{if result.status==3}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status !=3}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							确认
+						</a>
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status == 4 || (result.transTravelAgencyId==null && result.status == 1)}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if !(result.status == 4 || (result.status == 1 && result.transTravelAgencyId==null))}}style="color:#bbb;"{{/if}}>
+							<label class="padding-right20">|</label>
+							确认退回
 						</a>
 
 					</div>

@@ -139,8 +139,7 @@ define(function(require, exports) {
 				var divId = "Transfer-Out",
 				    type = "1";
 				    transfer.getSearchParam(divId,type);
-				var exportUrl="" + KingServices.build_url("transfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam));
-				window.location.href=exportUrl;
+				exportXLS( APP_ROOT + 'back/transfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)));
 			});
 	    };
 
@@ -413,6 +412,9 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-transfer-confirm'))  {
 					//撤销
 					transfer.transferOutConfirm(id,status);
+				} else if ($that.hasClass('T-returnTransfer-confirm'))  {
+					//确认退回
+					transfer.returnTransferOutConfirm(id);
 				}
 		    });
 
@@ -429,6 +431,9 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-transferIn-refuse'))  {
 					//拒绝
 					transfer.deleteTransferIn(id);
+				} else if ($that.hasClass('T-returnTransferIn-refuse'))  {
+					//申请回退
+					transfer.returnTransferIn(id);
 				}
 		    });
 	    };
@@ -472,11 +477,7 @@ define(function(require, exports) {
 					.done(function(data) {
 						if(showDialog(data)){
 							showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-								var type="1",
- 							    divId="Transfer-Out";
-								transfer.getSearchParam(divId,type);
-								transfer.findPager(divId,type,0);
-								transfer.listMainHead(0);
+								transfer.$tab.find('.T-transferOut-search').trigger('click');
 							})
 							
 						}
@@ -521,7 +522,6 @@ define(function(require, exports) {
 			});
 		};
 
-
 		/**
 		 * transferOutConfirm 外转确认
 		 * @param  {[type]} id [description]
@@ -542,6 +542,25 @@ define(function(require, exports) {
 			})
 		};
 
+		/**
+		 * transferOutConfirm 确认退回
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
+		transfer.returnTransferOutConfirm = function(id){
+			$.ajax({
+				url: KingServices.build_url("transfer","confirmApplyForTransferBack"),
+				data: 'outTransferId='+ id,
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					var divId="Transfer-Out",
+						type="1";
+						transfer.getSearchParam(divId,type);
+						transfer.findPager(divId,type,0);	
+				})
+			})
+		};
 
 	    /**
 	     * [init_updata_tab 为编辑我社转出绑定事件]
@@ -1016,7 +1035,6 @@ define(function(require, exports) {
 	 * @return {[type]}                [description]
 	 */
 	transfer.updateTransferIn=function(id){
-
 		$.ajax({
 			url:KingServices.build_url("transfer","confirm"),
 			data:"outTransferId="+id+"",
@@ -1027,6 +1045,25 @@ define(function(require, exports) {
 			KingServices.updateTransfer(touristGroupId,id);
 		})
 
+	};
+
+	/**
+	 * returnTransferIn 申请退回
+	 * @param  {[type]} id 记录Id
+	 * @return {[type]}    [description]
+	 */
+	transfer.returnTransferIn=function(id){
+		 showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+		 	$.ajax({
+				url:KingServices.build_url("transfer","transferBack"),
+				data:"outTransferId="+id+"",
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					transfer.$tab.find('.T-transferIn-search').trigger('click');
+				})
+			});
+		 });
 	};
 
 

@@ -8,44 +8,80 @@ FinancialService.initPayEvent = function($container,rule)  {
     var currDate = new Date();
     var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
-    var $card = $container.find('input[name="card-number"]').val();
     $container.find('input[name="tally-date"]').datetimepicker({
         autoclose:true,
         todayHighlight:true,
         format:'L',
         language:'zh-CN'
-     });
-    var $card = $container.find('input[name="card-number"]').autocomplete({
+    });
+
+    var $cash = $container.find('input[name=cash-number]'),
+        $card = $container.find('input[name=card-number]');
+    getBankList($cash,0);
+    getBankList($card,1);
+    $container.find('select').on('change', function(event) {
+        event.preventDefault();
+        var val = $(this).val();
+        if(val == 1){
+            var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
+        }
+        $cash.closest('div').toggleClass('hidden', val !== "0");
+        $card.closest('div').toggleClass('hidden', val != 1);
+        if(val !=0){
+           $container.find('input[name=cash-id]').val('');
+        };
+        if(val !=1){
+            $container.find('input[name=card-id]').val('');
+        };
+    }).trigger('change');
+};
+
+function getBankList($obj,payType){
+    $obj.autocomplete({
         minLength:0,
         change :function(event, ui){
             if(ui.item == null){
-                $(this).val('').nextAll('input[name="card-id"]').val('');
+                $(this).val('').nextAll('.T-accountId').val('');
+                $(this).nextAll('input[name=beginningBalance]').val('').trigger('change');
             }
         },
         select :function(event, ui){
-
-             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
-             $(this).nextAll('input[name="card-id"]').val(ui.item.id).trigger('change');
-
+            if(payType == 0){
+                $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
+                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $(this).closest('div').next().find('input').val("");
+            } else if(payType == 1){
+                $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
+                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $(this).closest('div').prev().find('input').val("");
+            }
         }
     }).one("click", function(){
         var $that = $(this);
         $.ajax({
             url:KingServices.build_url('financialIncomeOrPay','getBankList'),
+            data : {payType : payType},
             showLoading:false,
             success:function(data){
                 if(showDialog(data)){
                     var cardNumberJson = [];
                     var bankList = data.bankList;
                     if(bankList && bankList.length > 0){
-                        for(var i=0; i < bankList.length; i++){
+                        for(var i=0, tmp; i < bankList.length; i++){
+                            if (!!bankList[i].accountName && bankList[i].accountName != 'NULL') {
+                                tmp = "账户：" + bankList[i].accountName;
+                            } else {
+                                tmp = "账号：" + bankList[i].bankAccountNumber;
+                            }
+
                             var seatCount = {
-                                value : "账户："+ bankList[i].bankAccountNumber+",余额："+ bankList[i].balance,
-                                id: bankList[i].id
+                                value : tmp +",余额："+ bankList[i].balance +",期初余额：" + bankList[i].beginningBalance,
+                                id: bankList[i].id,
+                                beginningBalance: bankList[i].beginningBalance
                             }
                             cardNumberJson.push(seatCount);
                         }
-                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);;;
+                        $that.autocomplete('option','source', cardNumberJson).data('ajax', true);
                         $that.autocomplete('search', '');
                     }else{
                         layer.tips('没有内容', $that, {
@@ -63,16 +99,7 @@ FinancialService.initPayEvent = function($container,rule)  {
             $that.autocomplete('search', '');
         }
     });
-    $container.find('select').on('change', function(event) {
-        event.preventDefault();
-        var val = $(this).val();
-        if(val == 1){
-            var check =  new FinRule(5).check($card.closest('div'));
-        }
-        $card.closest('div').toggleClass('hidden', val != 1);
-    }).trigger('change');
-};
-
+}
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
@@ -607,6 +634,15 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'null',
                             errMsg: '银行账号不能为空'
+                        },
+                    ]
+                },
+                {   
+                    $ele: $obj.find('input[name=cash-number]'),
+                    rules: [
+                        {
+                            type: 'null',
+                            errMsg: '现金账号不能为空'
                         },
                     ]
                 },

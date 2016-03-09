@@ -9,7 +9,8 @@
         </a>
     </h5>
 </div>
-<table class="table table-striped table-bordered table-hover">
+<div class="overflow-x min-w-1050">
+<table class="table table-striped table-bordered table-hover w-1500">
     <thead>
         <tr>
             <th class="th-border"><span class="necessary">*</span>时间</th>
@@ -42,7 +43,8 @@
                     <select name="chooseRest">
                         <option value="">导游自选</option>
                         {{each arrange.restaurantChooseArrangeList as rs}}
-                            <option value="{{rs.restaurantId}}">{{rs.name}}</option>
+                            <option value="{{rs.restaurantId}}" 
+                            {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
                         {{/each}}
                     </select>
                 {{else}}
@@ -130,7 +132,7 @@
     {{/each}}
     </tbody>
 </table>
-
+</div>
 {{if tripPlan.billStatus > -1}}
     <div style="width:60%;">
         <div> 

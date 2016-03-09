@@ -286,16 +286,6 @@ define(function(require, exports) {
 					});
 
 					settings.push({
-						$ele: $that.find('input[name="memberCount"]'),
-						rules: [
-							{
-								type: 'NoNumber',
-								errMsg: '数据格式不正确'
-							}
-						]
-					});
-
-					settings.push({
 						$ele: $that.find('input[name="restaurant"]'),
 						rules: [
 							{
