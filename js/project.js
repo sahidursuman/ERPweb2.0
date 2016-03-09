@@ -515,7 +515,7 @@ function login(){
 					area: ['500px', '300px'], //宽高
 					content: "<div class='login-userData-form clearfix'><div class='col-sm-12' style='margin:25px 0 5px 0'><div class='form-group'>"+
 					"<div class='search-area'><div class='col-xs-12'><div class='input-group'>"+
-					"<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='password' />"+
+					"<input class='col-xs-12 date-picker' name='oldPassword' placeholder='请输入旧密码' value='' type='text' />"+
 					"<span class='input-group-addon'><i class='ace-icon fa fa-lock'></i></span></div></div></div></div></div>"+
 					"<div class='col-sm-12' style='margin:5px 0'><div class='form-group'><div class='search-area'><div class='col-xs-12'>"+
 					"<div class='input-group'><input class='col-xs-12' name='newPassword' placeholder='请输入新密码' value='' type='password' />"+
@@ -2595,3 +2595,14 @@ window.onbeforeunload=function(e){
 		}
 	});
 }
+
+
+if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
+            $(window).load(function () {
+                $('input:-webkit-autofill').each(function () {
+                    var text = $(this).val(); var name = $(this).attr('name');
+                    $(this).after(this.outerHTML).remove();
+                    $('input[name=' + name + ']').val(text);
+                });
+            });
+        }
