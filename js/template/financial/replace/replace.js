@@ -31,22 +31,21 @@ define(function(require, exports) {
 	 * @param  {int} page 页码
 	 */
 	Replace.getList = function(page){
-	    var date = new Date(),
-        year = date.getFullYear(),
-        month = Tools.addZero2Two(date.getMonth() + 1),
-        day = Tools.addZero2Two(date.getDate()),
+	    var dateJson = FinancialService.getInitDate();
 		args= {
 			pageNo : (page || 0),
-			startDate : year + "-" + month + "-01",
-			endDate : year + "-" + month + "-" + day
+			startDate : dateJson.startDate,
+			endDate : dateJson.endDate,
+			accountStatus : 2
 		};
 		if(!!Replace.$tab){
-			var name = Replace.$tab.find('.T-search-customer').val();
+			var name = Replace.$tab.find('.T-search-customer').val().trim();
 			args= {
 				pageNo : (page || 0),
 				travelAgencyName : name == '全部' ? '' : name,
 				startDate : Replace.$tab.find('.T-search-start-date').val(),
-				endDate : Replace.$tab.find('.T-search-end-date').val()
+				endDate : Replace.$tab.find('.T-search-end-date').val(),
+				accountStatus : Replace.$tab.find(".T-finance-status").find("button").data("value")
 			};
 		}
 		$.ajax({
@@ -94,10 +93,21 @@ define(function(require, exports) {
 			Replace.getList();
 		});
 		
+		//状态框选择事件
+        Replace.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Replace.getList();
+        });
+
 		// 报表内的操作
 		Replace.$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $that = $(this), id = $that.closest('tr').data('id'), name = $that.closest('tr').data('name');
+			var $that = $(this), 
+				id = $that.closest('tr').data('id'), 
+				name = $that.closest('tr').data('name');
 			if ($that.hasClass('T-checking'))  {
 				// 对账
 				Replace.checking(id, name);
@@ -171,12 +181,13 @@ define(function(require, exports) {
 	Replace.clearComma = function(str){
 		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
-	Replace.checkingList = function(page, id, startDate, endDate){
+	Replace.checkingList = function(page, id, startDate, endDate,accountStatus){
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.checkingId,
 			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
-			startDate : startDate || Replace.$tab.find('.T-search-start-date').val()
+			startDate : startDate || Replace.$tab.find('.T-search-start-date').val(),
+			accountStatus : accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value")
 		};
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
@@ -186,7 +197,8 @@ define(function(require, exports) {
 				partnerAgencyId : id || Replace.checkingId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
-				startDate : Replace.$checkingTab.find(".T-search-start-date").val()
+				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
+				accountStatus : Replace.$checkingTab.find("[name=accountStatus]").val(),
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -459,10 +471,11 @@ define(function(require, exports) {
 	            })
 	            .done(function(data) {
 	                if (showDialog(data)) {
-	                	var bankId = $tab.find('input[name=card-id]').val();
+	                	var payType = $tab.find('.T-sumPayType').val(),
+	                		bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 						var voucher = $tab.find('input[name=credentials-number]').val();
 						var billTime = $tab.find('input[name=tally-date]').val();
-						var bankNumber = $tab.find('input[name=card-number]').val();
+						var bankNumber = (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
 	                    Replace.payingJson = data.bookingAccountList;
 	                    Replace.payingJson.bankId = bankId;
 	                    Replace.payingJson.voucher = voucher;
@@ -703,23 +716,25 @@ define(function(require, exports) {
 		Replace.balanceId = id;
 		Replace.balanceName = name;
 		Replace.isBalanceSource = false;
-		Replace.balanceList(0, id, Replace.$tab.find('.T-search-start-date').val(), Replace.$tab.find('.T-search-end-date').val());
+		var accountStatus  =  accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value");
+		Replace.balanceList(0, id, Replace.$tab.find('.T-search-start-date').val(), Replace.$tab.find('.T-search-end-date').val(),accountStatus);
 	};
 	Replace.initIncome = function(args){
 		Replace.$balanceTab = null;
 		Replace.balanceId = args.id;
 		Replace.balanceName = args.name;
 		Replace.isBalanceSource = true;
-		Replace.balanceList(0, args.id, args.startDate, args.endDate);
+		Replace.balanceList(0, args.id, args.startDate, args.endDate,args.accountStatus);
 	};
 
 
-	Replace.balanceList = function(page, id, startDate, endDate){
+	Replace.balanceList = function(page, id, startDate, endDate,accountStatus){
 		var args = {
 			pageNo : (page || 0),
 			partnerAgencyId : id || Replace.balanceId,
 			endDate : endDate,
-			startDate : startDate
+			startDate : startDate,
+			accountStatus : accountStatus
 		};
 
 		if(!!Replace.$balanceTab){
@@ -730,7 +745,8 @@ define(function(require, exports) {
 				partnerAgencyId : id || Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
+				accountStatus : Replace.$balanceTab.find("[name=accountStatus]").val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -798,7 +814,8 @@ define(function(require, exports) {
             return false;
         };
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
-		var bankId = $tab.find('input[name=card-id]').val();
+		var payType = $tab.find('.T-sumPayType').val(),
+			bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
 		var billTime = $tab.find('input[name=tally-date]').val();		
 		if (json.length) {
@@ -808,7 +825,7 @@ define(function(require, exports) {
                     data: {
                         reciveAccountList: JSON.stringify(json),
                         partnerAgencyId: Replace.balanceId,
-                        payType: $tab.find('.T-sumPayType').val(),
+                        payType: payType,
                         bankId:bankId,
                         voucher:voucher,
                         billTime:billTime,

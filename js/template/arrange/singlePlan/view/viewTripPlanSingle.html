@@ -9,55 +9,55 @@
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">线路产品：</label>
+			<label class="col-xs-4 text-right no-padding">线路产品：</label>
 			<span class="col-xs-8">{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">人数：</label>
+			<label class="col-xs-4 text-right no-padding">人数：</label>
 			<span class="col-xs-8 "><span class="F-float F-count">{{tripPlan.touristAdultCount}}</span>大人 <span class="F-float F-count">{{tripPlan.touristChildCount}}</span>小孩</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">出游日期：</label>
+			<label class="col-xs-4 text-right no-padding">出游日期：</label>
 			<span class="col-xs-8">{{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">完团日期：</label>
+			<label class="col-xs-4 text-right no-padding">完团日期：</label>
 			<span class="col-xs-8">{{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪：</label>
+			<label class="col-xs-4 text-right no-padding">全陪：</label>
 			<span class="col-xs-8">{{tripPlan.accompanyGuideName}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">全陪电话：</label>
+			<label class="col-xs-4 text-right no-padding">全陪电话：</label>
 			<span class="col-xs-8">{{tripPlan.accompanyGuideMobile}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任计调：</label>
+			<label class="col-xs-4 text-right no-padding">责任计调：</label>
 			<span class="col-xs-8">{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">责任部门：</label>
+			<label class="col-xs-4 text-right no-padding">责任部门：</label>
 			<span class="col-xs-8">{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</span>
 		</div>
 	</div>
 	<div class="row border">
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">购物商家：</label>
+			<label class="col-xs-4 text-right no-padding">购物商家：</label>
 			<span class="col-xs-8">{{tripPlan.shopNames}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">自费商家：</label>
+			<label class="col-xs-4 text-right no-padding">自费商家：</label>
 			<span class="col-xs-8">{{tripPlan.selfPayItemNames}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">包含自费：</label>
+			<label class="col-xs-4 text-right no-padding">包含自费：</label>
 			<span class="col-xs-8">{{if tripPlan.isContainSelfPay == "1"}}包含{{else}}不包含{{/if}}</span>
 		</div>
 		<div class="col-xs-3">
-			<label class="col-xs-4 text-right">接站牌：</label>
+			<label class="col-xs-4 text-right no-padding">接站牌：</label>
 			<span class="col-xs-8">{{tripPlan.welcomeBoard}}</span>
 		</div>
 	</div>
@@ -242,20 +242,20 @@
                 <div class="tab-content" style="border: none;">
                 {{each dayList as days index}}
 					<div id="planDayListViewSingle-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
-						<div class="row">
-							<div class="col-xs-3">
+						<div class="clearfix">
+							<div class="pull-left mar-r-10">
 								<label class="control-label">简要行程：</label>
 								<label class="control-label">{{days.dayInfo.title}}</label>
 							</div>
-							<div class="col-xs-3 checkbox" style="margin-top: 0;">
+							<div class="pull-left mar-r-10 checkbox" style="margin-top: 0;">
 								<label class="control-label">含餐：</label>
 								{{#days.dayInfo.repastDetail | getRestaurantDesc}}
 							</div>
-							<div class="col-xs-2">
+							<div class="pull-left mar-r-10">
 								<label class="control-label">住宿地点：</label>
 								<label class="control-label">{{days.dayInfo.restPosition}}</label>
 							</div>
-							<div class="col-xs-4">
+							<div class="pull-left mar-r-10">
 								<label class="control-label">景点：</label>
 								<label class="control-label">{{days.dayInfo.scenicItemNames}}</label>
 							</div>
@@ -677,6 +677,6 @@
 </div>
 <div class="container-fluid hct-view-plan">
 	<div class="form-group text-center">
-		<button class="btn btn-xs T-btn-close w100"> 关闭 </button>
+		<button class="btn btn-xs T-btn-close btn-primary w100"><i class="ace-icon fa fa-times"></i> 关闭 </button>
 	</div>
 </div>

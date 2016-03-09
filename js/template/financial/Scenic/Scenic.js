@@ -22,15 +22,16 @@ define(function(require, exports) {
 
   	scenic.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        scenic.listScenic(0,"","",dateJson.startDate,dateJson.endDate);
+        scenic.listScenic(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
 
-    scenic.listScenic = function(page,scenicName,scenicId,startDate,endDate){
+    scenic.listScenic = function(page,scenicName,scenicId,startDate,endDate,accountStatus){
     	if (scenic.$searchArea && arguments.length === 1) {
-            scenicName = scenic.$searchArea.find("input[name=scenicName]").val(),
-            scenicId = scenic.$searchArea.find("input[name=scenicId]").val(),
-            startDate = scenic.$searchArea.find("input[name=startDate]").val(),
-            endDate = scenic.$searchArea.find("input[name=endDate]").val()
+            scenicName = scenic.$searchArea.find("input[name=scenicName]").val();
+            scenicId = scenic.$searchArea.find("input[name=scenicId]").val();
+            startDate = scenic.$searchArea.find("input[name=startDate]").val();
+            endDate = scenic.$searchArea.find("input[name=endDate]").val();
+            accountStatus = scenic.$searchArea.find(".T-finance-status").find("button").data("value");
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -45,6 +46,7 @@ define(function(require, exports) {
             scenicId : scenicId,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
 
@@ -63,7 +65,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey,"景区账务",html);
                     scenic.$tab = $('#tab-' + menuKey + "-content");
                     scenic.$searchArea = scenic.$tab.find('.T-search-area');
-                    scenic.initList(startDate,endDate);
+                    scenic.initList(startDate,endDate,accountStatus);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -93,7 +95,7 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    scenic.initList = function(startDate,endDate){
+    scenic.initList = function(startDate,endDate,accountStatus){
     	
 
         scenic.getQueryList();
@@ -105,6 +107,15 @@ define(function(require, exports) {
             scenic.listScenic(0);
         });
 
+        //状态框选择事件
+        scenic.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            scenic.listScenic(0);
+        });
+
         // 报表内的操作
         scenic.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
@@ -113,22 +124,23 @@ define(function(require, exports) {
                 name = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
-                scenic.scenicCheck(0,id,name,"",startDate,endDate);
+                scenic.scenicCheck(0,id,name,"",startDate,endDate,accountStatus);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 scenic.clearTempSumDate = false;
                 scenic.clearTempData = false;
-                scenic.scenicClear(0,0,id,name,"",startDate,endDate);
+                scenic.scenicClear(0,0,id,name,"",startDate,endDate,"",accountStatus);
             }
         });
     };
 
     //对账
-    scenic.scenicCheck = function(page,scenicId,scenicName,accountInfo,startDate,endDate){
+    scenic.scenicCheck = function(page,scenicId,scenicName,accountInfo,startDate,endDate,accountStatus){
         if (scenic.$checkSearchArea && arguments.length === 3) {
-            accountInfo = scenic.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startDate = scenic.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = scenic.$checkSearchArea.find("input[name=endDate]").val()
+            accountInfo = scenic.$checkSearchArea.find("input[name=accountInfo]").val();
+            startDate = scenic.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = scenic.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = scenic.$checkSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -143,6 +155,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType : "auto"
         };
         if(!scenicId && !!scenic.$checkTab){
@@ -243,20 +256,22 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     scenic.initPay = function(options) {
-        scenic.scenicClear(0, 0, options.id, options.name, '', options.startDate, options.endDate, true);
+        scenic.scenicClear(0, 0, options.id, options.name, '', options.startDate, options.endDate, true,options.accountStatus);
     }
     //结算
-    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter){
+    scenic.scenicClear = function(isAutoPay,page,scenicId,scenicName,accountInfo,startDate,endDate, isOuter,accountStatus){
         if (isAutoPay) {
             var searchParam = FinancialService.autoPayJson(scenic.$clearTab.find('.T-newData').data('id'),scenic.$clearTab, new FinRule(3), 0);
             searchParam = JSON.parse(searchParam);
-            searchParam.scenicId = searchParam.id;   
+            searchParam.scenicId = searchParam.id;
+            searchParam.accountStatus = scenic.$clearSearchArea.find("input[name=accountStatus]").val(); 
             delete(searchParam.id);
         } else {
             if (scenic.$clearSearchArea && arguments.length === 4) {
-                accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val(),
-                startDate = scenic.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = scenic.$clearSearchArea.find("input[name=endDate]").val()
+                accountInfo = scenic.$clearSearchArea.find("input[name=accountInfo]").val();
+                startDate = scenic.$clearSearchArea.find("input[name=startDate]").val();
+                endDate = scenic.$clearSearchArea.find("input[name=endDate]").val();
+                accountStatus = scenic.$clearSearchArea.find("input[name=accountStatus]").val();
             }
             if(startDate > endDate){
                 showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -270,6 +285,7 @@ define(function(require, exports) {
                 accountInfo : accountInfo,
                 startDate : startDate,
                 endDate : endDate,
+                accountStatus : accountStatus,
                 sortType : "auto"
             };
         }
@@ -345,8 +361,8 @@ define(function(require, exports) {
                                         sumPayMoney : sumPayMoney,
                                         sumPayType : sumPayType,
                                         sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                                        bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
-                                        bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                                        bankNo : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                                         voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                                         billTime : scenic.$clearTab.find('input[name=tally-date]').val()
                                     }
@@ -401,13 +417,14 @@ define(function(require, exports) {
             var startDate = scenic.$clearTab.find("input[name=startDate]").val(),
                 endDate = scenic.$clearTab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = scenic.$clearTab.find('select[name=sumPayType]').val();
                 scenic.clearTempSumDate = {
                     id : id,
                     sumPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                    bankNo : scenic.$clearTab.find('input[name=card-number]').val(),
-                    bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                     voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : scenic.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -453,30 +470,7 @@ define(function(require, exports) {
 			content : html,
 			scrollbar: false,
 			success : function() {
-				var colorbox_params = {
-                    photo: true,
-	    			rel: 'colorbox',
-	    			reposition:true,
-	    			scalePhotos:true,
-	    			scrolling:false,
-	    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-	    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-	    			close:'&times;',
-	    			current:'{current} of {total}',
-	    			maxWidth:'100%',
-	    			maxHeight:'100%',
-	    			onOpen:function(){ 
-	    				$overflow = document.body.style.overflow;
-	    				document.body.style.overflow = 'hidden';
-	    			},
-	    			onClosed:function(){
-	    				document.body.style.overflow = $overflow;
-	    			},
-	    			onComplete:function(){
-	    				$.colorbox.resize();
-	    			}
-	    		};
-	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
 			}
 		});
     }; 
@@ -571,11 +565,12 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            payType = scenic.$clearTab.find('select[name=sumPayType]').val();
             searchParam = {
                 sumCurrentPayMoney : scenic.$clearTab.find('input[name=sumPayMoney]').val(),
-                payType : scenic.$clearTab.find('select[name=sumPayType]').val(),
+                payType : payType,
                 payRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                bankId : scenic.$clearTab.find('input[name=card-id]').val(),
+                bankId : (payType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
                 voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
                 billTime : scenic.$clearTab.find('input[name=tally-date]').val()
             };
