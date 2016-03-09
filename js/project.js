@@ -1090,16 +1090,22 @@ var _statusText = {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
 					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
-						return ret;
+						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
 					ret = elem.value;
 					if($that.hasClass('F-float') && ret !== ""){						
 						ret = Tools.formatQuantile(ret);
 					}
+					if($that.hasClass('F-money') && ret !== ""){
+							ret = Tools.toFixed(ret, 2);
+					}
+					if($that.hasClass('F-count') && ret !== ""){
+							ret = Tools.toFixed(ret, 1);
+					}
 					return typeof ret === "string" ?
-						ret.replace(rreturn, "") :
-						ret == null ? "" : ret;
+						(ret.replace(rreturn, "")).replace(/(^\s*)|(\s*$)/g, "") :
+						ret == null ? "" : ret.replace(/(^\s*)|(\s*$)/g, "");
 				}
 
 				return;
@@ -1123,11 +1129,11 @@ var _statusText = {
 				// Treat null/undefined as ""; convert numbers to string
 				if ( val == null ) {
 					val = "";
-				} else if ( typeof val === "number" ) {
+				} else if ( typeof val === "number" ) {	
 					val += "";
 				} else if ( jQuery.isArray( val ) ) {
 					val = jQuery.map(val, function ( value ) {
-						return value == null ? "" : value + "";
+						return value == null ? "" : (value + "").replace(/(^\s*)|(\s*$)/g, "");
 					});
 				}
 
@@ -1144,7 +1150,7 @@ var _statusText = {
 						}
 						val = Tools.thousandPoint(val);						
 					}
-					this.value = val;
+					this.value = val.replace(/(^\s*)|(\s*$)/g, "");
 				}
 			});
 		},
@@ -1474,6 +1480,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		html = Tools.filterCount(html);
 		html = Tools.filterMoney(html);
 		html = Tools.filterUnPoint(html);
+		Tools.trFixed(html);
 		$("#tab-"+tab_id+"-content").html(filterUnAuth(html));
 	}
 };
@@ -2360,6 +2367,12 @@ KingServices.addBusDriverFunction = function(e){
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }
+//跳转报账审核的单团核算
+KingServices.viewTripAccount = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_count,function(module){
+		module.viewTripAccount(id);
+	});
+}
 /**
  * 设置省下拉框
  * @param  {[type]} obj [description]
@@ -2497,4 +2510,63 @@ KingServices.inlineTemplate = function(source, option) {
 		render = template.compile(s),
 		html = render(option);
 	return html;
+}
+/**
+ * 表格固定在顶部功能
+ * @param  {object} obj 暂时未用上
+ * @return {[type]}     [description]
+ */
+Tools.trFixed = function(obj){
+	$tabPane = $("#tabContent > .tab-pane.active");
+
+	$tabPane.off().scroll(function(event){
+		event.preventDefault();
+		
+		var $that = $(this),
+			$trFixed = $that.find('.T-tr-fixed'),
+			$focus = $(":focus");
+
+		if ($focus.hasClass('ui-autocomplete-input')) {
+			$focus.autocomplete('close');
+		}
+
+		if($trFixed.length === 0)return;
+
+		var $table = $trFixed.closest('table'),
+			top = $table.offset().top-$that.offset().top,
+			topArr = [], heightArr = [];;
+
+		if(top >= 0){
+			top = 0;
+		}
+		$trFixed.css({
+			'transform' : 'translateY('+(-top)+'px)',
+			'-webkit-transform' : 'translateY('+(-top)+'px)',
+			'-moz-transform' : 'translateY('+(-top)+'px)',
+			'msTransform' : 'translateY('+(-top)+'px)',
+			'-o-transform' : 'translateY('+(-top)+'px)'
+		});
+	});
+};
+
+//根据需要加载插件js
+var modulePlugin = {
+	"plugin_print":'components/jquery-print/jQuery.print.js'//加载打印插件
+};
+Tools.loadPluginScript = function(pluginKey){
+	if(pluginKey == 'plugin_print'){
+		$.getScript(modulePlugin.plugin_print);
+	};	
+};
+
+window.onbeforeunload=function(e){
+	var event = e || window.event;
+	var $children = $('#tabContent').children();
+	$children.each(function(index) {
+		var $this = $(this),
+			isEdited = $this.data('isEdited');
+		if (!!isEdited) {
+			event.returnValue='重新加载页面将导致未保存的数据丢失'
+		}
+	});
 }

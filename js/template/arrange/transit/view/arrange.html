@@ -1,4 +1,4 @@
-<div class="col-xs-12 arrangeTouristMain globalAdd" style="margin-left: 10px">
+<div class="col-xs-12 arrangeTouristMain globalAdd">
 	<form class="form-horizontal formOneList" role="form" onsubmit="return false" style="margin-left: 10px">
 		<div class="form-group">
 			<input type="hidden" name="touristGroup" value="{{touristGroup.id}}"/>
@@ -39,7 +39,7 @@
 	<button class="btn btn-sm  btn-success" style="margin-left: 20px"> 通知财务 </button> </a>
 	<div class="tabbable">
 		<ul class="nav nav-tabs" id="myTab_transitArrange">
-			{{if arrangeStatus.receiveBusStatus != 0}}
+			{{if arrangeStatus.receiveBusStatus != 0 }}
 			<li class="col-sm-1 no-padding align-center act">
 				<a data-toggle="tab" href="#transit_receive_bus" aria-expanded="true">接团车辆</a>
 			</li>

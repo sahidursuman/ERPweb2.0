@@ -4,20 +4,20 @@
             <div class="T-search-area">
                 <div class="form-group"> 
                     <label>车队：{{busCompanyName}}</label>
-                    <label class="marginLeft-30">账期：</label>
+                    <label class="mar-l-15">账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
                     <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
-                    <label class="marginLeft-30">账务类别：</label>
+                    <label class="mar-l-15">账务类别：</label>
                     <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
-                    <label class="marginLeft-30">车牌号：</label>
+                    <label class="mar-l-15">车牌号：</label>
                     <input name="licenseNumber" placeholder="车牌号" type="text" value="{{searchParam.licenseNumber}}" style="width:200px;" />
 
-                    <button class=" btn-sm T-search search-btn marginLeft-30">
+                    <button class=" btn-sm T-search search-btn mar-l-15">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
-                    <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
+                    <button class="btn-sm search-btn T-btn-export mar-l-15">导出报表</button>
                 </div>
             </div>
         </form>
@@ -33,9 +33,10 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
 	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
-    <table class="table overflow-table table-striped table-bordered table-hover all hct_align_middle" style="margin-top: 30px">
+<div class="overflow-x min-w-1050" style="margin-top: 30px">
+    <table class="table overflow-table table-striped table-bordered table-hover all hct_align_middle w-1500">
         <thead>
-            <tr><th class="th-border">账务类别</th>
+            <tr class="T-tr-fixed"><th class="th-border">账务类别</th>
                 <th class="th-border" width="170">用车时间(账期)</th>
                 <th class="th-border">人数</th>
                 <th class="th-border">司机</th>
@@ -109,7 +110,8 @@
 		    {{/each}}
         </tbody>  
     </table>
-    <div class="row pageMode">
+</div>
+    <div class="row pageMode" style="padding-top: 15px;">
         <div class="col-xs-6">
             <small>共计 {{searchParam.recordSize}} 条记录</small>
         </div>

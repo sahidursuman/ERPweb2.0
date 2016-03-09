@@ -50,10 +50,6 @@ define(function(require, exports) {
 				$ele: $container.find('.T-quoteInfo input[name="childCount"]'),
 				rules: [
 					{
-						type: 'null',
-						errMsg: '小孩数量不能为空'
-					},
-					{
 						type: 'nonnegative-int',
 						errMsg: '小孩数量只能是非负整数'
 					}

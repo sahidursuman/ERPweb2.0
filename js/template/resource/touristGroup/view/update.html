@@ -6,14 +6,14 @@
 		</div>
 
 
-		<div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:665px;">
+		<div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:655px;">
 			<label class="control-label no-padding-right mar-r-10">是否购买保险：
 			    <input type="checkbox" class="ace buyInsurance-status" value="1" name="buyInsurance"  {{if touristGroupDetail.buyInsurance==1}}checked="checked"{{/if}}/>
 			    <span class="lbl"></span>
 			</label> 
 
 	        <label>收客单号：</label>
-	        <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" readonly="readonly" style="width:160px;"  maxlength="9" placeholder="系统自动生成" >  
+	        <input type="text" name="orderNumber" value="{{touristGroupDetail.orderNumber}}" class="T-orderNumberChange" style="width:160px;" placeholder="系统自动生成" >  
         </div> 
 
         <input type="hidden"  class="T-isEditStatus" value="{{touristGroupDetail.status}}">
@@ -34,7 +34,7 @@
 		<div class="form-group fixed-width">
 		    <label for="qouteNumber"><span class="necessary">*</span> 线路产品：</label>
 	        <input type="text" name="lineProductIdName" class="form-control bind-change T-lineProductIdName" readonly="readonly" value="{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}"/>
-	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{touristGroupDetail.lineProduct.id}}" />
+	        <input type="hidden" name="lineProductId" class="T-lineProductId"value="{{if !!touristGroupDetail.lineProduct}}{{touristGroupDetail.lineProduct.id}}{{/if}}" />
 	        <input type="hidden" name="quoteId" class="T-quoteId" value="{{touristGroupDetail.quoteId}}"/>
 	        {{if !(touristGroupDetail.status != 1)}}
 	    	<button class="search-btn btn-sm T-travelLine-search" onsubmit="return false">
@@ -67,7 +67,7 @@
     	<div class="form-group fixed-width">
     		<label><span class="necessary">*</span>出游日期：</label>
             <input type="text" name="startTime" class="form-control {{if !(touristGroupDetail.status != 1)}}date-picker datepicker{{/if}} T-startTime" value="{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if !!touristGroupDetail.quoteId}} disabled {{/if}} {{if touristGroupDetail.status != 1}}readonly="readonly"{{/if}} />
-            <input type="hidden" name="days" class="form-control T-days" value="{{touristGroupDetail.lineProduct.days}}"/>
+            <input type="hidden" name="days" class="form-control T-days" value="{{if touristGroupDetail.lineProduct}}{{touristGroupDetail.lineProduct.days}}{{/if}}"/>
     	</div>
 
         <div class="form-group fixed-width">
@@ -89,8 +89,8 @@
 			{{/if}}
     	</div>
 
-    	<div class="form-group">
-    		<label><span class="necessary">*</span>客户联系人：</label>
+    	<div class="form-group" style="margin-right: 0px;">
+    		<label>客户联系人：</label>
             <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text"  style="width:133px;"value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}" name="partnerAgencyNameList" type="text" />
 			<input type="hidden" name="partnerAgencyContactId" value="{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.id}}{{/if}}" class="T-partnerAgencyContactId" />
 
@@ -419,62 +419,62 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
+						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
 							            <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
-										        	<span class="necessary">*</span>
-										            <label>接团时间：</label>
+										        	<span class="necessary">*</span><label class="mar-r-10">接团时间</label>
 										            <input type="text" name="arriveTime" value="{{touristGroupDetail.outRemarkArrange.arriveTime}}" class="form-control date-picker datetimepicker" />
 										        </div>
 										    </div>
 										    <div class="form-inline" style="padding:0 0 7px 14px;">
 										        <div class="fixed-width">
-										            <span class="necessary">*</span>
-										            <label>接团地点：</label>
+										            <span class="necessary">*</span><label class="mar-r-10">接团地点</label>
 										            <input type="text" name="arrivePosition" value="{{touristGroupDetail.outRemarkArrange.arrivePosition}}" class="form-control" />
 										        </div>
 										    </div>
-										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										    <div class="form-inline" style="padding:0 0 7px 20px;">
 										        <div class="fixed-width">
-										            <label>票务班次：</label>
+										            <label class="mar-r-10">票务班次</label>
 										            <input type="text" name="arriveShift" value="{{touristGroupDetail.outRemarkArrange.arriveShift}}" class="form-control" />
 										        </div>
 										    </div>
-										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										    <div class="form-inline" style="padding:0 0 7px 20px;">
 										        <div class="fixed-width">
-										            <label>票务时间：</label>
+										            <label class="mar-r-10">票务时间</label>
 										            <input type="text" name="arriveShiftTime" value="{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}" class="form-control date-picker datetimepicker" />
 										        </div>
 										    </div>
 										</div>
 									 {{each touristGroupDetail.outTransferRequire.reciveTrip as recive}}
 	                                    {{if recive.requireType =='receiveBus'}}
-		                                 <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
-						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求：</div>
+		                                 <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求</div>
 						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
 					                    </div>
 					                    {{else if recive.requireType =='receiveHotel'}}
-					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
-						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求：</div>
+					                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求</div>
 						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
 					                    </div>
 					                    {{else if recive.requireType =='receiveRestaurant'}}
-					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
-						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求：</div>
+					                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求</div>
 						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
 					                    </div>
 					                    {{else if recive.requireType =='receiveTicket'}}
-					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
-						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求：</div>
+					                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求</div>
 						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
 					                    </div>
 					                    {{else if recive.requireType =='receiveOther'}}
-					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
-						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求：</div>
+					                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求</div>
 						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}"></div>
 					                    </div>
 					                    {{/if}}
 								     {{/each}}
+								     {{/if}}
 						            </div>
 						    </div>
 					    	{{else}}
@@ -572,62 +572,62 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
 								       <div class="require-commons">
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
-										            <span class="necessary">*</span>
-										            <label>送团时间：</label>
+										            <span class="necessary">*</span><label>送团时间</label>
 										            <input type="text" name="leaveTime" value="{{touristGroupDetail.outRemarkArrange.leaveTime}}"  class="form-control date-picker datetimepicker" />
 										        </div>
 										    </div>
 										    <div class="form-inline" style="padding:0 0 7px 14px;">
 										        <div class="fixed-width">
-										            <span class="necessary">*</span>
-										            <label>送团地点：</label>
+										            <span class="necessary">*</span><label>送团地点</label>
 										            <input type="text" name="leavePosition" class="form-control"  value="{{touristGroupDetail.outRemarkArrange.leavePosition}}"/>
 										        </div>
 										    </div>
-										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										    <div class="form-inline" style="padding:0 0 7px 20px;">
 										        <div class="fixed-width">
-										            <label>票务班次：</label>
+										            <label>票务班次</label>
 										            <input type="text" name="leaveShift" class="form-control" value="{{touristGroupDetail.outRemarkArrange.leaveShift}}" />
 										        </div>
 										    </div>
-										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										    <div class="form-inline" style="padding:0 0 7px 20px;">
 										        <div class="fixed-width">
-										            <label>票务时间：</label>
+										            <label>票务时间</label>
 										            <input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" value="{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}" />
 										        </div>
 										    </div>
 										</div>
 									      {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
 		                                    {{if send.requireType =='sendBus'}}
-			                                 <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
-							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求：</div>
+			                                 <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求</div>
 							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
 						                    </div>
 						                    {{else if send.requireType =='sendHotel'}}
-						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
-							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求：</div>
+						                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求</div>
 							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
 						                    </div>
 						                    {{else if send.requireType =='sendRestaurant'}}
-						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
-							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求：</div>
+						                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求</div>
 							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
 						                    </div>
 						                    {{else if send.requireType =='sendTicket'}}
-						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
-							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求：</div>
+						                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求</div>
 							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
 						                    </div>
 						                    {{else if send.requireType =='sendOther'}}
-						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
-							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求：</div>
+						                    <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求</div>
 							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}"></div>
 						                    </div>
 						                    {{/if}}
 									    {{/each}}
+									    {{/if}}
 						            </div>
 						        </div>
 					    	{{else}}
