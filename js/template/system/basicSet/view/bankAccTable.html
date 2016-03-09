@@ -86,19 +86,27 @@
 								已停用
 							{{/if}}
 						</td>
+						
 					 	<td>
 							<div class="hidden-sm hidden-xs btn-group">
 								<a class="T-view cursor T-action" >
 									查看
 								</a>
-								<a class="T-edit cursor T-action R-right" data-right="1040003" >
+								<a class="T-edit cursor T-action" data-right="1040003" >
 									<label class="padding-right20">|</label>
 									编辑
 								</a>
+								{{if rs.incomeMoney == 0 && rs.payMoney == 0}}
 								<a class="T-delete cursor T-action R-right" data-right="1040004">
 									<label class="padding-right20">|</label>
 									删除
 								</a>
+								{{else}}
+								<a>
+									<label class="padding-right20">|</label>
+									<span style="color:#bbb;">删除</span>
+								</a>
+								{{/if}}
 							</div>
 						</td>
 					</tr>

@@ -3,10 +3,20 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right">类型：</label>
 			<div class="col-sm-3">
-				<select class="col-sm-12 T-accountType" name="type">
+			{{if bankAccount.incomeMoney != 0 || bankAccount.payMoney != 0}}
+				<label>
+					{{if bankAccount.type == 0}}
+						<span>现金账户</span>
+					{{else}}
+						<span>银行账户</span>
+					{{/if}}
+				</label>
+			{{else}}
+				<select class="col-sm-12 T-accountType" name="type" >
 					<option value="0">现金账户</option>
 					<option value="1" {{if bankAccount.type == 1}}selected="selected"{{/if}}>银行账户</option>
 				</select>
+			{{/if}}
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
 			<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
@@ -26,7 +36,7 @@
 			<div class="T-cashHidden">
 				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>银行账号:</label>
 				<div class="col-sm-3">
-					<input type="text" name="bankNumber" value="{{bankAccount.bankAccountNumber}}" class="col-sm-12"  maxlength="32"/>
+					<input type="text" name="bankNumber" value="{{bankAccount.bankAccountNumber}}" class="col-sm-12 T-edit-feild"  maxlength="32"/>
 					<input type="hidden" name="bankNumberId" value="{{bankAccount.id}}" class="col-sm-12"  maxlength="32"/>
 				</div>
 			</div>
@@ -36,7 +46,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初余额:</label>
 			<div class="col-sm-3">
-				<input type="text" name="balanceMoney" class="col-sm-12" value="{{bankAccount.beginningBalance}}" maxlength="9"  />
+				<input type="text" name="balanceMoney" class="col-sm-12 T-edit-feild" value="{{bankAccount.beginningBalance}}" maxlength="9"  />
 			</div>
 			<div class="T-cashHidden">
 				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户银行:</label>
@@ -48,7 +58,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初日期:</label>
 			<div class="col-sm-3">
-				<input type="text" name="startTime" style="width: 175px;" value="{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 datepicker" />
+				<input type="text" name="startTime" style="width: 175px;" value="{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 datepicker T-edit-feild" />
 			</div>
 			<div class="T-cashHidden">
 				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户户名:</label>

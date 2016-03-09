@@ -300,11 +300,16 @@ define(function(require,exports){
 					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
-					console.log(data);
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '修改资金账户'
+					}else{
+						typeTitle = '修改银行账户'
+					};				
 					var html = updateTemplate(data);
 					var updateBankAccLayer = layer.open({
 						type: 1,
-						title:"修改银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,
@@ -336,7 +341,13 @@ define(function(require,exports){
 			var payMoney = $obj.find('input[name=payMoney]').val();
 			if(incomeMoney != 0 || payMoney != 0){
 				//提示
-				$obj.find('input[type=text]').prop('disabled',true);
+				$obj.find('input[type=text]').each(function(index, el) {
+					var $that = $(this);
+
+					if ($that.hasClass('T-edit-feild')) {
+						$that.prop('disabled',true);
+					}
+				});
 			};
 		}
 		if($obj.find(".T-mainForm").data('type') != "1"){
@@ -387,10 +398,16 @@ define(function(require,exports){
 					var bankNumber = data.bankAccount.bankAccountNumber || "";
 					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
 					data.bankAccount.bankAccountNumber = bankNumber;
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '查看资金账户'
+					}else{
+						typeTitle = '查看银行账户'
+					};
 					var html = viewTemplate(data);
 					var viewBankAccTemplate = layer.open({
 						type: 1,
-						title:"查看银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,
@@ -444,15 +461,21 @@ define(function(require,exports){
 	//组装数据
 	Infrastructure.installData = function($obj,typeFlag){
 		var status = 0,
-		    checkStatus = $obj.find('.T-checkStatus').is(':checked');
+		    checkStatus = $obj.find('.T-checkStatus').is(':checked'),
+		    type;
 		if(checkStatus){
 			status = 1;
 		};
-		var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
-		var type = $obj.find('select[name=type]').val();
+		
+		if ($obj.find('.T-accountType').length) {
+			type = $obj.find('.T-accountType').val();
+		} else {
+			type = $obj.find(".T-mainForm").data('type');
+		}
+
 		if(type == 0){
 			var subData = {
-				type : $obj.find('select[name=type]').val(),
+				type : type,
 				aliasName:$obj.find('input[name=aliasName]').val(),
 				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
 				beginningTime:$obj.find('input[name=startTime]').val(),
@@ -461,8 +484,9 @@ define(function(require,exports){
 				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
 			};
 		}else{
+			var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
 			var subData = {
-				type : $obj.find('select[name=type]').val(),
+				type : type,
 				aliasName:$obj.find('input[name=aliasName]').val(),
 				accountName:$obj.find('input[name=accountName]').val(),
 				bankAccountNumber:bankNumber,

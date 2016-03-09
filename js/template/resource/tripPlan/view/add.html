@@ -14,7 +14,7 @@
                 <td class="style-myself">针对客源：</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
                 <td class="style-myself">人数：</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-count">{{basicInfo.touristAdultCount}}</span>大人&nbsp;<span class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-count T-touristCount" data-count={{basicInfo.touristAdultCount + basicInfo.touristChildCount}}>{{basicInfo.touristAdultCount}}</span>大人&nbsp;<span class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</td>
                 <td class="style-myself">团号：</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripNumber}}</td>
             </tr>
