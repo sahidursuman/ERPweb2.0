@@ -1,6 +1,6 @@
 <div class="T-search-area globalAdd tripplan-area">
     <form class="form-inline hct-search-area" role="form" onsubmit="return false">
-        <div class="form-group" style="margin-left: 7px;">
+        <div class="form-group">
             <label>客户</label>
             <input type="text" name="fromPartnerAgencyName" class="form-control" />
             <input type="hidden" name="fromPartnerAgencyId" value="" />
@@ -14,12 +14,12 @@
             <label>出游时间</label>
             <input class="form-control T-datePicker" name="startTime" value="" type="text" style="width: 139px;" />
         </div>
-        <div class="form-group" style="margin-left: 13px;">
+        <div class="form-group" >
             <label>安排人</label>
             <input type="text" name="arrangeUserName" value="" class="form-control" />
             <input type="hidden" name="arrangeUserId" value="" />
         </div>
-        <div class="form-group" style="margin-left: 9px;">
+        <div class="form-group">
             <label>安排时间</label>
             <input class="datepicker T-datePicker-range" name="arrangeStartTime" placeholder="开始时间" style="width:100px;" type="text" />
             <label>至</label>
@@ -38,7 +38,7 @@
             <input class="form-control" name="shift" value="" placeholder="班次" type="text" style="width: 189px;" />
         </div>
         <div class="form-group">
-            <label>资源状态</label>
+            <label>资源状态 </label>
             <select name="arrangeItem" class="form-control">
                 <option value="" selected>全部</option>
                 <option value="receiveBusStatus">接团车</option>
@@ -58,11 +58,11 @@
             </select>
         </div>
         <div class="form-group">
-            <label>收客单号</label>
+            <label>收客单号 </label>
             <input type="text" name="orderNumber" value="" class="form-control T-orderNumber" />
         </div>
-        <div class="form-group mar-l-10 T-transitState">
-            <label>状态</label>
+        <div class="form-group T-transitState">
+            <label>状态 </label>
             <select name="" id="">
                 <option value="">全部</option>
                 <option value="1">已安排</option>
@@ -70,10 +70,10 @@
             </select>
         </div>
          <div class="form-group">
-            <button class=" btn-sm  T-btn-transitList-search search-btn">
+            <button class=" btn-sm mar-r-10 T-btn-transitList-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
-            <button class="btn btn-sm btn-success T-transit-export" style="margin-left: 28px;">导出安排</button>
+            <button class="btn btn-sm btn-success T-transit-export">导出安排</button>
         </div>
     </form>
     <p class="text-info">
