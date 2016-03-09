@@ -663,15 +663,16 @@ define(function(require, exports) {
         }
 		var json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (json && json.length) {
-			var args = {
-                ticketId: Ticket.clearingId,
-                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
-                payType: $tab.find('.T-sumPayType').val(),
-                payRemark: $tab.find('.T-sumRemark').val(),
-                bankId : $tab.find('input[name=card-id]').val(),
-                voucher : $tab.find('input[name=credentials-number]').val(),
-                billTime : $tab.find('input[name=tally-date]').val()
-			}
+			var payType = $tab.find('.T-sumPayType').val(),
+				args = {
+	                ticketId: Ticket.clearingId,
+	                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
+	                payType: payType,
+	                payRemark: $tab.find('.T-sumRemark').val(),
+	                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+	                voucher : $tab.find('input[name=credentials-number]').val(),
+	                billTime : $tab.find('input[name=tally-date]').val()
+				}
             $.ajax({
                     url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
                     type: 'post',

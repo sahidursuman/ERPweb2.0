@@ -1,13 +1,29 @@
 <div class="">
     <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <colgroup>
+            <col style="width:20%;"></col>
+            <col style="width:8%"></col>
+            <col style="width:20%"></col>
+            <col style="width:130px"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:50px;"></col>
+            <col style="width:150px;"></col>
+            <col style="width:20%;"></col>
+        </colgroup>
         <thead>
-            <tr class="bg-blur">
-                <th>团号</th>
+            <tr class="bg-blur T-tr-fixed">
+                <th>团信息 </th> 
                 <th>出游日期</th>
-                <th>完团日期</th>
-                <th>线路产品</th>
-                <th>团队人数</th>
                 <th>客户</th>
+                <th>团队人数</th>
                 <th>导</th>
                 <th>车</th>
                 <th>险</th>
@@ -18,22 +34,23 @@
                 <th>购</th>
                 <th>娱</th>
                 <th>它</th>
-                <th>外联销售</th>
-                <th>责任计调</th>
-                <th>责任部门</th>
-                <th style="width:80px;">状态</th>
+                <th style="width:100px;">状态</th>
                 <th style="min-width:230px;">操作</th>
             </tr>
         </thead>
         <tbody>
             {{each result as rs}}
             <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
-                <td style="vertical-align:middle">{{rs.tripNumber}}</td>
-                <td style="vertical-align:middle">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td style="vertical-align:middle">{{rs.lineProduct.name}}</td>
-                <td style="vertical-align:middle">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
+                <td class="h-touristGroupInfo" style="vertical-align:middle">
+                    <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
+                    <p class="h-lineName"><{{rs.lineProduct.name}}></p>
+                    <p class="h-memberName">
+                        <span>责任计调：{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</span>
+                    </p>
+                </td>
+                <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
                 <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
@@ -44,9 +61,6 @@
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.outOPUser}}{{rs.tripPlanTouristList[0].touristGroup.outOPUser.realName}}{{/if}}</td>
-                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.realName}}{{/if}}</td>
-                <td style="vertical-align:middle">{{if !!rs.dutyOPUser}}{{rs.dutyOPUser.businessGroup.name}}{{/if}}</td>
                 <td style="vertical-align:middle">
                     {{if rs.status == 0}}
                     <span style="color: #ff9900;">待发团</span>

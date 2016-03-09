@@ -18,11 +18,19 @@
 
 
 /*table溢出*/
-
+.overflow-table {
+    width: 100%;
+}
 .overflow-table tr td,
 .overflow-table tr th {
     padding-left: 0px!important;
     padding-right: 0px!important;
+}
+
+.overflow-table tr .h-touristGroupInfo, .h-touristGroupInfo {
+    text-align: left;
+    padding-left: 10px !important;
+    margin-left: 20px;
 }
 
 .table-special {
@@ -424,16 +432,42 @@ table tr td {
     margin-top: 10px;
 }
 
+.mar-l-5 {
+    margin-left: 5px;
+}
+
+.mar-l-3{
+    margin-left: 3px;
+}
+.mar-l-8{
+    margin-left: 8px;
+}
 .mar-l-10 {
     margin-left: 10px;
+}
+.mar-l-23{
+    margin-left: 23px;
 }
 
 .mar-l-15 {
     margin-left: 15px;
 }
-
+.mar-1-112{
+    margin-left: 112px;
+}
 .mar-r-10 {
     margin-right: 10px;
+}
+.mar-r-20 {
+    margin-right: 20px!important;
+}
+
+.mar-b-10 {
+    margin-bottom: 10px;
+}
+
+.mar-b-20 {
+    margin-bottom: 20px;
 }
 
 .pad-0 {
@@ -446,6 +480,10 @@ table tr td {
 
 .pad-l-5 {
     padding-left: 5px;
+}
+
+.line-h-2 {
+    line-height: 1.9em;    
 }
 
 .label-inline-60 {
@@ -1701,7 +1739,39 @@ p#back-top a span {
      padding: 8px 5px 8px 5px;width: auto; 
      border-radius: 3px;
 }
-
+.userAuthWidth{
+    width:160px;height: auto;
+    position: fixed;
+    top:142px;left: 1080px; 
+    border:1px solid #ddd;
+    margin-top: 45px;
+}
+.userUpdate-auth .btn{
+    padding: 4px 3px;
+}
+.saveAuth-user{
+        margin-bottom:-22px; 
+        /*position: absolute;*/
+        /*margin-top: 10px;*/
+        margin-left: -1px;
+        width: 160px;
+    }
+.userAuth li{
+    list-style-type: none;
+    width: 133px;
+    height: 30px;
+    padding: 5px 0px 5px 0px;
+}
+.userAuth li:hover{
+    cursor: pointer;
+}
+.userAuth li:nth-child(1){
+    margin-top: 15px;
+}
+.h-touristGroupInfo p{
+    text-align: left;
+    margin: 0px;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -2031,6 +2101,16 @@ p#back-top a span {
 
 }
 
+@media screen and (max-width:1440px) {
+ .userAuthWidth{
+        width:160px;height: auto;
+        position: fixed;
+        top:142px;left: 1030px; 
+        border:1px solid #ddd;
+        margin-top: 45px;
+    }
+
+}
 
 /*媒体查询 1366*/
 
@@ -2123,9 +2203,35 @@ p#back-top a span {
         margin-left: 5px;
         margin-top: 25px;
     }
+
     
 }
+@media screen and (max-width:1280px) {
 
+    .busCompanyNameWidth{
+        width: 130px;
+    }
+    .hotelNameWidth{
+        width: 130px; 
+    }
+    .orderManagerTime{
+        margin-top: 10px;
+        margin-left: -23px;
+    }
+    .linproductName{
+        width: 93px;
+    }
+    .timeStartMore {
+        margin-left: -22px !important;
+        margin-top: 10px;
+    }
+    .addQuoteDiv{
+        margin-left: 20px;
+    }
+    .viewQuoteFdiv{
+        margin-left: 20px;
+    }
+}
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
     .share-anchor{
@@ -2385,5 +2491,29 @@ a.gray span{
 .table-inner-list li:first-child{
     border:none;
 }
+/*打印时的样式*/
+@media print{
+    .T-noprint{
+        display: none;
+    }
+    .T-print{
+        display: block!important;
+        visibility: visible!important;
+        opacity: 1;
+    }
+    
+    .tab-content {
+        border: 0;
+        padding: 0;
+    }
 
+    html, body, .main-container {
+        height: auto !important;
+        width: auto !important;
+        overflow: auto;
+    }
 
+    #tab-financial_count-outDetail-content {
+        width: auto !important;
+    }
+}
