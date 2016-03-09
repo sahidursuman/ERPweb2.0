@@ -24,7 +24,7 @@
                 <input type="text" value="{{searchParam.endTime}}" name="endTime" class=" datepicker" style="width:88px;" placeholder="结束日期" />
             </div>
             <div class="form-group btn-status btn-group mar-r-10">
-                <label>状态</label>
+                <label>状态 </label>
                 <button data-value="{{searchParam.billStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
                     <span>
 						{{if searchParam.billStatus == '-1'}}
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label mar-r-20">收入: <span class="F-float F-money">{{financialTripPlan.getAllMoney}}</span></label>
+            <label class="control-label mar-r-20">收入：<span class="F-float F-money">{{financialTripPlan.getAllMoney}}</span></label>
             <label class="control-label mar-r-20">成本：<span class="F-float F-money">{{financialTripPlan.payAllMoney}}</span></label>
             <label class="control-label mar-r-20">毛利：<span class="F-float F-money">{{financialTripPlan.grossProfitMoney}}</span></label>
             <label class="control-label mar-r-20">人均毛利：<span class="F-float F-money">{{financialTripPlan.perGrossProfitMoney}}</span></label>
