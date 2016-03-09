@@ -1,18 +1,18 @@
  <div class="row" >
     <form class="form-inline T-search-area" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
-            <label>开始时间：</label>
+            <label>开始时间 </label>
 			<input class="date-picker mar-r-10" name="startTime" value = "{{startDate}}" placeholder="开始日期" type="text" style="width:100px;" />	
-            <label >结束时间：</label>
+            <label >结束时间 </label>
             <input class="date-picker mar-r-10" name="endTime" value = "{{endDate}}" placeholder="结束日期"  type="text" style="width:100px;" />	
-            <label>客户：</label>
+            <label>客户 </label>
             <input type="text" class="T-choosePartner mar-r-10" name="fromPartnerAgencyName" value="{{fromPartnerAgencyName}}" placeholder="客户"  type="text" style="width:100px;" /> 
             <input type="hidden" name="fromPartnerAgencyId" value="{{fromPartnerAgencyId}}" /> 
-            <label>外联销售：</label>
+            <label>外联销售 </label>
             <input type="text" class="mar-r-10" name="outOPUserName" value="{{outOPUserName}}" placeholder="外联销售"  type="text" style="width:100px;" /> 
-            <label>部门：</label>
+            <label>部门 </label>
             <input type="text" name="groupName" class="mar-r-10" value="{{groupName}}" placeholder="部门"  type="text" style="width:100px;" /> 
-            <label>类别：</label>
+            <label>类别 </label>
             <select name="type" class="mar-r-10">
                 <option value="" selected="selected">全部</option>
                 <option value="receiveProfit">收客利润</option>
@@ -24,12 +24,12 @@
             </button>
         </div>
     </form>
-    <div class="form-group mar-t-10">
+    <div class="form-group">
         <label class="control-label mar-r-20">收入合计：<span class="income F-float F-money"></span></label>
         <label class="control-label mar-r-20">支出合计：<span class="cost F-float F-money"></span></label>
         <label class="control-label ">毛利合计：<span class="profit F-float F-money"></span></label>
     </div> 
-    <div class="row ticketList" style="margin-top:10px;">
+    <div class="row ticketList" >
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
