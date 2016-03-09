@@ -160,6 +160,9 @@ define(function(require, exports) {
                 if (result) {
                     data.isTurn = operateCalculteOut;
                 	var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
 			    	$("#tab-" + menuKey + "-content").find(".T-planProfit-list").html(html);
                     if(operateCalculteOut == 0){
                         plan.$tab.find(".T-turn").hide();
@@ -181,6 +184,13 @@ define(function(require, exports) {
                         plan.listPlan(0); 
                     });
 
+                    plan.$tab.find('.T-toTripAccount').off().on('click',function(){
+                        var id = $(this).closest('tr').data('id');
+                        var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        KingServices.viewTripAccount(id);
+                    });
+                    
 			    	// 绑定翻页组件
                     laypage({
                         cont: plan.$tab.find('.T-pagenation'),
@@ -206,20 +216,47 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
-                    var total = data.total;
-                    var totalDataHtml = "<tr style='background: #e0effd;'><td>合计</td><td></td><td></td><td></td><td>" + total.adultCount + " 大 " + total.childCount + " 小" + "</td><td></td><td></td><td></td><td>" + total.needPayAllMoney + "</td><td>" +
-                                        total.shopMoney + "</td><td>" + total.selfIncome + "</td><td>" + total.incomeMoney + "</td><td>" + total.guideMoney + "</td><td>" + total.guideTip + "</td><td>" + total.insuranceMoney + "</td><td>" +
-                                        total.busMoney + "</td><td>" + total.restaurantMoney + "</td><td>" + total.hotelMoney + "</td><td>" + total.scenicMoney + "</td><td>" + total.ticketMoney + "</td><td>" + total.selfPayMoney + "</td><td>" +
-                                        total.otherMoney + "</td><td>" + total.shopCostMoney + "</td><td>" + total.selfMoney + "</td><td>" + total.guideDeductions + "</td>";
+                    var total = data.total
+                        moneys = total.list[0];
+                    var totalDataHtml = "<tr style='background: #e0effd;'><td rowspan='3'>合计</td><td rowspan='3'></td><td>应收/付</td><td><span class='F-float F-money'>" + moneys.needPayAllMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideMoney + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideTip + "</span></td><td><span class='F-float F-money'>" + moneys.shopCostMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideDeductions + "</span></td>";
                     if(operateCalculteOut){
-                        totalDataHtml += "<td>" + total.outBusMoney + "</td><td>" + total.outRestaurantMoney + "</td><td>" + total.outHotelMoney + 
-                                         "</td><td>" + total.outTicketMoney + "</td><td>" + total.outOtherMoney + "</td>";
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
+                                         "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
                     }
-                    totalDataHtml += "<td>" + total.totalIncome + "</td><td>" + total.totalTrip + "</td>";
+                    totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
                     if(operateCalculteOut){
-                        totalDataHtml += "<td>" + total.totalOut + "</td>";
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
                     }
-                    totalDataHtml += "<td>" + total.profit + "</td><td>" + total.perCapitaProfit + "</td></tr>";
+                    totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + total.profit + "</span></td><td rowspan='3'><span class='F-float F-money'>" + total.perCapitaProfit + "</span></td></tr>";
+
+                    for(var i = 1; i <= 2; i++){
+                        moneys = total.list[i]
+                        totalDataHtml += "<tr style='background: #e0effd;'><td>";
+                        totalDataHtml += (i == 1) ? "已" : "未";
+                        totalDataHtml += "收/付</td><td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<span class='F-float F-money'>" + moneys.needPayAllMoney + "</span>";
+                        } else {
+                            totalDataHtml += "-";
+                        }
+                        totalDataHtml += "</td><td><span class='F-float F-money'>" + moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + ((i == 2) ? "-" : moneys.selfIncome) + "</span></td><td><span class='F-float F-money'>" + ((i == 2) ? "-" : moneys.incomeMoney) + "</span></td><td><span class='F-float F-money'>" + (moneys.guideMoney || "-") + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideTip || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.shopCostMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.selfMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.guideDeductions || "-") + "</span></td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
+                                             "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
+                        }
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
+                        }
+                    }
+                    totalDataHtml = Tools.filterCount(totalDataHtml);
+                    totalDataHtml = Tools.filterMoney(totalDataHtml);
+                    totalDataHtml = Tools.filterUnPoint(totalDataHtml);
                     $tab.find(".T-planProfit-list").append(totalDataHtml);
                 }
             }

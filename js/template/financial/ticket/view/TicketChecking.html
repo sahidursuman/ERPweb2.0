@@ -48,11 +48,12 @@
                 <label class="F-float F-money">{{checkedUnPayedMoney}}</label>
             </div>
         </div>
+        <input name="accountStatus" value="{{searchParam.accountStatus}}" type="hidden">
     </div>
     <div class="clearfix"></div>
     <table class="table table-striped table-bordered table-hover hct_align_middle">
         <thead>
-            <tr>
+            <tr class="T-tr-fixed">
                 <th class="th-border">账务类别</th>
                 <th class="th-border">发生日期（账期）</th>
                 <th class="th-border">类型</th>

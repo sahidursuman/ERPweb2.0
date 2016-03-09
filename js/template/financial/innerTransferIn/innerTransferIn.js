@@ -27,18 +27,19 @@ define(function(require,exports) {
 	InnerTransferIn.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
 		//dateJson.startDate = "2015-11-01";
-		InnerTransferIn.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate);
+		InnerTransferIn.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
 	};
 	/**
 	 * 初始化list页面
 	 */
-	InnerTransferIn.listInnerTransfer = function(pageNo,fromBusinessGroupId,fromBusinessGroupName,startDate,endDate){
+	InnerTransferIn.listInnerTransfer = function(pageNo,fromBusinessGroupId,fromBusinessGroupName,startDate,endDate,accountStatus){
 		 if(InnerTransferIn.$searchArea && arguments.length === 1){
 		 	var fromBusinessGroupName =InnerTransferIn.$searchArea.find("input[name=businessGroupName]").val();
 		 	fromBusinessGroupId = InnerTransferIn.$searchArea.find("input[name=businessGroupId]").val(),
             fromBusinessGroupName = fromBusinessGroupName == "全部"?"":fromBusinessGroupName,
             startDate = InnerTransferIn.$searchArea.find("input[name=startDate]").val(),
-            endDate = InnerTransferIn.$searchArea.find("input[name=endDate]").val()
+            endDate = InnerTransferIn.$searchArea.find("input[name=endDate]").val(),
+            accountStatus = InnerTransferIn.$searchArea.find(".T-finance-status").find("button").data("value")
 		 };
 		pageNo = pageNo || 0;
 		if(startDate > endDate){
@@ -53,6 +54,7 @@ define(function(require,exports) {
 				businessGroupName:fromBusinessGroupName,
 				startAccountTime:startDate,
 				endAccountTime:endDate,
+				accountStatus:accountStatus,
 				sortType:'auto'
 			},
 			type:'POST',
@@ -63,6 +65,7 @@ define(function(require,exports) {
 							businessGroupId:fromBusinessGroupId,
 							businessGroupName:fromBusinessGroupName,
 							startAccountTime:startDate,
+							accountStatus:accountStatus,
 							endAccountTime:endDate
 						};
 						var html = listTemplate(data);
@@ -109,6 +112,14 @@ define(function(require,exports) {
 			event.preventDefault();
 			InnerTransferIn.listInnerTransfer(0);
 		});
+		//状态框选择事件
+        InnerTransferIn.$searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            InnerTransferIn.listInnerTransfer(0);
+        });
 		//报表事件
 		$obj.find('.T-innerTransferList').on('click','.T-action',function(event){
 			event.preventDefault();
@@ -117,6 +128,7 @@ define(function(require,exports) {
 				id = $tr.attr("businessGroupId"),
 				name = $tr.attr("businessgroupname"),
 				startDate = $tr.attr("startDate"),
+				accountStatus = $tr.attr('accountStatus'),
 				endDate = $tr.attr("endDate");
 				var args = {
 					pageNo:0,
@@ -126,6 +138,7 @@ define(function(require,exports) {
 					lineProductName:'',
 					receiveUserId:'',
 					receiveUserName:'',
+					accountStatus:accountStatus,
 					startAccountTime:startDate,
 					endAccountTime:endDate
 				}
@@ -221,6 +234,7 @@ define(function(require,exports) {
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
 					    data.bankId = InnerTransferIn.saveJson.bankId || '';
 					    data.sumPayRemark = InnerTransferIn.saveJson.sumPayRemark || '';
+					    data.payType = InnerTransferIn.saveJson.payType;
 				    	tabId = settleId;
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
@@ -279,10 +293,10 @@ define(function(require,exports) {
 		                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
 		                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
 		                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
-		                                    var bankId = $countObj.find('input[name=card-id]').val();
-											var voucher = $countObj.find('input[name=credentials-number]').val();
-											var billTime = $countObj.find('input[name=tally-date]').val();
-											var bankNumber = $countObj.find('input[name=card-number]').val();
+	                                    var bankId = (sumPayType == 0) ? $countObj.find('input[name=cash-id]').val() : $countObj.find('input[name=card-id]').val();
+										var voucher = $countObj.find('input[name=credentials-number]').val();
+										var billTime = $countObj.find('input[name=tally-date]').val();
+										var bankNumber = (sumPayType == 0) ? $countObj.find('input[name=cash-number]').val() : $countObj.find('input[name=card-number]').val();
 		                                InnerTransferIn.saveJson = {
 		                                    sumPayMoney : sumPayMoney,
 		                                    sumPayType : sumPayType,
@@ -332,6 +346,8 @@ define(function(require,exports) {
 	InnerTransferIn.chenkingEvent = function($obj,$listSearchData,typeFlag){
 		var $list = typeFlag == 2?"T-clearList":"T-checkList";
 		var $checkList = $obj.find('.'+$list);
+		//格式化日期控件
+		Tools.setDatePicker($obj.find(".T-search .date-picker"), true);
 		//$obj.data('isEdited', false);
 		//切换tab事件
 		
@@ -532,10 +548,10 @@ define(function(require,exports) {
 	//自动下账
 	InnerTransferIn.autoAcountMoney = function($obj,$data){
 		var payType = $obj.find('select[name=sumPayType]').val();
-		var bankId = $obj.find('input[name=card-id]').val();
+		var bankId = (payType == 0) ? $obj.find('input[name=cash-id]').val() : $obj.find('input[name=card-id]').val();
 		var voucher = $obj.find('input[name=credentials-number]').val();
 		var billTime = $obj.find('input[name=tally-date]').val();
-		var bankNumber = $obj.find('input[name=card-number]').val();
+		var bankNumber = (payType == 0) ? $obj.find('input[name=cash-number]').val() : $obj.find('input[name=card-number]').val();
 		var args = {
 			lineProductId:$obj.find('input[name=lineProductId]').val(),
 			lineProductName:$obj.find('input[name=lineProductName]').val(),
@@ -562,6 +578,7 @@ define(function(require,exports) {
 						InnerTransferIn.saveJson = data;
 						InnerTransferIn.saveJson.bankId = bankId;
 				        InnerTransferIn.saveJson.voucher = voucher;
+				        InnerTransferIn.saveJson.payType = payType;
                         InnerTransferIn.saveJson.billTime = billTime;
                         InnerTransferIn.saveJson.bankNumber = bankNumber;
                         InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
@@ -811,15 +828,12 @@ define(function(require,exports) {
 		
 		var settleValidator = $data.btnShowStatus == true ? new FinRule(3):new FinRule(4);
 		var argumentsLen = arguments.length;
-		var payMoney;
-		var payType;
-		var remark;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,settleValidator);
-		var payType = tab_id.find('select[name=sumPayType]').val();
-		var sumRemark = tab_id.find('input[name=sumRemark]').val();
-		var bankId = tab_id.find('input[name=card-id]').val();
-		var voucher = tab_id.find('input[name=credentials-number]').val();
-		var billTime = tab_id.find('input[name=tally-date]').val();
+		var payType = tab_id.find('select[name=sumPayType]').val(),
+			sumRemark = tab_id.find('input[name=sumRemark]').val(),
+			bankId = (payType == 0) ? tab_id.find('input[name=cash-id]').val() : tab_id.find('input[name=card-id]').val(),
+			voucher = tab_id.find('input[name=credentials-number]').val(),
+			billTime = tab_id.find('input[name=tally-date]').val();
 		if(JsonStr.length == 0){
 			showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
 			return false;
@@ -926,6 +940,7 @@ define(function(require,exports) {
 				receiveUserName:'',
 				startAccountTime:options.startDate,
 				endAccountTime:options.endDate,
+				accountStatus : options.accountStatus,
 				btnShowStatus:true
 			}
         InnerTransferIn.chenking(args,2); 

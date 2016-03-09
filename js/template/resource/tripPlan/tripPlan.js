@@ -445,6 +445,7 @@ define(function(require, exports) {
 		tripPlan.$editTab = $tab;
 		// 计算导付
 		tripPlan.moneyTripPlan($tab);
+
 		// 监听修改
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change','input, select,.T-editor', function(event) {
@@ -1057,6 +1058,7 @@ define(function(require, exports) {
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
+					$this.closest('tr').data('entity-arrangeid',data.arrangeId);
 				}
 			}
 		})
@@ -1449,7 +1451,7 @@ define(function(require, exports) {
 	//添加餐饮安排
 	tripPlan.addRestaurant = function($this, validator, $tab){   
 		var tableContainer = $this.closest(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select name="type" class="col-sm-12 T-restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 		'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 T-chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
@@ -1476,7 +1478,7 @@ define(function(require, exports) {
 	// 添加酒店安排
 	tripPlan.addHotel = function($this, validator, $tab){
 		var tableContainer = $this.closest(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select class="col-sm-12 no-padding T-tripPlanHotelStar" style="width: 80px;"><option selected="selected" {{if hotel.hotel.level == 0}}selected="selected"{{/if}} value="">--全部--</option>'+
 		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select><input type="hidden" name="id" value="" /></td>' +
 		'<td><div class="col-sm-12"><input type="text" class="col-sm-12 T-chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
@@ -1509,7 +1511,7 @@ define(function(require, exports) {
 	// 添加景区安排
 	tripPlan.addScenic = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;"> <option value="全天">全天</option> <option value="上午">上午</option> <option value="下午">下午</option> </select> </td>' +
 		'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 T-chooseScenic"/><input type="hidden" name="scenicId"/><span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem"/><input type="hidden" name="scenicItemId"/></td>' +
@@ -1537,7 +1539,7 @@ define(function(require, exports) {
 	// 添加购物安排
 	tripPlan.addShop = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer" value=""></td>'+
+			html = '<tr><td class="T-whichDaysContainer w-100" value=""></td>'+
         '<td><div class="col-sm-12"><input type="hidden" name="id" value="" /><input type="text" name="name" class="col-sm-12 T-chooseShop" value="" /><input type="hidden" name="shopId" value="" /><span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="" /></td>'+
         '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="" /></td>'+
@@ -1559,7 +1561,7 @@ define(function(require, exports) {
 	// 添加自费安排
 	tripPlan.addSelfPay = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 T-chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="hidden" name="selfPayItemId" value="" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="" /></td>'+
 		'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
@@ -1570,7 +1572,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1601,7 +1603,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1621,7 +1623,7 @@ define(function(require, exports) {
 	// 添加其他
 	tripPlan.addOther = function($this, validator, $tab){
 		var tableContainer = $this.parents(".ui-sortable-handle").find(".table tbody"),
-			html = '<tr><td class="T-whichDaysContainer"></td>' +
+			html = '<tr><td class="T-whichDaysContainer w-100"></td>' +
 		'<td><input type="text" name="name" maxlength="32" class="col-sm-12 T-other-name"/></td>' +
 		'<td><input type="text" name="managerName" maxlength="32" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="mobileNumber" class="col-sm-12" maxlength="11"/></td>' +
@@ -1652,7 +1654,7 @@ define(function(require, exports) {
 
 		if(id){
 			var tr = $("#"+id+" tbody tr");
-			var selectText = '<select class="col-sm-12" name="whichDay">';
+			var selectText = '<select class="w-100" name="whichDay">';
 			for(var i = 0; i < days; i++){
 				selectText += '<option value="'+(i+1)+'">'+ Tools.addDay(startTime, i) +'</option>';
 			}
@@ -1661,7 +1663,7 @@ define(function(require, exports) {
 		}else{
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
 				var val = $(this).attr("value");
-				var selectText = '<select class="col-sm-12" name="whichDay">';
+				var selectText = '<select class="w-100" name="whichDay">';
 				for(var i = 0; i < days; i++){
 					if(val == (i+1)){
 						selectText += '<option value="'+(i+1)+'" selected="selected">'+ Tools.addDay(startTime, i) +'</option>';
@@ -1985,15 +1987,19 @@ define(function(require, exports) {
 					busCompanyId:$tr.find('input[name=busCompanyId]').val()
 				};
 				$.ajax({
-					url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+					url: KingServices.build_url('busCompany', 'selectBusCompanyList'),
 					showLoading:false,
 					type: 'post',
 					data: searchJson,
 				})
 				.done(function(data) {
 					if(showDialog(data)){
-						data.busCompanyList = JSON.parse(data.busCompanyList);
-						if (!data.busCompanyList || !data.busCompanyList.length) {
+						if (!!data.busCompanyList) {
+							data.busCompanyList = JSON.parse(data.busCompanyList);
+							if (!data.busCompanyList || !data.busCompanyList.length || data.busCompanyList == 'null') {
+								clearData($tr, start);
+							}
+						}else {
 							clearData($tr, start);
 						}
 					}
@@ -2052,11 +2058,11 @@ define(function(require, exports) {
 			change :function(event, ui){
 				if(ui.item == null){
 					var $that = $(this).val("");
-					clearData($that.closest('tr'), 'LicenseNumber');
+					clearData($that.closest('tr'), 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
-				checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
+				checkBusCompay($(this).blur().closest('tr'), 'licenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var $that = $(this), $tr = $that.closest('tr');

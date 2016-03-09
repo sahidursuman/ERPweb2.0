@@ -28,15 +28,16 @@ define(function(require, exports) {
 
     restaurant.initModule = function() {
     	var dateJson = FinancialService.getInitDate();
-        restaurant.listRestaurant(0,"","",dateJson.startDate,dateJson.endDate);
+        restaurant.listRestaurant(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
 
-    restaurant.listRestaurant = function(page,restaurantName,restaurantId,startDate,endDate){
+    restaurant.listRestaurant = function(page,restaurantName,restaurantId,startDate,endDate,accountStatus){
     	if (restaurant.$searchArea && arguments.length === 1) {
-            restaurantName = restaurant.$searchArea.find("input[name=restaurantName]").val(),
-            restaurantId = restaurant.$searchArea.find("input[name=restaurantId]").val(),
-            startDate = restaurant.$searchArea.find("input[name=startDate]").val(),
+            restaurantName = restaurant.$searchArea.find("input[name=restaurantName]").val();
+            restaurantId = restaurant.$searchArea.find("input[name=restaurantId]").val();
+            startDate = restaurant.$searchArea.find("input[name=startDate]").val();
             endDate = restaurant.$searchArea.find("input[name=endDate]").val();
+            accountStatus = restaurant.$searchArea.find(".T-finance-status").find("button").data("value");
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -51,6 +52,7 @@ define(function(require, exports) {
             restaurantId : restaurantId,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType: 'auto'
         };
 
@@ -68,7 +70,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey,"餐厅账务",html);
                     restaurant.$tab = $('#tab-' + menuKey + "-content");
                     restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
-                    restaurant.initList(startDate,endDate);
+                    restaurant.initList(startDate,endDate,accountStatus);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -98,7 +100,7 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    restaurant.initList = function(startDate,endDate){
+    restaurant.initList = function(startDate,endDate,accountStatus){
         
 
         restaurant.getQueryList();
@@ -106,6 +108,15 @@ define(function(require, exports) {
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
+            restaurant.listRestaurant(0);
+        });
+
+        //状态框选择事件
+        restaurant.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             restaurant.listRestaurant(0);
         });
 
@@ -118,20 +129,21 @@ define(function(require, exports) {
             if ($that.hasClass('T-check')) {
                 // 对账
                
-                restaurant.restaurantCheck(0,id,name,"",startDate,endDate);
+                restaurant.restaurantCheck(0,id,name,"",startDate,endDate,accountStatus);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
                
-                restaurant.restaurantClear(0,0,id,name,"",startDate,endDate);
+                restaurant.restaurantClear(0,0,id,name,"",startDate,endDate,accountStatus);
             }
         });
     };
     //对账
-    restaurant.restaurantCheck = function(page,restaurantId,restaurantName,accountInfo,startDate,endDate){
+    restaurant.restaurantCheck = function(page,restaurantId,restaurantName,accountInfo,startDate,endDate,accountStatus){
         if (restaurant.$checkSearchArea && arguments.length === 3) {
-            accountInfo = restaurant.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startDate = restaurant.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = restaurant.$checkSearchArea.find("input[name=endDate]").val()
+            accountInfo = restaurant.$checkSearchArea.find("input[name=accountInfo]").val();
+            startDate = restaurant.$checkSearchArea.find("input[name=startDate]").val();
+            endDate = restaurant.$checkSearchArea.find("input[name=endDate]").val();
+            accountStatus = restaurant.$checkSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -146,6 +158,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType : "accountTime"
         };
         searchParam = JSON.stringify(searchParam);
@@ -237,11 +250,12 @@ define(function(require, exports) {
     };
 
     //付款
-    restaurant.restaurantClear= function(isAutoPay,page,restaurantId,restaurantName,accountInfo,startDate,endDate){
+    restaurant.restaurantClear= function(isAutoPay,page,restaurantId,restaurantName,accountInfo,startDate,endDate,accountStatus){
         if (restaurant.$clearSearchArea && arguments.length === 4) {
-            accountInfo = restaurant.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val()
+            accountInfo = restaurant.$clearSearchArea.find("input[name=accountInfo]").val();
+            startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val();
+            endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val();
+            accountStatus = restaurant.$clearSearchArea.find("input[name=accountStatus]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -255,6 +269,7 @@ define(function(require, exports) {
             accountInfo : accountInfo,
             startDate : startDate,
             endDate : endDate,
+            accountStatus : accountStatus,
             sortType : "accountTime"
         }, args = arguments;
         if(isAutoPay == 1){
@@ -354,8 +369,8 @@ define(function(require, exports) {
                         sumPayMoney : sumPayMoney,
                         sumPayType : sumPayType,
                         sumPayRemark : sumPayRemark,
-                        bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
-                        bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                        bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                        bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
                         voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
                         billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                     }
@@ -423,13 +438,14 @@ define(function(require, exports) {
             var startDate = restaurant.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = restaurant.$clearSearchArea.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = restaurant.$clearTab.find('select[name=payType]').val();
                 restaurant.clearTempSumDate = {
                     id : id,
                     sumPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : restaurant.$clearTab.find('select[name=payType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : restaurant.$clearTab.find('input[name=remark]').val(),
-                    bankNo : restaurant.$clearTab.find('input[name=card-number]').val(),
-                    bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
                     voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -475,30 +491,7 @@ define(function(require, exports) {
             content : html,
             scrollbar: false, // 推荐禁用浏览器外部滚动条
             success : function() {
-                var colorbox_params = {
-                    photo : true,
-                    rel: 'colorbox',
-                    reposition:true,
-                    scalePhotos:true,
-                    scrolling:false,
-                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
-                    close:'&times;',
-                    current:'{current} of {total}',
-                    maxWidth:'100%',
-                    maxHeight:'100%',
-                    onOpen:function(){ 
-                        $overflow = document.body.style.overflow;
-                        document.body.style.overflow = 'hidden';
-                    },
-                    onClosed:function(){
-                        document.body.style.overflow = $overflow;
-                    },
-                    onComplete:function(){
-                        $.colorbox.resize();
-                    }
-                };
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
             } 
         });
     };
@@ -601,12 +594,13 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args.saveRule);
-        var searchParam = {
+        var payType = restaurant.$clearTab.find('select[name=payType]').val(),
+            searchParam = {
             restaurantId : id,
             sumCurrentPayMoney : restaurant.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : restaurant.$clearTab.find('select[name=payType]').val(),
+            payType : payType,
             payRemark : restaurant.$clearTab.find('input[name=remark]').val(),
-            bankId : restaurant.$clearTab.find('input[name=card-id]').val(),
+            bankId : (payType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
             voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
             billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
         };
@@ -739,7 +733,7 @@ define(function(require, exports) {
     };
 
     restaurant.initPay = function(options){
-        restaurant.restaurantClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        restaurant.restaurantClear(2,0,options.id,options.name,"",options.startDate,options.endDate,options.accountStatus); 
     };
 
     exports.init = restaurant.initModule;
