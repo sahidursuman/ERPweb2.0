@@ -328,11 +328,11 @@ define(function(require, exports) {
 		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
      	})
      	.done(function(data) {
-     		$tab.find('.T-tripTotalCount').text(data.sumTripCount);
-     		$tab.find('.T-adChilTotalCount').text(data.sumAdultCount+"大"+data.sumChildCount+"小");
-     		$tab.find('.T-transAdChilTotalCount').text(data.sumTransAdultCount+"大"+data.sumTransChildCount+"小");
-     		$tab.find('.T-innerAdChilTotalCount').text(data.sumInnerAdultCount+"大"+data.sumInnerChildCount+"小");
-     		$tab.find('.T-orderTotalCount').text(data.sumOrderCount);
+     		$tab.find('.T-tripTotalCount').text(data.tripCount);
+     		$tab.find('.T-adChilTotalCount').text(data.adultCount+"大"+data.childCount+"小");
+     		$tab.find('.T-transAdChilTotalCount').text(data.transAdultCount+"大"+data.transChildCount+"小");
+     		$tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount+"大"+data.innerChildCount+"小");
+     		$tab.find('.T-orderTotalCount').text(data.orderCount);
      	})
      }
 
@@ -345,12 +345,12 @@ define(function(require, exports) {
 		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
      	})
      	.done(function(data) {
-     		$tab.find('.T-tripTotalCount').text(data.sumTripPlanCount);
-     		$tab.find('.T-tripAdChildCount').text(data.sumTripPlanChildCount+"大"+data.sumTripPlanAdultCount+"小");
-     		$tab.find('.T-sumAdultCount').text(data.sumAdultCount+"大"+data.sumChildCount+"小");
-     		$tab.find('.T-transAdChilTotalCount').text(data.sumTransAdultCount+"大"+data.sumTransChildCount+"小");
-     		$tab.find('.T-innerAdChilTotalCount').text(data.sumInnerAdultCount+"大"+data.sumInnerChildCount+"小");
-     		$tab.find('.T-orderTotalCount').text(data.sumOrderCount);
+     		$tab.find('.T-tripTotalCount').text(data.tripCount);
+     		$tab.find('.T-tripAdChildCount').text(data.adultCount+"大"+data.childCount+"小");
+     		$tab.find('.T-sumAdultCount').text(data.getAdultCount+"大"+data.getChildCount+"小");
+     		$tab.find('.T-transAdChilTotalCount').text(data.transAdultCount+"大"+data.transChildCount+"小");
+     		$tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount+"大"+data.innerChildCount+"小");
+     		$tab.find('.T-orderTotalCount').text(data.orderCount);
      	})
     }
 

@@ -3,16 +3,15 @@
         <span class="badge badge-primary">1</span>
         <label class="middle title-size">小组信息</label>
     </div>
-    <div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:665px;">
+    <div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:655px;">
         <label class="control-label no-padding-right mar-r-10">是否购买保险：  
             <input type="checkbox" class="ace buyInsurance-status" value="1" checked="checked" name="buyInsurance"/>
             <span class="lbl"></span>
         </label>
 
         <label>收客单号：</label>
-        <input type="text" name="orderNumber" value="" readonly="readonly" style="width:160px;"  maxlength="9" placeholder="系统自动生成" >  
+        <input type="text" name="orderNumber" value="" class="T-orderNumberChange" style="width:160px;" placeholder="系统自动生成" >  
     </div> 
-
 </div>
 <form class="group-info globalAdd T-touristGroupMainForm"  onsubmit="return false">
 	<div class="form-inline">
@@ -75,8 +74,8 @@
             </span>
         </div>
 
-        <div class="form-group">
-            <label><span class="necessary">*</span>客户联系人：</label>
+        <div class="form-group" style="margin-right: 0;">
+            <label>客户联系人：</label>
             <input class="form-control bind-change T-partnerAgencyNameList" name="partnerAgencyNameList" type="text"  style="width:133px;"/>
             <input type="hidden" style='width:120px' name="partnerAgencyContactId" class="T-partnerAgencyContactId" />
             <span class="T-addPartnerManager" title="为客户来源添加联系人">

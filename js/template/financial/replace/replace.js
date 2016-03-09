@@ -471,10 +471,11 @@ define(function(require, exports) {
 	            })
 	            .done(function(data) {
 	                if (showDialog(data)) {
-	                	var bankId = $tab.find('input[name=card-id]').val();
+	                	var payType = $tab.find('.T-sumPayType').val(),
+	                		bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 						var voucher = $tab.find('input[name=credentials-number]').val();
 						var billTime = $tab.find('input[name=tally-date]').val();
-						var bankNumber = $tab.find('input[name=card-number]').val();
+						var bankNumber = (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
 	                    Replace.payingJson = data.bookingAccountList;
 	                    Replace.payingJson.bankId = bankId;
 	                    Replace.payingJson.voucher = voucher;
@@ -813,7 +814,8 @@ define(function(require, exports) {
             return false;
         };
 		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
-		var bankId = $tab.find('input[name=card-id]').val();
+		var payType = $tab.find('.T-sumPayType').val(),
+			bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
 		var billTime = $tab.find('input[name=tally-date]').val();		
 		if (json.length) {
@@ -823,7 +825,7 @@ define(function(require, exports) {
                     data: {
                         reciveAccountList: JSON.stringify(json),
                         partnerAgencyId: Replace.balanceId,
-                        payType: $tab.find('.T-sumPayType').val(),
+                        payType: payType,
                         bankId:bankId,
                         voucher:voucher,
                         billTime:billTime,

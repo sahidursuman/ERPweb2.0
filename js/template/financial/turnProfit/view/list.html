@@ -1,34 +1,34 @@
 <div class="resource_hotel" >
     <div class="row">
         <div class="form-inline search-area T-search-area">
-            <div class="form-group">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>线路产品：</span></label>
                 <input type="text" value="{{searchParam.lineProductName}}" name="lineProductName" placeholder="线路产品" />
                 <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>客户：</span></label>
                 <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName" placeholder="客户" />
                 <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>同行地接：</span></label>
                 <input type="text" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName" placeholder="同行地接" />
                 <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>收客单号：</span></label>
                 <input type="text" value="{{searchParam.orderNumber}}" name="orderNumber" placeholder="收客单号" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>开始日期：</span></label>
                 <input class="date-picker" name="startTime" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" style="width:100px;" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>结束日期：</span></label>
                 <input class="date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" style="width:100px;" /> 
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <button class="btn-sm  btn-height search-btn T-search" style="border-top-width: 4px;border-bottom-width: 4px;">
                     <i class="ace-icon fa fa-search"></i>
                      搜索
@@ -53,7 +53,7 @@
     <div class="row ticketList">
         <table class="table table-striped table-bordered table-hover T-showHighLight">
             <thead>
-                <tr class="bg-blur">
+                <tr class="bg-blur T-tr-fixed">
                     <th>收客单号</th>
                     <th class="col-sm-1">线路产品</th>
                     <th>出游日期</th>

@@ -393,8 +393,8 @@ define(function(require, exports) {
                                     sumPayMoney : sumPayMoney,
                                     sumPayType : sumPayType,
                                     sumPayRemark : sumPayRemark,
-                                    bankNo : Transfer.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+                                    bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
+                                    bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
                                     voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
                                 }
@@ -454,13 +454,14 @@ define(function(require, exports) {
             var startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
                 endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
                 Transfer.clearTempSumDate = {
                     id : id,
                     sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+                    sumPayType : payType,
                     sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-                    bankNo : Transfer.$clearTab.find('input[name=card-number]').val(),
-                    bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+                    bankNo : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
                     voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
                     billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
                 };
@@ -574,12 +575,13 @@ define(function(require, exports) {
 
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,settleValidator);
-        var searchParam = {
+        var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
+        searchParam = {
             partnerAgencyId : id,
             sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
-        	payType : Transfer.$clearTab.find('select[name=sumPayType]').val(),
+        	payType : payType,
             payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-            bankId : Transfer.$clearTab.find('input[name=card-id]').val(),
+            bankId : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
             voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
             billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
         };
@@ -768,6 +770,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-viewGroup')) {
                 // 游客明细
                 Transfer.viewGroup($(this));
+            }else if($that.hasClass('T-orderNumber')){
+                KingServices.viewTurnInfo($that.data("id"));
             }
         });
     };
