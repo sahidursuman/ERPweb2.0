@@ -1,33 +1,33 @@
 <div class="row">
     <div class="T-search-area" style="margin:0px;">
         <div class="form-horizontal">
-            <label>线路产品：</label>
+            <label>线路产品 </label>
             <input type="text" class="mar-r-10" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
             <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
-            <label>客户：</label>
+            <label>客户 </label>
             <input type="text" class="mar-r-10" style="width: 100px" placeholder="客户" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}" />
             <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}" />
-            <label>针对客源：</label>
+            <label>针对客源 </label>
             <select name="customerType" class="mar-r-10">
                 <option value="" {{if !searchParam.customerType || searchParam.customerType=="" }}selected{{/if}}>全部</option>
                 <option value="0" {{if searchParam.customerType==0 }}selected{{/if}}>散客</option>
                 <option value="1" {{if searchParam.customerType==1 }}selected{{/if}}>团队</option>
             </select>
-            <label>收客单号：</label>
+            <label>收客单号 </label>
             <input type="text" class="mar-r-10" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
         </div>
         <div class="mar-t-10">
-            <label>外联销售：</label>
+            <label>外联销售 </label>
             <input type="text" class="mar-r-10" style="width: 100px" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}" />
-            <label>部门：</label>
+            <label>部门 </label>
             <input type="text" class="mar-r-10" style="width: 100px" placeholder="部门" name="groupName" value="{{searchParam.groupName}}" />
-            <label>开始日期：</label>
+            <label>开始日期 </label>
             <input class="date-picker mar-r-10" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
-            <label>结束日期：</label>
+            <label>结束日期 </label>
             <input class="date-picker mar-r-10"  name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
             <button class="btn-sm  search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button>
         </div>
-        <div style="margin:8px 0px;">
+        <div >
             <label>总人数：<span class="F-float F-money T-touristCount"></span></label>
             <label class="mar-r-20">收入合计：<span class="F-float F-money T-totalIncome"></span></label>
             <label class="mar-r-20">支出合计：<span class="F-float F-money T-totalTrip"></span></label>
