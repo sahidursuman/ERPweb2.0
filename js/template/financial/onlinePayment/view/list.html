@@ -1,25 +1,25 @@
  <div class="row" >
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="T-search-area">
-            <label>业务类别：</label>
-            <select name="businessType">
+            <label>业务类别 </label>
+            <select name="businessType" class="mar-r-10">
                 <option value="" {{if !businessType || businessType == ""}}selected{{/if}}>全部</option>
                 <option value="guide" {{if businessType == "guide"}}selected{{/if}}>导游</option>
                 <option value="busCompany" {{if businessType == "busCompany"}}selected{{/if}}>车队</option>
                 <option value="hotel" {{if businessType == "hotel"}}selected{{/if}}>酒店</option>
             </select>
 
-            <label class="marginLeft-30">对方单位：</label>
-            <input type="text" class="T-choosePartner" name="resourceName" value="{{resourceName}}" placeholder="对方单位"  type="text" style="width:100px;" /> 
+            <label>对方单位 </label>
+            <input type="text" class="T-choosePartner mar-r-10" name="resourceName" value="{{resourceName}}" placeholder="对方单位"  type="text" style="width:100px;" /> 
             <!-- <input type="hidden" name="partnerAgencyId" value="{{partnerAgencyId}}" />  -->
 
-            <label class="marginLeft-30">记账时间：</label>
-			<input class="date-picker" name="startTime" value="{{startTime}}" placeholder="开始日期" type="text" style="width:100px;" />	
+            <label >记账时间 </label>
+			<input class="date-picker " name="startTime" value="{{startTime}}" placeholder="开始日期" type="text" style="width:100px;" />	
             <label>至</label>
-            <input class="date-picker" name="endTime" value="{{endTime}}" placeholder="结束日期"  type="text" style="width:100px;" />	
+            <input class="date-picker mar-r-10" name="endTime" value="{{endTime}}" placeholder="结束日期"  type="text" style="width:100px;" />	
 
-            <label class="marginLeft-30">状态：</label>
-            <div class="btn-group T-status">
+            <label >状态 </label>
+            <div class="btn-group T-status mar-r-10">
                 <button data-value="{{status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" style="background: #ffffff!important; border: 1px solid #83bbd6!important;" aria-expanded="false">
                     <span>
                         {{if status == ""}}
@@ -42,7 +42,7 @@
                 </ul>
             </div>
 
-            <button class="btn-height btn-sm search-btn T-search marginLeft-30">
+            <button class="btn-height btn-sm search-btn T-search">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
         </div>
@@ -50,7 +50,7 @@
     <!-- <div class="form-group">
         <label class="control-label">付款金额合计：<span class="F-float F-money"></span></label>
     </div> --> 
-    <div class="row" style="margin-top:15px;">
+    <div class="row mar-t-10">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>

@@ -1,15 +1,15 @@
 <div class="row">
     <div class="form-horizontal T-search-area">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group" style="margin-left:0px;">
-                <label>自费商家：</label>
-                <input type="text" class="T-chooseSelfPay" name="selfPayName" value="{{if searchParam.selfPayName == " "}}全部{{else}}{{searchParam.selfPayName}}{{/if}}" />
+            <div class="form-group">
+                <label class="mar-l-10">自费商家 </label>
+                <input type="text" class="T-chooseSelfPay mar-r-10" name="selfPayName" value="{{if searchParam.selfPayName == " "}}全部{{else}}{{searchParam.selfPayName}}{{/if}}" />
                 <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}" />
-                <label class="marginLeft-30">账期：</label>
+                <label >账期 </label>
                 <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
                 <label>&nbsp;至&nbsp;</label>
-                <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
-                <div class="btn-group T-finance-status marginLeft-30">
+                <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
+                <div class="btn-group T-finance-status mar-r-10">
                     <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
                 <span>
                     {{if searchParam.accountStatus == 0}}
@@ -34,24 +34,24 @@
                         </li>
                     </ul>
                 </div>
-                <button class=" btn-sm search-btn marginLeft-30 T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
+                <button class=" btn-sm search-btn  T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
             </div>
         </form>
     </div>
     <div class="form-inline T-sum-area">
-        <div class="form-group">
+        <div class="form-group mar-r-20">
             <label class="control-label">账面应付合计：</label>
             <label class="control-label F-float F-money T-sumNeedPay"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-20">
             <label class="control-label">结算金额合计：</label>
             <label class="control-label F-float F-money T-sumStMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-20">
             <label class="control-label">已付金额合计：</label>
             <label class="control-label F-float F-money T-sumPaiedMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group">
             <label class="control-label">未付金额合计：</label>
             <label class="control-label F-float F-money T-sumUnPaiedMoney"></label>
         </div>
