@@ -2525,5 +2525,6 @@ a.gray span{
 
     #tab-financial_count-outDetail-content {
         width: auto !important;
+        padding: 40px !important;
     }
 }
