@@ -1740,34 +1740,44 @@ p#back-top a span {
      border-radius: 3px;
 }
 .userAuthWidth{
-    width:160px;height: auto;
+    width:150px;height: auto;
     position: fixed;
     top:142px;left: 1080px; 
     border:1px solid #ddd;
     margin-top: 45px;
 }
+.userUpdate-auth ul{
+    margin-left: 0px;
+}
 .userUpdate-auth .btn{
     padding: 4px 3px;
 }
 .saveAuth-user{
-        margin-bottom:-22px; 
-        /*position: absolute;*/
-        /*margin-top: 10px;*/
-        margin-left: -1px;
-        width: 160px;
+    margin-left: -1px;
+    width: 150px;
     }
 .userAuth li{
     list-style-type: none;
-    width: 133px;
-    height: 30px;
-    padding: 5px 0px 5px 0px;
+    width: 150px;
+    height: 43px;
+    padding: 8px 0px 8px 0px;
+    text-align: center;
+}
+.userAuth li:hover{
+    background-color: #E8E8E8;
+    text-align: center;
+}
+.userAuth li a{
+    /*margin-left: 46px;*/
+    line-height: 35px;
+    color: #000;
+    text-align: center;
 }
 .userAuth li:hover{
     cursor: pointer;
 }
-.userAuth li:nth-child(1){
-    margin-top: 15px;
-}
+
+
 .h-touristGroupInfo p{
     text-align: left;
     margin: 0px;
