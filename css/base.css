@@ -956,7 +956,7 @@ input.datepicker {
     overflow: auto;
 	padding: 20px 20px 15px 25px;
 }
-.main-content-inner > .page-content > .tab-content > .tab-pane > *{
+.main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
 	min-width: 1085px;
 }
 .main-content-inner > .page-content > .tab-content > .tab-pane > .row{
