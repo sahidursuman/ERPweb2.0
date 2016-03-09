@@ -1742,6 +1742,62 @@ define(function(require, exports) {
                     var touristGroupList = data.touristGroupList;
                     //实例化对象
                     touristGroupList = JSON.parse(touristGroupList);
+                    for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
+                        tmp = touristGroupList[i];
+                        tmp.editTitle = '';
+                        tmp.deleteTitle = '';
+
+                        // can edit
+                        if (((tmp.status < 3 || tmp.status == 6) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                            tmp.canEdit = true;
+                        } else {
+                            tmp.canEdit = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.editTitle = '内转成功，不能编辑';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.editTitle = '客户账务已对账，不能编辑';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 5:
+                                        tmp.editTitle = '该小组已经分段，不能编辑';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+
+                        // can delete
+                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                            tmp.canDelete = true;
+                        } else {
+                            tmp.canDelete = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.deleteTitle = '内转成功，不能删除';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.deleteTitle = '客户账务已对账，不能删除';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 2:
+                                        tmp.deleteTitle = '该小组已分团，不能删除';
+                                        break;
+                                    case 3:
+                                        tmp.deleteTitle = '该小组已外转，不能删除';
+                                        break;
+                                    case 5:
+                                        tmp.deleteTitle = '该小组已分段，不能删除';
+                                        break;
+                                    case 6:
+                                        tmp.deleteTitle = '该小组已内转，不能删除';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+                    }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
                     var html = listTemplate(data);
