@@ -2519,7 +2519,7 @@ KingServices.inlineTemplate = function(source, option) {
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
 
-	$tabPane.off().scroll(function(event){
+	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
 		
 		var $that = $(this),
