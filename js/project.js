@@ -2519,7 +2519,7 @@ KingServices.inlineTemplate = function(source, option) {
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
 
-	$tabPane.off().scroll(function(event){
+	$tabPane.scroll(function(event){
 		event.preventDefault();
 		
 		var $that = $(this),
@@ -2528,6 +2528,12 @@ Tools.trFixed = function(obj){
 
 		if ($focus.hasClass('ui-autocomplete-input')) {
 			$focus.autocomplete('close');
+		}else if($focus.hasClass('datepicker')){
+			$focus.blur();
+			$focus.datepicker('hide');
+		}else if($focus.hasClass('T-dateTimePicker')){
+			$focus.blur();
+			$focus.datetimepicker('hide');
 		}
 
 		if($trFixed.length === 0)return;
