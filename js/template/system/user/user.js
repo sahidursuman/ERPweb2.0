@@ -279,12 +279,11 @@ define(function(require, exports) {
 	    		$(".T-function-id"+functionId).prop("checked",true);
 	    	}
     	}
-
+    	//编辑授权右侧列功能
     	$container.find(".meun").click(function(){
     		var toId = $(this).data('toid'),
     			top = $container.find('#'+toId).offset().top - 180 + $tab.scrollTop();
-
-	        $tab.animate({scrollTop: top},150);
+	       		$tab.animate({scrollTop: top},150);
 		});
 
     	//主菜单是否勾选

@@ -846,6 +846,7 @@ input.datepicker {
     height: 100%;
 	outline: none;
 	resize: none;
+	position: static;
 }
 .hct-textarea:disabled{
 	color: #848484!important;
@@ -855,6 +856,9 @@ input.datepicker {
 .financial-search-planProfit{
 	display: inline-block;
     padding-left: 15px;
+}
+.F-money,.pos-rel,label input[type=checkbox].ace,input[type=checkbox].ace+.lbl,input[type=checkbox].ace+.lbl::before{
+	position: static;
 }
 /**公共方法**/
 
