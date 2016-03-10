@@ -45,7 +45,7 @@
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName">&lt;{{rs.lineProduct.name}}&gt;</p>
                     <p>
-                        {{if !!rs.guide && rs.guide.realname}}<span class="h-memberName">导游：{{rs.guide.realname}}</span>{{/if}}
+                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}
                         {{if !!rs.dutyOPUser && rs.dutyOPUser.realName}}<span class="h-memberName">责任计调：{{rs.dutyOPUser.realName}}</span>{{/if}}
                     </p>
                 </td>
