@@ -90,8 +90,8 @@
                                                                 <td>{{groupIncome.orderNumber}}</td>
                                                                 <td>{{groupIncome.partnerAgencyName}}</td>
                                                                 <td>{{groupIncome.partnerAgencyContactName}}</td>
-                                                                <td>{{groupIncome.orderNumber}}</td>
-                                                                <td>{{groupIncome.orderNumber}}</td>
+                                                                <td>{{groupIncome.partnerAgencyContactName}}</td>
+                                                                <td>{{groupIncome.adultCount}}大{{groupIncome.childCount}}</td>
                                                                 <td>
                                                                     {{if groupIncome.touristGroupFeeList !=null}}
                                                                         {{each groupIncome.touristGroupFeeList as groupFee}}
@@ -263,6 +263,7 @@
                                                     <th class="th-border">项目</th>
                                                     <th class="th-border">单价 </th>
                                                     <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -289,6 +290,10 @@
                                                                     {{selfIncome.count}}
                                                                 </td>
                                                                 <td>
+                                                                    <span class="F-float F-money">{{selfIncome.reduceMoney}}</span>
+                                                                </td>
+
+                                                                <td>
                                                                     <span class="F-float F-money">{{selfIncome.needPayAllMoney}}</span>
                                                                 </td>
                                                                 <td>
@@ -299,7 +304,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr>
-                                                    <td colspan="5" style="text-align:left">合计</td>
+                                                    <td colspan="6" style="text-align:left">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripIncomeMap.selfPayIncomeMap.sumNeedPayAllMoney}}
