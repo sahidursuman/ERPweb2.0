@@ -92,13 +92,14 @@ define(function(require, exports) {
                 fromPartnerAgencyName: fromPartnerAgencyName,
                 fromPartnerAgencyId: fromPartnerAgencyId,
                 realName: touristGroup.$searchArea.find('input[name=realName]').val(),
+                quoteNumber: touristGroup.$searchArea.find('input[name=quoteNumber]').val(),
                 outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
                 otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
                 welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
                 startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
                 createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
                 createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
-                statusSearch: touristGroup.$searchArea.find('.T-select-status').find("button").data("value"),
+                statusSearch: touristGroup.$searchArea.find('.T-select-status').val(),
                 customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
@@ -211,7 +212,7 @@ define(function(require, exports) {
             startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
             createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
             createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
-            statusSearch: touristGroup.$searchArea.find('.T-select-status').find("button").data("value"),
+            statusSearch: touristGroup.$searchArea.find('.T-select-status').val(),
             customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
             memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
             orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
@@ -366,7 +367,8 @@ define(function(require, exports) {
                     if (Tools.addTab(updateTabId, '编辑小组', html)) {
                         touristGroup.visitorId = id;
                         var typeInner = type;
-                        touristGroup.updateEvents(typeInner);
+                        var status = data.touristGroupDetail.status;
+                        touristGroup.updateEvents(typeInner, status);
                     }
                 }
             }
@@ -423,6 +425,8 @@ define(function(require, exports) {
             touristGroup.chooseQuoteProduct(lineProductId, addType);
         });
 
+        touristGroup.orderNumberChange($addTabId)
+
         //提交按钮事件
         $addTabId.find(".T-submit-addTouristGroup").on('click', function() {
             if (!touristGroup.validator.form()) {
@@ -435,7 +439,7 @@ define(function(require, exports) {
         });
     };
     //修改小组的事件绑定
-    touristGroup.updateEvents = function(typeInner) {
+    touristGroup.updateEvents = function(typeInner, status) {
         var id = touristGroup.visitorId,
             $updateTabId = $("#tab-resource_touristGroup-update-content"),
             $groupInfoForm = $updateTabId.find(".T-touristGroupMainForm"), //小组信息对象
@@ -459,10 +463,7 @@ define(function(require, exports) {
                showMessageDialog($("#confirm-dialog-message"), "该游客小组已生成发团计划不可修改");
                return;
             }
-        });
-
-       
-
+        });       
         //添加验证
         touristGroup.validator = rule.checktouristGroup($groupInfoForm);
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($innerTransferForm);
@@ -481,6 +482,8 @@ define(function(require, exports) {
         $opUserList = $updateTabId.find('.T-choose-opUserList');
         touristGroup.getopUserList($opUserList);
 
+        touristGroup.orderNumberChange($updateTabId)
+
         //报价单号
         $updateTabId.find('.T-ChosenQuoteNumber').on('click', function(event) {
             event.preventDefault();
@@ -498,7 +501,7 @@ define(function(require, exports) {
             if (!touristGroup.checkInnerValidator.form()) {
                 return;
             }
-            touristGroup.installData($updateTabId, id, 2, "", typeInner);
+            touristGroup.installData($updateTabId, id, 2, "", typeInner,status);
         });
 
         //格式化时间
@@ -506,6 +509,12 @@ define(function(require, exports) {
 
 
         $updateTabId.data('isEdited', false);
+
+        //内转状态时   部分不可编辑
+        if (status == 6) {
+            $updateTabId.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').attr('disabled','disabled');
+            $updateTabId.find('.T-addPartner, .T-addPartnerManager, .T-touristGroup-addOtherCost, .T-add-tourist, .T-add-tourist-more, .oldbtnDeleteTourist, .T-delete').hide()
+        }
     };
     //查看小组信息
     touristGroup.viewTouristGroupDetails = function(id,isTransferIn) {
@@ -591,6 +600,32 @@ define(function(require, exports) {
 
     };
 
+
+    //检查收客单号重复性
+    touristGroup.orderNumberChange = function($tab) {
+        $tab.find('.T-orderNumberChange').on('change', function() {
+            var $this = $(this),
+                orderNumber = $this.val(),
+                touristGroupId = $tab.find('.T-submit-updateTouristGroup').data('entity-id');
+            $.ajax({
+                url: KingServices.build_url('touristGroup','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: {
+                    orderNumber: orderNumber,
+                    id: touristGroupId},
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该收客单号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 
     //删除小组
@@ -909,31 +944,34 @@ define(function(require, exports) {
                         id = $inputParent.data('id');
                     if(type === thisType){
                         if(!!id){
-                            showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
-                                $.ajax({
-                                    url: KingServices.build_url('touristGroup', 'deleteRequire'),
-                                    type: 'post',
-                                    data: {requireId: id},
-                                })
-                                .done(function(data) {
-                                    if (showDialog(data)) {
-                                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                            $inputParent.remove();
-                                        });
-                                    }
+                            $.ajax({
+                                url: KingServices.build_url('touristGroup', 'deleteRequire'),
+                                type: 'post',
+                                data: {requireId: id},
+                            })
+                            .done(function(data) {
+                                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                    if (data.success!=0) { //没有有中转安排,可以删除
+                                        $inputParent.remove();
+                                    }else{
+                                        $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>');
+                                    };
+                                    //当复选框未全部不选--移除共用选项
+                                    if ($checkedbox.length==0  && data.success!=0) { //$("input[type='checkbox']:checked").length
+                                        $div.find('.T-action-require-list').children('div.require-commons').remove();
+                                    };
                                 });
-                            },function(){
-                                $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>')
                             });
                         }else{
                             $inputParent.remove();
+                            //当复选框未全部不选--移除共用选项
+                            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
+                                $div.find('.T-action-require-list').children('div.require-commons').remove();
+                            };
                         }
                     }
                 });
-            }//当复选框未全部不选--移除共用选项
-            if ($checkedbox.length==0 ) { //$("input[type='checkbox']:checked").length
-                $div.find('.T-action-require-list').children('div.require-commons').remove();
-            };
+            }
         };
         touristGroup.checkInnerValidator = rule.checkInnerTransfer($obj);
     };
@@ -950,22 +988,22 @@ define(function(require, exports) {
         var list = '';
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 0 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
+                        '<label class="mar-r-10">'+$.trim(textTitle)+'时间</label><input type="text" name="arriveTime" class="form-control date-picker datetimepicker" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label class="mar-r-10">'+$.trim(textTitle)+'地点</label><input type="text" name="arrivePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 20px;"><div class="fixed-width"><label class="mar-r-10">票务班次</label><input type="text" name="arriveShift" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 0 20px;"><div class="fixed-width"><label  class="mar-r-10">票务时间</label><input type="text" name="arriveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
             if ($tab.find('.T-action-require-list').children('div.require-commons').length == 0 && isReciveType == 1 ) {
                 list += '<div class="require-commons"><div class="form-inline" style="padding:14px 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span>'+
-                        '<label>'+$.trim(textTitle)+'时间：</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label>'+$.trim(textTitle)+'地点：</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务班次：</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
-                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><label>票务时间：</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
+                        '<label class="mar-r-10">'+$.trim(textTitle)+'时间</label><input type="text" name="leaveTime" class="form-control date-picker datetimepicker" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 14px;"><div class="fixed-width"><span class="necessary">*</span><label class="mar-r-10">'+$.trim(textTitle)+'地点</label><input type="text" name="leavePosition" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 7px 20px;"><div class="fixed-width"><label class="mar-r-10">票务班次</label><input type="text" name="leaveShift" class="form-control" /></div></div>'+
+                        '<div class="form-inline" style="padding:0 0 0 20px;"><div class="fixed-width"><label class="mar-r-10">票务时间</label><input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" />'+
                         '</div></div></div>'
             };
-            list += '<div class="col-xs-10 hct-plan-ask" data-type="'+type+'">'+
-                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求：</div>'+
+            list += '<div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-type="'+type+'">'+
+                    '<div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">'+$.trim(title)+'要求</div>'+
                     '<div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent"></div>'+
                     '</div>';
         $tab.find('.T-action-require-list').append(list);
@@ -1704,6 +1742,62 @@ define(function(require, exports) {
                     var touristGroupList = data.touristGroupList;
                     //实例化对象
                     touristGroupList = JSON.parse(touristGroupList);
+                    for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
+                        tmp = touristGroupList[i];
+                        tmp.editTitle = '';
+                        tmp.deleteTitle = '';
+
+                        // can edit
+                        if (((tmp.status < 3 || tmp.status == 6) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                            tmp.canEdit = true;
+                        } else {
+                            tmp.canEdit = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.editTitle = '内转成功，不能编辑';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.editTitle = '客户账务已对账，不能编辑';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 5:
+                                        tmp.editTitle = '该小组已经分段，不能编辑';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+
+                        // can delete
+                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                            tmp.canDelete = true;
+                        } else {
+                            tmp.canDelete = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.deleteTitle = '内转成功，不能删除';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.deleteTitle = '客户账务已对账，不能删除';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 2:
+                                        tmp.deleteTitle = '该小组已分团，不能删除';
+                                        break;
+                                    case 3:
+                                        tmp.deleteTitle = '该小组已外转，不能删除';
+                                        break;
+                                    case 5:
+                                        tmp.deleteTitle = '该小组已分段，不能删除';
+                                        break;
+                                    case 6:
+                                        tmp.deleteTitle = '该小组已内转，不能删除';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+                    }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
                     var html = listTemplate(data);
@@ -1785,7 +1879,6 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         var formParObj = JSON.parse(data.partnerAgencyList);
-
                         if (formParObj != null && formParObj.length > 0) {
                             for (var i = 0; i < formParObj.length; i++) {
                                 formParObj[i].value = formParObj[i].travelAgencyName
@@ -1805,7 +1898,7 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (ui.item == null) {
-                    $(this).find("input[name=partnerAgencyContactId]").val("");
+                   $(this).val("").nextAll('[name="partnerAgencyContactId"]').val("");
                 }
             },
             select: function(event, ui) {
@@ -2060,7 +2153,7 @@ define(function(require, exports) {
      * @param  {array} tabArgs   切换tab的参数
      * @param  {[type]} typeInner 内外转标识
      */
-    touristGroup.installData = function($obj, id, typeFlag, tabArgs, typeInner) {
+    touristGroup.installData = function($obj, id, typeFlag, tabArgs, typeInner,status) {
         //判断购买保险状态
         var buyInsuranceS = 1,isNeedArriveService=0,isNeedLeaveService=0; //isNeedArriveService是否接团
         var $lineInfoForm = $obj.find(".T-touristGroupMainForm"),
@@ -2072,16 +2165,17 @@ define(function(require, exports) {
             //获取游客名单住宿、星级、自费、备注
             $visiForm = $obj.find(".T-touristGroupMainFormMember"),
             expectLevel = touristGroup.getVal($visiForm, "level"),
-            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense");
+            includeOwnExpense = touristGroup.getVal($visiForm, "includeOwnExpense"),
+            orderNumber = touristGroup.getVal($obj, "orderNumber");
 
         if ($insuranceStatus.is(":checked") == true) {
             buyInsuranceS = 1;
         } else {
             buyInsuranceS = 0;
-        }
+        };
 
         //游客小组、账单信息序列化
-        var form = $lineInfoForm.serialize(),
+        var form = '',
             $startTime = $lineInfoForm.find('input[name=startTime]'),
             $endTime = $lineInfoForm.find('input[name=endTime]');
 
@@ -2125,7 +2219,7 @@ define(function(require, exports) {
         } else {
             $addFeeItemTr = $lineInfoForm.find(".T-addCostTbody tr:not(.deleted)");
         };
-        var needTransitFee=0,isReturn=false;
+        var needTransitFee=true,isReturn=false;
         $addFeeItemTr.each(function(i) {
             var type = trim($addFeeItemTr.eq(i).find("select[name=type]").val()), //费用项目
                 count = trim($addFeeItemTr.eq(i).find(".T-count").val()), //数量
@@ -2136,7 +2230,9 @@ define(function(require, exports) {
             //计算按中转费用
             if ($addFeeItemTr.eq(i).find("select[name=type]").val()==3) {
                 var transitFee=$addFeeItemTr.eq(i).find('.T-payMoney').val()*1;
-                needTransitFee=needTransitFee+transitFee;
+                if (!isNaN(transitFee)) {
+                    needTransitFee=false;
+                };
             };
             //数量&&单价校验
             if (count== "" && price!= "") {
@@ -2209,7 +2305,7 @@ define(function(require, exports) {
         }
 
         var buyInsurance = buyInsuranceS;
-        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id;
+        form += "&hotelLevel=" + expectLevel + "&includeSelfPay=" + includeOwnExpense + "&buyInsurance=" + buyInsurance + "&isNeedArriveService=" + isNeedArriveService + "&isNeedLeaveService=" + isNeedLeaveService+"&touristGroupId="+id+ "&orderNumber=" +orderNumber+"&";
         //游客json串
         var touristGroupMemberJsonAdd = touristGroup.installVisiJson($visiForm, id, typeFlag);
 
@@ -2301,7 +2397,7 @@ define(function(require, exports) {
                 innerStatus = true;
             };
             url = touristGroup.url("saveTouristGroup", "add");
-            data = form + "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
+            data = "&touristGroupFeeJsonAdd=" + encodeURIComponent(touristGroupFeeJsonAdd) + "&touristGroupMemberJsonAdd=" + encodeURIComponent(touristGroupMemberJsonAdd) + "&reciveTrip=" + encodeURIComponent(reciveTrip)+"&sendTrip="+encodeURIComponent(sendTrip);
             tabId = addTabId;
             if (typeInner=='out') {
                 tabId = updateTabId
@@ -2311,13 +2407,13 @@ define(function(require, exports) {
 
        //中转选项是否打勾且中转费用项<=0
        var transitChekedLength = $arrangeForm.find('.T-add-action input[type="checkbox"]:checked').length;
-        if(transitChekedLength>0 && needTransitFee<=0){
+        if(transitChekedLength>0 && !!needTransitFee){
             //中转信息Tip
-            touristGroup.TransitInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+            touristGroup.TransitInfo($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
         }else if(needTotalMoney > needPayAllMoney){  //预收款与计划现收之和不能大于应收
-         touristGroup.preNeedPayMoneyInfo($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+         touristGroup.preNeedPayMoneyInfo($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
         }else{
-             touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+             touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
          }
        
     };
@@ -2334,7 +2430,7 @@ define(function(require, exports) {
      * @param {[type]} typeFlag    新增、编辑
      * @param {[type]} typeInner  
      */
-    touristGroup.TransitInfo = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+    touristGroup.TransitInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
         $("#confirm-dialog-message").removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -2350,7 +2446,7 @@ define(function(require, exports) {
                 text: "是",
                 "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
-                    touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+                    touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
                     $(this).dialog("close");
                 }
             }],
@@ -2362,7 +2458,7 @@ define(function(require, exports) {
 
 
     //预收款和计划现收之和大于应收金额，是否继续
-    touristGroup.preNeedPayMoneyInfo = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+    touristGroup.preNeedPayMoneyInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
         $("#confirm-dialog-message").removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -2378,7 +2474,7 @@ define(function(require, exports) {
                 text: "是",
                 "class": "btn btn-primary btn-minier btn-heightMall",
                 click: function() {
-                    touristGroup.submitData($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner);
+                    touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
                     $(this).dialog("close");
                 }
             }],
@@ -2390,7 +2486,12 @@ define(function(require, exports) {
 
 
     //提交数据
-    touristGroup.submitData = function($obj, url, data, innerStatus, tabId, tabArgs, typeFlag, typeInner) {
+    touristGroup.submitData = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
+        if (status == 6) {
+            $obj.find('input[name=buyInsurance], input[name=orderNumber], .T-touristGroupMainForm input, .T-touristGroupMainForm select, .T-touristGroupMainForm textarea, .T-touristGroupMainFormMember input , .T-touristGroupMainFormMember select').removeAttr('disabled');
+        } 
+        var formData = $lineInfoForm.serialize();
+        data += form + formData;
         $.ajax({
             url: url,
             type: "POST",

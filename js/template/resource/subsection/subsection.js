@@ -274,15 +274,15 @@ define(function(require, exports) {
 		subsection.addFeeItem = function($that, $tbody,nameText,countText,priceText,type){
 		   var $td = $that.closest('td'),name = '',count = '',price = '',payMoney = '',
 		       index  = $td.find('div').length;
-		       name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'"  name="type"  class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+		       name = '<div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="'+ index +'"  name="type"  class="T-type w-100 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
 					  +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
                       +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+               count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="count" value="'+$.trim(countText)+'"  class="F-float F-count T-count T-calc T-count-' + index + ' w-50"></div>',
+           	   price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'"  type="text" name="price" value="'+$.trim(priceText)+'"  class="F-float F-money  T-price T-calc T-price-' + index + ' w-80"></div>';
 		       if(!!type){
-		       		name = '<div class="clearfix" style="margin-top:1px"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type  col-sm-8  pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
-                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + '"></div>',
-           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + '"></div>';
+		       		name = '<div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="'+ index +'" data-type="'+ type +'"  name="type" class="T-type w-100  pull-left" disabled><option value="'+ type +'">中转结算价</option></select><label style="float:right;padding-top:0px;" class=" T-label-' + index + '"><button class="btn btn-success btn-sm btn-white T-action T-del" disabled="disabled"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label></div>',
+                    count = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="count" value="'+$.trim(countText)+'" readonly class="F-float F-count T-count T-calc T-count-' + index + ' w-50"></div>',
+           	        price = '<div class="clearfix" style="margin-top:6px"><input data-index="'+ index +'" data-type="'+ type +'"  type="text" name="price" value="'+$.trim(priceText)+'" readonly class="F-float F-money  T-price T-calc T-price-' + index + ' w-100"></div>';
 		        }
                $td.append(name); 
     	       $td.next().append(count); 
@@ -325,22 +325,25 @@ define(function(require, exports) {
         //计算
 	    subsection.$tbody.find('.T-price').trigger('change');
 
-
-
-
 	    //搜索线路
 	    subsection.$tabSub.find('.T-subsectionOperationTbody').on('click', '.T-option', function(event) {
 	    	event.preventDefault();
 	    	/* Act on the event */
 	    	var $that=$(this),$tr = $that.closest("tr"), id = $tr.data("entity-id");
 	    	if ($that.hasClass('T-searchLine')) {//搜搜线路
-	    		subsection.getLayerProductList($tr);
+		    	var linProInfoJson={
+		    		name:subsection.$tabSub.find('.T-lineProName').text(),
+		    		type:subsection.$tabSub.find('.T-lineProType').text(),
+		    		custumerType:subsection.$tabSub.find('.T-lineProcusType').text(),
+		    		days:subsection.$tabSub.find('.T-lineProDays').text(),
+		    		startTime:subsection.$tabSub.find('.T-lineProStartTime').text()
+		    	};
+	    		subsection.getLayerProductList($tr,linProInfoJson);
 	    	}else if($that.hasClass('T-btn-operation-delete')){//删除
 				subsection.deleteOperation(id,$that);
 				subsection.$tabSub.data('isEdited', true);
 	    	};
 	    });
-
 
 		/**
 		 * [startIntime 中转分段初日期
@@ -387,15 +390,15 @@ define(function(require, exports) {
 			var html = ''
 			+ '<tr data-entity-id="">'
 			+ '<td><div class="hct-input-group col-xs-12 T-search-line"><input type="text" name="lineProductName" readonly="" class="bind-change col-xs-12" value=""><span class="hct-group-search T-searchLine T-option cursor">[搜索]</span><input type="hidden" name="lineProductId" value=""></div></td>'
-			+ '<td><input type="text" name="customerType" class="col-sm-12" readonly="readonly" /></td>'
-			+ '<td><input type="text" name="days" class="col-sm-10 F-float F-count" readonly="readonly" /><span class="col-sm-2" style="line-height: 30px">天</span></td>'
-			+ '<td><input class="datepicker T-startTime col-sm-12" name="startTime" type="text" value="" /></td>'
-			+ '<td><div class="clearfix" style="margin-top:1px"><select data-index="0" name="type" class="T-type col-sm-8 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
+			+ '<td><input type="text" name="customerType" class="w-50" readonly="readonly" /></td>'
+			+ '<td><input type="text" name="days" class="w-50 F-float F-count" readonly="readonly" /></td>'
+			+ '<td><input class="datepicker T-startTime w-100" name="startTime" type="text" value="" /></td>'
+			+ '<td><div class="clearfix" style="margin-top:1px;min-width: 131px;"><select data-index="0" name="type" class="T-type w-100 pull-left"><option value="1">大人结算价</option><option value="2">小孩结算价</option>'
             +'<option value="4">车辆费用</option><option value="5">餐厅费用</option><option value="6">保险费用</option><option value="7">导服费</option><option value="8">酒店费用</option><option value="9">景区费用</option>'
             +'<option value="10">自费费用</option><option value="11">票务费用</option><option value="12">其他费用</option></select><label style="float:right;padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-action T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="F-float F-count T-count T-count-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="F-float F-money T-price T-price-0 T-calc"></div></td>'
-			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="F-float F-money T-payedMoney T-calc " readonly></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="count" class="w-50 F-float F-count T-count T-count-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input data-index="0" type="text" name="price" class="w-80 F-float F-money T-price T-price-0 T-calc"></div></td>'
+			+ '<td><div class="clearfix" style="margin-top:6px"><input type="text" name="needPayAllMoney" class="w-80 F-float F-money T-payedMoney T-calc " readonly></div></td>'
 			+ '<td>' + radio + '</td>'
 			+ '<td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" /></td>'
 			+ '<td>-</td>'
@@ -721,7 +724,7 @@ define(function(require, exports) {
 	};
 
 	//初始化线路Layer层
-	subsection.getLayerProductList = function($tr){
+	subsection.getLayerProductList = function($tr,linProInfoJson){
 		var html=searchListTemplate({});  
 		subsection.searchTravelLinelayer = layer.open({
 			type: 1,
@@ -734,7 +737,7 @@ define(function(require, exports) {
 		});
 		var $dialog = $('.T-subsection-lineproduct-search');
 		//初始化线路产品数据
-		subsection.getLineProductList($tr,$dialog, 0, '');
+		subsection.getLineProductList($tr,$dialog, 0, '',linProInfoJson);
 	};
 
 	/**
@@ -745,7 +748,7 @@ define(function(require, exports) {
 	 * @param  {string} name    搜索关键字
 	 * @return {[type]}         [description]
 	 */
-	subsection.getLineProductList = function($tr, $dialog, page, name) {
+	subsection.getLineProductList = function($tr, $dialog, page, name, linProInfoJson) {
 		page = page || 0;
 		$.ajax({
 			url:KingServices.build_url('innerTransferOperation', "getLineProductList"),
@@ -768,8 +771,15 @@ define(function(require, exports) {
 						$searchLine = $that.closest('.form-inline'),
 						name=$searchLine.find('.T-name').val();
 						
-					subsection.getLineProductList($tr, $dialog, 0, name);
+					subsection.getLineProductList($tr, $dialog, 0, name, linProInfoJson);
 				});
+				//显示线路信息
+				$dialog.find('.T-lineProName').text(linProInfoJson.name);
+				$dialog.find('.T-lineProType').text(linProInfoJson.type);
+				$dialog.find('.T-lineProcusType').text(linProInfoJson.custumerType);
+				$dialog.find('.T-lineProDays').text(linProInfoJson.days);
+				$dialog.find('.T-lineProStartTime').text(linProInfoJson.startTime);
+
 
 				//提交选中线路
 				$dialog.find('.T-btn-submit').on('click', function(event) {
@@ -781,7 +791,8 @@ define(function(require, exports) {
 								lineProductId : $lineProTr.eq(index).data('id'),
 							　　name : $lineProTr.eq(index).data('name'),
 							    customerType : $lineProTr.eq(index).attr('data-customerType'),
-							    days : $lineProTr.eq(index).data('days')
+							    days : $lineProTr.eq(index).data('days'),
+							    startTime:linProInfoJson.startTime
 							};
 						};
 					});
@@ -795,6 +806,7 @@ define(function(require, exports) {
 						$tr.find('input[name=lineProductId]').val(lineProductJson.lineProductId);
 						$tr.find('input[name=customerType]').val(lineProductJson.customerType);
 						$tr.find('input[name=days]').val(lineProductJson.days);
+						$tr.find('input[name=startTime]').val(lineProductJson.startTime);
 
 						if (!!$tr.prev().length>0) {
 							var days=$tr.prev().find('input[name=days]').val(),
@@ -823,7 +835,7 @@ define(function(require, exports) {
 				    curr: (data.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							subsection.getLineProductList($tr, $dialog, obj.curr -1, name);
+							subsection.getLineProductList($tr, $dialog, obj.curr -1, name, linProInfoJson);
 				    	}
 				    }
 				});	

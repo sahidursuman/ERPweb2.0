@@ -7,6 +7,7 @@
                 <th>收款方</th>
                 <th>金额</th>
                 <th>收款方式</th>
+                <th>账户名称</th>
                 <th>备注</th>
                 <th>操作人</th>
                 <th>操作时间</th>
@@ -20,6 +21,7 @@
                 <td>{{item.incomeOrPayParty}}</td>
                 <td><span class="F-float F-money">{{item.incomeMoney}}</span></td>
                 <td>{{item.payType | getPayTypeText}}</td>
+                <td>{{if item.accountName == null || item.accountName == ""}}-{{else}}{{item.accountName}}{{/if}}</td>
                 <td>{{item.remark}}</td>
                 <td>{{item.creatorName}}</td>
                 <td>{{item.createTime}}</td>

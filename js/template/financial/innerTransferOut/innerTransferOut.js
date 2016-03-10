@@ -27,12 +27,12 @@ define(function(require,exports) {
 	};
 	InnerTransferOut.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,'');
+		InnerTransferOut.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
 	};
 	/**
 	 * 初始化list页面
 	 */
-	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate){
+	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate,accountStatus){
 		if(InnerTransferOut.$searchArea && arguments.length === 1){
 			var $toBusinessGroupId = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupId]').val();
 			var $toBusinessGroupName = InnerTransferOut.$searchArea.find('input[name=toBusinessGroupName]').val(),
@@ -40,6 +40,7 @@ define(function(require,exports) {
 			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
 			startDate = InnerTransferOut.getValueForInput(InnerTransferOut.$searchArea,'input',"startDate");
 			endDate = InnerTransferOut.getValueForInput(InnerTransferOut.$searchArea,'input',"endDate");
+			accountStatus = InnerTransferOut.$searchArea.find(".T-finance-status").find("button").data("value");
 		};
 		pageNo = pageNo || 0;
 		if(startDate > endDate){
@@ -54,6 +55,7 @@ define(function(require,exports) {
 				toBusinessGroupName:toBusinessGroupName,
 				startDate:startDate,
 				endDate:endDate,
+				accountStatus:accountStatus,
 				sortType:'auto'
 			},
 			type:'POST',
@@ -64,6 +66,7 @@ define(function(require,exports) {
 							toBusinessGroupId:toBusinessGroupId,
 							toBusinessGroupName:toBusinessGroupName,
 							startDate:startDate,
+							accountStatus:accountStatus,
 							endDate:endDate,
 						};
 						var html = listTemplate(data);
@@ -110,6 +113,14 @@ define(function(require,exports) {
 			event.preventDefault();
 			InnerTransferOut.listInnerTransfer(0);
 		});
+		//状态框选择事件
+        InnerTransferOut.$searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            InnerTransferOut.listInnerTransfer(0);
+        });
 		//报表事件
 		$obj.find('.T-innerTransferOutList').on('click','.T-action',function(event){
 			event.preventDefault();
@@ -118,10 +129,11 @@ define(function(require,exports) {
 				id = $tr.attr("businessGroupId"),
 				name = $tr.attr("businessGroupName"),
 				startDate = $tr.attr("startDate"),
+				accountStatus = $tr.attr('accountStatus'),
 				endDate = $tr.attr("endDate");
 			if($that.hasClass('T-check')){
 				//对账处理
-				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate,"");
+				InnerTransferOut.chenking(0,id,name,"","","",startDate,endDate,"",accountStatus);
 			}else if($that.hasClass('T-balance')){
 				//付款处理
 				InnerTransferOut.btnSatus = 0;
@@ -133,6 +145,7 @@ define(function(require,exports) {
 					operateUserId:"",
 					orderNumber:"",
 					startDate:startDate,
+					accountStatus:accountStatus,
 					endDate:endDate
 				};
 				InnerTransferOut.settlement(args,0);
@@ -140,7 +153,7 @@ define(function(require,exports) {
 		});
 	};
 	//对账处理
-	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate,orderNumber){
+	InnerTransferOut.chenking = function(pageNo,toBusinessGroupId,toBusinessGroupName,lineProductId,lineProductName,operateUserId,startDate,endDate,orderNumber,accountStatus){
 
 		if(InnerTransferOut.$checkSearchArea && arguments.length === 1){
 			var $lineProductId = InnerTransferOut.$checkSearchArea.find('input[name=lineProductId]').val();
@@ -148,6 +161,7 @@ define(function(require,exports) {
 			toBusinessGroupId = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupId]').val();
 			toBusinessGroupName = InnerTransferOut.$checkSearchArea.find('input[name=toBusinessGroupName]').val();
 			lineProductId = $lineProductId;
+			accountStatus = InnerTransferOut.$checkSearchArea.find('input[name=accountStatus]').val();
 			orderNumber = InnerTransferOut.$checkSearchArea.find('input[name=orderNumber]').val();
 			lineProductName = $lineProductId == ""?"":$lineProductName;
 			operateUserId= InnerTransferOut.$checkSearchArea.find('select[name=operater]').val();
@@ -164,6 +178,7 @@ define(function(require,exports) {
 				lineProductName:lineProductName,
 				startDate:startDate,
 				operateUserId:operateUserId,
+				accountStatus:accountStatus,
 				endDate:endDate
 			};
 		if(startDate > endDate){
@@ -292,7 +307,7 @@ define(function(require,exports) {
 			});
 			if(InnerTransferOut.btnSatus == 1 || $data.showBtnFlag == true){
 				$obj.find('input[name=sumPayMoney]').val(InnerTransferOut.saveJson.autoPayMoney);
-				InnerTransferOut.setAutoFillEdit($obj,true);
+				//InnerTransferOut.setAutoFillEdit($obj,true);
 
 			};
 		}else{
@@ -412,7 +427,7 @@ define(function(require,exports) {
         		InnerTransferOut.setAutoFillEdit($obj,false);
         		InnerTransferOut.saveJson = [];
         		InnerTransferOut.btnSatus = 0;
-        		InnerTransferOut.settlement($data);
+        		InnerTransferOut.getListData($obj, $data, 2);
         	}
         });
 		var payingCheck = new FinRule(2).check($obj);
@@ -463,11 +478,15 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						InnerTransferOut.setAutoFillEdit($obj,true);
 						InnerTransferOut.saveJson = data;
 						InnerTransferOut.btnSatus = 1;
-						$obj.data("isEdited",false);
-						InnerTransferOut.settlement($data);
+						args.pageNo = 0;
+						args.toBusinessGroupName = InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val();
+						args.orderNumber = InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val();
+						args.operateUserId = InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
+						InnerTransferOut.getListData($obj,args,2);
+						$obj.data("isEdited",true);
+						InnerTransferOut.setAutoFillEdit($obj,true);
 						//设置按钮样式
 					});
 				}
@@ -479,7 +498,7 @@ define(function(require,exports) {
 		var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
 		if (!disable) {
 			$sum.val(0);
-		}
+		}console.log(disable);
 		$tab.find('.T-btn-autofill').html(disable?'<i class="ace-icon fa fa-times"></i> 取消下账': '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
 	};
 	//确认对账
@@ -625,16 +644,12 @@ define(function(require,exports) {
 	//付款处理
 	InnerTransferOut.settlement = function(args,pageNo){
 		if(InnerTransferOut.$settlementSearchArea && pageNo == 0){
-			args = {
-				toBusinessGroupId : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupId]').val(),
-				toBusinessGroupName : InnerTransferOut.$settlementSearchArea.find('input[name=toBusinessGroupName]').val(),
-				lineProductId : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val(),
-				lineProductName : InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val(),
-				orderNumber: InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val(),
-				operateUserId : InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val(),
-				startDate : InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val(),
-				endDate : InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val()
-			};
+			args.lineProductId = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductId]').val();
+			args.lineProductName = InnerTransferOut.$settlementSearchArea.find('input[name=lineProductName]').val();
+			args.orderNumber = InnerTransferOut.$settlementSearchArea.find('input[name=orderNumber]').val();
+			args.operateUserId = InnerTransferOut.$settlementSearchArea.find('select[name=operater]').val();
+			args.startDate = InnerTransferOut.$settlementSearchArea.find('input[name=startDate]').val();
+			args.endDate = InnerTransferOut.$settlementSearchArea.find('input[name=endDate]').val();
 		};
 		args.pageNo = pageNo || 0;
 		if(args.startDate > args.endDate){
@@ -692,7 +707,7 @@ define(function(require,exports) {
             	payJson:JsonStr,
             	payType:payType,
             	remark:sumRemark,
-            	bankId : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
+            	bankId : (payType == 0) ? InnerTransferOut.$settlementTab.find('input[name=cash-id]').val() : InnerTransferOut.$settlementTab.find('input[name=card-id]').val(),
 	            voucher : InnerTransferOut.$settlementTab.find('input[name=credentials-number]').val(),
 	            billTime : InnerTransferOut.$settlementTab.find('input[name=tally-date]').val()
             },
@@ -876,6 +891,7 @@ define(function(require,exports) {
 			operateUserId:"",
 			startDate:options.startDate,
 			endDate:options.endDate,
+			accountStatus:options.accountStatus,
 			showBtnFlag:true
 		};
         InnerTransferOut.settlement(args,0); 
