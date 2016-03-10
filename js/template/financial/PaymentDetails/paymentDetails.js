@@ -129,8 +129,6 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content');
 			$tab.find(".T-cash-area").addClass('hidden');
