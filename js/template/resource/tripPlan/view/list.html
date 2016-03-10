@@ -44,7 +44,7 @@
                 <p class="h-orderNumber">团号：{{tripPlan.tripNumber}}</p>
                 <p class="hct-absolute-group h-lineName">
                     <span class="hct-span-left">
-				<{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].lineProductName}}{{else}}{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}{{/if}}>
+				&lt;{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].lineProductName}}{{else}}{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}{{/if}}&gt;
 				</span> {{if tripPlan.tripPlanDetails.length > 1}}
                     <label class="T-action T-showLineInfo hct-button-right">
                         <button class="btn btn-success btn-sm btn-white show" index="0">
