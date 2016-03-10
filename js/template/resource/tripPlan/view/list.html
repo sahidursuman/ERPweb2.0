@@ -113,8 +113,9 @@
 
             </td>
             {{if index == 1}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>{{/if}}
+            <td>{{tripPlanDetails.touristAdultCount}}大{{tripPlanDetails.touristChildCount}}小</td>
+            {{if index == 1}}
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
