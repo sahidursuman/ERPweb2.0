@@ -22,16 +22,20 @@ FinancialService.initPayEvent = function($container,rule)  {
     $container.find('select').on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
-        if(val == 1){
+        if(val == 1 || val == 5){
             var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
         }
         $cash.closest('div').toggleClass('hidden', val !== "0");
         $card.closest('div').toggleClass('hidden', val != 1);
+        if(val == 5 || val == 4){
+            $card.closest('div').removeClass('hidden');
+        };
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };
         if(val !=1){
             $container.find('input[name=card-id]').val('');
+            $card.val('');
         };
     }).trigger('change');
 };
