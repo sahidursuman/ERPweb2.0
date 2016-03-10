@@ -470,7 +470,7 @@ define(function(require, exports) {
         //添加tab切换
         touristGroup.init_CRU_event($updateTabId, id, 2, typeInner);
         //游客的序号
-        touristGroup.memberNumber($groupMemberForm);
+        touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));
         //小组信息模块处理
         touristGroup.groupInfoDispose($groupInfoForm, 2, typeInner);
         //游客名单模块处理
@@ -1502,7 +1502,7 @@ define(function(require, exports) {
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('.T-addTouristTbody tr');
+        var $tbody = $obj.find('tr');
         $tbody.each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
@@ -1511,20 +1511,8 @@ define(function(require, exports) {
     };
     //批量添加游客
     touristGroup.addVisotorMore = function($obj) {
-        var html = addVisitorMoreTemplate();
-        var addVisotorMoreLayer = layer.open({
-            type: 1,
-            title: '批量添加游客',
-            skin: 'layui-layer-rim',
-            area: '40%',
-            zIndex: 1028,
-            content: html,
-            success: function() {
-                var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
-                $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-                    touristGroup.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj);
-                });
-            }
+        seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+            module.addVisotorMore($obj.find('.T-addTouristTbody'), touristGroup.memberNumber);
         });
     };
     //批量添加游客保存
