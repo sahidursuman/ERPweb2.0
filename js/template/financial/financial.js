@@ -27,7 +27,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         }
         $cash.closest('div').toggleClass('hidden', val !== "0");
         $card.closest('div').toggleClass('hidden', val != 1);
-        if(val == 5 || val == 4){
+        if(val == 5){
             $card.closest('div').removeClass('hidden');
         };
         if(val !=0){
