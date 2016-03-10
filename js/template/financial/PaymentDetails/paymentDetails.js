@@ -105,6 +105,9 @@ define(function(require, exports){
 
 		$tab.on("click",".T-viewDetails",function(event){
 			Payment.viewDetails($(this).closest('tr').data("id"));
+		})
+		.on("click",".T-delete",function(){
+			Payment.deletePayment($(this).closest('tr').data("id"));
 		});	
 
 		Payment.getSubjectList($tab);
@@ -355,6 +358,23 @@ define(function(require, exports){
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
+					});
+				}
+			}
+		});
+	};
+
+	//删除记录
+	Payment.deletePayment = function(id){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","deleteIncomeorPay"),
+			type:"POST",
+			data : {id : id},
+			success:function(data){
+				if(showDialog(data)){
+					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+						Payment.getTotal(0,$tab);
+						Payment.ajaxInit(0);
 					});
 				}
 			}
