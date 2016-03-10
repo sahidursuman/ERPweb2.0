@@ -35,5 +35,6 @@
         <td>{{rs.remark}}</td>
         <td>{{rs.user.realName}}</td>
         <td>{{rs.createTime}}</td>
+        <td><a class="{{if rs.deleteStatus == 1}}cursor T-delete{{else}}gray{{/if}}"><span>删除</span></a></td>
     </tr>
 {{/each}}
