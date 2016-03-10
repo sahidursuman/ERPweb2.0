@@ -452,7 +452,9 @@ define(function(require,exports) {
         //确认对账事件
         $obj.find(".T-checking").off().on('click',function(event){
         	if(!validatorCheck.form()){return;}
-			InnerTransferIn.saveCheckingData(0,$obj,$listSearchData);
+			FinancialService.changeUncheck($obj.find('.T-checkList tr'),function(){
+                InnerTransferIn.saveCheckingData(0,$obj,$listSearchData);
+            });
         });
         //自动下账事件
         $obj.find('.T-btn-autofill').off('click').on('click',function(){
@@ -580,19 +582,17 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-						InnerTransferIn.saveJson = data;
-						InnerTransferIn.saveJson.bankId = bankId;
-				        InnerTransferIn.saveJson.voucher = voucher;
-				        InnerTransferIn.saveJson.payType = payType;
-                        InnerTransferIn.saveJson.billTime = billTime;
-                        InnerTransferIn.saveJson.bankNumber = bankNumber;
-                        InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
-						InnerTransferIn.btnSatus = 1;
-						$obj.data("isEdited",false);
-						$data.autoAccount = 1;
-						InnerTransferIn.chenking($data,2,"settle");
-					});
+					InnerTransferIn.saveJson = data;
+					InnerTransferIn.saveJson.bankId = bankId;
+			        InnerTransferIn.saveJson.voucher = voucher;
+			        InnerTransferIn.saveJson.payType = payType;
+                    InnerTransferIn.saveJson.billTime = billTime;
+                    InnerTransferIn.saveJson.bankNumber = bankNumber;
+                    InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
+					InnerTransferIn.btnSatus = 1;
+					$obj.data("isEdited",false);
+					$data.autoAccount = 1;
+					InnerTransferIn.chenking($data,2,"settle");
 				}
 			}
 		});
@@ -607,6 +607,10 @@ define(function(require,exports) {
 	};
 	//确认对账
 	InnerTransferIn.saveCheckingData = function(pageNo,$obj,$data,tab_id, title, html){
+		if(!$obj.data('isEdited')){
+			showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
+			return false;
+		}
     	var JsonStr = [],
             selectFlag = 0,
             argumentsLen = arguments.length,
@@ -637,7 +641,7 @@ define(function(require,exports) {
 	    });
  	   //判断用户是否操作
 	 	   if(JsonStr.length == 0){
-	 		   showMessageDialog($( "#confirm-dialog-message" ),"您当前未进行任何操作");
+	 		   showMessageDialog($( "#confirm-dialog-message" ),"没有可提交的数据！");
 	 		   return
 	 	   }else{
 	 		   JsonStr = JSON.stringify(JsonStr);
