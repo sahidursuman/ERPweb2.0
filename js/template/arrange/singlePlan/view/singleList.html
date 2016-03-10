@@ -25,7 +25,14 @@
             <tr data-id="{{rs.id}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
-                    <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}></p>
+                    <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}>
+                    {{if rs.tripPlanTouristList.length > 1}}
+                    <label class="T-action T-showLineInfo hct-button-right">
+                        <button class="btn btn-success btn-sm btn-white show" index="0">
+                            <i class="fa fa-plus bigger-110 icon-only"></i>
+                        </button>
+                    </label>
+                    {{/if}}</p>
                     <p>
                         {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}
                         {{if !!rs.dutyOPUser && rs.dutyOPUser.realName}}<span class="h-memberName">责任计调：{{rs.dutyOPUser.realName}}{{/if}}
@@ -80,24 +87,19 @@
             {{if rs.tripPlanTouristList.length!=0}}
                 {{each rs.tripPlanTouristList as tripPlanTourist index}}
                 <tr class="hidden">
-                    {{if index == 0}}
-                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
-                    {{/if}}
                     {{if !!tripPlanTourist.touristGroup}}
-                    <td>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                    <td>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                    <td class="hct-absolute-group">
-                        <span class="hct-span-left">
+                    <td class="h-touristGroupInfo">
+                        <p>
                             {{if tripPlanTourist.touristGroup}}{{tripPlanTourist.touristGroup.lineProduct.name }}{{/if}}
-                        </span>
+                        </p>
+                        <p>
+                        {{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}
+                        </p>
                     </td>
-                    <td>{{tripPlanTourist.touristGroup.adultCount}}大{{tripPlanTourist.touristGroup.childCount}}小</td>
-                    {{else}}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    {{if index == 0}}
+                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     {{/if}}
+                    <td>{{tripPlanTourist.touristGroup.adultCount}}大{{tripPlanTourist.touristGroup.childCount}}小</td>
                     {{if index == 0}}
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
@@ -112,8 +114,7 @@
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
                     <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
-                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
-                    <td rowspan="{{rs.tripPlanTouristList.length}}"></td>
+                    {{/if}}
                     {{/if}}
                 </tr>                                
                 {{/each}}
