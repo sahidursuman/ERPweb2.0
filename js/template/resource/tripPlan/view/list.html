@@ -105,31 +105,34 @@
                 </a>
             </td>
         </tr>
-        {{if tripPlan.tripPlanDetails.length!=0}} {{each tripPlan.tripPlanDetails as tripPlanDetails index}} {{if index >= 1}}
+        {{if tripPlan.tripPlanDetails.length!=0}} {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
         <tr class="hidden">
             <td class="h-touristGroupInfo">
                 <p>{{tripPlanDetails.lineProductName}}</p>
                 <p>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</p>
 
             </td>
-            {{if index == 1}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
+            {{if index == 0}}
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            {{/if}}
+            <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小</td>
+            {{if index == 0}}
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
             {{/if}}
         </tr>
-        {{/if}} {{/each}} {{/if}} {{/each}}
+        {{/each}} {{/if}} {{/each}}
     </tbody>
 </table>
 <div class="row pageMode">
