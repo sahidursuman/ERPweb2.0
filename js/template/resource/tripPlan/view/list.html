@@ -20,6 +20,7 @@
    <thead>
         <tr class="bg-blur T-tr-fixed">
             <th>团信息</th>
+            <th>出游日期</th>
             <th>团队人数</th>
             <th>导</th>
             <th>车</th>
@@ -52,8 +53,12 @@
                     </label>
                     {{/if}}
                 </p>
-                <p class="h-startTime"><span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].startTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span>-<span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].endTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span></p>
-                <p class="h-memberName">责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+                <p class="h-memberName">导游：{{if tripPlan.guide}}{{tripPlan.guide.realname}}{{/if}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+            </td>
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
             </td>
             <td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
             <!-- 导 -->
