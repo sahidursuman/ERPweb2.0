@@ -1786,6 +1786,9 @@ p#back-top a span {
     text-align: center;
     margin: 0px;
 }
+.h-touristGroupInfo p span{
+    margin-right: 10px;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
