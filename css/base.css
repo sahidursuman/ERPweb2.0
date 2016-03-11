@@ -101,7 +101,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 
 /***发团计划样式**/
 
-input.datepicker {
+input.datepicker:not([class^="col-"]) {
 	border-radius: 0;
 	width: 90px;
 }
@@ -297,7 +297,8 @@ input.datepicker {
 .hct-absolute-group .hct-span-left{
 	padding-right: 40px;
 }
-.hct-absolute-group .hct-button-right .btn{
+.hct-absolute-group .hct-button-right .btn,
+.table tr .btn{
 	position: initial;
 }
 .hct-button-right{
