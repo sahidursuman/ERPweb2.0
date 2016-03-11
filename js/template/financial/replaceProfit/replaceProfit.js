@@ -472,7 +472,7 @@ define(function(require, exports) {
                 $target.nextAll('[name=groupName]').val('').data('id','');
 
             }
-        }).off('click').one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
             $.ajax({

@@ -504,30 +504,7 @@ define(function(require,exports) {
         	};
         });
         //关闭事件
-        $obj.find(".T-close").on('click',function(event){
-        	if(typeFlag == 1){
-        		var checkBoxList = $obj.find(".T-checkList").find('.T-checkbox'),
-        		result = false,
-        		unCheckList = [];
-	        	checkBoxList.each(function(i){
-	        		var $this = $(this),
-	        			flag = $this.is(":checked"),
-	        			$tr = $this.closest('tr');
-	        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
-	        			result = true;
-	        		}
-	        	});
-	        	if(result){
-	    			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
-		        		Tools.closeTab(checkId);
-		        	})
-	        	}else{
-	        		Tools.closeTab(checkId);
-	        	}
-        	}else{
-        		Tools.closeTab(settleId);
-        	}
-        });
+        FinancialService.closeTab((typeFlag == 1) ? checkId : settleId);
 	};
 
 	//自动下账

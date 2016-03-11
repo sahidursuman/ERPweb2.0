@@ -801,3 +801,20 @@ FinancialService.unfinishedBill = function(args,listFn){
         }
     });
 };
+
+
+//页面“关闭”按钮事件
+FinancialService.closeTab = function(tab_id){
+    var $tab = $('#tab-' + tab_id + '-content');
+    $tab.find(".T-btn-close").click(function(){
+        if ($tab.data('isEdited'))  {
+            showSaveConfirmDialog($("#confirm-dialog-message"),"数据已经被修改，是否保存?",function(){
+                $tab.trigger(CLOSE_TAB_SAVE);
+            },function(){
+                Tools.closeTab(tab_id);
+            },false);
+        } else {
+            Tools.closeTab(tab_id);
+        }
+    });
+};
