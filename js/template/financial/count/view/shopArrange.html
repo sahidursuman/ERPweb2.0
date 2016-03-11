@@ -16,7 +16,7 @@
             <th class="th-border" colspan="5">打单</th>
             <th class="th-border" colspan="2">社佣</th>
             <th class="th-border" colspan="2">导佣</th>
-            <th class="th-border" colspan="2">现收</th>
+            <th class="th-border" rowspan="2">现收</th>
             <th class="th-border" rowspan="2">导游报账备注</th>
             <th class="th-border" rowspan="2">是否对账</th>
         </tr>
@@ -64,10 +64,12 @@
                 
                 <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:50px;"/></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
 
-                <td rowspan="{{arrange.shopArrangeItemSet.length}}"><input name="currInCome" value="" type="text" style="width:90px;"></td>
+                <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                    <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" style="width:90px;" 
+                    {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                </td>
 
                 <td >
                 {{if editStatus == 1}}
