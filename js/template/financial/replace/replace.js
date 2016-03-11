@@ -81,7 +81,6 @@ define(function(require, exports) {
 	 * 初始化列表页面的事件绑定
 	 */
 	Replace.init_event = function(args){
-		
 		//搜索顶部的事件绑定
 		var $searchArea = Replace.$tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
@@ -552,6 +551,7 @@ define(function(require, exports) {
 					    curr: (data.searchParam.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		Replace.$balanceTab.data('isEdited',false);
 					    		Replace.getOperationList({pageNo : obj.curr -1},$tab);
 					    	}
 					    }
@@ -780,6 +780,7 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Replace.$balanceTab.data('isEdited',false);
 				    		Replace.balanceList({pageNo : obj.curr -1});
 				    	}
 				    }

@@ -1063,13 +1063,13 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					clearData(parents, 'companyName');
+					clearData(parents, 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
-					checkBusCompay(parents, 'companyName');
+					checkBusCompay(parents, 'licenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),
