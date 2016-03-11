@@ -427,7 +427,7 @@ define(function(require, exports) {
 						data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 						data.tarId = tabId;
 
-						if (Tools.addTab(menuKey + '-update', '编辑发团安排', addTemplate(data))) {
+						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
 							tripPlan.init_event($tab,id,target);
 						}
