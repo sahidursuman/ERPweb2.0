@@ -611,10 +611,11 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.innerEditFee_Event = function(type) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
-
         //精度限制
-        $count = $editFeeObj.find('.T-count');
+        $count = $editFeeObj.find('.T-count'),
+        $price = $editFeeObj.find('.T-price');
         Tools.inputCtrolFloat($count);
+        Tools.inputCtrolFloat($price);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -664,10 +665,8 @@ define(function(require, exports) {
     arrangeGroupTransfer.outEditFee_Event = function(type) {
         var $outFeeObj = $("#T-outEditFeeMain"),
             //精度限制
-            $price = $outFeeObj.find('.T-price'),
             $count = $outFeeObj.find('.T-count');
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -767,7 +766,7 @@ define(function(require, exports) {
         //精度限制
         var $price = $tbody.find('.T-price'),
             $count = $tbody.find('.T-count');
-        if (!!type && type==2) {
+        if (!!type && type==1) {
            Tools.inputCtrolFloat($price);
         };
         Tools.inputCtrolFloat($count);
