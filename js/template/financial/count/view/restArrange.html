@@ -54,9 +54,17 @@
                 {{/if}}
             {{else}}
                 {{if arrange.billUpdateTime != null}}
-                    {{if arrange.restaurantId == -1}}
+                    {{if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length > 0}}
+                        <select name="chooseRest">
+                            <option value="">导游自选</option>
+                            {{each arrange.restaurantChooseArrangeList as rs}}
+                                <option value="{{rs.restaurantId}}" 
+                                {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
+                            {{/each}}
+                        </select>
+                    {{else if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length == 0}}
                         导游自选
-                    {{else}}
+                    {{else if arrange.restaurantId != -1}}
                         {{if arrange.restaurant !=null}}
                             {{arrange.restaurant.name}}
                         {{/if}}
