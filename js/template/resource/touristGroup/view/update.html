@@ -300,9 +300,9 @@
 												<th class="th-border">操作</th>
 											</tr>
 											</thead>
-											<tbody class="T-addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as memberList}}
+											<tbody class="T-addTouristTbody">{{each touristGroupDetail.touristGroupMemberList as memberList index}}
 											<tr data-entity-id="{{memberList.id}}">
-												<td></td>
+												<td>{{index+1}}</td>
 												<td>
 													<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
 												</td>

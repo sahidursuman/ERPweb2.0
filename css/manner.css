@@ -121,6 +121,11 @@ input {
     background-color: #ddd;
 }
 
+
+.tab-text_align{
+    text-align: center;
+}
+
 .laypage_skip {
     padding: 0 !important;
     padding-left: 5px !important;
