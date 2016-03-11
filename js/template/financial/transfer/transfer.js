@@ -390,7 +390,7 @@ define(function(require, exports) {
         //搜索事件
         $tab.find(".T-search").click(function(){
             args.pageNo = 0;
-            Transfer.transferClear(args);
+            Transfer.transferClear(args,$tab);
         });
 
         //关闭页面事件
