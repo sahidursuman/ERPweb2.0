@@ -53,7 +53,7 @@
                     </label>
                     {{/if}}
                 </p>
-                <p class="h-memberName">导游：{{if tripPlan.guide}}{{tripPlan.guide.realname}}{{/if}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+                <p class="h-memberName">导游：{{tripPlan.guideNames}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
             </td>
             <td class="h-touristGroupInfo">
                 <p class="center">{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
