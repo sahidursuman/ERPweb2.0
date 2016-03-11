@@ -24,13 +24,12 @@
 			<tr data-value="{{tripPlanList.id}}"  data-seatCount ="{{if tripPlanList.bus!=null}}{{tripPlanList.bus.seatCount}}{{/if}}"  data-adultCount="{{tripPlanList.touristAdultCount}}"   data-childCount="{{tripPlanList.touristChildCount}}">
 				
 				<td>{{tripPlanList.tripNumber}}</td>
-				<td>{{if tripPlanList.lineProduct != null}}{{tripPlanList.lineProduct.name}}{{/if}}</td>
+				<td>{{tripPlanList.lineProductName}}</td>
 				<td>{{tripPlanList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 				<td>{{tripPlanList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-				<td>{{if tripPlanList.guide != null}}{{tripPlanList.guide.realname}}{{/if}}</td>
-				<td class="F-float F-count">
-					大人{{tripPlanList.touristAdultCount}}小孩{{tripPlanList.touristChildCount}}</td>
-				<td class="T-remainSeatCount">{{if tripPlanList.bus!= null}}{{tripPlanList.bus.seatCount-tripPlanList.touristAdultCount-tripPlanList.touristChildCount}}{{/if}}</td>
+				<td>{{tripPlanList.guideName}}</td>
+				<td class="F-float F-count">{{tripPlanList.touristCount}}</td>
+				<td class="T-remainSeatCount">{{tripPlanList.leaveCount}}</td>
 				<td>
 					{{if tripPlanList.status==0}}未发团
 						{{else}}已发团
