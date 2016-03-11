@@ -2074,9 +2074,9 @@ define(function(require, exports){
 		'<option value="晚餐">晚餐</option>'+
 		'</select>'+
 		'</td>'+
-		'<td><input type="text" name="price" style="width:90px;"/><input type="hidden" name="standardId"></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney"/></td>'+
+		'<td><input type="text" name="price" style="width:80px;"/><input type="hidden" name="standardId"></td>'+
+		'<td><input type="text" name="realCount" style="width:50px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney" style="width:80px;"/></td>'+
 		'<td><span class="restneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
@@ -2086,7 +2086,7 @@ define(function(require, exports){
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:80px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2176,19 +2176,19 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td><input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" style="width:80px;"/></td>'+
+		'<td><input type="text" name="realCount" style="width:50px;"/></td>'+
 		'<td><input type="text" name="realReduceMoney"/></td>'+
 		'<td><span class="hotelneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex">'+
+		'<div class="inline-flex col-xs-12">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:80px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2269,8 +2269,8 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td><input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" style="width:80px;"/></td>'+
+		'<td><input type="text" name="realCount" style="width:50px;"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="scenicneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
@@ -2281,7 +2281,7 @@ define(function(require, exports){
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:80px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2371,18 +2371,18 @@ define(function(require, exports){
 		'<td><input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td><input type="text" name="seatLevel" class="w-80"/></td>'+
 		'<td><input type="text" name="price" class="w-80"/></td>'+
-		'<td><input type="text" name="realCount" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="ticketneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div>'+
+		'<div class="inline-flex col-xs-12">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:80px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2466,19 +2466,19 @@ define(function(require, exports){
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney"/></td>'+
+		'<td><input type="text" name="price" style="width:80px;"/></td>'+
+		'<td><input type="text" name="realCount" style="width:50px;"/></td>'+
+		'<td><input type="text" name="realReduceMoney" style="width:80px;"/></td>'+
 		'<td><span class="otherOutNeedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div>'+
+		'<div class="inline-flex col-xs-12">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:60px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" style="width:80px;"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+

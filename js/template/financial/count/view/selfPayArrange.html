@@ -54,8 +54,8 @@
                 <td>{{if arrange.selfPayItem != null}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.name}}{{/if}}
                     {{else}}<input name="selfPayItemName" value="" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}><input name="selfPayItemId" type="hidden">{{/if}}</td>
                 <td>
-                {{if arrange.badStatus == 1}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{else}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>{{/if}}
-                <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
+                
+                <input type="text" name="marketPrice" value="{{arrange.marketPrice}}" class="w-50"/></td>
                 
                 <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50"></td>
     
@@ -67,8 +67,8 @@
                 <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGetMoney}}</span>{{else}}<input type="text" class="F-float F-money w-80" name="realGetMoney" value="{{arrange.realGetMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                 </td>
                
-                <td>{{if arrange.badStatus == 1}}<span class="price F-float F-money">{{arrange.price}}</span>{{else}}<span class="price F-float F-money">{{arrange.price}}</span>{{/if}}
-                <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                <td>
+                <input type="text" name="price" value="{{arrange.price}}" class="w-50"/></td>
                 
                 
                 
