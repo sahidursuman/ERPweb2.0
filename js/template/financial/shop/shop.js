@@ -261,6 +261,9 @@ define(function(require, exports) {
                     curr: (data.searchParam.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            if(type){
+                               FinShop.$settlementTab.data("isEdited",false);
+                            }
                             FinShop.initOperationList({ page: obj.curr - 1 }, type, $theTab);
                         }
                     }
@@ -513,7 +516,7 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                             Tools.closeTab(checkMenuKey);
-                            FinShop.getList(0);
+                            FinShop.getList(FinShop.listPageNo);
                         } else if(argLen === 2){
                             FinShop.initOperationList(args, false, false);
                         } else if(argLen === 3){
@@ -657,7 +660,7 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
-                            FinShop.getList(0);
+                            FinShop.getList(FinShop.listPageNo);
                         } else if(argLen === 2){
                             FinShop.initOperationList(args, true,false);
                         } else if(argLen === 3){
