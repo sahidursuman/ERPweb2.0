@@ -1288,10 +1288,11 @@ define(function(require, exports){
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" style="width:90px;" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
-		'<td><span class="travelAgencyRateMoney"></span></td>'+
-		'<td><input type="text" name="guideRate" style="width:90px;" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
-		'<td><span class="guideRateMoney"></span></td>'+
+		'<td><input type="text" name="travelAgencyRate" style="width:50px;" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRateMoney" style="width:80px;"/></td>'+
+		'<td><input type="text" name="guideRate" style="width:50px;" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRateMoney" style="width:80px;"/></td>'+
+		'<td rowspan="2"><input type="text" name="currInCome" style="width:90px;"/></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
