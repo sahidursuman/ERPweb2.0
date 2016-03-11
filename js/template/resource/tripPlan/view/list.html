@@ -53,7 +53,7 @@
                     </label>
                     {{/if}}
                 </p>
-                <p class="h-memberName">导游：{{if tripPlan.guide}}{{tripPlan.guide.realname}}{{/if}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+                <p class="h-memberName">导游：{{tripPlan.guideNames}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
             </td>
             <td class="h-touristGroupInfo">
                 <p class="center">{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
@@ -109,12 +109,12 @@
         <tr class="hidden">
             <td class="h-touristGroupInfo">
                 <p>{{tripPlanDetails.lineProductName}}</p>
-                <p>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</p>
-
             </td>
-            {{if index == 0}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            {{/if}}
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlanDetails.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlanDetails.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
+            </td>
             <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小</td>
             {{if index == 0}}
             <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>

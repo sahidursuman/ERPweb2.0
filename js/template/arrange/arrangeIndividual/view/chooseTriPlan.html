@@ -14,7 +14,6 @@
 			<td>出团日期</td>
 			<td>完团日期</td>
 			<td>导游</td>
-			<td>车牌号</td>
 			<td>团队人数</td>
 			<td>剩余座数</td>
 			<td>状态</td>
@@ -29,7 +28,6 @@
 				<td>{{tripPlanList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 				<td>{{tripPlanList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 				<td>{{if tripPlanList.guide != null}}{{tripPlanList.guide.realname}}{{/if}}</td>
-                <td>{{if tripPlanList.bus != null}}{{tripPlanList.bus.licenseNumber}}{{/if}}</td>
 				<td class="F-float F-count">
 					大人{{tripPlanList.touristAdultCount}}小孩{{tripPlanList.touristChildCount}}</td>
 				<td class="T-remainSeatCount F-float F-count">{{if tripPlanList.bus!= null}}{{tripPlanList.bus.seatCount-tripPlanList.touristAdultCount-tripPlanList.touristChildCount}}{{/if}}</td>
