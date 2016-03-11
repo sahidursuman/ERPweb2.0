@@ -263,6 +263,8 @@ define(function(require, exports) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             if(type){
                                FinShop.$settlementTab.data("isEdited",false);
+                            } else {
+                                FinShop.$checkingTab.data('isEdited',false);
                             }
                             FinShop.initOperationList({ page: obj.curr - 1 }, type, $theTab);
                         }
@@ -622,6 +624,7 @@ define(function(require, exports) {
                             curr: (data.searchParam.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    $tab.data('isEdited',false);
                                     FinShop.getOperationList(obj.curr - 1, $tab);
                                 }
                             }
