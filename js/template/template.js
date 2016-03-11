@@ -207,9 +207,10 @@
 
           case 3:
             return "支票";
-
+          case 4:
+            return "其他"
           default:
-            return "其他";
+            return "网付";
         }
     }), template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
         switch (1 * billStatus) {
