@@ -354,21 +354,7 @@ define(function(require, exports) {
 	            FinancialService.exportReport(args,"exportArrangeBookingOrderFinancial");
 	        });
         }
-		$tab.find('.T-btn-close').on('click', function(event){
-			if(!!$tab.data('isEdited')){
-				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
-						Replace.saveCheckingData($tab);
-		            });
-				}, function(){
-					Tools.closeTab(oMenuKey);
-                	Replace.getList(Replace.listPageNo);
-				});
-			}else{
-				Tools.closeTab(oMenuKey);
-                Replace.getList(Replace.listPageNo);
-			}
-		});
+        FinancialService.closeTab(oMenuKey);
 		$tab.find('.T-saveClear').on('click', function(event){
 			if (!validatorCheck.form()) {
                 return;
