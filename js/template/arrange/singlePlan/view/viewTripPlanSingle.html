@@ -655,8 +655,8 @@
 						<td>{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
 						<td>{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td>{{group.lineProduct.name}}</td>
-						<td>{{group.contactMember.name}}</td>
-						<td>{{group.contactMember.mobileNumber}}</td>
+						<td>{{if group.contactMember}}{{group.contactMember.name}}{{/if}}</td>
+						<td>{{if group.contactMember}}{{group.contactMember.mobileNumber}}{{/if}}</td>
 						<td>{{group.areaData}}</td>
 						<td>{{group.ageData}}</td>
 						<td>{{group.adultCount}}大{{group.childCount}}小</td>
