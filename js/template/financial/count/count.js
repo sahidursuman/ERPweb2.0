@@ -1161,8 +1161,8 @@ define(function(require, exports){
 					$outDetailTab.find('.btn-view').off('click').on('click',function(){
 						var $that = $(this);
 						var url = $that.attr("url");
-						var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-						var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val();
+						var smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
 						Count.viewImages(url,bigImg,smallImg);
 					});
 				}

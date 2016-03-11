@@ -316,9 +316,11 @@ define(function(require, exports) {
 	            if ($that.hasClass('T-count')) {  //若数量改变
 	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	                subsection.calcuFeeTotal(); //费用项实时计算
 	            }else if($that.hasClass('T-price')){ //若价格改变
 	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	                subsection.calcuFeeTotal();
 	        };
         });
 
@@ -591,6 +593,19 @@ define(function(require, exports) {
     	    };
     	return totalPayMoney;
     };
+
+    /**
+     * [calcuFeeTotal 费用项实时计算
+     * @return {[type]} [description]
+     */
+	subsection.calcuFeeTotal=function(){
+      var $trList=subsection.$tabSub.find('.T-subsectionOperationTbody').find('tr'),totalFee=0*1;
+      $trList.each(function(index) {
+      	  totalFee=totalFee*1;
+      	  totalFee+=$trList.eq(index).find('.T-payedMoney').val()*1;
+      });
+      subsection.$tabSub.find('.T-FeeTotal').val(totalFee);
+	};
 
 	/**
 	 * 保存分段操作

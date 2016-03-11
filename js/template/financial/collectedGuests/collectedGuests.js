@@ -27,10 +27,10 @@ define(function(require, exports) {
         var html = listMainTemplate(data);
         Tools.addTab(menuKey,"收客利润",html);
         
-        ColGuest.listMain("","","","","","",dateJson.startDate,dateJson.endDate);
+        ColGuest.listMain("","","","","","",dateJson.startDate,dateJson.endDate,"","","","","");
     };
 
-    ColGuest.listMain = function(lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime,outOPUserName,groupName){
+    ColGuest.listMain = function(lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime,outOPUserName,groupName,businessGroupName,businessGroupId,groupId){
         ColGuest.searchData = {
             pageNo : 0,
             lineProductName : lineProductName,
@@ -43,6 +43,9 @@ define(function(require, exports) {
             endTime : endTime,
             outOPUserName : outOPUserName,
             groupName : groupName,
+            groupId : groupId,
+            businessGroupName : businessGroupName,
+            businessGroupId : businessGroupId,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(ColGuest.searchData);
@@ -59,6 +62,7 @@ define(function(require, exports) {
 
                     var lineProductNameList = data.lineProductList,
                         partnerAgencyList = data.fromPartnerAgencyList;
+                        businessGroupList = data.businessGroupList;
 
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
@@ -89,12 +93,14 @@ define(function(require, exports) {
                     Tools.setDatePicker($tab.find(".date-picker"),true);
 
                     ColGuest.getOPUserList(ColGuest.$searchArea.find("input[name=outOPUserName]"), data.outOPUserList);
-                    ColGuest.getGroupMapList(ColGuest.$searchArea.find("input[name=groupName]"), data.groupMapList)
+                    ColGuest.getGroupMapList(ColGuest.$searchArea.find("input[name=groupName]"), data.groupMapList);
+                    ColGuest.getBusinessList(ColGuest.$searchArea.find("input[name=businessName]"), data.businessGroupList);
                     //搜索按钮事件
                     $tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
 
                         ColGuest.listMain(
+                            '',
                             ColGuest.$searchArea.find('input[name="lineProductName"]').val(),
                             ColGuest.$searchArea.find('input[name="lineProductId"]').val(),
                             ColGuest.$searchArea.find('input[name="fromPartnerAgencyName"]').val(),
@@ -104,15 +110,17 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find('input[name="startTime"]').val(),
                             ColGuest.$searchArea.find('input[name="endTime"]').val(),
                             ColGuest.$searchArea.find("input[name=outOPUserName]").val(),
-                            ColGuest.$searchArea.find("input[name=groupName]").val()
-                            );
+                            ColGuest.$searchArea.find("input[name=groupName]").val(),
+                            ColGuest.$searchArea.find("input[name=groupName]").data('id'),
+                            ColGuest.$searchArea.find("input[name=businessName]").val(),
+                            ColGuest.$searchArea.find("input[name=businessName]").data('id'));
                     });
                 }
             }
         });
     };
 
-    ColGuest.listGuest = function(pageNo,lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime, outOPUserName, groupName){
+    ColGuest.listGuest = function(pageNo,lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime, outOPUserName, groupName,groupId,businessGroupName,businessGroupId){
         if (ColGuest.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             lineProductName = ColGuest.$searchArea.find("input[name=lineProductName]").val(),
@@ -125,6 +133,9 @@ define(function(require, exports) {
             endTime = ColGuest.$searchArea.find("input[name=endTime]").val();
             outOPUserName = ColGuest.$searchArea.find("input[name=outOPUserName]").val();
             groupName = ColGuest.$searchArea.find("input[name=groupName]").val();
+            groupId = ColGuest.$searchArea.find("input[name=groupName]").data('id');
+            businessGroupName = ColGuest.$searchArea.find("input[name=businessName]").val();
+            businessGroupId = ColGuest.$searchArea.find("input[name=businessName]").data('id');
         }
         if(startTime > endTime){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -147,6 +158,9 @@ define(function(require, exports) {
             endTime : endTime,
             outOPUserName : outOPUserName,
             groupName : groupName,
+            groupId:groupId,
+            businessGroupName:businessGroupName,
+            businessGroupId:businessGroupId,
             order : "desc",
             sortType: 'startTime'
         };
@@ -277,8 +291,48 @@ define(function(require, exports) {
             }
         })
     };
-    /**
+
+     /**
      * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    ColGuest.getBusinessList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.businessGroupId);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].businessGroupName;
+                    data[i].id = data[i].businessGroupId;
+                }
+
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        });
+    };
+    /**
+     * 绑定子部门的选择
      * @param  {object} $target jQuery对象
      * @param  {object} data    部门数据
      * @return {[type]}         [description]
