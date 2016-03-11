@@ -207,8 +207,10 @@
 
           case 3:
             return "支票";
+
           case 4:
-            return "其他"
+            return "其他";
+
           default:
             return "网付";
         }

@@ -92,9 +92,6 @@
                         <p>
                             {{if tripPlanTourist.touristGroup}}{{tripPlanTourist.touristGroup.lineProduct.name }}{{/if}}
                         </p>
-                        <p>
-                        {{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}
-                        </p>
                     </td>
                     <td><span>{{tripPlanTourist.touristGroup.startTime | dateFormat: 'yyyy.MM.dd'}}</span><br> - <br><span>{{tripPlanTourist.touristGroup.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
                     <td>{{tripPlanTourist.touristGroup.adultCount}}大{{tripPlanTourist.touristGroup.childCount}}小</td>
