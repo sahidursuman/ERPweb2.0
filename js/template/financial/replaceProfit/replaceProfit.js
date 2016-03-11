@@ -196,8 +196,8 @@ define(function(require, exports) {
                         replace.listReplace(0);
                     });
                     replace.getOPUserList(replace.$tab.find('[name="outOPUserName"]'), replace.outOPUserList);
-                    replace.getGroupMapList(replace.$tab.find('[name="groupName"]'), replace.groupList);
-                    replace.getBusinessList(replace.$tab.find('[name="businessName"]'), replace.businessGroupList);
+                    replace.getGroupMapList(replace.$tab.find('[name="groupName"]'));
+                    replace.getBusinessList(replace.$tab.find('[name="businessName"]'));
 
                     replace.$tab.find('.T-list').off().on('click','.T-option',function(event) {
                         event.preventDefault();
@@ -421,27 +421,34 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.groupId);
             }
-        }).one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-
-            if (!!data) {
-                for (var i = 0, len = data.length;i < len; i++) {
-                    data[i].value = data[i].name;
+            $.ajax({
+                url: KingServices.build_url("group", "selectGroup"),
+                type: "POST",
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessName]').data('id'),
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
                 }
-
-                $target.autocomplete('option', 'source', data).data('ajax', true);
-                $target.autocomplete('search', '');
-            }
+            })
         })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
-        });
     };
 
 
@@ -461,26 +468,35 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.businessGroupId);
+                $target.nextAll('[name=groupName]').val('').data('id','');
+
             }
-        }).one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-
-            if (!!data) {
-                for (var i = 0, len = data.length;i < len; i++) {
-                    data[i].value = data[i].name;
+            $.ajax({
+                url: KingServices.build_url("group", "selectBusinessGroup"),
+                type: "POST",
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.businessGroupList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].businessGroupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
                 }
-                $target.autocomplete('option', 'source', data).data('ajax', true);
-                $target.autocomplete('search', '');
-            }
+            })
         })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
-        });
     };
 
     exports.init = replace.initModule;

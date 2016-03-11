@@ -52,7 +52,7 @@
             <div class="form-group mar-r-10">
                 <label class="control-label">本次收款金额合计：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money F-float F-money" {{if type}}disabled {{/if}}>
+                    <input type="text" name="sumPayMoney" class="money F-float F-money" value="{{sumPayMoney}}" {{if type}}disabled {{/if}}>
                 </label>
             </div>
 
@@ -189,7 +189,7 @@
         <div class="clearfix"></div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-createTripPlan T-close">
+                <button class="btn btn-xs btn-primary T-btn-close">
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>

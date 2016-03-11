@@ -28,16 +28,11 @@ define(function(require, exports) {
             touristGroupMergeList: []
         },
         touristGroupId: [],
-        transferId: [],
-
-        transferFromBusinessList: [],
-        transferFromPartnerList: [],
-        transferProductList: []
-
+        transferId: []
     };
 
     var getFeeItemPayTypeOptions =  {
-            payType : 1
+        payType : 1
     };
 
     /**
@@ -45,12 +40,12 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     arrangeGroupTransfer.initModule = function() {
-
-        //请求搜索数据
-        arrangeGroupTransfer.caCheAutocomData(2);
         Tools.addTab(menuKey, "团散转客", listMainTemplate());
+        arrangeGroupTransfer.$tab=$("#tab-"+menuKey+"-content");
+        //请求搜索数据
+        arrangeGroupTransfer.autocompleteSearch(2,arrangeGroupTransfer.$tab);
         //初始化时间控件
-        arrangeGroupTransfer.initDatePicker($("#" + tabId));
+        arrangeGroupTransfer.initDatePicker(arrangeGroupTransfer.$tab);
         //初始化散拼、团体、转客时间
         arrangeGroupTransfer.init_event();
     };
@@ -79,19 +74,6 @@ define(function(require, exports) {
             arrangeGroupTransfer.transferId = [];
             arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType);
         });
-
-
-        //线路产品的AutocomPlate数据
-        var $transferLinPro = $TransferObj.find('.T-Choose-linProList');
-            arrangeGroupTransfer.chooseLineProduct($transferLinPro, 2);
-
-        //业务部AutocomPlate数据
-        var $transferfromBus = $TransferObj.find('.T-fromBussinessGroup');
-            arrangeGroupTransfer.chooseBusinessGroup($transferfromBus, 2);
-
-        //组团社AutocomPlate数据
-        var $transferPart = $TransferObj.find('.T-fromPartnerAgency');
-            arrangeGroupTransfer.choosePartnerAgency($transferPart, 2);
 
         //模拟Click事件
         $TransferObj.find('.T-Transfer-search').trigger('click');
@@ -629,10 +611,11 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.innerEditFee_Event = function(type) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
-
         //精度限制
-        $count = $editFeeObj.find('.T-count');
+        $count = $editFeeObj.find('.T-count'),
+        $price = $editFeeObj.find('.T-price');
         Tools.inputCtrolFloat($count);
+        Tools.inputCtrolFloat($price);
 
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -682,10 +665,8 @@ define(function(require, exports) {
     arrangeGroupTransfer.outEditFee_Event = function(type) {
         var $outFeeObj = $("#T-outEditFeeMain"),
             //精度限制
-            $price = $outFeeObj.find('.T-price'),
             $count = $outFeeObj.find('.T-count');
         Tools.inputCtrolFloat($count);
-        Tools.inputCtrolFloat($price);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
@@ -785,7 +766,7 @@ define(function(require, exports) {
         //精度限制
         var $price = $tbody.find('.T-price'),
             $count = $tbody.find('.T-count');
-        if (!!type && type==2) {
+        if (!!type && type==1) {
            Tools.inputCtrolFloat($price);
         };
         Tools.inputCtrolFloat($count);
@@ -926,9 +907,9 @@ define(function(require, exports) {
             },
             otherFeeListDel = [];
         var $tbodyFee = $editFeeObj.find(".T-innerOutEditFeeTbody"),
-        $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
-        otherFeeListLength = $trNotDelete.length;
-        innerTransferFeeStatus=arrangeGroupTransfer.getVal($editFeeObj, "innerTransferFeeStatus");
+            $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
+            otherFeeListLength = $trNotDelete.length;
+            innerTransferFeeStatus=arrangeGroupTransfer.getVal($editFeeObj, "innerTransferFeeStatus");
         $trNotDelete.each(function(i) {
             var $that = $(this),
                 FeeJson = {
@@ -983,8 +964,8 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.saveTransFee = function($editFeeObj, type) {
         var transferFeeStatus = arrangeGroupTransfer.getVal($editFeeObj, "transferFeeStatus"),
-        id = arrangeGroupTransfer.getVal($editFeeObj, "touristGroupId"),
-        cashFlag = arrangeGroupTransfer.getVal($editFeeObj, "isCurrent");
+            id = arrangeGroupTransfer.getVal($editFeeObj, "touristGroupId"),
+            cashFlag = arrangeGroupTransfer.getVal($editFeeObj, "isCurrent");
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeGroupTransfer.getVal($editFeeObj, "remark") || "无",
@@ -998,8 +979,8 @@ define(function(require, exports) {
             },
             otherFeeListDel = [];
         var $tbodyFee = $editFeeObj.find(".T-innerOutEditFeeTbody"),
-        $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
-        otherFeeListLength = $trNotDelete.length;
+            $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
+            otherFeeListLength = $trNotDelete.length;
         $trNotDelete.each(function(i) {
             var $that = $(this),
             FeeJson = {
@@ -1233,7 +1214,7 @@ define(function(require, exports) {
      * @param  {[type]} customerType 散客、团体、转客标识
      * @return {[type]}              [description]
      */
-    arrangeGroupTransfer.caCheAutocomData = function(customerType) {
+    arrangeGroupTransfer.autocompleteSearch = function(customerType,$tab) {
         $.ajax({
             url: KingServices.build_url("touristGroup", "getQueryForTripOperation"),
             type: 'POST',
@@ -1242,22 +1223,20 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                arrangeGroupTransfer.transferFromBusinessList = data.fromBusinessGroupList;
-                arrangeGroupTransfer.transferFromPartnerList = data.fromPartnerAgencyList;
-                arrangeGroupTransfer.transferProductList = data.lineProductList;
+                var $searArea=$tab.find('.T-search-area');
+                arrangeGroupTransfer.chooseLineProduct($searArea.find('[name=lineProductName]'), data.lineProductList);
+                arrangeGroupTransfer.chooseBusinessGroup($searArea.find('[name=fromBussinessGroupName]'), data.fromBusinessGroupList);
+                arrangeGroupTransfer.choosePartnerAgency($searArea.find('[name=fromPartnerAgencyName]'), data.fromPartnerAgencyList);
             };
         })
+
     };
-
-
-
-
     /**
      * 线路产品Autocomplete
      * @param  {[type]} $obj [description]
      * @return {[type]}      [description]
      */
-    arrangeGroupTransfer.chooseLineProduct = function($obj, customerType) {
+    arrangeGroupTransfer.chooseLineProduct = function($obj, lineProList) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1272,11 +1251,7 @@ define(function(require, exports) {
                 parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),
-                list;
-            if (customerType == 2) {
-                list = arrangeGroupTransfer.transferProductList;
-            }
+            var $obj = $(this),list=lineProList;
             if (!!list && list.length > 0) {
                 for (var i = 0; i < list.length; i++) {
                     list[i].value = list[i].name;
@@ -1298,7 +1273,7 @@ define(function(require, exports) {
      * @param  {[type]} $obj [description]
      * @return {[type]}      [description]
      */
-    arrangeGroupTransfer.chooseBusinessGroup = function($obj, customerType) {
+    arrangeGroupTransfer.chooseBusinessGroup = function($obj, fromBusiGroupList) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1313,11 +1288,7 @@ define(function(require, exports) {
                 parents.find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),
-                list;
-            if (customerType == 2) {
-                list = arrangeGroupTransfer.transferFromBusinessList;
-            }
+            var $obj = $(this),list=fromBusiGroupList;
             if (!!list && list.length > 0) {
                 for (var i = 0; i < list.length; i++) {
                     list[i].value = list[i].businessGroupName;
@@ -1338,7 +1309,7 @@ define(function(require, exports) {
      * @param  {[type]} $obj [description]
      * @return {[type]}      [description]
      */
-    arrangeGroupTransfer.choosePartnerAgency = function($obj, customerType) {
+    arrangeGroupTransfer.choosePartnerAgency = function($obj, fromParAgencyList) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
@@ -1353,11 +1324,7 @@ define(function(require, exports) {
                 parents.find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
             }
         }).unbind("click").click(function() {
-            var $obj = $(this),
-                list;
-            if (customerType == 2) {
-                list = arrangeGroupTransfer.transferFromPartnerList;
-            }
+            var $obj = $(this),list = fromParAgencyList;
             if (!!list && list.length > 0) {
                 for (var i = 0; i < list.length; i++) {
                     list[i].value = list[i].travelAgencyName;

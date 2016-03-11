@@ -166,8 +166,10 @@ template.helper("getPayTypeText", function(payType) {
             return '签单';
         case 3:
             return '支票';
-        default:
+        case 4:
             return '其他';
+        default:
+            return '网付';
     }
 });      
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {

@@ -261,6 +261,11 @@ define(function(require, exports) {
                     curr: (data.searchParam.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            if(type){
+                               FinShop.$settlementTab.data("isEdited",false);
+                            } else {
+                                FinShop.$checkingTab.data('isEdited',false);
+                            }
                             FinShop.initOperationList({ page: obj.curr - 1 }, type, $theTab);
                         }
                     }
@@ -397,24 +402,7 @@ define(function(require, exports) {
             }
         });
         //绑定取消事件
-        $tab.find('.T-btn-close').on('click', function(event) {
-            event.preventDefault();
-            if (!!$tab.data('isEdited')) {
-                showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    if (!type) {
-                        FinancialService.changeUncheck($tab.find('.T-checkTr'), function() {
-                            saveData($tab, true);
-                        });
-                    } else {
-                        saveData($tab, true);
-                    }
-                }, function() {
-                    Tools.closeTab(operationMenuKey);
-                });
-            } else {
-                Tools.closeTab(operationMenuKey);
-            }
-        });
+        FinancialService.closeTab(operationMenuKey);
     };
 
     FinShop.viewOperationDetail = function(id, type) {
@@ -513,7 +501,7 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                             Tools.closeTab(checkMenuKey);
-                            FinShop.getList(0);
+                            FinShop.getList(FinShop.listPageNo);
                         } else if(argLen === 2){
                             FinShop.initOperationList(args, false, false);
                         } else if(argLen === 3){
@@ -619,6 +607,7 @@ define(function(require, exports) {
                             curr: (data.searchParam.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    $tab.data('isEdited',false);
                                     FinShop.getOperationList(obj.curr - 1, $tab);
                                 }
                             }
@@ -657,7 +646,7 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
-                            FinShop.getList(0);
+                            FinShop.getList(FinShop.listPageNo);
                         } else if(argLen === 2){
                             FinShop.initOperationList(args, true,false);
                         } else if(argLen === 3){
