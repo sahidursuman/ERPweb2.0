@@ -49,7 +49,7 @@
                 {{else}}{{itemSet.name}}<input type="hidden" name="shopPolicy" value="{{itemSet.name}}"></span>{{/if}}
                 </td>
 
-                <td><input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
+                <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
                 {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
@@ -58,16 +58,16 @@
                     {{/if}}
                 </td>
                 
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} style="width:50px;"/></td>
+                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
-                <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:50px;"/></td>
+                <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td rowspan="{{arrange.shopArrangeItemSet.length}}">
-                    <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" style="width:90px;" 
+                    <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 </td>
 
@@ -105,7 +105,7 @@
 
                 </td>
 
-                <td><input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
+                <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
                 {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                  <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
@@ -114,14 +114,14 @@
                     {{/if}}
                 </td>
                 
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} style="width:50px;"/></td>
+                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
-                <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:50px;"/></td>
+                <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} style="width:80px;"/></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
+                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
                 {{if editStatus == 1}}

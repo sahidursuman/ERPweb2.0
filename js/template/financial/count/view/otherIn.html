@@ -30,11 +30,11 @@
 
                         <td><span>{{otherInCome.title}}</span><input style="width:90px;" type="hidden" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
-                        <td><input style="width:90px;" type="text" class="F-float F-money" name="price" value="{{otherInCome.price}}"  maxlength="11"
+                        <td><input  type="text" class="F-float F-money w-80" name="price" value="{{otherInCome.price}}"  maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
                         /></td>
 
-                        <td><input style="width:90px;" type="text" class="F-float F-count" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
+                        <td><input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
                         <td><span class="needPayMoney F-float F-money">{{otherInCome.needPayMoney}}</span><input type="hidden" name="needPayMoney" value="{{otherInCome.needPayMoney}}" 

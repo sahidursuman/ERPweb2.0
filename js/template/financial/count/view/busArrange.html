@@ -71,7 +71,7 @@
 
             <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
             
-            <td><div class="inline-flex col-xs-12">
+            <td><div class="inline-flex">
     
             {{if busCompany.badStatus == 1}}
             <span>
@@ -94,7 +94,7 @@
                 <option value="2" {{if busCompany.payType == 2}}selected="selected"{{/if}}>签单</option>
             </select>
             &nbsp;
-            <input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" 
+            <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
             {{if busCompany.billUpdateTime != null}}{{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}"{{/if}}{{else}}
             {{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}
             {{/if}} 

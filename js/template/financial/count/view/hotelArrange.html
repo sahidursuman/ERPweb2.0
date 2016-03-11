@@ -41,9 +41,9 @@
 
                     <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
 
-                    <td>{{if arrange.badStatus == 1}}<input type="hidden" name="price" value="{{arrange.price}}" readOnly="readOnly"/>{{/if}}<input type="text" name="price" value="{{arrange.price}}" class="w-50"/></td>
+                    <td>{{if arrange.badStatus == 1}}<input type="hidden" name="price" value="{{arrange.price}}" readOnly="readOnly"/>{{/if}}<input type="text" name="price" value="{{arrange.price}}" class="w-80"/></td>
 
-                    <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input style="width:90px;" class="F-float F-count w-50" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5" 
+                    <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input  class="F-float F-count w-50" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                     </td>
 
@@ -75,7 +75,7 @@
                         <option value="2" {{if arrange.payType == 2}}selected="selected"{{/if}}>签单</option>
                     </select>
                     &nbsp;
-                    <input style="width:90px;" class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
+                    <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
                     {{if arrange.payType == 2}}value="{{arrange.signMoney}}"{{else}}{{if arrange.billUpdateTime != null }} value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}}  maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}{{/if}}/>{{/if}}
                         <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                         <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>

@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":46,"md5":"e7ccc671ff2ae92ac778336da6bef35d"}*/
+/*TMODJS:{"debug":true,"version":47,"md5":"e7ccc671ff2ae92ac778336da6bef35d"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/insuranceArrange", function($data, $filename) {
         try {
