@@ -1502,7 +1502,7 @@ define(function(require, exports) {
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('tr');
+        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
         $tbody.each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
