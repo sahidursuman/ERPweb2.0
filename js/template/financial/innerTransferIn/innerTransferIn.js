@@ -808,10 +808,10 @@ define(function(require,exports) {
 
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,$tab,$data,tab_id,title, html){
-		if(InnerTransferIn.$settlementTab.find('T-btn-autofill').length > 0){
-			var settleValidator = new FinRule(3);
-		} else {
+		if(InnerTransferIn.$settlementTab.find('.T-btn-autofill').length > 0){
 			var settleValidator = new FinRule(4);
+		} else {
+			var settleValidator = new FinRule(3);
 		}
 		var argumentsLen = arguments.length;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,settleValidator);
