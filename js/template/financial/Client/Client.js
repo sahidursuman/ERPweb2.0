@@ -343,9 +343,7 @@ define(function(require, exports) {
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientCheckTab);
-        });
+        FinancialService.closeTab(ClientCheckTab);
 
     };
 
@@ -630,9 +628,7 @@ define(function(require, exports) {
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientClearTab);
-        });
+        FinancialService.closeTab(ClientClearTab);
     };
 
     /**
