@@ -424,7 +424,7 @@ define(function(require, exports){
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName" && $nameFlag != "currInCome"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -700,7 +700,7 @@ define(function(require, exports){
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input[type=text]',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"){
+			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"  && $nameFlag != "currInCome"){
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoShopSum($(this),$obj);
@@ -1286,23 +1286,24 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
-		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" style="width:90px;" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
-		'<td><span class="travelAgencyRateMoney"></span></td>'+
-		'<td><input type="text" name="guideRate" style="width:90px;" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
-		'<td><span class="guideRateMoney"></span></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
+		'<td rowspan="2"><input type="text" name="currInCome" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
 		'<tr>'+
 		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy"><button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></td>'+
-		'<td><input type="text" name="consumeMoney" style="width:90px;"/></td>'+
+		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" style="width:90px;" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
-		'<td><span class="travelAgencyRateMoney"></span></td>'+
-		'<td><input type="text" name="guideRate" style="width:90px;" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
-		'<td><span class="guideRateMoney"></span></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 		'</tr>';
 		
@@ -1311,15 +1312,6 @@ define(function(require, exports){
 		Count.getShopData($bodyObj,$parentObj);
 		//设置下拉框
 		Count.setChooseDays($bodyObj,$parentObj,'shop');
-		$bodyObj.find('input[type=text]').off('change').on('change',function(){
-			
-			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "shopName" && $nameFlag != "shopPolicy" && $nameFlag != "billRemark"){
-			Count.calculateCost($(this));
-			//计算金额
-			Count.autoShopSum($(this),$parentObj);
-			}
-		});
 	};
 	//新增商品
 	Count.addShop = function($obj,$parentObj){
@@ -1342,12 +1334,12 @@ define(function(require, exports){
 
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
-			'<td><input type="text" name="consumeMoney" style="width:90px;"></td>'+
+			'<td><input type="text" name="consumeMoney" class="w-80"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="travelAgencyRate" style="width:90px;"><input type="hidden" name="travelAgencyRateMoney"></td>'+
-			'<td><span class="travelAgencyRateMoney"></span></td>'+
-			'<td><input type="text" name="guideRate" style="width:90px;"><input type="hidden" name="guideRateMoney"></td>'+
-			'<td><span class="guideRateMoney"></span></td>'+
+			'<td><input type="text" name="travelAgencyRate" class="w-50""><input type="hidden" name="travelAgencyRateMoney"></td>'+
+			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
+			'<td><input type="text" name="guideRate" class="w-50"><input type="hidden" name="guideRateMoney"></td>'+
+			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 			'</tr>';
 			
@@ -1427,6 +1419,7 @@ define(function(require, exports){
 	//购物金额计算
 	Count.autoShopSum = function($obj,$parentObj){
 		var $parent = $obj.closest('tr');
+		var $nameFlag = $obj.attr('name');
 		var consumeMoney = $parent.find('input[name=consumeMoney]').val();
 		var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 		var travelAgencyRateMoney = $parent.find('input[name=travelAgencyRateMoney]').val();
@@ -1443,10 +1436,11 @@ define(function(require, exports){
 		travelAgencyRateMoney = Count.changeTwoDecimal(travelAgencyRateMoney);
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
-		$parent.find('.travelAgencyRateMoney').text(travelAgencyRateMoney);
-		$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-		$parent.find('.guideRateMoney').text(guideRateMoney);
-		$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+		if($nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney"){
+			$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+			$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+		};
+		
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
@@ -1464,13 +1458,13 @@ define(function(require, exports){
 	        		sumMoney += parseFloat(sum);
 	        	});
 	        	//导佣
-	        	$listObj.find('.guideRateMoney').each(function(){
-	        		var sum = Count.changeTwoDecimal($(this).text());
+	        	$listObj.find('[name=guideRateMoney]').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).val());
 	        		guideSum += parseFloat(sum);
 	        	});
 	        	//社佣
-	        	$listObj.find('.travelAgencyRateMoney').each(function(){
-	        		var sum = Count.changeTwoDecimal($(this).text());
+	        	$listObj.find('[name=travelAgencyRateMoney]').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).val());
 	        		travelSum += parseFloat(sum);
 	        	});
 
@@ -1481,13 +1475,13 @@ define(function(require, exports){
 	        		sumMoney += parseFloat(sum);
 	        	});
 	        	//导佣
-	        	$listObj.find('.guideRateMoney').each(function(){
-	        		var sum = Count.changeTwoDecimal($(this).text());
+	        	$listObj.find('[name=guideRateMoney]').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).val());
 	        		guideSum += parseFloat(sum);
 	        	});
 	        	//社佣
-	        	$listObj.find('.travelAgencyRateMoney').each(function(){
-	        		var sum = Count.changeTwoDecimal($(this).text());
+	        	$listObj.find('[name=travelAgencyRateMoney]').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).val());
 	        		travelSum += parseFloat(sum);
 	        	});
 				//设置人数返佣，停车返佣
@@ -1751,7 +1745,7 @@ define(function(require, exports){
 		'<td><span class="needPayMoney"></span></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
@@ -1893,7 +1887,7 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="title" class="w-80"/></td>'+
 		'<td><input type="text" name="price" class="w-80"/></td>'+
-		'<td><input type="text" name="count" class="w-80"/></td>'+
+		'<td><input type="text" name="count" class="w-50"/></td>'+
 		'<td><span class="needPayMoney">0</span></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -1984,13 +1978,13 @@ define(function(require, exports){
 		'<td><span class="BusneedPayMoney">0</span></td>'+
 		'<td><input type="text" name="payedMoney" class="w-80"/></td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;margin:0px;padding:0px;"/>'+
+		'<input type="text" name="guidePayMoney" style="margin:0px;padding:0px;" class="w-80"/>'+
 		'</div>'+
 		'</td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
@@ -2080,19 +2074,19 @@ define(function(require, exports){
 		'<option value="晚餐">晚餐</option>'+
 		'</select>'+
 		'</td>'+
-		'<td><input type="text" name="price" style="width:90px;"/><input type="hidden" name="standardId"></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/><input type="hidden" name="standardId"></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="restneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2182,9 +2176,9 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td><input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="hotelneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
@@ -2194,7 +2188,7 @@ define(function(require, exports){
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2275,19 +2269,19 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td><input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="scenicneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div class="inline-flex col-xs-12">'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2377,18 +2371,18 @@ define(function(require, exports){
 		'<td><input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td><input type="text" name="seatLevel" class="w-80"/></td>'+
 		'<td><input type="text" name="price" class="w-80"/></td>'+
-		'<td><input type="text" name="realCount" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="ticketneedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div>'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:90px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -2472,19 +2466,19 @@ define(function(require, exports){
 		var html = '<tr>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
-		'<td><input type="text" name="price" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realCount" style="width:90px;"/></td>'+
-		'<td><input type="text" name="realReduceMoney"/></td>'+
+		'<td><input type="text" name="price" class="w-80"/></td>'+
+		'<td><input type="text" name="realCount" class="w-50"/></td>'+
+		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="otherOutNeedPayMoney">0</span><input type="hidden" value="0" name="needPayMoney"></td>'+
 		'<td>0</td>'+
 		'<td>'+
-		'<div>'+
+		'<div class="inline-flex">'+
 		'<select name="payType">'+
 		'<option value="0">现金</option>'+
 		'<option value="1">刷卡</option>'+
 		'<option value="2">签单</option>'+
 		'</select>&nbsp;'+
-		'<input type="text" name="guidePayMoney" style="width:60px;"/></div></td>'+
+		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
@@ -3851,22 +3845,7 @@ define(function(require, exports){
 			"addTicketArrangeList":[],
 			"otherArrangeList":[],
 			"guideArrangeList":[],
-	        "remarkArrangeList":[],
-			"log":{
-				"type":"1",
-				"info":{
-					"message":"",
-				},
-				"shopLog":[],
-				"selfPayLog":[],
-				"otherInLog":[],
-				"busLog":[],
-				"restaurantLog":[],
-				"hotelLog":[],
-				"scenicLog":[],
-				"ticketLog":[],
-				"otherLog":[],
-			}
+	        "remarkArrangeList":[]
 		};
 		//团信息
 		var tripPlan = {
@@ -3928,6 +3907,7 @@ define(function(require, exports){
 									id:id,
 									shopId:shopId,
 									whichDay:whichDay,
+									rebateCurrentIncomeMoney:Count.changeTwoDecimal(parseFloat($that.find('input[name=currInCome]').val())),
 								};
 								itemSet={
 									id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
@@ -3958,6 +3938,7 @@ define(function(require, exports){
 										id:id,
 										shopId:shopId,
 										whichDay:whichDay,
+										rebateCurrentIncomeMoney:Count.changeTwoDecimal(parseFloat($newTr.find('input[name=currInCome]').val()))
 									};
 									itemSet={
 										id:$newTr.find('input[name=shopPolicyArrId]').val() || '',
@@ -3977,6 +3958,7 @@ define(function(require, exports){
 										id:id,
 										shopId:shopId,
 										whichDay:whichDay,
+										rebateCurrentIncomeMoney:Count.changeTwoDecimal(parseFloat($newTr.find('input[name=currInCome]').val()))
 									};
 									itemSet={
 										id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
@@ -3997,6 +3979,7 @@ define(function(require, exports){
 										id:id,
 										shopId:shopId,
 										whichDay:whichDay,
+
 									};
 									itemSet={
 										id:$thisTr.find('input[name=shopPolicyArrId]').val() || '',
@@ -4042,14 +4025,6 @@ define(function(require, exports){
 						"guideRebateMoney":Count.changeToString($(this).find('input[name=guideRebateMoney]').val())
 				}
 				saveJson.selfPayArrangeList.push(selfPayArrange);
-				var log = {
-						"aid":selfPayArrange.id,
-						"oc":Count.changeToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-						"nc":selfPayArrange.realCount,
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":selfPayArrange.realGuidePayMoney
-				}
-				saveJson.log.selfPayLog.push(log);
 			}else{
 				var addSelfArrange = {
 					id:'',
@@ -4116,13 +4091,6 @@ define(function(require, exports){
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.busCompanyArrangeList.push(busCompanyArrange);
-				var log = {
-						"aid":busCompanyArrange.id,
-						"realReduceMoney":Count.changeToString(parseFloat($(this).find('input[name=realReduceMoney]').attr('old'))),
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":busCompanyArrange.realGuidePayMoney
-				}
-				saveJson.log.busLog.push(log);
 			}else{
 				var obj = $(this);
 				var busArrange = {
@@ -4163,15 +4131,6 @@ define(function(require, exports){
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.restaurantArrangeList.push(restaurantArrange);
-				var log = {
-						"aid":restaurantArrange.id,
-						"oc":Count.changeToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-						"nc":restaurantArrange.realCount,
-						"realReduceMoney":Count.changeToString(parseFloat($(this).find('input[name=realReduceMoney]').attr('old'))),
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":restaurantArrange.realGuidePayMoney
-				}
-				saveJson.log.restaurantLog.push(log);
 			}else{
 				var addRestArrange = {
 					id:'',
@@ -4205,15 +4164,6 @@ define(function(require, exports){
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.hotelArrangeList.push(hotelArrange);
-				var log = {
-						"aid":hotelArrange.id,
-						"oc":Count.changeToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-						"nc":hotelArrange.realCount,
-						"realReduceMoney":Count.changeToString(parseFloat($(this).find('input[name=realReduceMoney]').attr('old'))),
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":hotelArrange.realGuidePayMoney
-				}
-				saveJson.log.hotelLog.push(log);
 			}else{
 				var addHotelArrange = {
 					id:'',
@@ -4246,15 +4196,6 @@ define(function(require, exports){
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.scenicArrangeList.push(scenicArrange);
-				var log = {
-						"aid":scenicArrange.id,
-						"oc":Count.changeToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-						"nc":scenicArrange.realCount,
-						"realReduceMoney":Count.changeToString(parseFloat($(this).find('input[name=realReduceMoney]').attr('old'))),
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":scenicArrange.realGuidePayMoney
-				}
-				saveJson.log.scenicLog.push(log);
 			}else{
 				var addScenic = {
 					id:'',
@@ -4287,15 +4228,6 @@ define(function(require, exports){
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.ticketArrangeList.push(ticketArrange);
-				var log = {
-						"aid":ticketArrange.id,
-						"oc":Count.changeToString(parseFloat($(this).find('input[name=realCount]').attr('old'))),
-						"nc":ticketArrange.realCount,
-						"realReduceMoney":Count.changeToString(parseFloat($(this).find('input[name=realReduceMoney]').attr('old'))),
-						"ogm":Count.changeToString(parseFloat($(this).find('input[name=realGuidePayMoney]').attr('old'))),
-						"ngm":ticketArrange.realGuidePayMoney
-				}
-				saveJson.log.ticketLog.push(log);
 			}else{
 				var addTicket = {
 					id:'',
