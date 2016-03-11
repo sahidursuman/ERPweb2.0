@@ -93,8 +93,8 @@ define(function(require, exports) {
                     Tools.setDatePicker($tab.find(".date-picker"),true);
 
                     ColGuest.getOPUserList(ColGuest.$searchArea.find("input[name=outOPUserName]"), data.outOPUserList);
-                    ColGuest.getGroupMapList(ColGuest.$searchArea.find("input[name=groupName]"), data.groupMapList);
-                    ColGuest.getBusinessList(ColGuest.$searchArea.find("input[name=businessName]"), data.businessGroupList);
+                    ColGuest.getGroupMapList(ColGuest.$searchArea.find("input[name=groupName]"));
+                    ColGuest.getBusinessList(ColGuest.$searchArea.find("input[name=businessName]"));
                     //搜索按钮事件
                     $tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
@@ -298,7 +298,7 @@ define(function(require, exports) {
      * @param  {object} data    部门数据
      * @return {[type]}         [description]
      */
-    ColGuest.getBusinessList = function($target, data){
+    ColGuest.getBusinessList = function($target){
         return $target.autocomplete({
             minLength:0,
             change:function(event,ui){
@@ -309,35 +309,42 @@ define(function(require, exports) {
             select:function(event,ui){
                 var item = ui.item;
                 $target.blur().data("id", item.businessGroupId);
+                $target.nextAll('[name=groupName]').val('').data('id','');
             }
-        }).one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-
-            if (!!data) {
-                for (var i = 0, len = data.length;i < len; i++) {
-                    data[i].value = data[i].businessGroupName;
-                    data[i].id = data[i].businessGroupId;
+            $.ajax({
+                url: KingServices.build_url("group", "selectBusinessGroup"),
+                type: "POST",
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.businessGroupList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].businessGroupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
                 }
-
-                $target.autocomplete('option', 'source', data).data('ajax', true);
-                $target.autocomplete('search', '');
-            }
+            })
         })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
-        });
     };
+
     /**
      * 绑定子部门的选择
      * @param  {object} $target jQuery对象
      * @param  {object} data    部门数据
      * @return {[type]}         [description]
      */
-    ColGuest.getGroupMapList = function($target, data){
+    ColGuest.getGroupMapList = function($target){
         return $target.autocomplete({
             minLength:0,
             change:function(event,ui){
@@ -347,28 +354,34 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.groupId);
             }
-        }).one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-
-            if (!!data) {
-                for (var i = 0, len = data.length;i < len; i++) {
-                    data[i].value = data[i].groupName;
-                    data[i].id = data[i].groupId;
+            $.ajax({
+                url: KingServices.build_url("group", "selectGroup"),
+                type: "POST",
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessName]').data('id'),
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
                 }
-
-                $target.autocomplete('option', 'source', data).data('ajax', true);
-                $target.autocomplete('search', '');
-            }
+            })
         })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
-        });
     };
 
     exports.init = ColGuest.initModule;
