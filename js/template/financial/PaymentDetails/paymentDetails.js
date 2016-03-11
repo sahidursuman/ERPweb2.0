@@ -42,6 +42,7 @@ define(function(require, exports){
 	 * @param  {object} $tab $tab
 	 */
 	Payment.getTotal = function(args, $tab){
+		console.trace();
 		var page = typeof(args) !== "number" ? (args || 0) : (args.pageNo || 0);
 		if(!!Payment.$tab){
 			args = Payment.getArgs(page);
@@ -111,7 +112,7 @@ define(function(require, exports){
 		});	
 
 		Payment.getSubjectList($tab);
-		FinancialService.initPayEvent($tab);	
+		// FinancialService.initPayEvent($tab);	
 	};
 	/**
 	 * 初始化搜索栏
@@ -129,8 +130,12 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
+			// 关闭事件绑定，若存在
+			var $tab = $('#tab-' + menuKey + '-content').off();
+
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
-			$tab = $('#tab-' + menuKey + '-content');
+			$tab = $('#tab-' + menuKey + '-content').off();
+
 			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);

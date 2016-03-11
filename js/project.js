@@ -2546,7 +2546,6 @@ Tools.trFixed = function(obj){
 
 	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
-		
 		var $that = $(this),
 			$trFixed = $that.find('.T-tr-fixed'),
 			$focus = $(":focus");
@@ -2556,6 +2555,9 @@ Tools.trFixed = function(obj){
 		}else if($focus.hasClass('T-dateTimePicker')){
 			$focus.blur();
 			$focus.datetimepicker('hide');
+		}else if($(".datepicker.datepicker-dropdown").length > 0){
+			console.log($(".datepicker.datepicker-dropdown").length);
+			$(".datepicker.datepicker-dropdown").remove();
 		}
 
 		if($trFixed.length === 0)return;

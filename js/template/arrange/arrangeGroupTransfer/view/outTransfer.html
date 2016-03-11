@@ -25,7 +25,7 @@
 			</thead>
 			<tbody class="T-transferTouristGroup">
 				{{each touristGroupJson as touristGroup}}
-					<tr data-value="{{touristGroup.id}}"  data-entity-adultCount="{{touristGroup.adultCount}}" data-entity-childCount="{{touristGroup.childCount}}">
+					<tr data-value="{{touristGroup.id}}"  data-entity-adultCount="{{touristGroup.adultCount}}" data-entity-childCount="{{touristGroup.childCount}}" data-getType="{{if touristGroup.getType == 1}}旅行社系统{{else if touristGroup.getType == 2}}传真{{else if touristGroup.getType == 3}}短信{{else if touristGroup.getType == 4}}电话{{else if touristGroup.getType == 5}}QQ{{else if touristGroup.getType == 6}}微信{{else if touristGroup.getType == 7}}线上渠道{{/if}}" data-partnerAgency="{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}">
 						<td>
 							<label class="pos-rel">
 								<input type="checkbox" class="ace T-TransferCheckBox" />
@@ -47,7 +47,7 @@
 						 		</p>
 						 	</div>
 						 	{{if !!touristGroup.lineProduct}}
-							 <p class="h-lineName">{{touristGroup.lineProduct.name}}</p>
+							 <p class="h-lineName T-lineName">{{touristGroup.lineProduct.name}}</p>
 						 	{{/if}}									
 						 	{{if touristGroup.partnerAgency}}<p class="h-agencyName">{{touristGroup.partnerAgency.travelAgencyName}}</p>{{/if}}
    						</td>
@@ -56,9 +56,9 @@
    								{{touristGroup.lineProduct.days}}
    						 	{{/if}}	
    						</td>
-						<td>{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-						<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
-						<td>{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
+						<td class="T-startTime">{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+						<td class="T-contactMember">{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.name}}{{/if}}</td>
+						<td class="T-mobileNumber">{{if touristGroup.contactMember != null}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 						<td><span class="T-viewTouristGroup" data-entity-id="{{touristGroup.id}}" style="color:blue;text-decoration: underline; cursor:pointer;">大人{{touristGroup.adultCount}}小孩{{touristGroup.childCount}}</span></td>
 						<td>{{touristGroup.areaData}}</td>
 						<td class="F-float F-count">{{touristGroup.ageData}}</td>
@@ -82,7 +82,7 @@
 		</table>
 	
 		<div class="mar-t-20">
-			<label class="control-label no-padding-right">同行地接：</label>
+			<label class="control-label no-padding-right">同行地接</label>
 			<input type="text" name="partnerAgencyName" value="" class="T-Chosen-partnerAgency" placeholder="选择同行地接" style="width:270px;" />
 			<input type="hidden" name="partnerAgencyId" value="" />
 			<div style="color:RGB(184,70,53);" class="pull-right">(*提示：外转操作需填写费用信息)</div>

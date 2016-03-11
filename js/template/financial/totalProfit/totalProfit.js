@@ -47,8 +47,10 @@ define(function(require, exports) {
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
-                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id")
+                businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
+                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id")
             };
             //获取数据列表
             TotalProfit.getListData(0, args);
@@ -58,6 +60,7 @@ define(function(require, exports) {
 
         TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
         TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
+        TotalProfit.getBusinessList(TotalProfit.$searchArea.find('[name="businessName"]'));
        
     };
     //获取列表数据
@@ -72,6 +75,7 @@ define(function(require, exports) {
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
                 pageNo: page || 0
             }
         }
@@ -206,7 +210,7 @@ define(function(require, exports) {
     };
 
     /**
-     * 绑定部门的选择
+     * 绑定子部门的选择
      * @param  {object} $target jQuery对象
      * @return {[type]}         [description]
      */
@@ -220,7 +224,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.groupId);
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -232,7 +236,54 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.fromBusinessGroupList || false;
+                    var userList = data.groupList || false;
+                    if (!!userList) {
+                        for (var i = 0, len = userList.length;i < len; i++) {
+                            userList[i].value = userList[i].groupName;
+                        }
+
+                        $target.autocomplete('option', 'source', userList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        });
+    };
+
+
+    /**
+     * 绑定部门
+     * @param  {object} $target 绑定选择的Jquery对象
+     * @return {[type]}         [description]
+     */
+    TotalProfit.getBusinessList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.businessGroupId);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url('financialTotal', 'findTable'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var userList = data.businessGroupList || false;
                     if (!!userList) {
                         for (var i = 0, len = userList.length;i < len; i++) {
                             userList[i].value = userList[i].businessGroupName;
@@ -249,7 +300,7 @@ define(function(require, exports) {
             if ($target.data('ajax')) {
                 $target.autocomplete('search', '');
             }
-        });
+        })
     };
 
     exports.init = TotalProfit.initModule;

@@ -20,7 +20,8 @@ define(function(require, exports) {
 
     var arrangeGroupTransfer = {
         $tab:false,
-        editFeeLayer: "",
+        outEditFeeLayer: "",
+        innerEditFeeLayer: "",
         addGroupTemplateLayer: "",
         chosenMergenTripPlanlayer: "",
         touristGroupMergeData: {
@@ -47,12 +48,9 @@ define(function(require, exports) {
 
         //请求搜索数据
         arrangeGroupTransfer.caCheAutocomData(2);
-
-        var html = listMainTemplate();
-        Tools.addTab(menuKey, "团散转客", html);
+        Tools.addTab(menuKey, "团散转客", listMainTemplate());
         //初始化时间控件
         arrangeGroupTransfer.initDatePicker($("#" + tabId));
-
         //初始化散拼、团体、转客时间
         arrangeGroupTransfer.init_event();
     };
@@ -360,11 +358,11 @@ define(function(require, exports) {
         $innerTransfer.find('.T-editFee').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var $that = $(this),
-                id = $that.closest('tr').data('value'),
+            var $that = $(this),$tr=$that.closest('tr');
+                id = $tr.data('value'),
                 type = 1;
-
-            arrangeGroupTransfer.innerOutEditFee(id, type);
+            var linProJson=arrangeGroupTransfer.getLinProInfo($tr);
+            arrangeGroupTransfer.innerEditFee(id, type, linProJson);
         });
 
 
@@ -424,10 +422,10 @@ define(function(require, exports) {
         $outTransfer.find('.T-editFee').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var $that = $(this),
-                id = $that.closest('tr').data('value');
-            type = 2;
-            arrangeGroupTransfer.innerOutEditFee(id, type);
+            var $that = $(this),$tr=$that.closest('tr');
+                id = $tr.data('value');type = 2;
+            var linProJson=arrangeGroupTransfer.getLinProInfo($tr);
+            arrangeGroupTransfer.outEditFee(id, type, linProJson);
         });
 
         var $partnerObj = $outTransfer.find(".T-Chosen-partnerAgency");
@@ -456,6 +454,23 @@ define(function(require, exports) {
             arrangeGroupTransfer.checkTransferAll($outTransfer, $that, "tbody");
 
         });
+    };
+
+    /**
+     * [getLinProInfo 封装线路产品信息json
+     * @param  {[type]} $tr 当前点击行
+     * @return {[type]}
+     */
+    arrangeGroupTransfer.getLinProInfo=function($tr){
+        var getLinProJson={
+              name:$tr.find('.T-lineName').text(),
+              startTime:$tr.find('.T-startTime').text(),
+              customer:$tr.attr('data-partnerAgency'),
+              contactName:$tr.find('.T-contactMember').text(),
+              mobileNumber:$tr.find('.T-mobileNumber').text(),
+              getType:$tr.attr('data-getType')
+        };
+        return getLinProJson;
     };
 
     /** 
@@ -527,79 +542,85 @@ define(function(require, exports) {
         };
     };
     /**
-     * innerEditFee innerEditFee 内转费用填写
+     * outEditFee innerEditFee 编辑外转费用
      * @param  {[type]} id 游客小组Id
      * @return {[type]}    1---内转 ---2--  外转
      */
-    arrangeGroupTransfer.innerOutEditFee = function(id, type) {
-        if (type == 1) {
-            $.ajax({
-                url: KingServices.build_url("innerTransferOperation", "getInTransferFeeDetails"),
-                type: "POST",
-                data: "id=" + id + "",
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var data = {
-                            cashFlag : data.cashFlag,
-                            subsection : data.subsection,
-                            touristGroup : JSON.parse(data.touristGroup),
-                            touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
-                            innerTransferFeeList : JSON.parse(data.innerTransferFeeList),
-                            getPayType : getFeeItemPayTypeOptions.payType
-                        };
-                        var html = innerEditFeeTemplate(data);
-                        arrangeGroupTransfer.editFeeLayer = layer.open({
-                            type: 1,
-                            title: "编辑内转费用信息",
-                            skin: 'layui-layer-rim', //加上边框
-                            area: '60%', //宽高
-                            zIndex: 1028,
-                            content: html,
-                            scrollbar: false,
-                            success: function() {
-                                //初始化编辑费用事件
-                                arrangeGroupTransfer.innerEditFee_Event(type);
-                            }
-                        })
-                    }
+    arrangeGroupTransfer.outEditFee = function(id, type, linProJson) {
+        $.ajax({
+            url: KingServices.build_url("transTourist", "getTransfer"),
+            type: "POST",
+            data: "id=" + id + "",
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var data = {  
+                         cashFlag : data.cashFlag,
+                         subsection : data.subsection,
+                         touristGroup : JSON.parse(data.touristGroup),
+                         touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
+                         getPayType : getFeeItemPayTypeOptions.payType,
+                         linProJson:linProJson
+                    };
+                    var html = outEditFeeTemplate(data);
+                    arrangeGroupTransfer.outEditFeeLayer = layer.open({
+                        type: 1,
+                        title: "编辑外转费用信息",
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '60%', //宽高
+                        zIndex: 1028,
+                        content: html,
+                        scrollbar: false,
+                        success: function() {
+                            //初始化编辑费用事件
+                            arrangeGroupTransfer.outEditFee_Event(type);
+                        }
+                    })
                 }
-            });
+            }
+        });
+    };
 
-        } else {
-            $.ajax({
-                url: KingServices.build_url("transTourist", "getTransfer"),
-                type: "POST",
-                data: "id=" + id + "",
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        var data = {  
-                             cashFlag : data.cashFlag,
-                             subsection : data.subsection,
-                             touristGroup : JSON.parse(data.touristGroup),
-                             touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
-                             getPayType : getFeeItemPayTypeOptions.payType
-                        };
-                        var html = outEditFeeTemplate(data);
-                        arrangeGroupTransfer.editFeeLayer = layer.open({
-                            type: 1,
-                            title: "编辑外转费用信息",
-                            skin: 'layui-layer-rim', //加上边框
-                            area: '60%', //宽高
-                            zIndex: 1028,
-                            content: html,
-                            scrollbar: false,
-                            success: function() {
-                                //初始化编辑费用事件
-                                arrangeGroupTransfer.outEditFee_Event(type);
-                            }
-                        })
-                    }
+    /**
+     * innerEditFee 编辑内转费用项
+     * @param  {[type]} id   [description]
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
+    arrangeGroupTransfer.innerEditFee=function(id, type, linProJson){
+       $.ajax({
+            url: KingServices.build_url("innerTransferOperation", "getInTransferFeeDetails"),
+            type: "POST",
+            data: "id=" + id + "",
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var data = {
+                        cashFlag : data.cashFlag,
+                        subsection : data.subsection,
+                        touristGroup : JSON.parse(data.touristGroup),
+                        touristGroupFeeList : JSON.parse(data.touristGroupFeeList),
+                        innerTransferFeeList : JSON.parse(data.innerTransferFeeList),
+                        getPayType : getFeeItemPayTypeOptions.payType,
+                        linProJson:linProJson
+                    };
+                    var html = innerEditFeeTemplate(data);
+                    arrangeGroupTransfer.innerEditFeeLayer = layer.open({
+                        type: 1,
+                        title: "编辑内转费用信息",
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '60%', //宽高
+                        zIndex: 1028,
+                        content: html,
+                        scrollbar: false,
+                        success: function() {
+                            //初始化编辑费用事件
+                            arrangeGroupTransfer.innerEditFee_Event(type);
+                        }
+                    })
                 }
-            });
-
-        };
+            }
+        });
     };
 
     /**
@@ -639,9 +660,8 @@ define(function(require, exports) {
         //提交编辑转客费用信息
         $editFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
-            var type=1;
             /* Act on the event */
-            arrangeGroupTransfer.saveTransFee($editFeeObj, type);
+            arrangeGroupTransfer.saveInTransFee($editFeeObj);
         });
 
         //绑定删除
@@ -703,7 +723,6 @@ define(function(require, exports) {
         $outFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var type=2;
             arrangeGroupTransfer.saveTransFee($outFeeObj, type);
         });
     };
@@ -894,15 +913,78 @@ define(function(require, exports) {
     };
 
     /**
+     * saveInTransFee 保存内转费用项
+     * @param  {[type]} $editFeeObj 编辑内转费用项obj
+     * @return {[type]}
+     */
+    arrangeGroupTransfer.saveInTransFee=function($editFeeObj){
+        var innerTransferFeeStatus = 0,
+            formInData={},
+            $innerForm = $editFeeObj.find('form'),
+            inTransferFee = {
+                innerTransferFeeList: []
+            },
+            otherFeeListDel = [];
+        var $tbodyFee = $editFeeObj.find(".T-innerOutEditFeeTbody"),
+        $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
+        otherFeeListLength = $trNotDelete.length;
+        innerTransferFeeStatus=arrangeGroupTransfer.getVal($editFeeObj, "innerTransferFeeStatus");
+        $trNotDelete.each(function(i) {
+            var $that = $(this),
+                FeeJson = {
+                    type: arrangeGroupTransfer.getVal($that, "type"),
+                    price: arrangeGroupTransfer.getVal($that, "price"),
+                    count: arrangeGroupTransfer.getVal($that, "count"),
+                    remark: arrangeGroupTransfer.getVal($that, "remark")
+                };
+            if (innerTransferFeeStatus == 1) {
+                FeeJson.id = $that.attr("data-entity-id");
+            };
+            inTransferFee.innerTransferFeeList.push(FeeJson);
+        });
+        if (innerTransferFeeStatus==1) {
+            $tbodyFee.find("tr.deleted").each(function(i) {
+                var otherFeeDel = {
+                    "id": $(this).attr("data-entity-id")
+                };
+                otherFeeListDel.push(otherFeeDel);
+            })
+        };
+        formInData = $innerForm.serialize();
+        otherFeeListDel = JSON.stringify(otherFeeListDel);
+        inTransferFee = JSON.stringify(inTransferFee);
+        $.ajax({
+            url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
+            data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherFeeListDel),
+            type: "POST",
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    layer.close(arrangeGroupTransfer.innerEditFeeLayer);
+                    if (data.success == 1) {
+                        var inTransferTr = $(".T-transferTouristGroup-list").find("tr");
+                        inTransferTr.each(function(i) {
+                            var id = inTransferTr.eq(i).data("value");
+                            if (id == data.touristGroupId) {
+                                inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
+                                inTransferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney); 
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    };
+
+    /**
      * saveTransFee 提交转客费用信息
      * @return {[type]} [description]
      */
     arrangeGroupTransfer.saveTransFee = function($editFeeObj, type) {
         var transferFeeStatus = arrangeGroupTransfer.getVal($editFeeObj, "transferFeeStatus"),
-            innerTransferFeeStatus = arrangeGroupTransfer.getVal($editFeeObj, "innerTransferFeeStatus"),
-            $innerForm = $editFeeObj.find('form'),
-            id = arrangeGroupTransfer.getVal($editFeeObj, "touristGroupId"),
-            cashFlag = arrangeGroupTransfer.getVal($editFeeObj, "isCurrent");
+        id = arrangeGroupTransfer.getVal($editFeeObj, "touristGroupId"),
+        cashFlag = arrangeGroupTransfer.getVal($editFeeObj, "isCurrent");
         var touristGroup = {
                 "id": id,
                 "transRemark": arrangeGroupTransfer.getVal($editFeeObj, "remark") || "无",
@@ -913,34 +995,25 @@ define(function(require, exports) {
             otherFeeList = [],
             inTransferFee = {
                 innerTransferFeeList: []
-            }
+            },
+            otherFeeListDel = [];
         var $tbodyFee = $editFeeObj.find(".T-innerOutEditFeeTbody"),
-            $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
-            otherFeeListLength = $trNotDelete.length;
+        $trNotDelete = $tbodyFee.find('tr:not(.deleted)'),
+        otherFeeListLength = $trNotDelete.length;
         $trNotDelete.each(function(i) {
             var $that = $(this),
-                FeeJson = {
-                    type: arrangeGroupTransfer.getVal($that, "type"),
-                    price: arrangeGroupTransfer.getVal($that, "price"),
-                    count: arrangeGroupTransfer.getVal($that, "count"),
-                    remark: arrangeGroupTransfer.getVal($that, "remark")
-                };
-
+            FeeJson = {
+                type: arrangeGroupTransfer.getVal($that, "type"),
+                price: arrangeGroupTransfer.getVal($that, "price"),
+                count: arrangeGroupTransfer.getVal($that, "count"),
+                remark: arrangeGroupTransfer.getVal($that, "remark")
+            };
             if (transferFeeStatus == 1) {
                 FeeJson.id = $that.attr("data-entity-id");
             };
-
-            if (innerTransferFeeStatus == 1) {
-                FeeJson.id = $that.attr("data-entity-id");
-            };
-
             otherFeeList.push(FeeJson);
-            inTransferFee.innerTransferFeeList.push(FeeJson);
         });
-
-
-        var otherFeeListDel = [];
-        if (transferFeeStatus == 1 || innerTransferFeeStatus==1) {
+        if (transferFeeStatus == 1) {
             $tbodyFee.find("tr.deleted").each(function(i) {
                 var otherFeeDel = {
                     "id": $(this).attr("data-entity-id")
@@ -948,70 +1021,32 @@ define(function(require, exports) {
                 otherFeeListDel.push(otherFeeDel);
             })
         };
-        var formInData = $innerForm.serialize();
-        var touristGroup = JSON.stringify(touristGroup),
-            inTransferFee = JSON.stringify(inTransferFee),
-            otherFeeList = JSON.stringify(otherFeeList),
-            otherFeeListDel = JSON.stringify(otherFeeListDel);
-
-
-        if (type == 1) {
-            $.ajax({
-                url: KingServices.build_url("innerTransferOperation", "saveInTransferFee"),
-                data: formInData + "&inTransferFee=" +encodeURIComponent(inTransferFee) + "&otherinnerFeeDel=" + encodeURIComponent(otherFeeListDel),
-                type: "POST",
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                            layer.close(arrangeGroupTransfer.editFeeLayer);
-                            if (data.success == 1) {
-                                var inTransferTr = $(".T-transferTouristGroup-list").find("tr");
-                                inTransferTr.each(function(i) {
-                                    var id = inTransferTr.eq(i).data("value");
-                                    if (id == data.touristGroupId) {
-                                        inTransferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
-                                        inTransferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
-                                       
-                                    }
-                                })
-
+        touristGroup = JSON.stringify(touristGroup),
+        otherFeeList = JSON.stringify(otherFeeList),
+        otherFeeListDel = JSON.stringify(otherFeeListDel);
+        $.ajax({
+            url: KingServices.build_url("transTourist", "saveTransFee"),
+            data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel) + "&cashFlag=" + cashFlag,
+            type: "POST",
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    layer.close(arrangeGroupTransfer.outEditFeeLayer);
+                    if (data.success == 1) {
+                        var transferTr = $(".T-transferTouristGroup").find("tr");
+                        transferTr.each(function(i) {
+                            var id = transferTr.eq(i).data("value");
+                            if (id == data.id) {
+                                transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
+                                transferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
                             }
                         })
                     }
-                }
-            })
-        } else {
-            $.ajax({
-                url: KingServices.build_url("transTourist", "saveTransFee"),
-                data: "touristGroup=" + encodeURIComponent(touristGroup) + "&otherFeeList=" + encodeURIComponent(otherFeeList) + "&otherFeeListDel=" + encodeURIComponent(otherFeeListDel) + "&cashFlag=" + cashFlag,
-                type: "POST",
-                success: function(data) {
-                    var result = showDialog(data);
-                    if (result) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                            layer.close(arrangeGroupTransfer.editFeeLayer);
-                            if (data.success == 1) {
-                                var transferTr = $(".T-transferTouristGroup").find("tr");
-                                transferTr.each(function(i) {
-                                    var id = transferTr.eq(i).data("value");
-                                    if (id == data.id) {
-                                        transferTr.eq(i).find("td.transferFeeStatus").html('<i class ="ace-icon fa fa-check green"></i>已填写');
-                                        transferTr.eq(i).find(".T-needPay").html(data.transNeedPayAllMoney);
-                                       
-
-
-                                    }
-                                })
-
-                            }
-                        })
-                    }
-                }
-            })
-        }
+                })
+            }
+        })
     };
-
 
     /**
      * saveInTransfer 内转保存操作
@@ -1204,16 +1239,13 @@ define(function(require, exports) {
             type: 'POST',
             dataType: 'json',
             data: "customerType=" + customerType,
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    if (customerType == 2) { //团散转客
-                        arrangeGroupTransfer.transferFromBusinessList = data.fromBusinessGroupList;
-                        arrangeGroupTransfer.transferFromPartnerList = data.fromPartnerAgencyList;
-                        arrangeGroupTransfer.transferProductList = data.lineProductList;
-                    }
-                }
-            }
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                arrangeGroupTransfer.transferFromBusinessList = data.fromBusinessGroupList;
+                arrangeGroupTransfer.transferFromPartnerList = data.fromPartnerAgencyList;
+                arrangeGroupTransfer.transferProductList = data.lineProductList;
+            };
         })
     };
 
@@ -1250,7 +1282,7 @@ define(function(require, exports) {
                     list[i].value = list[i].name;
                 };
             } else {
-                layer.tips('没有内容', obj, {
+                layer.tips('没有内容', $obj, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });
@@ -1331,7 +1363,7 @@ define(function(require, exports) {
                     list[i].value = list[i].travelAgencyName;
                 };
             } else {
-                layer.tips('没有内容', obj, {
+                layer.tips('没有内容', $obj, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });
@@ -1406,25 +1438,6 @@ define(function(require, exports) {
             format: 'yyyy-mm-dd',
             language: 'zh-CN'
         })
-
-        var startTime = $tabId.find('[name="startTime"]').val();
-
-        // 集合时间
-        $tabId.find('input[name="setPlaceTime"]').datetimepicker({
-            autoclose: true,
-            todayHighlight: true,
-            maxDate: new Date(startTime + ' 23:59:59'),
-            format: 'L',
-            language: 'zh-CN'
-        });
-        // 定时发送时间
-        $tabId.find('input[name="executeTime"]').datetimepicker({
-            autoclose: true,
-            todayHighlight: true,
-            maxDate: new Date(startTime + ' 06:00:00'),
-            format: 'L',
-            language: 'zh-CN'
-        });
     };
 
     exports.init = arrangeGroupTransfer.initModule;
