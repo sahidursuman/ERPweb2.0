@@ -302,6 +302,8 @@ define(function(require,exports) {
 		                                InnerTransferIn.saveJson.bankNumber = bankNumber;
 		                                InnerTransferIn.saveJson.sumPayRemark = sumPayRemark;
 		                                InnerTransferIn.$settlementTab.data("isEdited",false);
+							    	} else {
+							    		InnerTransferIn.$checkTab.data('isEdited',false);
 							    	}							    	
 						    		args.pageNo = obj.curr -1;
 						    		InnerTransferIn.chenking(args,typeFlag,tab);
