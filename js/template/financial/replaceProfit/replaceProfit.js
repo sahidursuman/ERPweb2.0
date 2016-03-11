@@ -19,7 +19,8 @@ define(function(require, exports) {
         partnerAgencyList : false,
         hotelList : false,
         scenicList : false,
-        seatCountList : false
+        seatCountList : false,
+        businessGroupList : false
     };
 
     replace.initModule = function() {
@@ -44,10 +45,10 @@ define(function(require, exports) {
         var html = listMain(data);
         addTab(menuKey,"代订利润",html);
 
-        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "");
+        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "","","");
     };
 
-    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName){
+    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,businessGroupName,businessGroupId){
         replace.searchData = {
             partnerAgencyName : partnerAgencyName,
             partnerAgencyId : partnerAgencyId,
@@ -60,6 +61,8 @@ define(function(require, exports) {
             startTime : startDate,
             endTime : endDate,
             groupName : groupName,
+            businessGroupName : businessGroupName,
+            businessGroupId :businessGroupId,
             outOPUserName : outOPUserName,
             sortType: 'auto'
         };
@@ -80,7 +83,8 @@ define(function(require, exports) {
                         scenicList = conditions.scenics,
                         seatCountList = [];
                     replace.outOPUserList = conditions.users;
-                    replace.groupList = conditions.groups;
+                    replace.groupList = conditions.groupList;
+                    replace.businessGroupList = conditions.businessGroupList;
                     if(partnerAgencyList != null && partnerAgencyList.length > 0){
                         for(var i=0;i<partnerAgencyList.length;i++){
                             partnerAgencyList[i].value = partnerAgencyList[i].travelAgencyName;
@@ -123,7 +127,7 @@ define(function(require, exports) {
         });
     };
 
-    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName){
+    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,groupId,businessGroupName,businessGroupId){
         if (replace.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
@@ -137,7 +141,10 @@ define(function(require, exports) {
             startDate = replace.$searchArea.find("input[name=startDate]").val(),
             endDate = replace.$searchArea.find("input[name=endDate]").val(),
             outOPUserName = replace.$searchArea.find("input[name=outOPUserName]").val(),
-            groupName = replace.$searchArea.find("input[name=groupName]").val();
+            groupName = replace.$searchArea.find("input[name=groupName]").val(),
+            groupId = replace.$searchArea.find("input[name=groupName]").data('id'),
+            businessGroupName = replace.$searchArea.find("input[name=businessName]").val(),
+            businessGroupId = replace.$searchArea.find("input[name=businessGroupName]").data('id')
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -162,6 +169,7 @@ define(function(require, exports) {
             startTime : startDate,
             endTime : endDate,
             groupName : groupName,
+            businessGroupName : businessGroupName,
             outOPUserName : outOPUserName,
             sortType: 'auto'
         };
@@ -189,6 +197,7 @@ define(function(require, exports) {
                     });
                     replace.getOPUserList(replace.$tab.find('[name="outOPUserName"]'), replace.outOPUserList);
                     replace.getGroupMapList(replace.$tab.find('[name="groupName"]'), replace.groupList);
+                    replace.getBusinessList(replace.$tab.find('[name="businessName"]'), replace.businessGroupList);
 
                     replace.$tab.find('.T-list').off().on('click','.T-option',function(event) {
                         event.preventDefault();
@@ -397,7 +406,7 @@ define(function(require, exports) {
         })
     };
     /**
-     * 绑定部门的选择
+     * 绑定子部门的选择
      * @param  {object} $target jQuery对象
      * @param  {object} data    部门数据
      * @return {[type]}         [description]
@@ -423,6 +432,45 @@ define(function(require, exports) {
                     data[i].value = data[i].name;
                 }
 
+                $target.autocomplete('option', 'source', data).data('ajax', true);
+                $target.autocomplete('search', '');
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        });
+    };
+
+
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    replace.getBusinessList = function($target, data){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (!!data) {
+                for (var i = 0, len = data.length;i < len; i++) {
+                    data[i].value = data[i].name;
+                }
                 $target.autocomplete('option', 'source', data).data('ajax', true);
                 $target.autocomplete('search', '');
             }
