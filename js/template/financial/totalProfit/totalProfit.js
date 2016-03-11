@@ -210,8 +210,55 @@ define(function(require, exports) {
     };
 
     /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    TotalProfit.getBusinessList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.businessGroupId);
+                $target.nextAll('[name=groupName]').val('').data('id','');
+            }
+        }).off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url("group", "selectBusinessGroup"),
+                type: "POST",
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.businessGroupList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].businessGroupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
+                }
+            })
+        })
+    };
+
+    /**
      * 绑定子部门的选择
      * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
      * @return {[type]}         [description]
      */
     TotalProfit.getGroupMapList = function($target){
@@ -226,80 +273,31 @@ define(function(require, exports) {
                 var item = ui.item;
                 $target.blur().data("id", item.groupId);
             }
-        }).one('click', function(event) {
-            event.preventDefault();
-            /* Act on the event */
-
-            $.ajax({
-                url: KingServices.build_url('financialTotal', 'findTable'),
-                type: 'post',
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    var userList = data.groupList || false;
-                    if (!!userList) {
-                        for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].groupName;
-                        }
-
-                        $target.autocomplete('option', 'source', userList).data('ajax', true);
-                        $target.autocomplete('search', '');
-                    }
-                }
-            });
-        })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
-        });
-    };
-
-
-    /**
-     * 绑定部门
-     * @param  {object} $target 绑定选择的Jquery对象
-     * @return {[type]}         [description]
-     */
-    TotalProfit.getBusinessList = function($target){
-        return $target.autocomplete({
-            minLength:0,
-            change:function(event,ui){
-                if(ui.item == null){
-                    $target.data("id", "");
-                }
-            },
-            select:function(event,ui){
-                var item = ui.item;
-                $target.blur().data("id", item.businessGroupId);
-            }
-        }).one('click', function(event) {
+        }).off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
             $.ajax({
-                url: KingServices.build_url('financialTotal', 'findTable'),
-                type: 'post',
+                url: KingServices.build_url("group", "selectGroup"),
+                type: "POST",
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessName]').data('id'),
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var userList = data.businessGroupList || false;
-                    if (!!userList) {
-                        for (var i = 0, len = userList.length;i < len; i++) {
-                            userList[i].value = userList[i].businessGroupName;
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
                         }
-
-                        $target.autocomplete('option', 'source', userList).data('ajax', true);
-                        $target.autocomplete('search', '');
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
                     }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
                 }
-            });
-        })
-        .on('click', function(event) {
-            event.preventDefault();
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }
+            })
         })
     };
 
