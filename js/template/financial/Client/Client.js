@@ -225,6 +225,7 @@ define(function(require, exports) {
                     curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            Client.$checkTab.data('isEdited',false);
                             Client.ClientCheck(obj.curr - 1, false, $tab);
                         }
                     }
