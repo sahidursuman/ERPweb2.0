@@ -109,12 +109,12 @@
         <tr class="hidden">
             <td class="h-touristGroupInfo">
                 <p>{{tripPlanDetails.lineProductName}}</p>
-                <p>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</p>
-
             </td>
-            {{if index == 0}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            {{/if}}
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlanDetails.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlanDetails.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
+            </td>
             <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小</td>
             {{if index == 0}}
             <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
