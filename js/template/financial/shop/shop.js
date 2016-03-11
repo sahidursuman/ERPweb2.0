@@ -402,24 +402,7 @@ define(function(require, exports) {
             }
         });
         //绑定取消事件
-        $tab.find('.T-btn-close').on('click', function(event) {
-            event.preventDefault();
-            if (!!$tab.data('isEdited')) {
-                showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    if (!type) {
-                        FinancialService.changeUncheck($tab.find('.T-checkTr'), function() {
-                            saveData($tab, true);
-                        });
-                    } else {
-                        saveData($tab, true);
-                    }
-                }, function() {
-                    Tools.closeTab(operationMenuKey);
-                });
-            } else {
-                Tools.closeTab(operationMenuKey);
-            }
-        });
+        FinancialService.closeTab(operationMenuKey);
     };
 
     FinShop.viewOperationDetail = function(id, type) {
