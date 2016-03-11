@@ -200,10 +200,10 @@
             return "现金";
 
           case 1:
-            return "刷卡";
+            return "银行转账";
 
           case 2:
-            return "签单";
+            return "网上支付";
 
           case 3:
             return "支票";
