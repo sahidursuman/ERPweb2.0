@@ -376,7 +376,7 @@ define(function(require, exports){
 			success:function(data){
 				if(showDialog(data)){
 					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-						Payment.getTotal(0,$tab);
+						Payment.getTotal(0,Payment.$tab);
 						Payment.ajaxInit(0);
 					});
 				}

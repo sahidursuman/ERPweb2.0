@@ -87,6 +87,7 @@ define(function(require, exports) {
         }).done(function(data){
             if(showDialog(data)){
                 Tools.addTab(menuKey, "客户账务", listTemplate(data));
+                Client.listPage = args.pageNo;
                 Client.initList();
                 Client.getListSumData(args,$('#' + tabId));
                 // 绑定翻页组件
@@ -224,6 +225,7 @@ define(function(require, exports) {
                     curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            Client.$checkTab.data('isEdited',false);
                             Client.ClientCheck(obj.curr - 1, false, $tab);
                         }
                     }
@@ -341,9 +343,7 @@ define(function(require, exports) {
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientCheckTab);
-        });
+        FinancialService.closeTab(ClientCheckTab);
 
     };
 
@@ -500,6 +500,7 @@ define(function(require, exports) {
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             Client.cacheClearData($tab.find('.T-list'));
+                            Client.$clearTab.data("isEdited",false);
                             Client.ClientClear(obj.curr - 1, false, $tab);
                         }
                     }
@@ -627,9 +628,7 @@ define(function(require, exports) {
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientClearTab);
-        });
+        FinancialService.closeTab(ClientClearTab);
     };
 
     /**
@@ -812,12 +811,11 @@ define(function(require, exports) {
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
-                            Client.listClient(0);
+                            Client.listClient(Client.listPage);
                         } else if(argLen === 2){
                             Client.ClientCheck(args.pageNo,false, $tab);
                         } else if(argLen === 3){
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            console.log(args);
                             Client.initCheck($tab,args);
                         }
                     });
@@ -859,7 +857,7 @@ define(function(require, exports) {
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
-                            Client.listClient(0);
+                            Client.listClient(Client.listPage);
                         } else if(argLen === 2){
                             Client.ClientClear(args.pageNo, false, $tab);
                         } else if(argLen === 3){

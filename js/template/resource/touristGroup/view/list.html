@@ -65,13 +65,16 @@
                         </label>
                     </p>
                     <p class="mar-0">
+                        <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
+                            {{touristGroup.touristGroupMember.name}}
+                        {{/if}}</span>
                         <span class="h-agencyName">{{if touristGroup.customerType==0}} 散客
                         {{else if touristGroup.customerType==1}}团体  
                         {{/if}} </span>
                     </p>
                     <p class="mar-0">
                         <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
-                            {{touristGroup.touristGroupMember.name}}
+                            {{touristGroup.touristGroupMember.mobileNumber}}
                         {{/if}}</span>
                     </p>
                 </td>

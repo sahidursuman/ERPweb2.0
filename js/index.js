@@ -67,35 +67,41 @@
 	 * @return {[type]} [description]
 	 */
 	IndexFun.checkLogin = function() {
-		$.ajax({
-			url: APP_ROOT+"base.do?method=checkLogin",
-			type:"GET",
-			success:function(data){
-				IndexData.userInfo = data;
-				if(data.success == 0){
-					window.location.href = "login.html";
+		function callBack(data) {
+			IndexData.userInfo = data;
+			if(data.success == 0){
+				window.location.href = "login.html";
+			}
+			else{
+				var $login = $('#loginUserInfo');
+
+				$login.prev().toggleClass('hidden', !data.messageStatus);
+				if(data.realName != ""){//department
+					$(".navbar .light-blue .userName").text(data.realName);
+					$login.find(".userName").text(data.realName);
+					$login.find(".phoneNumber").text(data.mobileNumber); 
+					$login.find(".department").text(data.groupName);  
 				}
 				else{
-					var $login = $('#loginUserInfo');
-
-					$login.prev().toggleClass('hidden', !data.messageStatus);
-					if(data.realName != ""){//department
-						$(".navbar .light-blue .userName").text(data.realName);
-						$login.find(".userName").text(data.realName);
-						$login.find(".phoneNumber").text(data.mobileNumber); 
-						$login.find(".department").text(data.groupName);  
-					}
-					else{
-						$(".navbar .light-blue .userName").text(data.userName);
-					}
-					$(".navbar .light-blue .groupName").text(data.groupName);
-					listMenu();
-					seajs.use(""+ASSETS_ROOT+"js/template/index/index.js",function(index){
-						index.main();
-					});
+					$(".navbar .light-blue .userName").text(data.userName);
 				}
+				$(".navbar .light-blue .groupName").text(data.groupName);
+				listMenu();
+				seajs.use(""+ASSETS_ROOT+"js/template/index/index.js",function(index){
+					index.main();
+				});
 			}
-		});
+		}
+
+		if (!!DemoData) {
+			callBack(DemoData.userInfo);
+		} else {
+			$.ajax({
+				url: APP_ROOT+"base.do?method=checkLogin",
+				type:"GET",
+				success: callBack
+			});
+		}
 	}
 
 	/**

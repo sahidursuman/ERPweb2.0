@@ -731,166 +731,172 @@ var modalScripts = {
 
 
 function listMenu(menuTemplate){
-	$.ajax({
-		url:""+APP_ROOT+"back/user.do?method=listMenu&token="+$.cookie("token")+"&operation=self",
-		type:"POST",
-		dataType:"json",
-		success:function(data){
-			var result = showDialog(data);
-			if(result){
-				var menuList = data.menuList;
-				menuList = JSON.parse(menuList);
-				data.menuList = menuList;
-				var html = template("menu-template",data);
-				$("#sidebar .nav-list").html(html);
-				//绑定系统旅行社
-				$("#sidebar .nav-list .system_travelAgency").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
-						TravelAgency.listTravelAgency();
-					});
+	function callBack(data){
+		var result = showDialog(data);
+		if(result){
+			var menuList = data.menuList;
+			menuList = JSON.parse(menuList);
+			data.menuList = menuList;
+			var html = template("menu-template",data);
+			$("#sidebar .nav-list").html(html);
+			//绑定系统旅行社
+			$("#sidebar .nav-list .system_travelAgency").click(function(){
+				$("#sidebar .nav-list li").removeClass("active");
+				$(this).addClass("active");
+				$(this).parent().parent().addClass("active");
+				seajs.use("" + ASSETS_ROOT +"js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
+					TravelAgency.listTravelAgency();
 				});
+			});
 
-				//绑定其他支出菜单功能
-				$("#sidebar .nav-list .financial_else").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/else/else.js",function(Else){
-						Else.listElse();
-					});
+			//绑定其他支出菜单功能
+			$("#sidebar .nav-list .financial_else").click(function(){
+				$("#sidebar .nav-list li").removeClass("active");
+				$(this).addClass("active");
+				$(this).parent().parent().addClass("active");
+				seajs.use("" + ASSETS_ROOT +"js/template/financial/else/else.js",function(Else){
+					Else.listElse();
 				});
+			});
 
-				//绑定其他支出菜单功能
-				$("#sidebar .nav-list .financial_vertical").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/Vertical/Vertical.js",function(Vertical){
-						Vertical.listVertical();
-					});
+			//绑定其他支出菜单功能
+			$("#sidebar .nav-list .financial_vertical").click(function(){
+				$("#sidebar .nav-list li").removeClass("active");
+				$(this).addClass("active");
+				$(this).parent().parent().addClass("active");
+				seajs.use("" + ASSETS_ROOT +"js/template/financial/Vertical/Vertical.js",function(Vertical){
+					Vertical.listVertical();
 				});
+			});
 
-				//绑定収支明细菜单功能
-				$("#sidebar .nav-list .financial_collectDetail").click(function(){
-					$("#sidebar .nav-list li").removeClass("active");
-					$(this).addClass("active");
-					$(this).parent().parent().addClass("active");
-					seajs.use("" + ASSETS_ROOT +"js/template/financial/collectDetail/collectDetail.js",function(collectDetail){
-						collectDetail.listCollectDetail();
-					});
+			//绑定収支明细菜单功能
+			$("#sidebar .nav-list .financial_collectDetail").click(function(){
+				$("#sidebar .nav-list li").removeClass("active");
+				$(this).addClass("active");
+				$(this).parent().parent().addClass("active");
+				seajs.use("" + ASSETS_ROOT +"js/template/financial/collectDetail/collectDetail.js",function(collectDetail){
+					collectDetail.listCollectDetail();
 				});
-				//table 点击选中radio事件
-				$(document).on('click', '.T-chex-radio tbody tr', function(event) {
-					var $that = $(this);
-						$that.toggleClass('success').find('input[type="radio"]').prop('checked',true);
-						$that.siblings().removeClass('success');
-				});
-				$(document).on('click', '.T-chex-radio tbody input[type="radio"]', function(event) {
-					var $that = $(this),$tr = $that.closest('tr');
-						$tr.toggleClass('success');
-						$tr.siblings().removeClass('success');
+			});
+			//table 点击选中radio事件
+			$(document).on('click', '.T-chex-radio tbody tr', function(event) {
+				var $that = $(this);
+					$that.toggleClass('success').find('input[type="radio"]').prop('checked',true);
+					$that.siblings().removeClass('success');
+			});
+			$(document).on('click', '.T-chex-radio tbody input[type="radio"]', function(event) {
+				var $that = $(this),$tr = $that.closest('tr');
+					$tr.toggleClass('success');
+					$tr.siblings().removeClass('success');
 
-				});
-				// table 点击选中事件
-				$(document).on('click','tbody tr', function(event) {
-					var event = event ? event :window.event,
-						$target = $(event.target  || event.srcElement);
+			});
+			// table 点击选中事件
+			$(document).on('click','tbody tr', function(event) {
+				var event = event ? event :window.event,
+					$target = $(event.target  || event.srcElement);
 
-					// 若点击操作或者checkbox的浮层，就直接退出
-					if ($target.hasClass('T-action') || $target.hasClass('lbl')) return;
+				// 若点击操作或者checkbox的浮层，就直接退出
+				if ($target.hasClass('T-action') || $target.hasClass('lbl')) return;
 
-					var $that = $(this), $checkBox = $that.find('input[type="checkbox"]'),
-						targetIsCheckbox = $target.is('input[type="checkbox"]');
-					if ($that.closest('table').hasClass('T-showHighLight')) {	
-							if (targetIsCheckbox)  {	// 点击了checkbox
-								// $that.toggleClass('success', $target.prop('checked'));
-								toggleClass('success',  $target.prop('checked'));
-							} else if ($checkBox.length) {  // tr含有checkbox
-								$that.toggleClass('success');								
-								$checkBox.trigger('click');	
-							} else {   // 普通tr
-								$that.siblings('tr').removeClass('success');
-								toggleClass('success',  true);
-							}
+				var $that = $(this), $checkBox = $that.find('input[type="checkbox"]'),
+					targetIsCheckbox = $target.is('input[type="checkbox"]');
+				if ($that.closest('table').hasClass('T-showHighLight')) {	
+						if (targetIsCheckbox)  {	// 点击了checkbox
+							// $that.toggleClass('success', $target.prop('checked'));
+							toggleClass('success',  $target.prop('checked'));
+						} else if ($checkBox.length) {  // tr含有checkbox
+							$that.toggleClass('success');								
+							$checkBox.trigger('click');	
+						} else {   // 普通tr
+							$that.siblings('tr').removeClass('success');
+							toggleClass('success',  true);
+						}
+				}
+
+				// tr不对齐的处理
+				function toggleClass(className, enable) {
+					var $trs = $that.parent().children('tr'),
+						baseCnt = $trs.eq(0).children('td').length,
+						$current = $that.next(), $prev = $that;
+
+					// 向下遍历
+					while(baseCnt != $current.children('td').length && $current.children('td').length > 0) {
+						$current = $current.toggleClass(className, enable).next();
 					}
 
-					// tr不对齐的处理
-					function toggleClass(className, enable) {
-						var $trs = $that.parent().children('tr'),
-							baseCnt = $trs.eq(0).children('td').length,
-							$current = $that.next(), $prev = $that;
-
-						// 向下遍历
-						while(baseCnt != $current.children('td').length && $current.children('td').length > 0) {
-							$current = $current.toggleClass(className, enable).next();
-						}
-
-						// 向上遍历
-						while(baseCnt != $prev.children('td').length && $prev.children('td').length > 0) {
-							$prev = $prev.toggleClass(className, enable).prev();
-						}
-						$prev.toggleClass(className, enable);
+					// 向上遍历
+					while(baseCnt != $prev.children('td').length && $prev.children('td').length > 0) {
+						$prev = $prev.toggleClass(className, enable).prev();
 					}
-				});
+					$prev.toggleClass(className, enable);
+				}
+			});
 
-				//dateTime
-				$(document).on("click",".input-group-addon",function(){
-					var $that = $(this);
+			//dateTime
+			$(document).on("click",".input-group-addon",function(){
+				var $that = $(this);
 
-					if ($that.children('.fa-calendar').length || $that.children('.fa-clock-o').length)  {
-						var $allInputs = $that.prevAll('input[type="text"]');
-						$allInputs.eq($allInputs.length-1).focus();
+				if ($that.children('.fa-calendar').length || $that.children('.fa-clock-o').length)  {
+					var $allInputs = $that.prevAll('input[type="text"]');
+					$allInputs.eq($allInputs.length-1).focus();
+				}
+			})
+				// 处理中英文长度控制问题
+				.on('input', 'input[type="text"],textarea', function(event) {
+					event.preventDefault();
+
+					// 未设置maxlength，退出
+					if (this.attributes.maxlength === undefined)  {
+						return;
 					}
-				})
-					// 处理中英文长度控制问题
-					.on('input', 'input[type="text"],textarea', function(event) {
-						event.preventDefault();
 
-						// 未设置maxlength，退出
-						if (this.attributes.maxlength === undefined)  {
-							return;
+					var $that = $(this),
+						max = $that.attr('maxlength'),
+						val = $that.val();
+
+					if (chEnWordCount(val) > max)  {
+						val = cutStr(val, max);
+						$that.val(val);
+					} 
+
+					function chEnWordCount(str){
+						var count = 0;
+
+						if (!!str)  {
+							count = str.replace(/[^\x00-\xff]/g,"**").length;
 						}
+						return count;
+					}
 
-						var $that = $(this),
-							max = $that.attr('maxlength'),
-							val = $that.val();
+					function cutStr(src, length) {
+						var res = '';
 
-						if (chEnWordCount(val) > max)  {
-							val = cutStr(val, max);
-							$that.val(val);
-						} 
-
-						function chEnWordCount(str){
-							var count = 0;
-
-							if (!!str)  {
-								count = str.replace(/[^\x00-\xff]/g,"**").length;
-							}
-							return count;
-						}
-
-						function cutStr(src, length) {
-							var res = '';
-
-							if (!!src || isNaN(length))  {
-								for (var len = src.length, i = (len -1), tmp; i < len; i --) {
-									tmp = src.substr(0, i+1);
-									if (chEnWordCount(tmp) <= length)  {
-										res = tmp;
-										break;
-									}
+						if (!!src || isNaN(length))  {
+							for (var len = src.length, i = (len -1), tmp; i < len; i --) {
+								tmp = src.substr(0, i+1);
+								if (chEnWordCount(tmp) <= length)  {
+									res = tmp;
+									break;
 								}
 							}
-
-							return res;
 						}
-					});
-			}
+
+						return res;
+					}
+				});
 		}
-	});
+	}
+
+	if (!!DemoData) {
+		callBack(DemoData.menuInfo);
+	} else {
+		$.ajax({
+			url:""+APP_ROOT+"back/user.do?method=listMenu&token="+$.cookie("token")+"&operation=self",
+			type:"POST",
+			dataType:"json",
+			success: callBack
+		});
+	}
 }
 
 //override dialog's title function to allow for HTML titles//

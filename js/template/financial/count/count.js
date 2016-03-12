@@ -1689,6 +1689,9 @@ define(function(require, exports){
 			//计算应付                      
 			var needReduce = $parent.find('[name=realReduceMoney]').val();
 			var selfRealCount = $parent.find('[name=realCount]').val();
+			//规范数据
+			needReduce = Count.changeTwoDecimal(needReduce);
+			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算自费费用

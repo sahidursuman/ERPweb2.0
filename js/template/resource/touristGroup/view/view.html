@@ -265,65 +265,26 @@
 					    {{if touristGroupDetail.outRemarkArrange!=null}}
 					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
 						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
-						            {{if touristGroupDetail.outRemarkArrange.receiveBusStatus!=0}}
-						            <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
-						                <input type="checkbox" class="ace" checked disabled>
+						        	<label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveBusStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">车辆</span>
 						            </label>
-						            {{else}}
-						             <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">车辆</span>
-						            </label>
-						            {{/if}}
-						            {{if touristGroupDetail.outRemarkArrange.receiveHotelStatus!=0}}
 						            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveHotelStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">酒店</span>
 						            </label>
-						            {{else}}
-						             <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">酒店</span>
-						            </label>
-						            {{/if}}
-
-						            {{if touristGroupDetail.outRemarkArrange.receiveRestaurantStatus!=0}}
 						            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace"  {{if touristGroupDetail.outRemarkArrange.receiveRestaurantStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">餐饮</span>
 						            </label>
-						            {{else}}
-						            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">餐饮</span>
-						            </label>
-						            {{/if}}
-
-						            {{if touristGroupDetail.outRemarkArrange.receiveTicketStatus!=0}}
 						            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveTicketStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">票务</span>
 						            </label>
-						            {{else}}
-						            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">票务</span>
-						            </label>
-						            {{/if}}
-
-						            {{if touristGroupDetail.outRemarkArrange.receiveOtherStatus!=0}}
 						            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace"  {{if touristGroupDetail.outRemarkArrange.receiveOtherStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">其他</span>
 						            </label>
-						            {{else}}
-						            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled> 
-						                <span class="lbl">其他</span>
-						            </label>
-						            {{/if}}
-
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
 						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
 							            <div class="require-commons">
@@ -383,6 +344,30 @@
 								     {{/if}}
 						            </div>
 						    </div>
+						    {{else}}
+						    <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+						        <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+						         <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">车辆</span>
+						        </label>
+						        <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">酒店</span>
+						        </label>
+						        <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">餐饮</span>
+						        </label>
+						        <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">票务</span>
+						        </label>
+						        <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+						        <input type="checkbox" class="ace" disabled> 
+						        <span class="lbl">其他</span>
+						        </label>
+						    </div>
 					    {{/if}}
 					    <!--接团end-->
 
@@ -391,64 +376,29 @@
 					    {{if touristGroupDetail.outRemarkArrange!=null}}
 					          <div class="form-group fixed-width T-send col-sm-6">
 						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
-						            {{if touristGroupDetail.outRemarkArrange.sendBusStatus!=0}}
-						            <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
-						                <input type="checkbox" class="ace" checked disabled>
+						     		<label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendBusStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">车辆</span>
 						            </label>
-						            {{else}}
-						             <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">车辆</span>
-						            </label>
-						            {{/if}}
-						            {{if touristGroupDetail.outRemarkArrange.sendHotelStatus!=0}}
 						            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendHotelStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">酒店</span>
 						            </label>
-						            {{else}}
-						             <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">酒店</span>
-						            </label>
-						            {{/if}}
-
-						            {{if touristGroupDetail.outRemarkArrange.sendRestaurantStatus!=0}}
 						            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendRestaurantStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">餐饮</span>
 						            </label>
-						            {{else}}
-						            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">餐饮</span>
-						            </label>
-						            {{/if}}
-
-						            {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}
 						            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">票务</span>
 						            </label>
-						            {{else}}
-						            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">票务</span>
-						            </label>
-						            {{/if}}
 
-						            {{if touristGroupDetail.outRemarkArrange.sendOtherStatus!=0}}
+						            
 						            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" checked disabled>
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendOtherStatus!=0}}checked{{/if}} disabled>
 						                <span class="lbl">其他</span>
 						            </label>
-						            {{else}}
-						            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
-						                <input type="checkbox" class="ace" disabled>
-						                <span class="lbl">其他</span>
-						            </label>
-						            {{/if}}
+
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
 						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
 								       <div class="require-commons">
@@ -509,6 +459,30 @@
 									    {{/if}}
 						            </div>
 						        </div>
+						        {{else}}
+						    	<div class="form-group fixed-width T-recive col-sm-6">
+						    	    <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">送团</div>
+						    	     <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">车辆</span>
+						    	    </label>
+						    	    <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">酒店</span>
+						    	    </label>
+						    	    <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">餐饮</span>
+						    	    </label>
+						    	    <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">票务</span>
+						    	    </label>
+						    	    <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+						    	    <input type="checkbox" class="ace" disabled> 
+						    	    <span class="lbl">其他</span>
+						    	    </label>
+						    	</div>
 					    {{/if}}
 					    <!--送团end-->
 				    </div> 

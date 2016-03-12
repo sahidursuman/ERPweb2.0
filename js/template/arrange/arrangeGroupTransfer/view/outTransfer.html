@@ -47,7 +47,10 @@
 						 		</p>
 						 	</div>
 						 	{{if !!touristGroup.lineProduct}}
-							 <p class="h-lineName T-lineName">{{touristGroup.lineProduct.name}}</p>
+							    <p class="T-ctrl-tip h-lineName" title="{{touristGroup.lineProduct.name}}">
+									<span class='T-lineName'>{{touristGroup.lineProduct.name}}</span>
+									<span>({{touristGroup.lineProduct.type}})</span>
+								</p>
 						 	{{/if}}									
 						 	{{if touristGroup.partnerAgency}}<p class="h-agencyName">{{touristGroup.partnerAgency.travelAgencyName}}</p>{{/if}}
    						</td>

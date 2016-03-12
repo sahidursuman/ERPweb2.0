@@ -25,7 +25,6 @@ define(function(require,exports) {
 	};
 	InnerTransferIn.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		//dateJson.startDate = "2015-11-01";
 		InnerTransferIn.listInnerTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
 	};
 	/**
@@ -69,6 +68,7 @@ define(function(require,exports) {
 						};
 						var html = listTemplate(data);
 						Tools.addTab(listTabId,"内转转入",html);
+						InnerTransferIn.listPage = pageNo;
 						var $tabId = $("#tab-"+listTabId+"-content");
 							InnerTransferIn.$tab = $tabId;
 							InnerTransferIn.$searchArea = $tabId.find(".T-search-area");
@@ -229,6 +229,7 @@ define(function(require,exports) {
 				    	data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
 				    }
 				    if(typeFlag == 2 || tab =="settle" || args.autoAccount == 1){
+				    	data.sumPayMoney = InnerTransferIn.saveJson.sumPayMoney || 0;
 				    	data.bankNumber = InnerTransferIn.saveJson.bankNumber || '';
 					    data.voucher = InnerTransferIn.saveJson.voucher || '';
 					    data.billTime = InnerTransferIn.saveJson.billTime || '';
@@ -239,14 +240,7 @@ define(function(require,exports) {
 				    	title = "内转转入收款";
 				    	if(InnerTransferIn.saveJson.autoPayList){
 				    		if(data.innerTransferIncomeDetailsList.length != 0){
-				    			var saveJson = InnerTransferIn.saveJson.autoPayList
-					    		for(var i=0;i<data.innerTransferIncomeDetailsList.length;i++){
-					    			for(var j=0;j<saveJson.length;j++){
-					    				if(data.innerTransferIncomeDetailsList[i].id == saveJson[j].id){
-					    					data.innerTransferIncomeDetailsList[i].payMoney = saveJson[j].payMoney
-					    				}
-					    			}
-					    		}
+				    			data.innerTransferIncomeDetailsList = FinancialService.getTempDate(data.innerTransferIncomeDetailsList,InnerTransferIn.saveJson.autoPayList);
 				    		}
 				    	}
 				    	html = settlementTemplate(data);
@@ -274,11 +268,9 @@ define(function(require,exports) {
                     		var rightCode = InnerTransferIn.$checkId.find(".T-checkList").data("right");
                     		checkDisabled(fiList,checkTr,rightCode);
 						} else {
-							if(!!args.autoAccount && args.autoAccount == 1){
+							if(InnerTransferIn.saveJson.autoPayList){
 								$checkId.data("isEdited",true);
-							}else{
-								InnerTransferIn.$checkId.data("isEdited",false);
-							};
+							}
 						}
 						
 						//获取统计数据
@@ -293,26 +285,26 @@ define(function(require,exports) {
 						    jump: function(obj, first) {
 						    	if (!first) {
 							    	if(typeFlag == 2){
-							    		var tempJson = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
-		                                InnerTransferIn.saveJson.autoPayList = tempJson;
-		                                var sumPayMoney = parseFloat($countObj.find('input[name=sumPayMoney]').val()),
-		                                    sumPayType = parseFloat($countObj.find('select[name=sumPayType]').val()),
-		                                    sumPayRemark = $countObj.find('input[name=sumRemark]').val();
-	                                    var bankId = (sumPayType == 0) ? $countObj.find('input[name=cash-id]').val() : $countObj.find('input[name=card-id]').val();
-										var voucher = $countObj.find('input[name=credentials-number]').val();
-										var billTime = $countObj.find('input[name=tally-date]').val();
-										var bankNumber = (sumPayType == 0) ? $countObj.find('input[name=cash-number]').val() : $countObj.find('input[name=card-number]').val();
-		                                InnerTransferIn.saveJson = {
-		                                    sumPayMoney : sumPayMoney,
-		                                    sumPayType : sumPayType,
-		                                    bankId:bankId,
-		                                    voucher:voucher,
-		                                    billTime:billTime,
-		                                    bankNumber:bankNumber,
-		                                    sumPayRemark : sumPayRemark
-		                                }
-							    	}  // 避免死循环，第一次进入，不调用页面方法
-							    	
+							    		InnerTransferIn.saveJson.autoPayList = FinancialService.clearSaveJson($checkId,InnerTransferIn.saveJson.autoPayList,new FinRule(4));
+							    		$tab = InnerTransferIn.$settlementTab;
+		                                var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+		                                    sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
+		                                    sumPayRemark = $tab.find('input[name=sumRemark]').val();
+	                                    var bankId = (sumPayType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
+										var voucher = $tab.find('input[name=credentials-number]').val();
+										var billTime = $tab.find('input[name=tally-date]').val();
+										var bankNumber = (sumPayType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
+		                                InnerTransferIn.saveJson.sumPayMoney = sumPayMoney;
+		                                InnerTransferIn.saveJson.sumPayType = sumPayType;
+		                                InnerTransferIn.saveJson.bankId = bankId;
+		                                InnerTransferIn.saveJson.voucher = voucher;
+		                                InnerTransferIn.saveJson.billTime = billTime;
+		                                InnerTransferIn.saveJson.bankNumber = bankNumber;
+		                                InnerTransferIn.saveJson.sumPayRemark = sumPayRemark;
+		                                InnerTransferIn.$settlementTab.data("isEdited",false);
+							    	} else {
+							    		InnerTransferIn.$checkTab.data('isEdited',false);
+							    	}							    	
 						    		args.pageNo = obj.curr -1;
 						    		InnerTransferIn.chenking(args,typeFlag,tab);
 								}
@@ -380,9 +372,8 @@ define(function(require,exports) {
 			$obj.find('.T-clearList').off('change').on('change','input',function(){
 				$(this).closest('tr').data('change',true);
 				$obj.data('isEdited', true);
-				//自动计算本次收款金额
-				InnerTransferIn.autoSumIncomeMoney($obj);
 			});
+			FinancialService.updateSumPayMoney($obj,settleValidator);
 			FinancialService.initPayEvent($obj.find('.T-summary'));
 		}else{
 			InnerTransferIn.init_CRU_event($obj,$listSearchData,typeFlag,"T-checkList");
@@ -499,7 +490,7 @@ define(function(require,exports) {
                 return false;
             }
         	var sumPayMoney = parseFloat(InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').val());
-			var sumMoney = InnerTransferIn.autoSumIncomeMoney($obj);
+			var sumMoney = InnerTransferIn.$settlementTab.find('input[name=sumPayMoney]').data("money");
 		    if(sumMoney != sumPayMoney){
 		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 		        return false;
@@ -513,44 +504,7 @@ define(function(require,exports) {
         	};
         });
         //关闭事件
-        $obj.find(".T-close").on('click',function(event){
-        	if(typeFlag == 1){
-        		var checkBoxList = $obj.find(".T-checkList").find('.T-checkbox'),
-        		result = false,
-        		unCheckList = [];
-	        	checkBoxList.each(function(i){
-	        		var $this = $(this),
-	        			flag = $this.is(":checked"),
-	        			$tr = $this.closest('tr');
-	        		if($tr.data('change') && $tr.data("confirm") == 0 && !flag){
-	        			result = true;
-	        		}
-	        	});
-	        	if(result){
-	    			showConfirmDialog($( "#confirm-dialog-message" ), "您有记录已修改但未勾选对账，是否继续?",function(){
-		        		Tools.closeTab(checkId);
-		        	})
-	        	}else{
-	        		Tools.closeTab(checkId);
-	        	}
-        	}else{
-        		Tools.closeTab(settleId);
-        	}
-        });
-	};
-
-	//自动计算本次收款金额
-	InnerTransferIn.autoSumIncomeMoney = function($obj){
-		var sumPayMoney = $obj.find('input[name=sumPayMoney]'),
-			sumMoney = 0;
-		var tr = $obj.find('.T-clearList').find("input[name=payMoney]");
-		tr.each(function(){
-			var $thisVal = $(this).val();
-			$thisVal = InnerTransferIn.changeTwoDecimal($thisVal);
-			sumMoney += $thisVal;
-		});
-		sumPayMoney.val(sumMoney);
-		return sumMoney;
+        FinancialService.closeTab((typeFlag == 1) ? checkId : settleId);
 	};
 
 	//自动下账
@@ -582,7 +536,7 @@ define(function(require,exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					InnerTransferIn.saveJson = data;
+					InnerTransferIn.saveJson.autoPayList = data.autoPayList;
 					InnerTransferIn.saveJson.bankId = bankId;
 			        InnerTransferIn.saveJson.voucher = voucher;
 			        InnerTransferIn.saveJson.payType = payType;
@@ -655,7 +609,7 @@ define(function(require,exports) {
 							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
 								if(argumentsLen == 2){
 		                            Tools.closeTab(checkId);
-		                            InnerTransferIn.listInnerTransfer(0);
+		                            InnerTransferIn.listInnerTransfer(InnerTransferIn.listPage);
 	                        	} else if(argumentsLen == 3){
 		                            InnerTransferIn.chenking($data,1,"check");
 	                        	} else {
@@ -831,10 +785,10 @@ define(function(require,exports) {
 
 	//保存数据
 	InnerTransferIn.saveBlanceData = function(pageNo,$tab,$data,tab_id,title, html){
-		if(InnerTransferIn.$settlementTab.find('T-btn-autofill').length > 0){
-			var settleValidator = new FinRule(3);
-		} else {
+		if(InnerTransferIn.$settlementTab.find('.T-btn-autofill').length > 0){
 			var settleValidator = new FinRule(4);
+		} else {
+			var settleValidator = new FinRule(3);
 		}
 		var argumentsLen = arguments.length;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferIn.$settlementTab,InnerTransferIn.saveJson.autoPayList,settleValidator);
@@ -867,7 +821,7 @@ define(function(require,exports) {
                 		
                 		if(argumentsLen == 2){
                             Tools.closeTab(settleId);
-                            InnerTransferIn.listInnerTransfer(0);
+                            InnerTransferIn.listInnerTransfer(InnerTransferIn.listPage);
                     	} else if(argumentsLen == 3){
                     		InnerTransferIn.saveJson = [];
                     		InnerTransferIn.btnSatus = 0;

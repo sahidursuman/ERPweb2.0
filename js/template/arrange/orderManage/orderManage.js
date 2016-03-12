@@ -154,12 +154,7 @@ define(function(require, exports) {
 	     orderManage.$busCompanyOrderTabId.find('.T-busCompanyOrder-search').trigger('click');
 
 	    //车--搜索下拉事件
-    	orderManage.$busCompanyOrderTabId.find(".dropdown-menu a").click(function(){
-    	   var $that=$(this),
-    	       $thatDivObj=$that.closest('div');
-	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
-	    	   $thatDivObj.find(".T-status").val($that.data('value'));
-			   $thatDivObj.find("span").text($(this).text());
+    	orderManage.$busCompanyOrderTabId.find(".T-status").change(function(){
 			//表单序列化
 			var $searchParam = orderManage.$busCompanyOrderTabId.find('form'),pageNo=0;
 	     	//车队订单Ajax
@@ -197,12 +192,7 @@ define(function(require, exports) {
 	     });
 	     orderManage.$hotelOrderTabId.find('.T-hotelOrder-search').trigger('click');
     	//酒店--搜索下拉数据
-	    orderManage.$hotelOrderTabId.find(".dropdown-menu a").click(function(){
-    	   var $that=$(this),
-    	       $thatDivObj=$that.closest('div');
-	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
-	    	   $thatDivObj.find(".T-status").val($that.data('value'));
-			   $thatDivObj.find("span").text($(this).text());
+	    orderManage.$hotelOrderTabId.find(".T-status").change(function(){
 			var $searchParam = orderManage.$hotelOrderTabId.find('form'),pageNo=0;
 	     	//房订单Ajax
 	        orderManage.listHotelOrder($searchParam,pageNo);
