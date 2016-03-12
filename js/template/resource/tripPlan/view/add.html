@@ -121,8 +121,8 @@
                     <td>{{group.orderNumber}}</td>
                     <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
-                    <td name="contactMemberName">{{group.partnerAgencyContact.contactRealname}}</td>
-                    <td name="contactMemberMobileNumber">{{group.partnerAgencyContact.contactMobileNumber}}</td>
+                    <td name="contactMemberName">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactRealname}}{{/if}}</td>
+                    <td name="contactMemberMobileNumber">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
