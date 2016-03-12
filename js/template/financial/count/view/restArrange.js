@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":181,"md5":"68dc432de8751c804100d38790b41fc6"}*/
+/*TMODJS:{"debug":true,"version":182,"md5":"68dc432de8751c804100d38790b41fc6"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/restArrange", function($data, $filename) {
         try {

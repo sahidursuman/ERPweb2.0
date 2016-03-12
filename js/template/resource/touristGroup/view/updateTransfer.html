@@ -299,9 +299,9 @@
 												</tr>
 											</thead>
 											<tbody class="T-addTouristTbody">
-												{{each touristGroupDetail.touristGroupMemberList as memberList}}
+												{{each touristGroupDetail.touristGroupMemberList as memberList index}}
 														<tr data-entity-id="{{memberList.id}}">
-															<td></td>
+															<td>{{index+1}}</td>
 															<td>
 																<input name="name" value="{{memberList.name}}" type="text" class="col-sm-12  no-padding-right" />
 															</td>
@@ -309,7 +309,7 @@
 																<input name="mobileNumber" value="{{memberList.mobileNumber}}" type="text" class="col-sm-12  no-padding-right T-mobileNumber" maxlength="11" />
 															</td>
 															<td>
-																<select name="idCardType">
+																<select name="idCardType" class="col-xs-12">
 																	<option value="0" {{if memberList.idCardType == 0}}selected="selected"{{/if}}>身份证</option>
 																	<option value="1" {{if memberList.idCardType == 1}}selected="selected"{{/if}}>护照</option>
 																	<option value="2" {{if memberList.idCardType == 2}}selected="selected"{{/if}}>其它</option>
