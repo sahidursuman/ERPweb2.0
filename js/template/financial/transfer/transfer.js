@@ -14,8 +14,6 @@ define(function(require, exports) {
     	$checkTab : false,
     	$clearTab : false,
     	$searchArea : false,
-    	$checkSearchArea: false,
-        $clearSearchArea : false,
         partnerList : false,
         clearTempData : false,
         clearTempSumDate : false
@@ -93,8 +91,6 @@ define(function(require, exports) {
 
     };
 	Transfer.initList = function(startDate,endDate,accountStatus){
-        
-
         Transfer.getQueryList();
         Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);
 
@@ -115,62 +111,49 @@ define(function(require, exports) {
         Transfer.$tab.find('.T-list').on('click','.T-option',function(event) {
             event.preventDefault();
             var $that = $(this),
-            	id = $that.closest('tr').data('id'),
-            	name = $that.closest('tr').data('name');
+                args = {
+                    pageNo : 0,
+                    partnerAgencyId : $that.closest('tr').data('id'),
+                    partnerAgencyName : $that.closest('tr').data('name'),
+                    startDate : startDate,
+                    endDate : endDate,
+                    accountStatus : accountStatus
+                };
             if ($that.hasClass('T-check')) {
                 // 对账
-                Transfer.transferCheck(0,id,name,"","","",startDate,endDate,"",accountStatus);
+                Transfer.transferCheck(args);
             } else if ($that.hasClass('T-clear')) {
                 // 付款
-                Transfer.clearTempSumDate = false;
-                Transfer.clearTempData = false;
-                Transfer.transferClear(0,0,id,name,"","","",startDate,endDate,"",accountStatus);
+                args.isAutoPay = 0;
+                Transfer.transferClear(args);
             }
         });
     };
 
     //对账
-    Transfer.transferCheck = function(page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber,accountStatus){
-        if (Transfer.$checkSearchArea && arguments.length === 3) {
-            lineProductName = Transfer.$checkSearchArea.find("input[name=lineProductName]").val();
-            operateId = Transfer.$checkSearchArea.find("input[name=operateId]").val();
-            operateName = Transfer.$checkSearchArea.find("input[name=operateName]").val();
-            orderNumber = Transfer.$checkSearchArea.find("input[name=orderNumber]").val();
-            startDate = Transfer.$checkSearchArea.find("input[name=startDate]").val();
-            endDate = Transfer.$checkSearchArea.find("input[name=endDate]").val();
-            accountStatus = Transfer.$checkSearchArea.find("input[name=accountStatus]").val();
+    Transfer.transferCheck = function(args,$tab){
+        if($tab) {
+            args.pageNo = args.pageNo || 0;
+            args.lineProductName = $tab.find("input[name=lineProductName]").val();
+            args.operateId = $tab.find("input[name=operateId]").val();
+            args.operateName = $tab.find("input[name=operateName]").val();
+            args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.startDate = $tab.find("input[name=startDate]").val();
+            args.endDate = $tab.find("input[name=endDate]").val();
+            args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
+        args.operateName = (args.operateName == "全部") ? "" : args.operateName;
+        args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 
-        operateName = (operateName == "全部") ? "" : operateName;
-        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
-        // 修正页码
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            partnerAgencyId : partnerAgencyId,
-            lineProductName : lineProductName,
-            operateId : operateId,
-            operateName : operateName,
-            orderNumber : orderNumber,
-            startDate : startDate,
-            endDate : endDate,
-            accountStatus : accountStatus,
-            sortType : "auto"
-        };
-        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam : JSON.stringify(args) },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
                     var ftList = data.financialTransferList;
-                    data.partnerAgencyName = partnerAgencyName;
+                    data.partnerAgencyName = args.partnerAgencyName;
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
@@ -189,7 +172,9 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(page,partnerAgencyId,partnerAgencyName);                      
+                        Transfer.initCheck(args,$tab);                      
+                    } else {
+                        Transfer.$checkTab.data("next",args);
                     }
 
                     Transfer.getOperateList(Transfer.$checkTab,data.operateList);
@@ -203,10 +188,12 @@ define(function(require, exports) {
                     laypage({
                         cont: Transfer.$checkTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Transfer.transferCheck(obj.curr-1,partnerAgencyId,partnerAgencyName);
+                                Transfer.$checkTab.data("isEdited",false);
+                                args.pageNo = obj.curr-1;
+                                Transfer.transferCheck(args);
                             }
                         }
                     });
@@ -215,111 +202,87 @@ define(function(require, exports) {
         });
     };
 
-    Transfer.initCheck = function(page,id,name){
-    	// 初始化jQuery 对象 
-        Transfer.$checkTab = $("#tab-" + menuKey + "-checking-content");
-        Transfer.$checkSearchArea = Transfer.$checkTab.find('.T-search-area');
-
-        Transfer.init_event(page,id,name,Transfer.$checkTab,"check");
-        Tools.setDatePicker(Transfer.$checkTab.find(".date-picker"),true);
-        FinancialService.updateMoney_checking(Transfer.$checkTab,3);
+    Transfer.initCheck = function(args,$tab){
+        $tab = $("#tab-" + menuKey + "-checking-content");
+        Transfer.$checkTab = $tab;
+        Transfer.init_event(args,$tab,"check");
+        Tools.setDatePicker($tab.find(".date-picker"),true);
+        FinancialService.updateMoney_checking($tab,3);
 
         //表单验证
         var validator = new FinRule(0);
-        var validatorCheck = validator.check(Transfer.$checkTab);
+        var validatorCheck = validator.check($tab);
 
         //搜索按钮事件
-        Transfer.$checkSearchArea.find('.T-search').on('click', function(event) {
+        $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            Transfer.transferCheck(0,id,name);
+            Transfer.transferCheck({pageNo : 0},$tab);
         });
 
         //导出报表事件 btn-hotelExport
-        Transfer.$checkSearchArea.find(".T-btn-export").click(function(){
-            var args = { 
-                    lineProductId:Transfer.$checkSearchArea.find('input[name=lineProductId]').val(),
-                    lineProductName:Transfer.$checkSearchArea.find('input[name=lineProductName]').val(),
-                    operateId:Transfer.$checkSearchArea.find('input[name=operateId]').val(),
-                    operateName:Transfer.$checkSearchArea.find('input[name=operateName]').val(),
-                    partnerAgencyId:Transfer.$checkSearchArea.find('input[name=partnerAgencyId]').val(),
+        $tab.find(".T-btn-export").click(function(){
+            var argsDate = { 
+                    lineProductId:$tab.find('input[name=lineProductId]').val(),
+                    lineProductName:$tab.find('input[name=lineProductName]').val(),
+                    operateId:$tab.find('input[name=operateId]').val(),
+                    operateName:$tab.find('input[name=operateName]').val(),
+                    partnerAgencyId:$tab.find('input[name=partnerAgencyId]').val(),
                     travelAgencyId:"",
-                    startDate: Transfer.$checkSearchArea.find('input[name=startDate]').val(),
-                    endDate: Transfer.$checkSearchArea.find('input[name=endDate]').val()
+                    startDate: $tab.find('input[name=startDate]').val(),
+                    endDate: $tab.find('input[name=endDate]').val()
                 };
-            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-            args.operateName = args.operateName === "全部" ? "" : args.operateName;
-            FinancialService.exportReport(args,"exportArrangeTransferFinancial");
+            argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
+            argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;
+            FinancialService.exportReport(argsDate,"exportArrangeTransferFinancial");
         });
 
         //报表内的操作
-        Transfer.listOption(Transfer.$checkTab);
-
-        FinancialService.updateMoney_checking(Transfer.$checkTab,3);
+        Transfer.listOption($tab);
+        FinancialService.updateMoney_checking($tab,3);
 
         //复选框事件初始化
-        var checkboxList = Transfer.$checkTab.find(".T-checkList tr .T-checkbox"),
-            $checkAll = Transfer.$checkTab.find(".T-checkAll");
+        var checkboxList = $tab.find(".T-checkList tr .T-checkbox"),
+            $checkAll = $tab.find(".T-checkAll");
         FinancialService.initCheckBoxs($checkAll,checkboxList);
 
         //关闭页面事件
-        Transfer.$checkTab.find(".T-close-check").click(function(){
-            Tools.closeTab(menuKey + "-checking");
-        });
+        FinancialService.closeTab(menuKey + "-checking");
         //确认对账按钮事件
-        Transfer.$checkTab.find(".T-saveCheck").click(function(){
+        $tab.find(".T-saveCheck").click(function(){
             if(!validatorCheck.form()){return;}
-            FinancialService.changeUncheck(Transfer.$checkTab.find(".T-checkList tr"), function(){
-                Transfer.saveChecking(id,name,page);
+            FinancialService.changeUncheck($tab.find(".T-checkList tr"), function(){
+                Transfer.saveChecking($tab,args);
             },3);
         });
     };
 
     //付款
-    Transfer.transferClear= function(isAutoPay,page,partnerAgencyId,partnerAgencyName,lineProductName,operateId,operateName,startDate,endDate,orderNumber,accountStatus){
-        if (Transfer.$clearSearchArea && arguments.length === 4) {
-            lineProductName = Transfer.$clearSearchArea.find("input[name=lineProductName]").val(),
-            operateId = Transfer.$clearSearchArea.find("input[name=operateId]").val(),
-            operateName = Transfer.$clearSearchArea.find("input[name=operateName]").val(),
-            startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val(),
-            orderNumber = Transfer.$clearSearchArea.find("input[name=orderNumber]").val();
-            accountStatus = Transfer.$clearSearchArea.find("input[name=accountStatus]").val();
+    Transfer.transferClear= function(args,$tab){
+        if (!!$tab) {
+            args.pageNo = args.pageNo || 0;
+            args.lineProductName = $tab.find("input[name=lineProductName]").val();
+            args.operateId = $tab.find("input[name=operateId]").val();
+            args.operateName = $tab.find("input[name=operateName]").val();
+            args.startDate = $tab.find("input[name=startDate]").val();
+            args.endDate = $tab.find("input[name=endDate]").val();
+            args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
+        args.operateName = (args.operateName == "全部") ? "" : args.operateName;
+        args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 
-        operateName = (operateName == "全部") ? "" : operateName;
-        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            partnerAgencyId : partnerAgencyId,
-            lineProductName : lineProductName,
-            operateId : operateId,
-            operateName : operateName,
-            orderNumber : orderNumber,
-            startDate : startDate,
-            endDate : endDate,
-            sortType : "auto",
-            isAutoPay : isAutoPay,
-            accountStatus : accountStatus
-        };
-        if(isAutoPay == 1){
-           searchParam.isAutoPay = isAutoPay;
-           searchParam.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
+        if(args.isAutoPay == 1){
+           args.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
         }
-        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listTransferAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam : JSON.stringify(args) },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.partnerAgencyName = partnerAgencyName;
-                    if(isAutoPay == 1){
+                    data.partnerAgencyName = args.partnerAgencyName;
+                    if(args.isAutoPay == 1){
                         Transfer.clearTempData = data.autoPaymentJson;
                     }
 
@@ -339,7 +302,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
-                    data.isAutoPay = isAutoPay;
+                    data.isAutoPay = args.isAutoPay;
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
@@ -357,31 +320,23 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "外转付款", html)) {
+                        if(Transfer.clearTempData){
+                            Transfer.$clearTab.data('isEdited',true);
+                        }
                         // 初始化jQuery 对象 
                         Transfer.$clearTab = $("#tab-" + menuKey + "-clearing-content");
-                        Transfer.$clearSearchArea = Transfer.$clearTab.find('.T-search-area');
-                        Transfer.initClear(page,partnerAgencyId,partnerAgencyName); 
-                                       
+                        Transfer.initClear(args,Transfer.$clearTab); 
+                    } else {
+                       Transfer.$clearTab.data('next',args);
                     }
                     Transfer.getOperateList(Transfer.$clearTab,data.operateList);
                     Transfer.getLineProductList(Transfer.$clearTab,data.lineProductList);
-                    if(isAutoPay == 0){
-                        Transfer.$clearTab.find(".T-cancel-auto").hide();
-                    } else {
-                        Transfer.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        Transfer.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
-                            Transfer.$clearTab.data('isEdited',true);
-                        } else if(isAutoPay == 2){
-                            Transfer.$clearTab.find(".T-cancel-auto").hide();
-                        }
-                    }
+                    
                     //绑定翻页组件
-                    var $tr = Transfer.$clearTab.find('.T-clearList tr');
                     laypage({
                         cont: Transfer.$clearTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
@@ -398,7 +353,9 @@ define(function(require, exports) {
                                     voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
                                     billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
                                 }
-                                Transfer.transferClear(isAutoPay,obj.curr -1,partnerAgencyId,partnerAgencyName);
+                                Transfer.$clearTab.data("isEdited",false);
+                                args.pageNo = obj.curr-1;
+                                Transfer.transferClear(args,Transfer.$clearTab);
                             }
                         }
                     });
@@ -407,75 +364,79 @@ define(function(require, exports) {
         });
     };
 
-    Transfer.initClear = function(page,id,name){
-       
+    Transfer.initClear = function(args,$tab){
+        console.log(args);
+        Transfer.init_event(args,$tab,"clear");
+        Tools.setDatePicker($tab.find(".date-picker"),true);
 
-        Transfer.init_event(page,id,name,Transfer.$clearTab,"clear");
-        Tools.setDatePicker(Transfer.$clearTab.find(".date-picker"),true);
-        var isAutoPay = Transfer.$clearTab.find('input[name=isAutoPay]').val()
-        //表单验证
-        var settleValidator = isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
-            autoValidator = new FinRule(2);
-        var validatorCheck = settleValidator.check(Transfer.$clearTab),
-        autoValidatorCheck = autoValidator.check(Transfer.$clearTab.find('.T-count'));
-            
-        FinancialService.initPayEvent(Transfer.$clearTab.find('.T-summary'));
-        //搜索事件
-        Transfer.$clearTab.find(".T-search").click(function(){
-            Transfer.clearTempSumDate = false;
-            Transfer.clearTempData = false;
-            Transfer.$clearTab.data('isEdited',false);
-            if(isAutoPay == 2){
-                Transfer.transferClear(2,0,id,name);
-            }else{
-                Transfer.transferClear(0,0,id,name);
+        if(args.isAutoPay == 0){
+            $tab.find(".T-cancel-auto").hide();
+        } else {
+            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
+            $tab.find(".T-clear-auto").hide(); 
+            if(args.isAutoPay == 1){
+                $tab.data('isEdited',true);
+            } else if(args.isAutoPay == 2){
+                $tab.find(".T-cancel-auto").hide();
             }
+        }
+        //表单验证
+        var settleValidator = args.isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
+            autoValidator = new FinRule(2);
+        var validatorCheck = settleValidator.check($tab),
+        autoValidatorCheck = autoValidator.check($tab.find('.T-count'));
+            
+        FinancialService.initPayEvent($tab);
+        //搜索事件
+        $tab.find(".T-search").click(function(){
+            args.pageNo = 0;
+            Transfer.transferClear(args,$tab);
         });
 
         //关闭页面事件
-        Transfer.$clearTab.find(".T-close-clear").click(function(){
-            Tools.closeTab(menuKey + "-clearing");
-        });
+        FinancialService.closeTab(menuKey + "-clearing");
 
         //保存付款事件
-        Transfer.$clearTab.find(".T-saveClear").click(function(){
+        $tab.find(".T-saveClear").click(function(){
             if(!validatorCheck.form()){return;}
-            Transfer.saveClear(id,name,page);
+            Transfer.saveClear($tab,args);
         });
 
         //报表内的操作
-        Transfer.listOption(Transfer.$clearTab);
+        Transfer.listOption($tab);
 
         //自动下账
-        Transfer.$clearTab.find(".T-clear-auto").off().on("click",function(){
+        $tab.find(".T-clear-auto").off().on("click",function(){
             if(!autoValidatorCheck.form()){return;}
-            var isAutoPay = FinancialService.autoPayJson(id,Transfer.$clearTab,new FinRule(1));
+            var isAutoPay = FinancialService.autoPayJson(args.id,$tab,new FinRule(1));
             if(!isAutoPay){return false;}
-            var startDate = Transfer.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = Transfer.$clearSearchArea.find("input[name=endDate]").val();
+            var startDate = $tab.find("input[name=startDate]").val(),
+                endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
-                var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
+                var payType = $tab.find('select[name=sumPayType]').val();
                 Transfer.clearTempSumDate = {
-                    id : id,
-                    sumPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+                    id : args.partnerAgencyId,
+                    sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
                     sumPayType : payType,
-                    sumPayRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-                    bankNo : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
-                    bankId : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
-                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
-                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                    sumPayRemark : $tab.find('input[name=sumPayRemark]').val(),
+                    bankNo : (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                    voucher : $tab.find('input[name=credentials-number]').val(),
+                    billTime : $tab.find('input[name=tally-date]').val()
                 };
-                Transfer.transferClear(1,0,id,name);
+                args.pageNo = 0;
+                args.isAutoPay = 1;
+                Transfer.transferClear(args,$tab);
             });
         });
 
-        Transfer.$clearTab.find(".T-cancel-auto").off().on("click",function(){
-            Transfer.$clearTab.find(".T-cancel-auto").toggle();
-            Transfer.$clearTab.find(".T-clear-auto").toggle();
+        $tab.find(".T-cancel-auto").off().on("click",function(){
             Transfer.clearTempSumDate = false;
             Transfer.clearTempData = false;
-            Transfer.$clearTab.data('isEdited',false);
-            Transfer.transferClear(0,0,id,name);
+            $tab.data('isEdited',false);
+            args.isAutoPay = 0;
+            args.pageNo = 0;
+            Transfer.transferClear(args);
         });
 
         FinancialService.updateSumPayMoney(Transfer.$clearTab,settleValidator);
@@ -534,8 +495,8 @@ define(function(require, exports) {
     };
 
     //对账数据保存
-    Transfer.saveChecking = function(partnerAgencyId,partnerAgencyName,page,tab_id, title, html){
-        var argumentsLen = arguments.length,
+    Transfer.saveChecking = function($tab,args,tabArgs){
+        var argLen = arguments.length,
             saveJson = Transfer.saveCheckingJson(Transfer.$checkTab); 
         if(!saveJson){return false;}
 
@@ -549,16 +510,15 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-                        if(argumentsLen == 2){
+                        $tab.data('isEdited', false);
+                        if(argLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        } else if(argumentsLen == 3){
-                            Transfer.$checkTab.data('isEdited',false);
-                            Transfer.transferCheck(page,partnerAgencyId,partnerAgencyName);
-                        } else {
-                            Transfer.$checkTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            Transfer.initCheck(0,Transfer.$checkTab.find(".T-newData").data("id"),Transfer.$checkTab.find(".T-newData").data("name"));
+                        } else if(argLen === 2){
+                            Transfer.transferCheck(args,$tab);
+                        } else if(argLen === 3){
+                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
+                            Transfer.initCheck(args,$tab);
                         }
                     });
                 }
@@ -566,24 +526,24 @@ define(function(require, exports) {
         });
     };
 
-    Transfer.saveClear = function(id,name,page,tab_id, title, html){
-        var isAutoPay = Transfer.$clearTab.find('input[name=isAutoPay]').val();
-        var settleValidator = isAutoPay == 2 ? new FinRule(3) : new FinRule(1);
-        if(!FinancialService.isClearSave(Transfer.$clearTab,settleValidator)){
+    Transfer.saveClear = function($tab,args,tabArgs){
+        var isAutoPay = (arguments.length > 1) ? args.isAutoPay : $tab.data("isAutoPay"),
+            settleValidator = new FinRule(isAutoPay == 2 ? 3 : 1);
+        if(!FinancialService.isClearSave($tab,settleValidator)){
             return false;
         };
 
-        var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,settleValidator);
+        var argLen = arguments.length,
+            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator);
         var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
         searchParam = {
-            partnerAgencyId : id,
-            sumCurrentPayMoney : Transfer.$clearTab.find('input[name=sumPayMoney]').val(),
+            partnerAgencyId : (arguments.length > 1) ? args.partnerAgencyId : $tab.data("id"),
+            sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
         	payType : payType,
-            payRemark : Transfer.$clearTab.find('input[name=sumPayRemark]').val(),
-            bankId : (payType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
-            voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
-            billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+            payRemark : $tab.find('input[name=sumPayRemark]').val(),
+            bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+            voucher : $tab.find('input[name=credentials-number]').val(),
+            billTime : $tab.find('input[name=tally-date]').val()
         };
 
         clearSaveJson = JSON.stringify(clearSaveJson);
@@ -601,17 +561,16 @@ define(function(require, exports) {
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         Transfer.clearTempData = false;
                         Transfer.clearTempSumDate = false;
-                        if(argumentsLen === 2){
+                        $tab.data('isEdited', false);
+                        if(argLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        }else if(argumentsLen === 3){
-                            Transfer.$clearTab.data('isEdited',false);
-                            var isShow = isAutoPay == 2 ? 2 : 0 ;
-                            Transfer.transferClear(isShow,page,id,name);
-                        } else {
-                            Transfer.$clearTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            Transfer.initClear(0,Transfer.$clearTab.find(".T-newData").data("id"),Transfer.$clearTab.find(".T-newData").data("name"));
+                        }else if(argLen === 2){
+                            args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
+                            Transfer.transferClear(args,$tab);
+                        } else if(argLen === 3){
+                            args.isAutoPay = (isAutoPay == 1) ? 0 : args.isAutoPay
+                            Transfer.transferClear(args,$tab);
                         }
                     }); 
                 }
@@ -619,9 +578,8 @@ define(function(require, exports) {
         });
     };
 
-    Transfer.init_event = function(page,id,name,$tab,option) {
+    Transfer.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
-
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
                 event.preventDefault();
@@ -631,28 +589,33 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    Transfer.initCheck(page,id,name);
+                    Transfer.initCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
-                    Transfer.initClear(page,id,name);
-                    Transfer.$clearTab.find(".T-cancel-auto").hide();
+                    Transfer.clearTempData = false;
+                    Transfer.clearTempSumDate = false;
+                    args = $tab.data('next');
+                    args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                    Transfer.transferClear($tab.data('next'),$tab);
                 }
 			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    Transfer.saveChecking(id,name,0,tab_id, title, html);
+                    Transfer.saveChecking($tab,args,[tab_id, title, html]);
                 } else if(option == "clear"){
-                    Transfer.saveClear(id,name,0,tab_id, title, html);
+                    Transfer.saveClear($tab,args,[tab_id, title, html]);
                 }
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
                 if(option == "check"){
-                    Transfer.saveChecking(id,name);
+                    Transfer.saveChecking($tab);
                 } else if(option == "clear"){
-                    Transfer.saveClear(id,name);
+                    $tab.data("isAutoPay",args.isAutoPay);
+                    $tab.data("id",args.partnerAgencyId);
+                    Transfer.saveClear($tab);
                 }
             });
         }
@@ -859,7 +822,16 @@ define(function(require, exports) {
     };
 
     Transfer.initPay = function(options){
-        Transfer.transferClear(2,0,options.id,options.name,"","","",options.startDate,options.endDate,"",options.accountStatus); 
+        var args = {
+            pageNo : 0,
+            partnerAgencyId : options.id,
+            partnerAgencyName : options.name,
+            startDate : options.startDate,
+            endDate : options.endDate,
+            accountStatus : options.accountStatus,
+            isAutoPay : 2
+        }
+        Transfer.transferClear(args); 
     };
 
     exports.init = Transfer.initModule;
