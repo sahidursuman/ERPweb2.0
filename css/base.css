@@ -1034,6 +1034,112 @@ input.datepicker:not([class^="col-"]) {
 	margin-left: 0;
 	padding-left: 43px;
 }
+/**新版本**/
+.table-new > thead > tr > th,
+.table-new > tbody > tr > td{
+	border: 1px solid #ccc;
+}
+.table-new > thead > tr > th{
+	background: #f9f9f9;
+	color: #444;
+}
+.table-new>thead:first-child>tr:first-child>th{
+	border-top: 1px solid #ccc;
+}
+.table-new>thead>tr>th:first-child{
+	border-left-color: #ccc;
+}
+.table-new>thead>tr>th:last-child{
+	border-right-color: #ccc;
+}
+.table-new>tbody>tr:nth-child(odd){
+	background-color: #fff;
+}
+.table-new>tbody>tr:nth-child(even){
+	background-color: #f9f9f9;
+}
+.hct-table-update thead tr th{
+	height: 40px;
+	background-color: #51B0C2;
+	border-left: none;
+    border-bottom: none;
+    border-right-color: #fff;
+    color: #fff;
+}
+.hct-table-update thead tr th:last-child{
+	border-right-color: #51B0C2;
+}
+.hct-table-update tbody tr td{
+	border-color: #ECECEC;
+}
+.hct-update-list-title{
+	font-size: 16px;
+    color: #428BCA;
+    font-weight: bold;
+	margin-top: 0;
+}
+.hct-title-point{
+	padding-left: 18px;
+	position: relative;
+}
+.hct-title-point:after{
+	content: '';
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -4px;
+	background-color: #428BCA;
+}
+.hct-shrink-box{
+	position: relative;
+    overflow: hidden;
+}
+.hct-shrink-box:before{
+	content: '';
+    position: absolute;
+    top: 50%;
+    left: 75px;
+	height: 1px;
+	width: 100%;
+	background-color: #DFDFDF;
+}
+.hct-shrink-box .hct-shrink-btn{
+	position: absolute;
+	right: 0;
+	top: -5px;
+	color: #CDCDDC;
+    background-color: #fff;
+    padding-left: 10px;
+}
+.hct-bg-1FADE0{
+	background: #1FADE0!important;
+}
+.hct-group-input{
+	position: relative;
+}
+.col-xs-12.hct-group-input{
+	padding-right: 0;
+}
+.hct-group-input > label{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 55px;
+	line-height: 24px;
+	text-align: right;
+}
+.hct-group-input > .col-xs-12{
+	padding-left: 48px;
+}
+.col-xs-12.hct-group-input > label{
+	left: 12px;
+}
+.col-xs-12.hct-group-input> .col-xs-12{
+	padding-left: 60px;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
