@@ -426,6 +426,8 @@ define(function(require, exports){
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input',function(){
+			Count.shopClickCount += 1;
+			Count.shopInputCount = $shopObj.find('input[type=text]').length;
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName" && $nameFlag != "currInCome"){
 				Count.calculateCost($(this));
@@ -1034,6 +1036,7 @@ define(function(require, exports){
 	};
 	//审核通过事件
 	Count.accountCheck = function(id, billStatus, financialTripPlanId,$obj){
+		Count.shopClickCount = 0;
 		var method = billStatus==0?"opVerify":"financialVerify";
 		var saveJsonStr = Count.installData(id,$obj);
 		//Count.saveTripCount(id,financialTripPlanId,$obj,1);
@@ -1426,6 +1429,7 @@ define(function(require, exports){
 	//购物金额计算
 	Count.autoShopSum = function($obj,$parentObj){
 		var $parent = $obj.closest('tr');
+		var shopId = $parent.attr('shopId') || '';
 		var $nameFlag = $obj.attr('name');
 		var consumeMoney = $parent.find('input[name=consumeMoney]').val();
 		var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
@@ -1443,13 +1447,21 @@ define(function(require, exports){
 		travelAgencyRateMoney = Count.changeTwoDecimal(travelAgencyRateMoney);
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
+		if(!!shopId){
+			if($nameFlag== "travelAgencyRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+			};
+			if($nameFlag== "guideRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			};
+		}else{
+			if($nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney"){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			}
+		};
 
-		if($nameFlag== "travelAgencyRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
-			$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-		};
-		if($nameFlag== "guideRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
-			$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-		};
+		
 		
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
