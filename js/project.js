@@ -1257,6 +1257,31 @@ var Tools = {
 	$descContainer2: $('#desc-tooltip-containter2'),
 };
 
+// 定义图片查看参数
+Tools.colorbox_params = {
+            photo : true,
+            rel: 'colorbox',
+            reposition:true,
+            scalePhotos:true,
+            scrolling:false,
+            previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+            next:'<i class="ace-icon fa fa-arrow-right"></i>',
+            close:'&times;',
+            current:'{current} of {total}',
+            maxWidth:'100%',
+            maxHeight:'100%',
+            onOpen:function(){ 
+                $overflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+            },
+            onClosed:function(){
+                document.body.style.overflow = $overflow;
+            },
+            onComplete:function(){
+                $.colorbox.resize();
+            }
+        };
+        
 /**
  * 表单 转 JSON
  * @param  {[type]} $ [description]
@@ -2519,15 +2544,20 @@ KingServices.inlineTemplate = function(source, option) {
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
 
-	$tabPane.off().scroll(function(event){
+	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
-		
 		var $that = $(this),
 			$trFixed = $that.find('.T-tr-fixed'),
 			$focus = $(":focus");
-
-		if ($focus.hasClass('ui-autocomplete-input')) {
-			$focus.autocomplete('close');
+		if($focus.hasClass('datepicker')){
+			$focus.blur();
+			$focus.datepicker('hide');
+		}else if($focus.hasClass('T-dateTimePicker')){
+			$focus.blur();
+			$focus.datetimepicker('hide');
+		}else if($(".datepicker.datepicker-dropdown").length > 0){
+			console.log($(".datepicker.datepicker-dropdown").length);
+			$(".datepicker.datepicker-dropdown").remove();
 		}
 
 		if($trFixed.length === 0)return;

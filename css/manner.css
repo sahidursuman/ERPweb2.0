@@ -121,6 +121,11 @@ input {
     background-color: #ddd;
 }
 
+
+.tab-text_align{
+    text-align: center;
+}
+
 .laypage_skip {
     padding: 0 !important;
     padding-left: 5px !important;
@@ -452,8 +457,8 @@ table tr td {
 .mar-l-15 {
     margin-left: 15px;
 }
-.mar-1-112{
-    margin-left: 112px;
+.mar-1-135{
+    margin-left: 135px;
 }
 .mar-r-10 {
     margin-right: 10px;
@@ -1740,37 +1745,54 @@ p#back-top a span {
      border-radius: 3px;
 }
 .userAuthWidth{
-    width:160px;height: auto;
+    width:150px;height: auto;
     position: fixed;
     top:142px;left: 1080px; 
     border:1px solid #ddd;
     margin-top: 45px;
 }
+.userUpdate-auth ul{
+    margin-left: 0px;
+}
 .userUpdate-auth .btn{
     padding: 4px 3px;
 }
 .saveAuth-user{
-        margin-bottom:-22px; 
-        /*position: absolute;*/
-        /*margin-top: 10px;*/
-        margin-left: -1px;
-        width: 160px;
+    margin-left: -1px;
+    width: 150px;
     }
 .userAuth li{
     list-style-type: none;
-    width: 133px;
-    height: 30px;
-    padding: 5px 0px 5px 0px;
+    width: 150px;
+    height: 43px;
+    padding: 8px 0px 8px 0px;
+    text-align: center;
+}
+.userAuth li:hover{
+    background-color: #E8E8E8;
+    text-align: center;
+}
+.userAuth li a{
+    /*margin-left: 46px;*/
+    line-height: 35px;
+    color: #000;
+    text-align: center;
 }
 .userAuth li:hover{
     cursor: pointer;
 }
-.userAuth li:nth-child(1){
-    margin-top: 15px;
-}
+
+
 .h-touristGroupInfo p{
     text-align: left;
     margin: 0px;
+}
+.h-touristGroupInfo p.center{
+    text-align: center;
+    margin: 0px;
+}
+.h-touristGroupInfo p span{
+    margin-right: 10px;
 }
 /*媒体查询-不同分辨率*/
 
@@ -2231,6 +2253,9 @@ p#back-top a span {
     .viewQuoteFdiv{
         margin-left: 20px;
     }
+    .mar-ort-10{
+        margin-top: 10px;
+    }
 }
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
@@ -2515,5 +2540,6 @@ a.gray span{
 
     #tab-financial_count-outDetail-content {
         width: auto !important;
+        padding: 40px !important;
     }
 }
