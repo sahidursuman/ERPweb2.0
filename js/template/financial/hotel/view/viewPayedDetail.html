@@ -26,7 +26,7 @@
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
 										<td>{{if rs.payParty == null || rs.payParty == ""}}-{{else}}{{rs.payParty}}{{/if}}</td>
 										<td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
-										<td>{{rs.payType | getPayTypeText}}</td>
+										<td>{{if rs.payParty == '社付'}}{{rs.payType | getPayTypeText}}{{else}}{{rs.payType | getPlanPayTypeText}}{{/if}}</td>
 										<td>{{if rs.accountName == null || rs.accountName == ""}}-{{else}}{{rs.accountName}}{{/if}}</td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
