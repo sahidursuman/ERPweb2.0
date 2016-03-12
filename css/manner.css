@@ -10,6 +10,7 @@
 
 .table-special tr:first-child {
     border: none;
+   
 }
 
 .table-special tr {
@@ -2542,4 +2543,46 @@ a.gray span{
         width: auto !important;
         padding: 40px !important;
     }
+}
+.w-150{
+    width: 150px
+}
+/*中转安排*/
+.hct-tab .hct-new-tab{
+    height: 40px;
+    background: #e9fbfe;
+    border-bottom: none;
+}    
+.hct-tab .hct-new-tab li{
+    width: 65px;
+    height: 40px;
+    margin-top: 0px;
+    
+}
+.hct-tab .hct-new-tab li a{
+    margin-top: 0px;
+    height: inherit!important;
+    background: none;
+    border:none;
+    box-shadow: none!important;
+    line-height: 25px;
+}
+
+.hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
+    color:#fff;
+    border: none;
+    background: #51b0c2;
+    line-height: 25px;
+
+}
+.hct-max-model .tab-content{
+    border: none;
+    padding:14px 0px;
+}
+.T-hide{
+    display: none;
+}
+.hct-max-model .nav-tabs .hct-box{
+    width: 150px;
+    /*height: 30px;*/
 }
