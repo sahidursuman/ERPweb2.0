@@ -62,8 +62,15 @@
     <!--游客小组费end-->
     <input type="hidden" name="flag" class="T-flag" value="{{flag}}">
 
-    <div class="form-group">
-        <button class="btn btn-sm btn-success T-btn-operation-add" data-mark="{{mark}}"> <i class="ace-icon fa fa-plus"></i>新增分段</button>
+    <div class="form-inline">
+        <div class="form-group mr-l-10">
+            <button class="btn btn-sm btn-success T-btn-operation-add" data-mark="{{mark}}"> <i class="ace-icon fa fa-plus"></i>新增分段</button>
+        </div>
+
+        <div class="form-group pull-right">
+           <label>合计金额</label>
+           <input type="text" name="feeTotal" value="0" class="T-FeeTotal F-float F-money" readonly/>
+       </div>
     </div>
 
     <div class="form-group">

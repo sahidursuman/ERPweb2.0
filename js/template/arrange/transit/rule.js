@@ -322,7 +322,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="memberCount"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数字格式不正确'
 							}
 						]

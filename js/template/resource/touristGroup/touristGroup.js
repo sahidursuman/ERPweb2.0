@@ -470,7 +470,7 @@ define(function(require, exports) {
         //添加tab切换
         touristGroup.init_CRU_event($updateTabId, id, 2, typeInner);
         //游客的序号
-        touristGroup.memberNumber($groupMemberForm);
+        touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));
         //小组信息模块处理
         touristGroup.groupInfoDispose($groupInfoForm, 2, typeInner);
         //游客名单模块处理
@@ -1483,7 +1483,7 @@ define(function(require, exports) {
             '<td>' + '</td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
-            '<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
+            '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
             '<td><a class="cursor btnDeleteTourist">删除</a></td>' +
@@ -1502,7 +1502,7 @@ define(function(require, exports) {
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('.T-addTouristTbody tr');
+        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
         $tbody.each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
@@ -1511,20 +1511,8 @@ define(function(require, exports) {
     };
     //批量添加游客
     touristGroup.addVisotorMore = function($obj) {
-        var html = addVisitorMoreTemplate();
-        var addVisotorMoreLayer = layer.open({
-            type: 1,
-            title: '批量添加游客',
-            skin: 'layui-layer-rim',
-            area: '40%',
-            zIndex: 1028,
-            content: html,
-            success: function() {
-                var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
-                $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-                    touristGroup.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj);
-                });
-            }
+        seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+            module.addVisotorMore($obj.find('.T-addTouristTbody'), touristGroup.memberNumber);
         });
     };
     //批量添加游客保存
@@ -1567,7 +1555,7 @@ define(function(require, exports) {
                         "<td>" + "</td>" +
                         "<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + name + "\"/></td>" +
                         "<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\"" + mobileNumber + "\"/></td>" +
-                        "<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
+                        "<td><select name=\"idCardType\" class=\"col-xs-12\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
                         "<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + idCardNumber + "\" /></td>" +
                         "<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>" +
                         "<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>" +
@@ -1742,6 +1730,62 @@ define(function(require, exports) {
                     var touristGroupList = data.touristGroupList;
                     //实例化对象
                     touristGroupList = JSON.parse(touristGroupList);
+                    for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
+                        tmp = touristGroupList[i];
+                        tmp.editTitle = '';
+                        tmp.deleteTitle = '';
+
+                        // can edit
+                        if (((tmp.status < 3 || tmp.status == 6) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                            tmp.canEdit = true;
+                        } else {
+                            tmp.canEdit = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.editTitle = '内转成功，不能编辑';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.editTitle = '客户账务已对账，不能编辑';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 5:
+                                        tmp.editTitle = '该小组已经分段，不能编辑';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+
+                        // can delete
+                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                            tmp.canDelete = true;
+                        } else {
+                            tmp.canDelete = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.deleteTitle = '内转成功，不能删除';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.deleteTitle = '客户账务已对账，不能删除';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 2:
+                                        tmp.deleteTitle = '该小组已分团，不能删除';
+                                        break;
+                                    case 3:
+                                        tmp.deleteTitle = '该小组已外转，不能删除';
+                                        break;
+                                    case 5:
+                                        tmp.deleteTitle = '该小组已分段，不能删除';
+                                        break;
+                                    case 6:
+                                        tmp.deleteTitle = '该小组已内转，不能删除';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+                    }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
                     var html = listTemplate(data);

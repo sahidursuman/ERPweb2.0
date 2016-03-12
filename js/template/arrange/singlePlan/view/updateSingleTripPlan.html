@@ -227,8 +227,8 @@
 						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
 						<td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td name="lineProductName">{{group.lineProduct.name}}</td>
-						<td name="contactMemberName">{{group.contactMember.name}}</td>
-						<td name="contactMemberMobileNumber">{{group.contactMember.mobileNumber}}</td>
+						<td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}{{/if}}</td>
+						<td name="contactMemberMobileNumber">{{if group.contactMember}}{{group.contactMember.mobileNumber}}{{/if}}</td>
 						<td name="areaData">{{group.areaData}}</td>
 						<td name="ageData" class="F-float F-count">{{group.ageData}}</td>
 						<td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>

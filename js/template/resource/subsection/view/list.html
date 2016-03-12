@@ -21,7 +21,7 @@
                     <p>
                         <span class="h-orderNumber">收客单号：{{subList.orderNumber}}</span>
                         <span class="h-memberName">{{if subList.contactMember!=null}}{{subList.contactMember.name}}{{/if}}</span>
-                        <label class="h-peopleCount">(<span class="F-float F-count">{{subList.adultCount}}</span>大<span class="F-float F-count">{{subList.childCount}}</span>小)</label>
+                        <span class="h-peopleCount">(<label class="F-float F-count">{{subList.adultCount}}</label>大<label class="F-float F-count">{{subList.childCount}}</label>小)</span>
                     </p>
                     <p class="h-agencyName">{{if !!subList.partnerAgency}}{{subList.partnerAgency.travelAgencyName}}{{/if}}</p>
                 </td>

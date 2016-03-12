@@ -1022,30 +1022,7 @@ define(function(require, exports){
 				content : html,
                 scrollbar: false, // 推荐禁用浏览器外部滚动条
 				success : function() {
-					var colorbox_params = {
-		    			rel: 'colorbox',
-		    			reposition:true,
-		    			scalePhotos:true,
-		    			scrolling:false,
-		    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-		    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-		    			close:'&times;',
-		    			current:'{current} of {total}',
-		    			maxWidth:'100%',
-		    			maxHeight:'100%',
-		    			onOpen:function(){ 
-		    				$overflow = document.body.style.overflow;
-		    				document.body.style.overflow = 'hidden';
-		    			},
-		    			onClosed:function(){
-		    				document.body.style.overflow = $overflow;
-		    			},
-		    			onComplete:function(){
-		    				$.colorbox.resize();
-		    			}
-		    		};
-
-		    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+		    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
 				}
 			});
 	};
@@ -1184,8 +1161,8 @@ define(function(require, exports){
 					$outDetailTab.find('.btn-view').off('click').on('click',function(){
 						var $that = $(this);
 						var url = $that.attr("url");
-						var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-						var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val();
+						var smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
 						Count.viewImages(url,bigImg,smallImg);
 					});
 				}
@@ -1712,6 +1689,9 @@ define(function(require, exports){
 			//计算应付                      
 			var needReduce = $parent.find('[name=realReduceMoney]').val();
 			var selfRealCount = $parent.find('[name=realCount]').val();
+			//规范数据
+			needReduce = Count.changeTwoDecimal(needReduce);
+			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算自费费用
