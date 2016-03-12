@@ -22,7 +22,7 @@
         </thead>
         <tbody> 
             {{each result as rs}}
-            <tr data-id="{{rs.id}}">
+            <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName"><{{if rs.lineProduct}}{{rs.lineProduct.name }}{{/if}}>
