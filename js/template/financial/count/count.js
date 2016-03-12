@@ -37,7 +37,9 @@ define(function(require, exports){
 		$ReimbursementTab:false,
 		$listBodyTab:false,
 		$searchArea:false,
-		$args:{}
+		$args:{},
+		shopClickCount:0,
+		shopInputCount:0
 	};
 	//暴露的方法--初始化列表
 	Count.initModule = function(){
@@ -77,6 +79,7 @@ define(function(require, exports){
 				if(result){
 					var html = listHeaderTamplate(data);
 					Tools.addTab(listTabId,'报账审核',html);
+					Count.shopClickCount = 0;
 					var $listTabId = $("#tab-"+listTabId+"-content");
 					Count.$listTab = $listTabId;
 					Count.$searchArea = $listTabId.find('.T-search-area');
@@ -699,6 +702,8 @@ define(function(require, exports){
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input[type=text]',function(){
+			Count.shopClickCount += 1;
+			Count.shopInputCount = $shopObj.find('input[type=text]').length;
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag != "shopPolicyName"  && $nameFlag != "currInCome"){
 				Count.calculateCost($(this));
@@ -707,6 +712,7 @@ define(function(require, exports){
 				Count.formatDays($(this),$obj);
 			}
 		});
+
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
@@ -1051,6 +1057,7 @@ define(function(require, exports){
 	};
 	//退回计调事件
 	Count.reback = function(id, billStatus, financialTripPlanId){
+		Count.shopClickCount = 0;
 		var method = billStatus==0?"rebackGuide":billStatus==1?"rebackOp":"rebackFinancial";
 		var guide = billStatus==0?"guide":"";
 		$.ajax({
@@ -1436,8 +1443,11 @@ define(function(require, exports){
 		travelAgencyRateMoney = Count.changeTwoDecimal(travelAgencyRateMoney);
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
-		if($nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney"){
+
+		if($nameFlag== "travelAgencyRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
 			$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+		};
+		if($nameFlag== "guideRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
 			$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 		};
 		
@@ -3607,6 +3617,7 @@ define(function(require, exports){
 	//保存数据
 	Count.saveTripCount = function(id, financialTripPlanId,$obj,typeFlag){
 		var method = typeFlag == 1?'update':'webGuideAccountUpdate';
+		Count.shopClickCount = 0;
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
 		var addShopList = saveJsonStr.addShopArrangeList;
@@ -3848,7 +3859,22 @@ define(function(require, exports){
 			"addTicketArrangeList":[],
 			"otherArrangeList":[],
 			"guideArrangeList":[],
-	        "remarkArrangeList":[]
+	        "remarkArrangeList":[],
+	        "log":{
+				"type":"1",
+				"info":{
+					"message":"",
+				},
+				"shopLog":[],
+				"selfPayLog":[],
+				"otherInLog":[],
+				"busLog":[],
+				"restaurantLog":[],
+				"hotelLog":[],
+				"scenicLog":[],
+				"ticketLog":[],
+				"otherLog":[]
+			}
 		};
 		//团信息
 		var tripPlan = {

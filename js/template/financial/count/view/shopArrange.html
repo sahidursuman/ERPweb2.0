@@ -60,11 +60,11 @@
                 
                 <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
                 <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td rowspan="{{arrange.shopArrangeItemSet.length}}">
                     <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
@@ -84,7 +84,7 @@
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}">
                 <td><span>
                 <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
                 <input type="hidden" name="shopPolicy" 
@@ -116,11 +116,11 @@
                 
                 <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
                 <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old="{{itemSet.guideRebateMoney}}"
                 {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
