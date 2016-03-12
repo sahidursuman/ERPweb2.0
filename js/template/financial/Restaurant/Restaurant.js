@@ -554,7 +554,6 @@ define(function(require, exports) {
                     restaurant.clearTempSumDate = false;
                     restaurant.clearTempData = false;
                     restaurant.$clearTab.data('isEdited',false);
-                    isAutoPay = restaurant.$clearTab.data('next')[0];
                     if(args.isAutoPay == 1){
                         args.isAutoPay = 0;
                     }
