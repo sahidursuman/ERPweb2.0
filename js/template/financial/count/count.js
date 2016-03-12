@@ -3845,7 +3845,22 @@ define(function(require, exports){
 			"addTicketArrangeList":[],
 			"otherArrangeList":[],
 			"guideArrangeList":[],
-	        "remarkArrangeList":[]
+	        "remarkArrangeList":[],
+	        "log":{
+				"type":"1",
+				"info":{
+					"message":"",
+				},
+				"shopLog":[],
+				"selfPayLog":[],
+				"otherInLog":[],
+				"busLog":[],
+				"restaurantLog":[],
+				"hotelLog":[],
+				"scenicLog":[],
+				"ticketLog":[],
+				"otherLog":[]
+			}
 		};
 		//团信息
 		var tripPlan = {
