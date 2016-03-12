@@ -28,22 +28,19 @@ define(function(require, exports){
 			args.accountStatus = $tab.find(".T-borrow-status").find("button").data("value");
 		}
 		args.guideName = (args.guideName == "全部") ? "" : args.guideName;
-		var data = {};
-		data.searchParam = args;
-		Tools.addTab(menuKey, "导游借款", listTemplate(data));
-		guideBorrow.$tab = $("#tab-" + menuKey + "-content");
 
-		// $.ajax({
-		// 	url: '/path/to/file',
-		// 	type: 'POST)',
-		// 	data: {param1: 'value1'},
-		// })
-		// .done(function(data) {
-		// 	if(showDialog(data)){
-
-		// 	}
-		// });
-		guideBorrow.initList(guideBorrow.$tab);
+		$.ajax({
+			url: KingServices.build_url("account/guideFinancial","guideLoanList"),
+			type: 'POST',
+			data: {searchParam: JSON.stringify(args)},
+		})
+		.done(function(data) {
+			if(showDialog(data)){
+				Tools.addTab(menuKey, "导游借款", listTemplate(data));
+				guideBorrow.$tab = $("#tab-" + menuKey + "-content");
+				guideBorrow.initList(guideBorrow.$tab);
+			}
+		});
 	};
 
 	guideBorrow.initList = function($tab){
