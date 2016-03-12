@@ -1807,7 +1807,7 @@ define(function(require, exports) {
                         }
                     }
                     if(fn){
-                        fn();
+                        fn($obj);
                     }
                 }
             }else{
@@ -1845,4 +1845,6 @@ define(function(require, exports) {
     exports.init = tripPlan.initModule;
     exports.addTripPlan = tripPlan.addTripPlan;
     exports.listTripPlanGroup = tripPlan.listTripPlanGroup;
+
+    exports.addVisotorMore = F.batchAddTourists;
 });

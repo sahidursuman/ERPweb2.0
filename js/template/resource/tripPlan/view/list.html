@@ -1,24 +1,26 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight tripPlanViewList">
-    <thead>
-        <colgroup>
-            <col width="300px"></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-            <col></col>
-        </colgroup>
+<colgroup >
+    <col width="300px"></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+</colgroup>
+   <thead>
         <tr class="bg-blur T-tr-fixed">
             <th>团信息</th>
+            <th>出游日期</th>
             <th>团队人数</th>
             <th>导</th>
             <th>车</th>
@@ -42,7 +44,7 @@
                 <p class="h-orderNumber">团号：{{tripPlan.tripNumber}}</p>
                 <p class="hct-absolute-group h-lineName">
                     <span class="hct-span-left">
-				<{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].lineProductName}}{{else}}{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}{{/if}}>
+				&lt;{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].lineProductName}}{{else}}{{if tripPlan.lineProduct}}{{tripPlan.lineProduct.name}}{{/if}}{{/if}}&gt;
 				</span> {{if tripPlan.tripPlanDetails.length > 1}}
                     <label class="T-action T-showLineInfo hct-button-right">
                         <button class="btn btn-success btn-sm btn-white show" index="0">
@@ -51,8 +53,12 @@
                     </label>
                     {{/if}}
                 </p>
-                <p class="h-startTime"><span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].startTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span>-<span>{{if tripPlan.tripPlanDetails.length!=0}}{{tripPlan.tripPlanDetails[0].endTime | dateFormat: 'yyyy.MM.dd'}}{{else}}{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}{{/if}}</span></p>
-                <p class="h-memberName">责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+                <p class="h-memberName">{{if !!tripPlan.guideNames}}导游：{{tripPlan.guideNames}}{{/if}} &nbsp;责任计调：{{if tripPlan.dutyOPUser}}{{tripPlan.dutyOPUser.realName}}{{/if}}</p>
+            </td>
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
             </td>
             <td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
             <!-- 导 -->
@@ -99,31 +105,34 @@
                 </a>
             </td>
         </tr>
-        {{if tripPlan.tripPlanDetails.length!=0}} {{each tripPlan.tripPlanDetails as tripPlanDetails index}} {{if index >= 1}}
+        {{if tripPlan.tripPlanDetails.length!=0}} {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
         <tr class="hidden">
             <td class="h-touristGroupInfo">
                 <p>{{tripPlanDetails.lineProductName}}</p>
-                <p>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}} - {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</p>
-
             </td>
-            {{if index == 1}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length - 1}}"></td>
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlanDetails.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlanDetails.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
+            </td>
+            <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小</td>
+            {{if index == 0}}
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
             {{/if}}
         </tr>
-        {{/if}} {{/each}} {{/if}} {{/each}}
+        {{/each}} {{/if}} {{/each}}
     </tbody>
 </table>
 <div class="row pageMode">

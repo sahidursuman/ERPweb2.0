@@ -1455,7 +1455,6 @@ define(function(require, exports) {
 		'<td><select name="type" class="col-sm-12 T-restauranType" style="width:80px;"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select></td>' +
 		'<td><div class="col-sm-12"><input type="text" name="restaurantName" class="col-sm-12 T-chooseRestaurant"/><input type="hidden" name="restaurantId"><input type="hidden" name="optional" value="" /><span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" name="managerName" readonly="readonly" class="col-sm-12"/></td>' +
-		'<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="price" value="" class="col-sm-12 T-typeNameChoose F-float F-money"/><input type="hidden" name="restaurantStandardId" value="0"/></td>' +
 		'<td><input name="memberCount" type="text" class="col-sm-12 F-float F-count" style="width: 60px;" maxlength="4" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
@@ -1483,7 +1482,6 @@ define(function(require, exports) {
 		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select><input type="hidden" name="id" value="" /></td>' +
 		'<td><div class="col-sm-12"><input type="text" class="col-sm-12 T-chooseHotel" name="name" /><input type="hidden" name="hotelId"><span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="text" class="col-sm-12" readonly="readonly" name="managerName"/></td>' +
-		'<td><input type="text" class="col-sm-12" readonly="readonly" name="mobileNumber"/></td>' +
 		'<td><input type="text" class="col-sm-12 T-chooseHotelRoom" name="hotelRoom"/><input type="hidden" name="hotelRoomId"></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="price" style="width: 60px;" maxlength="6"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-count" name="memberCount" style="width: 60px;" maxlength="6"  value="'+ (tripPlan.touristCount/2) +'"/></td>' +
@@ -1565,7 +1563,6 @@ define(function(require, exports) {
 		'<td><div class="col-sm-12"><input type="text" name="name" class="col-sm-12 T-chooseSelfPay"/><input type="hidden" name="selfPayId" /><span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
 		'<td><input type="hidden" name="selfPayItemId" value="" /><input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="" /></td>'+
 		'<td><input type="text" readonly="readonly" name="managerName" class="col-sm-12"/></td>' +
-		'<td><input type="text" readonly="readonly" name="mobileNumber" class="col-sm-12"/></td>' +
 		'<td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6"/></td>' +
 		'<td><input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="6"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
@@ -2274,7 +2271,6 @@ define(function(require, exports) {
 					$this.val("");
 					$parents.find("input[name=restaurantId]").val("");
 					$parents.find("input[name=managerName]").val("");
-					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=reduceMoney]").val('');
 					$parents.find("input[name=price]").val("").trigger('change');
 				}
@@ -2284,8 +2280,7 @@ define(function(require, exports) {
 				if (ui.item.id == -1) {
 					tripPlan.addOptional($this);
 					$parents.find("input[name=restaurantId]").val(ui.item.id).trigger('change');
-					$parents.find("input[name=mobileNumber]").val(ui.item.mobileNumber);
-					$parents.find("input[name=managerName]").val(ui.item.managerName);
+					$parents.find("input[name=managerName]").val(ui.item.managerName + ' ' + ui.item.mobileNumber);
 					$parents.find("input[name=reduceMoney]").val('');
 					$parents.find("input[name=price]").val("").trigger('change');
 				}else{
@@ -2303,8 +2298,7 @@ define(function(require, exports) {
 	                    success: function(data){
 							if(showDialog(data)){
 								var restaurant = JSON.parse(data.restaurant);
-								$parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
-								$parents.find("input[name=managerName]").val(restaurant.managerName);
+								$parents.find("input[name=managerName]").val(restaurant.managerName+' '+restaurant.mobileNumber);
 								$parents.find("input[name=reduceMoney]").val('');
 								$parents.find("input[name=price]").val("").trigger('change');
 								$parents.find("input[name=optional]").val("");
@@ -2425,8 +2419,7 @@ define(function(require, exports) {
                     data: "id=" + ui.item.id,
                     success: function(data) {
 						if(showDialog(data)){
-							$parents.find("input[name=mobileNumber]").val(data.hotel.mobileNumber);
-							$parents.find("input[name=managerName]").val(data.hotel.managerName);
+							$parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ data.hotel.mobileNumber);
 							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
@@ -2763,7 +2756,6 @@ define(function(require, exports) {
 					$this.val("");
 					$parents.find("input[name=selfPayId]").val("");
 					$parents.find("input[name=managerName]").val("");
-					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=price]").val("");
 					$parents.find("input[name=selfPayItemId]").val("");
 					$parents.find("input[name=selfitem]").val("");
@@ -2780,8 +2772,7 @@ define(function(require, exports) {
 						if(showDialog(data)){
 							var selfPay = JSON.parse(data.selfPay) || {};
 							$parents.find("input[name=selfPayId]").val(ui.item.id).trigger('change');
-							$parents.find("input[name=managerName]").val(selfPay.managerName);
-							$parents.find("input[name=mobileNumber]").val(selfPay.mobileNumber);
+							$parents.find("input[name=managerName]").val(selfPay.managerName +' '+ selfPay.mobileNumber);
 							$parents.find("input[name=selfPayItemId]").val("");
 							$parents.find("input[name=selfitem]").val("");
 							$parents.find("input[name=price]").val(0);

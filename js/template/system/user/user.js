@@ -11,8 +11,7 @@ define(function(require, exports) {
 	var user = {
 		$tab : false,
 		$searchArea : false,
-		$addUserLayer :false,
-		$updateAuth : false
+		$addUserLayer :false
 	};
 
 	user.initModule = function() {
@@ -279,12 +278,11 @@ define(function(require, exports) {
 	    		$(".T-function-id"+functionId).prop("checked",true);
 	    	}
     	}
-
+    	//编辑授权右侧列功能
     	$container.find(".meun").click(function(){
     		var toId = $(this).data('toid'),
     			top = $container.find('#'+toId).offset().top - 180 + $tab.scrollTop();
-
-	        $tab.animate({scrollTop: top},150);
+	       		$tab.animate({scrollTop: top},150);
 		});
 
     	//主菜单是否勾选
@@ -395,6 +393,7 @@ define(function(require, exports) {
     		if(!$(this).data("click")){
     			$(this).data("click",true);
     			user.saveAuth(data.user.id,data.user.userName);
+
     		}
     	});
 	};
@@ -436,8 +435,10 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					layer.close(user.$updateAuth);
+					// layer.close(user.$updateAuth);
+					
 					showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+						Tools.closeTab(tabId);
 						user.listUser(0, "", 1);	
 						if (IndexData.userInfo.userName === username) {
 							user.updateLoginInfo();
