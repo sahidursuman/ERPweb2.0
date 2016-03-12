@@ -49,13 +49,15 @@
             </tr>
         </thead>
         <tbody class="T-list">
-            <tr>
-                <td>导游</td>
-                <td>计划预支款</td>
-                <td>预支金额</td>
-                <td>未付金额</td>
+            {{each guideLoanList as rs}}
+            <tr data-id="{{rs.guideId}}" data-name="{{rs.guideName}}">
+                <td>{{rs.guideName}}</td>
+                <td><span class="F-float F-money">{{rs.planPreMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.preMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
                 <td><a class="cursor T-borrow">借款</a></td>
             </tr>
+            {{/each}}
         </tbody>
     </table>
     <div class="row pageMode">
