@@ -1161,8 +1161,8 @@ define(function(require, exports){
 					$outDetailTab.find('.btn-view').off('click').on('click',function(){
 						var $that = $(this);
 						var url = $that.attr("url");
-						var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-						var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val();
+						var smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
 						Count.viewImages(url,bigImg,smallImg);
 					});
 				}
@@ -1683,6 +1683,9 @@ define(function(require, exports){
 			//计算应付                      
 			var needReduce = $parent.find('[name=realReduceMoney]').val();
 			var selfRealCount = $parent.find('[name=realCount]').val();
+			//规范数据
+			needReduce = Count.changeTwoDecimal(needReduce);
+			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
             if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
             //计算自费费用

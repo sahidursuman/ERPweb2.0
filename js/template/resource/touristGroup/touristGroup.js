@@ -1483,7 +1483,7 @@ define(function(require, exports) {
             '<td>' + '</td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
-            '<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
+            '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
             '<td><a class="cursor btnDeleteTourist">删除</a></td>' +
@@ -1502,7 +1502,7 @@ define(function(require, exports) {
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('tr');
+        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
         $tbody.each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
@@ -1555,7 +1555,7 @@ define(function(require, exports) {
                         "<td>" + "</td>" +
                         "<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + name + "\"/></td>" +
                         "<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\"" + mobileNumber + "\"/></td>" +
-                        "<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
+                        "<td><select name=\"idCardType\" class=\"col-xs-12\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
                         "<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + idCardNumber + "\" /></td>" +
                         "<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>" +
                         "<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>" +
