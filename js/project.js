@@ -11,7 +11,7 @@ var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
-	REFRESH_TAB_EVENT = 'refresh.tab.event';
+	REFRESH_TAB_EVENT = 'refresh.tab.event', DemoData = DemoData || false;
 /**
  * 图片地址
  */
