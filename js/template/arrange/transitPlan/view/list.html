@@ -28,20 +28,20 @@
                             <form class="form-inline T-search" role="form" onsubmit="return false">
                                 <div class="form-group mar-r-10">
                                     <label>收客单号</label>
-                                    <input type="text" name="fromPartnerAgencyName" class="form-control" />
+                                    <input type="text"  class="form-control" />
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>客人</label>
-                                    <input type="text" name="lineProductName" class="form-control" value="" />
+                                    <input type="text" class="form-control" value="" />
                                 </div>
                                 <div class="form-group mar-r-10 mar-l-10">
                                     <label>司机</label>
-                                    <input class=" form-control " name="startTime" value="" type="text" />
+                                    <input class=" form-control "  value="" type="text" />
                                 </div>
                                 <div class="form-group mar-r-10">
                                     <label>抵达时间</label>
-                                    <input type="text" name="arrangeUserName" value="" class="form-control" />
-                                    <input type="hidden" name="arrangeUserId" value="" />
+                                    <input type="text" value="" class="form-control datepicker" />
+                                    <input type="hidden" value="" />
                                 </div>
                                 <div class="form-group ">
                                     <button class=" btn-sm mar-r-10 T-btn-transitList-search search-btn">
@@ -224,6 +224,7 @@
                             <thead>
                                 <tr class="bg-blur T-tr-fixed">
                                     <th>中转信息</th>
+                                    <th>类型</th>
                                     <th>客人信息</th>
                                     <th>消费时间</th>
                                     <th>要求</th>
@@ -233,6 +234,7 @@
                                 </tr>
                             </thead>
                             <tbody class="T-its-list">
+                            <!-- 它 -->
                                 <tr>
                                     <td class="h-touristGroupInfo">
                                         <p>中转单号：HLJQ16390994858943ZZ</p>
@@ -240,6 +242,7 @@
                                         <p><span>2016-3-15</span><span>百事通</span><span>外链销售：张晓雅</span></p>
                                         <p>收客单号：HLJQ16390994858943ZZ</p>
                                     </td>
+                                    <td>它</td>
                                     <td>
                                         <p>王倩倩</p>
                                         <p>20大2小</p>
@@ -261,6 +264,72 @@
                                         <a class="cursor T-arrage T-plan-its T-action">
                                             <label class="padding-right20">|</label> 安排</a>
                                         <a class="cursor T-arrage T-view T-action">
+                                            <label class="padding-right20">|</label> 查看
+                                    </td>
+                                </tr>
+                                <!-- 餐 -->
+                                <tr>
+                                    <td class="h-touristGroupInfo">
+                                        <p>中转单号：HLJQ16390994858943ZZ</p>
+                                        <p><span>&lt;贵阳-西江-黄果树双飞五日游&gt;</span><span>跟团游</span></p>
+                                        <p><span>2016-3-15</span><span>百事通</span><span>外链销售：张晓雅</span></p>
+                                        <p>收客单号：HLJQ16390994858943ZZ</p>
+                                    </td>
+                                    <td>餐</td>
+                                    <td>
+                                        <p>王倩倩</p>
+                                        <p>20大2小</p>
+                                    </td>
+                                    <td>
+                                        2016-3-21
+                                    </td>
+                                    <td>川剧变脸</td>
+                                    <td>
+                                        <p>
+                                            <span>四川大剧院</span>
+                                            <span>16:30场</span>
+                                        </p>
+                                    </td>
+                                    <td><i class="ace-icon fa fa-check green bigger-130"></i>已安排</td>
+                                    <td>
+                                        <a class="cursor T-inform T-action"> 
+                                        通知</a>
+                                        <a class="cursor T-plan-meal T-action">
+                                            <label class="padding-right20">|</label> 安排</a>
+                                        <a class="cursor T-view T-action">
+                                            <label class="padding-right20">|</label> 查看
+                                    </td>
+                                </tr>
+                                <!-- 票 -->
+                                 <tr>
+                                    <td class="h-touristGroupInfo">
+                                        <p>中转单号：HLJQ16390994858943ZZ</p>
+                                        <p><span>&lt;贵阳-西江-黄果树双飞五日游&gt;</span><span>跟团游</span></p>
+                                        <p><span>2016-3-15</span><span>百事通</span><span>外链销售：张晓雅</span></p>
+                                        <p>收客单号：HLJQ16390994858943ZZ</p>
+                                    </td>
+                                    <td>票</td>
+                                    <td>
+                                        <p>王倩倩</p>
+                                        <p>20大2小</p>
+                                    </td>
+                                    <td>
+                                        2016-3-21
+                                    </td>
+                                    <td>川剧变脸</td>
+                                    <td>
+                                        <p>
+                                            <span>四川大剧院</span>
+                                            <span>16:30场</span>
+                                        </p>
+                                    </td>
+                                    <td><i class="ace-icon fa fa-check green bigger-130"></i>已安排</td>
+                                    <td>
+                                        <a class="cursor T-inform T-action"> 
+                                        通知</a>
+                                        <a class="cursor T-plan-ticket T-action">
+                                            <label class="padding-right20">|</label> 安排</a>
+                                        <a class="cursor T-view T-action">
                                             <label class="padding-right20">|</label> 查看
                                     </td>
                                 </tr>
