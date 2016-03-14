@@ -7,15 +7,18 @@
             <label>外联销售 </label>
             <input class="mar-r-10" type="text" value="{{searchParam.outOPUserName}}" name="outOPUserName" placeholder="外联销售" />
             <label>部门 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="groupName" placeholder="部门" />
+            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="businessName" placeholder="部门" />
+            <label>子部门 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="groupName" placeholder="子部门" />
             <label>酒店 </label>
             <input type="text" class="mar-r-10" value="{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
             <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
-            <label>景区 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
-            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" />
+          
         </div>
         <div class="mar-t-10">
+            <label>景区 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
+            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" /> 
         	<label>票务 </label>
             <select name="ticketType" class="mar-r-10">
                 <option value="" {{if searchParam.ticketType=="" }}selected="selected" {{/if}}>全部</option>

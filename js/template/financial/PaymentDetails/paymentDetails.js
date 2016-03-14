@@ -42,6 +42,7 @@ define(function(require, exports){
 	 * @param  {object} $tab $tab
 	 */
 	Payment.getTotal = function(args, $tab){
+		console.trace();
 		var page = typeof(args) !== "number" ? (args || 0) : (args.pageNo || 0);
 		if(!!Payment.$tab){
 			args = Payment.getArgs(page);
@@ -105,10 +106,13 @@ define(function(require, exports){
 
 		$tab.on("click",".T-viewDetails",function(event){
 			Payment.viewDetails($(this).closest('tr').data("id"));
+		})
+		.on("click",".T-delete",function(){
+			Payment.deletePayment($(this).closest('tr').data("id"));
 		});	
 
 		Payment.getSubjectList($tab);
-		FinancialService.initPayEvent($tab);	
+		// FinancialService.initPayEvent($tab);	
 	};
 	/**
 	 * 初始化搜索栏
@@ -126,10 +130,9 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
-			$tab = $('#tab-' + menuKey + '-content');
+			$tab = $('#tab-' + menuKey + '-content').off();
+
 			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
@@ -234,7 +237,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
@@ -355,6 +358,23 @@ define(function(require, exports){
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
+					});
+				}
+			}
+		});
+	};
+
+	//删除记录
+	Payment.deletePayment = function(id){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","deleteIncomeorPay"),
+			type:"POST",
+			data : {id : id},
+			success:function(data){
+				if(showDialog(data)){
+					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+						Payment.getTotal(0,Payment.$tab);
+						Payment.ajaxInit(0);
 					});
 				}
 			}

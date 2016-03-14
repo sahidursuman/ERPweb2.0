@@ -229,7 +229,6 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.tripPlanList = JSON.parse(data.tripPlanList);
                     var html = chosenTripPlanTemplate(data);
                     $chooseTipPlan.find('.T-chooseTipPlan-Content').html(html);
                     // 再调整对话框的高度
