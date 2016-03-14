@@ -119,6 +119,8 @@ define(function(require, exports){
 	 * @param  {object} args 初始化时填充参数
 	 */
 	Payment.initSearch = function(args,bankNo){
+		console.log("searchParam");
+		console.log(args);
 		$.ajax({
 			url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
 			type : "POST",
@@ -130,9 +132,8 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			// 关闭事件绑定，若存在
-			var $tab = $('#tab-' + menuKey + '-content').off();
-
+			console.log("searchParam2");
+			console.log(data.searchParam);
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 
@@ -240,7 +241,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
