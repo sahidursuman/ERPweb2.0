@@ -4052,6 +4052,8 @@ define(function(require, exports){
 				var selfPayArrange = {
 						"id":Count.changeToString($(this).attr('selfPayArrangeId')),
 						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val() || '',
+						"price":$(this).find('input[name=price]').val(),
+						"marketPrice":$(this).find('input[name=marketPrice]').val(),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
@@ -4198,6 +4200,7 @@ define(function(require, exports){
 				var hotelArrange = {
 						"id":Count.changeToString($(this).attr('hotelArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
@@ -4230,6 +4233,7 @@ define(function(require, exports){
 				var scenicArrange = {
 						"id":Count.changeToString($(this).attr('scenicArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
@@ -4262,6 +4266,7 @@ define(function(require, exports){
 				var ticketArrange = {
 						"id":Count.changeToString($(this).attr('ticketArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),

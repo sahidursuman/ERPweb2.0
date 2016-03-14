@@ -67,16 +67,7 @@
                 <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGetMoney}}</span>{{else}}<input type="text" class="F-float F-money w-80" name="realGetMoney" value="{{arrange.realGetMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                 </td>
                
-                <td>
-                {{if tripPlan.billStatus == -1}}
-                    {{if arrange.badStatus == 1}}
-                        <span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>
-                    {{else}}<span class="marketPrice F-float F-money">{{arrange.marketPrice}}</span>
-                    {{/if}}
-                {{else}}
-                    <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/>
-                {{/if}}
-                </td>
+                
                 <td>
                 {{if tripPlan.billStatus == -1}}
                     {{if arrange.badStatus == 1}}
