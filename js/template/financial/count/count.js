@@ -3651,14 +3651,14 @@ define(function(require, exports){
 		Count.shopClickCount = 0;
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		var addShopList = saveJsonStr.addShopArrangeList;
-		for(var i = 0;i<addShopList.length;i++){
-			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
+		var shopList = saveJsonStr.shopArrangeList;
+		for(var i = 0;i<shopList.length;i++){
+			if(shopList[i].shopId == "" || shopList[i].shopPolicyId == ""){
 				var message="";
-				if(addShopList[i].shopId == ""){
+				if(shopList[i].shopId == ""){
 					message = "请选择购物店"
 				}else{
-					if(addShopList[i].shopPolicyId == ""){
+					if(shopList[i].shopPolicyId == ""){
 						message="请选择商品"
 					}
 				};
@@ -3714,6 +3714,21 @@ define(function(require, exports){
 				}
 			}
 		};*/
+		var addBusList = saveJsonStr.addBusArrangeList;
+		for(var i = 0;i<addBusList.length;i++){
+			if(addBusList[i].busCompanyId == "" || addBusList[i].busId == ""){
+				var message="";
+				if(addBusList[i].busCompanyId == ""){
+					message = "请选择车队"
+				}else{
+					if(addBusList[i].busId == ""){
+						message="请选择车牌号"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		};
 		var addHotelList = saveJsonStr.addHotelArrangeList;
 		for(var i = 0;i<addHotelList.length;i++){
 			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
@@ -3728,7 +3743,7 @@ define(function(require, exports){
 				showMessageDialog($("#confirm-dialog-message"),message);
 				return;
 			}
-		}
+		};
 
 		var addScenicList = saveJsonStr.addScenicArrangeList;
 		for(var i = 0;i<addScenicList.length;i++){
