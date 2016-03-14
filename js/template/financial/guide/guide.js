@@ -383,6 +383,14 @@ define(function(require, exports) {
         //确认按钮事件
         $tab.find(".T-saveClear").click(function() {
             if (!validatorCheck.form())return;
+            if($tab.data('isBorrowSave')){
+                $tab.find('input[name="payMoney"]').each(function() {
+                    var $that = $(this);
+                    if (!!$that.val())  {
+                        $that.trigger('change');
+                    }
+                });
+            }
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
@@ -647,13 +655,7 @@ define(function(require, exports) {
 
                         // 当存在预支款时，触发change，以便可直接保存
                         if ($tab.find('.T-saveClear').data('borrow') === 'borrow') {
-                            $tbody.find('input[name="payMoney"]').each(function() {
-                                var $that = $(this);
-
-                                if (!!$that.val())  {
-                                    $that.trigger('change');
-                                }
-                            });
+                            $tab.data('isBorrowSave', true);
                         }
                     }
                 });
