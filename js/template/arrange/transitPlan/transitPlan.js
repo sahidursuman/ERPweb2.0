@@ -111,6 +111,10 @@ define(function(require, exports) {
         var html = busplanTemplate();
         addTab(busplan, '车安排', html);
         transitPlan.$tab = $("#tab-" + busplan + "-content");
+        //绑定删除事件
+        transitPlan.$tab.on('click','.T-contact-delete',function(){
+            transitPlan.delBusArrange($(this));
+        });
         // 新增车安排
         transitPlan.$tab.find('.T-add-bus').on('click', function(event) {
             transitPlan.addbus(transitPlan.$tab)
@@ -123,6 +127,10 @@ define(function(require, exports) {
         var html = hotelplanTemplate();
         addTab(hotelplan, '房安排', html);
         transitPlan.$tab = $("#tab-" + hotelplan + "-content");
+        //绑定删除事件
+        transitPlan.$tab.on('click','.T-contact-delete',function(){
+            transitPlan.delBusArrange($(this));
+        });
         // 新增房安排
         transitPlan.$tab.find('.T-add-hotel').on('click', function(event) {
             transitPlan.addhotel(transitPlan.$tab);
@@ -130,11 +138,16 @@ define(function(require, exports) {
         //时间控件
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
 
+
     };
     transitPlan.itsplan = function() {
         var html = itsplanTemplate();
         addTab(itsplan, '它安排', html);
         transitPlan.$tab = $("#tab-" + itsplan + "-content");
+        //绑定删除事件
+        transitPlan.$tab.on('click','.T-contact-delete',function(){
+            transitPlan.delBusArrange($(this));
+        });
         // 新增它安排
         transitPlan.$tab.find('.T-add-its').on('click', function(event) {
             event.preventDefault();
@@ -148,6 +161,10 @@ define(function(require, exports) {
         var html = mealplanTemplate();
         addTab(mealplan, '餐安排', html);
         transitPlan.$tab = $("#tab-" + mealplan + "-content");
+        //绑定删除事件
+        transitPlan.$tab.on('click','.T-contact-delete',function(){
+            transitPlan.delBusArrange($(this));
+        });
         // 新增餐安排
         transitPlan.$tab.find('.T-add-meal').on('click', function(event) {
             event.preventDefault();
@@ -162,6 +179,10 @@ define(function(require, exports) {
         var html = ticketplanTemplate();
         addTab(ticketplan, '票安排', html);
         transitPlan.$tab = $("#tab-" + ticketplan + "-content");
+        //绑定删除事件
+        transitPlan.$tab.on('click','.T-contact-delete',function(){
+            transitPlan.delBusArrange($(this));
+        });
         // 新增票安排
         transitPlan.$tab.find('.T-add-ticket').on('click', function(event) {
             event.preventDefault();
@@ -193,10 +214,12 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
-        $tbody.find('.T-contact-delete').off('click').on('click', function() {
-            var $tr = $(this).closest('tr');
-            $tr.remove();
-        });
+        
+    };
+    //删除安排
+    transitPlan.delBusArrange = function($obj){
+       var $tr = $obj.closest('tr');
+        $tr.remove(); 
     };
     //添加车安排
     transitPlan.addhotel = function($obj) {
@@ -218,10 +241,6 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
-        $tbody.find('.T-contact-delete').off('click').on('click', function() {
-            var $tr = $(this).closest('tr');
-            $tr.remove();
-        });
     };
     //添加它安排
     transitPlan.addits = function($obj) {
@@ -241,10 +260,6 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
-        $tbody.find('.T-contact-delete').off('click').on('click', function() {
-            var $tr = $(this).closest('tr');
-            $tr.remove();
-        });
     };
     //添加餐安排
     transitPlan.addmeal = function($obj) {
@@ -265,10 +280,6 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
-        $tbody.find('.T-contact-delete').off('click').on('click', function() {
-            var $tr = $(this).closest('tr');
-            $tr.remove();
-        });
     };
     //添加票安排
     transitPlan.addticket = function($obj) {
@@ -291,10 +302,6 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
-        $tbody.find('.T-contact-delete').off('click').on('click', function() {
-            var $tr = $(this).closest('tr');
-            $tr.remove();
-        });
     };
 
     transitPlan.viewbus = function() {
