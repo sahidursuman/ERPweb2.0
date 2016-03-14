@@ -1727,12 +1727,18 @@ define(function(require, exports){
             $parent.find('.selfMoney').val(needSum);
 			//导游佣金= (现收-应收数量*低价)*导佣比例
 			var publiSum = realGetMoney-(incomeCount*price);
-			var guideRebateMoney = publiSum * parseFloat(guideRate)/100;
+			var guideRebateMoney = 0,
+				travelAgencyRebateMoney = 0;
+				
+			if(publiSum>0){
+				guideRebateMoney = publiSum * parseFloat(guideRate)/100;
+				travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
+			};
+			
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
-			var travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
 			$parent.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
