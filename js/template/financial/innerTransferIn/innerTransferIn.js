@@ -229,6 +229,8 @@ define(function(require,exports) {
 				    	data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
 				    }
 				    if(typeFlag == 2 || tab =="settle" || args.autoAccount == 1){
+				    	console.log("typeFlagbfesdrbgfj");
+				    	console.log(InnerTransferIn.saveJson);
 				    	data.sumPayMoney = InnerTransferIn.saveJson.sumPayMoney || 0;
 				    	data.bankNumber = InnerTransferIn.saveJson.bankNumber || '';
 					    data.voucher = InnerTransferIn.saveJson.voucher || '';
@@ -398,7 +400,7 @@ define(function(require,exports) {
 			
 		});
 		if(InnerTransferIn.btnSatus == 1 || $listSearchData.btnShowStatus == true){
-			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.autoPayMoney);
+			$obj.find('input[name=sumPayMoney]').val(InnerTransferIn.saveJson.sumPayMoney);
 			InnerTransferIn.setAutoFillEdit($obj,true);
 		};
 		//格式化日期控件
@@ -497,10 +499,10 @@ define(function(require,exports) {
 		    };
         	if(sumPayMoney == 0){
         		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-		            InnerTransferIn.saveBlanceData(0,$obj,$listSearchData);
+		            InnerTransferIn.saveBlanceData($obj,$listSearchData);
 		        })
         	}else{
-        		InnerTransferIn.saveBlanceData(0,$obj,$listSearchData);
+        		InnerTransferIn.saveBlanceData($obj,$listSearchData);
         	};
         });
         //关闭事件
@@ -542,6 +544,7 @@ define(function(require,exports) {
 			        InnerTransferIn.saveJson.payType = payType;
                     InnerTransferIn.saveJson.billTime = billTime;
                     InnerTransferIn.saveJson.bankNumber = bankNumber;
+                    InnerTransferIn.saveJson.sumPayMoney = $obj.find('input[name=sumPayMoney]').val();
                     InnerTransferIn.saveJson.sumPayRemark = $obj.find('input[name=sumRemark]').val();
 					InnerTransferIn.btnSatus = 1;
 					$obj.data("isEdited",false);
@@ -784,7 +787,7 @@ define(function(require,exports) {
 	};
 
 	//保存数据
-	InnerTransferIn.saveBlanceData = function(pageNo,$tab,$data,tab_id,title, html){
+	InnerTransferIn.saveBlanceData = function($tab,$data,tab_id,title, html){
 		if(InnerTransferIn.$settlementTab.find('.T-btn-autofill').length > 0){
 			var settleValidator = new FinRule(4);
 		} else {
@@ -818,11 +821,10 @@ define(function(require,exports) {
                 if(result){
                 	$tab.data('isEdited', false);
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                		
-                		if(argumentsLen == 2){
+                		if(argumentsLen === 1){
                             Tools.closeTab(settleId);
                             InnerTransferIn.listInnerTransfer(InnerTransferIn.listPage);
-                    	} else if(argumentsLen == 3){
+                    	} else if(argumentsLen === 2){
                     		InnerTransferIn.saveJson = [];
                     		InnerTransferIn.btnSatus = 0;
                     		$data.autoAccount = 0;
@@ -839,31 +841,34 @@ define(function(require,exports) {
 	};
 	//切换tab页面自动提示
 	InnerTransferIn.init_CRU_event = function($tab,$listSearchData,typeFlag,options){
-		if(!!$tab && $tab.length === 1){
-			// 监听保存，并切换tab
-			$tab.on(SWITCH_TAB_SAVE, function(event,tab_id, title, html) {
-				event.preventDefault();
-				if(typeFlag == 2){
-					InnerTransferIn.saveBlanceData(0,$tab,$listSearchData,tab_id, title, html);
-				}else{
-					InnerTransferIn.saveCheckingData(0,$tab,$listSearchData,tab_id, title, html);
-				}
-			})
-			.on(SWITCH_TAB_BIND_EVENT, function(event,tab_id, title, html) {
-				event.preventDefault();
-				InnerTransferIn.$checkSearchArea = false;
-				InnerTransferIn.chenking($tab.data("next"),typeFlag,$tab);
-			})
-			// 保存后关闭
-			.on(CLOSE_TAB_SAVE, function(event) {
-				event.preventDefault();
-				if(typeFlag == 2){
-					InnerTransferIn.saveBlanceData(0,$tab);
-				}else{
-					InnerTransferIn.saveCheckingData(0,$tab);
-				}
-			});
-		}
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            event.preventDefault();
+			console.log("typeFlag:" + typeFlag);
+			if(typeFlag == 2){
+				InnerTransferIn.saveJson = [];
+        		InnerTransferIn.btnSatus = 0;
+        		$data.autoAccount = 0;
+        	}
+			InnerTransferIn.chenking($tab.data("next"),typeFlag,$tab);
+        })
+        // 监听保存，并切换tab
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+			if(typeFlag == 2){
+				InnerTransferIn.saveBlanceData($tab,$listSearchData,tab_id, title, html);
+			}else{
+				InnerTransferIn.saveCheckingData($tab,$listSearchData,tab_id, title, html);
+			}
+        })
+        // 保存后关闭
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+			if(typeFlag == 2){
+				InnerTransferIn.saveBlanceData($tab);
+			}else{
+				InnerTransferIn.saveCheckingData($tab);
+			}
+        });
 	};
 	//规范输入的数字数据
 	InnerTransferIn.changeTwoDecimal = function($val){
