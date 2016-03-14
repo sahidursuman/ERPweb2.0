@@ -1448,10 +1448,15 @@ define(function(require, exports){
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
 		if(!!shopId){
+			var span = $parent.find('.span_shopPolicy');
 			if($nameFlag== "travelAgencyRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 			};
 			if($nameFlag== "guideRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			};
+			if($parent.children('td').length == 8 && $nameFlag== "consumeMoney" && span.length == 0){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			};
 		}else{
