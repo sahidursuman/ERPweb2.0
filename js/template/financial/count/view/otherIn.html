@@ -30,9 +30,16 @@
 
                         <td><span>{{otherInCome.title}}</span><input style="width:90px;" type="hidden" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
-                        <td><input  type="text" class="F-float F-money w-80" name="price" value="{{otherInCome.price}}"  maxlength="11"
-                        {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
-                        /></td>
+                        <td>
+                        {{if tripPlan.billStatus == -1}}
+                            <span>{{otherInCome.price}}</span>
+                            <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}"/>
+                        {{else}}
+                            <input  type="text" class="F-float F-money w-80" 
+                            name="price" value="{{otherInCome.price}}"  maxlength="11"
+                            {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                        {{/if}}
+                        </td>
 
                         <td><input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>

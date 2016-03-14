@@ -41,7 +41,22 @@
 
                     <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
 
-                    <td>{{if arrange.badStatus == 1}}<input type="hidden" name="price" value="{{arrange.price}}" readOnly="readOnly"/>{{/if}}<input type="text" name="price" value="{{arrange.price}}" class="w-80"/></td>
+                    <td>
+                        {{if tripPlan.billStatus == -1}}
+                            {{if arrange.badStatus == 1}}
+                                <span class="F-float F-money">{{arrange.price}}</span>
+                            {{else}}
+                                <span class="F-float F-money">{{arrange.price}}</span>
+                                <input type="hidden" name="price" value="{{arrange.price}}" />
+                            {{/if}}
+                        {{else}}
+                            {{if arrange.badStatus == 1}}
+                                <input type="hidden" name="price" value="{{arrange.price}}" readOnly="readOnly"/>
+                            {{else}}
+                                <input type="text" name="price" value="{{arrange.price}}" class="w-80"/>
+                            {{/if}}
+                        {{/if}}
+                    </td>
 
                     <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input  class="F-float F-count w-50" type="text" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}

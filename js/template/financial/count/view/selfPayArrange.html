@@ -67,8 +67,18 @@
                 <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGetMoney}}</span>{{else}}<input type="text" class="F-float F-money w-80" name="realGetMoney" value="{{arrange.realGetMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                 </td>
                
+                
                 <td>
-                <input type="text" name="price" value="{{arrange.price}}" class="w-50"/></td>
+                {{if tripPlan.billStatus == -1}}
+                    {{if arrange.badStatus == 1}}
+                        <span class="price F-float F-money">{{arrange.price}}</span>
+                    {{else}}
+                        <span class="price F-float F-money">{{arrange.price}}</span>
+                    {{/if}}
+                {{else}}
+                    <input type="text" name="price" value="{{arrange.price}}" class="w-50"/>
+                {{/if}}
+                </td>
                 
                 
                 

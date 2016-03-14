@@ -45,7 +45,7 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index == 0}}
 
-                <td><span><input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
+                <td><span class="span_shopPolicy"><input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
                 {{else}}{{itemSet.name}}<input type="hidden" name="shopPolicy" value="{{itemSet.name}}"></span>{{/if}}
                 </td>
 
@@ -85,23 +85,23 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}">
-                <td><span>
-                <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
-                <input type="hidden" name="shopPolicy" 
-                value="{{if itemSet.shopPolicy != null }}
-                    {{itemSet.shopPolicy.name}}{{else}}
-                {{itemSet.name}}
-                {{/if}}">
-                <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}
-                {{itemSet.shopPolicy.id}}
-                {{/if}}">
-                {{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
+                <td>
+                <span class="span_shopPolicy">
+                    <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
+                    <input type="hidden" name="shopPolicy" 
+                    value="{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}{{else}}{{itemSet.name}}{{/if}}">
+                    <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}
+                    {{itemSet.shopPolicy.id}}
+                    {{/if}}">
+                    {{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
 
-                {{else}}{{itemSet.name}}
-                
-                {{if index==1}}</a>
-                    <button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
-                {{/if}}</span>{{/if}}
+                    {{else}}{{itemSet.name}}
+                    
+                    {{if index==1}}</a>
+                        <button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                    {{/if}}
+                    </span>
+                    {{/if}}
 
                 </td>
 

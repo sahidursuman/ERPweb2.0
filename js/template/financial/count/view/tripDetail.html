@@ -205,6 +205,7 @@
                             <th class="th-border" colspan="5">打单</th>
                             <th class="th-border" colspan="2">社佣</th>
                             <th class="th-border" colspan="2">导佣</th>
+                            <th class="th-border" rowspan="2">现收</th>
                             <th class="th-border" rowspan="2">导游报账备注</th>
                             <th class="th-border" rowspan="2">是否对账</th>
                         </tr>
@@ -250,12 +251,17 @@
                 
                 <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 
-                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span>
+                    
+                </td>
                 
-                <td><span class="F-float F-count">{{itemSet.guideRate*100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="F-float F-count">{{itemSet.guideRate*100}}</span></td>
                 
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span></td>
+
+                <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                    <span class="T-float T-money">{{arrange.rebateCurrentIncomeMoney}}</span>
+                </td>
 
                 <td >
                 {{if editStatus == 1}}
@@ -300,12 +306,11 @@
                 
                 <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 
-                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span></td>
                 
                 <td><span class="F-float F-count">{{itemSet.guideRate * 100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span></td>
 
                 <td >
                 {{if editStatus == 1}}
