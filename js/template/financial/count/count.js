@@ -1491,6 +1491,17 @@ define(function(require, exports){
 	        		var sum = Count.changeTwoDecimal($(this).val());
 	        		travelSum += parseFloat(sum);
 	        	});
+	        	//计算明细
+	        	//导佣
+	        	$listObj.find('.guideRateMoney ').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).text());
+	        		guideSum += parseFloat(sum);
+	        	});
+	        	//社佣
+	        	$listObj.find('.travelAgencyRateMoney').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).text());
+	        		travelSum += parseFloat(sum);
+	        	});
 
 	        }else{
 	        	//金额
