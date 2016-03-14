@@ -20,6 +20,7 @@
                 <th>收客信息</th>
                 <th>出游日期</th>
                 <th>游客信息</th>
+                <th>外联销售</th>
                 <th>应收</th>
                 <th>预收款</th>
                 <th>已收</th>
@@ -46,9 +47,6 @@
                     <p class="h-OPUser">
                         <span>{{if touristGroup.partnerAgency != null}}
 						{{touristGroup.partnerAgency.travelAgencyName}}
-						{{/if}}</span>
-                        <span>{{if touristGroup.outOPUser != null}}
-						外联销售：{{touristGroup.outOPUser.realName}}
 						{{/if}}</span>
                     </p>
                     <p class="h-orderNumber">
@@ -77,6 +75,11 @@
                             {{touristGroup.touristGroupMember.mobileNumber}}
                         {{/if}}</span>
                     </p>
+                </td>
+                <td>
+                    <span>{{if touristGroup.outOPUser != null}}
+                    {{touristGroup.outOPUser.realName}}
+                    {{/if}}</span>
                 </td>
                 <td>
                     <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
