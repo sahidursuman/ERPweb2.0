@@ -50,8 +50,22 @@
 
     <td>{{arrange.seatLevel}}</td>
 
-        <td>{{if arrange.badStatus == 1}}<input type="text" name="price" value="{{arrange.price}}" class="w-80" readOnly="readOnly"/>{{/if}}
-        <input type="text" name="price" value="{{arrange.price}}" class="w-80"/></td>
+        <td>
+            {{if tripPlan.billStatus == -1}}
+                {{if arrange.badStatus == 1}}
+                    <span class="F-float F-money">{{arrange.price}}</span>
+                {{else}}
+                    <span class="F-float F-money">{{arrange.price}}</span>
+                {{/if}}
+                    <input type="hidden" name="price" value="{{arrange.price}}" />
+            {{else}}
+                {{if arrange.badStatus == 1}}
+                    <input type="text" name="price" value="{{arrange.price}}" class="w-80" readOnly="readOnly"/>
+                {{else}}
+                    <input type="text" name="price" value="{{arrange.price}}" class="w-80"/>
+                {{/if}}
+            {{/if}}
+        </td>
 
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input class="F-float F-count w-50" name="realCount" type="text" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5" 
         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
