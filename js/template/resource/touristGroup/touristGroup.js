@@ -470,7 +470,7 @@ define(function(require, exports) {
         //添加tab切换
         touristGroup.init_CRU_event($updateTabId, id, 2, typeInner);
         //游客的序号
-        touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));
+        touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));        
         //小组信息模块处理
         touristGroup.groupInfoDispose($groupInfoForm, 2, typeInner);
         //游客名单模块处理
@@ -871,19 +871,23 @@ define(function(require, exports) {
             touristGroup.addVisotorMore($obj);
             touristGroup.validator = rule.checktouristGroup($obj);
         });
-        //删除原有游客
-        if (typeFlag == 2) {
-            $obj.find(".oldbtnDeleteTourist").on('click', function() {
-                var $tr = $(this).closest('tr');
-                var touristListTrId = $tr.attr("data-entity-id");
-                if (touristListTrId != null && touristListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                    })
-                }
-            });
-        };
+        // 删除游客
+        $obj.find('.T-addTouristTbody').on('click', '.T-delete', function(event) {
+            event.preventDefault();
+            var $tr = $(this).closest('tr');
+            var id = $tr.attr("data-entity-id");
+            if (!!id && typeFlag == 2) {
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $tr.hide();
+                })
+            } else {
+                $tr.fadeOut(function() {
+                    $tr.remove();
+                    touristGroup.memberNumber($obj);
+                });
+            };          
+        });
     };
     //处理中转
     touristGroup.innerTransferDispose = function($obj) {
@@ -1244,34 +1248,6 @@ define(function(require, exports) {
         });
     };
 
-
-    //处理游客名单
-    touristGroup.groupMemberDispose = function($obj, typeFlag) {
-        //添加成员
-        $obj.find('.T-add-tourist').on('click', function() {
-            touristGroup.addVisotor($obj);
-            touristGroup.validator = rule.checktouristGroup($obj);
-        });
-        //批量添加
-        $obj.find('.T-add-tourist-more').on('click', function() {
-            touristGroup.addVisotorMore($obj);
-            touristGroup.validator = rule.checktouristGroup($obj);
-        });
-        //删除原有游客
-        if (typeFlag == 2) {
-            $obj.find(".oldbtnDeleteTourist").on('click', function() {
-                var $tr = $(this).closest('tr');
-                var touristListTrId = $tr.attr("data-entity-id");
-                if (touristListTrId != null && touristListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                    })
-                }
-            });
-        };
-    };
-
     /**
      * 用报价产品信息，初始化小组页面
      * @param  {object} $mainForm   对应小组页面容器
@@ -1486,19 +1462,11 @@ define(function(require, exports) {
             '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
-            '<td><a class="cursor btnDeleteTourist">删除</a></td>' +
+            '<td><a class="cursor T-delete">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
         $tbody.append(html);
-        touristGroup.memberNumber($obj);
-        //删除事件
-        $tbody.find('.btnDeleteTourist').on('click', function() {
-            $tr = $(this).closest('tr');
-            $tr.fadeOut(function() {
-                $(this).remove();
-                touristGroup.memberNumber($obj);
-            });
-        });
+        touristGroup.memberNumber($obj);        
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
@@ -1515,78 +1483,7 @@ define(function(require, exports) {
             module.addVisotorMore($obj.find('.T-addTouristTbody'), touristGroup.memberNumber);
         });
     };
-    //批量添加游客保存
-    touristGroup.saveVisitorMore = function($panelObj, addVisotorMoreLayer, $obj) {
-        var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
-        function numReg(str) {
-            if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
-                idCardNumber = str;
-            } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
-                mobileNumber = str;
-            }
-        }
-        if (data == "") {
-            showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
-        } else {
-            var dataArray = data.split(/\r?\n/);
-            if (dataArray.length > 0) {
-                var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
-                for (var i = 0; i < dataArray.length; i++) {
-                    memberInfo = trim(dataArray[i]);
-                    memberInfoArray = memberInfo.split(/\s+/);
-                    name = "";
-                    mobileNumber = "";
-                    idCardNumber = "";
-                    if (memberInfoArray.length == 1) {
-                        name = memberInfoArray[0];
-                    } else if (memberInfoArray.length == 2) {
-                        name = memberInfoArray[0];
-                        numReg(memberInfoArray[1]);
-                    } else if (memberInfoArray.length == 3) {
-                        name = memberInfoArray[0];
-                        numReg(memberInfoArray[1]);
-                        numReg(memberInfoArray[2]);
-                    }
 
-                    
-                    // 如果第一行数据为空，则删除第一行
-                    var html =
-                        "<tr>" +
-                        "<td>" + "</td>" +
-                        "<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + name + "\"/></td>" +
-                        "<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\"" + mobileNumber + "\"/></td>" +
-                        "<td><select name=\"idCardType\" class=\"col-xs-12\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
-                        "<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + idCardNumber + "\" /></td>" +
-                        "<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>" +
-                        "<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>" +
-                        "</tr>";
-
-                    var $formObj = $obj.closest('form');
-                    $formObj.find(".T-addTouristTbody").append(html);
-                    var $tableObj = $formObj.find(".T-addTouristList");
-                    touristGroup.memberNumber($tableObj);
-                    //游客名单删除事件
-                    $tableObj.find('.btnDeleteTourist').on('click', function() {
-                        var $tr = $(this).closest('tr');
-                        var touristListTrId = $tr.attr("data-entity-id");
-                        if (!(touristListTrId != null && touristListTrId != "")) {
-                            $tr.addClass("deleted");
-                            $tr.fadeOut(function() {
-                                $(this).remove();
-                            })
-                        } else {
-                            $tr.fadeOut(function() {
-                                $(this).remove();
-                                touristGroup.memberNumber($tableObj);
-                            });
-                        };
-
-                    });
-                    layer.close(addVisotorMoreLayer);
-                }
-            }
-        }
-    };
     //新增同行联系人
     touristGroup.addPartnerManager = function($obj) {
         var $parentsObj = $obj.closest('.form-inline');
