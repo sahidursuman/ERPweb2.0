@@ -1298,9 +1298,9 @@ define(function(require, exports){
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td rowspan="2"><input type="text" name="currInCome" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
@@ -1310,9 +1310,9 @@ define(function(require, exports){
 		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy"><button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 		'</tr>';
@@ -1346,9 +1346,9 @@ define(function(require, exports){
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
 			'<td><input type="text" name="consumeMoney" class="w-80"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="travelAgencyRate" class="w-50""><input type="hidden" name="travelAgencyRateMoney"></td>'+
+			'<td><input type="text" name="travelAgencyRate" class="w-50""></td>'+
 			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-			'<td><input type="text" name="guideRate" class="w-50"><input type="hidden" name="guideRateMoney"></td>'+
+			'<td><input type="text" name="guideRate" class="w-50"></td>'+
 			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 			'</tr>';
@@ -1460,9 +1460,6 @@ define(function(require, exports){
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			}
 		};
-
-		
-		
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
