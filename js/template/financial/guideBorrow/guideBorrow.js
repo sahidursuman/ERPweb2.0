@@ -16,6 +16,7 @@ define(function(require, exports){
 	guideBorrow.initModule = function(){
 		var args = FinancialService.getInitDate();
 		args.pageNo = 0;
+		args.accountStatus = 2;
 		guideBorrow.getList(args);
 	};
 	guideBorrow.getList = function(args,$tab){
@@ -58,6 +59,7 @@ define(function(require, exports){
 	};
 
 	guideBorrow.initList = function($tab,args){
+		Tools.setDatePicker($tab.find('.datepicker'), true);
 		guideBorrow.getGuideList($tab.find('input[name=guideName]'));
 		$tab.find(".T-btn-search").off().on('click',function(event) {
 			event.preventDefault();
