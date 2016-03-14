@@ -118,7 +118,7 @@ define(function(require, exports){
 				            }
 				        },
 				        select :function(event, ui){
-			                $obj.nextAll('input[name=Id]').val(ui.item.id);
+			                $obj.nextAll('input[name=guideId]').val(ui.item.id);
 				        }
 				    }).on("click",function(){
 			            $obj.autocomplete('search','');
