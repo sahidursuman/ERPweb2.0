@@ -955,6 +955,7 @@ input.datepicker:not([class^="col-"]) {
 .main-content-inner > .page-content,
 .main-content-inner > .page-content > .tab-content{
 	height: 100%;
+	background: #F9FFF9;
 }
 #tabContent{
 	padding: 0;
