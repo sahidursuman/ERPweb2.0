@@ -1,0 +1,55 @@
+<table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
+    <colgroup>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:20%;"></col>
+        <col style="width:20%;"></col>
+        <col style="width:15%;"></col>
+        <col style="width:15%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
+    </colgroup>
+    <thead>
+        <tr class="bg-blur">
+            <th class="col-sm-1">客户</th>
+            <th class="col-sm-2">团号</th>
+            <th class="col-sm-1">人数</th>
+            <th class="col-sm-1">进店日期</th>
+            <th class="col-sm-1">购物店</th>
+            <th class="col-sm-1">总打单</th>
+            <th class="col-sm-1">人均打单</th>
+            <th class="col-sm-2">导佣</th>
+            <th class="col-sm-1">社佣</th>
+            <th class="col-sm-1">总佣金</th>
+            <th class="col-sm-2">人均返佣</th>
+        </tr>
+    </thead>
+    <tbody class="T-tourguidPer-list">
+        {{each sumListPerformance as sumL}}
+        <tr>
+            <td>{{sumL.guideName}}</td>
+            <td>{{sumL.mobileNumber}}</td>
+            <td>{{sumL.tourCount}}</td>
+            <td>{{sumL.tourNumber}}</td>
+            <td>{{sumL.sumShopMoney}}</td>
+            <td>{{sumL.maxShopMoney}}</td>
+            <td>{{sumL.aveTeamShop}}</td>
+            <td>{{sumL.avePeoShop}}</td>
+            <td>{{sumL.sumSelfPayMoney}}</td>
+            <td>{{sumL.aveSelfPayMoney}}</td>
+            <td>{{sumL.aveSelfPay}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div class="pageMode">
+    <div class="col-xs-5">
+        <small>共计{{totalCount}}条记录</small>
+    </div>
+    <div class="col-xs-7">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>
