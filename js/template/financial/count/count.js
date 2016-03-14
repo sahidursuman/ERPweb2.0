@@ -1729,7 +1729,7 @@ define(function(require, exports){
 			var publiSum = realGetMoney-(incomeCount*price);
 			var guideRebateMoney = 0,
 				travelAgencyRebateMoney = 0;
-				
+
 			if(publiSum>0){
 				guideRebateMoney = publiSum * parseFloat(guideRate)/100;
 				travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
@@ -1748,8 +1748,8 @@ define(function(require, exports){
 			var selfMoney = 0;
 			var guideRebateMoney = 0;
 			var $mainTr = $parentObj.find('.T-count-selfPay');
-			$mainTr.find('.selfMoney').each(function() {
-				var totalSum = parseFloat($(this).val());
+			$mainTr.find('.needPayMoney').each(function() {
+				var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
 				selfMoney += totalSum;
 			});
 			$mainTr.find('.needIncome').each(function() {
