@@ -649,6 +649,13 @@ define(function(require, exports) {
                 } else if(option == "clear"){
                     Insure.saveClear(id,name);
                 }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    Insure.clearTempData = false;
+                    Insure.clearTempSumDate = false;
+                }
             });
         }
     };

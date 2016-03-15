@@ -575,6 +575,13 @@ define(function(require, exports) {
                     $tab.data('hotelId',args.hotelId);
                     hotel.saveClear($tab);
                 }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    hotel.clearTempData = false;
+                    hotel.clearTempSumDate = false;
+                }
             });
 
             //报表内的操作

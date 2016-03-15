@@ -579,6 +579,13 @@ define(function(require, exports) {
                     $tab.data('restaurantId',args.restaurantId);
                     restaurant.saveClear($tab);
                 }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    restaurant.clearTempSumDate = false;
+                    restaurant.clearTempData = false;
+                }
             });
 
             //报表内的操作

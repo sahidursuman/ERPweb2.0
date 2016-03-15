@@ -432,6 +432,12 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
             saveFn($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(type == 2){
+                FinTransIn.clearTempData = false;
+            }
         });
 
     	//关闭事件

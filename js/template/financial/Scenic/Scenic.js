@@ -575,6 +575,13 @@ define(function(require, exports) {
                 } else if(option == "clear"){
                     scenic.saveClear($tab);
                 }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    scenic.clearTempData = false;
+                    scenic.clearTempSumDate = false;
+                }
             });
 
             //报表内的操作

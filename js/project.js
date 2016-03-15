@@ -11,7 +11,8 @@ var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
-	REFRESH_TAB_EVENT = 'refresh.tab.event';
+	REFRESH_TAB_EVENT = 'refresh.tab.event',
+	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
 /**
  * 图片地址
  */
@@ -1491,6 +1492,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
+											$content.trigger(CLOSE_TAB_SAVE_NO);
 											Tools.closeTab(tab_id);
 										},
 										// 取消
