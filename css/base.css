@@ -15,11 +15,17 @@
 .table th, .table td {
     text-align: center;
 }
+html,
+body,
+.main-container{
+	width: 100%;
+    overflow: hidden;
+    height: 100%;
+}
 body{
 	color:#000; 
+	background-color: white;
 	font-family: "microsoft yahei";
-	min-width: 1699px;
-    overflow-x: auto;
 }
 a{cursor: pointer;}
 a:hover, a:focus{text-decoration: none;}
@@ -95,7 +101,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 
 /***发团计划样式**/
 
-input.datepicker {
+input.datepicker:not([class^="col-"]) {
 	border-radius: 0;
 	width: 90px;
 }
@@ -130,7 +136,7 @@ input.datepicker {
 .hct-search-area.form-inline .form-group{
 	display: block;
 	float: left;
-	margin-bottom: 0;
+	margin-bottom: 0!important;
 	padding: 5px 10px 5px 0;
 }
 .hct-view-plan{
@@ -287,16 +293,18 @@ input.datepicker {
 	padding-right: 15px!important;
 }
 .hct-absolute-group{
-	position: relative;
 }
 .hct-absolute-group .hct-span-left{
 	padding-right: 40px;
 }
+.hct-absolute-group .hct-button-right .btn,
+.table tr .btn{
+	position: initial;
+}
 .hct-button-right{
-	position: absolute;
-    right: 10px;
-    top: 50%;
-    margin-top: -12px;
+	margin-top: -4px;
+    float: right;
+    margin-right: 10px;
 }
 .tripplan-area .btn .fa-minus{
 	color: #81a87b;
@@ -840,6 +848,7 @@ input.datepicker {
     height: 100%;
 	outline: none;
 	resize: none;
+	position: static;
 }
 .hct-textarea:disabled{
 	color: #848484!important;
@@ -849,6 +858,9 @@ input.datepicker {
 .financial-search-planProfit{
 	display: inline-block;
     padding-left: 15px;
+}
+.F-money,.pos-rel,label input[type=checkbox].ace,input[type=checkbox].ace+.lbl,input[type=checkbox].ace+.lbl::before{
+	position: static;
 }
 /**公共方法**/
 
@@ -860,6 +872,168 @@ input.datepicker {
 		padding-top: 49px;
 	}
 } */
+/*布局全局变量*/
+.main-content-inner > .page-content{
+	padding: 0;
+	padding-top: 38px;
+}
+
+
+/*内容区边界*/
+/* #tabContent {
+	padding: 20px 20px 0 25px;
+} */
+
+.overflow-x {
+	overflow-x: auto;
+}
+
+/*内容区所支持的最小宽度*/
+.min-w-1050 {
+	min-width: 1050px;
+}
+
+/*数量input的宽度*/
+.w-50 {
+	width: 50px;
+}
+/*金额input的宽度*/
+.w-80 {
+	width: 80px;
+}
+
+/*时间input的宽度*/
+.w-100 {
+	width: 100px;
+}
+
+/*线路产品*/
+.w-150 {	
+	width: 150px;
+}
+
+.min-w-200 {	
+	min-width: 200px;
+}
+
+/*自费table的宽度*/
+.w-1400 {
+	min-width: 1400px;
+}
+
+/*车辆安排table的宽度*/
+.w-1500 {
+	min-width: 1500px;
+}
+/*table 标题边框颜色*/
+.table>thead>tr.bg-blur>th:last-child{
+    border-right-color: #51b0c2
+}
+.table>thead>tr.bg-blur>th:first-child{
+	border-left-color: #51B0C2;
+}
+.table>tbody>tr>td{
+	vertical-align:middle;
+}
+.main-container{
+	padding-top: 78px;
+}
+.sidebar+.main-content{
+	margin-left: 0;
+	margin-top: 0;
+	padding-left: 190px;
+    height: 100%;
+}
+.main-content-inner,
+.main-content-inner > .page-content,
+.main-content-inner > .page-content > .tab-content{
+	height: 100%;
+}
+#tabContent{
+	padding: 0;
+}
+.main-content-inner > .page-content {
+	padding-top: 41px;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane{
+	position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+	padding: 20px 20px 15px 25px;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
+	min-width: 1085px;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane > .row{
+	margin-right: 0;
+}
+.table{
+	position: relative;
+}
+.T-tr-fixed{
+	position: relative;
+	z-index: 5;
+    width: 100%;
+}
+.table-bordered{
+	border:none;
+}
+.table>thead>tr.T-tr-fixed>th{
+	border:none!important;
+	position: relative;
+	border-left: 1px solid #ddd!important;
+}
+.table>thead>tr.T-tr-fixed>th:last-child{
+	border-right: 1px solid #ddd!important;
+}
+.table>thead>tr.bg-blur.T-tr-fixed>th{
+	border:none;
+	position: relative;
+	border-left: 1px solid #ddd;
+}
+.table-striped>tbody>tr{
+	background-color: #fff;
+}
+.table-striped>tbody>tr:nth-child(odd){
+	background-color: #f9f9f9;
+}
+.table>thead>tr.bg-blur.T-tr-fixed>th:last-child{
+	border-right: 1px solid #51B0C2;
+}
+.table>thead>tr.T-tr-fixed>th:after{
+	content: '';
+	position: absolute;;
+	width: 100%;
+	height: 1px;
+	left: 0;
+	bottom: 0;
+	background-color: #ddd;
+}
+.table>thead>tr.T-tr-fixed>th:before{
+	content: '';
+	position: absolute;;
+	width: 100%;
+	height: 1px;
+	top: 0;
+	left: 0;
+	background-color: #ddd;
+}
+.table .btn-group, 
+.table .btn-group-vertical{
+	position: inherit;
+}
+#cnzz_stat_icon_1257382061 {
+	display: none;
+}
+
+.inline-flex {
+	display: inline-flex;
+}
+.sidebar.menu-min+.main-content{
+	margin-left: 0;
+	padding-left: 43px;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
@@ -874,21 +1048,12 @@ input.datepicker {
 	.sidebar+.main-content .breadcrumbs-fixed {
 	    left: 140px;
 	}
-	.main-content-inner > .page-content{
-		padding: 8px 12px 24px;
-	}
-	.breadcrumbs-fixed+.page-content{
-		padding-top: 49px;
-	}
 	.sidebar+.main-content {
-		margin-left: 140px;
+		padding-left: 140px;
 	}
 }
-
-#cnzz_stat_icon_1257382061 {
-	display: none;
-}
-
-.inline-flex {
-	display: inline-flex;
+@media only screen and (max-width: 991px){
+	.sidebar.responsive+.main-content {
+		padding-left: 0;
+	}
 }
