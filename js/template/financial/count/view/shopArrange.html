@@ -75,7 +75,7 @@
                 {{if editStatus == 1}}
                     <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" />
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                &nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDel">删除</a>
+                {{if tripPlan.billStatus == -1}}&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDel">删除</a>{{/if}}
                 </td>
                 {{/if}}
             {{/each}}
