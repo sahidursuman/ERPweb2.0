@@ -872,6 +872,13 @@ input.datepicker:not([class^="col-"]) {
 		padding-top: 49px;
 	}
 } */
+.breadcrumbs-fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    z-index: 1024;
+}
 /*布局全局变量*/
 .main-content-inner > .page-content{
 	padding: 0;
@@ -948,6 +955,7 @@ input.datepicker:not([class^="col-"]) {
 .main-content-inner > .page-content,
 .main-content-inner > .page-content > .tab-content{
 	height: 100%;
+	background: #F9FFF9;
 }
 #tabContent{
 	padding: 0;

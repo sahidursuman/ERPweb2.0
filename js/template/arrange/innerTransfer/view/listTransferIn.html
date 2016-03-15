@@ -158,7 +158,7 @@
                     <td><span class=" F-float F-money">{{rs.transPayedMoney}}</span></td>
                     <td>{{if rs.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if rs.status == 1}}<span style="color: green;">已接收</span>{{else if rs.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
                     <td>
-                        <div class="hidden-sm hidden-xs btn-group">
+                        <div class="btn-group">
                             <a data-entity-id="{{rs.id}}" class="cursor  btn-transfer-view">
 							查看
 						</a> {{if searchParam!=null}}
@@ -170,36 +170,6 @@
                             <a data-entity-id="{{rs.id}}" class="cursor btn-transfer-refuse">
 							拒绝
 						</a> {{/if}}
-                        </div>
-                        <div class="hidden-md hidden-lg">
-                            <div class="inline pos-rel">
-                                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                    <li>
-                                        <a data-entity-id="{{rs.id}}" href="javascript:void(0)" class="tooltip-error btn-TransferIn-view" data-rel="tooltip">
-                                            <span class="red">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a data-entity-id="{{rs.id}}" href="javascript:void(0)" class="tooltip-success btn-TransferIn-edit" data-rel="tooltip">
-                                            <span class="green">
-											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-										</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a data-entity-id="{{rs.id}}" href="javascript:void(0)" class="tooltip-error btn-transfer-delete" data-rel="tooltip">
-                                            <span class="red">
-											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </td>
                 </tr>

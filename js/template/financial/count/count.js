@@ -1298,9 +1298,9 @@ define(function(require, exports){
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td rowspan="2"><input type="text" name="currInCome" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
@@ -1310,9 +1310,9 @@ define(function(require, exports){
 		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy"><button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/><input type="hidden" name="travelAgencyRateMoney"/></td>'+
+		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="guideRate" class="w-50" value="0"/><input type="hidden" name="guideRateMoney" /></td>'+
+		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 		'</tr>';
@@ -1346,9 +1346,9 @@ define(function(require, exports){
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
 			'<td><input type="text" name="consumeMoney" class="w-80"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="travelAgencyRate" class="w-50""><input type="hidden" name="travelAgencyRateMoney"></td>'+
+			'<td><input type="text" name="travelAgencyRate" class="w-50""></td>'+
 			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-			'<td><input type="text" name="guideRate" class="w-50"><input type="hidden" name="guideRateMoney"></td>'+
+			'<td><input type="text" name="guideRate" class="w-50"></td>'+
 			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
 			'</tr>';
@@ -1448,10 +1448,15 @@ define(function(require, exports){
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
 		if(!!shopId){
+			var span = $parent.find('.span_shopPolicy');
 			if($nameFlag== "travelAgencyRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 			};
 			if($nameFlag== "guideRate" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			};
+			if($parent.children('td').length == 8 && $nameFlag== "consumeMoney" && span.length == 0){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			};
 		}else{
@@ -1460,9 +1465,6 @@ define(function(require, exports){
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			}
 		};
-
-		
-		
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
@@ -1487,6 +1489,17 @@ define(function(require, exports){
 	        	//社佣
 	        	$listObj.find('[name=travelAgencyRateMoney]').each(function(){
 	        		var sum = Count.changeTwoDecimal($(this).val());
+	        		travelSum += parseFloat(sum);
+	        	});
+	        	//计算明细
+	        	//导佣
+	        	$listObj.find('.guideRateMoney ').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).text());
+	        		guideSum += parseFloat(sum);
+	        	});
+	        	//社佣
+	        	$listObj.find('.travelAgencyRateMoney').each(function(){
+	        		var sum = Count.changeTwoDecimal($(this).text());
 	        		travelSum += parseFloat(sum);
 	        	});
 
@@ -1714,12 +1727,18 @@ define(function(require, exports){
             $parent.find('.selfMoney').val(needSum);
 			//导游佣金= (现收-应收数量*低价)*导佣比例
 			var publiSum = realGetMoney-(incomeCount*price);
-			var guideRebateMoney = publiSum * parseFloat(guideRate)/100;
+			var guideRebateMoney = 0,
+				travelAgencyRebateMoney = 0;
+
+			if(publiSum>0){
+				guideRebateMoney = publiSum * parseFloat(guideRate)/100;
+				travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
+			};
+			
 			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
 			$parent.find('.guideRebateMoney').text(guideRebateMoney);
 			$parent.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 			
-			var travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
 			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
 			$parent.find('.travelAgencyRebateMoney').text(travelAgencyRebateMoney);
 			$parent.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
@@ -1729,8 +1748,8 @@ define(function(require, exports){
 			var selfMoney = 0;
 			var guideRebateMoney = 0;
 			var $mainTr = $parentObj.find('.T-count-selfPay');
-			$mainTr.find('.selfMoney').each(function() {
-				var totalSum = parseFloat($(this).val());
+			$mainTr.find('.needPayMoney').each(function() {
+				var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
 				selfMoney += totalSum;
 			});
 			$mainTr.find('.needIncome').each(function() {
@@ -3632,14 +3651,14 @@ define(function(require, exports){
 		Count.shopClickCount = 0;
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		var addShopList = saveJsonStr.addShopArrangeList;
-		for(var i = 0;i<addShopList.length;i++){
-			if(addShopList[i].shopId == "" || addShopList[i].shopPolicyId == ""){
+		var shopList = saveJsonStr.shopArrangeList;
+		for(var i = 0;i<shopList.length;i++){
+			if(shopList[i].shopId == "" || shopList[i].shopPolicyId == ""){
 				var message="";
-				if(addShopList[i].shopId == ""){
+				if(shopList[i].shopId == ""){
 					message = "请选择购物店"
 				}else{
-					if(addShopList[i].shopPolicyId == ""){
+					if(shopList[i].shopPolicyId == ""){
 						message="请选择商品"
 					}
 				};
@@ -3695,6 +3714,21 @@ define(function(require, exports){
 				}
 			}
 		};*/
+		var addBusList = saveJsonStr.addBusArrangeList;
+		for(var i = 0;i<addBusList.length;i++){
+			if(addBusList[i].busCompanyId == "" || addBusList[i].busId == ""){
+				var message="";
+				if(addBusList[i].busCompanyId == ""){
+					message = "请选择车队"
+				}else{
+					if(addBusList[i].busId == ""){
+						message="请选择车牌号"
+					}
+				};
+				showMessageDialog($("#confirm-dialog-message"),message);
+				return;
+			}
+		};
 		var addHotelList = saveJsonStr.addHotelArrangeList;
 		for(var i = 0;i<addHotelList.length;i++){
 			if(addHotelList[i].hotelId == "" || addHotelList[i].hotelRoomId == ""){
@@ -3709,7 +3743,7 @@ define(function(require, exports){
 				showMessageDialog($("#confirm-dialog-message"),message);
 				return;
 			}
-		}
+		};
 
 		var addScenicList = saveJsonStr.addScenicArrangeList;
 		for(var i = 0;i<addScenicList.length;i++){
@@ -4052,6 +4086,8 @@ define(function(require, exports){
 				var selfPayArrange = {
 						"id":Count.changeToString($(this).attr('selfPayArrangeId')),
 						"selfPayItemId":$(this).find('input[name=selfPayItemId]').val() || '',
+						"price":$(this).find('input[name=price]').val(),
+						"marketPrice":$(this).find('input[name=marketPrice]').val(),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
@@ -4198,6 +4234,7 @@ define(function(require, exports){
 				var hotelArrange = {
 						"id":Count.changeToString($(this).attr('hotelArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
@@ -4230,6 +4267,7 @@ define(function(require, exports){
 				var scenicArrange = {
 						"id":Count.changeToString($(this).attr('scenicArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
@@ -4262,6 +4300,7 @@ define(function(require, exports){
 				var ticketArrange = {
 						"id":Count.changeToString($(this).attr('ticketArrangeId')),
 						"realCount":Count.changeToString($(this).find('input[name=realCount]').val()),
+						"price":$(this).find('input[name=price]').val(),
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),

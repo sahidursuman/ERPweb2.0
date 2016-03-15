@@ -39,23 +39,8 @@
 
         {{if index == 0}}
             <td rowspan="{{arrangeList.restaurantArrangeList.length}}">
-            {{if tripPlan.billStatus == -1}}
-                {{if arrange.isChoose == 1}}
-                    <select name="chooseRest">
-                        <option value="">导游自选</option>
-                        {{each arrange.restaurantChooseArrangeList as rs}}
-                            <option value="{{rs.restaurantId}}" 
-                            {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
-                        {{/each}}
-                    </select>
-                {{else}}
-                    {{if arrange.restaurant != null}}
-                        <span>{{arrange.restaurant.name}}</span>
-                    {{/if}}
-                {{/if}}
-            {{else}}
-                {{if arrange.billUpdateTime != null}}
-                    {{if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length > 0}}
+                {{if tripPlan.billStatus == -1}}
+                    {{if arrange.isChoose == 1}}
                         <select name="chooseRest">
                             <option value="">导游自选</option>
                             {{each arrange.restaurantChooseArrangeList as rs}}
@@ -63,23 +48,38 @@
                                 {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
                             {{/each}}
                         </select>
-                    {{else if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length == 0}}
-                        导游自选
-                    {{else if arrange.restaurantId != -1}}
-                        {{if arrange.restaurant !=null}}
-                            {{arrange.restaurant.name}}
+                    {{else}}
+                        {{if arrange.restaurant != null}}
+                            <span>{{arrange.restaurant.name}}</span>
                         {{/if}}
                     {{/if}}
                 {{else}}
-                    {{if arrange.restaurantId == -1}}
-                        导游自选
+                    {{if arrange.billUpdateTime != null}}
+                        {{if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length > 0}}
+                            <select name="chooseRest">
+                                <option value="">导游自选</option>
+                                {{each arrange.restaurantChooseArrangeList as rs}}
+                                    <option value="{{rs.restaurantId}}" 
+                                    {{if arrange.restaurantId == rs.restaurantId}}selected="selected"{{/if}}>{{rs.name}}</option>
+                                {{/each}}
+                            </select>
+                        {{else if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length == 0}}
+                            导游自选
+                        {{else if arrange.restaurantId != -1}}
+                            {{if arrange.restaurant !=null}}
+                                {{arrange.restaurant.name}}
+                            {{/if}}
+                        {{/if}}
                     {{else}}
-                        {{if arrange.restaurant !=null}}
-                            {{arrange.restaurant.name}}
+                        {{if arrange.restaurantId == -1}}
+                            导游自选
+                        {{else}}
+                            {{if arrange.restaurant !=null}}
+                                {{arrange.restaurant.name}}
+                            {{/if}}
                         {{/if}}
                     {{/if}}
                 {{/if}}
-            {{/if}}
             </td>
         {{/if}}
 
@@ -92,8 +92,7 @@
                 type="text" name="price" class="w-80"/>
                 <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
             {{else}}
-                <input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.price}}" 
-                type="text" name="price" class="w-80"/>
+                <span class="F-float F-money">{{arrange.price}}</span>
             {{/if}}
         {{else}}
             {{if arrange.badStatus == 1}}
