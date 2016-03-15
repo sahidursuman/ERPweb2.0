@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":443,"md5":"7f659c274b5ef4a85599b10f5d301fd9"}*/
+/*TMODJS:{"debug":true,"version":445,"md5":"7f659c274b5ef4a85599b10f5d301fd9"}*/
 define(function(require) {
     return require("../../../template")("financial/OtherAccounts/view/AccountsPayment", function($data, $filename) {
         try {
