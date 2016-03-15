@@ -88,7 +88,7 @@
                             <option value="2" {{if arrange.realPayType==2 }}selected="selected" {{/if}}>签单</option>
                         </select>
                         &nbsp;
-                        <input  class="F-float F-money w-80" type="text" name="realGuidePayMoney" {{if arrange.payType==2 }}value="{{arrange.signMoney}}" {{else}}{{if !!arrange.billUpdateTime}} value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}" {{/if}}  maxlength="11" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}{{/if}}/>{{/if}}
+                        <input  class="F-float F-money w-80" type="text" name="realGuidePayMoney" {{if arrange.realPayType==2 }}value="{{arrange.realSignMoney}}" {{else}}{{if !!arrange.billUpdateTime}} value="{{arrange.realGuidePayMoney}}" {{else}}value="{{arrange.guidePayMoney}}" {{/if}}  maxlength="11" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}{{/if}}/>{{/if}}
                         <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                         <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" />
                     </div>
