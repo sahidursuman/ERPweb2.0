@@ -11,7 +11,8 @@ var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
-	REFRESH_TAB_EVENT = 'refresh.tab.event';
+	REFRESH_TAB_EVENT = 'refresh.tab.event',
+	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
 /**
  * 图片地址
  */
@@ -1491,6 +1492,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
+											$content.trigger(CLOSE_TAB_SAVE_NO);
 											Tools.closeTab(tab_id);
 										},
 										// 取消
@@ -1972,12 +1974,16 @@ Tools.setDateRange = function($dateObjs) {
  *         					当天的话，返回0
  *         					开始日期或者结束日期为空，则表示今天
  */
-Tools.getDateDiff = function(startDate,endDate)  
+Tools.getDateDiff = function(startDate,endDate, isAbs)  
 {
 	var days = 0;
 
 	if (!!startDate || !!endDate)   {
-		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		if (isAbs == 'noAbs') {
+			days = Math.floor((getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}else{
+			days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}
 	}
     
     return days; 
@@ -2010,7 +2016,6 @@ Tools.addDay = function(date, days) {
 		var month = date.getMonth() + 1, day = date.getDate();
 		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
-
 	return date;
 }
 
