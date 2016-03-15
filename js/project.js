@@ -1972,12 +1972,16 @@ Tools.setDateRange = function($dateObjs) {
  *         					当天的话，返回0
  *         					开始日期或者结束日期为空，则表示今天
  */
-Tools.getDateDiff = function(startDate,endDate)  
+Tools.getDateDiff = function(startDate,endDate, isAbs)  
 {
 	var days = 0;
 
 	if (!!startDate || !!endDate)   {
-		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		if (isAbs == 'noAbs') {
+			days = Math.floor((getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}else{
+			days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}
 	}
     
     return days; 
@@ -2010,7 +2014,6 @@ Tools.addDay = function(date, days) {
 		var month = date.getMonth() + 1, day = date.getDate();
 		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
-
 	return date;
 }
 
