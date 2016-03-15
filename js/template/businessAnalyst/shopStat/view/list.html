@@ -45,10 +45,10 @@
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
-        <tr>
+        <tr shopId = "{{shop.shopId}}">
             <td>{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{shop.shopName}}</td>
-            <td>{{shop.consumeMoney}}</td>
+            <td><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
             <td>{{shop.aveconsumeMoney}}</td>
             <td>{{shop.guideRebateMoney}}</td>
             <td>{{shop.travelAgencyRebateMoney}}</td>
