@@ -57,10 +57,11 @@ define(function(require,exports){
 				id = $that.closest('tr').attr('bankid'),
 				bankNumber = $that.closest('tr').attr('banknum'),
 				bankMoney = $that.closest('tr').attr('bankMoney'),
-				bankInfo = "账户：" + bankNumber + ",余额：" + bankMoney;
+				bankInfo = "账户：" + bankNumber + ",余额：" + bankMoney,
+				type = $that.closest('tr').data("type");
 			if ($that.hasClass('T-view'))  {
 				// 查看账户信息
-				KingServices.viewPayMentDetail(id,bankInfo);
+				KingServices.viewPayMentDetail(id,bankInfo,type);
 			} 
 		});
 	};
