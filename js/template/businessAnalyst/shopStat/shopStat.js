@@ -56,7 +56,7 @@ define(function(require, exports) {
 	   		}
 		};
 	   	// 修正页码
-	   	page = page || 0;
+	   	searchData.pageNo = page || 0;
 	   	//购物统计列表请求Ajax
 	 	$.ajax({
 	 		url : KingServices.build_url("financial/shopAccount","shopStatistics"),
@@ -69,7 +69,8 @@ define(function(require, exports) {
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//获取客户、团号和购物店列表
 		       		shopStat.autocompleteDate(shopStat.$tab);
-
+		       		//绑定页面事件
+		       		shopStat.initEvent();
 			       	// 绑定翻页组件
 					laypage({
 					    cont: shopStat.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -84,8 +85,21 @@ define(function(require, exports) {
 				}
 			}
 		});
-	}
+	};
 
+	/**
+	 * 列表事件
+	 */
+	shopStat.initEvent = function(){
+
+		//搜索事件
+		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
+			//搜索事件
+			shopStat.listShopStat(0);
+		}).on('click','.T-shopStat-export',function(){
+			//打印事件
+		});
+	};
 	/**
 	 * [autocompleteDate 获取客户、团号和购物店列表]
 	 * @return {[type]} [description]
@@ -97,14 +111,55 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)){
-				var $partnerAgencyObj = tab.find('[name=partnerAgency]'),
-					$shopObj = tab.find('[name=shop]');
+				var partnerAgency = tab.find('[name=partnerAgency]'),
+					shop = tab.find('[name=shop]');
+
+				//购物店列表
+				var shopList = data.shopList;
+				for(var i = 0;i<shopList.length;i++){
+					shopList[i].value = shopList[i].shopName;
+				};
+				//客户列表
+				var customerList = data.fromPartnerAgencyList;
+				for(var i = 0;i<customerList.length;i++){
+					customerList[i].value = customerList[i].travelAgencyName;
+					customerList[i].id = customerList[i].fromPartnerAgencyId;
+				};
+
+				shopStat.showList(shop,shopList);
+				shopStat.showList(partnerAgency,customerList);
 			}
 		});
 		
 	}
-	
+	/**
+	 * [下拉列表展示]
+	 * @return {[type]} [description]
+	 */
+	shopStat.showList = function($obj,dataList){
+		var name = $obj.attr('name');
+		$obj.autocomplete({
+			minLength:0,
+			select:function(event,ui){
+				if(ui.item != null){
+					var divObj = $(this).closest('div');
+					divObj.find('[name='+name+'Id]').val(ui.item.id);
+				}
+			},
+			change:function(event,ui){
+				if(ui.item == null){
+					var divObj = $(this).closest('div');
+					$(this).val('');
+					divObj.find('[name='+name+'Id]').val('');
+				};
+			}
 
+		}).off('click').on('click',function(){
+			var obj = $(this);
+			obj.autocomplete('option','source', dataList);
+			obj.autocomplete('search', '');
+		});
+	};
 	//时间控件初始化
 	shopStat.datepicker = function($obj){
 		$obj.find(".datepicker").datepicker({
