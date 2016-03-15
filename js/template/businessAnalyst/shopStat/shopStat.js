@@ -95,11 +95,10 @@ define(function(require, exports) {
 	shopStat.initEvent = function(){
 
 		//搜索事件
-		shopStat.$searchArea.on('click','.T-shopStat-search',function(){
+		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
-		});
-		shopStat.$searchArea.on('click','.T-shopStat-export',function(){
+		}).on('click','.T-shopStat-export',function(){
 			//打印事件
 			//shopStat.listShopStat(0);
 		});
