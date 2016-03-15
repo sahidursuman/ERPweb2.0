@@ -553,9 +553,17 @@ define(function(require, exports) {
         //绑定时间
         Tools.setDatePicker($tab.find('.datepicker'), true);
         tripPlan.setExecuteTimer($tab);
-        $tab.find('[name="startTime"]').on('change', function(){
+        $tab.find('[name="startTime"]').off('changeDate').on('changeDate', function(){
             F.arrangeDate($tab);
+            F.calcWhicDay($tab);
+            if (!!$tab.find('[name=startTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
+                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+            }
         }).trigger('change'); 
+        F.arrangeDate($tab);
+        $tab.off('changeDate.whichDayDate').on('changeDate.whichDayDate', '[name=whichDayDate]', function() {
+            F.calcWhicDay($tab);
+        }).trigger('change');
 
         var validate = rule.checkPlan($tab); 
         tripPlan.init_edit_event($tab, validate, type);
@@ -576,8 +584,9 @@ define(function(require, exports) {
             event.preventDefault();
             var $days = $tab.find('.T-days'),
                 lenWhichDay = $days.data('length-whichDay');
-            $days.append(travelArrange({lineProductDayList:[{whichDay: lenWhichDay ? lenWhichDay*1+1 : 1}]}));
-            F.arrangeDate($tab);
+            $days.append(travelArrange({lineProductDayList:[{whichDay: ''}]}));
+            
+            Tools.setDatePicker($tab.find('.datepicker'), true);
             validate = rule.update(validate);
         });
 
@@ -725,9 +734,9 @@ define(function(require, exports) {
                     $that.closest('tr').remove();
                     var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
                         lenWhichDay = $tab.find('.T-days').data('length-whichDay');
-                    if(whichDay == lenWhichDay){
-                        F.arrangeDate($tab);
-                    }
+                    // if(whichDay == lenWhichDay){
+                    //     F.arrangeDate($tab);
+                    // }
                 }
                 if (!!id) {
                     showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
@@ -780,6 +789,20 @@ define(function(require, exports) {
         if($tab.find('.T-tourists-list tr').length === 0){
             showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
             return ;
+        }
+        var isDateRepear = 0,
+            dateArray = [],
+            $dateTr = $tab.find('.T-days tr');
+        $dateTr.each(function(index) {
+            var $this = $(this);
+            dateArray.push($this.find('[name=whichDayDate]').val())
+        });
+        var dateArray2 = dateArray.sort();
+        for (var i = dateArray.length - 1; i >= 0; i--) {
+            if (dateArray[i] == dateArray2[i+1]) {
+                showMessageDialog($( "#confirm-dialog-message" ), "行程安排中日期重复");
+                return;
+            }
         }
         var isSetContact = 0, isMobileNumber = 1;
         $tab.find('.T-tourists-list tr').each(function(index) {
@@ -1584,7 +1607,7 @@ define(function(require, exports) {
                         }
                         
                         if(!$.isEmptyObject(data.quote)){
-                            var quote = data.quote;
+                            var quote = data.quote, dayList = data.lineProductDayList;
                             $tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
                             $tab.find('[name="selfPayItemNames"]').val(quote.selfPayItemNames).data('propover', quote.selfPayItemIds);
                             $tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
@@ -1592,10 +1615,13 @@ define(function(require, exports) {
                             $tab.find('[name="childCount"]').val(quote.childCount).attr('readonly', 'readonly');
                             $tab.find('[name="startTime"]').val(quote.startTime);
                             $tab.find('[name="endTime"]').val(quote.endTime);
+                            $tab.find('[name="lineProductName"]').data('entity-days', dayList.length);
                         }else if(!$.isEmptyObject(data.lineProduct)){
-                            var line = data.lineProduct;
+                            var line = data.lineProduct,
+                                dayList = data.lineProductDayList;
                             $tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
                             $tab.find('[name="selfPayItemNames"]').val(line.selfPayItemNames).data('propover', line.selfPayItemIds);
+                            $tab.find('[name="lineProductName"]').data('entity-days', dayList.length);
                         }
                         for(var i=0; i<data.lineProductDayList.length; i++){
                             var repastDetail = data.lineProductDayList[i].repastDetail;
@@ -1610,8 +1636,9 @@ define(function(require, exports) {
                         $tab.find(".T-days").html(travelArrange(data));
                         $tab.find('input[name="lineProductName"]').trigger('change');
                         //KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
-                        F.arrangeDate($tab);
-
+                        F.arrangeDate($tab, 1);
+                        F.calcWhicDay($tab)
+                        Tools.setDatePicker($tab.find('.datepicker'), true);
                         $tab.find('.T-action-plan .T-add-action [type=checkbox]').each(function(index) {
                             if ($(this).is(':checked')) {
                                 $(this).trigger('click');
@@ -1738,7 +1765,7 @@ define(function(require, exports) {
             return Tools.toFixed(countMoney);
         },
         //换算行程安排日期
-        arrangeDate : function($tab){
+        arrangeDate : function($tab, chooseLine){
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
                 endTime = $tab.find('[name="endTime"]'),
@@ -1747,19 +1774,36 @@ define(function(require, exports) {
             var lengthWhichDay = 1;
             $tr.each(function(index){
                 var $days = $(this).find('[name="dateDays"]'),
-                    theWhichDay = $days.data('which-day')
+                    theWhichDay = $days.data('which-day'),
                     whichDate = Tools.addDay(startTime, theWhichDay - 1);
-                if(lengthWhichDay < theWhichDay){
-                    lengthWhichDay = theWhichDay;
-                }
-                if(startTime != ""){
-                    Tools.setDatePicker($days.find('[name="whichDayDate"]').val(whichDate));
-                    endTime.val(Tools.addDay(startTime, lengthWhichDay - 1));
-                }
-                if(index == $tr.length-1){
-                    $tab.find('.T-days').data('length-whichDay', lengthWhichDay);
+
+                if(startTime != "" &&  /^(\+|-)?\d+($|\.\d+$)/.test(theWhichDay)){
+                    $days.find('[name="whichDayDate"]').val(whichDate);
+                    if (chooseLine == 1) {
+                        if(lengthWhichDay < theWhichDay){
+                            lengthWhichDay = theWhichDay;
+                        }
+                       endTime.val(Tools.addDay(startTime, lengthWhichDay - 1));
+                    }
                 }
             });
+        },
+        //将行程安排中的日期换算成whichday 存
+        calcWhicDay : function($tab) {
+            var $time = $tab.find('[name="startTime"]'),
+                startTime = $time.val(),
+                $tr = $tab.find('.T-days tr');
+
+            if (!!startTime) {
+                $tr.each(function(index) {
+                    var $this = $(this),
+                        wichTime = $this.find('[name=whichDayDate]').val();
+                    if (!!wichTime) {
+                        $this.find('[name=dateDays]').data('which-day', Tools.getDateDiff(startTime, wichTime, 'noAbs')+1);
+                        //console.log('whichDay:' + $this.find('[name=dateDays]').data('which-day'));
+                    }
+                })
+            }
         },
         batchAddTourists : function($obj, fn){
             var addVisotorMoreLayer = layer.open({
@@ -1821,23 +1865,23 @@ define(function(require, exports) {
                 showMessageDialog($( "#confirm-dialog-message" ), '请添加行程安排');
                 return false;
             }
-            if (len != $planObj.length) {
+            /*if (len != $planObj.length) {
                 res = false;
                 showMessageDialog($( "#confirm-dialog-message" ), '行程安排天数不正确');
-            }
+            }*/
 
             var days = [];
             $planObj.each(function(index, el) {
                 days.push($(this).val());
             });
 
-            for (var i = 0; i < len; i ++) {
+            /*for (var i = 0; i < len; i ++) {
                 if (days.indexOf(Tools.addDay(startTime , i)) < 0) {
                     res = false;
                     showMessageDialog($( "#confirm-dialog-message" ), '行程安排不连续');
                     break;
                 }
-            }
+            }*/
             return res;
         }
     };
