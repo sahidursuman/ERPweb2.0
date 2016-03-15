@@ -93,6 +93,7 @@
                 <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
             {{else}}
                 <span class="F-float F-money">{{arrange.price}}</span>
+                <input type="hidden" name="price" value="{{arrange.price}}"/>
             {{/if}}
         {{else}}
             {{if arrange.badStatus == 1}}
