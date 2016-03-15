@@ -969,6 +969,7 @@ input.datepicker:not([class^="col-"]) {
     height: 100%;
     overflow: auto;
 	padding: 20px 20px 15px 25px;
+	background-color: #f9fff9;
 }
 .main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
 	min-width: 1085px;
