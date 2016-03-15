@@ -222,6 +222,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "tripCost":data.touristGroup,
 	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
@@ -376,6 +377,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "tripCost":data.touristGroup,
 	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
@@ -422,7 +424,7 @@ define(function(require, exports){
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
-		}).on('click','.T-del',function(){
+		}).on('click','.T-shopArrDel',function(){
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input',function(){
@@ -642,6 +644,7 @@ define(function(require, exports){
 							"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 							"touristGroup":data.touristGroup,
+							"tripCost":data.touristGroup,
 							"touristGroups":JSON.parse(data.touristGroup.touristGroups),
 							"financialTripPlanId":data.financialTripPlanId,
 							"insurancePrice":data.insurancePrice,
@@ -656,6 +659,7 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
+					console.log()
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
@@ -700,7 +704,8 @@ define(function(require, exports){
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
-		}).on('click','.T-del',function(){
+		}).on('click','.T-shopArrDel',function(){
+			var id = $(this).closest('tr').attr('shopArrangeId');
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
 		}).on('change','input[type=text]',function(){
@@ -1303,7 +1308,7 @@ define(function(require, exports){
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td rowspan="2"><input type="text" name="currInCome" class="w-80"/></td>'+
-		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-del">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-shopArrDel">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
 		'<tr>'+
@@ -1398,30 +1403,51 @@ define(function(require, exports){
 	Count.delShopArrange = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),
 			$nextTr = $tr.nextAll(),
-			td_cnt = $tr.children('td').length;
-		if($nextTr.length>2){
-			$tr.remove();
-			for(var i = 0;i<$nextTr.length;i++){
-				var tdLen = $nextTr.eq(i).children('td').length;
-				if(tdLen == td_cnt){
-					break;
-				}else{
-					if(i+1==$nextTr.length ){
-						if(!!$nextTr.eq(i).next()){
-							$nextTr.eq(i).remove();
-						}else{
-							$nextTr.eq(i-1).remove();
+			td_cnt = $tr.children('td').length,
+			shopArrangeId = $tr.attr('shopArrangeId');
+		if(!!shopArrangeId){
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				$.ajax({
+					url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
+		            type: "post",
+		            data:"cateName=shop&cateId="+shopArrangeId,
+		            success: function(data) {
+						if(showDialog(data)){
+							showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
+								removeItem();
+							})
 						}
-					}else{
-						$nextTr.eq(i).remove();
-					}
-				}
-			};
+		            }
+		        });
+			});
 		}else{
-			for(var i = 0;i<$nextTr.length;i++){
-				var tdLen = $nextTr.eq(i).children('td').length;
-				$nextTr.eq(i).remove();
+			removeItem();
+		}
+		function removeItem (){
+			if($nextTr.length>2){
 				$tr.remove();
+				for(var i = 0;i<$nextTr.length;i++){
+					var tdLen = $nextTr.eq(i).children('td').length;
+					if(tdLen == td_cnt){
+						break;
+					}else{
+						if(i+1==$nextTr.length ){
+							if(!!$nextTr.eq(i).next()){
+								$nextTr.eq(i).remove();
+							}else{
+								$nextTr.eq(i-1).remove();
+							}
+						}else{
+							$nextTr.eq(i).remove();
+						}
+					}
+				};
+			}else{
+				for(var i = 0;i<$nextTr.length;i++){
+					var tdLen = $nextTr.eq(i).children('td').length;
+					$nextTr.eq(i).remove();
+					$tr.remove();
+				};
 			};
 		};
 		Count.autoShopSum($obj,$parentObj);
@@ -1459,6 +1485,11 @@ define(function(require, exports){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			};
+			if($nameFlag== "consumeMoney" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			};
+			
 		}else{
 			if($nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney"){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
@@ -4098,7 +4129,7 @@ define(function(require, exports){
 						"guideRate":Count.changeToString(parseFloat($(this).find('input[name=guideRate]').val())/100),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
 						"needIncomeCount":$(this).find('input[name=needCount]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"guideRebateMoney":Count.changeToString($(this).find('input[name=guideRebateMoney]').val())
 				}
 				saveJson.selfPayArrangeList.push(selfPayArrange);
@@ -4122,7 +4153,7 @@ define(function(require, exports){
 					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
 					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
-					payType:$(this).find('[name=payType]').val(),
+					realPayType:$(this).find('[name=payType]').val(),
 					needIncomeCount:$(this).find('input[name=needCount]').val()
 				}
 				saveJson.addSelfPayArrangeList.push(addSelfArrange)	
@@ -4164,7 +4195,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.busCompanyArrangeList.push(busCompanyArrange);
@@ -4183,7 +4214,7 @@ define(function(require, exports){
 					price:obj.find('input[name=price]').val(),
 					realGuidePayMoney:obj.find('input[name=guidePayMoney]').val(),
 					realReduceMoney:obj.find('input[name=realReduceMoney]').val(),
-					payType:$(this).find('[name=payType]').val(),
+					realPayType:$(this).find('[name=payType]').val(),
 					billRemark:obj.find('input[name=billRemark]').val()
 				};
 				saveJson.addBusArrangeList.push(busArrange);
@@ -4204,7 +4235,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.restaurantArrangeList.push(restaurantArrange);
@@ -4221,7 +4252,7 @@ define(function(require, exports){
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
-					payType:$(this).find('[name=payType]').val()
+					realPayType:$(this).find('[name=payType]').val()
 				}
 				saveJson.addRestArrangeList.push(addRestArrange);
 			}
@@ -4238,7 +4269,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.hotelArrangeList.push(hotelArrange);
@@ -4253,7 +4284,7 @@ define(function(require, exports){
 					realReduceMoney:$(this).find('input[name=realReduceMoney]').val(),
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
-					payType:$(this).find('[name=payType]').val(),
+					realPayType:$(this).find('[name=payType]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val()
 				}
 				saveJson.addHotelArrangeList.push(addHotelArrange);
@@ -4271,7 +4302,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.scenicArrangeList.push(scenicArrange);
@@ -4286,7 +4317,7 @@ define(function(require, exports){
 					realReduceMoney:$(this).find('input[name=realReduceMoney]').val(),
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
-					payType:$(this).find('[name=payType]').val(),
+					realPayType:$(this).find('[name=payType]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val()
 				}
 				saveJson.addScenicArrangeList.push(addScenic);
@@ -4304,7 +4335,7 @@ define(function(require, exports){
 						"needPayMoney":Count.changeToString($(this).find('.needPayMoney').text()),
 						"realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 						"billRemark":$(this).find('input[name=billRemark]').val(),
-						"payType":$(this).find('[name=payType]').val(),
+						"realPayType":$(this).find('[name=payType]').val(),
 						"realGuidePayMoney":Count.changeToString($(this).find('input[name=realGuidePayMoney]').val())
 				}
 				saveJson.ticketArrangeList.push(ticketArrange);
@@ -4324,7 +4355,7 @@ define(function(require, exports){
 					payedMoney:$(this).find('input[name=payedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
-					payType:$(this).find('[name=payType]').val()
+					realPayType:$(this).find('[name=payType]').val()
 				};
 				saveJson.addTicketArrangeList.push(addTicket);
 			}
@@ -4340,7 +4371,7 @@ define(function(require, exports){
                     "count":$(this).find('input[name="realCount"]').val(),
                     "realReduceMoney":Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
                     "realGuidePayMoney":$(this).find('input[name="realGuidePayMoney"]').val(),
-                    "payType":$(this).find('[name=payType]').val(),
+                    "realPayType":$(this).find('[name=payType]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val()
                 }
                 saveJson.otherArrangeList.push(otherArrange);
@@ -4353,7 +4384,7 @@ define(function(require, exports){
                     "realReduceMoney":$(this).find('input[name="realReduceMoney"]').val(),
                     "payedMoney":$(this).find('input[name="payedMoney"]').val(),
                     "realGuidePayMoney":$(this).find('input[name="guidePayMoney"]').val(),
-                    "payType":$(this).find('[name=payType]').val(),
+                    "realPayType":$(this).find('[name=payType]').val(),
                     "billRemark":$(this).find('input[name="billRemark"]').val()
                 }
                 saveJson.otherArrangeList.push(otherArrange);
