@@ -4,7 +4,7 @@
     <td>{{checking.lineProductName}}</td>
     <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
     <td>{{checking.contactUserName}}</td>
-    <td><a href="#" class="T-seeGroup" title="查看小组" data-list="{{checking.tgMemberList}}">
+    <td><a href="#" class="T-action T-seeGroup" title="查看小组" data-list="{{checking.tgMemberList}}">
             <span class="F-float F-count">{{checking.adultCount}}</span>大
             <span class="F-float F-count">{{checking.childCount}}</span>小
         </a>
@@ -21,7 +21,7 @@
             {{/each}}
         {{/if}}
     </td>
-    <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+    <td><a href="javascript:void(0)" class="T-action T-needPayDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
     <td><span class="F-float F-money">{{checking.backMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.unIncomeMoney}}</span></td>
@@ -38,7 +38,7 @@
             {{/if}}
         </label>
         <label>
-            <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
+            <a href="#" class="T-action T-payedDetail" style="margin-left:5px">查看</a>
         </label>
     </td>
 </tr>
