@@ -15,13 +15,15 @@ define(function(require, exports) {
         itsplanTemplate = require("./view/itsplan"),
         mealplanTemplate = require("./view/mealplan"),
         ticketplanTemplate = require("./view/ticketplan"),
+        viewTemplate = require("./view/view"),
         hotelplan = "tab-" + menuKey + "-hotelplan",
         busplan = "tab-" + menuKey + "-busplan",
         itsplan = "tab-" + menuKey + "-itsplan",
         mealplan = "tab-" + menuKey + "-mealplan",
         ticketplan = "tab-" + menuKey + "-ticketplan",
         tabId = "tab-" + menuKey + '-content',
-        viewbus = menuKey + "-bus";
+        viewbus =  "tab-" + menuKey + "-bus",
+        viewId = "tab-" + menuKey + '-view';
     /**
      * 自定义中转对象
      * @type {Object}
@@ -30,30 +32,43 @@ define(function(require, exports) {
 
         }
         //初始化中转模块
-    transitPlan.initModule = function() {
-        transitPlan.listtransitPlan();
+    transitPlan.initModule = function(event) {
+        var args = {
+            pageNo:0,
+            customerType : 1,
+            arrangeItem : "bus"
+        }
+        transitPlan.listtransitPlan(args);
     };
-    transitPlan.listtransitPlan = function() {
-        var html = listTemplate();
-        addTab(menuKey, "中转安排", html);
-        transitPlan.$tab = $("#" + tabId);
+    transitPlan.listtransitPlan = function(args) {
+         $.ajax({
+            url: KingServices.build_url("v2/touristGroupTransferArrange", "getTouristGroupTransferArrangeList"),
+            type: "POST",
+            data:args,
+            success: function(data) {
+                console.log(data);
+                var result = showDialog(data);
+                if (result) {
+                    var html = listTemplate(data);
+                    addTab(menuKey, "中转安排", html);
+                    transitPlan.$tab = $("#" + tabId);
+                    transitPlan.init_eventMain(transitPlan.$tab);
+                    
+                 
+                }
+            }
+        })
 
-        transitPlan.init_eventMain(transitPlan.$tab);
+        
     };
     transitPlan.init_eventMain = function($tab) {
         // 收起展开
         var $search = $tab.find('.T-search');
-        $search.find('.T-shrink').on('click', function() {
-                var font = $(this).text();
-                $tab.find('.T-hide').toggle(100);
-                if (font == '收起') {
-                    $(this).text("展开");
-                } else {
-                    $(this).text("收起");
-                }
+        $search.find('.T-shrink').on('click', function(event) {
+                $tab.find('.T-hide').toggle();
             })
             // 查看车
-        $tab.find('.T-view').on('click', function() {
+        $tab.find('.T-view').on('click', function(event) {
                 transitPlan.viewbus();
             })
             // 查看房
@@ -70,6 +85,9 @@ define(function(require, exports) {
             if ($that.hasClass('T-plan-bus')) {
                 // 车安排
                 transitPlan.busplan();
+            }else if($that.hasClass('T-view-plan')){
+                //车查看
+                transitPlan.buslook();
             }
         });
         // 表格内操作
@@ -107,12 +125,12 @@ define(function(require, exports) {
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
 
     };
-    transitPlan.busplan = function() {
+    transitPlan.busplan = function(event) {
         var html = busplanTemplate();
         addTab(busplan, '车安排', html);
         transitPlan.$tab = $("#tab-" + busplan + "-content");
         //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(){
+        transitPlan.$tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
         // 新增车安排
@@ -123,12 +141,12 @@ define(function(require, exports) {
         //时间控件
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
     };
-    transitPlan.hotelplan = function() {
+    transitPlan.hotelplan = function(event) {
         var html = hotelplanTemplate();
         addTab(hotelplan, '房安排', html);
         transitPlan.$tab = $("#tab-" + hotelplan + "-content");
         //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(){
+        transitPlan.$tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
         // 新增房安排
@@ -140,12 +158,12 @@ define(function(require, exports) {
 
 
     };
-    transitPlan.itsplan = function() {
+    transitPlan.itsplan = function(event) {
         var html = itsplanTemplate();
         addTab(itsplan, '它安排', html);
         transitPlan.$tab = $("#tab-" + itsplan + "-content");
         //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(){
+        transitPlan.$tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
         // 新增它安排
@@ -157,12 +175,12 @@ define(function(require, exports) {
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
 
     };
-    transitPlan.mealplan = function() {
+    transitPlan.mealplan = function(event) {
         var html = mealplanTemplate();
         addTab(mealplan, '餐安排', html);
         transitPlan.$tab = $("#tab-" + mealplan + "-content");
         //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(){
+        transitPlan.$tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
         // 新增餐安排
@@ -175,12 +193,12 @@ define(function(require, exports) {
 
 
     };
-    transitPlan.ticketplan = function() {
+    transitPlan.ticketplan = function(event) {
         var html = ticketplanTemplate();
         addTab(ticketplan, '票安排', html);
         transitPlan.$tab = $("#tab-" + ticketplan + "-content");
         //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(){
+        transitPlan.$tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
         // 新增票安排
@@ -198,11 +216,11 @@ define(function(require, exports) {
             '<tr>' +
             '<td><input class="col-sm-10" type="text" name="contactMobileNumber" maxlength="20"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
             '<td><input class="col-sm-12" type="text" name="departmentName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-10" type="text" name="dutyName" maxlength="45"/></td>' +
+            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
             '<td><input class="col-sm-10" type="text" name="dutyName" maxlength="45"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
             '<td><input class="col-sm-10" type="text" name="dutyName" maxlength="45"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
             '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
+            '<td><input class="col-sm-12 datepicker" type="text" name="dutyName" maxlength="45"/></td>' +
             '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
             '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
             '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
@@ -303,8 +321,14 @@ define(function(require, exports) {
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
     };
+    // 查看中转安排
+    transitPlan.buslook = function(){
+        var html = viewTemplate();
+        addTab(viewId,'查看中转安排',html);
+        transitPlan.$tab = $("#tab-" + viewId + "-content");
 
-    transitPlan.viewbus = function() {
+    };
+    transitPlan.viewbus = function(event) {
         var html = viewbusTemplate();
         layer.open({
             type: 1,
@@ -314,12 +338,12 @@ define(function(require, exports) {
             zIndex: 1028,
             content: html,
             scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
+            success: function(event) {
 
             }
         });
     };
-    transitPlan.viewhotel = function() {
+    transitPlan.viewhotel = function(event) {
         var html = viewhotelTemplate();
         layer.open({
             type: 1,
@@ -329,7 +353,7 @@ define(function(require, exports) {
             zIndex: 1028,
             content: html,
             scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
+            success: function(event) {
 
             }
         })

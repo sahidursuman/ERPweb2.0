@@ -2577,7 +2577,7 @@ a.gray span{
     line-height: 25px;
 
 }
-.hct-max-model .tab-content{
+.hct-max-model .box .tab-content{
     border: none;
     padding:14px 0px;
 }
@@ -2587,4 +2587,8 @@ a.gray span{
 .hct-max-model .nav-tabs .hct-box{
     width: 150px;
     /*height: 30px;*/
+}
+.hct-view table{
+    width: 90%;
+    margin-left: 5%;
 }
