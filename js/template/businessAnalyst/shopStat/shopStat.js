@@ -7,6 +7,7 @@ define(function(require, exports) {
 	var menuKey = "business_analyst_shopStat",
         listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list"),
+        viewConsumeMoneyTemplate = require("./view/viewConsumeMoney"),
         tabId="tab-"+menuKey+"-content";
     /**
 	 * 定义购物统计对象
@@ -36,6 +37,7 @@ define(function(require, exports) {
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
 		shopStat.datepicker(shopStat.$searchArea)
 		shopStat.listShopStat(0);
+		
 	}
 
 	//购物统计页面list
@@ -47,9 +49,9 @@ define(function(require, exports) {
 	   			customerType: shopStat.getValue(shopStat.$searchArea,'customerType'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
 	   			endTime: shopStat.getValue(shopStat.$searchArea,'endTime'),
-	   			fromPartnerAgencyName: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyName'),
-	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyId'),
-	   			shopName: shopStat.getValue(shopStat.$searchArea,'shopName'),
+	   			fromPartnerAgencyName: shopStat.getValue(shopStat.$searchArea,'partnerAgency'),
+	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'partnerAgencyId'),
+	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
 	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber')
@@ -93,11 +95,50 @@ define(function(require, exports) {
 	shopStat.initEvent = function(){
 
 		//搜索事件
-		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
+		shopStat.$searchArea.on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
-		}).on('click','.T-shopStat-export',function(){
+		});
+		shopStat.$searchArea.on('click','.T-shopStat-export',function(){
 			//打印事件
+			//shopStat.listShopStat(0);
+		});
+		//列表事件
+		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');
+		$listObj.off('click').on('click','.T-option',function(){
+
+			var $that = $(this);
+
+			if($that.hasClass('T-consumeMoney')){
+
+				//查看总打单金额
+				var shopId = $that.closest('tr').attr('shopId');
+				shopStat.viewConsumeMoney(shopId);
+			};
+		});
+	};
+
+	/**
+	 *展示点击总打单
+	 */
+	shopStat.viewConsumeMoney = function(id){
+		$.ajax({
+			url:KingServices.build_url('financial/shopAccount','consumeMoney'),
+			data:{id:id},
+			type:'POST',
+			showLoading:false,
+			success:function(data){
+				var html = viewConsumeMoneyTemplate(data);
+				layer.open({
+                    type : 1,
+                    title : "打单详情",
+                    skin : 'layui-layer-rim',
+                    area : '1000px',
+                    zIndex : 1028,
+                    content : html,
+                    scrollbar: false 
+                });
+			}
 		});
 	};
 	/**
