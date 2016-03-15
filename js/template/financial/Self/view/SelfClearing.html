@@ -31,18 +31,21 @@
             <div class="form-group mar-r-20">
                 <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}"  {{if showBtnFlag == true}}readonly="true"{{/if}} >
+                    <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}"  {{if showBtnFlag == true || isAutoPay != "0"}}readonly="true"{{/if}} >
                 </label>
             </div>
                 
             {{if !showBtnFlag}}
             <div class="form-group mar-r-20">
+                {{if isAutoPay == "0"}}
                 <button class="btn btn-primary T-clear-auto">
-                        <i class="ace-icon fa fa-check-circle"></i> 自动下账
-                    </button>
-                    <button class="btn btn-warning T-cancel-auto">
-                        <i class="ace-icon fa fa-times-circle"></i> 取消下账
-                    </button>
+                    <i class="ace-icon fa fa-check-circle"></i> 自动下账
+                </button>
+                {{else if isAutoPay == "1"}}
+                <button class="btn btn-warning T-cancel-auto">
+                    <i class="ace-icon fa fa-times-circle"></i> 取消下账
+                </button>
+                {{/if}}
             </div>
             {{/if}}
 

@@ -125,6 +125,7 @@ define(function(require, exports) {
                 scenic.scenicCheck(args);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
+                args.isAutoPay = 0;
                 scenic.scenicClear(args);
             }
         });
@@ -231,7 +232,7 @@ define(function(require, exports) {
             endDate : options.endDate,
             accountStatus : options.accountStatus,
             isOuter : true,
-            isAutoPay : true
+            isAutoPay : 2
         }
         scenic.scenicClear(args);
     }
@@ -243,7 +244,7 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
-        if(args.isAutoPay){
+        if(args.isAutoPay == 1){
             args.sumCurrentPayMoney = scenic.$clearTab.find('input[name=sumPayMoney]').val();
         }
         args.page = args.page || 0;
@@ -255,7 +256,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     data.scenicName = args.scenicName;
-                    if (args.isAutoPay && scenic.$clearTab) {
+                    if (args.isAutoPay == 1 && scenic.$clearTab) {
                         scenic.clearTempData = data.autoPaymentJson;
                     }
 
@@ -323,15 +324,6 @@ define(function(require, exports) {
 
     scenic.initClear = function(args,$tab){
         scenic.init_event(args,$tab,"clear");
-        if(args.isAutoPay == 1){
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            $tab.find(".T-cancel-auto").show();
-        } else {
-            $tab.find(".T-clear-auto").show(); 
-            $tab.find(".T-cancel-auto").hide();
-        }
-
         //搜索事件
         $tab.find(".T-search").off().click(function(){
             args.pageNo = 0;
@@ -366,7 +358,7 @@ define(function(require, exports) {
                     voucher : $tab.find('input[name=credentials-number]').val(),
                     billTime : $tab.find('input[name=tally-date]').val()
                 };
-                args.isAutoPay = true;
+                args.isAutoPay = 1;
                 scenic.scenicClear(args);
             });
         });
@@ -375,6 +367,7 @@ define(function(require, exports) {
             scenic.clearTempSumDate = false;
             scenic.clearTempData = false;
             scenic.$clearTab.data('isEdited',false);
+            args.isAutoPay = 0;
             scenic.scenicClear(args);
         });
 
@@ -527,7 +520,7 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "-clearing");
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
-                            args.isAutoPay = false;
+                            args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                             scenic.scenicClear(args,$tab);
                         }
                     }); 
@@ -552,7 +545,7 @@ define(function(require, exports) {
                 if(option == "check"){
                     scenic.initCheck(args,$tab);
                 } else if(option == "clear"){
-                    args.isAutoPay = false;
+                    args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                     scenic.clearTempData = false;
                     scenic.clearTempSumDate = false;
                     scenic.scenicClear($tab.data('next'),$tab);

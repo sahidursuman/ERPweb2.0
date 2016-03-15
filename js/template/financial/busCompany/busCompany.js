@@ -323,18 +323,6 @@ define(function(require, exports) {
         args.saveRule = saveRule;
 
         busCompany.init_event(args,$tab, "clear");
-        if (args.isAutoPay == 0) {
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled", true);
-            $tab.find(".T-clear-auto").hide();
-            if (args.isAutoPay == 1) {
-                $tab.data('isEdited', true);
-            } else if (args.isAutoPay == 2) {
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
-
         FinancialService.initPayEvent($tab);
         //搜索事件
        $tab.find(".T-search").click(function() {
@@ -379,6 +367,7 @@ define(function(require, exports) {
             busCompany.clearTempSumDate = false;
             busCompany.clearTempData = false;
             $tab.data('isEdited', false);
+            args.isAutoPay = 0;
             busCompany.busCompanyClear(args,$tab);
         });
         FinancialService.updateSumPayMoney($tab,saveRule);

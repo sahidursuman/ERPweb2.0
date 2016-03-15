@@ -334,19 +334,6 @@ define(function(require, exports) {
                        
                     }
 
-                    if(isAutoPay == 0){
-                        Insure.$clearTab.find(".T-cancel-auto").hide();
-                    } else {
-                        Insure.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        Insure.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
-                            Insure.$clearTab.data('isEdited',true);
-                            // Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
-                        } else if(isAutoPay == 2){
-                            Insure.$clearTab.find(".T-cancel-auto").hide();
-                        }
-                    }
-
                     //绑定翻页组件
                     var $tr = Insure.$clearTab.find('.T-clearList tr');
                     laypage({
