@@ -233,8 +233,20 @@
                                 <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</span>
                                 <br/>
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                {{if tripCost.includeSelfPay == null}}
+                                    -
+                                {{else}}
+                                    {{tripCost.includeSelfPay}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if tripCost.remark == null || tripCost.remark == ""}}
+                                    -
+                                {{else}}
+                                    {{tripCost.remark}}
+                                {{/if}}
+                            </td>
                             <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>

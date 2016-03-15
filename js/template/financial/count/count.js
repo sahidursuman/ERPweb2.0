@@ -222,6 +222,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "tripCost":data.touristGroup,
 	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
@@ -376,6 +377,7 @@ define(function(require, exports){
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
+	                    "tripCost":data.touristGroup,
 	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
@@ -642,6 +644,7 @@ define(function(require, exports){
 							"WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 							"WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 							"touristGroup":data.touristGroup,
+							"tripCost":data.touristGroup,
 							"touristGroups":JSON.parse(data.touristGroup.touristGroups),
 							"financialTripPlanId":data.financialTripPlanId,
 							"insurancePrice":data.insurancePrice,
@@ -656,6 +659,7 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
+					console.log()
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
