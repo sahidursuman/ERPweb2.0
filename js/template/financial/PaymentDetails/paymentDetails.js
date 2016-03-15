@@ -108,7 +108,10 @@ define(function(require, exports){
 			Payment.viewDetails($(this).closest('tr').data("id"));
 		})
 		.on("click",".T-delete",function(){
-			Payment.deletePayment($(this).closest('tr').data("id"));
+			var id = $(this).closest('tr').data("id");
+			showConfirmMsg($("#confirm-dialog-message"),"是否确认删除该条数据？",function(){
+		        Payment.deletePayment(id);
+		    },function(){},"放弃","删除");
 		});	
 
 		Payment.getSubjectList($tab);
