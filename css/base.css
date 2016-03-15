@@ -1140,6 +1140,9 @@ input.datepicker:not([class^="col-"]) {
 .col-xs-12.hct-group-input> .col-xs-12{
 	padding-left: 60px;
 }
+.radio-inline{
+	padding-left: 0;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
