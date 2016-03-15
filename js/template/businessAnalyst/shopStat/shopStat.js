@@ -43,19 +43,18 @@ define(function(require, exports) {
 		if (shopStat.$searchArea && arguments.length===1) {
 	   		//初始化页面后可以获取页面参数
 	   		var searchData = {
+	   			pageNo: page,
 	   			customerType: shopStat.getValue(shopStat.$searchArea,'customerType'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
 	   			endTime: shopStat.getValue(shopStat.$searchArea,'endTime'),
 	   			fromPartnerAgencyName: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyName'),
 	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyId'),
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shopName'),
+	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
-	   			// travelAgencyId: shopStat.getValue(shopStat.$searchArea,'travelAgencyId'),
-	   			// travelAgencyName: shopStat.getValue(shopStat.$searchArea,'travelAgencyName'),
 	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber')
 	   		}
 		};
-
 	   	// 修正页码
 	   	page = page || 0;
 	   	//购物统计列表请求Ajax
@@ -66,23 +65,43 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-			       var html = listTemplate(data);
-			       shopStat.$tab.find('.T-shopStatPager-list').html(html);
+		       		var html = listTemplate(data);
+		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
+		       		//获取客户、团号和购物店列表
+		       		shopStat.autocompleteDate();
+
 			       	// 绑定翻页组件
 					laypage({
 					    cont: shopStat.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-					    pages: data.totalPage, //总页数
+					    pages: data.searchParam.recordSize, //总页数
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		shopStat.listtourguidPer(obj.curr -1);
+					    		shopStat.listShopStat(obj.curr -1);
 					    	}
 					    }
 					});
 				}
 			}
 		});
-	 }
+	}
+
+	/**
+	 * [autocompleteDate 获取客户、团号和购物店列表]
+	 * @return {[type]} [description]
+	 */
+	shopStat.autocompleteDate = function() {
+		$.ajax({
+			url: KingServices.build_url('financial/shopAccount','shopRequest'),
+			type: 'POST'
+		})
+		.done(function(data) {
+			if (showDialog(data)){
+				
+			}
+		});
+		
+	}
 	
 
 	//时间控件初始化

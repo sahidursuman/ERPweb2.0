@@ -1,22 +1,30 @@
-/*TMODJS:{"debug":true,"version":8,"md5":"e5090f47b333d1a765a3c79ec371d42c"}*/
+/*TMODJS:{"debug":true,"version":77,"md5":"006b64f020ac9e38c5086ecbda1c76c9"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/shopStat/view/list", function($data, $filename) {
         try {
-            var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, sumListPerformance = $data.sumListPerformance, $escape = ($data.sumL, 
-            $data.$index, $utils.$escape), totalCount = $data.totalCount, $out = "";
-            return $out += '<table class="table table-striped table-bordered table-hover table-fixed T-showHighLight"> <colgroup> <col style="width:10%;"></col> <col style="width:10%;"></col> <col style="width:10%;"></col> <col style="width:20%;"></col> <col style="width:20%;"></col> <col style="width:15%;"></col> <col style="width:15%;"></col> <col style="width:10%;"></col> <col style="width:10%;"></col> <col style="width:10%;"></col> </colgroup> <thead> <tr class="bg-blur"> <th class="col-sm-1">客户</th> <th class="col-sm-2">团号</th> <th class="col-sm-1">人数</th> <th class="col-sm-1">进店日期</th> <th class="col-sm-1">购物店</th> <th class="col-sm-1">总打单</th> <th class="col-sm-1">人均打单</th> <th class="col-sm-2">导佣</th> <th class="col-sm-1">社佣</th> <th class="col-sm-1">总佣金</th> <th class="col-sm-2">人均返佣</th> </tr> </thead> <tbody class="T-tourguidPer-list"> ', 
-            $line = 30, $each(sumListPerformance, function(sumL) {
-                $out += " <tr> <td>", $line = 32, $out += $escape(sumL.guideName), $out += "</td> <td>", 
-                $line = 33, $out += $escape(sumL.mobileNumber), $out += "</td> <td>", $line = 34, 
-                $out += $escape(sumL.tourCount), $out += "</td> <td>", $line = 35, $out += $escape(sumL.tourNumber), 
-                $out += "</td> <td>", $line = 36, $out += $escape(sumL.sumShopMoney), $out += "</td> <td>", 
-                $line = 37, $out += $escape(sumL.maxShopMoney), $out += "</td> <td>", $line = 38, 
-                $out += $escape(sumL.aveTeamShop), $out += "</td> <td>", $line = 39, $out += $escape(sumL.avePeoShop), 
-                $out += "</td> <td>", $line = 40, $out += $escape(sumL.sumSelfPayMoney), $out += "</td> <td>", 
-                $line = 41, $out += $escape(sumL.aveSelfPayMoney), $out += "</td> <td>", $line = 42, 
-                $out += $escape(sumL.aveSelfPay), $out += "</td> </tr> ", $line = 44;
+            var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, shopListdata = $data.shopListdata, $escape = ($data.rs, 
+            $data.$index, $utils.$escape), searchParam = ($data.shop, $data.index, $data.searchParam), $out = "";
+            return $out += '<table class="table table-striped table-bordered table-hover table-fixed T-showHighLight"> <colgroup> <col></col> <col></col> <col style="width:10%;"></col> <col style="width:20%;"></col> <col style="width:20%;"></col> <col style="width:10%;"></col> <col style="width:8%;"></col> <col style=""></col> <col style=""></col> <col style=""></col> <col style=""></col> </colgroup> <thead> <tr class="bg-blur"> <th>客户</th> <th>团号</th> <th>人数</th> <th>进店日期</th> <th>购物店</th> <th>总打单</th> <th>人均打单</th> <th>导佣</th> <th>社佣</th> <th>总佣金</th> <th>人均返佣</th> </tr> </thead> <tbody class="T-tourguidPer-list"> ', 
+            $line = 31, $each(shopListdata, function(rs) {
+                $out += ' <tr> <td rowspan="', $line = 33, rs.shopList.length ? ($line = 33, $out += $escape(rs.shopList.length + 1), 
+                $line = 33) : ($out += "1", $line = 33), $out += '">', $line = 33, $out += $escape(rs.partnerAgencyName), 
+                $out += '</td> <td rowspan="', $line = 34, rs.shopList.length ? ($line = 34, $out += $escape(rs.shopList.length + 1), 
+                $line = 34) : ($out += "1", $line = 34), $out += '">', $line = 34, $out += $escape(rs.tripNumber), 
+                $out += '</td> <td rowspan="', $line = 35, rs.shopList.length ? ($line = 35, $out += $escape(rs.shopList.length + 1), 
+                $line = 35) : ($out += "1", $line = 35), $out += '">', $line = 35, $out += $escape(rs.touristAdultCount), 
+                $out += "大", $line = 35, $out += $escape(rs.touristChildCount), $out += "小</td> ", 
+                $line = 36, 0 == rs.shopList.length && ($out += " <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> ", 
+                $line = 45), $out += " </tr> ", $line = 47, $each(rs.shopList, function(shop) {
+                    $out += " <tr> <td>", $line = 49, $out += $escape(shop.inStoreDate), $out += "</td> <td>", 
+                    $line = 50, $out += $escape(shop.shopName), $out += "</td> <td>", $line = 51, $out += $escape(shop.consumeMoney), 
+                    $out += "</td> <td>", $line = 52, $out += $escape(shop.aveconsumeMoney), $out += "</td> <td>", 
+                    $line = 53, $out += $escape(shop.guideRebateMoney), $out += "</td> <td>", $line = 54, 
+                    $out += $escape(shop.travelAgencyRebateMoney), $out += "</td> <td>", $line = 55, 
+                    $out += $escape(shop.sumRebateMoney), $out += "</td> <td>", $line = 56, $out += $escape(shop.aveRebateMoney), 
+                    $out += "</td> </tr> ", $line = 58;
+                }), $out += " ", $line = 59;
             }), $out += ' </tbody> </table> <div class="pageMode"> <div class="col-xs-5"> <small>共计', 
-            $line = 49, $out += $escape(totalCount), $out += '条记录</small> </div> <div class="col-xs-7"> <div class="dataTables_paginate paging_simple_numbers T-pagenation"> </div> </div> </div>', 
+            $line = 64, $out += $escape(searchParam.recordSize), $out += '条记录</small> </div> <div class="col-xs-7"> <div class="dataTables_paginate paging_simple_numbers T-pagenation"> </div> </div> </div>', 
             new String($out);
         } catch (e) {
             throw {
@@ -24,7 +32,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">\r\n    <colgroup>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:20%;"></col>\r\n        <col style="width:20%;"></col>\r\n        <col style="width:15%;"></col>\r\n        <col style="width:15%;"></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:10%;"></col>\r\n    </colgroup>\r\n    <thead>\r\n        <tr class="bg-blur">\r\n            <th class="col-sm-1">客户</th>\r\n            <th class="col-sm-2">团号</th>\r\n            <th class="col-sm-1">人数</th>\r\n            <th class="col-sm-1">进店日期</th>\r\n            <th class="col-sm-1">购物店</th>\r\n            <th class="col-sm-1">总打单</th>\r\n            <th class="col-sm-1">人均打单</th>\r\n            <th class="col-sm-2">导佣</th>\r\n            <th class="col-sm-1">社佣</th>\r\n            <th class="col-sm-1">总佣金</th>\r\n            <th class="col-sm-2">人均返佣</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody class="T-tourguidPer-list">\r\n        {{each sumListPerformance as sumL}}\r\n        <tr>\r\n            <td>{{sumL.guideName}}</td>\r\n            <td>{{sumL.mobileNumber}}</td>\r\n            <td>{{sumL.tourCount}}</td>\r\n            <td>{{sumL.tourNumber}}</td>\r\n            <td>{{sumL.sumShopMoney}}</td>\r\n            <td>{{sumL.maxShopMoney}}</td>\r\n            <td>{{sumL.aveTeamShop}}</td>\r\n            <td>{{sumL.avePeoShop}}</td>\r\n            <td>{{sumL.sumSelfPayMoney}}</td>\r\n            <td>{{sumL.aveSelfPayMoney}}</td>\r\n            <td>{{sumL.aveSelfPay}}</td>\r\n        </tr>\r\n        {{/each}}\r\n    </tbody>\r\n</table>\r\n<div class="pageMode">\r\n    <div class="col-xs-5">\r\n        <small>共计{{totalCount}}条记录</small>\r\n    </div>\r\n    <div class="col-xs-7">\r\n        <div class="dataTables_paginate paging_simple_numbers T-pagenation">\r\n        </div>\r\n    </div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">\r\n    <colgroup>\r\n        <col></col>\r\n        <col></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:20%;"></col>\r\n        <col style="width:20%;"></col>\r\n        <col style="width:10%;"></col>\r\n        <col style="width:8%;"></col>\r\n        <col style=""></col>\r\n        <col style=""></col>\r\n        <col style=""></col>\r\n        <col style=""></col>\r\n    </colgroup>\r\n    <thead>\r\n        <tr class="bg-blur">\r\n            <th>客户</th>\r\n            <th>团号</th>\r\n            <th>人数</th>\r\n            <th>进店日期</th>\r\n            <th>购物店</th>\r\n            <th>总打单</th>\r\n            <th>人均打单</th>\r\n            <th>导佣</th>\r\n            <th>社佣</th>\r\n            <th>总佣金</th>\r\n            <th>人均返佣</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody class="T-tourguidPer-list">\r\n        {{each shopListdata as rs}}\r\n        <tr>\r\n            <td rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.partnerAgencyName}}</td>\r\n            <td rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.tripNumber}}</td>\r\n            <td rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>\r\n            {{if rs.shopList.length == 0}}\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            <td></td>\r\n            {{/if}}\r\n        </tr>\r\n        {{each rs.shopList as shop index}}\r\n        <tr>\r\n            <td>{{shop.inStoreDate}}</td>\r\n            <td>{{shop.shopName}}</td>\r\n            <td>{{shop.consumeMoney}}</td>\r\n            <td>{{shop.aveconsumeMoney}}</td>\r\n            <td>{{shop.guideRebateMoney}}</td>\r\n            <td>{{shop.travelAgencyRebateMoney}}</td>\r\n            <td>{{shop.sumRebateMoney}}</td>\r\n            <td>{{shop.aveRebateMoney}}</td>\r\n        </tr>\r\n        {{/each}}\r\n        {{/each}}\r\n    </tbody>\r\n</table>\r\n<div class="pageMode">\r\n    <div class="col-xs-5">\r\n        <small>共计{{searchParam.recordSize}}条记录</small>\r\n    </div>\r\n    <div class="col-xs-7">\r\n        <div class="dataTables_paginate paging_simple_numbers T-pagenation">\r\n        </div>\r\n    </div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
