@@ -195,6 +195,9 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 data.businessGroupName = args.businessGroupName;
                 data.isOut = FinTransIn.isOut;
+                for(var i = 0; i < data.innerTransferIncomeDetailsList.length; i++){
+                    data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
+                }
                 var tabId = menuKey + ((type == 1) ? "-checking" : "-clearing"),
                     title = (type == 1) ? "内转转入对账" : "内转转入收款",
                     html = (type == 1) ? checkTemplate(data) : clearTemplate(data);
@@ -264,6 +267,9 @@ define(function(require, exports) {
         }).done(function(data) {
             if (showDialog(data)) {
                 data.innerTransferIncomeDetailsList = FinancialService.getTempDate(data.innerTransferIncomeDetailsList,FinTransIn.clearTempData);
+                for(var i = 0; i < data.innerTransferIncomeDetailsList.length; i++){
+                    data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
+                }
                 $tab.find('.T-clearList').html(clearTableTemplate(data));
                 $tab.find('.T-recordSize').text(data.recordSize);
                 FinTransIn.initCheck(args,$tab,2);
@@ -584,40 +590,6 @@ define(function(require, exports) {
             }
         });
     };
-    
-    // FinTransIn.viewImage = function($tab, strImage) {
-    //     if (!strImage) return;
-    //     var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
-    //         WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small'),
-    //         data = {
-    //             "images": []
-    //         },
-    //         str = strImage,
-    //         strs = str.split(",");
-    //     for (var i = 0; i < strs.length; i++) {
-    //         var s = strs[i];
-    //         if (s != null && s != "" && s.length > 0) {
-    //             var image = {
-    //                 "WEB_IMG_URL_BIG": imgUrl + s,
-    //                 "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
-    //             }
-    //             data.images.push(image);
-    //         }
-    //     }
-    //     var $overflow = null;
-    //     layer.open({
-    //         type: 1,
-    //         title: "单据图片",
-    //         skin: 'layui-layer-rim', // 加上边框
-    //         area: '500px', // 宽高
-    //         zIndex: 1028,
-    //         content: billImagesTemplate(data),
-    //         scrollbar: false, // 推荐禁用浏览器外部滚动条
-    //         success: function() {
-    //             $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-    //         }
-    //     });
-    // };
 
     FinTransIn.saveCheck = function($tab,args,tabArgs) {
         var argLen = arguments.length,
@@ -678,20 +650,6 @@ define(function(require, exports) {
             }
         });
     };
-
-
-    // FinTransIn.setAutoFillEdit = function($tab, disable) {
-    //     var $sum = $tab.find('input[name="sumPayMoney"]').prop('disabled', disable);
-    //     if (!disable) {
-    //         $sum.val(0);
-    //     }
-
-    //     $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
-
-    //     FinTransIn.getOperationList(0, $tab);
-    //     $tab.data('isEdited', true);
-    //     FinancialService.updateSumPayMoney($tab, new FinRule(FinTransIn.isBalanceSource ? 3 : 1));
-    // };
 
     FinTransIn.initPay = function(options){
         var args = {
