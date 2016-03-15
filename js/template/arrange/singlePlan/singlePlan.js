@@ -1076,7 +1076,7 @@ define(function(require, exports) {
                                 $container.find(".T-saveGroup").click(function(){
                                     var addGroupIdJson = [],
                                         html = "<td>"+
-                                            "<div class=\"hidden-sm hidden-xs btn-group\">"+
+                                            "<div class=\"btn-group\">"+
                                             "<a class=\"cursor T-action T-groupView\">"+
                                                 "查看"+
                                             "</a>"+"<a class='cursor'> </a>"+
@@ -1141,7 +1141,7 @@ define(function(require, exports) {
                     (!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+
                     (!!group[i].sendPosition?group[i].sendPosition:"")+'</td><td>'+
                     (!!group[i].remark?group[i].remark:"")+'</td><td>'+
-                    '<div class="hidden-sm hidden-xs btn-group">'+
+                    '<div class="btn-group">'+
                     '<a class="cursor T-action T-groupView">查看</a>'+
                     '<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
                 }
