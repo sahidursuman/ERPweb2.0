@@ -1485,6 +1485,10 @@ define(function(require, exports){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			};
+			if($nameFlag== "consumeMoney" && $nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney" && Count.shopClickCount > Count.shopInputCount){
+				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			};
 			
 		}else{
 			if($nameFlag != "travelAgencyRateMoney" && $nameFlag != "guideRateMoney"){
