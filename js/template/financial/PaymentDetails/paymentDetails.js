@@ -18,7 +18,7 @@ define(function(require, exports){
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(bankId,bankNo){
+	Payment.initModule = function(bankId,bankNo,type){
 		Payment.$tab = null;
 		var date = new Date(),
         year = date.getFullYear(),
@@ -29,7 +29,8 @@ define(function(require, exports){
 			endTime : year + "-" + month + "-" + day,
 			startTime : year + "-" + month + "-01",
 			bankId : bankId ? bankId : "",
-			payType : ""
+			payType : "",
+			type : type
 		},
 		data = {
 			searchParam : args
@@ -133,10 +134,12 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
+			if(args.type == 0){
+				data.searchParam.payType = 0;
+			}
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 
-			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
@@ -144,8 +147,9 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				Payment.$tab.find(".T-card-number").val(bankNo);
-				Payment.$tab.find(".T-card-number").closest('div').removeClass('hidden');
+				var $obj = (args.type == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				$obj.val(bankNo);
+				$obj.closest('div').removeClass('hidden');
 			}
 		});
 	};
