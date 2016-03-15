@@ -4,7 +4,7 @@
             <tr style="">
                 <td><label style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
                 <td><label style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
-                <td><label style="font-weight: bold;">针对客源：{{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label></td>
+                <td><label style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
                 <td><label style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
             </tr>
             <tr>
