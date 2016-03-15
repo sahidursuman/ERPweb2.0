@@ -57,6 +57,23 @@
         </tr>
         {{/each}}
         {{/each}}
+        {{each totalShop as total index}}
+            {{if index == 0}}
+            <tr style="background: #e0effd;">
+                <td>合计</td>
+                <td></td>
+                <td>{{total.touristAdultCount}}大{{total.touristChildCount}}小</td>
+                <td></td>
+                <td></td>
+                <td>{{total.sumConsumeMoney}}</td>
+                <td>{{total.aveconsumeMoney}}</td>
+                <td>{{total.guideRebateMoney}}</td>
+                <td>{{total.travelAgencyRebateMoney}}</td>
+                <td>{{total.sumRebateMoney}}</td>
+                <td>{{total.aveRebateMoney}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
     </tbody>
 </table>
 <div class="pageMode">
