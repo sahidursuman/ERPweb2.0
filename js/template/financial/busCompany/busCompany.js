@@ -199,7 +199,8 @@ define(function(require, exports) {
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
-            busCompany.busCompanyCheck({pageNo : 0},$tab);
+            args.pageNo = 0;
+            busCompany.busCompanyCheck(args,$tab);
         });
 
         //导出报表事件 btn-busCompanyExport

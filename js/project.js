@@ -683,6 +683,7 @@ var modalScripts = {
     'business_analyst_customerVolume': "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
     'business_analyst_employeePerfor': "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
     'business_analyst_tourguidePerfor': "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+    'business_analyst_shopStat': "js/template/businessAnalyst/shopStat/shopStat.js", //购物统计
 
     //-------------------------------------------财务管理模块--------------------------------------------------------------------
     'financial_count': "js/template/financial/count/count.js", //报账审核
@@ -2260,9 +2261,9 @@ KingServices.viewTransit = function(id){
 	});
 };
 //查看收支明细 
-KingServices.viewPayMentDetail = function(id,num){
+KingServices.viewPayMentDetail = function(id,num,type){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
-		module.init(id,num);
+		module.init(id,num,type);
 	});
 };
 //报账审核--跳转发团安排的查看页面

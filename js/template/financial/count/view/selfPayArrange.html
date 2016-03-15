@@ -75,6 +75,7 @@
                     {{else}}
                         <span class="price F-float F-money">{{arrange.price}}</span>
                     {{/if}}
+                    <input type="hidden" name="price" value="{{arrange.price}}"/>
                 {{else}}
                     <input type="text" name="price" value="{{arrange.price}}" class="w-50"/>
                 {{/if}}
