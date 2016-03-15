@@ -435,9 +435,31 @@
                             {{/if}}
                             </span>
                             &nbsp;&nbsp;
-                            {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-                            
-                            <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            {{if arrange.badStatus == 1}}
+                                <span>
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                </span>
+                            {{else}}
+                                <span>
+                                    {{if arrange.billUpdateTime != null}}
+                                        {{if arrange.realPayType == 2}}
+                                            {{arrange.realSignMoney}}
+                                        {{else}}
+                                            {{arrange.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{else}}
+                                        {{if arrange.realPayType == 2}}
+                                            {{arrange.realSignMoney}}
+                                        {{else}}
+                                            {{arrange.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{/if}}
+                                </span>
+                            {{/if}}
                             </td>
                            
                             <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -592,21 +614,44 @@
                         <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}</td>
                         <td>{{busCompany.payedMoney}}</td>
                         <td>
-                        <span>
-                            {{if busCompany.realPayType == 0}}
-                                现金
-                                {{else if busCompany.realPayType == 1}}
-                                刷卡
-                                {{else if busCompany.realPayType == 2}}
-                                签单
-                            {{/if}}
-                        </span>
-                        &nbsp;&nbsp;
-                        {{if busCompany.badStatus == 1}}<span>{{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}</span>{{else}}
-                        <span>
-                        {{if busCompany.billUpdateTime != null}}{{busCompany.realGuidePayMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span>{{/if}}  
-                            <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                            <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
+                            <span>
+                                {{if busCompany.realPayType == 0}}
+                                    现金
+                                    {{else if busCompany.realPayType == 1}}
+                                    刷卡
+                                    {{else if busCompany.realPayType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;
+                            {{if busCompany.badStatus == 1}}
+                                <span>
+                                    {{if busCompany.realPayType == 2}}
+                                        {{busCompany.realSignMoney}}
+                                    {{else}}
+                                        {{busCompany.realGuidePayMoney}}
+                                    {{/if}}
+                                </span>
+                            {{else}}
+                                <span>
+                                    {{if busCompany.billUpdateTime != null}}
+                                        {{if busCompany.realPayType == 2}}
+                                            {{busCompany.realSignMoney}}
+                                        {{else}}
+                                            {{busCompany.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{else}}
+                                        {{if busCompany.realPayType == 2}}
+                                            {{busCompany.realSignMoney}}
+                                        {{else}}
+                                            {{busCompany.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{/if}}
+                                </span>
+                            {{/if}}  
+                                <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                <input type="hidden" name="guidePayMoney" value="{{busCompany.realGuidePayMoney}}" />
+                        </td>
                          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
                                 <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
                             {{else}}
@@ -700,9 +745,32 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -785,9 +853,32 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -870,9 +961,32 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}<span>
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        {{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -958,9 +1072,32 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -1036,9 +1173,32 @@
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>

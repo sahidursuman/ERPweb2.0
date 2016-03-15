@@ -1,16 +1,16 @@
 <table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
     <colgroup>
-        <col></col>
-        <col></col>
+        <col style="width:15%;"></col>
+        <col style="width:15%;"></col>
         <col style="width:10%;"></col>
-        <col style="width:20%;"></col>
-        <col style="width:20%;"></col>
         <col style="width:10%;"></col>
         <col style="width:8%;"></col>
-        <col style=""></col>
-        <col style=""></col>
-        <col style=""></col>
-        <col style=""></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
+        <col style="width:10%;"></col>
     </colgroup>
     <thead>
         <tr class="bg-blur">
@@ -34,19 +34,19 @@
             <td rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.tripNumber}}</td>
             <td rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
             {{if rs.shopList.length == 0}}
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
         <tr>
-            <td>{{shop.inStoreDate}}</td>
+            <td>{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{shop.shopName}}</td>
             <td>{{shop.consumeMoney}}</td>
             <td>{{shop.aveconsumeMoney}}</td>
