@@ -69,25 +69,25 @@
 
         <td><div class="inline-flex">{{if arrange.badStatus == 1}}
         <span>
-            {{if arrange.payType == 0}}
+            {{if arrange.realPayType == 0}}
                 现金
-                {{else if arrange.payType == 1}}
+                {{else if arrange.realPayType == 1}}
                 刷卡
-                {{else if arrange.payType == 2}}
+                {{else if arrange.realPayType == 2}}
                 签单
             {{/if}}
         </span>
         &nbsp;
-        <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>
+        <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>
         <span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}
         <select name="payType">
-            <option value="0" {{if arrange.payType == 0}}selected="selected"{{/if}}>现金</option>
-            <option value="1" {{if arrange.payType == 1}}selected="selected"{{/if}}>刷卡</option>
-            <option value="2" {{if arrange.payType == 2}}selected="selected"{{/if}}>签单</option>
+            <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+            <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+            <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
         </select>
         &nbsp;
         <input  type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-            {{if arrange.payType == 2}}value="{{arrange.signMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} {{/if}}/>{{/if}}
+            {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} {{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>
 

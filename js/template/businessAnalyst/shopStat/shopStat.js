@@ -68,7 +68,7 @@ define(function(require, exports) {
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//获取客户、团号和购物店列表
-		       		shopStat.autocompleteDate();
+		       		shopStat.autocompleteDate(shopStat.$tab);
 
 			       	// 绑定翻页组件
 					laypage({
@@ -90,14 +90,15 @@ define(function(require, exports) {
 	 * [autocompleteDate 获取客户、团号和购物店列表]
 	 * @return {[type]} [description]
 	 */
-	shopStat.autocompleteDate = function() {
+	shopStat.autocompleteDate = function(tab) {
 		$.ajax({
 			url: KingServices.build_url('financial/shopAccount','shopRequest'),
 			type: 'POST'
 		})
 		.done(function(data) {
 			if (showDialog(data)){
-				
+				var $partnerAgencyObj = tab.find('[name=partnerAgency]'),
+					$shopObj = tab.find('[name=shop]');
 			}
 		});
 		

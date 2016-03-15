@@ -75,28 +75,28 @@
     
             {{if busCompany.badStatus == 1}}
             <span>
-                {{if busCompany.payType == 0}}
+                {{if busCompany.realPayType == 0}}
                     现金
-                    {{else if busCompany.payType == 1}}
+                    {{else if busCompany.realPayType == 1}}
                     刷卡
-                    {{else if busCompany.payType == 2}}
+                    {{else if busCompany.realPayType == 2}}
                     签单
                 {{/if}}
             </span>
             &nbsp;
             <span class="F-float F-money">
-                {{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
+                {{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
             </span>
             {{else}}
             <select name="payType">
-                <option value="0" {{if busCompany.payType == 0}}selected="selected"{{/if}}>现金</option>
-                <option value="1" {{if busCompany.payType == 1}}selected="selected"{{/if}}>刷卡</option>
-                <option value="2" {{if busCompany.payType == 2}}selected="selected"{{/if}}>签单</option>
+                <option value="0" {{if busCompany.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+                <option value="1" {{if busCompany.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+                <option value="2" {{if busCompany.realPayType == 2}}selected="selected"{{/if}}>签单</option>
             </select>
             &nbsp;
             <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
             {{if busCompany.billUpdateTime != null}}{{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}"{{/if}}{{else}}
-            {{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}
+            {{if busCompany.realPayType == 2}}value="{{busCompany.realSignMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}
             {{/if}} 
             old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
                 <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
