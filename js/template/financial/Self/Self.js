@@ -294,24 +294,10 @@ define(function(require, exports) {
                     data.isAutoPay = isAutoPay;
                     data.searchParam.accountStatus = accountStatus;
                     var html = SelfClearing(data);
-                    data.isAutoPay = isAutoPay;
                     // 初始化页面
                     if (Tools.addTab(blanceTabId, "自费付款", html)) {
                         var settleValidator = new FinRule(Self.showBtnFlag ? 3 : 1);
                         Self.initClear(page,selfPayId,selfPayName,settleValidator); 
-                    }
-
-                    if(isAutoPay == 0){
-                        Self.$clearTab.find(".T-cancel-auto").hide();
-                    } else {
-                        Self.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        Self.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
-                            Self.$clearTab.data('isEdited',true);
-                            // Self.$clearTab.find(".T-bankDiv").removeClass('hidden');
-                        } else if(isAutoPay == 2){
-                            Self.$clearTab.find(".T-cancel-auto").hide();
-                        }
                     }
 
                     //绑定翻页组件
