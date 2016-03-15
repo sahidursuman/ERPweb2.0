@@ -543,6 +543,9 @@ define(function(require, exports) {
 				var $money = $(this).closest('tr').find('.T-payedMoney'),
 					money = ($money.val() || 0) * 1;
 				$money.val(money + sum);
+
+				//实时计算
+    		    subsection.calcuFeeTotal();
 	    	}
 	    	
 	    });
