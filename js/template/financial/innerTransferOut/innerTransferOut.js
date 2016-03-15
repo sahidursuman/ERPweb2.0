@@ -685,7 +685,12 @@ define(function(require,exports) {
 				}else{
 					InnerTransferOut.saveCheckingData($tab);
 				}
-			});
+			}).on(CLOSE_TAB_SAVE_NO, function(event) {
+	            event.preventDefault();
+	            if(typeFlag == 2){
+	                InnerTransferOut.saveJson = false;
+	            }
+	        });
 		}
 	};
 	//获取搜索框的数据

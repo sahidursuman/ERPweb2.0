@@ -314,18 +314,6 @@ define(function(require, exports) {
         // 初始化jQuery 对象 
         var autoPayRule = (new FinRule(2)).check($tab);
             args.saveRule = new FinRule(args.isAutoPay== 2?3: 1);
-
-        if(args.isAutoPay == 0){
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            if(args.isAutoPay == 1){
-                $tab.data('isEdited',true);
-            } else if(args.isAutoPay == 2){
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
         hotel.init_event(args,$tab,"clear");
 
         FinancialService.initPayEvent($tab);
@@ -369,6 +357,7 @@ define(function(require, exports) {
         $tab.find(".T-cancel-auto").off().on("click",function(){
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
+            args.isAutoPay = 0;
             hotel.hotelClear(args,$tab);
         });
 
@@ -574,6 +563,13 @@ define(function(require, exports) {
                     $tab.data('isAutoPay',args.isAutoPay);
                     $tab.data('hotelId',args.hotelId);
                     hotel.saveClear($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    hotel.clearTempData = false;
+                    hotel.clearTempSumDate = false;
                 }
             });
 
