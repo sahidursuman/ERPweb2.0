@@ -9,6 +9,10 @@ define(function(require, exports) {
 			list : require('./view/list'),//列表页
 			listTable : require('./view/listTable'),//列表页表格
 			update : require('./view/update'),//编辑页面
+            chooseClient : require('./view/chooseClient'),//选择客户
+            chooseClientList : require('./view/chooseClientList'),//选择客户列表
+            chooseLineProduct : require('./view/chooseLineProduct'),//选择线路产品
+            chooseLineProductList : require('./view/chooseLineProductList'),//选择线路产品列表
 			guestInfo : require('./view/guestInfo'),//客人信息
 			updateMoney : require('./view/updateMoney'),//编辑金额
 			updateBus : require('./view/updateBus'),//编辑车
@@ -204,6 +208,20 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     touristGroup.commonEvents = function($tab){
+        //小组信息表内操作
+        $tab.find('.T-team-info').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this);
+            if($that.hasClass('T-client')){
+                touristGroup.chooseClient();
+            }else if($that.hasClass('T-search-trip')){
+
+            }else if($that.hasClass('T-receivable')){
+                touristGroup.updateJionGroupMoney();
+            }else if($that.hasClass('T-guest-info')){
+                touristGroup.updateGuestInfo($tab);
+            }
+        });
     	//添加接团
     	$tab.find('.T-add-join-group').on('click', function(){
     		touristGroup.addJoinGroup($tab);
@@ -216,17 +234,11 @@ define(function(require, exports) {
     	$tab.find('.T-add-send-group').on('click', function(){
     		touristGroup.addSendGroup($tab);
     	});
-    	//客人信息
-    	$tab.find('.T-guest-info').on('click', function(){
-    		touristGroup.updateGuestInfo($tab);
-    	});
-    	//接团事件
+    	//接团表内操作
     	$tab.find('.T-join-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this);
-    		if($that.hasClass('T-money')){
-    			touristGroup.updateJionGroupMoney();
-    		}else if($that.hasClass('T-bug')){
+    		if($that.hasClass('T-bug')){
     			touristGroup.updateJionGroupBus();
     		}else if($that.hasClass('T-hotel')){
     			touristGroup.updateJionGroupHotel();
@@ -234,13 +246,11 @@ define(function(require, exports) {
     			touristGroup.updateJionGroupOther();
     		}
     	});
-    	//参团事件
+    	//参团表内操作
     	$tab.find('.T-part-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this);
-    		if($that.hasClass('T-money')){
-    			touristGroup.updateJionGroupMoney(1);
-    		}else if($that.hasClass('T-hotel')){
+    		if($that.hasClass('T-hotel')){
     			touristGroup.updateJionGroupHotel(1);
     		}else if($that.hasClass('T-inner-turn')){
                 touristGroup.updateInnerTurn();
@@ -250,13 +260,11 @@ define(function(require, exports) {
                 $that.closest('tr').remove();
             }
     	});
-    	//送团事件
+    	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this);
-    		if($that.hasClass('T-money')){
-    			touristGroup.updateJionGroupMoney(2);
-    		}else if($that.hasClass('T-bug')){
+    		if($that.hasClass('T-bug')){
     			touristGroup.updateJionGroupBus(2);
     		}else if($that.hasClass('T-hotel')){
     			touristGroup.updateJionGroupHotel(2);
@@ -277,6 +285,53 @@ define(function(require, exports) {
     	});
         //绑定日期事件
         Tools.setDatePicker($tab.find('.datepicker'));
+    };
+
+    //选择客户
+    touristGroup.chooseClient = function(){
+        var layerIndex = layer.open({
+            type: 1,
+            title:"选择客户",
+            skin: 'layui-layer-rim', //加上边框
+            area: '950px', //宽高
+            zIndex:1028,
+            content: T.chooseClient(),
+            success:function(obj){
+                var $layer = $(obj);
+                touristGroup.getClientList(0, $layer);
+                $layer.find('.T-btn-search').on('click', function(){
+                    var args = {
+                        pageNo : page || 0,
+                        travelAgencyName : $layer.find('[name="travelAgencyName"]').val(),
+                        contactRealname : $layer.find('[name="contactRealname"]').val()
+                    };
+                    touristGroup.getClientList(args)
+                });
+            }
+        });
+    };
+
+    //获取客户列表
+    touristGroup.getClientList = function(args, $layer){
+        if(args === "number"){
+            var page = args;
+            args = {};
+            args.pageNo = page;
+        }
+        var html = T.chooseClientList();
+        $layer.find('.T-client-list').html(html);
+        /*$.ajax({
+            url : KingServices.build_url('v2/partnerAgency', 'selectPartnerAgency'),
+            data : {searchParam : args},
+            type: 'POST',
+            success : function(data){
+                if(showDialog(data)){
+                    var html = T.chooseClientList(data);
+                    $layer.find('.T-client-list').html(html);
+                    console.log(data);
+                }
+            }
+        });*/
     };
 
     //添加接团
@@ -326,10 +381,10 @@ define(function(require, exports) {
             }
         });
     };
+
     //添加游客
     touristGroup.addVisotor = function($obj) {
-        var html = '<tr>' +
-            '<td>' + '</td>' +
+        var html = '<tr><td></td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
             '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
@@ -340,6 +395,10 @@ define(function(require, exports) {
         var $tbody = $obj.find('.T-addTouristTbody')
         $tbody.append(html);
         touristGroup.memberNumber($obj);
+    };
+
+    touristGroup.searchLineProduct = function(){
+
     };
 
     //编辑客人信息
@@ -371,18 +430,11 @@ define(function(require, exports) {
 		});
     };
 
-    //更新接/参/送团金额
-    touristGroup.updateJionGroupMoney = function(type){
-    	var title = "接团费用", data = {};
-    	if(type === 1){
-    		title = "参团费用";
-    	}else if(type === 2){
-    		title = "送团费用";
-    	}
-    	data.type = type;
+    //更新应收团款
+    touristGroup.updateJionGroupMoney = function(){
     	var layerIndex = layer.open({
 			type: 1,
-		    title: title,
+		    title: "应收团款",
 		    skin: 'layui-layer-rim', //加上边框
 		    area: '850px', //宽高
 		    zIndex:1028,
@@ -404,7 +456,7 @@ define(function(require, exports) {
 			type: 1,
 		    title: title,
 		    skin: 'layui-layer-rim', //加上边框
-		    area: '560px', //宽高
+		    area: '890px', //宽高
 		    zIndex:1028,
 		    content: T.updateBus(),
 		    scrollbar: false,
@@ -425,7 +477,7 @@ define(function(require, exports) {
 			type: 1,
 		    title: title,
 		    skin: 'layui-layer-rim', //加上边框
-		    area: '560px', //宽高
+		    area: '890px', //宽高
 		    zIndex:1028,
 		    content: T.updateHotel(data),
 		    scrollbar: false,
@@ -450,7 +502,7 @@ define(function(require, exports) {
 			type: 1,
 		    title: title,
 		    skin: 'layui-layer-rim', //加上边框
-		    area: '560px', //宽高
+		    area: '890px', //宽高
 		    zIndex:1028,
 		    content: T.updateOther(),
 		    scrollbar: false,
@@ -509,7 +561,7 @@ define(function(require, exports) {
             skin: 'layui-layer-rim', //加上边框
             area: '870px', //宽高
             zIndex:1028,
-            content: T.updateInnerTurn(),
+            content: T.updateOuterTurn(),
             scrollbar: false,
             success:function(){
                 
@@ -533,6 +585,16 @@ define(function(require, exports) {
         });
     };
     
+    //游客列表序号自动升序
+    touristGroup.memberNumber = function($obj) {
+        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
+        $tbody.each(function(i) {
+            if (i >= 0) {
+                $(this).children().eq(0).text(i + 1);
+            }
+        });
+    };
+
     //批量添加游客
     touristGroup.batchAddTourists = function($obj) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
