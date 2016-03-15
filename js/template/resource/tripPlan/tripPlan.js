@@ -301,13 +301,14 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	tripPlan.sendTripPlanArrange = function(id, status) {
+		var html = filterUnAuth(noticeTemplate(status));
 		var noticeLayer = layer.open({
 			type: 1,
 			title: '通知设置',
 			skin: 'layui-layer-rim', //加上边框
 			area: '630px', //宽高
 			zIndex:1028,
-			content: noticeTemplate(status),
+			content: html.html(),
 			success:function(){
 				var $container = $('.T-tripPlanNotice'),
 					$checkbox = $container.find('.T-checked'),
