@@ -494,6 +494,8 @@ define(function(require, exports) {
 			$(this).closest('div').remove();
 		});
 		$that.remove();
+        //移除计算
+		subsection.calcuFeeTotal();
 	};
 
 	/**
@@ -541,6 +543,9 @@ define(function(require, exports) {
 				var $money = $(this).closest('tr').find('.T-payedMoney'),
 					money = ($money.val() || 0) * 1;
 				$money.val(money + sum);
+
+				//实时计算
+    		    subsection.calcuFeeTotal();
 	    	}
 	    	
 	    });
@@ -560,6 +565,7 @@ define(function(require, exports) {
 				$parents.addClass("del");
 				$parents.fadeOut(function(){
 					$parents.hide();
+					subsection.calcuFeeTotal();
 				})
 				$(this).dialog( "close" );
 			})
@@ -567,6 +573,7 @@ define(function(require, exports) {
 		}else{
 			$parents.fadeOut(function(){
 				$parents.remove();
+				subsection.calcuFeeTotal();
 			})
 		}
 	};
@@ -599,7 +606,7 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
 	subsection.calcuFeeTotal=function(){
-      var $trList=subsection.$tabSub.find('.T-subsectionOperationTbody').find('tr'),totalFee=0*1;
+      var $trList=subsection.$tabSub.find('.T-subsectionOperationTbody').find("tr:not(.del)"),totalFee=0*1;
       $trList.each(function(index) {
       	  totalFee=totalFee*1;
       	  totalFee+=$trList.eq(index).find('.T-payedMoney').val()*1;
