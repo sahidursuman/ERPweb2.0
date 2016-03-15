@@ -67,6 +67,10 @@ define(function(require, exports) {
 			/* Act on the event */
 			subsection.subsectionList(0);
 		});
+		subsection.$searchArea.find('#order_by').on('change', function(event) {
+			event.preventDefault();
+			subsection.subsectionList(0, false);
+		});
 		//模糊查询
 		subsection.getPartnerAgencyList();
 		//subsection.getLineProductList();
@@ -89,7 +93,7 @@ define(function(require, exports) {
 	 * @param  {[type]} operationEndDate    [操作日期-结束]
 	 * @return {[type]}                     [description]
 	 */
-	subsection.subsectionList = function(page) {
+	subsection.subsectionList = function(page, noCount) {
 		if (subsection.$searchArea && arguments.length == 1) {
 			var args = {
 				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
@@ -102,6 +106,13 @@ define(function(require, exports) {
 				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),
 				operationStartDate:subsection.$searchArea.find("input[name=operationStartDate]").val(),
 				operationEndDate:subsection.$searchArea.find("input[name=operationEndDate]").val(),
+				sortType: 'startTime',
+				order: subsection.$searchArea.find("#order_by").val()
+			}
+		} else {
+			var args = {
+				sortType: 'startTime',
+				order: 'asc'
 			}
 		}
 		// 修正页码
@@ -136,16 +147,18 @@ define(function(require, exports) {
 			}
 		});
 
-		//计算人数合计 和 现收款合计
-		$.ajax({
-			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
-			type: 'POST',
-			data: args,
-			success: function(data){
-				subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
-				subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
-			}
-		})
+		if (!noCount) {
+			//计算人数合计 和 现收款合计
+			$.ajax({
+				url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
+				type: 'POST',
+				data: args,
+				success: function(data){
+					subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
+					subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
+				}
+			});
+		}
 	};
 	/**
 	 * 列表中事件绑定
