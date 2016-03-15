@@ -150,7 +150,7 @@ define(function(require, exports) {
 			type:"POST",
 			data: {
 				pageNo: page,
-				sortType: 'startTime',
+				sortType: 'touristGroup.startTime',
 				order: transit.$searchArea.find("#order_by").val(),
 				fromPartnerAgencyName: fromPartnerAgencyName,
 				fromPartnerAgencyId: fromPartnerAgencyId,

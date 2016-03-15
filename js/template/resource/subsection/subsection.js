@@ -94,7 +94,7 @@ define(function(require, exports) {
 	 * @return {[type]}                     [description]
 	 */
 	subsection.subsectionList = function(page, noCount) {
-		if (subsection.$searchArea && arguments.length == 1) {
+		if (subsection.$searchArea && arguments.length >= 1) {
 			var args = {
 				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
 				lineProduct:subsection.$searchArea.find("input[name=lineProduct]").val(),
