@@ -151,7 +151,7 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)){
-				var partnerAgency = tab.find('[name=partnerAgency]'),
+				var partnerAgency = tab.find('[name=fromPartnerAgency]'),
 					shop = tab.find('[name=shop]');
 
 				//购物店列表
