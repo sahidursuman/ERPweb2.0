@@ -19,7 +19,8 @@ FinancialService.initPayEvent = function($container,rule)  {
         $card = $container.find('input[name=card-number]');
     getBankList($cash,0);
     getBankList($card,1);
-    $container.find('select').on('change', function(event) {
+    $select = $container.find('select[name=sumPayType]') || $container.find('select[name=payType]');
+    $select.on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
         if(val == 1 || val == 5){

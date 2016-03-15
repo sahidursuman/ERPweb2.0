@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":96,"md5":"3e6fab6f08ebda68e632109f3ad44862"}*/
+/*TMODJS:{"debug":true,"version":98,"md5":"3e6fab6f08ebda68e632109f3ad44862"}*/
 define(function(require) {
     return require("../../../template")("financial/Scenic/view/ScenicClearing", function($data, $filename) {
         try {
