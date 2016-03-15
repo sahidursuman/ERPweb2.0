@@ -64,7 +64,7 @@ define(function(require, exports) {
 	 */
 	transit.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		transit.$searchArea.find('.T-transitState').on('change', function() {
+		transit.$searchArea.find('.T-transitState, #order_by').on('change', function() {
 			transit.listTransit(0);
 		});
 
@@ -150,7 +150,8 @@ define(function(require, exports) {
 			type:"POST",
 			data: {
 				pageNo: page,
-				sortType: 'auto',
+				sortType: 'startTime',
+				order: transit.$searchArea.find("#order_by").val(),
 				fromPartnerAgencyName: fromPartnerAgencyName,
 				fromPartnerAgencyId: fromPartnerAgencyId,
 				lineProductName: lineProductName,
