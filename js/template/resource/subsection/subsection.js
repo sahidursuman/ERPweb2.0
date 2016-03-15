@@ -404,7 +404,7 @@ define(function(require, exports) {
 			+ '<td>' + radio + '</td>'
 			+ '<td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" /></td>'
 			+ '<td>-</td>'
-			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
+			+ '<td><div class="btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
 			$tbody.append(html);
 
