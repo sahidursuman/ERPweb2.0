@@ -80,12 +80,12 @@ define(function(require, exports) {
                     innerTransfer.allData.toBusinessGroup = JSON.parse(data.toBusinessGroup)
                     innerTransfer.allData.toUser = JSON.parse(data.toUser);
                     var html = listMainTemplate(innerTransfer.allData);
-                    Tools.addTab(menuKey, "内转管理", html);
+                    if (Tools.addTab(menuKey, "内转管理", html)) {
+                        innerTransfer.$tab = $('#tab-arrange_inner_Transfer-content');
 
-                    //内转管理页面绑定事件
-                    innerTransfer.initActionEvent();
-
-
+                        //内转管理页面绑定事件
+                        innerTransfer.initActionEvent();                        
+                    }
                 }
             }
         });
@@ -126,14 +126,12 @@ define(function(require, exports) {
         //导出
         $innerTrsfInObj.find(".T-transfer-export").click(function() {
             innerTransfer.$searchParam.type = 2;
-            var exportUrl = "" + KingServices.build_url("innerTransfer", "findExcel") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-            window.location.href = exportUrl;
+            exportXLS( APP_ROOT + 'back/innerTransfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)));
         });
         //导出操作 
         $innerTrsfOutObj.find(".T-transfer-export").click(function() {
             innerTransfer.$searchParam.type = 1;
-            var exportUrl = "" + KingServices.build_url("innerTransfer", "findExcel") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam));
-            window.location.href = exportUrl;
+            exportXLS( APP_ROOT + 'back/innerTransfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam=" + encodeURIComponent(JSON.stringify(innerTransfer.$searchParam)));
         });
         $innerTrsfOutObj.find(".dropdown-menu a").click(function() {
             $(this).closest('div').find("button").attr("data-value", $(this).attr("data-value"));
@@ -248,6 +246,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-TransferOut-delete')) {
                 //撤销
                 innerTransfer.deleteTransferOut(id);
+            }else if ($that.hasClass('T-returnTransferOut-delete')) {
+                //确认退回
+                innerTransfer.returnTransferOut(id);
             };
         });
 
@@ -266,6 +267,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-TransferIn-refuse')) {
                 //拒绝
                 innerTransfer.deleteTransferIn(id);
+            }else if($that.hasClass('T-returnTransferIn-refuse')){
+                //申请退回
+                innerTransfer.returnTransferIn(id);
             };
         });
 
@@ -654,28 +658,29 @@ define(function(require, exports) {
         }
     }
 
-    //内转确认后查看内转信息
-/*    innerTransfer.saveTransferIn = function(id) {
+
+
+    /**
+     * [deleteTransferOut 确认退回操作]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    innerTransfer.returnTransferOut = function(id) {
         $.ajax({
-                url: KingServices.build_url("innerTransfer", "save"),
-                type: "POST",
-                data: "id=" + id + "&isDelete=1"
-            })
-            .done(function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var touristGroupId = data.touristGroupId,
-                        isTransferIn = 'inner';
-                    //查看内转
-                    KingServices.viewTouristGroup(touristGroupId, isTransferIn);
-                    //刷新data
-                    var divId = "inner-TransferIn",
-                        type = "2";
-                    innerTransfer.getSearchParam(divId, type);
-                    innerTransfer.innerList(divId, type, 0);
-                }
-            })
-    };*/
+            url: KingServices.build_url("innerTransfer", "confirmApplyForInnerTransferBack"),
+            type: "POST",
+            data: "innerTransferId=" + id + "",
+        })
+        .done(function(data) {
+            var result = showDialog(data);
+            if (result) {
+                var divId = "inner-TransferOut",
+                    type = "1";
+                innerTransfer.getSearchParam(divId, type);
+                innerTransfer.innerList(divId, type, 0);
+            }
+        }); 
+    };
 
 
     /**
@@ -712,6 +717,7 @@ define(function(require, exports) {
                                     isTransferIn = 'inner';
                                 //查看内转
                                 KingServices.viewTouristGroup(touristGroupId, isTransferIn);
+                                innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
                             }
                         })
                     $(this).dialog("close");
@@ -762,15 +768,43 @@ define(function(require, exports) {
             }
         });
     };
+     
+    /**
+     * [returnTransferIn 回退功能的使用]
+     * @param  {[type]} id 游客记录Id
+     * @return {[type]}   
+     */
+    innerTransfer.returnTransferIn=function(id){
+        showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+            $.ajax({
+                url: KingServices.build_url("innerTransfer", "innerTransferBack"),
+                ype: "POST",
+                data: "innerTransferId=" + id + "",
+            })
+            .done(function(data) {
+                 var result = showDialog(data);
+                if (result) {
+                     innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
+                }
+            });
+        });
+       
+    };
+
     innerTransfer.chooseLineProduct = function(divId) {
         var chooseLineProduct = $("#" + divId).find(".T-lineProductChoose"),
             list;
         list = innerTransfer.allData.lineProduct;
         if (!!list && list.length > 0) {
             for (var i = 0; i < list.length; i++) {
-                list[i].value = list[i].name;
+                if (!!list[i]) {
+                    list[i].value = list[i].name;
+                } else {
+                    list.splice(i, 1);
+                }
             }
         }
+
         chooseLineProduct.autocomplete({
             minLength: 0,
             change: function(event, ui) {

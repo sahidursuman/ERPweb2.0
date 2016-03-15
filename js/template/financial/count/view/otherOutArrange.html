@@ -9,7 +9,8 @@
         </a>
     </h5>
 </div>
-<table class="table table-striped table-bordered table-hover">
+<div class="overflow-x min-w-1050">
+<table class="table table-striped table-bordered table-hover w-1500">
     <thead>
     <tr>
         <th class="th-border"><span class="necessary">*</span>时间</th>
@@ -45,7 +46,7 @@
         <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 
-        <td><div class="inline-flex col-xs-12">{{if arrange.badStatus == 1}}
+        <td><div class="inline-flex">{{if arrange.badStatus == 1}}
         <span>
             {{if arrange.payType == 0}}
                 现金
@@ -56,7 +57,7 @@
             {{/if}}
         </span>
         &nbsp;
-        <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}
+        <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>
         <span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}
         <select name="payType">
             <option value="0" {{if arrange.payType == 0}}selected="selected"{{/if}}>现金</option>
@@ -85,7 +86,7 @@
     {{/each}}
     </tbody>
 </table>
-
+</div>
 {{if tripPlan.billStatus > -1}}
     <div style="width:60%;">
         <div> 

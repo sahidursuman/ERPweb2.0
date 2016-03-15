@@ -47,20 +47,21 @@ define(function(require, exports) {
     };	
     
     Client.listClient = function(page){
-        var date = new Date(),
-            year = date.getFullYear(),
-            month = Tools.addZero2Two(date.getMonth() + 1),
-            day = Tools.addZero2Two(date.getDate()),
+        var date = FinancialService.getInitDate(),
+
             args = {
                 pageNo : (page || 0),
-                startDate : year + '-' + month + '-' + '01',
-                endDate : year + '-' + month + '-' + day
+                startDate : date.startDate,
+                endDate : date.endDate,
+                accountStatus:2
             };
+
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
                 startDate : Client.$tab.find('.T-search-start-date').val(),
-                endDate : Client.$tab.find('.T-search-end-date').val()
+                endDate : Client.$tab.find('.T-search-end-date').val(),
+                accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value")
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -123,7 +124,14 @@ define(function(require, exports) {
             event.preventDefault();
             Client.listClient(0);
         });
-
+        //状态框选择事件
+        Client.$searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Client.listClient(0);
+        });
         // 报表内的操作
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -135,6 +143,7 @@ define(function(require, exports) {
                     fromPartnerAgencyName : $tr.children('td').eq(1).text(),
                     fromPartnerAgencyId: $tr.data('id'),
                     name: $tr.children('td').eq(1).text(),
+                    accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
                     endDate : Client.$tab.find('.T-search-end-date').val()
                 };
@@ -430,6 +439,7 @@ define(function(require, exports) {
             name: options.name,
             startDate: options.startDate,
             endDate: options.endDate,
+            accountStatus : options.accountStatus,
             type: 1
         });
     }
@@ -463,7 +473,6 @@ define(function(require, exports) {
 
                 data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
-
                 //费用明细处理
                 var resultList = data.customerAccountList;
                 for(var i = 0; i < resultList.length; i++){
@@ -657,10 +666,10 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                         Client.clearDataArray = data.customerAccountList;
-                        var bankId = $tab.find('input[name=card-id]').val();
+                        var bankId = $tab.find('input[name=card-id]').val() || $tab.find('input[name=cash-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
-                        var bankNumber = $tab.find('input[name=card-number]').val();
+                        var bankNumber = $tab.find('input[name=card-number]').val() || $tab.find('input[name=cash-number]').val();
                         Client.clearDataArray.bankId = bankId;
                         Client.clearDataArray.voucher = voucher;
                         Client.clearDataArray.billTime = billTime;
@@ -815,9 +824,10 @@ define(function(require, exports) {
 
     Client.saveClearData = function($tab,tabArgs) {
         var argLen = arguments.length;
-        var bankId = $tab.find('input[name=card-id]').val();
-        var voucher = $tab.find('input[name=credentials-number]').val();
-        var billTime = $tab.find('input[name=tally-date]').val();
+        var payType = $tab.find('.T-sumPayType').val(),
+            bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+            voucher = $tab.find('input[name=credentials-number]').val(),
+            billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
 		var JsonStr = Client.clearDataArray; 
         if(JsonStr.length==0){
@@ -832,7 +842,7 @@ define(function(require, exports) {
             data:{
                 receiveAccountList : JsonStr,
                 fromPartnerAgencyId: $tab.data('id'),
-                payType: $tab.find('.T-sumPayType').val(),
+                payType: payType,
                 bankId:bankId,
                 voucher:voucher,
                 billTime:billTime,
@@ -1084,6 +1094,7 @@ define(function(require, exports) {
             creatorName : $tab.find('.T-search-enter').val(),
             startDate : $tab.find('.T-search-start-date').val(),
             endDate : $tab.find('.T-search-end-date').val(),
+            accountStatus : $tab.find('[name=accountStatus]').val(),
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             contactRealname : $tab.find('.T-search-contact').val()
         }
