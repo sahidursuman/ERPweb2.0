@@ -146,7 +146,7 @@ define(function(require, exports) {
             args.licenseNumber = $tab.find("input[name=licenseNumber]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
-            args.accountStatus = $tab.find(".T-finance-status").find("button").data("value");
+            args.accountStatus = $tab.find("[name=accountStatus]").val();
         }
         args.sortType = "startTime";
         $.ajax({
@@ -157,6 +157,7 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     var fbList = data.financialBusCompanyListData;
                     data.busCompanyName = args.busCompanyName;
+                    data.accountStatus = args.accountStatus;
                     data.financialBusCompanyListData = FinancialService.isGuidePay(fbList); //获取是否显示导付标识
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData); //获取是否显示人数标识
                     var html = checkBill(data);
