@@ -37,7 +37,7 @@
 			</thead>
 			<tbody class="T-bankAcc-list">
 				{{each newBankAccountList as rs}}
-					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}" bankMoney="{{rs.balance}}" data-type="{{rs.type}}">
+					<tr bankid="{{rs.id}}" aliasName="{{rs.aliasName}}" bankMoney="{{rs.balance}}" beginningBalance="{{rs.beginningBalance}}" data-type="{{rs.type}}">
 						<td>{{if rs.type == 0}}现金账户{{else rs.type == 1}}银行账户{{/if}}</td>
 						<td>{{rs.aliasName}}</td>
 						<td>{{if rs.type == 0}}-{{else}}{{rs.bankAccountNumber}}{{/if}}</td>
