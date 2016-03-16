@@ -13,7 +13,7 @@
         <col style="width:10%;"></col>
     </colgroup>
     <thead>
-        <tr class="bg-blur">
+        <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
             <th>客户</th>
             <th>团号</th>
             <th>人数</th>
@@ -45,7 +45,7 @@
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
-        <tr shopId = "{{shop.shopId}}">
+        <tr shopId = "{{shop.shopId}}" tripPlanId = "{{shop.tripPlanId}}">
             <td>{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{shop.shopName}}</td>
             <td><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
@@ -76,9 +76,9 @@
         {{/each}}
     </tbody>
 </table>
-<div class="pageMode">
+<div class="pageMode T-noprint">
     <div class="col-xs-5">
-        <small>共计{{searchParam.recordSize}}条记录</small>
+        <small><span class="recordSize"></span></small>
     </div>
     <div class="col-xs-7">
         <div class="dataTables_paginate paging_simple_numbers T-pagenation">

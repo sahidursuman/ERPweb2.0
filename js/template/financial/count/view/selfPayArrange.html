@@ -55,7 +55,7 @@
                     {{else}}<input name="selfPayItemName" value="" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}><input name="selfPayItemId" type="hidden">{{/if}}</td>
                 <td>
                 
-                <input type="text" name="marketPrice" value="{{arrange.marketPrice}}" class="w-50"/></td>
+                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50"/></td>
                 
                 <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50"></td>
     
@@ -71,13 +71,13 @@
                 <td>
                 {{if tripPlan.billStatus == -1}}
                     {{if arrange.badStatus == 1}}
-                        <span class="price F-float F-money">{{arrange.price}}</span>
+                        <span class="price F-float F-money">{{arrange.realPrice}}</span>
                     {{else}}
-                        <span class="price F-float F-money">{{arrange.price}}</span>
+                        <span class="price F-float F-money">{{arrange.realPrice}}</span>
                     {{/if}}
-                    <input type="hidden" name="price" value="{{arrange.price}}"/>
+                    <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
                 {{else}}
-                    <input type="text" name="price" value="{{arrange.price}}" class="w-50"/>
+                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50"/>
                 {{/if}}
                 </td>
                 
