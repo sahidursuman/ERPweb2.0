@@ -8,34 +8,40 @@
 				<thead>
 					<tr>
 						<th>客户</th>
-						<th>线路产品</th>
+						<th>行程</th>
 						<th width="100">接团日期</th>
 						<th width="100">送团日期</th>
 						<th>应收</th>
 						<th>客人信息</th>
 						<th>联系电话</th>
 						<th>外联销售</th>
-						<th>团散界定</th>
+						<th style="width: 170px;">团散界定</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="T-team-info">
 					<tr>
-						<td><input type="text" class="col-xs-12"></td>
+						<td><input type="text" class="col-xs-12 T-action T-client"></td>
 						<td>
 							<div class="hct-input-group col-xs-12">
 								<input type="text" class="col-xs-12">
-								<span class="hct-group-add cursor">[新增]</span>
+								<span class="hct-group-add cursor T-action T-search-trip">[搜索]</span>
 							</div>
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker"></td>
 						<td><input type="text" class="col-xs-12 datepicker"></td>
+						<td><input type="text" class="col-xs-12 T-action T-receivable"></td>
+						<td><input type="text" class="col-xs-12 T-action T-guest-info"></td>
 						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12 T-guest-info"></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
+						<td><input type="text" class="col-xs-12 T-action"></td>
 						<td>
-							<label><input checked="checked" type="radio" class="ace" name="singlePlanDefine" ><span class="lbl">散客拼团</span></label>
-							<label><input type="radio" class="ace" name="singlePlanDefine" ><span class="lbl">独立成团</span></label>
+							<label class="radio-inline">
+								<input checked="checked" type="radio" class="ace" name="singlePlanDefine" >
+								<span class="lbl">散客拼团</span>
+							</label>
+							<label class="radio-inline">
+								<input type="radio" class="ace" name="singlePlanDefine" >
+								<span class="lbl">独立成团</span>
+							</label>
 						</td>
 					</tr>
 				</tbody>
@@ -59,10 +65,10 @@
 					<tr>
 						<th width="100">抵达时间</th>
 						<th>班次</th>
-						<th>金额</th>
 						<th>车</th>
 						<th>房</th>
 						<th>它</th>
+						<th>接团小计</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -70,11 +76,11 @@
 					<tr>
 						<td><input type="text" class="col-xs-12 datepicker"></td>
 						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12 T-action T-money"></td>
 						<td><input type="text" class="col-xs-12 T-action T-bug"></td>
 						<td><input type="text" class="col-xs-12 T-action T-hotel"></td>
 						<td><input type="text" class="col-xs-12 T-action T-other"></td>
-						<td><a class="cursor T-action">删除</a></td>
+						<td><input type="text" class="col-xs-12" readonly></td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -91,8 +97,9 @@
 						<th>线路产品</th>
 						<th width="100">出团日期</th>
 						<th width="100">完团日期</th>
-						<th>金额</th>
+						<th>线路应付</th>
 						<th>返程住宿</th>
+						<th>参团小计</th>
 						<th width="95">本段先收团款</th>
 						<th width="95">本段核算团款</th>
 						<th>状态</th>
@@ -101,10 +108,16 @@
 				</thead>
 				<tbody class="T-part-group-list">
 					<tr>
+						<td>
+							<div class="hct-input-group col-xs-12">
+								<input type="text" class="col-xs-12" readonly>
+								<span class="hct-group-add cursor T-action T-search-line">[搜索]</span>
+							</div>
+						</td>
+						<td><input type="text" class="col-xs-12 datepicker"></td>
+						<td><input type="text" class="col-xs-12 datepicker"></td>
 						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12 datepicker"></td>
-						<td><input type="text" class="col-xs-12 datepicker"></td>
-						<td><input type="text" class="col-xs-12 T-action T-money"></td>
+						<td><input type="text" class="col-xs-12" readonly></td>
 						<td><input type="text" class="col-xs-12 T-action T-hotel"></td>
 						<td>
 							<label><input checked="checked" type="checkbox" class="ace" ><span class="lbl"></span></label>
@@ -133,10 +146,10 @@
 					<tr>
 						<th width="100">送离时间</th>
 						<th>班次</th>
-						<th>金额</th>
 						<th>车</th>
 						<th>房</th>
 						<th>它</th>
+						<th>送团小计</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -144,10 +157,10 @@
 					<tr>
 						<td><input type="text" class="col-xs-12 datepicker"></td>
 						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12 T-action T-money"></td>
 						<td><input type="text" class="col-xs-12 T-action T-bug"></td>
 						<td><input type="text" class="col-xs-12 T-action T-hotel"></td>
 						<td><input type="text" class="col-xs-12 T-action T-other"></td>
+						<td><input type="text" class="col-xs-12"></td>
 						<td>
 							<a class="cursor T-action">删除</a>
 						</td>
