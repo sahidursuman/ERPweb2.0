@@ -128,7 +128,17 @@
                                         <td>
                                             {{if bus.isNeedArriveService == 1}}{{ bus.arriveRequire}} {{else if  bus.isNeedLeaveService == 1 }}{{bus.arriveRequire}}{{/if}}
                                         </td>
-                                 
+                                        <td>
+                                            <p>
+                                               {{if bus.isNeedArriveService == 1}}
+                                                    {{if bus.leaveArrangeResuleList.length == 0}}{{else}}
+                                                    {{bus.leaveArrangeResuleList.busCompanyName}}{{/if}}
+                                               {{else if bus.isNeedLeaveService == 1}}
+                                                   {{if bus.leaveArrangeResuleList.length == 0}}{{else}}
+                                                   {{bus.leaveArrangeResuleList.busCompanyName}}{{/if}}
+                                               {{/if}}
+                                            </p>
+                                        </td>
                                         <td>
                                             {{if bus.status == 1}}
                                                 <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
