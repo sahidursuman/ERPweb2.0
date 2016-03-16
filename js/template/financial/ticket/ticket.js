@@ -417,7 +417,6 @@ define(function(require, exports) {
 					Ticket.$clearingTab.data('next',args);
 				}
 				
-				
 				// 绑定翻页组件
 				laypage({
 				    cont: Ticket.$clearingTab.find('.T-pagenation'), 
@@ -425,6 +424,9 @@ define(function(require, exports) {
 				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) { 
+				    		Ticket.payingJson = FinancialService.clearSaveJson(Ticket.$clearingTab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));	
+				    		console.log("clearingList");
+				    		console.log(Ticket.payingJson);
 				    		Ticket.$clearingTab.data('isEdited',false);
 				    		args.pageNo = obj.curr -1;
 				    		Ticket.getOperationList(args,Ticket.$clearingTab);
@@ -449,6 +451,7 @@ define(function(require, exports) {
             Ticket.savePayingData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
+        	Ticket.payingJson = [];
             Ticket.clearingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -457,6 +460,10 @@ define(function(require, exports) {
                 return;
             }
             Ticket.savePayingData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Ticket.payingJson = [];
         });
 
         FinancialService.initPayEvent($tab);
@@ -532,7 +539,6 @@ define(function(require, exports) {
 
         Ticket.getOperationList(args, $tab);
         FinancialService.updateSumPayMoney($tab, new FinRule(Ticket.isBalanceSource ? 3 : 1));
-        $tab.data("isEdited",true);
     };
     /**
      * 获取付款列表数据
@@ -556,7 +562,9 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                    	Ticket.payingJson = data.autoPaymentJson;
+                    	if(args.isAutoPay == 1){
+                    		Ticket.payingJson = data.autoPaymentJson;
+                    	}
                     	data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
                     	data.financialTicketList = FinancialService.getTempDate(data.financialTicketList, Ticket.payingJson);
                     	var html = payingTableTemplate(data);
@@ -575,7 +583,12 @@ define(function(require, exports) {
 						    curr: (data.searchParam.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		Ticket.getOperationList(obj.curr -1);
+						    		Ticket.payingJson = FinancialService.clearSaveJson($tab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));
+						    		console.log("getOperationList");
+						    		console.log(Ticket.payingJson);
+						    		$tab.data('isEdited',false);
+						    		args.pageNo = obj.curr -1;
+						    		Ticket.getOperationList(args,$tab);
 						    	}
 						    }
 						});	
@@ -598,44 +611,40 @@ define(function(require, exports) {
         if(!FinancialService.isClearSave($tab)){
             return false;
         }
-        console.log(Ticket.payingJson);
 		var argLen = arguments.length,
 			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
-		if (json && json.length) {
-			var payType = $tab.find('.T-sumPayType').val(),
-				argsData = {
-	                ticketId: Ticket.clearingId,
-	                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
-	                payType: payType,
-	                payRemark: $tab.find('.T-sumRemark').val(),
-	                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
-	                voucher : $tab.find('input[name=credentials-number]').val(),
-	                billTime : $tab.find('input[name=tally-date]').val()
-				}
-            $.ajax({
-                    url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
-                    type: 'post',
-                    data: {
-                    	searchParam : JSON.stringify(argsData),
-                    	ticketJson : JSON.stringify(json)
-                    },
-                })
-                .done(function(data) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                    	$tab.data('isEdited', false);
-                    	Ticket.payingJson = [];
-                        if (argLen === 1) {
-                        	Ticket.getList(Ticket.listPageNo);
-                        } else if(argLen === 2){
-                            Ticket.clearingList(args,$tab);
-                        } else if(argLen === 3){
-                        	Ticket.clearingList(args,$tab);
-                        }
-                    })
-                });
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
-        }
+		if (!json) { return false; }
+		var payType = $tab.find('.T-sumPayType').val(),
+			argsData = {
+                ticketId: Ticket.clearingId,
+                sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),
+                payType: payType,
+                payRemark: $tab.find('.T-sumRemark').val(),
+                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
+			}
+        $.ajax({
+            url: KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountSettlement'),
+            type: 'post',
+            data: {
+            	searchParam : JSON.stringify(argsData),
+            	ticketJson : JSON.stringify(json)
+            },
+        })
+        .done(function(data) {
+            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            	$tab.data('isEdited', false);
+            	Ticket.payingJson = [];
+                if (argLen === 1) {
+                	Ticket.getList(Ticket.listPageNo);
+                } else if(argLen === 2){
+                    Ticket.clearingList(args,$tab);
+                } else if(argLen === 3){
+                	Ticket.clearingList(args,$tab);
+                }
+            })
+        });
 	};
 	//暴露方法
 	exports.init = Ticket.initModule;
