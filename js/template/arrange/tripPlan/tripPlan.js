@@ -554,11 +554,15 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find('.datepicker'), true);
         tripPlan.setExecuteTimer($tab);
         $tab.find('[name="startTime"]').off('changeDate').on('changeDate', function(){
-            F.arrangeDate($tab);
+            //F.arrangeDate($tab);
+            if (!$(this).data('clicked') && $(this).data('add')) {
+                F.arrangeDate($tab);
+            }
             F.calcWhicDay($tab);
             if (!!$tab.find('[name=startTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
                 $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
             }
+            $(this).data("clicked",true);
         }).trigger('change'); 
         F.arrangeDate($tab);
         $tab.off('changeDate.whichDayDate').on('changeDate.whichDayDate', '[name=whichDayDate]', function() {
@@ -1171,13 +1175,13 @@ define(function(require, exports) {
                 for(var i=0; i<data.dayList.length; i++){
                     data.dayList[i].dayInfo = JSON.parse(data.dayList[i].dayInfo);
                     var arrangeData = data.dayList[i].arrangeData;
-                    arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);
-                    arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);
-                    arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);
-                    arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);
-                    arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);
-                    arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);
-                    arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);
+                    if (arrangeData.hotelArrangeList) {arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);}
+                    if (arrangeData.otherArrangeList) {arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);}
+                    if (arrangeData.restaurantArrangeList) {arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);}
+                    if (arrangeData.scenicArrangeList) {arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);}
+                    if (arrangeData.selfPayArrangeList) {arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);}
+                    if (arrangeData.shopArrangeList) {arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);}
+                    if (arrangeData.ticketArrangeList) {arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);}
                 }
                 data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
                 data.guideArrange = JSON.parse(data.guideArrange);

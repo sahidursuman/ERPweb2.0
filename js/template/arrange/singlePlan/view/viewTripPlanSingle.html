@@ -233,16 +233,17 @@
 				<ul class="nav nav-tabs">
 				{{each dayList as days index}}
                     <li {{if index == 0}}class="active"{{/if}}>
-                        <a aria-expanded="true" data-toggle="tab" href="#planDayListViewSingle-{{days.dayInfo.whichDay}}" style="text-align:center;width:140px;"> 
-							{{tripPlan.startTime | getDateText: days.dayInfo.whichDay}}
+                        <a aria-expanded="true" data-toggle="tab" href="#planDayListViewSingle-{{days.whichDay}}" style="text-align:center;width:140px;"> 
+							{{tripPlan.startTime | getDateText: days.whichDay}}
 						</a>
                     </li>
                 {{/each}}
                 </ul>
                 <div class="tab-content" style="border: none;">
                 {{each dayList as days index}}
-					<div id="planDayListViewSingle-{{days.dayInfo.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
+					<div id="planDayListViewSingle-{{days.whichDay}}" class="tab-pane fade {{if index == 0}}active in{{/if}}">
 						<div class="clearfix">
+							{{if days.dayInfo}}
 							<div class="pull-left mar-r-10">
 								<label class="control-label">简要行程：</label>
 								<label class="control-label">{{days.dayInfo.title}}</label>
@@ -259,8 +260,10 @@
 								<label class="control-label">景点：</label>
 								<label class="control-label">{{days.dayInfo.scenicItemNames}}</label>
 							</div>
+							{{/if}}
 						</div>
 						<div class="timeline-container">
+							{{if days.arrangeData.restaurantArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -309,6 +312,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.hotelArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -359,6 +364,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.scenicArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -411,6 +418,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.ticketArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -465,6 +474,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.shopArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -490,7 +501,15 @@
 															<td>{{if rs.shop}}{{rs.shop.name}}{{/if}}</td>
 															<td>{{if rs.shop}}{{rs.shop.managerName}}{{/if}}</td>
 															<td>{{if rs.shop}}{{rs.shop.mobileNumber}}{{/if}}</td>
-															<td>{{if rs.shopPolicy}}{{rs.shopPolicy.name}}{{/if}}</td>
+															<td>
+																{{if rs.shopArrangeItemSet}}
+																	{{each rs.shopArrangeItemSet as item}}
+																		{{if item.shopPolicy}}
+																			{{item.shopPolicy.name}}、
+																		{{/if}}
+																	{{/each}}
+																{{/if}}
+															</td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -501,6 +520,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.selfPayArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -551,6 +572,8 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
+							{{if days.arrangeData.otherArrangeList}}
 							<div class="timeline-items scheduleListContainer">
 								<div class="timeline-item clearfix viewLineProductDaysDetail">
 									<div class="timeline-info" style="color:#1fade0;margin-left: 5px;">
@@ -597,6 +620,7 @@
 									</div>
 								</div>
 							</div>
+							{{/if}}
 						</div>
 					</div>
 					{{/each}}
