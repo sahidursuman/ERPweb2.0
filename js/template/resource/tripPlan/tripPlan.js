@@ -29,7 +29,8 @@ define(function(require, exports) {
 	 */
 	var tripPlan = {
 		$tab: false,
-		$searchArea: false
+		$searchArea: false,
+		dayWhich:''
 	},
 		autocompleteData = {};
 	//初始化发团安排模块
@@ -64,14 +65,12 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		var $searchArea = tripPlan.$searchArea.on('change', 'input, select', function(event) {
+		var $searchArea = tripPlan.$searchArea.on('change', 'select, input', function(event) {
 			event.preventDefault();
 			var $that = $(this);
-
 			if ($that.is('select[name="arrangeItem"]')) {
 				$searchArea.find('#arrangeItemStatus').val('');
 			}
-
 			if ($that.is('select[name="tripPlanItem"]')) {
 				$searchArea.find('#tripPlanItemStatus').toggleClass('hidden', $that.val() != '0').val('');
 			}
@@ -88,8 +87,11 @@ define(function(require, exports) {
 
 		//查询条件 autocomplete
 		tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), autocompleteData.lineProductList, 'lineProductName', 'lineProductId');
-		tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), autocompleteData.dutyOPUserList, 'dutyOPUserName', 'dutyOPUserId');
+		//tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), autocompleteData.dutyOPUserList, 'dutyOPUserName', 'dutyOPUserId');
 		tripPlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), autocompleteData.businessGroupList, 'businessGroupName', 'businessGroupId');
+
+		//责任计调
+		tripPlan.getDutyOPUserList($searchArea.find('[name=dutyOPUserName]'));
 
 		tripPlan.$tab.find('.T-tripPlanList').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -427,6 +429,7 @@ define(function(require, exports) {
 						data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 						data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 						data.tarId = tabId;
+						tripPlan.dayWhich = data.dayWhich;
 
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
@@ -1647,14 +1650,22 @@ define(function(require, exports) {
 	//第N天
 	tripPlan.setChooseDays = function(id){
 		var days = tripPlan.$editTab.find(".T-days").text()*1,
-			startTime = tripPlan.$editTab.find('.T-startTime').text();
+			startTime = tripPlan.dayWhich.startTime,
+			endTime = tripPlan.dayWhich.startTime;
+		tripPlan.dayWhich.whichDay.push(1);
+		tripPlan.dayWhich.whichDay.push(Tools.getDateDiff(startTime,endTime) + 1)
+		console.log(tripPlan.dayWhich)
+		var max = Math.max.apply(Math,tripPlan.dayWhich.whichDay) - 1,
+			min = Math.min.apply(Math,tripPlan.dayWhich.whichDay) - 1;
+			console.log(max + ',' + min)
 		if(parseInt(days) < 1)return;
 
 		if(id){
 			var tr = $("#"+id+" tbody tr");
 			var selectText = '<select class="w-100" name="whichDay">';
-			for(var i = 0; i < days; i++){
+			for(var i = min; i <= max; i++){
 				selectText += '<option value="'+(i+1)+'">'+ Tools.addDay(startTime, i) +'</option>';
+				console.log(Tools.addDay(startTime, i))
 			}
 			selectText += '</select>';
 			tr.eq(tr.length-1).find(".T-whichDaysContainer").html(selectText);
@@ -1662,7 +1673,7 @@ define(function(require, exports) {
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
 				var val = $(this).attr("value");
 				var selectText = '<select class="w-100" name="whichDay">';
-				for(var i = 0; i < days; i++){
+				for(var i = min; i <= max; i++){
 					if(val == (i+1)){
 						selectText += '<option value="'+(i+1)+'" selected="selected">'+ Tools.addDay(startTime, i) +'</option>';
 					}else{
@@ -1757,6 +1768,9 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('div');
 				parents.find("input[name="+inputIdName+"]").val(ui.item.id);
+				if ($this.attr('name')==='businessGroupName') {
+					$this.closest('.form-inline').find('[name=dutyOPUserName]').val('').trigger('change');
+				}
 			}
 		}).on('click', function() {
 			var $this = $(this),
@@ -1777,6 +1791,49 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+    /**
+     * getDutyOPUserList 根据业务部门获取责任计调
+     * @param  {[type]} $chooseObj [description]
+     * @return {[type]}            [description]
+     */
+	tripPlan.getDutyOPUserList = function($chooseObj) {
+        $chooseObj.autocomplete({
+            minLength: 0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    $(this).val('').nextAll('[name=dutyOPUserId]').val('');
+                }
+            },
+            select :function(event, ui){
+                $(this).val(ui.item.realName).nextAll('[name=dutyOPUserId]').val(ui.item.id);
+            }
+        }).off('click').on('click', function() {
+            $.ajax({
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
+                type: "POST",
+                data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupId]').val(),
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var jsonList = data.outOPUsers;
+                        if (jsonList != null && jsonList.length > 0) {
+                            for (var i = 0; i < jsonList.length; i++) {
+                                jsonList[i].value = jsonList[i].realName;
+                            }
+                            $chooseObj.autocomplete('option','source', jsonList);
+                            $chooseObj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', $chooseObj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        })
+    };
 
 	/**
 	 * 发团安排编辑页面所有的autocomplete
