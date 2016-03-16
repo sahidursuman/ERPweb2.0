@@ -762,7 +762,7 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                     	data.touristGroupList = JSON.parse(data.touristGroupList || false) || [];
-                        Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
+                        Tools.addTab(menuKey + "-costDetail", "导游报账表", costDetailTemplate(data));
                         var $tab = $("#tab-" + menuKey + "-costDetail-content");
                         //查看图片事件
                         $tab.find(".T-view-bill").on('click',function(){

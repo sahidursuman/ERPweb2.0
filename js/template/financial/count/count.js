@@ -3590,12 +3590,14 @@ define(function(require, exports){
 	Count.setChooseDays = function($obj,$parentObj,type){
 		var days = $parentObj.find('.T-ProductDays').text();
 		var startTime = $parentObj.find('.tripPlanStartTime').val();
+		var minDay = parseInt($parentObj.find('[name=minDay]').val());
+		var maxDay = parseInt($parentObj.find('[name=maxDay]').val());
         if(parseInt(days) < 1)return;
         if($obj){
             var tr = $obj.find("tr");
             var selectText = '<select class="col-sm-12" name="whichDay">';
-            for(var i = 0; i < parseInt(days); i++){
-                selectText += '<option value="'+(i+1)+'">'+Tools.addDay(startTime, i)+'</option>';
+            for(var i = minDay; i <= maxDay; i++){
+                selectText += '<option value="'+(i)+'">'+Tools.addDay(startTime, i-1)+'</option>';
             }
             selectText += '</select>';
             if(!!type){
@@ -3608,7 +3610,7 @@ define(function(require, exports){
             $("td.whichDaysContainer").each(function(index){
                 var val = $(this).attr("value");
                 var selectText = '<select class="col-sm-12" name="whichDay">';
-                for(var i = 0; i < parseInt(days); i++){
+                for(var i = minDay; i < maxDay; i++){
                     if(val == (i+1)){
                         selectText += '<option value="'+(i+1)+'" selected="selected">'+Tools.addDay(startTime, i)+'</option>';
                     }else{
