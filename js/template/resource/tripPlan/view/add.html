@@ -103,8 +103,7 @@
                     <th class="th-border">收客单号</th>
                     <th class="th-border">客户</th>
                     <th class="th-border">线路产品</th>
-                    <th class="th-border">联系人</th>
-                    <th class="th-border">联系电话</th>
+                    <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
                     <th class="th-border">住宿标准</th>
@@ -119,10 +118,9 @@
                 {{if !!touristGroupList}} {{each touristGroupList as group}}
                 <tr data-id="{{group.id}}">
                     <td>{{group.orderNumber}}</td>
-                    <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+                    <td name="travelAgencyName" title="{{if group.partnerAgencyContact}}联系人：{{group.partnerAgencyContact.contactRealname}}，电话：{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
-                    <td name="contactMemberName">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactRealname}}{{/if}}</td>
-                    <td name="contactMemberMobileNumber">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+                    <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
