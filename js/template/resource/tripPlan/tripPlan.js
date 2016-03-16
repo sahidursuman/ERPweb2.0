@@ -65,7 +65,7 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		var $searchArea = tripPlan.$searchArea.on('change', 'select, input', function(event) {
+		var $searchArea = tripPlan.$searchArea.on('change', 'select', function(event) {
 			event.preventDefault();
 			var $that = $(this);
 			if ($that.is('select[name="arrangeItem"]')) {
