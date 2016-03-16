@@ -281,7 +281,7 @@
 				{{each dayList as days index}}
                     <li {{if index == 0}}class="active"{{/if}}>
                         <a aria-expanded="true" data-toggle="tab" href="#planDayListViewGroup-{{days.dayInfo.whichDay}}" style="text-align:center;width:140px;"> 
-							第{{days.dayInfo.whichDay}}天
+							{{tripPlan.startTime | getDateText: days.dayInfo.whichDay}}
 						</a>
                     </li>
                 {{/each}}
