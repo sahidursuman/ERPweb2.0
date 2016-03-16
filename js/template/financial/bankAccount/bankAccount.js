@@ -32,6 +32,10 @@ define(function(require,exports){
 					//设置记录数
 					var recordSize = Tools.getRecordSizeDesc(data.recordSize);
 					$listTab.find('.recordSize').text(recordSize);
+					$listTab.find('.T-refresh').on('click', function() {
+						args.pageNo = 0;
+						BankAccount.listBank(args);
+					})
 					//绑定分页插件
 					laypage({
 					    cont: $listTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,

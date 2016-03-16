@@ -535,7 +535,15 @@
 															<td>{{if rs.shop}}{{rs.shop.name}}{{/if}}</td>
 															<td>{{if rs.shop}}{{rs.shop.managerName}}{{/if}}</td>
 															<td>{{if rs.shop}}{{rs.shop.mobileNumber}}{{/if}}</td>
-															<td>{{if rs.shopPolicy}}{{rs.shopPolicy.name}}{{/if}}</td>
+															<td>
+																{{if rs.shopArrangeItemSet}}
+																	{{each rs.shopArrangeItemSet as item}}
+																		{{if item.shopPolicy}}
+																			{{item.shopPolicy.name}}、
+																		{{/if}}
+																	{{/each}}
+																{{/if}}
+															</td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
