@@ -1651,7 +1651,7 @@ define(function(require, exports) {
 	tripPlan.setChooseDays = function(id){
 		var days = tripPlan.$editTab.find(".T-days").text()*1,
 			startTime = tripPlan.dayWhich.startTime,
-			endTime = tripPlan.dayWhich.startTime;
+			endTime = tripPlan.dayWhich.endTime;
 		tripPlan.dayWhich.whichDay.push(1);
 		tripPlan.dayWhich.whichDay.push(Tools.getDateDiff(startTime,endTime) + 1)
 		console.log(tripPlan.dayWhich)
