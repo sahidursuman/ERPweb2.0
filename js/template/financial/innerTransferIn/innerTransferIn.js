@@ -450,7 +450,7 @@ define(function(require, exports) {
         FinancialService.closeTab(menuKey + (type == 1 ? "-checking" : "-clearing") );
 
         //查看游客小组
-        $tab.on("click",".T-action",function(){
+        $tab.off('click.action').on("click.action",".T-action",function(){
             var $this = $(this),
                 id = $this.closest('tr').data('id');
             if($this.hasClass('T-seeGroup')){

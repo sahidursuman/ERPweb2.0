@@ -224,7 +224,8 @@ define(function(require, exports) {
 
 		$tab.find(".T-btn-search").off().on('click', function(event){
 			event.preventDefault();
-			Ticket.checkingList({pageNo : 0},$tab);
+			args.pageNo = 0;
+			Ticket.checkingList(args,$tab);
 		});
 
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
