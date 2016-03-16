@@ -87,7 +87,7 @@ define(function(require, exports) {
 
 		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
 		Tools.setDatePicker($datepicker, true);
-		$searchArea.find('.T-btn-search').on('click', function(event) {
+		$searchArea.find('.T-btn-search').off().on('click', function(event) {
 			event.preventDefault();
 			Replace.getList();
 		});
@@ -110,7 +110,8 @@ define(function(require, exports) {
 					partnerAgencyId : $that.closest('tr').data('id'), 
 					name : $that.closest('tr').data('name'),
 					startDate : args.startDate,
-					endDate : args.endDate					
+					endDate : args.endDate,
+					accountStatus : args.accountStatus				
 				};
 			if ($that.hasClass('T-checking'))  {
 				// 对账
@@ -273,6 +274,7 @@ define(function(require, exports) {
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             if (!isCheck) {
+            	Replace.payingJson = [];
 				Replace.balanceList($tab.data('next'));
             }else{
             	Replace.checkingList($tab.data('next'));
@@ -286,6 +288,12 @@ define(function(require, exports) {
         	}else{
             	Replace.savePayingData($tab);
         	}
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(!isCheck){
+                Replace.payingJson = [];
+            }
         });
 		//搜索
 		var $searchArea = $tab.find('.T-search-area'),
@@ -294,7 +302,7 @@ define(function(require, exports) {
 		Replace.chooseOrder($searchArea.find('.T-search-order'));
 		Replace.chooseProject($searchArea.find('.T-search-project'));
 
-		$searchArea.find('.T-btn-search').on('click', function(event){
+		$searchArea.find('.T-btn-search').off().on('click', function(event){
 			event.preventDefault();
 			if(isCheck){
 				Replace.checkingList({pageNo : 0});
@@ -355,7 +363,7 @@ define(function(require, exports) {
 	        });
         }
         FinancialService.closeTab(oMenuKey);
-		$tab.find('.T-saveClear').on('click', function(event){
+		$tab.find('.T-saveClear').off().on('click', function(event){
 			if (!validatorCheck.form()) {
                 return;
             }
@@ -388,7 +396,7 @@ define(function(require, exports) {
 		});
 
 		if(!isCheck){
-			$tab.find('.T-btn-autofill').on('click', function(event){
+			$tab.find('.T-btn-autofill').off().on('click', function(event){
 				event.preventDefault();
 				var $that = $(this);
 
@@ -525,6 +533,9 @@ define(function(require, exports) {
 					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
 					html = payingTableTemplate(data);
 					Replace.$balanceTab.find('.T-clearList').html(html);
+					if(Replace.payingJson){
+						Replace.$balanceTab.data('isEdited',true);
+					}
 					Replace.CM_event(Replace.$balanceTab,args,false);
 
                     // 设置记录条数及页面
@@ -538,6 +549,7 @@ define(function(require, exports) {
 					    curr: (data.searchParam.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
 					    		Replace.$balanceTab.data('isEdited',false);
 					    		Replace.getOperationList({pageNo : obj.curr -1},$tab);
 					    	}
@@ -707,6 +719,7 @@ define(function(require, exports) {
 
 
 	Replace.balanceList = function(args){
+		console.log(Replace.$balanceTab);
 		if(!!Replace.$balanceTab){
 			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
 			var order = Replace.$balanceTab.find(".T-search-order").val();
@@ -767,8 +780,10 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+				    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
 				    		Replace.$balanceTab.data('isEdited',false);
-				    		Replace.balanceList({pageNo : obj.curr -1});
+				    		args.pageNo = obj.curr -1;
+				    		Replace.getOperationList(args,Replace.$balanceTab);
 				    	}
 				    }
 				});	

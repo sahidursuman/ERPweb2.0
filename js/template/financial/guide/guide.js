@@ -627,6 +627,13 @@ define(function(require, exports) {
                             data.isOuter = FinGuide.isOuter;
                             if($tab.find('.T-saveClear').data('borrow') == "borrow" || FinGuide.payingJson.length > 0){
                                 data.isPayMoney = true;
+                                var sumPayMoney = 0;
+                                for(var i = 0; i < data.list.length; i++){
+                                    if(data.list[i].payMoney && data.list[i].payMoney != 0){
+                                        sumPayMoney = sumPayMoney + data.list[i].payMoney*1;
+                                    }
+                                }
+                                $tab.find('.T-sumPayMoney').val(sumPayMoney);
                             }
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
