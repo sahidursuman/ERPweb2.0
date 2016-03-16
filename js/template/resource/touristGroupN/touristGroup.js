@@ -2,12 +2,14 @@ define(function(require, exports) {
 	//key
 	var K = {
 			menu : "resource_touristGroup",
-			update : "resource_touristGroup_update"
+			update : "resource_touristGroup_update",
+            add : "resource_touristGroup_add"
 		},
 		//模板文件
 		T = {
 			list : require('./view/list'),//列表页
 			listTable : require('./view/listTable'),//列表页表格
+            add : require('./view/add'),//新增页面
 			update : require('./view/update'),//编辑页面
             chooseClient : require('./view/chooseClient'),//选择客户
             chooseClientList : require('./view/chooseClientList'),//选择客户列表
@@ -160,11 +162,37 @@ define(function(require, exports) {
     touristGroup.init_events = function($tab){
     	var $searchArea = $tab.find(".T-search-area");
     	$searchArea.find('.T-choosePorB').on('change', function() {
-
+            var $that = $(this), val = $(this).val();
+            $searchArea.find('.T-choosePAB, .T-PorB').addClass('hidden');
+            if(val == "0"){
+                $searchArea.find('.T-choosePAB').removeClass('hidden');
+            }else if(val == "1"){
+                $searchArea.find('.T-choosePartnerAgency').removeClass('hidden');
+            }else if(val == "2"){
+                $searchArea.find('.T-chooseBussinessGroup').removeClass('hidden');
+            }
         });
+        //搜索
+        $searchArea.find('.T-touristGroupList-search').on('click', function(){
+            var args = {
+                pageNo : 0,
+                orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                type : $searchArea.find('.T-choosePorB').val(),
+                lineProductName: $searchArea.find('[name="lineProductName"]').val(),
+                lineProductId: $searchArea.find('[name="lineProductId"]').val(),
+                fromBussinessGroupName : $searchArea.find('[name="fromBussinessGroupName"]').val(),
+                fromBussinessGroupId: $searchArea.find('[name="fromBussinessGroupId"]').val(),
+                fromPartnerAgencyName: $searchArea.find('[name="fromPartnerAgencyName"]').val(),
+                fromPartnerAgencyId: $searchArea.find('[name="fromPartnerAgencyId"]').val(),
+                customerType : $searchArea.find('[name="customerType"]').val()
+            }
+            touristGroup.getList(args, $tab);
+        });
+        //绑定日期事件
+        Tools.setDatePicker($searchArea.find('.datepicker'));
         //添加游客小组事件
         $tab.find('.T-touristGroup-add').on('click', function(){
-            touristGroup.touristGroupUpdate();
+            touristGroup.addTouristGroup();
         });
         //表内操作
     	$tab.find('.T-touristGroup').on('click', '.T-action', function(event){
@@ -172,10 +200,23 @@ define(function(require, exports) {
     		var $that = $(this), id = $that.closest('tr').data('id');
     		if($that.hasClass('T-edit')){
     			touristGroup.touristGroupUpdate(id);
-    		}
+    		}else if($that.hasClass('T-view')){
+
+            }else if($that.hasClass('T-del')){
+
+            }
     	});
 
     	return this;
+    };
+
+    /**
+     * 新增游客小组
+     */
+    touristGroup.addTouristGroup = function(){
+        if (Tools.addTab(K.add , '新增小组', T.add())) {
+            touristGroup.commonEvents($("#tab-" + K.add + "-content"));
+        }
     };
 
     /**
@@ -301,11 +342,14 @@ define(function(require, exports) {
                 touristGroup.getClientList(0, $layer);
                 $layer.find('.T-btn-search').on('click', function(){
                     var args = {
-                        pageNo : page || 0,
+                        pageNo : 0,
                         travelAgencyName : $layer.find('[name="travelAgencyName"]').val(),
                         contactRealname : $layer.find('[name="contactRealname"]').val()
                     };
                     touristGroup.getClientList(args)
+                });
+                $layer.find('.T-btn-save').on('click', function(){
+                    $layer.find('.T-client-list').find('[name="chooseClient"]').is(':checked');
                 });
             }
         });
