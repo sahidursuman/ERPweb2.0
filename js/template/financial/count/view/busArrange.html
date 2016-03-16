@@ -95,9 +95,15 @@
             </select>
             &nbsp;
             <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
-            {{if busCompany.billUpdateTime != null}}{{if busCompany.realPayType == 2}}value="{{busCompany.realSignMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}"{{/if}}{{else}}
-            {{if busCompany.realPayType == 2}}value="{{busCompany.realSignMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}" {{/if}}
-            {{/if}} 
+            {{if busCompany.realPayType==2 }}
+                value="{{busCompany.realSignMoney}}" 
+            {{else}}
+                {{if !!busCompany.billUpdateTime}} 
+                    value="{{busCompany.realGuidePayMoney}}" 
+                {{else}}
+                    value="{{busCompany.guidePayMoney}}" 
+                {{/if}} 
+            {{/if}}
             old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
                 <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></div></td>
