@@ -196,7 +196,7 @@ define(function(require, exports) {
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
             args.pageNo = 0 ;
-            restaurant.restaurantCheck(args);
+            restaurant.restaurantCheck(args,$tab);
         });
         
         //导出报表事件 btn-hotelExport
