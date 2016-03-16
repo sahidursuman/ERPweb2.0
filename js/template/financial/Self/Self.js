@@ -192,7 +192,8 @@ define(function(require, exports) {
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
-            Self.Getcheck(0,id,name);
+            args.pageNo = 0;
+            Self.Getcheck(args,$tab);
         });
 
         //导出报表事件 btn-hotelExport
