@@ -8,14 +8,10 @@ define(function(require, exports) {
         ViewAmountPaidTemplate = require("./view/ViewAmountPaid"),
         viewOrderDetailTemplate = require("./view/viewOrderDetail"),
         viewImgCheckingTemplate = require("./view/viewImgChecking"),
-        checkTabId = menuKey + "-checking",
-        tabId = "tab-" + menuKey + "-content",
-        PaymentTabId = menuKey + "-Payment";
+        tabId = "tab-" + menuKey + "-content";
     var OtherAccounts = {
         $searchArea: false,
-        $checkSearchArea: false,
         saveJson: {},
-        $clearSearchArea: false,
         showBtnFlag: false,
         clearTempData : false,
         clearTempSumDate : false
@@ -86,7 +82,6 @@ define(function(require, exports) {
     OtherAccounts.initList = function(pageNo, name, startAccountTime, endAccountTime, accountStatus) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
-        console.log(accountStatus);
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
         OtherAccounts.getTravelAgencyList($obj);
         //搜索按钮事件
@@ -107,15 +102,21 @@ define(function(require, exports) {
         // 报表内的操作
         OtherAccounts.$tab.find('.T-other').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this);
-            var name = $(this).closest('tr').attr("data-name");
+            var $that = $(this),
+                args = {
+                    pageNo : 0 ,
+                    name : $that.closest('tr').data('name'),
+                    startAccountTime : startAccountTime,
+                    endAccountTime : endAccountTime,
+                    accountStatus : accountStatus
+                };
             if ($that.hasClass('T-checking')) {
                 //对账
-                OtherAccounts.AccountsChecking(0, name, "", startAccountTime, endAccountTime, accountStatus);
+                OtherAccounts.AccountsChecking(args);
             } else if ($that.hasClass('T-payment')) {
                 // 付款
                 OtherAccounts.showBtnFlag = false;
-                OtherAccounts.AccountsPayment(0, name, "", startAccountTime, endAccountTime, accountStatus);
+                OtherAccounts.AccountsPayment(args);
             }
         });
         var status = OtherAccounts.$tab.find(".T-finance-status");
@@ -127,57 +128,54 @@ define(function(require, exports) {
     };
 
     // 对账
-    OtherAccounts.AccountsChecking = function(pageNo, name, info, startAccountTime, endAccountTime, accountStatus) {
-
-        if (OtherAccounts.$checkSearchArea && arguments.length === 1) {
-            startAccountTime = OtherAccounts.$checkSearchArea.find(".T-startTime").val();
-            endAccountTime = OtherAccounts.$checkSearchArea.find(".T-endTime").val();
-            name = OtherAccounts.$checkSearchArea.find("input[name=itemName]").val();
-            info = OtherAccounts.$checkSearchArea.find('.T-creatorUserChoose').val();
-            accountStatus = OtherAccounts.$checkSearchArea.data('account-status');
+    OtherAccounts.AccountsChecking = function(args,$tab) {
+        if (!!$tab) {
+            args.startAccountTime = $tab.find(".T-startTime").val();
+            args.endAccountTime = $tab.find(".T-endTime").val();
+            args.name = $tab.find("input[name=itemName]").val();
+            args.info = $tab.find('.T-creatorUserChoose').val();
         }
-
-        pageNo = pageNo || 0;
-        //重置搜索条件
-        OtherAccounts.CheckingData = {
-            pageNo: pageNo,
-            name: name,
-            startAccountTime: startAccountTime,
-            endAccountTime: endAccountTime,
-            info: info,
-            accountStatus : accountStatus,
-            sortType: 'auto'
-        }
+        args.pageNo = args.pageNo || 0;
+        args.sortType = "auto";
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
-            data: OtherAccounts.CheckingData,
+            data: args,
             success: function(data) {
-                var result = showDialog(data);
-                if (result) {
+                if (showDialog(data)) {
                     var dataTable = data;
                     // 对账 
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
                         type: "POST",
-                        data: OtherAccounts.CheckingData,
+                        data: args,
                         success: function(data) {
-                            dataTable.accountStatus = accountStatus;
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
                             if (showDialog(data)) {
-                                // 切换tab内容成功
-                                if (Tools.addTab(checkTabId, "其它对账", AccountsCheckingTemplate(dataTable))) {
-                                    OtherAccounts.initCheckEvent(dataTable);
-                                } else if (OtherAccounts.$checkTab && OtherAccounts.$checkTab.length) {
-                                    OtherAccounts.$checkTab.data('next', dataTable);
+                                if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
+                                    OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                                    OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);
+                                } else{
+                                    OtherAccounts.$checkTab.data('next',args);
                                 }
-                            }
 
+                                //翻页
+                                laypage({
+                                    cont: OtherAccounts.$checkTab.find('.T-pagenation'),
+                                    pages: dataTable.totalPage,
+                                    curr: (args.pageNo + 1),
+                                    jump: function(obj, first) {
+                                        if (!first) {
+                                            OtherAccounts.$checkTab.data('isEdited',false);
+                                            args.pageNo = obj.curr - 1;
+                                            OtherAccounts.AccountsChecking(args);
+                                        }
+                                    }
+                                });
+                            }
                         }
                     })
-
-
                 }
             }
         })
@@ -188,25 +186,12 @@ define(function(require, exports) {
      * @param  {object} data 页面响应数据
      * @return {[type]}      [description]
      */
-    OtherAccounts.initCheckEvent = function(data) {
-        var $checkTab = $("#tab-" + checkTabId + "-content"),
-            checkRule = new FinRule(0);
-        OtherAccounts.$checkSearchArea = $checkTab.find('.T-search-area');
-        FinancialService.updateUnpayMoney($checkTab, checkRule);
-        //翻页
-        laypage({
-            cont: $checkTab.find('.T-pagenation'),
-            pages: data.totalPage,
-            curr: (data.pageNo + 1),
-            jump: function(obj, first) {
-                if (!first) {
-                    OtherAccounts.AccountsChecking(obj.curr - 1);
-                }
-            }
-        });
+    OtherAccounts.initCheckEvent = function(args,$tab) {
+        var checkRule = new FinRule(0);
+        FinancialService.updateUnpayMoney($tab, checkRule);
 
         // 表格内操作
-        $checkTab.find('.T-checkListNum').on('click', '.T-action', function(event) {
+        $tab.find('.T-checkListNum').on('click', '.T-action', function(event) {
             event.preventDefault();
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -226,78 +211,52 @@ define(function(require, exports) {
             }
         });
         //时间控件
-        Tools.setDatePicker(OtherAccounts.$checkSearchArea.find('.datepicker'), true);
+        Tools.setDatePicker($tab.find('.datepicker'), true);
 
         //关闭页面事
-        $checkTab.find(".T-closeTab").click(function() {
-            Tools.closeTab(checkTabId);
-        });
+        FinancialService.closeTab(menuKey + "-checking");
         // 处理关闭与切换tab
-        $checkTab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-            .on('change', '.T-checkList, .T-checkAll', function() {
-                $checkTab.data('isEdited', true);
-                if ($(this).hasClass('T-checkAll')) {
-                    $checkTab.find('.T-checkTr').data('change', true);
-                }
+        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
+            .on('change', '.T-checkList input, .T-checkAll', function() {
+                $tab.data('isEdited', true);
+                $(this).closest('tr').data('change', true);
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
-                Ticket.CheckConfirm($checkTab, [tab_id, title, html]);
+                OtherAccounts.CheckConfirm($tab,$tab.data('next'),[tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
-                Ticket.checkingList();
+                OtherAccounts.AccountsChecking($tab.data('next'),$tab);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
-                if (!validator.form()) {
-                    return;
-                }
-                Ticket.CheckConfirm($checkTab);
+                OtherAccounts.CheckConfirm($tab);
             });
-        $checkTab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-            event.preventDefault();
-            OtherAccounts.initCheckEvent(data);
-        });
-
-        //监听关闭tab
-        $checkTab.find(".T-closeTab").on('click', function(event) {
-            event.preventDefault();
-            if (!!$checkTab.data('isEdited')) {
-                showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    OtherAccounts.CheckConfirm($checkTab);
-                }, function() {
-                    Tools.closeTab(checkMenuKey);
-                    OtherAccounts.listFinancialOtherAccounts(0);
-                });
-            } else {
-                Tools.closeTab(checkMenuKey);
-                OtherAccounts.listFinancialOtherAccounts(0);
-            }
-        });
 
         //对账保存
-        $checkTab.find(".T-confirm").click(function(event) {
-            OtherAccounts.CheckConfirm(data.searchParam.name, OtherAccounts.$checkTab);
+        $tab.find(".T-confirm").click(function(event) {
+            FinancialService.changeUncheck($tab.find('.T-checkList tr'),function(){
+                OtherAccounts.CheckConfirm($tab,args);
+            });
         });
         //对账搜索
-        $checkTab.find('.T-search').click(function(event) {
-            OtherAccounts.AccountsChecking(0);
+        $tab.find('.T-search').click(function(event) {
+            args.pageNo = 0;
+            OtherAccounts.AccountsChecking(args,$tab);
         });
 
         //导出报表事件 btn-hotelExport
-        $checkTab.find(".T-btn-export").click(function(){
-            var args = { 
-                    name: $checkTab.find('input[name=itemName]').val(),
-                    info: $checkTab.find('.T-creatorUserChoose').val(),
-                    startAccountTime: $checkTab.find('.T-startTime').val(),
-                    endAccountTime: $checkTab.find('.T-endTime').val()
+        $tab.find(".T-btn-export").click(function(){
+            var argsData = { 
+                    name: args.name,
+                    info: $tab.find('.T-creatorUserChoose').val(),
+                    startAccountTime: $tab.find('.T-startTime').val(),
+                    endAccountTime: $tab.find('.T-endTime').val()
                 };
-            FinancialService.exportReport(args,"exportArrangeOtherFinancial");
+            FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });
         //给全选按钮绑定事件
-        FinancialService.initCheckBoxs($checkTab.find('.T-selectAll'), $checkTab.find('.T-Accounts').find('input[type="checkbox"]'));
-
-        OtherAccounts.$checkTab = $checkTab;
+        FinancialService.initCheckBoxs($tab.find('.T-selectAll'), $tab.find('.T-checkList input[type="checkbox"]'));
     };
     /**
      * 获取其它账务list列表
@@ -341,67 +300,43 @@ define(function(require, exports) {
     };
 
     // 保存对账 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
-    OtherAccounts.CheckConfirm = function(name, $checkTab, tabArgs) {
+    OtherAccounts.CheckConfirm = function($tab,args,tabArgs) {
         var argumentLen = arguments.length
-        var json = FinancialService.checkSaveJson($checkTab, new FinRule(0));
-        if (json.length > 0) {
-            $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
-                type: "POST",
-                data: {
-                    reconciliation: json
-                },
-            }).done(function(data) {
-                if (showDialog(data)) {
-                    $checkTab.data('isEdited', false);
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (argumentLen == 2) {
-                            OtherAccounts.AccountsChecking(0);
-                        } else {
-                            if (!!tabArgs) {
-                                Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                                OtherAccounts.checkList(0);
-                            } else {
-                                Tools.closeTab(checkTabId);
-                                OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
-                            }
-                        }
-                    });
-                }
-            });
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
-        }
+        var json = FinancialService.checkSaveJson($tab, new FinRule(0));
+        if(!json){ return false; }
+        $.ajax({
+            url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
+            type: "POST",
+            data: { reconciliation: json },
+        }).done(function(data) {
+            if (showDialog(data)) {
+                $tab.data('isEdited', false);
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    if (argumentLen === 1) {
+                        Tools.closeTab(menuKey + "-checking");
+                        OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
+                    } else {
+                        OtherAccounts.AccountsChecking(args);
+                    }
+                });
+            }
+        });
     };
     //付款
-    OtherAccounts.AccountsPayment = function(pageNo, name, info, startAccountTime, endAccountTime, accountStatus) {
-        if (OtherAccounts.$clearSearchArea && arguments.length === 1) {
-            startAccountTime = OtherAccounts.$clearSearchArea.find(".T-startTime").val();
-            endAccountTime = OtherAccounts.$clearSearchArea.find(".T-endTime").val();
-            name = OtherAccounts.$clearSearchArea.find("input[name=itemName]").val();
-            info = OtherAccounts.$clearSearchArea.find('.T-creatorUserChoose').val();
-            accountStatus = OtherAccounts.$clearSearchArea.data('account-status');
+    OtherAccounts.AccountsPayment = function(args,$tab) {
+        if (!!$tab) {
+            args.startAccountTime = $tab.find(".T-startTime").val();
+            args.endAccountTime = $tab.find(".T-endTime").val();
+            args.info = $tab.find('.T-creatorUserChoose').val();
         }
-        console.log(accountStatus);
-        pageNo = pageNo || 0;
-        //重置搜索条件
-        OtherAccounts.PaymentData = {
-            pageNo: pageNo,
-            name: name,
-            info: info,
-            startAccountTime: startAccountTime,
-            endAccountTime: endAccountTime,
-            accountStatus : accountStatus,
-            sortType: 'auto'
-        };
-
+        args.pageNo = args.pageNo || 0;
+        args.sortType = "auto";
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOtherDetails"),
             type: "POST",
-            data: OtherAccounts.PaymentData,
+            data: args,
             success: function(data) {
-                var result = showDialog(data);
-                if (result) {
+                if (showDialog(data)) {
                     //暂存数据读取
                     if(OtherAccounts.saveJson){
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
@@ -411,20 +346,12 @@ define(function(require, exports) {
                         data.bankId = OtherAccounts.saveJson.bankId;
                         data.voucher = OtherAccounts.saveJson.voucher;
                         data.billTime = OtherAccounts.saveJson.billTime;
-                    } 
-                    data.accountStatus = accountStatus;
-                    if (OtherAccounts.saveJson.autoPayList) {
-                        var saveJson = OtherAccounts.saveJson.autoPayList;
-                        for (var i = 0; i < data.financialOtherDetailsList.length; i++) {
-                            for (var j = 0; j < saveJson.length; j++) {
-                                if (data.financialOtherDetailsList[i].id == saveJson[j].id) {
-                                    data.financialOtherDetailsList[i].payMoney = saveJson[j].payMoney
-                                }
-                            }
-                        }
-                    };
+
+                        data.financialOtherDetailsList = FinancialService.getTempDate(data.financialOtherDetailsList,OtherAccounts.saveJson.autoPayList);
+                    }
+                    data.financialOtherDetailsList = FinancialService.isGuidePay(data.financialOtherDetailsList);
                     //财务入口调用
-                    data.showBtnFlag = OtherAccounts.showBtnFlag
+                    data.showBtnFlag = OtherAccounts.showBtnFlag;
                     if (OtherAccounts.saveJson.btnShowStatus) {
                         data.btnShowStatus = OtherAccounts.saveJson.btnShowStatus;
                     }
@@ -433,22 +360,47 @@ define(function(require, exports) {
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
                         type: "POST",
-                        data: OtherAccounts.PaymentData,
+                        data: args,
                         success: function(data) {
                             if (showDialog(data)) {
-
                                 dataTable.statistics = data.statistics;
-                                dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
-                                if (Tools.addTab(PaymentTabId, "其它付款", AccountsPaymentTemplate(dataTable))) {
-                                    if(OtherAccounts.saveJson.btnShowStatus){
-                                        OtherAccounts.$PaymentTabId.data("isEdited",true);
+                                if (Tools.addTab(menuKey + "-clearing", "其它付款", AccountsPaymentTemplate(dataTable))) {
+                                    OtherAccounts.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+                                    if(OtherAccounts.saveJson.autoPayList){
+                                        OtherAccounts.$clearTab.data("isEdited",true);
                                     }
-                                    OtherAccounts.initPaymentEvent(dataTable);
-                                } else if (OtherAccounts.$PaymentTabId && OtherAccounts.$PaymentTabId.length) {
-                                    OtherAccounts.$PaymentTabId.data('next', dataTable);
+                                    OtherAccounts.initPaymentEvent(args,OtherAccounts.$clearTab);
+                                } else {
+                                    OtherAccounts.$clearTab.data('next',args);
                                 }
 
-
+                                //翻页
+                                laypage({
+                                    cont: OtherAccounts.$clearTab.find('.T-pagenation'),
+                                    pages: dataTable.totalPage,
+                                    curr: (args.pageNo + 1),
+                                    jump: function(obj, first) {
+                                        if (!first) {
+                                            var tempJson = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
+                                            OtherAccounts.saveJson.autoPayList = tempJson;
+                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()),
+                                                sumPayType = parseFloat(OtherAccounts.$clearTab.find('select[name=sumPayType]').val()),
+                                                sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumRemark]').val();
+                                            OtherAccounts.saveJson = {
+                                                sumPayMoney: sumPayMoney,
+                                                sumPayType: sumPayType,
+                                                sumPayRemark: sumPayRemark,
+                                                bankNo : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-number]').val() : OtherAccounts.$clearTab.find('input[name=card-number]').val(),
+                                                bankId : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-id]').val() : OtherAccounts.$clearTab.find('input[name=card-id]').val(),
+                                                voucher : OtherAccounts.$clearTab.find('input[name=credentials-number]').val(),
+                                                billTime : OtherAccounts.$clearTab.find('input[name=tally-date]').val()
+                                            }
+                                            OtherAccounts.$clearTab.data('isEdited',false);
+                                            args.pageNo = obj.curr - 1;
+                                            OtherAccounts.AccountsPayment(args);
+                                        }
+                                    }
+                                });
                             }
                         }
                     })
@@ -462,48 +414,42 @@ define(function(require, exports) {
      * @param  {object} data 页面响应数据
      * @return {[type]}      [description]
      */
-    OtherAccounts.initPaymentEvent = function(data) {
-        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
-        OtherAccounts.$PaymentTabId = $PaymentTabId;
-
-        OtherAccounts.$clearSearchArea = $PaymentTabId.find('.T-search-area');
-        var id = OtherAccounts.$PaymentTabId.find('.T-btn-save').data('id');
-        var autoValidator = new FinRule(2).check($PaymentTabId.find('.T-count'));
-        var settleValidator = data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
-        var payValidator = settleValidator.check($PaymentTabId);
-        OtherAccounts.$PaymentTabId.data('id', id);
-        if (data.btnShowStatus) {
-            $PaymentTabId.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
-            OtherAccounts.setAutoFillEdit($PaymentTabId, true);
+    OtherAccounts.initPaymentEvent = function(args,$tab) {
+        var autoValidator = new FinRule(2).check($tab.find('.T-count'));
+        var settleValidator = OtherAccounts.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
+        var payValidator = settleValidator.check($tab);
+        if (OtherAccounts.saveJson.btnShowStatus) {
+            $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
+            OtherAccounts.setAutoFillEdit($tab, true);
         }
-        OtherAccounts.$PaymentTabId.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-                OtherAccounts.saveJson = false;
-                OtherAccounts.saveJson.autoPayList = false;
-                OtherAccounts.$PaymentTabId.data("isEdited",false);
-                OtherAccounts.AccountsPayment(OtherAccounts.$PaymentTabId, id);
-            })
-            // 监听保存，并切换tab
-            .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-                event.preventDefault();
-                OtherAccounts.paysave($tab, [tab_id, title, html]);
-            })
-            // 保存后关闭
-            .on(CLOSE_TAB_SAVE, function(event) {
-                event.preventDefault();
-                OtherAccounts.paysave($tab);
-            })
-            .on(CLOSE_TAB_SAVE_NO, function(event) {
-                event.preventDefault();
-                OtherAccounts.saveJson = {};
-            });
+
+        FinancialService.updateSumPayMoney($tab, settleValidator);
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            OtherAccounts.saveJson = false;
+            OtherAccounts.saveJson.autoPayList = false;
+            OtherAccounts.AccountsPayment($tab.data('next'),$tab);
+        })
+        // 监听保存，并切换tab
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+            OtherAccounts.paysave($tab,$tab.data('next'),[tab_id, title, html]);
+        })
+        // 保存后关闭
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+            OtherAccounts.paysave($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            OtherAccounts.saveJson = {};
+        });
         //付款-自动计算本次付款总额
-        $PaymentTabId.find('.T-clearList').off('change').on('change', 'input', function() {
+        $tab.find('.T-clearList').off('change').on('change', 'input', function() {
             $(this).closest('tr').data('change', true);
-            $PaymentTabId.data("isEdited",true);
-            FinancialService.updateSumPayMoney($PaymentTabId, settleValidator);
+            $tab.data("isEdited",true);
         });
         //表格内操作
-        $PaymentTabId.find('.T-clearList').on('click', '.T-action', function(event) {
+        $tab.find('.T-clearList').on('click', '.T-action', function(event) {
             event.preventDefault();
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -513,158 +459,121 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                var bigImg = $PaymentTabId.find('input[name=WEB_IMG_URL_BIG]').val();
-                var smallImg = $PaymentTabId.find('input[name=WEB_IMG_URL_SMALL]').val();
+                var bigImg = $tab.find('input[name=WEB_IMG_URL_BIG]').val();
+                var smallImg = $tab.find('input[name=WEB_IMG_URL_SMALL]').val();
                 OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
             }
         });
-
-        FinancialService.initPayEvent($PaymentTabId.find('.T-summary'));
+        FinancialService.initPayEvent($tab);
         
         //时间控件
-        Tools.setDatePicker(OtherAccounts.$clearSearchArea.find('.datepicker'), true);
-        //翻页
-        laypage({
-            cont: $PaymentTabId.find('.T-pagenation'),
-            pages: data.totalPage,
-            curr: (data.pageNo + 1),
-            jump: function(obj, first) {
-                if (!first) {
-                    var tempJson = FinancialService.clearSaveJson($PaymentTabId, OtherAccounts.saveJson.autoPayList, new FinRule(1));
-                    OtherAccounts.saveJson.autoPayList = tempJson;
-                    var sumPayMoney = parseFloat($PaymentTabId.find('input[name=sumPayMoney]').val()),
-                        sumPayType = parseFloat($PaymentTabId.find('select[name=sumPayType]').val()),
-                        sumPayRemark = $PaymentTabId.find('input[name=sumRemark]').val();
-                    OtherAccounts.saveJson = {
-                        sumPayMoney: sumPayMoney,
-                        sumPayType: sumPayType,
-                        sumPayRemark: sumPayRemark,
-                        bankNo : (sumPayType == 0) ? $PaymentTabId.find('input[name=cash-number]').val() : $PaymentTabId.find('input[name=card-number]').val(),
-                        bankId : (sumPayType == 0) ? $PaymentTabId.find('input[name=cash-id]').val() : $PaymentTabId.find('input[name=card-id]').val(),
-                        voucher : $PaymentTabId.find('input[name=credentials-number]').val(),
-                        billTime : $PaymentTabId.find('input[name=tally-date]').val()
-                    }
-                    OtherAccounts.AccountsPayment(obj.curr - 1);
-                }
-            }
-        });
+        Tools.setDatePicker($tab.find('.datepicker'), true);
+        
         //付款搜索
-        $PaymentTabId.find('.T-paymentSearch').click(function(event) {
-            OtherAccounts.AccountsPayment(0);
+        $tab.find('.T-paymentSearch').click(function(event) {
+            args.pageNo = 0;
+            OtherAccounts.AccountsPayment(args,$tab);
         });
         //关闭页面事件
-        $PaymentTabId.find(".T-close-clear").click(function() {
-            Tools.closeTab(PaymentTabId);
-        });
+        FinancialService.closeTab(menuKey + "-clearing");
         //保存付款事件
-        $PaymentTabId.find(".T-saveClear").click(function() {
-            var check =  new FinRule(5).check($PaymentTabId);
+        $tab.find(".T-saveClear").click(function() {
+            var check =  new FinRule(5).check($tab);
             if(!check.form()){ return false; }
             if(!payValidator.form()){return;}
-            OtherAccounts.paysave(data, $PaymentTabId);
+            OtherAccounts.paysave($tab,args);
         });
         // 自动下账
-        $PaymentTabId.find(".T-clear-auto").off('click').on("click", function() {
+        $tab.find(".T-clear-auto").off('click').on("click", function() {
             var $that = $(this);
             if ($that.hasClass('btn-primary')) {
-                var sumPayMoney = parseInt($PaymentTabId.find('input[name=sumPayMoney]').val()),
-                    sumPayType = $PaymentTabId.find('select[name=sumPayType]').val(),
-                    info = $PaymentTabId.find('input[name=creator]').val(),
-                    startAccountTime = $PaymentTabId.find('.T-startTime').val(),
-                    endAccountTime = $PaymentTabId.find('.T-endTime').val(),
-                    names = $PaymentTabId.find(".T-name").text(),
+                var startAccountTime = $tab.find('.T-startTime').val(),
+                    endAccountTime = $tab.find('.T-endTime').val(),
                     $that = $(this);
-                var isAutoPay = FinancialService.autoPayJson(names, $PaymentTabId, new FinRule(2));
+                var isAutoPay = FinancialService.autoPayJson(args.name,$tab, new FinRule(2));
                 if (!isAutoPay) {
                     return false;
                 }
-
                 var searchParam = {
-                    name: names,
-                    autoPayMoney: sumPayMoney,
+                    name: args.name,
+                    autoPayMoney: parseInt($tab.find('input[name=sumPayMoney]').val()),
                     startAccountTime: startAccountTime,
                     endAccountTime: endAccountTime,
-                    info: info,
-                    payType: sumPayType
+                    info: $tab.find('input[name=creator]').val(),
+                    payType: $tab.find('select[name=sumPayType]').val(),
                 };
-                showConfirmMsg($("#confirm-dialog-message"), "是否按当前账期 " + startAccountTime + " 至 " + endAccountTime + " 下账？", function() {
+                FinancialService.autoPayConfirm(startAccountTime,endAccountTime,function() {
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "autoPayment"),
                         type: "POST",
                         data: searchParam,
                         success: function(data) {
-                            var result = showDialog(data);
-                            if (result) {
-                                OtherAccounts.$PaymentTabId.data("isEdited",false);
+                            if (showDialog(data)) {
+                                $tab.data("isEdited",false);
                                 OtherAccounts.saveJson = data;
-                                OtherAccounts.AccountsPayment(0);
+                                args.pageNo = 0;
+                                OtherAccounts.AccountsPayment(args,$tab);
                                 OtherAccounts.saveJson.btnShowStatus = true;
-                                OtherAccounts.setAutoFillEdit($PaymentTabId, true);
-                                OtherAccounts.saveJson.sumPayMoney = $PaymentTabId.find('input[name=sumPayMoney]').val();
-                                var payType = $PaymentTabId.find('select[name=sumPayType]').val();
+                                OtherAccounts.setAutoFillEdit($tab, true);
+                                OtherAccounts.saveJson.sumPayMoney = $tab.find('input[name=sumPayMoney]').val();
+                                var payType = $tab.find('select[name=sumPayType]').val();
                                 OtherAccounts.saveJson.sumPayType = payType;
-                                OtherAccounts.saveJson.sumPayRemark = $PaymentTabId.find('input[name=sumPayRemark]').val();
-                                OtherAccounts.saveJson.bankNo = (payType == 0) ? $PaymentTabId.find('input[name=cash-number]').val() : $PaymentTabId.find('input[name=card-number]').val();
-                                OtherAccounts.saveJson.bankId = (payType == 0) ? $PaymentTabId.find('input[name=cash-id]').val() : $PaymentTabId.find('input[name=card-id]').val();
-                                OtherAccounts.saveJson.voucher = $PaymentTabId.find('input[name=credentials-number]').val();
-                                OtherAccounts.saveJson.billTime = $PaymentTabId.find('input[name=tally-date]').val();
+                                OtherAccounts.saveJson.sumPayRemark = $tab.find('input[name=sumPayRemark]').val();
+                                OtherAccounts.saveJson.bankNo = (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
+                                OtherAccounts.saveJson.bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
+                                OtherAccounts.saveJson.voucher = $tab.find('input[name=credentials-number]').val();
+                                OtherAccounts.saveJson.billTime = $tab.find('input[name=tally-date]').val();
                             }
                         }
                     });
                 });
             } else {
-                OtherAccounts.setAutoFillEdit($PaymentTabId, false);
+                OtherAccounts.AccountsPayment(args,$tab);
             }
         });
     };
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
-    OtherAccounts.paysave = function(data, tabid, title, html) {
-        var $PaymentTabId = $("#tab-" + PaymentTabId + "-content");
-        if(!FinancialService.isClearSave($PaymentTabId)){
+    OtherAccounts.paysave = function($tab,args,tabArgs) {
+        if(!FinancialService.isClearSave($tab)){
             return false;
         }
-        var json = FinancialService.clearSaveJson(tabid, OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        if(!json){ return false; }
         var arguementLen = arguments.length,
-            payType = tabid.find('select[name=sumPayType]').val(),
+            payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
-                payMoney : tabid.find('input[name=sumPayMoney]').val(),
+                payMoney : $tab.find('input[name=sumPayMoney]').val(),
                 payType : payType,
-                payRemark : tabid.find('input[name=sumPayRemark]').val(),
-                bankId : (payType == 0) ? tabid.find('input[name=cash-id]').val() : tabid.find('input[name=card-id]').val(),
-                voucher : tabid.find('input[name=credentials-number]').val(),
-                billTime : tabid.find('input[name=tally-date]').val()
+                payRemark : $tab.find('input[name=sumPayRemark]').val(),
+                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
             };
-        json = JSON.stringify(json);
-        searchParam = JSON.stringify(searchParam);
-        if (json.length > 0) {
-            $.ajax({
-                url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
-                type: "POST",
-                data: {
-                    payment: json,
-                    searchParam : searchParam
-                },
-            }).done(function(data) {
-                if (showDialog(data)) {
-                    tabid.data('isEdited', false);
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        OtherAccounts.saveJson = {};
-                        if (arguementLen == 2) {
-                            OtherAccounts.AccountsPayment(0);
-                        } else {
-                            Tools.closeTab(checkTabId);
-                            OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
-                        }
-                    });
-                }
-            });
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
-        }
+        $.ajax({
+            url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
+            type: "POST",
+            data: {
+                payment: JSON.stringify(json),
+                searchParam : JSON.stringify(searchParam)
+            },
+        }).done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    $tab.data('isEdited', false);
+                    OtherAccounts.saveJson = {};
+                    if (arguementLen === 1) {
+                        Tools.closeTab(menuKey + "-clearing");
+                        OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
+                    } else {
+                        OtherAccounts.AccountsPayment(args,$tab);
+                    }
+                });
+            }
+        });
     };
     //显示单据
     OtherAccounts.viewInsuranceImg = function(obj, bigImg, smallImg) {
@@ -701,7 +610,6 @@ define(function(require, exports) {
     //
     // // 查看已付金额a-1
     OtherAccounts.lookDetail = function(id) {
-
         // 对账查看明细页面
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "getPaymentDetails"),
@@ -710,8 +618,7 @@ define(function(require, exports) {
                 id: id
             },
             success: function(data) {
-                var result = showDialog(data);
-                if (result) {
+                if (showDialog(data)) {
                     var html = lookDetailTemplate(data);
                     var lookDetailLayer = layer.open({
                         type: 1,
@@ -735,8 +642,7 @@ define(function(require, exports) {
                 id: id
             },
             success: function(data) {
-                var result = showDialog(data);
-                if (result) {
+                if (showDialog(data)) {
                     var html = viewOrderDetailTemplate(data);
                     var lookDetailLayer = layer.open({
                         type: 1,
@@ -750,7 +656,6 @@ define(function(require, exports) {
                 }
             }
         })
-
     };
 
     //自动下账后设置按钮的样式
@@ -766,7 +671,14 @@ define(function(require, exports) {
     //暴露方法
     OtherAccounts.initPayModule = function(options) {
         OtherAccounts.showBtnFlag = true;
-        OtherAccounts.AccountsPayment(0, options.name, "", options.startDate, options.endDate, options.accountStatus);
+        var args = {
+            pageNo : 0,
+            name : options.name,
+            startAccountTime : options.startDate,
+            endAccountTime : options.endDate,
+            accountStatus : options.accountStatus
+        };
+        OtherAccounts.AccountsPayment(args);
     };
     exports.init = OtherAccounts.initModule;
     exports.initPay = OtherAccounts.initPayModule;
