@@ -24,6 +24,8 @@
     <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
     <input type="hidden" name='billStatus' value="{{tripPlan.billStatus}}">
+    <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
+    <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
     <div class="col-sm-12 " style="margin: 20px 0px 20px 0px;display: none;">
         billStatus:{{if tripPlan.billStatus == '-1'}}待报账{{else if tripPlan.billStatus == '0'}}待审核（就是已报账）{{else if tripPlan.billStatus == '1'}}计调已审{{else if tripPlan.billStatus == '2'}}财务已审{{/if}}
         <br />
