@@ -16,7 +16,12 @@ define(function(require, exports) {
         mealplanTemplate = require("./view/mealplan"),
         ticketplanTemplate = require("./view/ticketplan"),
         viewTemplate = require("./view/view"),
+        listHeaderTemplate = require("./view/listHeader"),
+        listBusTemplate = require("./view/listBus"),
+        listHotelTemplate = require("./view/listHotel"),
+        listItsTemplate = require("./view/listIts"),
         hotelplan = "tab-" + menuKey + "-hotelplan",
+        listHeader = "tab-" + menuKey + "-listHeader",
         busplan = "tab-" + menuKey + "-busplan",
         itsplan = "tab-" + menuKey + "-itsplan",
         mealplan = "tab-" + menuKey + "-mealplan",
@@ -35,33 +40,152 @@ define(function(require, exports) {
     transitPlan.initModule = function(event) {
         var args = {
             pageNo:0,
-            customerType : 1,
+            customerType : 0,
             arrangeItem : "bus"
         }
-        transitPlan.listtransitPlan(args);
+        transitPlan.listTransitBusPlan(args);
     };
-    transitPlan.listtransitPlan = function(args) {
+    // 车队
+    transitPlan.listTransitBusPlan = function(args) {
          $.ajax({
             url: KingServices.build_url("v2/touristGroupTransferArrange", "getTouristGroupTransferArrangeList"),
             type: "POST",
             data:args,
             success: function(data) {
-                console.log(data);
                 var result = showDialog(data);
                 if (result) {
                     var html = listTemplate(data);
-                    addTab(menuKey, "中转安排", html);
+                    Tools.addTab(menuKey, "中转安排", html);
                     transitPlan.$tab = $("#" + tabId);
+                    // 搜索域的html
+                    var listHeader = listHeaderTemplate(data)
+                    transitPlan.$tab.find('.T-search').html(listHeader);
+                    // 车队列表
+                    var listToutel = listBusTemplate(data);
+                    transitPlan.$tab.find('.T-busLists').html(listToutel);
                     transitPlan.init_eventMain(transitPlan.$tab);
-                    
-                 
+                    //翻页
+                    laypage({
+                        cont: transitPlan.$tab.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (data.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                var searchData = args;
+                                searchData.pageNo = obj.curr-1
+                                transitPlan.listTransitBusPlan(searchData);
+                            }
+                        }
+                    });
+                    transitPlan.$tab.find('.T-listTabs').on('click', '.T-tab', function(event) {
+                        event.preventDefault();
+                        var $that = $(this);
+
+                        if($that.hasClass('T-busTab')) {
+                            // 车安排
+                            transitPlan.listTransitBusPlan();
+                        }else if($that.hasClass('T-hotelTab')){
+                            //房查看
+                            transitPlan.listTransitHoutelPlan(transitPlan.$tab);
+                        }else if($that.hasClass('T-itsTab')){
+                            // 它 
+                            transitPlan.listTransitItsPlan(transitPlan.$tab);
+                        }
+                    });
+                   
+                }
+            }
+        })
+    };
+
+    // 房
+    transitPlan.listTransitHoutelPlan = function($tab){
+
+        var hotelsData = {
+            pageNo:0,
+            customerType : 0,
+            arrangeItem : "hotel"
+        }
+        $.ajax({
+            url: KingServices.build_url("v2/touristGroupTransferArrange", "getTouristGroupTransferArrangeList"),
+            type: "POST",
+            data:hotelsData,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    // 搜索域的html
+                    var listHeader = listHeaderTemplate(data)
+                    $tab.find('.T-search').html(listHeader);
+                    // 车队列表
+                    var listBus = listHotelTemplate(data);
+                    $tab.find('.T-HotelList').html(listBus);
+                    transitPlan.init_eventMain($tab);
+                    //翻页
+                    laypage({
+                        cont: $tab.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (data.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                var searchData = args;
+                                searchData.pageNo = obj.curr-1
+                                transitPlan.listTransitBusPlan(searchData);
+                                
+                            }
+                        }
+                    });
                 }
             }
         })
 
-        
     };
+    // 它
+    transitPlan.listTransitItsPlan = function($tab){
+         console.log($tab);
+        var itsData = {
+            pageNo:0,
+            customerType : 0,
+            arrangeItem : "other"
+        }
+        $.ajax({
+            url: KingServices.build_url("v2/touristGroupTransferArrange", "getTouristGroupTransferArrangeList"),
+            type: "POST",
+            data:itsData,
+            success: function(data) {
+                
+                var result = showDialog(data);
+                if (result) {
+                    // 搜索域的html
+                    var listHeader = listHeaderTemplate(data)
+                    $tab.find('.T-search').html(listHeader);
+                    // 它列表
+                    var listIts = listItsTemplate(data);
+                    $tab.find('.T-itsList').html(listIts);
+                    transitPlan.init_eventMain($tab);
+                    //翻页
+                    laypage({
+                        cont: $tab.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (data.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                var searchData = args;
+                                searchData.pageNo = obj.curr-1
+                                transitPlan.listTransitBusPlan(searchData);
+                            }
+                        }
+                    });
+                }
+            }
+        })
+
+    }
+    
+    
+
     transitPlan.init_eventMain = function($tab) {
+        // 监听事件
+        
         // 收起展开
         var $search = $tab.find('.T-search');
         $search.find('.T-shrink').on('click', function(event) {
@@ -123,7 +247,7 @@ define(function(require, exports) {
         });
         //时间控件
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-
+        
     };
     transitPlan.busplan = function(event) {
         var html = busplanTemplate();
