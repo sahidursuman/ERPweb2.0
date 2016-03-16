@@ -37,6 +37,11 @@ define(function(require, exports) {
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
 		shopStat.datepicker(shopStat.$searchArea)
 		shopStat.listShopStat(0);
+		//获取客户、团号和购物店列表
+   		shopStat.autocompleteDate(shopStat.$tab);
+   		//加载打印插件
+   		var pluginKey = 'plugin_print';
+		Tools.loadPluginScript(pluginKey);
 		
 	}
 
@@ -49,8 +54,8 @@ define(function(require, exports) {
 	   			customerType: shopStat.getValue(shopStat.$searchArea,'customerType'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
 	   			endTime: shopStat.getValue(shopStat.$searchArea,'endTime'),
-	   			fromPartnerAgencyName: shopStat.getValue(shopStat.$searchArea,'partnerAgency'),
-	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'partnerAgencyId'),
+	   			fromPartnerAgencyName: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgency'),
+	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyId'),
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
 	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
@@ -69,14 +74,15 @@ define(function(require, exports) {
 				if(result){
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
-		       		//获取客户、团号和购物店列表
-		       		shopStat.autocompleteDate(shopStat.$tab);
 		       		//绑定页面事件
 		       		shopStat.initEvent();
+		       		//设置记录条数
+					var recordSize = Tools.getRecordSizeDesc(data.searchParam.totalCount);
+					shopStat.$tab.find('.recordSize').text(recordSize);
 			       	// 绑定翻页组件
 					laypage({
 					    cont: shopStat.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-					    pages: data.searchParam.recordSize, //总页数
+					    pages: data.searchParam.totalPage, //总页数
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
@@ -99,8 +105,12 @@ define(function(require, exports) {
 			//搜索事件
 			shopStat.listShopStat(0);
 		}).on('click','.T-shopStat-export',function(){
+			var $obj = shopStat.$tab;
+
 			//打印事件
-			//shopStat.listShopStat(0);
+			$obj.print({
+				globalStyles:true
+			});
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');
@@ -111,8 +121,9 @@ define(function(require, exports) {
 			if($that.hasClass('T-consumeMoney')){
 
 				//查看总打单金额
-				var shopId = $that.closest('tr').attr('shopId');
-				shopStat.viewConsumeMoney(shopId);
+				var shopId = $that.closest('tr').attr('shopId'),
+					id = $that.closest('tr').attr('tripPlanId');
+				shopStat.viewConsumeMoney(id,shopId);
 			};
 		});
 	};
@@ -120,10 +131,13 @@ define(function(require, exports) {
 	/**
 	 *展示点击总打单
 	 */
-	shopStat.viewConsumeMoney = function(id){
+	shopStat.viewConsumeMoney = function(id,shopId){
 		$.ajax({
 			url:KingServices.build_url('financial/shopAccount','consumeMoney'),
-			data:{id:id},
+			data:{
+				id:id,
+				shopId:shopId
+			},
 			type:'POST',
 			showLoading:false,
 			success:function(data){
