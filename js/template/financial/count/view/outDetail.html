@@ -89,8 +89,14 @@
                                                             <tr>
                                                                 <td>{{groupIncome.orderNumber}}</td>
                                                                 <td>{{groupIncome.partnerAgencyName}}</td>
-                                                                <td>{{groupIncome.partnerAgencyContactName}}</td>
-                                                                <td>{{groupIncome.partnerAgencyContactName}}</td>
+                                                                <td>
+                                                                    {{groupIncome.partnerAgencyContactName}}<br>
+                                                                    {{groupIncome.partnerAgencyContactMobile}}
+                                                                </td>
+                                                                <td>    
+                                                                    {{groupIncome.touristContactName}}<br>
+                                                                    {{groupIncome.touristContactMobile}}
+                                                                </td>
                                                                 <td>{{groupIncome.adultCount}}大{{groupIncome.childCount}}小</td>
                                                                 <td>
                                                                     {{if groupIncome.touristGroupFeeList !=null}}
