@@ -29,7 +29,8 @@ define(function(require, exports) {
 	 */
 	var tripPlan = {
 		$tab: false,
-		$searchArea: false
+		$searchArea: false,
+		dayWhich:''
 	},
 		autocompleteData = {};
 	//初始化发团安排模块
@@ -427,6 +428,7 @@ define(function(require, exports) {
 						data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 						data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 						data.tarId = tabId;
+						tripPlan.dayWhich = data.dayWhich;
 
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
@@ -1647,14 +1649,22 @@ define(function(require, exports) {
 	//第N天
 	tripPlan.setChooseDays = function(id){
 		var days = tripPlan.$editTab.find(".T-days").text()*1,
-			startTime = tripPlan.$editTab.find('.T-startTime').text();
+			startTime = tripPlan.dayWhich.startTime,
+			endTime = tripPlan.dayWhich.startTime;
+		tripPlan.dayWhich.whichDay.push(1);
+		tripPlan.dayWhich.whichDay.push(Tools.getDateDiff(startTime,endTime) + 1)
+		console.log(tripPlan.dayWhich)
+		var max = Math.max.apply(Math,tripPlan.dayWhich.whichDay) - 1,
+			min = Math.min.apply(Math,tripPlan.dayWhich.whichDay) - 1;
+			console.log(max + ',' + min)
 		if(parseInt(days) < 1)return;
 
 		if(id){
 			var tr = $("#"+id+" tbody tr");
 			var selectText = '<select class="w-100" name="whichDay">';
-			for(var i = 0; i < days; i++){
+			for(var i = min; i <= max; i++){
 				selectText += '<option value="'+(i+1)+'">'+ Tools.addDay(startTime, i) +'</option>';
+				console.log(Tools.addDay(startTime, i))
 			}
 			selectText += '</select>';
 			tr.eq(tr.length-1).find(".T-whichDaysContainer").html(selectText);
@@ -1662,7 +1672,7 @@ define(function(require, exports) {
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
 				var val = $(this).attr("value");
 				var selectText = '<select class="w-100" name="whichDay">';
-				for(var i = 0; i < days; i++){
+				for(var i = min; i <= max; i++){
 					if(val == (i+1)){
 						selectText += '<option value="'+(i+1)+'" selected="selected">'+ Tools.addDay(startTime, i) +'</option>';
 					}else{
