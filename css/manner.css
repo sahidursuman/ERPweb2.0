@@ -2531,7 +2531,13 @@ a.gray span{
         visibility: visible!important;
         opacity: 1;
     }
-    
+    .P-tdFontSize{
+        font-size: 4px!important;
+    }
+    .P-trFontSize{
+        font-size: 8px!important;
+        background-color: green;
+    }
     .tab-content {
         border: 0;
         padding: 0;
