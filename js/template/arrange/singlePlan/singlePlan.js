@@ -39,7 +39,6 @@ define(function(require, exports) {
         Tools.addTab(menuKey, "散客计划", listMainTemplate(FinancialService.getInitDate()));
         singlePlan.$tab = $('#tab-'+menuKey+'-content');
         singlePlan.init_eventMain(singlePlan.$tab);
-        
         singlePlan.getAutocompleteData(0);
     };
 
@@ -56,12 +55,13 @@ define(function(require, exports) {
                 singlePlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), data.lineProducts, 'name');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="partnerAgencyName"]'), data.partnerAgencies, 'travelAgencyName');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
-                singlePlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), data.dutyOPUsers, 'realName');
+                //singlePlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), data.dutyOPUsers, 'realName');//责任计调
                 singlePlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), data.businessGroups, 'name');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="realname"]'), data.guides, 'realname');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="brand"]'), data.busCompanyArranges, 'licenseNumber');
 
                 singlePlan.listTripPlanSingle(0, singlePlan.$tab);
+                
             }
         })
     }
@@ -92,6 +92,9 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.addTripPlan($(this).data('type'));
         });
+        
+        //获取责任计调
+        singlePlan.getDutyOPUserList(singlePlan.$tab.find('[name=dutyOPUserName]'));
 
         // 散客
         $tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
@@ -226,6 +229,9 @@ define(function(require, exports) {
             },
             select :function(event, ui){
                 $(this).data('id', ui.item.id);
+                if ($(this).attr("name") === "businessGroupName") {
+                    $(this).closest('.form-inline').find('[name=dutyOPUserName]').val('').data('id', '');
+                }
             }
         }).on('click', function() {
             var $this = $(this),
@@ -1698,6 +1704,44 @@ define(function(require, exports) {
                 })
             }
         }
+    };
+
+    singlePlan.getDutyOPUserList = function($chooseObj) {
+        $chooseObj.autocomplete({
+            minLength: 0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    $(this).data('id', '');
+                }
+            },
+            select :function(event, ui){
+                $(this).data('id', ui.item.id);
+            }
+        }).off('click').on('click', function() {
+            $.ajax({
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
+                type: "POST",
+                data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupName]').data('id'),
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var jsonList = data.outOPUsers;
+                        if (jsonList != null && jsonList.length > 0) {
+                            for (var i = 0; i < jsonList.length; i++) {
+                                jsonList[i].value = jsonList[i].realName;
+                            }
+                            $chooseObj.autocomplete('option','source', jsonList);
+                            $chooseObj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', $chooseObj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        })
     };
 
     exports.init = singlePlan.initModule;

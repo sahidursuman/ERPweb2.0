@@ -100,7 +100,7 @@
                     {{else}}-
                     {{/if}}
                 </td>
-                <td><a href="javascript:void(0)" class="T-action T-needPayDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td><a href="javascript:void(0)" class="T-action T-payedDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
                 <td><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
@@ -116,7 +116,7 @@
                     </label>
                     <label>|</label>
                         <label>
-                            <a href="#" class="T-action T-payedDetail" style="margin-left:5px">查看</a>
+                            <a href="#" class="T-action T-needPayDetail" style="margin-left:5px">查看</a>
                         </label>
                 </td>
             </tr>

@@ -104,7 +104,7 @@ define(function(require, exports) {
             event.preventDefault(); //阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
-            $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             busCompany.listBusCompany(0);
         });
 
@@ -123,8 +123,8 @@ define(function(require, exports) {
                     pageNo : 0,
                     busCompanyId : $that.closest('tr').data('id'),
                     busCompanyName : $that.closest('tr').data('name'),
-                    startDate : startDate,
-                    endDate : endDate,
+                    startTime : startDate,
+                    endTime : endDate,
                     accountStatus : accountStatus
                 };
             if ($that.hasClass('T-check')) {
@@ -144,8 +144,8 @@ define(function(require, exports) {
             args.pageNo = args.pageNo || 0;
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.licenseNumber = $tab.find("input[name=licenseNumber]").val();
-            args.startDate = $tab.find("input[name=startDate]").val();
-            args.endDate = $tab.find("input[name=endDate]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("[name=accountStatus]").val();
         }
         args.sortType = "startTime";
@@ -231,8 +231,8 @@ define(function(require, exports) {
             args.pageNo = args.pageNo || 0;
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.licenseNumber = $tab.find("input[name=licenseNumber]").val();
-            args.startDate = $tab.find("input[name=startDate]").val();
-            args.endDate = $tab.find("input[name=endDate]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
         args.sortType = "startTime";

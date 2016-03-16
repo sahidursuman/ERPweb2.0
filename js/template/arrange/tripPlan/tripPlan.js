@@ -56,7 +56,6 @@ define(function(require, exports) {
                 tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), data.lineProducts, 'name');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="partnerAgencyName"]'), data.partnerAgencies, 'travelAgencyName');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
-                tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), data.dutyOPUsers, 'realName');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), data.businessGroups, 'name');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="realname"]'), data.guides, 'realname');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="brand"]'), data.busCompanyArranges, 'licenseNumber');
@@ -79,6 +78,9 @@ define(function(require, exports) {
             event.preventDefault();
             tripPlan.listTripPlanGroup(-1, $tab);
         });
+
+        //获取责任计调
+        tripPlan.getDutyOPUserList($tab.find('[name=dutyOPUserName]'));
         
         $tab.find("[name='tripPlanStatus']").on('change', function(){
             if($(this).val() != "1"){
@@ -192,6 +194,9 @@ define(function(require, exports) {
             },
             select :function(event, ui){
                 $(this).data('id', ui.item.id);
+                if ($(this).attr("name") === "businessGroupName") {
+                    $(this).closest('.form-inline').find('[name=dutyOPUserName]').val('').data('id', '');
+                }
             }
         }).on('click', function() {
             var $this = $(this),
@@ -211,6 +216,49 @@ define(function(require, exports) {
             }
         });
     }
+
+    /**
+     * getDutyOPUserList 获取责任计调
+     * @param  {[type]} $chooseObj [description]
+     * @return {[type]}            [description]
+     */
+    tripPlan.getDutyOPUserList = function($chooseObj) {
+        $chooseObj.autocomplete({
+            minLength: 0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    $(this).data('id', '');
+                }
+            },
+            select :function(event, ui){
+                $(this).data('id', ui.item.id);
+            }
+        }).off('click').on('click', function() {
+            $.ajax({
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
+                type: "POST",
+                data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupName]').data('id'),
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var jsonList = data.outOPUsers;
+                        if (jsonList != null && jsonList.length > 0) {
+                            for (var i = 0; i < jsonList.length; i++) {
+                                jsonList[i].value = jsonList[i].realName;
+                            }
+                            $chooseObj.autocomplete('option','source', jsonList);
+                            $chooseObj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', $chooseObj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        })
+    };
 
     //新增计划
     tripPlan.addTripPlan = function(planType, args, groupIds){

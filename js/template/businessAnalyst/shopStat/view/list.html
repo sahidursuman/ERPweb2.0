@@ -45,7 +45,7 @@
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
-        <tr shopId = "{{shop.shopId}}" tripPlanId = "{{shop.tripPlanId}}">
+        <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
             <td>{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{shop.shopName}}</td>
             <td><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
@@ -57,23 +57,18 @@
         </tr>
         {{/each}}
         {{/each}}
-        {{each totalShop as total index}}
-            {{if index == 0}}
-            <tr style="background: #e0effd;">
-                <td>合计</td>
-                <td></td>
-                <td>{{total.touristAdultCount}}大{{total.touristChildCount}}小</td>
-                <td></td>
-                <td></td>
-                <td>{{total.sumConsumeMoney}}</td>
-                <td>{{total.aveconsumeMoney}}</td>
-                <td>{{total.guideRebateMoney}}</td>
-                <td>{{total.travelAgencyRebateMoney}}</td>
-                <td>{{total.sumRebateMoney}}</td>
-                <td>{{total.aveRebateMoney}}</td>
-            </tr>
-            {{/if}}
-        {{/each}}
+        <tr style="background: #e0effd;">
+            <td colspan="2">合计</td>
+            <td>{{totalShop.touristAdultCount}}大{{totalShop.touristChildCount}}小</td>
+            <td>-</td>
+            <td>-</td>
+            <td>{{totalShop.sumConsumeMoney}}</td>
+            <td>{{totalShop.aveconsumeMoney}}</td>
+            <td>{{totalShop.guideRebateMoney}}</td>
+            <td>{{totalShop.travelAgencyRebateMoney}}</td>
+            <td>{{totalShop.sumRebateMoney}}</td>
+            <td>{{totalShop.aveRebateMoney}}</td>
+        </tr>
     </tbody>
 </table>
 <div class="pageMode T-noprint">
