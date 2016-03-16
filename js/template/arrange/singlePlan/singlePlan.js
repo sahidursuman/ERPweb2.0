@@ -229,6 +229,9 @@ define(function(require, exports) {
             },
             select :function(event, ui){
                 $(this).data('id', ui.item.id);
+                if ($(this).attr("name") === "businessGroupName") {
+                    $(this).closest('.form-inline').find('[name=dutyOPUserName]').val('').data('id', '');
+                }
             }
         }).on('click', function() {
             var $this = $(this),

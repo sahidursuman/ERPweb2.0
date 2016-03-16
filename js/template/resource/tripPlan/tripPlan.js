@@ -65,14 +65,12 @@ define(function(require, exports) {
 	 */
 	tripPlan.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		var $searchArea = tripPlan.$searchArea.on('change', 'input, select', function(event) {
+		var $searchArea = tripPlan.$searchArea.on('change', 'select, input', function(event) {
 			event.preventDefault();
 			var $that = $(this);
-
 			if ($that.is('select[name="arrangeItem"]')) {
 				$searchArea.find('#arrangeItemStatus').val('');
 			}
-
 			if ($that.is('select[name="tripPlanItem"]')) {
 				$searchArea.find('#tripPlanItemStatus').toggleClass('hidden', $that.val() != '0').val('');
 			}
@@ -89,8 +87,11 @@ define(function(require, exports) {
 
 		//查询条件 autocomplete
 		tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), autocompleteData.lineProductList, 'lineProductName', 'lineProductId');
-		tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), autocompleteData.dutyOPUserList, 'dutyOPUserName', 'dutyOPUserId');
+		//tripPlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), autocompleteData.dutyOPUserList, 'dutyOPUserName', 'dutyOPUserId');
 		tripPlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), autocompleteData.businessGroupList, 'businessGroupName', 'businessGroupId');
+
+		//责任计调
+		tripPlan.getDutyOPUserList($searchArea.find('[name=dutyOPUserName]'));
 
 		tripPlan.$tab.find('.T-tripPlanList').on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -1767,6 +1768,9 @@ define(function(require, exports) {
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('div');
 				parents.find("input[name="+inputIdName+"]").val(ui.item.id);
+				if ($this.attr('name')==='businessGroupName') {
+					$this.closest('.form-inline').find('[name=dutyOPUserName]').val('').trigger('change');
+				}
 			}
 		}).on('click', function() {
 			var $this = $(this),
@@ -1787,6 +1791,49 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+    /**
+     * getDutyOPUserList 根据业务部门获取责任计调
+     * @param  {[type]} $chooseObj [description]
+     * @return {[type]}            [description]
+     */
+	tripPlan.getDutyOPUserList = function($chooseObj) {
+        $chooseObj.autocomplete({
+            minLength: 0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    $(this).val('').nextAll('[name=dutyOPUserId]').val('');
+                }
+            },
+            select :function(event, ui){
+                $(this).val(ui.item.realName).nextAll('[name=dutyOPUserId]').val(ui.item.id);
+            }
+        }).off('click').on('click', function() {
+            $.ajax({
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
+                type: "POST",
+                data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupId]').val(),
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var jsonList = data.outOPUsers;
+                        if (jsonList != null && jsonList.length > 0) {
+                            for (var i = 0; i < jsonList.length; i++) {
+                                jsonList[i].value = jsonList[i].realName;
+                            }
+                            $chooseObj.autocomplete('option','source', jsonList);
+                            $chooseObj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', $chooseObj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        })
+    };
 
 	/**
 	 * 发团安排编辑页面所有的autocomplete
