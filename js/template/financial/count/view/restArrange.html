@@ -88,18 +88,18 @@
         <td>
         {{if tripPlan.billStatus == -1}}
             {{if arrange.isChoose == 1}}
-                <input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.price}}" 
+                <input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.realPrice}}" 
                 type="text" name="price" class="w-80"/>
                 <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
             {{else}}
-                <span class="F-float F-money">{{arrange.price}}</span>
-                <input type="hidden" name="price" value="{{arrange.price}}"/>
+                <span class="F-float F-money">{{arrange.realPrice}}</span>
+                <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
             {{/if}}
         {{else}}
             {{if arrange.badStatus == 1}}
-                <input type="text" name="price" value="{{arrange.price}}" class="w-80" readOnly="readOnly"/>
+                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" readOnly="readOnly"/>
             {{else}}
-                <input type="text" name="price" value="{{arrange.price}}" class="w-80"/><input type="hidden" name="standardId">
+                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80"/><input type="hidden" name="standardId">
             {{/if}}
         {{/if}}
         </td>
