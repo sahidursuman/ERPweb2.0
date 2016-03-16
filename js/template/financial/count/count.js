@@ -682,6 +682,8 @@ define(function(require, exports){
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
 			var id = $obj.find('.financial-tripPlanId').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
 			KingServices.viewFeeDetail(id);
 		});
 		//导游数据处理
