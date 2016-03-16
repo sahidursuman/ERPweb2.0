@@ -193,7 +193,7 @@
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
-                                {{if touristGroup.subStatus == 0}}
+                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
