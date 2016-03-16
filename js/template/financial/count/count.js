@@ -4179,7 +4179,7 @@ define(function(require, exports){
                 "tripPlanId":id,
                 "whichDay":$(this).find('select[name="whichDay"]').val(),
                 "title":$(this).find('input[name="title"]').val(),
-                "realPrice":$(this).find('input[name="price"]').val(),
+                "price":$(this).find('input[name="price"]').val(),
                 "count":$(this).find('input[name="count"]').val(),
                 "billRemark":$(this).find('input[name="billRemark"]').val(),
                 }
