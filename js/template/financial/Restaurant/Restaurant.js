@@ -196,7 +196,7 @@ define(function(require, exports) {
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
             args.pageNo = 0 ;
-            restaurant.restaurantCheck(args);
+            restaurant.restaurantCheck(args,$tab);
         });
         
         //导出报表事件 btn-hotelExport
@@ -313,18 +313,6 @@ define(function(require, exports) {
     };
 
     restaurant.initClear = function(args,$tab){
-        if(args.isAutoPay == 0){
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            if(args.isAutoPay == 1){
-                $tab.data('isEdited',true);
-            } else if(args.isAutoPay == 2){
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
-
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
@@ -370,6 +358,7 @@ define(function(require, exports) {
             restaurant.clearTempSumDate = false;
             restaurant.clearTempData = false;
             $tab.data('isEdited',false);
+            args.isAutoPay = 0;
             restaurant.restaurantClear(args);
         });
 
@@ -578,6 +567,13 @@ define(function(require, exports) {
                     $tab.data('saveRule',args.saveRule);
                     $tab.data('restaurantId',args.restaurantId);
                     restaurant.saveClear($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    restaurant.clearTempSumDate = false;
+                    restaurant.clearTempData = false;
                 }
             });
 

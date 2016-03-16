@@ -491,6 +491,10 @@ define(function(require, exports) {
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
                 OtherAccounts.paysave($tab);
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                OtherAccounts.saveJson = {};
             });
         //付款-自动计算本次付款总额
         $PaymentTabId.find('.T-clearList').off('change').on('change', 'input', function() {
@@ -648,8 +652,8 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     tabid.data('isEdited', false);
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        OtherAccounts.saveJson = {};
                         if (arguementLen == 2) {
-                            OtherAccounts.saveJson = {};
                             OtherAccounts.AccountsPayment(0);
                         } else {
                             Tools.closeTab(checkTabId);

@@ -301,13 +301,14 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	tripPlan.sendTripPlanArrange = function(id, status) {
+		var html = filterUnAuth(noticeTemplate(status));
 		var noticeLayer = layer.open({
 			type: 1,
 			title: '通知设置',
 			skin: 'layui-layer-rim', //加上边框
 			area: '630px', //宽高
 			zIndex:1028,
-			content: noticeTemplate(status),
+			content: html.html(),
 			success:function(){
 				var $container = $('.T-tripPlanNotice'),
 					$checkbox = $container.find('.T-checked'),
@@ -1414,7 +1415,7 @@ define(function(require, exports) {
 			html = '<tr> <td><input type="text" name="startTime" class="datepicker T-busPriceC"></td>'
 					+ '<td><input type="text" name="endTime" class="datepicker T-busPriceC"></td>'
 					+ '<td><select name="taskType"><option value="0">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option><option value="6">小车接客</option></select></td>'
-					+ '<td><input type="text" name="needSeatCount" class="col-sm-12 F-float F-count" style="width: 60px;"></td>'
+					+ '<td><input type="text" name="needSeatCount" class="col-sm-12" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="brand" class="col-sm-12"></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12 T-busPriceC"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
