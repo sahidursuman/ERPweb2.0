@@ -33,10 +33,10 @@
                         <td>
                         {{if tripPlan.billStatus == -1}}
                             <span>{{otherInCome.price}}</span>
-                            <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.realPrice}}" old="{{otherInCome.realPrice}}"/>
+                            <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}"/>
                         {{else}}
                             <input  type="text" class="F-float F-money w-80" 
-                            name="price" value="{{otherInCome.realPrice}}"  maxlength="11"
+                            name="price" value="{{otherInCome.price}}"  maxlength="11"
                             {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                         {{/if}}
                         </td>
