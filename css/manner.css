@@ -460,9 +460,11 @@ table tr td {
 .mar-1-135{
     margin-left: 135px;
 }
-.mar-r-9{
-    margin-left: 9px;
+
+.mar-r-9 {
+    margin-right: 9px;
 }
+
 .mar-r-10 {
     margin-right: 10px;
 }

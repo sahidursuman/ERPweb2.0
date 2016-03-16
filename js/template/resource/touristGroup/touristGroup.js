@@ -104,7 +104,7 @@ define(function(require, exports) {
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
                 sortType: 'startTime',
-                'order':'asc'
+                'order': touristGroup.$searchArea.find('#order_by').val()
             }
         }
         //保存查询数据
@@ -160,11 +160,10 @@ define(function(require, exports) {
     touristGroup.initEvents = function() {
         var $searchAreaObj = touristGroup.$searchArea;
         //选择框事件
-        $searchAreaObj.find(".T-select-status").on('click', 'a', function(event) {
+        
+        $searchAreaObj.find("select").on('change',  function(event) {
             event.preventDefault();
-            var $that = $(this);
-            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
-            touristGroup.listTouristGroup(touristGroup.args);
+            touristGroup.listTouristGroup(touristGroup.getSearParam());
         });
         //搜索按钮事件
         $searchAreaObj.find(".T-touristGroupList-search").on('click', function(event) {
@@ -216,7 +215,8 @@ define(function(require, exports) {
             customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
             memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
             orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
-            sortType: 'auto'
+            sortType: 'startTime',
+            order: touristGroup.$searchArea.find('#order_by').val()
         }
         return touristGroup.args;         
     };
