@@ -121,9 +121,9 @@ define(function(require, exports) {
 			if($that.hasClass('T-consumeMoney')){
 
 				//查看总打单金额
-				var shopId = $that.closest('tr').attr('shopId'),
-					id = $that.closest('tr').attr('tripPlanId');
-				shopStat.viewConsumeMoney(id,shopId);
+				var shopArrangeId = $that.closest('tr').attr('shopArrangeId'),
+					tripPlanId = $that.closest('tr').attr('tripPlanId');
+				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId);
 			};
 		});
 	};
@@ -131,12 +131,13 @@ define(function(require, exports) {
 	/**
 	 *展示点击总打单
 	 */
-	shopStat.viewConsumeMoney = function(id,shopId){
+	shopStat.viewConsumeMoney = function(tripPlanId,shopArrangeId){
 		$.ajax({
 			url:KingServices.build_url('financial/shopAccount','consumeMoney'),
 			data:{
-				id:id,
-				shopId:shopId
+				tripPlanId:tripPlanId,
+				shopArrangeId:shopArrangeId,
+				
 			},
 			type:'POST',
 			showLoading:false,

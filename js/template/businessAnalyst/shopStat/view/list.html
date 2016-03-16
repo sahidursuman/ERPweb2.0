@@ -45,7 +45,7 @@
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
-        <tr shopId = "{{shop.shopId}}" tripPlanId = "{{shop.tripPlanId}}">
+        <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
             <td>{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{shop.shopName}}</td>
             <td><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
