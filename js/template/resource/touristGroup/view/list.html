@@ -34,7 +34,7 @@
             </tr>
         </thead>
         <tbody calss="T-touristGroup">{{each touristGroupList as touristGroup}}
-            <tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}">
+            <tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">
                         {{if touristGroup.orderNumber}}
@@ -120,6 +120,7 @@
             </tr>{{/each}}
         </tbody>
     </table>
+    <div >合计人数：<span class="T-total">0</span></div>
     <div class="row pageMode">
         <div class="col-xs-6">
             <small>共计 {{recordSize}} 条记录</small>

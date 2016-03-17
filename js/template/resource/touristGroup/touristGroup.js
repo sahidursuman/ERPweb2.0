@@ -223,6 +223,7 @@ define(function(require, exports) {
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
+        //报表事件
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -253,6 +254,17 @@ define(function(require, exports) {
                 });
             };
         });
+        
+        //统计游客数量
+        function calculTotalCount($obj){
+           var totalCount=0,$trList=$obj.find('tbody').children('tr');
+           $trList.each(function(index) {
+                totalCount+=parseInt($trList.eq(index).attr('data-adultCount')),
+                totalCount+=parseInt($trList.eq(index).attr('data-childCount'));
+            });
+            return totalCount;
+        };
+        $listObj.find('.T-total').text(calculTotalCount($listObj));
     };
 
     /**
@@ -1690,6 +1702,7 @@ define(function(require, exports) {
                     html = filterUnAuth(html);
                     $listObj.html(html);
                     touristGroup.listEvents($listObj);
+                   
                     //绑定分页插件
                     laypage({
                         cont: $mainList.find('.T-pagenation'),
@@ -1706,6 +1719,9 @@ define(function(require, exports) {
             }
         });
     };
+
+
+  
 
     //刷新数据合计
     touristGroup.freshHeader = function($args) {
