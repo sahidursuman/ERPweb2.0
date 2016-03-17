@@ -1366,7 +1366,7 @@ define(function(require, exports){
 			}
 			$next =  $tr.nextAll();
 
-		var $html = $('<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
+		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-delShop"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
 			'<td><input type="text" name="consumeMoney" class="w-80"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
@@ -1375,7 +1375,7 @@ define(function(require, exports){
 			'<td><input type="text" name="guideRate" class="w-50"></td>'+
 			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="billRemark"/><span style="margin-left:20px;color:#bbb;">删除</span></td>'+
-			'</tr>');
+			'</tr>';
 			
 			if($next.length>1){
 				rowSpan = rowSpan * 1 + 1;
@@ -1383,10 +1383,10 @@ define(function(require, exports){
 				for(var i = 0;i<$next.length;i++){
 					var tdLen = $next.eq(i).children('td').length;
 					if( tdLen == td_cnt){
-						$next.eq(i).prev().after($html);
+						$next.eq(i).prev().after(html);
 						break;
 					}else{
-						$next.eq(rowSpan-3).after($html);
+						$next.eq(rowSpan-3).after(html);
 						break;
 					}
 				};
@@ -1394,18 +1394,12 @@ define(function(require, exports){
 				rowSpan = rowSpan * 1 + 1;
 				$tr.children('td[rowspan]').prop('rowspan', rowSpan);
 				$tr.prop('shopId', shopId);
-				$that.closest('tr').after($html);
+				$that.closest('tr').after(html);
 			};
 			//商品选择
 			var $shopObj = $parentObj.find('.T-count-shopping');
 			var $shopPolicyObj = $shopObj.find('input[name=shopPolicy]');
-			Count.getShopPolicy($shopPolicyObj,$parentObj,$tr);
-			$html.on('change', 'input', function(event) {
-				event.preventDefault();
-				/* Act on the event */
-				Count.autoShopSum($(this), $parentObj);
-			});
-			
+			Count.getShopPolicy($shopPolicyObj,$parentObj,$tr);			
 	};
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
