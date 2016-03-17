@@ -44,10 +44,8 @@ define(function(require, exports) {
         arrangeGroupTransfer.$tab=$("#tab-"+menuKey+"-content");
         //请求搜索数据
         arrangeGroupTransfer.autocompleteSearch(2,arrangeGroupTransfer.$tab);
-        //初始化时间控件
-        arrangeGroupTransfer.initDatePicker(arrangeGroupTransfer.$tab);
         //初始化散拼、团体、转客时间
-        arrangeGroupTransfer.init_event();
+        arrangeGroupTransfer.init_event(arrangeGroupTransfer.$tab);
     };
 
 
@@ -55,9 +53,10 @@ define(function(require, exports) {
      * init_event 团散转客页面初始化
      * @return {[type]} [description]
      */
-    arrangeGroupTransfer.init_event = function() {
-        arrangeGroupTransfer.$tab=$("#" + tabId);
-        var $TransferObj = arrangeGroupTransfer.$tab.find('.T-search-area');
+    arrangeGroupTransfer.init_event = function($tab) {
+        //设置时间
+        Tools.setDatePicker($tab.find('.datepicker'), false);
+        var $TransferObj = $tab.find('.T-search-area');
         var $searchArgumentsForm = $TransferObj.find('form'),
                 customerType = 2;
         //转客
@@ -107,16 +106,12 @@ define(function(require, exports) {
                 if (result) {
                     data.searchParam = data.searchParam;
                     data.touristGroupList = JSON.parse(data.touristGroupList);
-                    if (customerType == 2) { //转客
-                        var html = listTransferTemplate(data);
-                        html = filterUnAuth(html);
-                        arrangeGroupTransfer.$tab.find('.T-groupTransfer-list').html(html);
-                        //初始化页面事件
-                        arrangeGroupTransfer.init_transferEvent();
-
-                        //转客分页选中效果
-                        arrangeGroupTransfer.pagerTransferChecked(customerType);
-                    };
+                    var html = listTransferTemplate(data);
+                    arrangeGroupTransfer.$tab.find('.T-groupTransfer-list').html(filterUnAuth(html));
+                    //初始化页面事件
+                    arrangeGroupTransfer.init_transferEvent(customerType);
+                    //转客分页选中效果
+                    arrangeGroupTransfer.pagerTransferChecked(customerType);
                     // 绑定共用翻页组件
                     laypage({
                         cont: arrangeGroupTransfer.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -170,10 +165,9 @@ define(function(require, exports) {
      * init_transferEvent 转客报表绑定事件
      * @return {[type]} [description]
      */
-    arrangeGroupTransfer.init_transferEvent = function() {
+    arrangeGroupTransfer.init_transferEvent = function(customerType) {
         var $transferObj = arrangeGroupTransfer.$tab.find('.T-Transfer-list'),
-            $searchArgumentsForm = $transferObj.find('form'),
-            customerType = 2;
+            $searchArgumentsForm = $transferObj.find('form');
         //重置计算
         arrangeGroupTransfer.choosenAdultAndChildCount($transferObj);
 
