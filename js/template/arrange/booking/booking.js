@@ -831,7 +831,7 @@ define(function(require, exports) {
 			'<td><input name="hotelName" value="" type="text" class="col-sm-12 T-chooseHotel bind-change"/><input name="hotelId" type="hidden" value="" /></td>'+
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
 			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="5" readonly="readonly" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="5" /></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
 			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
 			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12 F-float F-money"/></td>'+
@@ -856,7 +856,7 @@ define(function(require, exports) {
 			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/></div></td>'+
 			'<td><input name="scenicName" value="" type="text" class="col-sm-12 T-chooseScenic bind-change" /><input name="scenicId" value="" type="hidden" /></td>'+
 			'<td><input name="scenicItemName" value="" type="text"  class="col-sm-12 T-chooseScenicItem bind-change" /><input name="scenicItemId" value="" type="hidden" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur F-float F-count"  maxlength="5" /></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur"  maxlength="5" /></td>'+
 			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
@@ -885,7 +885,7 @@ define(function(require, exports) {
 			'<td><input name="shift" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 			'<td><input name="seatLevel" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 			'<td><div class="input-group" style="min-width: 165px;"><input name="startTime" value="" type="text" class="datetimepicker col-sm-12"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="5" /></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
 			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
@@ -908,10 +908,10 @@ define(function(require, exports) {
 		var html = '<tr>'+
 			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker" /></div></td>'+
 			'<td><div class="input-group"><input name="endTime" value="" type="text" class="datepicker" /></div></td>'+
-			'<td><input name="needSeatCount" value="" type="text" class="col-sm-12 T-chooseSeatCount bind-change F-float F-count" /></td>'+
+			'<td><input name="needSeatCount" value="" type="text" class="col-sm-12 T-chooseSeatCount bind-change" /></td>'+
 			'<td><input name="needBusBrand" value="" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" /></td>'+
 			'<td><input name="busCompany" value="" type="text" class="col-sm-12 bind-change T-busCompany" /><input name="busCompanyId" value="" type="hidden" /></td>'+
-			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="5" /></td>'+
+			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
 			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
 			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+

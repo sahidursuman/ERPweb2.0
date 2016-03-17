@@ -20,6 +20,7 @@
                 <th>收客信息</th>
                 <th>出游日期</th>
                 <th>游客信息</th>
+                <th>外联销售</th>
                 <th>应收</th>
                 <th>预收款</th>
                 <th>已收</th>
@@ -47,9 +48,6 @@
                         <span>{{if touristGroup.partnerAgency != null}}
 						{{touristGroup.partnerAgency.travelAgencyName}}
 						{{/if}}</span>
-                        <span>{{if touristGroup.outOPUser != null}}
-						外联销售：{{touristGroup.outOPUser.realName}}
-						{{/if}}</span>
                     </p>
                     <p class="h-orderNumber">
                         {{if !!touristGroup.quote}}<span>报价单号：{{touristGroup.quote.quoteNumber}}</span>{{/if}}
@@ -65,15 +63,23 @@
                         </label>
                     </p>
                     <p class="mar-0">
+                        <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
+                            {{touristGroup.touristGroupMember.name}}
+                        {{/if}}</span>
                         <span class="h-agencyName">{{if touristGroup.customerType==0}} 散客
                         {{else if touristGroup.customerType==1}}团体  
                         {{/if}} </span>
                     </p>
                     <p class="mar-0">
                         <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
-                            {{touristGroup.touristGroupMember.name}}
+                            {{touristGroup.touristGroupMember.mobileNumber}}
                         {{/if}}</span>
                     </p>
+                </td>
+                <td>
+                    <span>{{if touristGroup.outOPUser != null}}
+                    {{touristGroup.outOPUser.realName}}
+                    {{/if}}</span>
                 </td>
                 <td>
                     <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
@@ -97,7 +103,7 @@
                     {{ if touristGroup.status==0 }} 已发团 {{else if touristGroup.status==1 }} 未分团 {{else if touristGroup.status==2 }} 已分团 {{else if touristGroup.status==3 }} 已外转 {{else if touristGroup.status==4 }} 已取消 {{else if touristGroup.status==5 }} 已分段 {{else if touristGroup.status==6 }} 已内转 {{/if}}
                 </td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group" style="width:120px;">
+                    <div class="btn-group" style="width:120px;">
                         <a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
 							查看
 						</a>
@@ -109,36 +115,6 @@
                             <label class="padding-right20">|</label>
                             删除
                         </a>
-                    </div>
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-error btn-touristGroup-view" data-rel="tooltip">
-                                        <span class="red">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-success btn-touristGroup-edit" data-rel="tooltip">
-                                        <span class="green">
-											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-error btn-touristGroup-delete" data-rel="tooltip">
-                                        <span class="red">
-											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </td>
             </tr>{{/each}}

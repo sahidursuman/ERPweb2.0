@@ -19,19 +19,27 @@ FinancialService.initPayEvent = function($container,rule)  {
         $card = $container.find('input[name=card-number]');
     getBankList($cash,0);
     getBankList($card,1);
-    $container.find('select').on('change', function(event) {
+    $select = $container.find('select[name=sumPayType]');
+    if($select.length == 0){
+        $select = $container.find('select[name=payType]');
+    }
+    $select.on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();
-        if(val == 1){
+        if(val == 1 || val == 5){
             var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
         }
         $cash.closest('div').toggleClass('hidden', val !== "0");
         $card.closest('div').toggleClass('hidden', val != 1);
+        if(val == 5){
+            $card.closest('div').removeClass('hidden');
+        };
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };
         if(val !=1){
             $container.find('input[name=card-id]').val('');
+            $card.val('');
         };
     }).trigger('change');
 };
@@ -794,6 +802,23 @@ FinancialService.unfinishedBill = function(args,listFn){
         buttons: buttons,
         open:function(event,ui){
             $(this).find("p").text("您有未完成的支付订单，是否跳转到付款界面？");
+        }
+    });
+};
+
+
+//页面“关闭”按钮事件
+FinancialService.closeTab = function(tab_id){
+    var $tab = $('#tab-' + tab_id + '-content');
+    $tab.find(".T-btn-close").click(function(){
+        if ($tab.data('isEdited'))  {
+            showSaveConfirmDialog($("#confirm-dialog-message"),"数据已经被修改，是否保存?",function(){
+                $tab.trigger(CLOSE_TAB_SAVE);
+            },function(){
+                Tools.closeTab(tab_id);
+            },false);
+        } else {
+            Tools.closeTab(tab_id);
         }
     });
 };
