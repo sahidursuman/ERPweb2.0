@@ -1500,12 +1500,12 @@ define(function(require, exports){
 				case 'guideRate':
 					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 					break;
-				case 'consumeMoney':
-					if ($parent.find('.span_shopPolicy').length === 0) {
-						$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-						$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-					}
-					break;
+				// case 'consumeMoney':
+				// 	if ($parent.find('.span_shopPolicy').length === 0) {
+				// 		$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+				// 		$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+				// 	}
+				// 	break;
 				case 'consumeMoney':
 					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
