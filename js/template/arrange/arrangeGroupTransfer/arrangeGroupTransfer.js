@@ -1129,8 +1129,6 @@ define(function(require, exports) {
         $parents.find('[name=fromBussinessGroupId]').val("");
     };
 
-
-
     /**
      * [cacheAutocomData 缓存Autocomplate数据
      * @param  {[type]} customerType 散客、团体、转客标识
@@ -1146,9 +1144,9 @@ define(function(require, exports) {
         .done(function(data) {
             if (showDialog(data)) {
                 var $searArea=$tab.find('.T-search-area');
-                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=lineProductName]'),data.lineProductList,"name");
-                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName");
-                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=lineProductName]'),data.lineProductList,"name","lineProductId");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName","fromPartnerAgencyId");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName","fromBussinessGroupId");
             };
         })
     };

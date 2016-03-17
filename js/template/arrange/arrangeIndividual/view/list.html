@@ -29,7 +29,16 @@
     </thead>
     <tbody class="T-arrageVisitor-list">
         {{each touristGroupList as touristGroupL}}
-        <tr data-value="{{touristGroupL.id}}" data-entity-id="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}" data-entity-partnerAgency="{{if !!touristGroupL.partnerAgency}} {{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}" data-entity-name="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}" data-entity-type="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.type}}{{/if}}" data-entity-days="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}" data-entity-startTime="{{touristGroupL.startTime}}" data-entity-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}" class="tr-{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}-{{touristGroupL.startTime}}" data-entity-adultCount="{{touristGroupL.adultCount}}" data-entity-childCount="{{touristGroupL.childCount}}">
+        <tr data-value="{{touristGroupL.id}}" data-id="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}" 
+        data-entity-partnerAgency="{{if !!touristGroupL.partnerAgency}} {{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}" 
+        data-name="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}" 
+        data-type="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.type}}{{/if}}" 
+        data-days="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}" 
+        data-startTime="{{touristGroupL.startTime}}"
+        data-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}" 
+        class="tr-{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}-{{touristGroupL.startTime}}" 
+        data-adultCount="{{touristGroupL.adultCount}}" 
+        data-childCount="{{touristGroupL.childCount}}">
             <td style="vertical-align:middle;padding: 5px;">
                 <label class="pos-rel">
                     <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label>
