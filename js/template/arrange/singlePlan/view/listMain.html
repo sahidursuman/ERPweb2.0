@@ -22,8 +22,8 @@
                     <input class="form-control datepicker" name="endTime" placeholder="结束时间" style="width:133px;" type="text" />
                 </div>
                 <div class="form-group">
-                    <label>线路产品</label>
-                    <input type="text" name="lineProductName" class="form-control" placeholder="线路产品" style="width: 142px;">
+                    <label>责任部门</label>
+                    <input type="text" name="businessGroupName" class="form-control" placeholder="责任部门">
                 </div>
                 <div class="form-group">
                     <label>责任计调</label>
@@ -32,8 +32,8 @@
             </div>
             <div class="form-inline hct-search-area">
                 <div class="form-group">
-                    <label>责任部门</label>
-                    <input type="text" name="businessGroupName" class="form-control" placeholder="责任部门">
+                    <label>线路产品</label>
+                    <input type="text" name="lineProductName" class="form-control" placeholder="线路产品" style="width: 142px;">
                 </div>
                 <div class="form-group">
                     <label>导游</label>
@@ -43,7 +43,7 @@
                     <label>车辆</label>
                     <input type="text" name="licenseNumber" class="form-control" placeholder="车辆">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="width: 180px;">
                     <label>状态</label>
                     <select name="tripPlanStatus" class="form-control">
                         <option value="">全部</option>
@@ -57,7 +57,16 @@
                     </select>
                 </div>
 
-                <div class="form-group mar-1-135">
+                <div class="form-group mar-l-15">
+                    <label >出游日期</label>
+                    <select name="order" id="order_by">
+                        <option value="asc">升序</option>
+                        <option value="desc">降序</option>
+                    </select>
+                    <input type="hidden" name="sortType" value="startTime">
+                </div>
+
+                <div class="form-group mar-l-10">
                     <button class="btn-sm search-btn T-btn-tripPlan-search" data-type="0">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>

@@ -57,7 +57,7 @@ define(function(require, exports) {
 				Tools.addTab(menuKey, "代订账务", listTemplate(data));
 				Replace.$tab = $('#tab-' + menuKey + '-content');
 				//绑定事件
-				Replace.init_event();
+				Replace.init_event(args);
 				// 缓存页面
 				Replace.listPageNo = args.pageNo;
 				//获取统计金额
@@ -80,15 +80,14 @@ define(function(require, exports) {
 	/**
 	 * 初始化列表页面的事件绑定
 	 */
-	Replace.init_event = function(){
-		
+	Replace.init_event = function(args){
 		//搜索顶部的事件绑定
 		var $searchArea = Replace.$tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
 		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
 		Tools.setDatePicker($datepicker, true);
-		$searchArea.find('.T-btn-search').on('click', function(event) {
+		$searchArea.find('.T-btn-search').off().on('click', function(event) {
 			event.preventDefault();
 			Replace.getList();
 		});
@@ -105,15 +104,21 @@ define(function(require, exports) {
 		// 报表内的操作
 		Replace.$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $that = $(this), 
-				id = $that.closest('tr').data('id'), 
-				name = $that.closest('tr').data('name');
+			var $that = $(this),
+				argsData = {
+					pageNo : 0,
+					partnerAgencyId : $that.closest('tr').data('id'), 
+					name : $that.closest('tr').data('name'),
+					startDate : args.startDate,
+					endDate : args.endDate,
+					accountStatus : args.accountStatus				
+				};
 			if ($that.hasClass('T-checking'))  {
 				// 对账
-				Replace.checking(id, name);
+				Replace.checking(argsData);
 			} else if ($that.hasClass('T-balance'))  {
 				// 结算
-				Replace.balance(id, name);
+				Replace.balance(argsData);
 			}
 		});
 	};
@@ -172,29 +177,21 @@ define(function(require, exports) {
 	 * 对账
 	 * @param  {int} id 客户ID
 	 */
-	Replace.checking = function(id, name){
-		Replace.$checkingTab = null;
-		Replace.checkingId = id;
+	Replace.checking = function(args){
+		Replace.checkingId = args.partnerAgencyId;
 		Replace.checkingName = name;
-		Replace.checkingList(0, id);
+		Replace.checkingList(args);
 	};
 	Replace.clearComma = function(str){
 		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
-	Replace.checkingList = function(page, id, startDate, endDate,accountStatus){
-		var args = {
-			pageNo : (page || 0),
-			partnerAgencyId : id || Replace.checkingId,
-			endDate : endDate || Replace.$tab.find('.T-search-end-date').val(),
-			startDate : startDate || Replace.$tab.find('.T-search-start-date').val(),
-			accountStatus : accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value")
-		};
+	Replace.checkingList = function(args){
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
 			args = {
-				pageNo : (page || 0),
-				partnerAgencyId : id || Replace.checkingId,
+				pageNo : (args.pageNo || 0),
+				partnerAgencyId : args.partnerAgencyId || Replace.checkingId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
 				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
@@ -233,20 +230,22 @@ define(function(require, exports) {
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
 				
-				Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data));
-
-				Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
-
-				Replace.CM_event(Replace.$checkingTab, true);
+				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
+					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
+					Replace.CM_event(Replace.$checkingTab,args,true);
+				} else {
+					Replace.$checkingTab.data('next', args)
+				}
+				
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$checkingTab.find('.T-pagenation'), 
 				    pages: data.searchParam.totalPage, //总页数
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
-				    	Replace.$checkingTab.data('isEdited', false);
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Replace.checkingList(obj.curr -1);
+				    		Replace.$checkingTab.data('isEdited',false);
+				    		Replace.checkingList({pageNo : obj.curr -1});
 				    	}
 				    }
 				});	
@@ -254,38 +253,47 @@ define(function(require, exports) {
 		});
 	};
 
-	Replace.CM_event = function($tab, isCheck){
+	Replace.CM_event = function($tab,args,isCheck){
 		var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1)),
 		validatorCheck = validator.check($tab);
 		// 处理关闭与切换tab
-        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on('change', '.T-checkList, .T-clearList', function() {
+        $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
             $tab.data('isEdited', true);
-        })
+        });
+        $tab.off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             if (!validatorCheck.form())return;
-            if (!isCheck) {
-            	Replace.saveCheckingData($tab, [tab_id, title, html]);
+            if (isCheck) {
+            	Replace.saveCheckingData($tab,args,[tab_id, title, html]);
         	}else{
-            	Replace.savePayingData($tab, [tab_id, title, html]);
+            	Replace.savePayingData($tab,args,[tab_id, title, html]);
         	}
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             if (!isCheck) {
-				Replace.balanceList();
+            	Replace.payingJson = [];
+				Replace.balanceList($tab.data('next'));
             }else{
-            	Replace.checkingList();
+            	Replace.checkingList($tab.data('next'));
             }
         })
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
             if (!validatorCheck.form())return;
-            if (!isCheck) {
+            if (isCheck) {
             	Replace.saveCheckingData($tab);
         	}else{
             	Replace.savePayingData($tab);
         	}
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(!isCheck){
+                Replace.payingJson = [];
+            }
         });
 		//搜索
 		var $searchArea = $tab.find('.T-search-area'),
@@ -294,12 +302,12 @@ define(function(require, exports) {
 		Replace.chooseOrder($searchArea.find('.T-search-order'));
 		Replace.chooseProject($searchArea.find('.T-search-project'));
 
-		$searchArea.find('.T-btn-search').on('click', function(event){
+		$searchArea.find('.T-btn-search').off().on('click', function(event){
 			event.preventDefault();
 			if(isCheck){
-				Replace.checkingList();
+				Replace.checkingList({pageNo : 0});
 			}else{
-				Replace.balanceList();
+				Replace.balanceList({pageNo : 0});
 			}
 		});
 		if (!isCheck) {
@@ -308,15 +316,6 @@ define(function(require, exports) {
         }else{
         	Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
         };
-		
-
-		// 监听修改
-        $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
-            event.preventDefault();
-            $(this).closest('tr').data("change",true);
-            $tab.data('isEdited', true);
-        });
-
 		$tab.find('.T-list').on('click', '.T-action', function(event){
 			var $that = $(this), id = $that.closest('tr').data('id');
 			if($that.hasClass('T-view-Received')){
@@ -363,28 +362,14 @@ define(function(require, exports) {
 	            FinancialService.exportReport(args,"exportArrangeBookingOrderFinancial");
 	        });
         }
-		$tab.find('.T-btn-close').on('click', function(event){
-			if(!!$tab.data('isEdited')){
-				showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function(){
-					FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
-						Replace.saveCheckingData($tab);
-		            });
-				}, function(){
-					Tools.closeTab(oMenuKey);
-                	Replace.getList(Replace.listPageNo);
-				});
-			}else{
-				Tools.closeTab(oMenuKey);
-                Replace.getList(Replace.listPageNo);
-			}
-		});
-		$tab.find('.T-saveClear').on('click', function(event){
+        FinancialService.closeTab(oMenuKey);
+		$tab.find('.T-saveClear').off().on('click', function(event){
 			if (!validatorCheck.form()) {
                 return;
             }
 			if(isCheck){
 				FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
-					Replace.saveCheckingData($tab, true);
+					Replace.saveCheckingData($tab,args);
 	            });
 			}else{
 				if(!$tab.data('isEdited')){
@@ -402,16 +387,16 @@ define(function(require, exports) {
 			    };
 	        	if(sumPayMoney == 0){
 	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-			            Replace.savePayingData($tab, true);
+			            Replace.savePayingData($tab,args);
 			        })
 	        	}else{
-	        		Replace.savePayingData($tab, true);
+	        		Replace.savePayingData($tab,args);
 	        	}
 			}
 		});
 
 		if(!isCheck){
-			$tab.find('.T-btn-autofill').on('click', function(event){
+			$tab.find('.T-btn-autofill').off().on('click', function(event){
 				event.preventDefault();
 				var $that = $(this);
 
@@ -421,13 +406,9 @@ define(function(require, exports) {
                     	Replace.autoFillData($tab);
 	                }
 	            } else {
-	            	Replace.payingJson = [];
 	                Replace.setAutoFillEdit($tab, false,isCheck);
 	            }
 			});
-
-            // 清空数据
-            Replace.payingJson = [];
 		}
 	};
 
@@ -497,23 +478,23 @@ define(function(require, exports) {
 
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
 
-        Replace.getOperationList(0, $tab);
+        Replace.getOperationList({pageNo : 0}, $tab);
         $tab.data('isEdited', true);
         var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1));
         FinancialService.updateSumPayMoney($tab, validator);
     };
 
     /**
-     * 获取对账列表数据
+     * 获取付款列表数据
      * @param  {int} pageNo 列表页码
      * @return {[type]}        [description]
      */
-    Replace.getOperationList = function(pageNo, $tab) {
+    Replace.getOperationList = function(args, $tab) {
         if ($tab) {
             var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
 			var order = Replace.$balanceTab.find(".T-search-order").val();
 			args = {
-				pageNo : (pageNo || 0),
+				pageNo : (args.pageNo || 0),
 				partnerAgencyId : Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
@@ -552,6 +533,10 @@ define(function(require, exports) {
 					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
 					html = payingTableTemplate(data);
 					Replace.$balanceTab.find('.T-clearList').html(html);
+					if(Replace.payingJson){
+						Replace.$balanceTab.data('isEdited',true);
+					}
+					Replace.CM_event(Replace.$balanceTab,args,false);
 
                     // 设置记录条数及页面
                     $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
@@ -564,7 +549,9 @@ define(function(require, exports) {
 					    curr: (data.searchParam.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		Replace.getOperationList(obj.curr -1);
+					    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
+					    		Replace.$balanceTab.data('isEdited',false);
+					    		Replace.getOperationList({pageNo : obj.curr -1},$tab);
 					    	}
 					    }
 					});	
@@ -678,8 +665,9 @@ define(function(require, exports) {
 		}
 	};
 
-	Replace.saveCheckingData = function($tab, tabArgs){
-		var validator = new FinRule(0);
+	Replace.saveCheckingData = function($tab,args,tabArgs){
+		var argLen = arguments.length,
+			validator = new FinRule(0);
 		var json = FinancialService.checkSaveJson($tab, validator);
 		if (json) { // 有值
 			$.ajax({
@@ -694,12 +682,14 @@ define(function(require, exports) {
                     $tab.data('isEdited', false);
 
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
-                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            Replace.checkingList(0);
-                        } else {
-                            Tools.closeTab(checkMenuKey);
+                        if (argLen === 1) {
+                        	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);
+                        } else if(argLen === 2){
+                            Replace.checkingList(args);
+                        } else if(argLen === 3){
+                        	Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
+                            Replace.CM_event($tab,args,true);
                         }
                     })
                 }
@@ -711,38 +701,31 @@ define(function(require, exports) {
 	 * 收款
 	 * @param  {int} id 客户ID
 	 */
-	Replace.balance = function(id, name){
-		Replace.$balanceTab = null;
-		Replace.balanceId = id;
+	Replace.balance = function(args){
+		Replace.balanceId = args.partnerAgencyId;
 		Replace.balanceName = name;
 		Replace.isBalanceSource = false;
-		var accountStatus  =  accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value");
-		Replace.balanceList(0, id, Replace.$tab.find('.T-search-start-date').val(), Replace.$tab.find('.T-search-end-date').val(),accountStatus);
+		args.accountStatus  =  args.accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value");
+		Replace.balanceList(args);
 	};
 	Replace.initIncome = function(args){
-		Replace.$balanceTab = null;
 		Replace.balanceId = args.id;
 		Replace.balanceName = args.name;
 		Replace.isBalanceSource = true;
-		Replace.balanceList(0, args.id, args.startDate, args.endDate,args.accountStatus);
+		args.pageNo = 0;
+		args.partnerAgencyId = args.id;
+		Replace.balanceList(args);
 	};
 
 
-	Replace.balanceList = function(page, id, startDate, endDate,accountStatus){
-		var args = {
-			pageNo : (page || 0),
-			partnerAgencyId : id || Replace.balanceId,
-			endDate : endDate,
-			startDate : startDate,
-			accountStatus : accountStatus
-		};
-
+	Replace.balanceList = function(args){
+		console.log(Replace.$balanceTab);
 		if(!!Replace.$balanceTab){
 			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
 			var order = Replace.$balanceTab.find(".T-search-order").val();
 			args = {
-				pageNo : (page || 0),
-				partnerAgencyId : id || Replace.balanceId,
+				pageNo : (args.pageNo || 0),
+				partnerAgencyId : args.partnerAgencyId || Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
 				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
@@ -781,16 +764,15 @@ define(function(require, exports) {
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
-				Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data));
-				Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
-
-				html = payingTableTemplate(data);
-				Replace.$balanceTab.find('.T-clearList').html(html);
-				//Tools.descToolTip(Replace.$balanceTab.find('.T-clearList').find(".T-ctrl-tip"),1);
-				Replace.CM_event(Replace.$balanceTab, false);
-
-				var payingCheck = new FinRule(2).check(Replace.$balanceTab);
-
+				if(Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data))){
+					Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
+					html = payingTableTemplate(data);
+					Replace.$balanceTab.find('.T-clearList').html(html);
+					Replace.CM_event(Replace.$balanceTab,args,false);
+					var payingCheck = new FinRule(2).check(Replace.$balanceTab);
+				} else {
+					Replace.$balanceTab.data("next",args);
+				}
 				// 绑定翻页组件
 				laypage({
 				    cont: Replace.$balanceTab.find('.T-pagenation'), 
@@ -798,14 +780,17 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Replace.balanceList(obj.curr -1);
+				    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
+				    		Replace.$balanceTab.data('isEdited',false);
+				    		args.pageNo = obj.curr -1;
+				    		Replace.getOperationList(args,Replace.$balanceTab);
 				    	}
 				    }
 				});	
 			}
 		});
 	};
-	Replace.savePayingData = function($tab, tabArgs){
+	Replace.savePayingData = function($tab,args,tabArgs){
 		var check =  new FinRule(5).check($tab);
     	if(!check.form()){ return false; }
 		
@@ -813,7 +798,8 @@ define(function(require, exports) {
 		if(!FinancialService.isClearSave(Replace.$balanceTab,validator)){
             return false;
         };
-		var json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
+		var argLen = arguments.length,
+			json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
 		var payType = $tab.find('.T-sumPayType').val(),
 			bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
@@ -836,17 +822,19 @@ define(function(require, exports) {
                     $tab.data('isEdited', false);
                     Replace.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
-                            //Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            Replace.balanceList(0);
-                        } else {
-                            Tools.closeTab(blanceMenuKey);
-                            Replace.getList(Replace.listPageNo);
+                        if (argLen === 1) {
+                        	Tools.closeTab(blanceMenuKey);
+                            Replace.getList(Replace.listPageNo);                            
+                        } else if(argLen === 2){
+                            Replace.balanceList(args);
+                        } else if(argLen === 3){
+                        	Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
+                        	Replace.getOperationList(args,$tab);
                         }
                     })
                 });
         } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
         }
 	};
 	exports.init = Replace.initModule;

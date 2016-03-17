@@ -101,7 +101,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 
 /***发团计划样式**/
 
-input.datepicker {
+input.datepicker:not([class^="col-"]) {
 	border-radius: 0;
 	width: 90px;
 }
@@ -297,7 +297,8 @@ input.datepicker {
 .hct-absolute-group .hct-span-left{
 	padding-right: 40px;
 }
-.hct-absolute-group .hct-button-right .btn{
+.hct-absolute-group .hct-button-right .btn,
+.table tr .btn{
 	position: initial;
 }
 .hct-button-right{
@@ -871,6 +872,13 @@ input.datepicker {
 		padding-top: 49px;
 	}
 } */
+.breadcrumbs-fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    z-index: 1024;
+}
 /*布局全局变量*/
 .main-content-inner > .page-content{
 	padding: 0;
@@ -947,6 +955,7 @@ input.datepicker {
 .main-content-inner > .page-content,
 .main-content-inner > .page-content > .tab-content{
 	height: 100%;
+	background: #F9FFF9;
 }
 #tabContent{
 	padding: 0;
@@ -960,6 +969,7 @@ input.datepicker {
     height: 100%;
     overflow: auto;
 	padding: 20px 20px 15px 25px;
+	background-color: #f9fff9;
 }
 .main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
 	min-width: 1085px;
