@@ -322,9 +322,7 @@ define(function(require, exports) {
         $tab.find('.all .T-CheckAllBox').on('click', function(event) {
             /* Act on the event */
             arrangeGroupTransfer.checkTransferAll($tab, $(this));
-
         });
-
     };
 
     /**
@@ -604,7 +602,7 @@ define(function(require, exports) {
             var $that = $(this),
                 $tr = $that.closest('tr');
             var id = $tr.attr("data-entity-id");
-            arrangeGroupTransfer.delOutTransfer(id, $tr, $outFeeObj);
+            arrangeGroupTransfer.delTransferData(id, $tr, $outFeeObj);
         });
 
         //计算应付款
@@ -709,7 +707,7 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr');
                 var id = $tr.attr("data-entity-id");
-                arrangeGroupTransfer.delOutTransfer(id, $tr, $tab);
+                arrangeGroupTransfer.delTransferData(id, $tr, $tab);
             });
         };
         $tab.find(".count").on('change', function(event) {
@@ -746,30 +744,6 @@ define(function(require, exports) {
                 arrangeGroupTransfer.PayMoneyF($tab);
             });
         }
-    };
-
-    /**
-     * delOutTransfer        外转删除
-     * @param  {[type]} id   [description]
-     * @param  {[type]} $tr  [description]
-     * @param  {[type]} $tab [description]
-     * @return {[type]}      [description]
-     */
-    arrangeGroupTransfer.delOutTransfer = function(id, $tr, $tab) {
-        if (!!id && id!= null) {
-            //移除空的其他费用
-            $tr.fadeOut(function() {
-                $tr.addClass('deleted');
-                $tr.hide();
-                arrangeGroupTransfer.PayMoneyF($tab);
-            });
-        } else {
-            //移除空的其他费用
-            $tr.fadeOut(function() {
-                $tr.remove();
-                arrangeGroupTransfer.PayMoneyF($tab);
-            });
-        };
     };
 
     /**
