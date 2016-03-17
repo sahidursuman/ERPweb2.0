@@ -3123,7 +3123,8 @@ define(function(require, exports){
 						change:function(event,ui){
 							 if(ui.item == null){
 							 	var $tr = $(this).closest('tr');
-							 	$(this).val('');
+							 	// 允许输入餐标，不清空
+							 	// $(this).val('');
 							 	$tr.find('input[name=standardId]').val('');
 							 }
 							 Count.autoRestaurantSum($(this),$parentObj);
