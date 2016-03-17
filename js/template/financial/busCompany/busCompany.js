@@ -667,8 +667,8 @@ define(function(require, exports) {
             pageNo : 0,
             busCompanyId : options.id,
             busCompanyName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
+            startTime : options.startDate,
+            endTime : options.endDate,
             accountStatus : options.accountStatus,
             isAutoPay : 2
         }
