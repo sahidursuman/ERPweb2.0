@@ -67,6 +67,10 @@ define(function(require, exports) {
 			/* Act on the event */
 			subsection.subsectionList(0);
 		});
+		subsection.$searchArea.find('#order_by').on('change', function(event) {
+			event.preventDefault();
+			subsection.subsectionList(0, false);
+		});
 		//模糊查询
 		subsection.getPartnerAgencyList();
 		//subsection.getLineProductList();
@@ -89,8 +93,8 @@ define(function(require, exports) {
 	 * @param  {[type]} operationEndDate    [操作日期-结束]
 	 * @return {[type]}                     [description]
 	 */
-	subsection.subsectionList = function(page) {
-		if (subsection.$searchArea && arguments.length == 1) {
+	subsection.subsectionList = function(page, noCount) {
+		if (subsection.$searchArea && arguments.length >= 1) {
 			var args = {
 				orderNumber:subsection.$searchArea.find("input[name=orderNumber]").val(),
 				lineProduct:subsection.$searchArea.find("input[name=lineProduct]").val(),
@@ -102,6 +106,13 @@ define(function(require, exports) {
 				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),
 				operationStartDate:subsection.$searchArea.find("input[name=operationStartDate]").val(),
 				operationEndDate:subsection.$searchArea.find("input[name=operationEndDate]").val(),
+				sortType: 'startTime',
+				order: subsection.$searchArea.find("#order_by").val()
+			}
+		} else {
+			var args = {
+				sortType: 'startTime',
+				order: 'asc'
 			}
 		}
 		// 修正页码
@@ -136,16 +147,18 @@ define(function(require, exports) {
 			}
 		});
 
-		//计算人数合计 和 现收款合计
-		$.ajax({
-			url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
-			type: 'POST',
-			data: args,
-			success: function(data){
-				subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
-				subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
-			}
-		})
+		if (!noCount) {
+			//计算人数合计 和 现收款合计
+			$.ajax({
+				url: KingServices.build_url('innerTransferOperation', "getTransitSubCount"),
+				type: 'POST',
+				data: args,
+				success: function(data){
+					subsection.$tab.find(".T-search-memberCount").html("人数合计：<span class='F-float F-count'>"+data.adultCount+"</span>大<span class='F-float F-count'>"+data.childCount+"</span>小");
+					subsection.$tab.find(".T-search-currentNeedPayMoney").html("现收款合计：<span class='F-float F-money'>"+data.currentNeedPayMoney+"</span>元");
+				}
+			});
+		}
 	};
 	/**
 	 * 列表中事件绑定
@@ -316,9 +329,11 @@ define(function(require, exports) {
 	            if ($that.hasClass('T-count')) {  //若数量改变
 	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	                subsection.calcuFeeTotal(); //费用项实时计算
 	            }else if($that.hasClass('T-price')){ //若价格改变
 	                var payMoney = subsection.totalPayMoney($tr);
 	                $tr.find('.T-payedMoney').eq(0).val(payMoney);
+	                subsection.calcuFeeTotal();
 	        };
         });
 
@@ -402,7 +417,7 @@ define(function(require, exports) {
 			+ '<td>' + radio + '</td>'
 			+ '<td><input type="radio" name="operateCalculteOut" class="T-operateCalculteOut" /></td>'
 			+ '<td>-</td>'
-			+ '<td><div class="hidden-sm hidden-xs btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
+			+ '<td><div class="btn-group"><a data-entity-id="" class=" T-btn-operation-delete cursor">删除</a></div></td>'
 			+ '</tr>';
 			$tbody.append(html);
 
@@ -492,6 +507,8 @@ define(function(require, exports) {
 			$(this).closest('div').remove();
 		});
 		$that.remove();
+        //移除计算
+		subsection.calcuFeeTotal();
 	};
 
 	/**
@@ -539,6 +556,9 @@ define(function(require, exports) {
 				var $money = $(this).closest('tr').find('.T-payedMoney'),
 					money = ($money.val() || 0) * 1;
 				$money.val(money + sum);
+
+				//实时计算
+    		    subsection.calcuFeeTotal();
 	    	}
 	    	
 	    });
@@ -558,6 +578,7 @@ define(function(require, exports) {
 				$parents.addClass("del");
 				$parents.fadeOut(function(){
 					$parents.hide();
+					subsection.calcuFeeTotal();
 				})
 				$(this).dialog( "close" );
 			})
@@ -565,6 +586,7 @@ define(function(require, exports) {
 		}else{
 			$parents.fadeOut(function(){
 				$parents.remove();
+				subsection.calcuFeeTotal();
 			})
 		}
 	};
@@ -591,6 +613,19 @@ define(function(require, exports) {
     	    };
     	return totalPayMoney;
     };
+
+    /**
+     * [calcuFeeTotal 费用项实时计算
+     * @return {[type]} [description]
+     */
+	subsection.calcuFeeTotal=function(){
+      var $trList=subsection.$tabSub.find('.T-subsectionOperationTbody').find("tr:not(.del)"),totalFee=0*1;
+      $trList.each(function(index) {
+      	  totalFee=totalFee*1;
+      	  totalFee+=$trList.eq(index).find('.T-payedMoney').val()*1;
+      });
+      subsection.$tabSub.find('.T-FeeTotal').val(totalFee);
+	};
 
 	/**
 	 * 保存分段操作

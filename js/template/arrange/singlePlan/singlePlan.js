@@ -39,7 +39,6 @@ define(function(require, exports) {
         Tools.addTab(menuKey, "散客计划", listMainTemplate(FinancialService.getInitDate()));
         singlePlan.$tab = $('#tab-'+menuKey+'-content');
         singlePlan.init_eventMain(singlePlan.$tab);
-        
         singlePlan.getAutocompleteData(0);
     };
 
@@ -56,12 +55,13 @@ define(function(require, exports) {
                 singlePlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), data.lineProducts, 'name');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="partnerAgencyName"]'), data.partnerAgencies, 'travelAgencyName');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
-                singlePlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), data.dutyOPUsers, 'realName');
+                //singlePlan.autocompleteSearch($searchArea.find('input[name="dutyOPUserName"]'), data.dutyOPUsers, 'realName');//责任计调
                 singlePlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), data.businessGroups, 'name');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="realname"]'), data.guides, 'realname');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="brand"]'), data.busCompanyArranges, 'licenseNumber');
 
                 singlePlan.listTripPlanSingle(0, singlePlan.$tab);
+                
             }
         })
     }
@@ -92,6 +92,9 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.addTripPlan($(this).data('type'));
         });
+        
+        //获取责任计调
+        singlePlan.getDutyOPUserList(singlePlan.$tab.find('[name=dutyOPUserName]'));
 
         // 散客
         $tab.find(".T-tripPlan-singleList").on('click', '.T-action', function(event){
@@ -226,6 +229,9 @@ define(function(require, exports) {
             },
             select :function(event, ui){
                 $(this).data('id', ui.item.id);
+                if ($(this).attr("name") === "businessGroupName") {
+                    $(this).closest('.form-inline').find('[name=dutyOPUserName]').val('').data('id', '');
+                }
             }
         }).on('click', function() {
             var $this = $(this),
@@ -375,9 +381,20 @@ define(function(require, exports) {
         //绑定时间
         Tools.setDatePicker($tab.find('.datepicker'), true);
         singlePlan.setExecuteTimer($tab);
-        $tab.find('[name="startTime"]').on('change', function(){
-            F.arrangeDate($tab);
-        }).trigger('change'); 
+        $tab.find('[name="startTime"]').off('changeDate').on('changeDate', function(){
+            if(!$(this).data("clicked") && $(this).data('add')){
+                F.arrangeDate($tab);
+            }
+            F.calcWhicDay($tab);
+            if (!!$tab.find('[name=startTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
+                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+            }
+            $(this).data("clicked",true);
+        }).trigger('change');
+        F.arrangeDate($tab);
+        $tab.off('changeDate.whichDayDate').on('changeDate.whichDayDate', '[name=whichDayDate]', function() {
+            F.calcWhicDay($tab);
+        }).trigger('change');
 
         var validate = rule.checkPlan($tab); 
         singlePlan.init_edit_event($tab, validate, type);
@@ -420,8 +437,10 @@ define(function(require, exports) {
             event.preventDefault();
             var $days = $tab.find('.T-days'),
                 lenWhichDay = $days.data('length-whichDay');
-            $days.append(travelArrange({lineProductDayList:[{whichDay: lenWhichDay ? lenWhichDay*1+1 : 1}]}));
-            F.arrangeDate($tab);
+            $days.append(travelArrange({lineProductDayList:[{whichDay: ''}]}));
+            // F.arrangeDate($tab);
+            Tools.setDatePicker($tab.find('.datepicker'), true);
+            F.calcWhicDay($tab);
             validate = rule.update(validate);
         });
 
@@ -569,9 +588,9 @@ define(function(require, exports) {
                     $that.closest('tr').remove();
                     var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
                         lenWhichDay = $tab.find('.T-days').data('length-whichDay');
-                    if(whichDay == lenWhichDay){
-                        F.arrangeDate($tab);
-                    }
+                    // if(whichDay == lenWhichDay){
+                    //     F.arrangeDate($tab);
+                    // }
                 }
                 if (!!id) {
                     showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
@@ -760,6 +779,20 @@ define(function(require, exports) {
         } else if(args.executeTimeType == 0) {
             delete(args.executeTime);
         }
+        var isDateRepear = 0,
+            dateArray = [],
+            $dateTr = $tab.find('.T-days tr');
+        $dateTr.each(function(index) {
+            var $this = $(this);
+            dateArray.push($this.find('[name=whichDayDate]').val())
+        });
+        var dateArray2 = dateArray.sort();
+        for (var i = dateArray.length - 1; i >= 0; i--) {
+            if (dateArray[i] == dateArray2[i+1]) {
+                showMessageDialog($( "#confirm-dialog-message" ), "行程安排中日期重复");
+                return;
+            }
+        }
 
         //团行程json包
         args.planDayJson =  JSON.stringify(singlePlan.getTripPlanDays($tab));
@@ -904,13 +937,13 @@ define(function(require, exports) {
                 for(var i=0; i<data.dayList.length; i++){
                     data.dayList[i].dayInfo = JSON.parse(data.dayList[i].dayInfo);
                     var arrangeData = data.dayList[i].arrangeData;
-                    arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);
-                    arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);
-                    arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);
-                    arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);
-                    arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);
-                    arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);
-                    arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);
+                    if (arrangeData.hotelArrangeList) {arrangeData.hotelArrangeList = JSON.parse(arrangeData.hotelArrangeList);}
+                    if (arrangeData.otherArrangeList) {arrangeData.otherArrangeList = JSON.parse(arrangeData.otherArrangeList);}
+                    if (arrangeData.restaurantArrangeList) {arrangeData.restaurantArrangeList = JSON.parse(arrangeData.restaurantArrangeList);}
+                    if (arrangeData.scenicArrangeList) {arrangeData.scenicArrangeList = JSON.parse(arrangeData.scenicArrangeList);}
+                    if (arrangeData.selfPayArrangeList) {arrangeData.selfPayArrangeList = JSON.parse(arrangeData.selfPayArrangeList);}
+                    if (arrangeData.shopArrangeList) {arrangeData.shopArrangeList = JSON.parse(arrangeData.shopArrangeList);}
+                    if (arrangeData.ticketArrangeList) {arrangeData.ticketArrangeList = JSON.parse(arrangeData.ticketArrangeList);}
                 }
                 data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
                 data.guideArrange = JSON.parse(data.guideArrange);
@@ -1076,7 +1109,7 @@ define(function(require, exports) {
                                 $container.find(".T-saveGroup").click(function(){
                                     var addGroupIdJson = [],
                                         html = "<td>"+
-                                            "<div class=\"hidden-sm hidden-xs btn-group\">"+
+                                            "<div class=\"btn-group\">"+
                                             "<a class=\"cursor T-action T-groupView\">"+
                                                 "查看"+
                                             "</a>"+"<a class='cursor'> </a>"+
@@ -1141,7 +1174,7 @@ define(function(require, exports) {
                     (!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+
                     (!!group[i].sendPosition?group[i].sendPosition:"")+'</td><td>'+
                     (!!group[i].remark?group[i].remark:"")+'</td><td>'+
-                    '<div class="hidden-sm hidden-xs btn-group">'+
+                    '<div class="btn-group">'+
                     '<a class="cursor T-action T-groupView">查看</a>'+
                     '<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
                 }
@@ -1435,7 +1468,6 @@ define(function(require, exports) {
                     data.lineProductDayList = JSON.parse(data.lineProductDayList);
                     var result =showDialog(data);
                     if(result){
-                        
                         if(!$.isEmptyObject(data.quote)){
                             var quote = data.quote;
                             $tab.find('[name="shopNames"]').val(quote.shopNames).data('propover', quote.shopIds);
@@ -1446,9 +1478,11 @@ define(function(require, exports) {
                             $tab.find('[name="startTime"]').val(quote.startTime);
                             $tab.find('[name="endTime"]').val(quote.endTime);
                         }else if(!$.isEmptyObject(data.lineProduct)){
-                            var line = data.lineProduct;
+                            var line = data.lineProduct,
+                                dayList = data.lineProductDayList;
                             $tab.find('[name="shopNames"]').val(line.shopNames).data('propover', line.shopIds);
                             $tab.find('[name="selfPayItemNames"]').val(line.selfPayItemNames).data('propover', line.selfPayItemIds);
+                            $tab.find('[name="lineProductName"]').data('entity-days', dayList.length);
                         }
                         for(var i=0; i<data.lineProductDayList.length; i++){
                             var repastDetail = data.lineProductDayList[i].repastDetail;
@@ -1463,7 +1497,9 @@ define(function(require, exports) {
                         $tab.find(".T-days").html(travelArrange(data));
                         $tab.find('input[name="lineProductName"]').trigger('change');
                         //KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
-                        F.arrangeDate($tab);
+                        F.arrangeDate($tab, 1);
+                        F.calcWhicDay($tab)
+                        Tools.setDatePicker($tab.find('.datepicker'), true);
 
                         $tab.find('.T-action-plan .T-add-action [type=checkbox]').each(function(index) {
                             if ($(this).is(':checked')) {
@@ -1576,7 +1612,7 @@ define(function(require, exports) {
             return Tools.toFixed(countMoney);
         },
         //换算行程安排日期
-        arrangeDate : function($tab){
+        arrangeDate : function($tab, chooseLine){
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
                 endTime = $tab.find('[name="endTime"]'),
@@ -1585,17 +1621,17 @@ define(function(require, exports) {
             var lengthWhichDay = 1;
             $tr.each(function(index){
                 var $days = $(this).find('[name="dateDays"]'),
-                    theWhichDay = $days.data('which-day')
+                    theWhichDay = $days.data('which-day'),
                     whichDate = Tools.addDay(startTime, theWhichDay - 1);
-                if(lengthWhichDay < theWhichDay){
-                    lengthWhichDay = theWhichDay;
-                }
-                if(startTime != ""){
+
+                if(startTime != "" &&  /^(\+|-)?\d+($|\.\d+$)/.test(theWhichDay)){
                     $days.find('[name="whichDayDate"]').val(whichDate);
-                    endTime.val(Tools.addDay(startTime, lengthWhichDay - 1));
-                }
-                if(index == $tr.length-1){
-                    $tab.find('.T-days').data('length-whichDay', lengthWhichDay);
+                    if (chooseLine == 1) {
+                        if(lengthWhichDay < theWhichDay){
+                            lengthWhichDay = theWhichDay;
+                        }
+                       endTime.val(Tools.addDay(startTime, lengthWhichDay - 1));
+                    }
                 }
             });
         },
@@ -1651,7 +1687,61 @@ define(function(require, exports) {
             }else{
                 showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
             }
+        },
+        calcWhicDay : function($tab) {
+            var $time = $tab.find('[name="startTime"]'),
+                startTime = $time.val(),
+                $tr = $tab.find('.T-days tr');
+
+            if (!!startTime) {
+                $tr.each(function(index) {
+                    var $this = $(this),
+                        wichTime = $this.find('[name=whichDayDate]').val();
+                    if (!!wichTime) {
+                        $this.find('[name=dateDays]').data('which-day', Tools.getDateDiff(startTime, wichTime, 'noAbs')+1);
+                        //console.log('whichDay:' + $this.find('[name=dateDays]').data('which-day'));
+                    }
+                })
+            }
         }
+    };
+
+    singlePlan.getDutyOPUserList = function($chooseObj) {
+        $chooseObj.autocomplete({
+            minLength: 0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    $(this).data('id', '');
+                }
+            },
+            select :function(event, ui){
+                $(this).data('id', ui.item.id);
+            }
+        }).off('click').on('click', function() {
+            $.ajax({
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
+                type: "POST",
+                data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupName]').data('id'),
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var jsonList = data.outOPUsers;
+                        if (jsonList != null && jsonList.length > 0) {
+                            for (var i = 0; i < jsonList.length; i++) {
+                                jsonList[i].value = jsonList[i].realName;
+                            }
+                            $chooseObj.autocomplete('option','source', jsonList);
+                            $chooseObj.autocomplete('search', '');
+                        } else {
+                            layer.tips('没有内容', $chooseObj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        })
     };
 
     exports.init = singlePlan.initModule;
