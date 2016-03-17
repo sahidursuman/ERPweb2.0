@@ -2124,10 +2124,10 @@ define(function(require, exports){
 	//餐费金额计算
 	Count.autoRestaurantSum = function($obj,$parentObj){
 		var $tr = $obj.closest('tr');
-		var $price = parseFloat($tr.find('input[name=price]').val());
-		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
-		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
-		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
+		var $price = parseFloat($tr.find('input[name=price]').val()|| 0);
+		var $realCount = parseFloat($tr.find('input[name=realCount]').val() || 0);
+		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val() || 0);
+		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val() || 0);
 		var badStatus = $tr.attr('badStatus');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
@@ -2194,23 +2194,23 @@ define(function(require, exports){
 		//获取餐厅数据
 		Count.getRestData($obj,$parentObj);
 		//下拉框事件
-		$obj.find('select').off('change').on('change',function(){
-			var $tr = $(this).closest('tr');
-			var restaurantId = $tr.find('input[name=restaurantId]').val();
-			if(restaurantId != null && restaurantId != ""){
-				$tr.find('input[name=price]').val(0);
-				Count.autoRestaurantSum($(this),$parentObj);
-				Count.getRestPrice($tr,$parentObj);
-			};
-		});
+		// $obj.find('select').off('change').on('change',function(){
+		// 	var $tr = $(this).closest('tr');
+		// 	var restaurantId = $tr.find('input[name=restaurantId]').val();
+		// 	if(restaurantId != null && restaurantId != ""){
+		// 		$tr.find('input[name=price]').val(0);
+		// 		Count.autoRestaurantSum($(this),$parentObj);
+		// 		Count.getRestPrice($tr,$parentObj);
+		// 	};
+		// });
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
 		//绑定事件
-		$obj.find('input[type=text]').off('change').on('change',function(){
-			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "billRemark"){
-				//Count.calculateCost($(this));
-				//计算金额
+		$obj.find('input[type=text]').on('change',function(){
+			var $that = $(this);
+
+			if ($that.attr('name') != 'billRemark') {
+				// 计算
 				Count.autoRestaurantSum($(this),$parentObj);
 			}
 		});
