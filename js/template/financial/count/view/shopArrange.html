@@ -16,7 +16,7 @@
             <th class="th-border" colspan="5">打单</th>
             <th class="th-border" colspan="2">社佣</th>
             <th class="th-border" colspan="2">导佣</th>
-            <th class="th-border" rowspan="2">现收</th>
+            <th class="th-border hidden" rowspan="2">现收</th>
             <th class="th-border" rowspan="2">导游报账备注</th>
             <th class="th-border" rowspan="2">是否对账</th>
         </tr>
@@ -66,7 +66,7 @@
                 
                 <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
-                <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                <td rowspan="{{arrange.shopArrangeItemSet.length}}" class="hidden">
                     <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 </td>
