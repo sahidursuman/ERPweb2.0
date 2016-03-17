@@ -2647,9 +2647,7 @@ define(function(require, exports) {
 		} else if(trim(type) == ""){
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
 			return false;
-		}
-		
-		
+		}		
 
 		// 获取表单的数据
 		travelLineData.lineProduct = 
@@ -2668,7 +2666,8 @@ define(function(require, exports) {
 				shopNames: $form.find('.T-shopMultiselect').val(),
 				shopIds: ResLineProduct.jsonToString($form.find('.T-shopMultiselect').data('propover')),
 				selfPayItemNames: $form.find('.T-selfPayMultiselect').val(),
-				selfPayItemIds: ResLineProduct.jsonToString($form.find('.T-selfPayMultiselect').data('propover'))
+				selfPayItemIds: ResLineProduct.jsonToString($form.find('.T-selfPayMultiselect').data('propover')),
+				publishAuthArea: $tab.find('#publishAuthArea').val()
 			}];
 		
 		// 获取基础安排的数据
