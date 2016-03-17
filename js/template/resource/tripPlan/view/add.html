@@ -103,8 +103,7 @@
                     <th class="th-border">收客单号</th>
                     <th class="th-border">客户</th>
                     <th class="th-border">线路产品</th>
-                    <th class="th-border">联系人</th>
-                    <th class="th-border">联系电话</th>
+                    <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
                     <th class="th-border">住宿标准</th>
@@ -119,10 +118,9 @@
                 {{if !!touristGroupList}} {{each touristGroupList as group}}
                 <tr data-id="{{group.id}}">
                     <td>{{group.orderNumber}}</td>
-                    <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+                    <td name="travelAgencyName" title="{{if group.partnerAgencyContact}}联系人：{{group.partnerAgencyContact.contactRealname}}，电话：{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
-                    <td name="contactMemberName">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactRealname}}{{/if}}</td>
-                    <td name="contactMemberMobileNumber">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+                    <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
@@ -132,7 +130,7 @@
                     <td>{{group.sendPosition}}</td>
                     <td name="remark" title={{group.mark}}>{{group.remark}}</td>
                     <td>
-                        <div class="hidden-sm hidden-xs btn-group">
+                        <div class="btn-group">
                             <a class="cursor T-action T-groupView">
                             查看
                         </a>
@@ -148,43 +146,43 @@
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
                 {{if arrangeItemsStauts.guideStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140011">
                     <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.insuranceStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012">
                     <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.busStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013">
                     <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.restaurantStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014">
                     <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="false">餐饮</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.hotelStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015">
                     <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.scenicStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016">
                     <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="false">景区</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.ticketStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017">
                     <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.shopStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018">
                     <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="false">购物</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.selfPayStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019">
                     <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="false">自费</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.otherStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140020">
                     <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
                 </li>
                 {{/if}}
@@ -426,7 +424,7 @@
                                             </td>
                                             <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
                                             <td>
-                                                <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" />
+                                                <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12" style="width: 60px;" />
                                             </td>
                                             <td>
                                                 <input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.brand}}" class="col-sm-12" />

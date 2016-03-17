@@ -22,16 +22,16 @@
             <th>团信息</th>
             <th>出游日期</th>
             <th>团队人数</th>
-            <th>导</th>
-            <th>车</th>
-            <th>险</th>
-            <th>餐</th>
-            <th>房</th>
-            <th>景</th>
-            <th>票</th>
-            <th>购</th>
-            <th>娱</th>
-            <th>它</th>
+            <th class="R-right" data-right="1140011">导</th>
+            <th class="R-right" data-right="1140013">车</th>
+            <th class="R-right" data-right="1140012">险</th>
+            <th class="R-right" data-right="1140014">餐</th>
+            <th class="R-right" data-right="1140015">房</th>
+            <th class="R-right" data-right="1140016">景</th>
+            <th class="R-right" data-right="1140017">票</th>
+            <th class="R-right" data-right="1140018">购</th>
+            <th class="R-right" data-right="1140019">娱</th>
+            <th class="R-right" data-right="1140020">它</th>
             <th>责任部门</th>
             <th>状态</th>
             <th>操作</th>
@@ -62,25 +62,25 @@
             </td>
             <td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
             <!-- 导 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus R-right" data-right="1140011" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td>
             <!-- 车 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus" class="busStatus" data-status="{{tripPlan.busStatus}}"><i class="ace-icon fa {{tripPlan.busStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus" class="busStatus R-right" data-right="1140013" data-status="{{tripPlan.busStatus}}"><i class="ace-icon fa {{tripPlan.busStatus | getArrangeIcon }}"></i></td>
             <!-- 险 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{tripPlan.insuranceStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance" class="R-right" data-right="1140012"><i class="ace-icon fa {{tripPlan.insuranceStatus | getArrangeIcon }}"></i></td>
             <!-- 餐 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant" class="restaurantStatus" data-status="{{tripPlan.restaurantStatus}}"><i class="ace-icon fa {{tripPlan.restaurantStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant" class="restaurantStatus R-right" data-right="1140014" data-status="{{tripPlan.restaurantStatus}}"><i class="ace-icon fa {{tripPlan.restaurantStatus | getArrangeIcon }}"></i></td>
             <!-- 房 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel" class="hotelStatus" data-status="{{tripPlan.hotelStatus}}"><i class="ace-icon fa {{tripPlan.hotelStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel" class="hotelStatus R-right" data-right="1140015" data-status="{{tripPlan.hotelStatus}}"><i class="ace-icon fa {{tripPlan.hotelStatus | getArrangeIcon }}"></i></td>
             <!-- 景 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic"><i class="ace-icon fa {{tripPlan.scenicStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic" class="R-right" data-right="1140016"><i class="ace-icon fa {{tripPlan.scenicStatus | getArrangeIcon }}"></i></td>
             <!-- 票 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket"><i class="ace-icon fa {{tripPlan.ticketStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket" class="R-right" data-right="1140017"><i class="ace-icon fa {{tripPlan.ticketStatus | getArrangeIcon }}"></i></td>
             <!-- 购 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop" class="shopStatus" data-status="{{tripPlan.shopStatus}}"><i class="ace-icon fa {{tripPlan.shopStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop" class="shopStatus R-right" data-right="1140018" data-status="{{tripPlan.shopStatus}}"><i class="ace-icon fa {{tripPlan.shopStatus | getArrangeIcon }}"></i></td>
             <!-- 娱 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay" class="selfPayStatus" data-status="{{tripPlan.selfPayStatus}}"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay" class="selfPayStatus R-right" data-right="1140019" data-status="{{tripPlan.selfPayStatus}}"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
             <!-- 它 -->
-            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other" class="R-right" data-right="1140020"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
             <td>{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</td>
             {{if tripPlan.status == 0}}
             <td class="warning-text">待发团</td>
@@ -117,16 +117,16 @@
             </td>
             <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小</td>
             {{if index == 0}}
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
-            <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140011"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140013"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140012"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140014"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140015"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140016"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140017"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140018"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140019"></td>
+            <td rowspan="{{tripPlan.tripPlanDetails.length}}" class="R-right" data-right="1140020"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>
             <td rowspan="{{tripPlan.tripPlanDetails.length}}"></td>

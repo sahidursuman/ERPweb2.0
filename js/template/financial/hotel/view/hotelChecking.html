@@ -3,9 +3,9 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area" >
                 <div class="form-group"> 
-                    <label> 酒店：{{hotelName}}</label>
+                    <label class="mar-r-10"> 酒店：{{hotelName}}</label>
                     <label>账期：</label>
-                    <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
+                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
                     <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
@@ -109,7 +109,7 @@
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group" style="text-align: center;">
-            <button class="btn btn-xs btn-primary T-close-check">
+            <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
             <button class="btn btn-xs btn-primary T-saveCheck" style="margin-left: 20px">

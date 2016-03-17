@@ -231,6 +231,7 @@ define(function(require, exports) {
                 if (type) {
                     data.name = FinShop.settlementName;
                     data.source = FinShop.isBalanceSource;
+                    data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
                     data.name = FinShop.checkingName;
                     template = shopCheckingTemplate;
@@ -242,6 +243,9 @@ define(function(require, exports) {
                     if (type) {
                         $theTab = $tab || $('#tab-' + key + '-content');
                         FinShop.$settlementTab = $theTab;
+                        if(FinShop.payingJson){
+                            FinShop.$settlementTab.data('isEdited',true);
+                        }
                     } else {
                         $theTab = $tab || $('#tab-' + key + '-content');
                         FinShop.$checkingTab = $theTab;
@@ -262,11 +266,13 @@ define(function(require, exports) {
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             if(type){
-                               FinShop.$settlementTab.data("isEdited",false);
+                                FinShop.payingJson = FinancialService.clearSaveJson(FinShop.$settlementTab,FinShop.payingJson,new FinRule(FinShop.isBalanceSource ? 3 : 1));
+                                FinShop.$settlementTab.data("isEdited",false);
+                                FinShop.getOperationList(obj.curr - 1,FinShop.$settlementTab);
                             } else {
                                 FinShop.$checkingTab.data('isEdited',false);
+                                FinShop.initOperationList({ page: obj.curr - 1 }, type,FinShop.$checkingTab);
                             }
-                            FinShop.initOperationList({ page: obj.curr - 1 }, type, $theTab);
                         }
                     }
                 });
@@ -303,7 +309,10 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            FinShop.initOperationEvent($tab,$tab.data("next"),type);
+            if(type){
+                FinShop.payingJson = [];
+            }
+            FinShop.initOperationList($tab.data("next"), true,false);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -314,6 +323,12 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
             saveData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(type){
+                FinShop.payingJson = [];
+            }
         });
 
         if (type) {
@@ -594,6 +609,9 @@ define(function(require, exports) {
                         data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                         var html = payingTableTemplate(data);
                         FinShop.$settlementTab.find('.T-checkList').html(html);
+                        if(FinShop.payingJson){
+                            FinShop.$settlementTab.data("isEdited",true);
+                        }
                         $tab.find('.T-checkTr').on('change', function() {
                             $(this).data('change', 'true');
                         });
@@ -607,6 +625,7 @@ define(function(require, exports) {
                             curr: (data.searchParam.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    FinShop.payingJson = FinancialService.clearSaveJson($tab,FinShop.payingJson,new FinRule(FinShop.isBalanceSource ? 3 : 1));
                                     $tab.data('isEdited',false);
                                     FinShop.getOperationList(obj.curr - 1, $tab);
                                 }
@@ -641,17 +660,16 @@ define(function(require, exports) {
                     data: saveArgs,
                 })
                 .done(function(data) {
-                    $tab.data('isEdited', false);
-                    FinShop.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        $tab.data('isEdited', false);
+                        FinShop.payingJson = [];
                         if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
                         } else if(argLen === 2){
                             FinShop.initOperationList(args, true,false);
                         } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            FinShop.initOperationEvent($tab,args,true);
+                            FinShop.initOperationList(args, true,false);
                         }
                     })
                 });

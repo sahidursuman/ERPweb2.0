@@ -617,6 +617,13 @@ define(function(require, exports) {
                     $tab.data("id",args.partnerAgencyId);
                     Transfer.saveClear($tab);
                 }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    Transfer.clearTempData = false;
+                    Transfer.clearTempSumDate = false;
+                }
             });
         }
     };
