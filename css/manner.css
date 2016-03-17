@@ -460,6 +460,11 @@ table tr td {
 .mar-1-135{
     margin-left: 135px;
 }
+
+.mar-r-9 {
+    margin-right: 9px;
+}
+
 .mar-r-10 {
     margin-right: 10px;
 }
@@ -2526,7 +2531,13 @@ a.gray span{
         visibility: visible!important;
         opacity: 1;
     }
-    
+    .P-tdFontSize{
+        font-size: 4px!important;
+    }
+    .P-trFontSize{
+        font-size: 8px!important;
+        background-color: green;
+    }
     .tab-content {
         border: 0;
         padding: 0;

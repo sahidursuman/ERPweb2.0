@@ -18,7 +18,7 @@ define(function(require, exports){
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(bankId,bankNo){
+	Payment.initModule = function(bankId,bankNo,type){
 		Payment.$tab = null;
 		var date = new Date(),
         year = date.getFullYear(),
@@ -29,7 +29,8 @@ define(function(require, exports){
 			endTime : year + "-" + month + "-" + day,
 			startTime : year + "-" + month + "-01",
 			bankId : bankId ? bankId : "",
-			payType : ""
+			payType : "",
+			type : type
 		},
 		data = {
 			searchParam : args
@@ -108,7 +109,10 @@ define(function(require, exports){
 			Payment.viewDetails($(this).closest('tr').data("id"));
 		})
 		.on("click",".T-delete",function(){
-			Payment.deletePayment($(this).closest('tr').data("id"));
+			var id = $(this).closest('tr').data("id");
+			showConfirmMsg($("#confirm-dialog-message"),"是否确认删除该条数据？",function(){
+		        Payment.deletePayment(id);
+		    },function(){},"放弃","删除");
 		});	
 
 		Payment.getSubjectList($tab);
@@ -130,13 +134,12 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			// 关闭事件绑定，若存在
-			var $tab = $('#tab-' + menuKey + '-content').off();
-
+			if(args.type == 0){
+				data.searchParam.payType = 0;
+			}
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 
-			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
@@ -144,8 +147,9 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				Payment.$tab.find(".T-card-number").val(bankNo);
-				Payment.$tab.find(".T-card-number").closest('div').removeClass('hidden');
+				var $obj = (args.type == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				$obj.val(bankNo);
+				$obj.closest('div').removeClass('hidden');
 			}
 		});
 	};
@@ -240,7 +244,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,

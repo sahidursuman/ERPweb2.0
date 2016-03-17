@@ -32,6 +32,10 @@ define(function(require,exports){
 					//设置记录数
 					var recordSize = Tools.getRecordSizeDesc(data.recordSize);
 					$listTab.find('.recordSize').text(recordSize);
+					$listTab.find('.T-refresh').on('click', function() {
+						args.pageNo = 0;
+						BankAccount.listBank(args);
+					})
 					//绑定分页插件
 					laypage({
 					    cont: $listTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -55,12 +59,14 @@ define(function(require,exports){
 		$obj.find('.T-bankAcc-list').on('click', '.T-action', function(event) {
 			var $that = $(this), 
 				id = $that.closest('tr').attr('bankid'),
-				bankNumber = $that.closest('tr').attr('banknum'),
+				aliasName = $that.closest('tr').attr('aliasName'),
 				bankMoney = $that.closest('tr').attr('bankMoney'),
-				bankInfo = "账户：" + bankNumber + ",余额：" + bankMoney;
+				beginningBalance = $that.closest('tr').attr('beginningBalance'),
+				bankInfo = "账户：" + aliasName + ",余额：" + bankMoney + ",期初余额：" + beginningBalance,
+				type = $that.closest('tr').data("type");
 			if ($that.hasClass('T-view'))  {
 				// 查看账户信息
-				KingServices.viewPayMentDetail(id,bankInfo);
+				KingServices.viewPayMentDetail(id,bankInfo,type);
 			} 
 		});
 	};

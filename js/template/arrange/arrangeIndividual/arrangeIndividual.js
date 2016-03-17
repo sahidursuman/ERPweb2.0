@@ -55,10 +55,11 @@ define(function(require, exports) {
     arrangeIndividual.init_event = function() {
         arrangeIndividual.$tab = $("#"+tabId);
         var $visitorObj = arrangeIndividual.$tab.find('.T-search-area');
+        var $searchArgumentsForm = $visitorObj.find('form'),customerType = 0;
         //散拼
         $visitorObj.find('.T-visitorTourist-search').off().on('click', function(event) {
             /* Act on the event */
-            var $searchArgumentsForm = $visitorObj.find('form'),customerType = 0;
+            
             //选择组团社与业务部
             var $selectObj = $visitorObj.find(".T-choosePart-chooseFromB");
             $selectObj.on('change', function() {
@@ -67,6 +68,11 @@ define(function(require, exports) {
             });
             arrangeIndividual.touristGroupId = [];
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList = [];
+            arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
+        });
+
+        $visitorObj.find('#order_by').off().on('change', function(event) {
+            event.preventDefault();
             arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
         });
 

@@ -11,7 +11,8 @@ var $tabList = $('#tabList'), $tabContent = $("#tabContent");
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
-	REFRESH_TAB_EVENT = 'refresh.tab.event';
+	REFRESH_TAB_EVENT = 'refresh.tab.event',
+	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
 /**
  * 图片地址
  */
@@ -683,6 +684,7 @@ var modalScripts = {
     'business_analyst_customerVolume': "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
     'business_analyst_employeePerfor': "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
     'business_analyst_tourguidePerfor': "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+    'business_analyst_shopStat': "js/template/businessAnalyst/shopStat/shopStat.js", //购物统计
 
     //-------------------------------------------财务管理模块--------------------------------------------------------------------
     'financial_count': "js/template/financial/count/count.js", //报账审核
@@ -714,6 +716,7 @@ var modalScripts = {
 	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
+	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
@@ -1489,6 +1492,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
+											$content.trigger(CLOSE_TAB_SAVE_NO);
 											Tools.closeTab(tab_id);
 										},
 										// 取消
@@ -1970,12 +1974,16 @@ Tools.setDateRange = function($dateObjs) {
  *         					当天的话，返回0
  *         					开始日期或者结束日期为空，则表示今天
  */
-Tools.getDateDiff = function(startDate,endDate)  
+Tools.getDateDiff = function(startDate,endDate, isAbs)  
 {
 	var days = 0;
 
 	if (!!startDate || !!endDate)   {
-		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		if (isAbs == 'noAbs') {
+			days = Math.floor((getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}else{
+			days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}
 	}
     
     return days; 
@@ -2008,7 +2016,6 @@ Tools.addDay = function(date, days) {
 		var month = date.getMonth() + 1, day = date.getDate();
 		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
-
 	return date;
 }
 
@@ -2259,9 +2266,9 @@ KingServices.viewTransit = function(id){
 	});
 };
 //查看收支明细 
-KingServices.viewPayMentDetail = function(id,num){
+KingServices.viewPayMentDetail = function(id,num,type){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
-		module.init(id,num);
+		module.init(id,num,type);
 	});
 };
 //报账审核--跳转发团安排的查看页面

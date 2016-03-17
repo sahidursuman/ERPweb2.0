@@ -4,7 +4,7 @@
             <form class="form-inline" role="form" onsubmit="return false">
                 <div class="form-group mar-r-10">
                     <label  class="control-label pull-left" style="margin-left: 0px;">部门：</label>
-                    <span>{{searchParam.businessGroupName}}</span>
+                    <span>{{businessGroupName}}</span>
                     <input type="hidden" value="{{searchParam.businessGroupId}}" name="businessGroupId">
                     <input type="hidden" value="{{searchParam.businessGroupName}}" name="businessGroupName"> 
                 </div>
@@ -29,7 +29,7 @@
                     <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
                 </div>
                 <div class="form-group mar-r-10">
-                    <button class="btn-sm search-btn T-checking-search" >
+                    <button class="btn-sm search-btn T-btn-search" >
                          <i class="ace-icon fa fa-search"></i>
                              搜索
                     </button>
@@ -47,7 +47,7 @@
                 <label class=" control-label " style="margin-left:30px;">返款金额合计：<span class="T-sumBackMoney F-float F-money"></span></label>
                 <label class=" control-label " style="margin-left:30px;">结算金额合计：<span class="T-sumSettlementMoney F-float F-money"></span></label>
                 <label class=" control-label " style="margin-left:30px;">未收金额合计：<span class="T-sumUnReceivedMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">未收金额合计(已对账)：<span class="T-sumUnReceivedMoney F-float F-money"></span></label>
+                <label class=" control-label " style="margin-left:30px;">未收金额合计(已对账)：<span class="T-sumUnPayedMoney F-float F-money"></span></label>
             </div>
         </form>
     </div>
@@ -77,12 +77,12 @@
             </thead>   
             <tbody class="T-checkList" data-right="1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
-            <tr class="T-checkTr" data-entity-id="{{checking.id}}" data-entity-createTime="{{checking.createTime}}" data-confirm ="{{checking.isConfirmAccount}}" data-entity-UnIncomeMoney="{{checking.checkUnIncomeMoney}}" data-entity-backMoney="{{checking.backMoney}}" data-entity-remark="{{checking.checkRemark}}">
+            <tr class="T-checkTr" data-id="{{checking.id}}" data-confirm ="{{checking.isConfirmAccount}}">
                 <td>{{checking.orderNumber}}</td>
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{checking.contactUserName}}</td>
-                <td><a href="#" class="T-seeGroup" data-list="{{checking.tgMemberList}}" title="查看小组">
+                <td><a href="#" class="T-action T-seeGroup" data-list="{{checking.tgMemberList}}" title="查看小组">
                         <span class="F-float F-count">{{checking.adultCount}}</span>大
                         <span class="F-float F-count">{{checking.childCount}}</span>小
                     </a>
@@ -100,12 +100,11 @@
                     {{else}}-
                     {{/if}}
                 </td>
-                <td><a href="javascript:void(0)" class="T-viewDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td><a href="javascript:void(0)" class="T-action T-payedDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
                 <td><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
-                <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}{{else}}
-                    <textarea class="col-sm-12 hct-textarea" maxlength="1000" name="checkRemark">{{checking.checkRemark}}</textarea>{{/if}}
+                <td><textarea class="col-sm-12 hct-textarea" maxlength="1000" name="checkRemark" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}>{{checking.checkRemark}}</textarea>
                 </td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
@@ -117,7 +116,7 @@
                     </label>
                     <label>|</label>
                         <label>
-                            <a href="#" class="T-check-Detail" style="margin-left:5px">查看</a>
+                            <a href="#" class="T-action T-needPayDetail" style="margin-left:5px">查看</a>
                         </label>
                 </td>
             </tr>
