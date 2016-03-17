@@ -213,8 +213,8 @@ define(function(require, exports) {
         $trList.each(function() {
             var $that = $(this);
             if ($that.find(".T-cheked").is(":checked")) {
-                sumAdultCount += parseInt($(this).attr("data-entity-adultcount"));
-                sumChildCount += parseInt($(this).attr("data-entity-childcount"));
+                sumAdultCount += parseInt($(this).attr("data-adultcount"));
+                sumChildCount += parseInt($(this).attr("data-childcount"));
             }
         });
         $tab.find(".T-chosenAdultAndChildCount").text("大人" + sumAdultCount + "小孩" + sumChildCount + "");
@@ -654,8 +654,7 @@ define(function(require, exports) {
     arrangeGroupTransfer.calcPayMoney = function($tab) {
         $tab.find('.T-innerOutEditFeeTbody').on('change', '.T-calc', function(event) {
             /* Act on the event */
-            var $that = $(this),
-                $tr = $that.closest('tr');
+            var $that = $(this),$tr = $that.closest('tr');
             if ($that.hasClass('T-count')) { //若数量改变
                 var count = $tr.find('.T-count').val(),
                     price = $tr.find('.T-price').val(),
