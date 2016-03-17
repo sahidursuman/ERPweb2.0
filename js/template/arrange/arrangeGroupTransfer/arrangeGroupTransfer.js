@@ -1145,8 +1145,8 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 var $searArea=$tab.find('.T-search-area');
                 arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=lineProductName]'),data.lineProductList,"name","lineProductId");
-                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName","fromPartnerAgencyId");
-                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName","fromBussinessGroupId");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName","fromBussinessGroupId");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName","fromPartnerAgencyId");
             };
         })
     };

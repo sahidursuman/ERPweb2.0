@@ -16,6 +16,7 @@ define(function(require, exports) {
 
     var arrangeIndividual = {
         $tab:false,
+        $searchArea:"",
         editFeeLayer: "",
         addGroupTemplateLayer: "",
         chosenMergenTripPlanlayer: "",
@@ -37,6 +38,7 @@ define(function(require, exports) {
         arrangeIndividual.autocompleteSearch(0,arrangeIndividual.$tab);
         //初始化散拼、团体、转客时间
         arrangeIndividual.init_event(arrangeIndividual.$tab);
+        arrangeIndividual.listArrangeTourist(0);
     };
 
      /**
@@ -56,8 +58,8 @@ define(function(require, exports) {
                 if (result) {
                     var $searArea=$tab.find('.T-search-area');
                     arrangeIndividual.getAutoSearchList($searArea.find('[name=lineProductName]'),data.lineProductList,"name","lineProductId");
-                    arrangeIndividual.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName","fromPartnerAgencyId");
-                    arrangeIndividual.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName","fromBussinessGroupId");
+                    arrangeIndividual.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName","fromBussinessGroupId");
+                    arrangeIndividual.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName","fromPartnerAgencyId");
                 }
             }
         })
@@ -109,27 +111,21 @@ define(function(require, exports) {
     arrangeIndividual.init_event = function($tab) {
         //设置时间控件
         Tools.setDatePicker($tab.find('.datepicker'), false);
-        var $visitorObj = $tab.find('.T-search-area');
-        var $searchArgumentsForm = $visitorObj.find('form'),customerType = 0;
+        arrangeIndividual.$searchArea = $tab.find('.T-search-area');
         //散拼
-        $visitorObj.find('.T-visitorTourist-search').off().on('click', function(event) {
-            /* Act on the event */
-            //选择组团社与业务部
-            var $selectObj = $visitorObj.find(".T-choosePart-chooseFromB");
-            $selectObj.on('change', function() {
-                var $that = $(this);
-                arrangeIndividual.chosenPartAgenOrBussiness($that);
-            });
+        $tab.find('.T-search').off().on('click', function(event) {
             arrangeIndividual.touristGroupId = [];
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList = [];
-            arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
+            arrangeIndividual.listArrangeTourist(0);
         });
-        $visitorObj.find('#order_by').off().on('change', function(event) {
+        $tab.find('#order_by').off().on('change', function(event) {
             event.preventDefault();
-            arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
+            arrangeIndividual.listArrangeTourist(0);
         });
-        //模拟Click事件
-        $visitorObj.find('.T-visitorTourist-search').trigger('click');
+        $tab.find('[name=type]').on('change', function() {
+            arrangeIndividual.chosenPartAgenOrBussiness($(this));
+        });
+
     };
 
     /**
@@ -138,9 +134,11 @@ define(function(require, exports) {
      * @param  {[type]} divId        [description]
      * @return {[type]}              [description]
      */
-    arrangeIndividual.listArrangeTourist = function(page, $searchArgumentsForm, customerType) {
-        var formData = $searchArgumentsForm.serializeJson();
-        formData.customerType = customerType;
+    arrangeIndividual.listArrangeTourist = function(page) {
+        if (arrangeIndividual.$searchArea && arguments.length==1) {
+            var formData=arrangeIndividual.$searchArea.find('form').serializeJson();
+        }
+        formData.customerType = arrangeIndividual.$searchArea.find('.T-search').attr('data-customerType');
         formData.pageNo = page;
         $.ajax({
             url: KingServices.build_url("touristGroup", "getTouristGroupForTripPlan"),
@@ -162,7 +160,7 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                arrangeIndividual.listArrangeTourist(obj.curr - 1, $searchArgumentsForm, customerType);
+                                arrangeIndividual.listArrangeTourist(obj.curr - 1);
                             }
                         }
                     });
@@ -365,11 +363,7 @@ define(function(require, exports) {
                 //清空游客小组Id
                 arrangeIndividual.touristGroupId = [];
                 //数据刷新
-                var divId = "T-Visitor-list",
-                    $VisitorObj = $('#' + divId),
-                    $searchArgumentsForm = $VisitorObj.find('form'),
-                    customerType = 0;
-                    arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+                arrangeIndividual.listArrangeTourist(0);
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择计划");
             };
@@ -436,11 +430,7 @@ define(function(require, exports) {
                 //在数组中移除选中生成计划记录
                 arrangeIndividual.touristGroupMergeData.touristGroupMergeList.splice(0,arrangeIndividual.touristGroupMergeData.touristGroupMergeList.length);
                 //数据刷新
-                var divId = "T-Visitor-list",
-                    $VisitorObj = $('#' + divId),
-                    $searchArgumentsForm = $VisitorObj.find('form'),
-                    customerType = 0;
-                    arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+                arrangeIndividual.listArrangeTourist(0);
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
             };
