@@ -254,17 +254,6 @@ define(function(require, exports) {
                 });
             };
         });
-        
-        //统计游客数量
-        function calculTotalCount($obj){
-           var totalCount=0,$trList=$obj.find('tbody').children('tr');
-           $trList.each(function(index) {
-                totalCount+=parseInt($trList.eq(index).attr('data-adultCount')),
-                totalCount+=parseInt($trList.eq(index).attr('data-childCount'));
-            });
-            return totalCount;
-        };
-        $listObj.find('.T-total').text(calculTotalCount($listObj));
     };
 
     /**
@@ -1697,6 +1686,9 @@ define(function(require, exports) {
                     }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
+                    data.adultCount = 0;
+                    data.childCount = 0;
+
                     var html = listTemplate(data);
                     //权限过滤
                     html = filterUnAuth(html);
