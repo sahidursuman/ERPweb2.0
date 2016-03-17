@@ -98,8 +98,6 @@ define(function(require, exports) {
                     arrangeGroupTransfer.$tab.find('.T-groupTransfer-list').html(filterUnAuth(html));
                     //初始化页面事件
                     arrangeGroupTransfer.initTrsListEvent(customerType);
-                    //转客分页选中效果
-                    arrangeGroupTransfer.pagerTransferChecked(customerType);
                     // 绑定共用翻页组件
                     laypage({
                         cont: arrangeGroupTransfer.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -120,16 +118,16 @@ define(function(require, exports) {
      * [pagerTransferChecked 转客分页选中效果
      * @return {[type]} [description]
      */
-    arrangeGroupTransfer.pagerTransferChecked = function(customerType) {
+    arrangeGroupTransfer.checkedPager = function() {
         //分页--勾选游客小组Id
-        if (customerType == '2' && arrangeGroupTransfer.transferId.length > 0) {
+        if (arrangeGroupTransfer.transferId.length > 0) {
             for (var i = 0; i < arrangeGroupTransfer.transferId.length; i++) {
                 var transferId = arrangeGroupTransfer.transferId[i].id,
-                    $transferTr = arrangeGroupTransfer.$tab.find('tr');
-                $transferTr.each(function(index) {
-                    var id = $transferTr.eq(index).data('value');
+                    $trList = arrangeGroupTransfer.$tab.find('tr');
+                $trList.each(function(index) {
+                    var id = $trList.eq(index).data('value');
                     if (!!id && !!transferId && id == transferId) {
-                        $transferTr.eq(index).find('.T-cheked').prop('checked', true);
+                        $trList.eq(index).find('.T-cheked').prop('checked', true);
                     };
                 });
             }
@@ -157,7 +155,7 @@ define(function(require, exports) {
             $searchArgumentsForm = $transferObj.find('form');
         //重置计算
         arrangeGroupTransfer.choosenAdultAndChildCount($transferObj);
-
+        arrangeGroupTransfer.checkedPager();
         //查看小组信息
         $transferObj.find('.T-arrageTransfer-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -1148,120 +1146,51 @@ define(function(require, exports) {
         .done(function(data) {
             if (showDialog(data)) {
                 var $searArea=$tab.find('.T-search-area');
-                arrangeGroupTransfer.chooseLineProduct($searArea.find('[name=lineProductName]'), data.lineProductList);
-                arrangeGroupTransfer.chooseBusinessGroup($searArea.find('[name=fromBussinessGroupName]'), data.fromBusinessGroupList);
-                arrangeGroupTransfer.choosePartnerAgency($searArea.find('[name=fromPartnerAgencyName]'), data.fromPartnerAgencyList);
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=lineProductName]'),data.lineProductList,"name");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromBussinessGroupName]'),data.fromBusinessGroupList,"businessGroupName");
+                arrangeGroupTransfer.getAutoSearchList($searArea.find('[name=fromPartnerAgencyName]'),data.fromPartnerAgencyList,"travelAgencyName");
             };
-        })
-
-    };
-    /**
-     * 线路产品Autocomplete
-     * @param  {[type]} $obj [description]
-     * @return {[type]}      [description]
-     */
-    arrangeGroupTransfer.chooseLineProduct = function($obj, lineProList) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    var parents = $(this).parent();
-                    parents.find("input[name=lineProductId]").val("");
-                }
-            },
-            select: function(event, ui) {
-                var _this = this,
-                    parents = $(_this).parent();
-                parents.find("input[name=lineProductId]").val(ui.item.id).trigger('change');
-            }
-        }).unbind("click").click(function() {
-            var $obj = $(this),list=lineProList;
-            if (!!list && list.length > 0) {
-                for (var i = 0; i < list.length; i++) {
-                    list[i].value = list[i].name;
-                };
-            } else {
-                layer.tips('没有内容', $obj, {
-                    tips: [1, '#3595CC'],
-                    time: 2000
-                });
-            };
-            $obj.autocomplete('option', 'source', list);
-            $obj.autocomplete('search', '');
-        })
-    };
-
-
-    /**
-     * 业务部----Autocomplete
-     * @param  {[type]} $obj [description]
-     * @return {[type]}      [description]
-     */
-    arrangeGroupTransfer.chooseBusinessGroup = function($obj, fromBusiGroupList) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    var parents = $(this).parent();
-                    parents.find("input[name=fromBussinessGroupId]").val("");
-                }
-            },
-            select: function(event, ui) {
-                var _this = this,
-                    parents = $(_this).parent();
-                parents.find("input[name=fromBussinessGroupId]").val(ui.item.id).trigger('change');
-            }
-        }).unbind("click").click(function() {
-            var $obj = $(this),list=fromBusiGroupList;
-            if (!!list && list.length > 0) {
-                for (var i = 0; i < list.length; i++) {
-                    list[i].value = list[i].businessGroupName;
-                };
-            } else {
-                layer.tips('没有内容', $obj, {
-                    tips: [1, '#3595CC'],
-                    time: 2000
-                });
-            };
-            $obj.autocomplete('option', 'source', list);
-            $obj.autocomplete('search', '');
         })
     };
 
     /**
-     * 组团社----Autocomplete
-     * @param  {[type]} $obj [description]
-     * @return {[type]}      [description]
+     * 搜索区域autocomplete
+     * @param  {[obj]} chooseObj   [选择的input对象]
+     * @param  {[array]} jsonList    [数据列表]
+     * @param  {[string]} valueName   [数据中需要展示的对象属性]
+     * @param  {[string]} inputIdName [隐藏的input Id 的name值]
+     * @return {[type]}             [description]
      */
-    arrangeGroupTransfer.choosePartnerAgency = function($obj, fromParAgencyList) {
-        $obj.autocomplete({
+    arrangeGroupTransfer.getAutoSearchList = function(chooseObj,jsonList,valueName,inputIdName) {
+        chooseObj.autocomplete({
             minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    var parents = $(this).parent();
-                    parents.find("input[name=fromPartnerAgencyId]").val("");
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('div');
+                    parents.find("input[name="+inputIdName+"]").val("");
+                    $this.next('[name='+inputIdName+']').val("");
                 }
             },
-            select: function(event, ui) {
-                var _this = this,
-                    parents = $(_this).parent();
-                parents.find("input[name=fromPartnerAgencyId]").val(ui.item.id).trigger('change');
+            select :function(event, ui){
+                var $this = $(this),parents = $(this).closest('div');
+                parents.find("input[name="+inputIdName+"]").val(ui.item.id).trigger('change');
             }
-        }).unbind("click").click(function() {
-            var $obj = $(this),list = fromParAgencyList;
-            if (!!list && list.length > 0) {
-                for (var i = 0; i < list.length; i++) {
-                    list[i].value = list[i].travelAgencyName;
-                };
-            } else {
-                layer.tips('没有内容', $obj, {
+        }).on('click', function() {
+            var $this = $(this),
+                completeList = jsonList;
+            if (completeList && completeList.length > 0) {
+                for(var i = 0, len = completeList.length; i < len; i++) {
+                    completeList[i].value = completeList[i][valueName];
+                }
+                $this.autocomplete('option','source', completeList);
+                $this.autocomplete('search', '');
+            }else{
+                layer.tips('无数据', $this, {
                     tips: [1, '#3595CC'],
                     time: 2000
                 });
-            };
-            $obj.autocomplete('option', 'source', list);
-            $obj.autocomplete('search', '');
-        })
+            }
+        });
     };
 
 
