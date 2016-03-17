@@ -335,8 +335,6 @@ define(function(require, exports) {
 
     };
 
-
-
     /**
      * outTransferEvent 外转报表操作
      * @param  {[type]} $tab [description]
@@ -432,20 +430,17 @@ define(function(require, exports) {
                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                             Tools.closeTab(menuKey + "-outTransfer");
                             arrangeGroupTransfer.transferId = [];
-                            var customerType = 2,
-                                divId = "T-Transfer-list",
+                            var customerType = 2,divId = "T-Transfer-list",
                                 $TransferObj = $("#" + divId);
                             var $searchArgumentsForm = $TransferObj.find('form');
-                            arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+                            arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType);
                             exportXLS(KingServices.build_url('transTourist', 'exportTransfer') + "&idJson=" + JSON.stringify(touristGroupId));
                         });
                     }
                 }
             })
         }
-
     };
-
     /**
      * checkTransferAll 全选组件
      * @param  {[type]} $tab  TabId--唯一标识
@@ -994,11 +989,10 @@ define(function(require, exports) {
                         showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                             Tools.closeTab(menuKey + "-innerTransfer");
                             arrangeGroupTransfer.transferId = [];
-                            var customerType = 2,
-                                divId = "T-Transfer-list",
-                                $TransferObj = $("#" + divId);
-                            var $searchArgumentsForm = $TransferObj.find('form');
-                            arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType, divId);
+                            var customerType = 2,divId = "T-Transfer-list",
+                                $TransferObj = $("#" + divId),
+                                $searchArgumentsForm = $TransferObj.find('form');
+                            arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType);
                         });
                     }
                 }
