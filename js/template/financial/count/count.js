@@ -1309,7 +1309,7 @@ define(function(require, exports){
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
-		'<td rowspan="2"><input type="text" name="currInCome" class="w-80"/></td>'+
+		'<td rowspan="2" class="hidden"><input type="text" name="currInCome" class="w-80"/></td>'+
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:20px;" class="T-shopArrDel">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+

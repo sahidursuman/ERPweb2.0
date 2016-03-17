@@ -1671,8 +1671,11 @@ define(function(require, exports) {
 			tr.eq(tr.length-1).find(".T-whichDaysContainer").html(selectText);
 		}else{
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
-				var val = $(this).attr("value");
+				var val = ($(this).attr("value") || 0)*1;
 				var selectText = '<select class="w-100" name="whichDay">';
+				max = (max > val)? max: val;
+				min = (min < val)? min: val;
+				console.info(max);
 				for(var i = min; i <= max; i++){
 					if(val == (i+1)){
 						selectText += '<option value="'+(i+1)+'" selected="selected">'+ Tools.addDay(startTime, i) +'</option>';
