@@ -58,12 +58,13 @@ define(function(require, exports) {
     arrangeGroupTransfer.init_event = function() {
         arrangeGroupTransfer.$tab=$("#" + tabId);
         var $TransferObj = arrangeGroupTransfer.$tab.find('.T-search-area');
+        var $searchArgumentsForm = $TransferObj.find('form'),
+                customerType = 2;
         //转客
         $TransferObj.find('.T-Transfer-search').off().on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var $searchArgumentsForm = $TransferObj.find('form'),
-                customerType = 2;
+            
             //组团社与业务部选择
             var $selectObj = $TransferObj.find(".T-choosePart-chooseFromB");
             $selectObj.on('change', function() {
@@ -72,6 +73,11 @@ define(function(require, exports) {
             });
             //转客清空操作
             arrangeGroupTransfer.transferId = [];
+            arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType);
+        });
+
+        $TransferObj.find('#order_by').on('change', function(event) {
+            event.preventDefault();
             arrangeGroupTransfer.listArrangeTourist(0, $searchArgumentsForm, customerType);
         });
 

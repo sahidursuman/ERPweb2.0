@@ -4,7 +4,7 @@
             <tr style="">
                 <td><label  style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
                 <td><label  style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
-                <td><label  style="font-weight: bold;">针对客源：{{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label></td>
+                <td><label  style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
                 <td><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
             </tr>
             <tr>
@@ -23,7 +23,8 @@
     </table>
     <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
-  
+    <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
+    <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
         <tbody>
         <tr >
@@ -153,9 +154,9 @@
                         <th>序号</th>
                         <th>客户</th>
                         <th>收客单号</th>
-                        <th>小组联系人</th>
-                        <th>联系电话</th>
-                        <th>人数</th>
+                        <th>游客信息</th>
+                        <th>包含自费</th>
+                        <th>备注</th>
                         <th>应收</th>
                         <th>社收</th>
                         <th>现收</th>
@@ -167,14 +168,33 @@
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                             <td>{{touristGroup.orderNumber}}</td>
-                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
-                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</td>
-                            <td><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</td>
+                            <td>
+                                <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
+                                <br/>
+                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</span>
+                                <br/>
+                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</span>
+                                <br/>
+                            </td>
+                             <td>
+                                {{if tripCost.includeSelfPay == null}}
+                                    -
+                                {{else}}
+                                    {{tripCost.includeSelfPay}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if tripCost.remark == null || tripCost.remark == ""}}
+                                    -
+                                {{else}}
+                                    {{tripCost.remark}}
+                                {{/if}}
+                            </td>
                             <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
-                                {{if touristGroup.subStatus == 0}}
+                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=

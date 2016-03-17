@@ -10,6 +10,7 @@
 						</label>
 					</th>
 					<th>收客信息</th>
+					<th>销售部门</th>
 					<th>天数</th>
 					<th>出游日期</th>
 					<th>联系人</th>
@@ -54,7 +55,7 @@
 						 	{{/if}}									
 						 	{{if touristGroup.partnerAgency}}<p class="h-agencyName">{{touristGroup.partnerAgency.travelAgencyName}}</p>{{/if}}
    						</td>
-						
+						<td>{{ if !!touristGroup.saleLineProductBG}} {{touristGroup.saleLineProductBG.name}}{{/if}}</td>
 						<td>
 							{{if !!touristGroup.lineProduct}}
 								{{touristGroup.lineProduct.days}}

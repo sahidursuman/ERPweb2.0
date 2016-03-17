@@ -3,10 +3,8 @@
           <div class="T-search" >
               <form class="form-horizontal" role="form" onsubmit="return false">
                 <div > 
-                    <label  class="control-label pull-left mar-r-10">部门：</label>
-                    <span>{{searchParam.toBusinessGroupName}}</span>
-                    <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId">
-                    <input type="hidden" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName"> 
+                    <label  class="control-label pull-left">部门：</label>
+                    <label class="control-label mar-r-10">{{searchParam.toBusinessGroupName}}</label>
                     <label class="control-label mar-r-10">账期：
                       <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}"/>
                       <span>至</span>
@@ -94,7 +92,7 @@
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-createTripPlan T-close">
+                <button class="btn btn-xs btn-primary T-btn-close">
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>
