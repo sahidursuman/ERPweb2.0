@@ -223,7 +223,7 @@ define(function(require, exports) {
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
-        $listObj.find('.T-total').text(touristGroup.calculTotalCount($listObj));
+        //报表事件
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -254,6 +254,17 @@ define(function(require, exports) {
                 });
             };
         });
+        
+        //统计游客数量
+        function calculTotalCount($obj){
+           var totalCount=0,$trList=$obj.find('tbody').children('tr');
+           $trList.each(function(index) {
+                totalCount+=parseInt($trList.eq(index).attr('data-adultCount')),
+                totalCount+=parseInt($trList.eq(index).attr('data-childCount'));
+            });
+            return totalCount;
+        };
+        $listObj.find('.T-total').text(calculTotalCount($listObj));
     };
 
     /**
@@ -1710,21 +1721,7 @@ define(function(require, exports) {
     };
 
 
-    /**
-     * [calculTotalCount 统计游客人数
-     * @param  {[type]} $tab [description]
-     * @return {[type]}      [description]
-     */
-    touristGroup.calculTotalCount=function($obj){
-        var totalCount=0;
-        console.log($obj.find('tbody tr').length);
-        $obj.find('tbody').children('tr').each(function(index) {
-            totalCount+=parseInt($obj.find('tbody').children('tr').eq(index).attr('data-adultCount')),
-            totalCount+=parseInt($obj.find('tbody').children('tr').eq(index).attr('data-childCount'));
-            console.log(parseInt($obj.find('tbody').children('tr').eq(index).attr('data-adultCount')));
-        });
-        return totalCount;
-    };
+  
 
     //刷新数据合计
     touristGroup.freshHeader = function($args) {
