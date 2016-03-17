@@ -287,7 +287,7 @@ define(function(require, exports) {
                                 var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(args.isAutoPay== 2?3: 1));
                                 hotel.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=payType]').val()),
+                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
                                 hotel.clearTempSumDate = {
                                     id : args.hotelId,
@@ -338,7 +338,7 @@ define(function(require, exports) {
             var startDate = $tab.find("input[name=startDate]").val(),
                 endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
-                var payType = $tab.find('select[name=payType]').val();
+                var payType = $tab.find('select[name=sumPayType]').val();
                 hotel.clearTempSumDate = {
                     id : args.hotelId,
                     sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -483,7 +483,7 @@ define(function(require, exports) {
         }
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson($tab,hotel.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2?3: 1));
-        var payType = $tab.find('select[name=payType]').val(),
+        var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 hotelId : args ? args.hotelId : $tab.data('hotelId'),
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),

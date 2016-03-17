@@ -617,7 +617,7 @@ define(function(require,exports) {
 			settlermentValidator =  new FinRule((showBtnFlag == true) ? 3 : 1),
 			argumentsLen = arguments.length;
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
-		var payType = $tab.find('select[name=payType]').val(),
+		var payType = $tab.find('select[name=sumPayType]').val(),
 			sumRemark = $tab.find('input[name=sumRemark]').val();
 		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({

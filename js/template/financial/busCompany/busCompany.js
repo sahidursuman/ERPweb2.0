@@ -292,7 +292,7 @@ define(function(require, exports) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab, busCompany.clearTempData, new FinRule(args.isAutoPay == 2 ? 3 : 1));
                                 busCompany.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=payType]').val()),
+                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
                                 busCompany.clearTempSumDate = {
                                     id: args.busCompanyId,
@@ -348,7 +348,7 @@ define(function(require, exports) {
             var startDate = $tab.find("input[name=startDate]").val(),
                 endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate, endDate, function() {
-                var payType = $tab.find('select[name=payType]').val();
+                var payType = $tab.find('select[name=sumPayType]').val();
                 busCompany.clearTempSumDate = {
                     id: args.busCompanyId,
                     sumPayMoney: $tab.find('input[name=sumPayMoney]').val(),
@@ -412,7 +412,7 @@ define(function(require, exports) {
         }
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson($tab, busCompany.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1));
-        var payType = $tab.find('select[name=payType]').val(),
+        var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 busCompanyId: args ? args.busCompanyId : $tab.data('busCompanyId'),
                 sumCurrentPayMoney: $tab.find('input[name=sumPayMoney]').val(),
@@ -667,8 +667,8 @@ define(function(require, exports) {
             pageNo : 0,
             busCompanyId : options.id,
             busCompanyName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
+            startTime : options.startDate,
+            endTime : options.endDate,
             accountStatus : options.accountStatus,
             isAutoPay : 2
         }
