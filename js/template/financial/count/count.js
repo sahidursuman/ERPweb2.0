@@ -2166,7 +2166,7 @@ define(function(require, exports){
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><span class="difference"></span></td>'+
-		'<td><input type="text" name="billRemark" style="width:230px;"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
+		'<td style="text-align:left"><input type="text" name="billRemark" class="w-150"/><a href="javascript:void(0)" class="T-del" style="margin-left:20px;">删除</a></td>'+
 		'<td>未对账</td>'+
 		'</tr>';
 		$obj.append(html);
@@ -3726,14 +3726,11 @@ define(function(require, exports){
 
 		var addRestList = saveJsonStr.addRestArrangeList;
 		for(var i = 0;i<addRestList.length;i++){
-			if(addRestList[i].restaurantId == "" || addRestList[i].restaurantStandardId == ""){
+			// 不校验餐标
+			if(addRestList[i].restaurantId == ""){
 				var message="";
 				if(addRestList[i].restaurantId == ""){
 					message = "请选择餐厅"
-				}else{
-					if(addRestList[i].restaurantStandardId == ""){
-						message="请选择餐标"
-					}
 				};
 				showMessageDialog($("#confirm-dialog-message"),message);
 				return;
