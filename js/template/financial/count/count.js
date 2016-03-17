@@ -4400,7 +4400,8 @@ define(function(require, exports){
 				var guideJson = {
 					id:$(this).attr('arrangeid'),
 					price:$(this).find('input[name=price]').val(),
-					manageFee:$(this).find('input[name=manageFee]').val()
+					manageFee:$(this).find('input[name=manageFee]').val(),
+					remark:$(this).find('input[name=remark]').val()
 				};
 				saveJson.guideArrangeList.push(guideJson);
 			}
