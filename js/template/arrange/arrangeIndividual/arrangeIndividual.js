@@ -137,9 +137,9 @@ define(function(require, exports) {
     arrangeIndividual.listArrangeTourist = function(page) {
         if (arrangeIndividual.$searchArea && arguments.length==1) {
             var formData=arrangeIndividual.$searchArea.find('form').serializeJson();
+            formData.customerType = arrangeIndividual.$searchArea.find('.T-search').attr('data-customerType');
+            formData.pageNo = page;
         }
-        formData.customerType = arrangeIndividual.$searchArea.find('.T-search').attr('data-customerType');
-        formData.pageNo = page;
         $.ajax({
             url: KingServices.build_url("touristGroup", "getTouristGroupForTripPlan"),
             type: "POST",
