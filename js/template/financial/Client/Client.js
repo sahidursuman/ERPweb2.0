@@ -826,7 +826,7 @@ define(function(require, exports) {
 
     Client.saveClearData = function($tab,args,tabArgs) {
         var argLen = arguments.length;
-        var payType = $tab.find('.T-sumPayType').val(),
+        var payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
             voucher = $tab.find('input[name=credentials-number]').val(),
             billTime = $tab.find('input[name=tally-date]').val();

@@ -54,8 +54,8 @@ define(function(require, exports){
 			data : {searchParam : JSON.stringify(args)},
 			showLoading: false
 		}).done(function(data){
-			$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
-			$tab.find('.T-payMoney').html(data.total.payMoney);
+			$tab.find('.T-incomeMoney').text(data.total.incomeMoney);
+			$tab.find('.T-payMoney').text(data.total.payMoney);
 			Payment.total = data.total;
 			Payment.allClac($tab);
 		});

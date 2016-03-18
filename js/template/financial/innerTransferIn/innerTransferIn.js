@@ -376,7 +376,7 @@ define(function(require, exports) {
                 autoPayMoney : $tab.find('input[name=sumPayMoney]').val(),
                 receiveUserId : $tab.find('input[name=receiveUserId]').val(),
                 receiveUserName : $tab.find('input[name=receiveUserName]').val(),
-                payType : $tab.find('select[name=sumPayType]').val(),
+                payType : payType,
                 bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val(),
