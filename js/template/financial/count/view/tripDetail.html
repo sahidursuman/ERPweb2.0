@@ -145,18 +145,22 @@
             <!-- 团款 -->
             <div id="financial-count-tripdetail-money" class="tab-pane fade active in T-tripCost">
                 <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="th-border">序号</th>
+                            <th class="th-border">客户</th>
+                            <th class="th-border">收客单号</th>
+                            <th class="th-border">游客信息</th>
+                            <th class="th-border">包含自费</th>
+                            <th class="th-border">备注</th>
+                            <th class="th-border">应收</th>
+                            <th class="th-border">社收</th>
+                            <th class="th-border">现收</th>
+                            <th class="th-border">明细</th>
+                        </tr>
+                    </thead>
                     <tbody class="T-tripDetail">
                     <tr>
-                        <td>序号</td>
-                        <td>客户</td>
-                        <th>收客单号</th>
-                        <th>游客信息</th>
-                        <th>包含自费</th>
-                        <th>备注</th>
-                        <td>应收</td>
-                        <td>社收</td>
-                        <td>现收</td>
-                        <td>明细</td>
                    {{each touristGroups as touristGroup index}}
                         <tr>
                             <td>{{index+1}}</td>

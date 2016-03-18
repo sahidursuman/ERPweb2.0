@@ -105,7 +105,7 @@ define(function(require, exports) {
 	 */
 	shopStat.initEvent = function(){
 
-		//搜索事件
+		//搜索事件 T-shopStat-outToexcel
 		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
@@ -116,6 +116,8 @@ define(function(require, exports) {
 			$obj.print({
 				globalStyles:true
 			});
+		}).on('click','.T-shopStat-outToexcel',function(){
+			//导出事件
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');
