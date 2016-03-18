@@ -104,9 +104,16 @@
         {{/if}}
         </td>
 
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input  type="text" class="F-float F-count w-50" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
-        {{else}}value="{{arrange.memberCount}}"{{/if}}  maxlength="5"
-        {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+        <td>
+            {{if arrange.badStatus == 1}}
+                <span class="F-float F-count">
+                    {{arrange.memberCount}}
+                </span>
+                {{else}}
+                    <input  type="text" class="F-float F-count w-50" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"
+                    {{else}}value="{{arrange.memberCount}}"{{/if}}  maxlength="5"
+                    {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+            {{/if}}
         </td>
 
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-money w-80">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" 
@@ -139,7 +146,7 @@
         </select>
         &nbsp;
         <input  type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.realGuidePayMoney}}" {{/if}} maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}{{/if}}/>{{/if}}
+        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}{{/if}}/>{{/if}}
         <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
         <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>
         
