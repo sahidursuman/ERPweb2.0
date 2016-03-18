@@ -538,7 +538,7 @@ define(function(require, exports) {
                     //接送安排
                     touristGroup.innerTransferDispose($innerTransferForm, 2);
                     //游客的序号
-                    touristGroup.memberNumber($groupMemberForm);
+                    touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));
 
                     if (!!isTransferIn) {
                         $('#inner-TransferIn').find('.T-T-transferIn-search').trigger('click');
@@ -885,7 +885,7 @@ define(function(require, exports) {
             } else {
                 $tr.fadeOut(function() {
                     $tr.remove();
-                    touristGroup.memberNumber($obj);
+                    touristGroup.memberNumber($obj.find('.T-addTouristTbody'));
                 });
             };          
         });
@@ -1467,12 +1467,11 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
         $tbody.append(html);
-        touristGroup.memberNumber($obj);        
+        touristGroup.memberNumber($tbody);        
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
-        $tbody.each(function(i) {
+       $obj.find('tr').each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
             }
