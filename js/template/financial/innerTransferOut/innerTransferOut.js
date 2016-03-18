@@ -259,7 +259,8 @@ define(function(require,exports) {
 	//对账页面事件
 	InnerTransferOut.chenkingEvent = function($tab,args,typeFlag){
 		//切换tab事件
-		InnerTransferOut.init_CRU_event($tab,args,typeFlag)
+		InnerTransferOut.init_CRU_event($tab,args,typeFlag);
+		InnerTransferOut.getGroupList($tab,typeFlag);
 		//监听已对账的数据是否被修改
 		if(typeFlag == 2){
 			$tab.find('.T-clearList').off('change').on('change','input',function(){
@@ -697,43 +698,44 @@ define(function(require,exports) {
 	//获取搜索框的数据
 	InnerTransferOut.getToBusinessGroupName = function($obj,nameData){
 		var $nameObj = $obj.find('input[name=toBusinessGroupName]');
-		$nameObj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					var $div = $(this).closest('div');
-					$div.find('input[name=toBusinessGroupId]').val('');
-				}
-			},
-			select:function(event,ui){
-				var $div = $(this).closest('div');
-				$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-			}
-		}).off('click').on('click',function(){
-			var obj = $(this);
-			$.ajax({
-				url:KingServices.build_url('account/innerTransferOutFinancial','listFinancialInnerTransferOutQuery'),
-				data:nameData,
-				type:'POST',
-				showLoading:false,
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						var businessGroupList = data.businessGroupList;
-						var allItem = {
-							id:"",
-							name:"全部"
-						};
-						businessGroupList.unshift(allItem);
-						for(var i = 0;i<businessGroupList.length;i++){
+		var obj = $(this);
+		$.ajax({
+			url:KingServices.build_url('account/innerTransferOutFinancial','listFinancialInnerTransferOutQuery'),
+			data:nameData,
+			type:'POST',
+			showLoading:false,
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var businessGroupList = data.businessGroupList;
+					var allItem = {
+						id:"",
+						name:"全部"
+					};
+					
+					for(var i = 0;i<businessGroupList.length;i++){
 						businessGroupList[i].value = businessGroupList[i].name;
-						}
-						obj.autocomplete('option','source', businessGroupList);
-						obj.autocomplete('search','');
 					}
+					InnerTransferOut.businessGroupList = businessGroupList.slice(allItem);
+					businessGroupList.unshift(allItem);
+					$nameObj.autocomplete({
+						minLength:0,
+						source : businessGroupList,
+						change:function(event,ui){
+							if(ui.item == null){
+								var $div = $(this).closest('div');
+								$div.find('input[name=toBusinessGroupId]').val('');
+							}
+						},
+						select:function(event,ui){
+							var $div = $(this).closest('div');
+							$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
+						}
+					}).on('click',function(){
+						$nameObj.autocomplete('search','');
+					});
 				}
-			});
-			
+			}
 		});
 	};
 	//获取线路列表
@@ -796,6 +798,36 @@ define(function(require,exports) {
 			showBtnFlag:true
 		};
         InnerTransferOut.settlement(args,0); 
+    };
+
+    InnerTransferOut.getGroupList = function($tab,type){
+    	var $obj = $tab.find('input[name=toBusinessGroupName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : InnerTransferOut.businessGroupList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    toBusinessGroupId : ui.item.id,
+					toBusinessGroupName : ui.item.value,
+					startDate : $tab.find('input[name=startDate]'),
+					endDate : $tab.find('input[name=endDate]'),
+					accountStatus : $tab.find('input[name=accountStatus]')
+                };
+                if(type == 1){
+                	InnerTransferOut.chenking(args);
+                } else {
+                	InnerTransferOut.settlement(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 	exports.init = InnerTransferOut.initModule;
 	exports.initPay = InnerTransferOut.initPay;
