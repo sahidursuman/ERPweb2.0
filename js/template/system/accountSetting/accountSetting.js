@@ -183,9 +183,11 @@ define(function(require, exports) {
 						            data: {
 						            	searchParam:JSON.stringify(searchData)
 					            	},
-									success:function(){
-										accountSetting.newPhoneChange();
-										layer.close(newPhoneLayer);
+									success:function(data){
+										if (showDialog(data)) {
+											accountSetting.newPhoneChange();
+											layer.close(newPhoneLayer);
+										}
 									}
 								})
 										
@@ -248,9 +250,11 @@ define(function(require, exports) {
 							            data: {
 							            	searchParam:JSON.stringify(searchData)
 						            	},
-										success:function(){
-											layer.close(changePhoneLayer);
-											accountSetting.accountSeList();
+										success:function(data){
+											if (showDialog(data)) {
+												layer.close(changePhoneLayer);
+												accountSetting.accountSeList();
+											}
 										}
 									})
 								});
@@ -274,8 +278,6 @@ define(function(require, exports) {
 				});	
 		    	}
 			});
-            	// }
-			// })
 		};
 
 		//申请借款
