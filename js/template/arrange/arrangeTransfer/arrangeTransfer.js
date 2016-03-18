@@ -74,12 +74,9 @@ define(function(require, exports) {
 
 						var html=listMainTemplate(transfer.allData);
 						Tools.addTab(menuKey,"外转管理",html);
-
-				    	transfer.$tab=$('#'+ tabId);
-				    	//初始化时间插件
-				    	transfer.datePicker(transfer.$tab);
+				    	transfer.$tab=$("#tab-"+menuKey+"-content");
 				    	//初始化事件的绑定
-				    	transfer.init_event(); 	
+				    	transfer.init_event(transfer.$tab); 	
 					}
 			    }
 	    	})
@@ -89,14 +86,14 @@ define(function(require, exports) {
 	     * [init_event listMain搜索域数据查询事件绑定]
 	     * @return {[type]} [description]
 	     */
-	    transfer.init_event=function(){
-	    	transfer.$divIdInObj=$('#Transfer-In');
-	    	transfer.$divIdOutObj=$('#Transfer-Out');
+	    transfer.init_event=function($tab){
+            Tools.setDatePicker($tab.find('.datepicker'), false);
+	    	transfer.$divIdInObj=$tab.find('#Transfer-In');
+	    	transfer.$divIdOutObj=$tab.find('#Transfer-Out');
 	    	transfer.chooseLineProduct(transfer.$divIdInObj);
 	    	transfer.choosePartnerAgency(transfer.$divIdInObj,2);
 	    	transfer.choosePartnerAgency(transfer.$divIdOutObj,1);
 	    	transfer.chooseUserList(transfer.$divIdOutObj,1);
-
 	    	/**
 	    	 * type 1 我社转出 2他部转入
 	    	 * @type {String}
@@ -225,7 +222,6 @@ define(function(require, exports) {
 						});
 					}
 			})
-
 		};
 
 		/**
@@ -265,19 +261,6 @@ define(function(require, exports) {
 						});
 					}
 				})
-		};
-		/**
-		 * 时间控件初始化
-		 * @param  {[type]} $obj [description]
-		 * @return {[type]}      [description]
-		 */
-		transfer.datePicker = function($obj){
-			$obj.find(".datepicker").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			})
 		};
 
 	    /**
