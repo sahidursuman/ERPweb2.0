@@ -2194,15 +2194,15 @@ define(function(require, exports){
 		//获取餐厅数据
 		Count.getRestData($obj,$parentObj);
 		//下拉框事件
-		// $obj.find('select').off('change').on('change',function(){
-		// 	var $tr = $(this).closest('tr');
-		// 	var restaurantId = $tr.find('input[name=restaurantId]').val();
-		// 	if(restaurantId != null && restaurantId != ""){
-		// 		$tr.find('input[name=price]').val(0);
-		// 		Count.autoRestaurantSum($(this),$parentObj);
-		// 		Count.getRestPrice($tr,$parentObj);
-		// 	};
-		// });
+		$obj.find('select[name=type]').off('change').on('change',function(){
+			var $tr = $(this).closest('tr');
+			var restaurantId = $tr.find('input[name=restaurantId]').val();
+			if(restaurantId != null && restaurantId != ""){
+				$tr.find('input[name=price]').val(0);
+				Count.autoRestaurantSum($(this),$parentObj);
+				Count.getRestPrice($tr,$parentObj);
+			};
+		});
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
 		//绑定事件
@@ -3675,21 +3675,20 @@ define(function(require, exports){
 	                		guideRate = Count.changeTwoDecimal(guideRate);
 	                		var $tr = $obj.closest('tr');
 	                		
-	                		if(travelAgencyRate > 0 && $tr.find("input[name=travelAgencyRate]").val() > 0) {
+	                		if(travelAgencyRate > 0) {
 	                			$tr.find("input[name=travelAgencyRate]").val(travelAgencyRate);
 	                			Count.autoShopSum($obj,$bodyObj);
 	                		}
-	                		if(guideRate > 0 && $tr.find("input[name=guideRate]").val() > 0) {
+	                		if(guideRate > 0) {
 	                			$tr.find("input[name=guideRate]").val(guideRate);
 	                			Count.autoShopSum($obj,$bodyObj);
 	                		}	                		
-	                	}
-	                	// 禁用清空
-	                	// else{
-	                	// 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
-	                	// 	$obj.closest('tr').find("input[name=guideRate]").val(0);
-	                	// 	Count.autoShopSum($obj,$bodyObj);
-	                	// }
+	                	}else{
+	                	 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+	                	 	$obj.closest('tr').find("input[name=guideRate]").val(0);
+	                	 	Count.autoShopSum($obj,$bodyObj);
+	                	};
+	                	 
 					}
 				}
 			});
