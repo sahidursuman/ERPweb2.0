@@ -185,14 +185,11 @@ define(function(require, exports) {
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-			args = {
-				pageNo : (args.pageNo || 0),
-				partnerAgencyId : args.partnerAgencyId || Replace.checkingId,
-				orderNumber : order == '全部' ? '' : order,
-				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
-				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
-				accountStatus : Replace.$checkingTab.find("[name=accountStatus]").val(),
-			};
+				args.pageNo = (args.pageNo || 0);
+				args.orderNumber = order == '全部' ? '' : order;
+				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
+				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+				args.accountStatus = Replace.$checkingTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -215,7 +212,7 @@ define(function(require, exports) {
 			data: args
 		}).done(function(data){
 			if (showDialog(data)) {
-				data.name = Replace.checkingName;
+				data.name = args.name;
 				for(var j=0; j<data.bookinAccountList.length; j++){
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
@@ -720,14 +717,11 @@ define(function(require, exports) {
 		if(!!Replace.$balanceTab){
 			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
 			var order = Replace.$balanceTab.find(".T-search-order").val();
-			args = {
-				pageNo : (args.pageNo || 0),
-				partnerAgencyId : args.partnerAgencyId || Replace.balanceId,
-				orderNumber : order == '全部' ? '' : order,
-				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
-				accountStatus : Replace.$balanceTab.find("[name=accountStatus]").val()
-			};
+			args.pageNo = (args.pageNo || 0);
+			args.orderNumber = order == '全部' ? '' : order;
+			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
+			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
+			args.accountStatus = Replace.$balanceTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -751,7 +745,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if (showDialog(data)) {
 				var html;
-				data.name = Replace.balanceName;
+				data.name = args.name;
 				data.source = Replace.isBalanceSource;
 				for(var j=0; j<data.bookinAccountList.length; j++){
 					var detailList = data.bookinAccountList[j].detailList;
@@ -855,9 +849,9 @@ define(function(require, exports) {
 					accountStatus : $tab.find('input[name=accountStatus]').val(),
                 };
                 if(isCheck){
-                	Replace.checking(args);
+                	Replace.checkingList(args);
                 } else {
-                	Replace.balance(args);
+                	Replace.balanceList(args);
                 }
             }
         }).on("click",function(){
