@@ -2,8 +2,8 @@
 	<div class="row">
 		<div class="col-xs-12 mar-t-20">
 			<div class="pull-left">
-				<span class="necessary">*</span>人数：大人 <span class="necessary">*</span> <input type="text" class="w-50">
-				小孩 <input type="text" class="w-50">
+				<span class="necessary">*</span>人数：大人 <span class="necessary">*</span> <input type="text" class="w-50" name="adultCount" value="{{adultCount}}">
+				小孩 <input type="text" class="w-50" name="childCount" value="{{childCount}}">
 			</div>
 			<div class="pull-right">
 				<button class="btn btn-sm btn-success T-add-tourist"> <i class="ace-icon fa fa-plus"></i> 添加成员 </button>
@@ -24,29 +24,33 @@
 					</tr>
 				</thead>
 				<tbody class="T-addTouristTbody">
+				{{if !!touristGroupMemberJsonAdd && touristGroupMemberJsonAdd.length > 0}}
+					{{each touristGroupMemberJsonAdd as rs}}
 					<tr>
 						<td>1</td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
+						<td><input type="text" class="col-xs-12" name="name" value="{{rs.name}}"></td>
+						<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{rs.mobileNumber}}"></td>
 						<td>
 							<select class="col-xs-12" name="idCardType">
-								{{#"1" | getCardOption}}
+								{{#rs.idCardType | getCardOption}}
 							</select>
 						</td>
-						<td><input type="text" class="col-xs-12"></td>
+						<td><input type="text" class="col-xs-12" name="idCardNumber" value="{{rs.idCardNumber}}"></td>
 						<td>
-							<label class="control-label">
-								<input type="checkbox" name="isContactUser" class="ace">
+							<label>
+								<input type="checkbox" name="isContactUser" class="ace"{{if rs.isContactUser == 1}} checked{{/if}}>
 								<span class="lbl"></span>
 							</label>
 						</td>
-						<td><a class="cursor">删除</a></td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
+					{{/each}}
+				{{/if}}
 				</tbody>
 			</table>
 		</div>
 		<div class="col-xs-12 mar-t-20 mar-b-10 text-center">
-			<button class="btn btn-sm btn-primary otherButton" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
+			<button class="btn btn-sm btn-primary otherButton T-btn-save" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
 		</div>
 	</div>
 </div>
