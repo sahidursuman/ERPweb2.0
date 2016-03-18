@@ -38,7 +38,7 @@
             <span class="F-float F-money">{{rs.price}}</span>{{/if}}</td>
             <td>{{if rs.isAccountGuide == 1}}<input name="manageFee" class="F-float F-money" value="{{rs.manageFee}}" type="text" >{{else}}<span class="F-float F-money">{{rs.manageFee}}</span>{{/if}}</td>
             <td><span class="F-float F-money">{{rs.guideAllPreMoney}}</span></td>
-            <td>{{rs.remark}}</td>
+            <td><input type="text" name="remark" value="{{rs.remark}}" /></td>
         </tr>
     {{/each}}
     </tbody>
