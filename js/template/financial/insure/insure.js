@@ -628,8 +628,7 @@ define(function(require, exports) {
             list.unshift(all);
         } else if (!isMainList && list[0].value === '全部') {
             list.shift(all);
-        }
-        
+        }        
 
         //保险
         $obj.autocomplete({
