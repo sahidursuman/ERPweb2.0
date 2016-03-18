@@ -3,29 +3,29 @@
 		<div class="col-xs-12">
 			<div class="col-xs-1 text-right no-padding-right control-label">车辆要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="requireContent" value="{{if !!require}}{{require.requireContent}}{{/if}}" data-id="{{if !!require}}{{require.id}}{{/if}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">责任部门</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
 			</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">责任计调</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 col-xs-offset-1" style="padding-left: 7px;">
 				<label class="control-label">
-					<input type="checkbox" name="isContactUser" class="ace">
+					<input type="checkbox" class="ace T-abversion"{{if isTransfer == 1}} checked{{/if}}>
 					<span class="lbl"> 外转</span>
 				</label>
 			</div>
-			<div class="col-xs-4">
+			<div class="col-xs-4{{if isTransfer != 1}} hidden{{/if}} T-peer">
 				<label class="pull-left control-label" style="width: 35px">同行</label>
-				<input type="text" class="pull-left">
+				<input type="text" class="pull-left" name="transferPartnerAgency" value="{{transferPartnerAgency}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -34,7 +34,7 @@
 			</div>
 			<div class="col-xs-8" style="padding-top: 4px;">
 				<label class="control-label pull-left" style="width: 35px;">应付</label>
-				<input type="text" readonly class="pull-left">
+				<input type="text" readonly class="pull-left" name="needPayAllMoney" value="{{needPayAllMoney}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -49,20 +49,24 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="T-fee-list">
+				{{if outFee && outFee.length > 0}}
+					{{each outFee as rs}}
 					<tr>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12" readonly></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><a class="cursor">删除</a></td>
+						<td><input type="text" class="col-xs-12" name="type" value="{{rs.type}}"></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
+					{{/each}}
+				{{/if}}
 				</tbody>
 			</table>
 		</div>
 		<div class="col-xs-12 mar-t-20 mar-b-10 text-center">
-			<button class="btn btn-sm btn-primary otherButton" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
+			<button class="btn btn-sm btn-primary otherButton T-btn-save" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
 		</div>
 	</div>
 </div>

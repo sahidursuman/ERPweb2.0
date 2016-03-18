@@ -147,7 +147,31 @@ template.helper("getPlanPayTypeText", function(payType) {
         default:
             return '其他';
     }
-}); 
+});
+template.helper("getTravelAgencyType", function(payType) {
+    switch (payType * 1) {
+        case 0:
+            return '地接社';
+        case 1:
+            return '组团社';
+        case 2:
+            return '地接社和组团社';
+        default:
+            return '组团社';
+    }
+});
+template.helper("getTravelAgencyLevel", function(payType) {
+    switch (payType * 1) {
+        case 1:
+            return '金牌';
+        case 2:
+            return '银牌';
+        case 3:
+            return '铜牌';
+        default:
+            return '金牌';
+    }
+});
 template.helper("getPlanPayTypeOption", function(status) {
     var res = '';
     status = status || 0;
@@ -273,6 +297,18 @@ template.helper("getHotelLevelDesc", function(level) {
         case 7:     return '五星以上';
         default:     return '';
     }
+});
+template.helper("getHotelLevelOptions", function(level) {
+    var res = '';
+    level = level || 1;
+    res += '<option value="1" '+(level == 1?'selected':'')+'>三星以下</option>';
+    res += '<option value="2" '+(level == 2?'selected':'')+'>三星</option>';
+    res += '<option value="3" '+(level == 3?'selected':'')+'>准四星</option>';
+    res += '<option value="4" '+(level == 4?'selected':'')+'>四星</option>';
+    res += '<option value="5" '+(level == 5?'selected':'')+'>准五星</option>';
+    res += '<option value="6" '+(level == 6?'selected':'')+'>五星</option>';
+    res += '<option value="7" '+(level == 7?'selected':'')+'>五星以上</option>';
+    return res;
 });
 
 template.helper("getOrderStatusDesc", function(status) {
