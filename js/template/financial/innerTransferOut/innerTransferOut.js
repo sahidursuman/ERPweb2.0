@@ -143,8 +143,6 @@ define(function(require,exports) {
 		if(!!$tab){
 			args.pageNo = args.pageNo || 0,
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
-			args.toBusinessGroupId = $tab.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = $tab.find('input[name=toBusinessGroupName]').val();
 			args.accountStatus = $tab.find('input[name=accountStatus]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
 			args.lineProductName = $tab.find('input[name=lineProductName]').val();
@@ -286,9 +284,9 @@ define(function(require,exports) {
 			event.preventDefault();
 			args.pageNo = 0;
 			if(typeFlag !=2){
-				InnerTransferOut.chenking(args);
+				InnerTransferOut.chenking(args,$tab);
 			}else{
-				InnerTransferOut.settlement(args);
+				InnerTransferOut.settlement(args,$tab);
 			}
 		});
 		//导出报表事件
@@ -616,6 +614,9 @@ define(function(require,exports) {
 		var showBtnFlag = (arguments.length > 1) ? args.showBtnFlag : $tab.data('showBtnFlag'),
 			settlermentValidator =  new FinRule((showBtnFlag == true) ? 3 : 1),
 			argumentsLen = arguments.length;
+		if(!FinancialService.isClearSave($tab,settlermentValidator)){
+			return false;
+		}
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			sumRemark = $tab.find('input[name=sumRemark]').val();
