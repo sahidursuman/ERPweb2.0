@@ -1777,10 +1777,92 @@ p#back-top a span {
     cursor: pointer;
 }
 
-
 .h-touristGroupInfo p{
     text-align: left;
     margin: 0px;
+}
+.h-touristGroupInfo p.center{
+    text-align: center;
+    margin: 0px;
+}
+.h-touristGroupInfo p span{
+    margin-right: 10px;
+}
+/*账户设置样式*/
+.application input{
+    margin-left: 40px;
+}
+.wizard-steps{
+    list-style: none;
+    display: table;
+    width: 98%;
+    padding: 0;
+    margin: auto;
+    position: relative;
+}
+.wizard-steps li {
+    display: table-cell;
+    /*text-align: center;*/
+    width: 1%;
+}
+.wizard-steps li:before {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 1px;
+    font-size: 0;
+    overflow: hidden;
+    border-top: 4px solid #CED1D6;
+    position: relative;
+    top: 21px;
+    z-index: 1;
+}
+.wizard-steps li.active .step, .wizard-steps li.complete .step {
+    border-color: #5293c4;
+}
+.wizard-steps li .step {
+    border: 5px solid #ced1d6;
+    color: #546474;
+    font-size: 15px;
+    border-radius: 100%;
+    background-color: #FFF;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    text-align: center;
+}
+.wizard-steps li .title {
+    display: block;
+    margin-top: 4px;
+    max-width: 100%;
+    color: #949ea7;
+    font-size: 14px;
+    z-index: 104;
+    /*text-align: center;*/
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.apply-information label{
+    font-size: 14px !important;
+    color: #333;
+}
+.apply-information input{
+    height: 30px !important;
+    width: 250px !important;
+}
+.account-solutionMain{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+.account-solutionMain p{
+    color: #999999;
+    font-size: 14px;
+    font-family: '宋体';
+    text-align: left;
 }
 /*媒体查询-不同分辨率*/
 
