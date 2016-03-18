@@ -841,7 +841,7 @@ define(function(require, exports) {
 
                     //散客拼团
                     if(!isInnerSinglePlan){
-                        $('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+                        $('#tab-arrange_individual-content').find('.T-search').trigger('click');
                     }
                     
                 });             

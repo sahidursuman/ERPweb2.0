@@ -359,19 +359,14 @@ define(function(require, exports) {
 	    			var result = showDialog(data);
 	    			if (result) {
 	    				data.result=JSON.parse(data.result);
-	    				var html;
-						if (type == 1) {
-							html = outListTemplate(data);
-						}else{
+	    				var html= outListTemplate(data);
+						if (type == 2) {
 							html = inListTemplate(data);
 						}
-						html = filterUnAuth(html);
 						//模板页面追加
-						$("#"+divId ).find(".transferList").html(html);
-
+						$("#"+divId ).find(".transferList").html(filterUnAuth(html));
 						//模板数据Action事件
 						transfer.initActionEvent(divId,type);
-
 						// 绑定翻页组件
 						laypage({
 						    cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -670,10 +665,8 @@ define(function(require, exports) {
 					var id = $tr.attr("data-entity-id");
 					transfer.delTransferData(id,$tr,$tab);
 				});
-
 		    }
 		};
-
 
 		/**
 		 * [newAddFee 给新增费用绑定事件]
@@ -697,10 +690,8 @@ define(function(require, exports) {
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
 			Tools.inputCtrolFloat($count);
-			
 			// 更新表单验证的事件绑定
 			rule.update(validator);   
-			
 			//绑定删除分团转客信息
 			$tab.find(".T-updateTransfer-delete").off().on("click",function(){
 				var $that=$(this),
