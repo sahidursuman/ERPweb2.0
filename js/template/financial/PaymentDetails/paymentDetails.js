@@ -18,7 +18,7 @@ define(function(require, exports){
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(bankId,bankNo){
+	Payment.initModule = function(bankId,bankNo,type){
 		Payment.$tab = null;
 		var date = new Date(),
         year = date.getFullYear(),
@@ -29,7 +29,8 @@ define(function(require, exports){
 			endTime : year + "-" + month + "-" + day,
 			startTime : year + "-" + month + "-01",
 			bankId : bankId ? bankId : "",
-			payType : ""
+			payType : "",
+			type : type
 		},
 		data = {
 			searchParam : args
@@ -42,6 +43,7 @@ define(function(require, exports){
 	 * @param  {object} $tab $tab
 	 */
 	Payment.getTotal = function(args, $tab){
+		console.trace();
 		var page = typeof(args) !== "number" ? (args || 0) : (args.pageNo || 0);
 		if(!!Payment.$tab){
 			args = Payment.getArgs(page);
@@ -52,8 +54,8 @@ define(function(require, exports){
 			data : {searchParam : JSON.stringify(args)},
 			showLoading: false
 		}).done(function(data){
-			$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
-			$tab.find('.T-payMoney').html(data.total.payMoney);
+			$tab.find('.T-incomeMoney').text(data.total.incomeMoney);
+			$tab.find('.T-payMoney').text(data.total.payMoney);
 			Payment.total = data.total;
 			Payment.allClac($tab);
 		});
@@ -105,10 +107,16 @@ define(function(require, exports){
 
 		$tab.on("click",".T-viewDetails",function(event){
 			Payment.viewDetails($(this).closest('tr').data("id"));
+		})
+		.on("click",".T-delete",function(){
+			var id = $(this).closest('tr').data("id");
+			showConfirmMsg($("#confirm-dialog-message"),"是否确认删除该条数据？",function(){
+		        Payment.deletePayment(id);
+		    },function(){},"放弃","删除");
 		});	
 
 		Payment.getSubjectList($tab);
-		FinancialService.initPayEvent($tab);	
+		// FinancialService.initPayEvent($tab);	
 	};
 	/**
 	 * 初始化搜索栏
@@ -126,11 +134,12 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-
+			if(args.type == 0){
+				data.searchParam.payType = 0;
+			}
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
-			$tab = $('#tab-' + menuKey + '-content');
-			$tab.find(".T-cash-area").addClass('hidden');
+			$tab = $('#tab-' + menuKey + '-content').off();
+
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
@@ -138,8 +147,9 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				Payment.$tab.find(".T-card-number").val(bankNo);
-				Payment.$tab.find(".T-card-number").closest('div').removeClass('hidden');
+				var $obj = (args.type == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				$obj.val(bankNo);
+				$obj.closest('div').removeClass('hidden');
 			}
 		});
 	};
@@ -234,7 +244,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
@@ -355,6 +365,23 @@ define(function(require, exports){
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false
+					});
+				}
+			}
+		});
+	};
+
+	//删除记录
+	Payment.deletePayment = function(id){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","deleteIncomeorPay"),
+			type:"POST",
+			data : {id : id},
+			success:function(data){
+				if(showDialog(data)){
+					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+						Payment.getTotal(0,Payment.$tab);
+						Payment.ajaxInit(0);
 					});
 				}
 			}

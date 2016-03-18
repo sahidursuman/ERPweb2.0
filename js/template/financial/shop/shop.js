@@ -109,7 +109,6 @@ define(function(require, exports) {
             // 设置选择的效果
             $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
             FinShop.getList(0,$tab);
-            // console.log($that.data('value'));
         });
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
@@ -179,24 +178,22 @@ define(function(require, exports) {
      * @param  {[int]} id 购物账务ID
      */
     FinShop.accountChecking = function(args) {
-        FinShop.$checkingTab = null;
         FinShop.checkingId = args.shopId = args.id;
         FinShop.checkingName = args.name;
         args.page = 0;
-        FinShop.initOperationList(args, false);
+        FinShop.initOperationList(args, false,false);
     };
     /**
      * 初始化付款模块
      * @param  {[type]} args 
      */
     FinShop.initPay = FinShop.settlement = function(args) {
-        FinShop.$settlementTab = null;
         FinShop.settlementId = args.shopId = args.id;
         FinShop.settlementName = args.name;
         FinShop.isBalanceSource = !args.source;
         args.page = 0;
         //args.accountStatus = 
-        FinShop.initOperationList(args, true);
+        FinShop.initOperationList(args, true,false);
     };
     /**
      * 对账和收款列表
@@ -234,6 +231,7 @@ define(function(require, exports) {
                 if (type) {
                     data.name = FinShop.settlementName;
                     data.source = FinShop.isBalanceSource;
+                    data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
                     data.name = FinShop.checkingName;
                     template = shopCheckingTemplate;
@@ -243,24 +241,41 @@ define(function(require, exports) {
                 var $theTab = null;
                 if (Tools.addTab(key, title, template(data))) {
                     if (type) {
-                        $theTab = FinShop.$settlementTab = $tab || $('#tab-' + key + '-content');
+                        $theTab = $tab || $('#tab-' + key + '-content');
+                        FinShop.$settlementTab = $theTab;
+                        if(FinShop.payingJson){
+                            FinShop.$settlementTab.data('isEdited',true);
+                        }
                     } else {
-                        $theTab = FinShop.$checkingTab = $tab || $('#tab-' + key + '-content');
+                        $theTab = $tab || $('#tab-' + key + '-content');
+                        FinShop.$checkingTab = $theTab;
                     }
-                    FinShop.initOperationEvent($theTab, type);
+                    FinShop.initOperationEvent($theTab,args,type);
                     $theTab.data('id', args.shopId);
-                    // 绑定翻页组件
-                    laypage({
-                        cont: $theTab.find('.T-pagenation'),
-                        pages: data.searchParam.totalPage, //总页数
-                        curr: (data.searchParam.pageNo + 1),
-                        jump: function(obj, first) {
-                            if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                FinShop.initOperationList({ page: obj.curr - 1 }, type, $theTab);
+                } else {
+                    var $tab = type ? FinShop.$settlementTab : FinShop.$checkingTab;
+                    $tab.data('next', args);
+                }
+
+                var $tab = type ? FinShop.$settlementTab : FinShop.$checkingTab;
+                // 绑定翻页组件
+                laypage({
+                    cont: $tab.find('.T-pagenation'),
+                    pages: data.searchParam.totalPage, //总页数
+                    curr: (data.searchParam.pageNo + 1),
+                    jump: function(obj, first) {
+                        if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            if(type){
+                                FinShop.payingJson = FinancialService.clearSaveJson(FinShop.$settlementTab,FinShop.payingJson,new FinRule(FinShop.isBalanceSource ? 3 : 1));
+                                FinShop.$settlementTab.data("isEdited",false);
+                                FinShop.getOperationList(obj.curr - 1,FinShop.$settlementTab);
+                            } else {
+                                FinShop.$checkingTab.data('isEdited',false);
+                                FinShop.initOperationList({ page: obj.curr - 1 }, type,FinShop.$checkingTab);
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     };
@@ -270,7 +285,7 @@ define(function(require, exports) {
      * @param  {[type]} type [description]
      * @return {[type]}      [description]
      */
-    FinShop.initOperationEvent = function($tab, type) {
+    FinShop.initOperationEvent = function($tab,args,type) {
         var validator = (new FinRule(!type ? 0 : (FinShop.isBalanceSource ? 3 : 1))).check($tab);
 
         //搜索顶部的事件绑定
@@ -282,28 +297,11 @@ define(function(require, exports) {
         var $datepicker = $searchArea.find('.datepicker');
         Tools.setDatePicker($datepicker, true);
         var operationMenuKey = settMenuKey,
-            saveData = FinShop.saveSettlement;
-
-        $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE)
-            .on('change', '.T-checkList', function(event) {
-                event.preventDefault();
-                $tab.data('isEdited', true);
-            })
-            .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
-                event.preventDefault();
-                saveData($tab, true);
-            })
-            .on(CLOSE_TAB_SAVE, function(event) {
-                event.preventDefault();
-                saveData($tab, true);
-            });
-
-        $tab.find('.T-checkTr').on('change', function() {
-            $(this).data('change', 'true');
-        });
+            saveData = type ? FinShop.saveSettlement : FinShop.saveChecking;
 
         // 监听修改
-        $tab.find(".T-clearList").off('change').on('change', "input", function(event) {
+        var $list = type ? $tab.find(".T-clearList") : $tab.find(".T-checkList");
+        $list.off('change').on('change', "input", function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change", true);
             $tab.data('isEdited', true);
@@ -311,7 +309,26 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            FinShop.initOperationEvent($tab, type);
+            if(type){
+                FinShop.payingJson = [];
+            }
+            FinShop.initOperationList($tab.data("next"), true,false);
+        })
+        // 监听保存，并切换tab
+        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+            event.preventDefault();
+            saveData($tab,args,[tab_id, title, html]);
+        })
+        // 保存后关闭
+        .on(CLOSE_TAB_SAVE, function(event) {
+            event.preventDefault();
+            saveData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(type){
+                FinShop.payingJson = [];
+            }
         });
 
         if (type) {
@@ -333,7 +350,6 @@ define(function(require, exports) {
 
             FinancialService.initPayEvent($searchArea);
         } else {
-            saveData = FinShop.saveChecking;
             operationMenuKey = checkMenuKey;
             FinancialService.updateUnpayMoney($tab, new FinRule(0));
             //给全选按钮绑定事件
@@ -378,7 +394,7 @@ define(function(require, exports) {
             event.preventDefault();
             if (!type) {
                 FinancialService.changeUncheck($tab.find('.T-checkTr'), function() {
-                    saveData($tab);
+                    saveData($tab,args);
                 });
             } else {
                 if (!$tab.data('isEdited')) {
@@ -388,37 +404,20 @@ define(function(require, exports) {
                 var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
                     sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
                 if (sumPayMoney != sumListMoney) {
-                    showMessageDialog($("#confirm-dialog-message"), "本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+                    showMessageDialog($("#confirm-dialog-message"), "本次收款金额合计与单条记录本收付款金额的累计值不相等，请检查！");
                     return false;
                 }
                 if (sumPayMoney == 0) {
                     showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                        saveData($tab);
+                        saveData($tab,args);
                     })
                 } else {
-                    saveData($tab);
+                    saveData($tab,args);
                 }
             }
         });
         //绑定取消事件
-        $tab.find('.T-btn-close').on('click', function(event) {
-            event.preventDefault();
-            if (!!$tab.data('isEdited')) {
-                showSaveConfirmDialog($('#confirm-dialog-message'), "内容已经被修改，是否保存?", function() {
-                    if (!type) {
-                        FinancialService.changeUncheck($tab.find('.T-checkTr'), function() {
-                            saveData($tab, true);
-                        });
-                    } else {
-                        saveData($tab, true);
-                    }
-                }, function() {
-                    Tools.closeTab(operationMenuKey);
-                });
-            } else {
-                Tools.closeTab(operationMenuKey);
-            }
-        });
+        FinancialService.closeTab(operationMenuKey);
     };
 
     FinShop.viewOperationDetail = function(id, type) {
@@ -501,9 +500,11 @@ define(function(require, exports) {
         });
     };
 
-    FinShop.saveChecking = function($tab, tabArgs) {
+    FinShop.saveChecking = function($tab,args,tabArgs) {
+        console.log("saveChecking");
         // 表单校验
-        var json = FinancialService.checkSaveJson($tab, new FinRule(0));
+        var argLen = arguments.length,
+            json = FinancialService.checkSaveJson($tab, new FinRule(0));
         if (JSON.parse(json).length > 0) {
             $.ajax({
                 url: KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
@@ -513,19 +514,20 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     $tab.data('isEdited', false);
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
+                        if (argLen === 1) {
                             Tools.closeTab(checkMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else {
-                            FinShop.initOperationList({ page: 0 }, false, $tab);
+                        } else if(argLen === 2){
+                            FinShop.initOperationList(args, false, false);
+                        } else if(argLen === 3){
+                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
+                            FinShop.initOperationEvent($tab,args,false);
                         }
                     });
                 }
             });
-        } else if (!json) {
-
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+        }else {
+            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据');
         }
     };
 
@@ -553,7 +555,7 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var payType = $tab.find('.T-sumPayType').val(),
+                        var payType = $tab.find('select[name=sumPayType]').val(),
                             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
                         var voucher = $tab.find('input[name=credentials-number]').val();
                         var billTime = $tab.find('input[name=tally-date]').val();
@@ -607,10 +609,12 @@ define(function(require, exports) {
                         data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                         var html = payingTableTemplate(data);
                         FinShop.$settlementTab.find('.T-checkList').html(html);
+                        if(FinShop.payingJson){
+                            FinShop.$settlementTab.data("isEdited",true);
+                        }
                         $tab.find('.T-checkTr').on('change', function() {
                             $(this).data('change', 'true');
                         });
-                        //FinShop.initOperationEvent($tab, 1);
                         // 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.searchParam.recordSize + '条记录');
                         $tab.find('.T-saveClear').data('pageNo', args.pageNo);
@@ -621,6 +625,8 @@ define(function(require, exports) {
                             curr: (data.searchParam.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                                    FinShop.payingJson = FinancialService.clearSaveJson($tab,FinShop.payingJson,new FinRule(FinShop.isBalanceSource ? 3 : 1));
+                                    $tab.data('isEdited',false);
                                     FinShop.getOperationList(obj.curr - 1, $tab);
                                 }
                             }
@@ -631,15 +637,15 @@ define(function(require, exports) {
         }
     }
 
-    FinShop.saveSettlement = function($tab, tabArgs) {
-
-        var payType = $tab.find('.T-sumPayType').val(),
+    FinShop.saveSettlement = function($tab,args,tabArgs) {
+        var argLen = arguments.length,
+            payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val();
         var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
         if (json.length) {
-            var args = {
+            var saveArgs = {
                 shopId: FinShop.settlementId,
                 payType: payType,
                 bankId: bankId,
@@ -651,22 +657,24 @@ define(function(require, exports) {
             $.ajax({
                     url: KingServices.build_url('financial/shopAccount', 'receiveShopAccount'),
                     type: 'post',
-                    data: args,
+                    data: saveArgs,
                 })
                 .done(function(data) {
-                    $tab.data('isEdited', false);
-                    FinShop.payingJson = [];
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs) {
+                        $tab.data('isEdited', false);
+                        FinShop.payingJson = [];
+                        if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else {
-                            FinShop.initOperationList({ page: 0 }, true, $tab);
+                        } else if(argLen === 2){
+                            FinShop.initOperationList(args, true,false);
+                        } else if(argLen === 3){
+                            FinShop.initOperationList(args, true,false);
                         }
                     })
                 });
         } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
         }
     };
 

@@ -11,6 +11,8 @@
 										<th class="th-border">姓名</th>
 										<th class="th-border">证件类型</th>
 										<th class="th-border">证件号</th>
+										<th class="th-border">手机号</th>
+										<th class="th-border">是否为联系人</th>
 										<th class="th-border">客源地</th>
 										<th class="th-border">年龄</th>
 									</tr>
@@ -29,6 +31,8 @@
 											{{/if}}
 										</td>
 										<td>{{memberList.idCardNumber}}</td>
+										<td>{{memberList.mobileNumber}}</td>
+										<td>{{if memberList.isContactUser == 1}}是{{else}}-{{/if}}</td>
 										<td>{{if memberList.idCardType == 0}}{{memberList.area}}{{else}}--{{/if}}</td>
 										<td class="F-float F-count">{{if memberList.idCardType == 0}}{{if memberList.age==0}}--{{else}}{{memberList.age}}{{/if}}{{else}}{{/if}}</td>
 									</tr>
