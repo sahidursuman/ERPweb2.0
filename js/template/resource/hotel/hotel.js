@@ -281,7 +281,7 @@ define(function(require, exports) {
 			'<td><select name="containDinner" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><input name="broadband" class="col-sm-12" type="text"  maxlength="100" /></td>' + 
 			'<td><input name="areaSize" class="col-sm-12 F-float F-count" type="text"  maxlength="3" /></td>' +
-			'<td><input name="guestNumber" class="col-sm-12 F-float F-count" type="text"  maxlength="4" /></td>' +
+			'<td><input name="guestNumber" class="col-sm-12" type="text"  maxlength="4" /></td>' +
 			'<td><input name="remark" class="col-sm-12" type="text"  maxlength="1000" /></td>' +
 			'<td style="width:70px"><a data-entity-id="" href="#" class=" btn-xs  T-btn-hotel-standard-delete">删除</a></td>' +
 			'</tr>';

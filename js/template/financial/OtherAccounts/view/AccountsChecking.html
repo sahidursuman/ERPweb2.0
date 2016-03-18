@@ -1,9 +1,9 @@
 <div class="row T-Accounts globalAdd">
     <div class="col-xs-12 ">
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="search-area T-search-area" data-account-status="{{accountStatus}}">
+            <div class="search-area T-search-area">
                 <div class="form-group">
-                    <label>项目名称:{{searchParam.name}}</label>
+                    <label>项目名称：{{searchParam.name}}</label>
                     <input type="hidden" name="itemName" value="{{searchParam.name}}">
                     <label class="marginLeft-30">账期：</label>
                     <input class="datepicker T-time T-startTime" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
@@ -33,22 +33,22 @@
     <div class="clearfix"></div>
     <table class="table table-striped table-bordered table-hover all hct_align_middle">
         <thead>
-            <tr class="T-tr-fixed">
-                <th class="th-border">团信息</th>
-                <th class="th-border">消费日期(账期)</th>
-                <th class="th-border">团队人数</th>
-                <th class="th-border">单价</th>
-                <th class="th-border">数量</th>
-                <th class="th-border">优惠</th>
-                <th class="th-border">账面应付</th>
-                <th class="th-border">已付金额</th>
-                <th class="th-border">单据</th>
-                <th class="th-border">结算金额</th>
-                <th class="th-border">未付金额</th>
-                <th class="th-border">备注</th>
-                <th class="th-border">对账时间</th>
-                <th class="th-border">对账人</th>
-                <th class="th-border" style="width:108px">对账</th>
+            <tr class="T-tr-fixed bg-blur">
+                <th>团信息</th>
+                <th>消费日期(账期)</th>
+                <th>团队人数</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>优惠</th>
+                <th>账面应付</th>
+                <th>已付金额</th>
+                <th>单据</th>
+                <th>结算金额</th>
+                <th>未付金额</th>
+                <th>备注</th>
+                <th>对账时间</th>
+                <th>对账人</th>
+                <th style="width:115px">对账</th>
             </tr>
         </thead>
         <tbody class="T-checkListNum T-checkList">
@@ -101,7 +101,7 @@
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group text-center">
-            <button class="btn btn-xs btn-primary T-closeTab">
+            <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
             <button class="btn btn-xs btn-primary T-confirm" data-id={{name}}>

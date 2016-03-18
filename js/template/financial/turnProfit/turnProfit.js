@@ -66,7 +66,7 @@ define(function(require, exports) {
                 if (result) {
                 	data.searchParam = TurnProfit.searchParam;
                     var html = listTemplate(data);
-                    addTab(menuKey,"外转利润",html);
+                    Tools.addTab(menuKey,"外转利润",html);
                     TurnProfit.searchParam.pageNo = page;
                     
                     TurnProfit.initList();

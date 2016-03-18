@@ -17,16 +17,13 @@ define(function(require, exports) {
     
     var Client = {
         mock: false,
-		searchData: false,
+        searchData: false,
         $tab: false,
         $searchArea: false,
         $checkSearchArea: false,
         $clearSearchArea : false,
-        edited : {},
-        oldBlanceClientId : false,
-        oldCheckClientId : false,
         checkId : false
-	};
+    };
 
     Client.initModule = function() {
         Client = $.extend({}, Client, 
@@ -37,14 +34,11 @@ define(function(require, exports) {
                 $searchArea: false,
                 $checkSearchArea: false,
                 $clearSearchArea : false,
-                edited : {},
-                oldBlanceClientId : false,
-                oldCheckClientId : false,
                 checkId : false
             }
             );
         Client.listClient(0);
-    };	
+    };  
     
     Client.listClient = function(page){
         var date = FinancialService.getInitDate(),
@@ -93,6 +87,7 @@ define(function(require, exports) {
         }).done(function(data){
             if(showDialog(data)){
                 Tools.addTab(menuKey, "客户账务", listTemplate(data));
+                Client.listPage = args.pageNo;
                 Client.initList();
                 Client.getListSumData(args,$('#' + tabId));
                 // 绑定翻页组件
@@ -219,19 +214,22 @@ define(function(require, exports) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
                     Client.initCheck($tab,args);
-
-                    // 绑定翻页组件
-                    laypage({
-                        cont: $tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                        pages: data.searchParam.totalPage, //总页数
-                        curr: (args.pageNo + 1),
-                        jump: function(obj, first) {
-                            if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                Client.ClientCheck(obj.curr - 1, false, $tab);
-                            }
-                        }
-                    });
+                } else {
+                    Client.$checkTab.data("next",args);
                 }
+
+                // 绑定翻页组件
+                laypage({
+                    cont: Client.$checkTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                    pages: data.searchParam.totalPage, //总页数
+                    curr: (args.pageNo + 1),
+                    jump: function(obj, first) {
+                        if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            Client.$checkTab.data('isEdited',false);
+                            Client.ClientCheck(obj.curr - 1, false, $tab);
+                        }
+                    }
+                });
             }
         });
     };
@@ -247,13 +245,13 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.ClientCheck(Client.checkPageNo, false, $tab);
+            Client.initCheck($tab,Client.$checkTab.data("next"));
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             if (!validator.form()) { return; }
-            Client.saveCheckingData($tab, [tab_id, title, html])
+            Client.saveCheckingData($tab,args,[tab_id, title, html])
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -263,6 +261,7 @@ define(function(require, exports) {
         });
 
         // 初始化jQuery 对象 
+        Client.$checkTab = $tab;
         Client.$checkSearchArea = $tab.find('.T-search-area');
         Client.$checkSumArea = $tab.find('.T-sum-area');
         Client.$checkSumBackMoney = Client.$checkSumArea.find('.T-sumBackMoney');
@@ -339,14 +338,12 @@ define(function(require, exports) {
         $tab.find(".T-saveClear").click(function(){ 
             if (!validator.form()) { return; }
             FinancialService.changeUncheck($tab.find('.T-checkList tr'), function(){
-                Client.saveCheckingData($tab);
+                Client.saveCheckingData($tab,args);
             },3);
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientCheckTab);
-        });
+        FinancialService.closeTab(ClientCheckTab);
 
     };
 
@@ -490,28 +487,32 @@ define(function(require, exports) {
                 
                 if (Tools.addTab(ClientClearTab, "客户收款", ClientClearingTemplate(data))) {
                     $tab = $("#tab-"+ ClientClearTab + "-content").data('id', args.fromPartnerAgencyId);
-                    Client.initClear($tab, args.fromPartnerAgencyId,args);                    
+                    Client.initClear($tab,args);  
+                } else {
+                    Client.$clearTab.data('next', args);
+                }                  
 
-                    // 绑定翻页组件
-                    laypage({
-                        cont: $tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-                        pages: data.searchParam.totalPage, //总页数
-                        curr: (args.pageNo + 1),
-                        jump: function(obj, first) {
-                            if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                Client.cacheClearData($tab.find('.T-list'));
-                                Client.ClientClear(obj.curr - 1, false, $tab);
-                            }
+                // 绑定翻页组件
+                laypage({
+                    cont: Client.$clearTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+                    pages: data.searchParam.totalPage, //总页数
+                    curr: (args.pageNo + 1),
+                    jump: function(obj, first) {
+                        if (!first) { // 避免死循环，第一次进入，不调用页面方法
+                            Client.cacheClearData($tab.find('.T-list'));
+                            Client.$clearTab.data("isEdited",false);
+                            Client.ClientClear(obj.curr - 1, false, $tab);
                         }
-                    });
-                };
+                    }
+                });
             }
         });
     };
 
-    Client.initClear = function($tab, id,args){
+    Client.initClear = function($tab,args){
         var id = $tab.find('.T-saveClear').data('id');
         
+        Client.$clearTab = $tab;
         Client.$clearSearchArea = $tab.find('.T-search-area');
         Client.$sumUnReceivedMoney = $tab.find('.T-sumReciveMoney');
         var validator = (new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1)).check($tab),
@@ -521,13 +522,13 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initClear($tab, id,args);
+            Client.initClear($tab,Client.$clearTab.data("next"));
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             if (autoValidator.form()) {
-                Client.saveClearData($tab, [tab_id, title, html]);
+                Client.saveClearData($tab,args,[tab_id, title, html]);
             }
         })
         // 保存后关闭
@@ -612,24 +613,22 @@ define(function(require, exports) {
                 sumList = parseFloat($tab.find('input[name=sumPayMoney]').val());
             }
             if(sum != sumList){
-                showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+                showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
                 return false;
             }
 
             if(sumList == 0){
                 showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                    Client.saveClearData($tab);
+                    Client.saveClearData($tab,args);
                 })
             }else{
-                Client.saveClearData($tab);
+                Client.saveClearData($tab,args);
             }
             
          });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function(){
-            Tools.closeTab(ClientClearTab);
-        });
+        FinancialService.closeTab(ClientClearTab);
     };
 
     /**
@@ -794,7 +793,7 @@ define(function(require, exports) {
         }
     }
 
-    Client.saveCheckingData = function($tab, tabArgs){
+    Client.saveCheckingData = function($tab,args,tabArgs){
         var argLen = arguments.length,
             JsonStr = FinancialService.saveJson_checking($tab);
         if(!JsonStr){return false;}
@@ -810,11 +809,14 @@ define(function(require, exports) {
                     $tab.data('isEdited', false);
 
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                        if (argLen === 2) {
-                            Client.listClient(0);
+                        if (argLen === 1) {
+                            Tools.closeTab(menuKey + "_checking");
+                            Client.listClient(Client.listPage);
+                        } else if(argLen === 2){
+                            Client.ClientCheck(args.pageNo,false, $tab);
+                        } else if(argLen === 3){
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                        } else {
-                            Client.ClientCheck(0, false, $tab);
+                            Client.initCheck($tab,args);
                         }
                     });
                 }
@@ -822,14 +824,14 @@ define(function(require, exports) {
         });
     };
 
-    Client.saveClearData = function($tab,tabArgs) {
+    Client.saveClearData = function($tab,args,tabArgs) {
         var argLen = arguments.length;
-        var payType = $tab.find('.T-sumPayType').val(),
+        var payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
             voucher = $tab.find('input[name=credentials-number]').val(),
             billTime = $tab.find('input[name=tally-date]').val();
         Client.cacheClearData($tab.find('.T-list'));
-		var JsonStr = Client.clearDataArray; 
+        var JsonStr = Client.clearDataArray; 
         if(JsonStr.length==0){
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
@@ -853,18 +855,20 @@ define(function(require, exports) {
                     $tab.data('isEdited', false);
                     Client.clearDataArray = [];
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                        if (argLen === 2) {
-                            Client.listClient(0);
+                        if (argLen === 1) {
+                            Tools.closeTab(menuKey + "_clearing");
+                            Client.listClient(Client.listPage);
+                        } else if(argLen === 2){
+                            Client.ClientClear(args.pageNo, false, $tab);
+                        } else if(argLen === 3){
                             Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            Client.initClear($tab.data('id'));
-                        } else {
-                            Client.ClientClear(0, false, $tab);
+                            Client.initClear($tab,args);
                         }
                     });
                 }
             }
         });
-	};
+    };
 
     //给每个tr增加验证
     Client.validatorTable = function(){

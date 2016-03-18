@@ -103,8 +103,7 @@
                     <th class="th-border">收客单号</th>
                     <th class="th-border">客户</th>
                     <th class="th-border">线路产品</th>
-                    <th class="th-border">联系人</th>
-                    <th class="th-border">联系电话</th>
+                    <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
                     <th class="th-border">住宿标准</th>
@@ -119,10 +118,9 @@
                 {{if !!touristGroupList}} {{each touristGroupList as group}}
                 <tr data-id="{{group.id}}">
                     <td>{{group.orderNumber}}</td>
-                    <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+                    <td name="travelAgencyName" title="{{if group.partnerAgencyContact}}联系人：{{group.partnerAgencyContact.contactRealname}}，电话：{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
-                    <td name="contactMemberName">{{group.partnerAgencyContact.contactRealname}}</td>
-                    <td name="contactMemberMobileNumber">{{group.partnerAgencyContact.contactMobileNumber}}</td>
+                    <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
@@ -132,7 +130,7 @@
                     <td>{{group.sendPosition}}</td>
                     <td name="remark" title={{group.mark}}>{{group.remark}}</td>
                     <td>
-                        <div class="hidden-sm hidden-xs btn-group">
+                        <div class="btn-group">
                             <a class="cursor T-action T-groupView">
                             查看
                         </a>
@@ -148,43 +146,43 @@
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
                 {{if arrangeItemsStauts.guideStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140011">
                     <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.insuranceStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012">
                     <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.busStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013">
                     <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.restaurantStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014">
                     <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="false">餐饮</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.hotelStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015">
                     <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.scenicStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016">
                     <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="false">景区</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.ticketStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017">
                     <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.shopStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018">
                     <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="false">购物</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.selfPayStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019">
                     <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="false">自费</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.otherStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140020">
                     <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
                 </li>
                 {{/if}}
@@ -426,7 +424,7 @@
                                             </td>
                                             <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
                                             <td>
-                                                <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" />
+                                                <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12" style="width: 60px;" />
                                             </td>
                                             <td>
                                                 <input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.brand}}" class="col-sm-12" />
@@ -540,8 +538,7 @@
                                     <col style="width:110px">
                                     <col style="width:50px;">
                                     <col style="width:150px;">
-                                    <col style="width:110px;">
-                                    <col style="width:110px;">
+                                    <col style="width:160px;">
                                     <col style="width:60px;">
                                     <col style="width:60px;">
                                     <col style="width:60px;">
@@ -556,8 +553,7 @@
                                         <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
                                         <th class="th-border"><span class="necessary">*</span>类型</th>
                                         <th class="th-border"><span class="necessary">*</span>餐厅</th>
-                                        <th class="th-border">联系人</th>
-                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">联系方式</th>
                                         <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
                                         <th class="th-border">人数</th>
                                         <th class="th-border">优惠</th>
@@ -596,10 +592,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="managerName" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}" class="col-sm-12" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="mobileNumber" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12" />
+                                            <input type="text" name="managerName" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}} {{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12" />
                                         </td>
                                         <td>
                                             <input type="text" name="price" value="{{restaurant.price}}" class="col-sm-12 T-typeNameChoose F-float F-money" />
@@ -660,8 +653,7 @@
                                     <col style="width:110px">
                                     <col style="width:90px;">
                                     <col style="width:150px;">
-                                    <col style="width:100px;">
-                                    <col style="width:110px;">
+                                    <col style="width:160px;">
                                     <col style="width:60px;">
                                     <col style="width:60px;">
                                     <col style="width:60px;">
@@ -678,8 +670,7 @@
                                         <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
                                         <th class="th-border">星级</th>
                                         <th class="th-border"><span class="necessary">*</span>酒店</th>
-                                        <th class="th-border">联系人</th>
-                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">联系方式</th>
                                         <th class="th-border"><span class="necessary">*</span>房型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
@@ -721,10 +712,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="col-sm-12" name="mobileNumber" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}" />
+                                            <input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}} {{hotel.hotel.mobileNumber}}{{/if}}" />
                                         </td>
                                         <td>
                                             <input type="text" class="col-sm-12 T-chooseHotelRoom" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" />
@@ -994,8 +982,7 @@
                                     <col style="width:110px">
                                     <col style="width:150px;">
                                     <col style="width:150px;">
-                                    <col style="width:90px;">
-                                    <col style="width:110px;">
+                                    <col style="width:160px;">
                                     <col style="width:80px">
                                     <col style="width:80px">
                                     <col style="width:80px">
@@ -1011,8 +998,7 @@
                                         <th style="width:100px;"><span class="necessary">*</span>日期</th>
                                         <th><span class="necessary">*</span>自费商家</th>
                                         <th>自费项目</th>
-                                        <th>联系人</th>
-                                        <th>联系电话</th>
+                                        <th>联系方式</th>
                                         <th style="width: 77px;">单价</th>
                                         <th style="width: 77px;">底价</th>
                                         <th style="width: 77px;">数量</th>
@@ -1043,10 +1029,7 @@
                                             <input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" />
                                         </td>
                                         <td>
-                                            <input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}" />
+                                            <input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}} {{selfPay.selfPay.mobileNumber}}{{/if}}" />
                                         </td>
                                         <td>
                                             <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{if !!selfPay.marketPrice}}{{selfPay.marketPrice}}{{else}}{{selfPay.quotePrice}}{{/if}}" style="width: 60px;" />
