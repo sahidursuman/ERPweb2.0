@@ -42,40 +42,23 @@
                         <label class="col-xs-3 text-right control-label no-padding-right">操作日期</label>
                         <div class="col-xs-8 orderManagerOption">
                             <div class="input-group">
-                                <input class="col-xs-5 date-picker" name="startTime" placeholder="开始时间" value="" type="text" />
+                                <input class="col-xs-5 datepicker date-picker" name="startTime" placeholder="开始时间" value="" type="text" />
                                 <lable class="col-xs-2" style="text-align:center;padding:0;padding-top:2px;">&nbsp;至&nbsp;</lable>
-                                <input class="col-xs-5 date-picker" name="endTime" placeholder="结束时间" value="" type="text" />
+                                <input class="col-xs-5 datepicker date-picker" name="endTime" placeholder="结束时间" value="" type="text" />
                             </div>
                         </div>
                     </div>
-                    <div class="pull-left btn-group btn-status T-select-status mar-t-10">
-                        <label class="pull-left text-right control-label no-padding-right margin-left33">状态 </label>
-                        <button data-value="" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false" style="height: 24px;font-size: 12px;">
-                            <span>
-							    全部
-							</span>
-                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
-                        </button>
-                        <input type="hidden" name="status" class="T-status" value="" />
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a data-value="" href="javascript:void(0)">全部</a>
-                            </li>
-                            <li>
-                                <a data-value="-1" href="javascript:void(0)">已撤单</a>
-                            </li>
-                            <li>
-                                <a data-value="0" href="javascript:void(0)">预定中</a>
-                            </li>
-                            <li>
-                                <a data-value="1" href="javascript:void(0)">已预订</a>
-                            </li>
-                            <li>
-                                <a data-value="2" href="javascript:void(0)">已拒绝</a>
-                            </li>
-                        </ul>
+                    <div class="pull-left btn-group btn-status T-select-status mar-ort-10 margin-left33">
+                        <label>状态 </label>
+                        <select name="status" class="T-status">
+                            <option value="">全部</option>
+                            <option value="-1">已撤单</option>
+                            <option value="0">预定中</option>
+                            <option value="1">已预订</option>
+                            <option value="2">已拒绝</option>
+                        </select>
                     </div>
-                    <div class="pull-left mar-t-10" style="margin-left: 20px;">
+                    <div class="pull-left mar-ort-10" style="margin-left: 20px;">
                         <button class=" btn-sm  T-busCompanyOrder-search search-btn">
                             <i class="ace-icon fa fa-search"></i> 搜索
                         </button>
@@ -115,40 +98,23 @@
                         <label class="col-xs-3 text-right control-label no-padding-right">操作日期</label>
                         <div class="col-xs-8 orderManagerOption">
                             <div class="input-group">
-                                <input class="col-xs-5 date-picker" name="startTime" placeholder="开始时间" value="" type="text" />
+                                <input class="col-xs-5 datepicker date-picker" name="startTime" placeholder="开始时间" value="" type="text" />
                                 <lable class="col-xs-2" style="text-align:center;padding:0;padding-top:2px;">&nbsp;至&nbsp;</lable>
-                                <input class="col-xs-5 date-picker" name="endTime" placeholder="结束时间" value="" type="text" />
+                                <input class="col-xs-5 datepicker date-picker" name="endTime" placeholder="结束时间" value="" type="text" />
                             </div>
                         </div>
                     </div>
-                    <div class="pull-left btn-group btn-status T-select-status mar-t-10">
-                        <label class="pull-left text-right control-label no-padding-right margin-left33">状态 </label>
-                        <button data-value="" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false" style="height: 24px;font-size: 12px;">
-                            <span>
-							 	全部
-							</span>
-                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
-                        </button>
-                        <input type="hidden" name="status" class="T-status" value="" />
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a data-value="" href="javascript:void(0)">全部</a>
-                            </li>
-                            <li>
-                                <a data-value="-1" href="javascript:void(0)">已撤单</a>
-                            </li>
-                            <li>
-                                <a data-value="0" href="javascript:void(0)">预定中</a>
-                            </li>
-                            <li>
-                                <a data-value="1" href="javascript:void(0)">已预订</a>
-                            </li>
-                            <li>
-                                <a data-value="2" href="javascript:void(0)">已拒绝</a>
-                            </li>
-                        </ul>
+                    <div class="pull-left btn-group btn-status T-select-status mar-ort-10 margin-left33">
+                        <label>状态 </label>
+                        <select name="status" class="T-status">
+                            <option value="">全部</option>
+                            <option value="-1">已撤单</option>
+                            <option value="0">预定中</option>
+                            <option value="1">已预订</option>
+                            <option value="2">已拒绝</option>
+                        </select>
                     </div>
-                    <div class="pull-left mar-t-10" style="margin-left: 20px;">
+                    <div class="pull-left mar-ort-10" style="margin-left: 20px;">
                         <button class=" btn-sm  T-hotelOrder-search search-btn">
                             <i class="ace-icon fa fa-search"></i> 搜索
                         </button>
