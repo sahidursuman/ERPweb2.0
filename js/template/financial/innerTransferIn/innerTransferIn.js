@@ -181,7 +181,6 @@ define(function(require, exports) {
         	args.orderNumber = $tab.find('input[name=orderNumber]').val();
         	args.startAccountTime = $tab.find('input[name=startDate]').val();
         	args.endAccountTime = $tab.find('input[name=endDate]').val();
-            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -254,7 +253,6 @@ define(function(require, exports) {
             args.orderNumber = $tab.find('input[name=orderNumber]').val();
             args.startAccountTime = $tab.find('input[name=startDate]').val();
             args.endAccountTime = $tab.find('input[name=endDate]').val();
-            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -306,8 +304,6 @@ define(function(require, exports) {
                 FinTransIn.getCheckList(args,$tab,1);
             } else {
                 FinTransIn.getClearList(args,$tab);
-                FinTransIn.clearTempData = false;
-                FinTransIn.setAutoFillEdit($tab,false);
             }
         });
         if(type == 1){
