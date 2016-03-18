@@ -64,7 +64,7 @@ define(function(require, exports) {
 	 */
 	transit.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		transit.$searchArea.find('.T-transitState').on('change', function() {
+		transit.$searchArea.find('.T-transitState, #order_by').on('change', function() {
 			transit.listTransit(0);
 		});
 
@@ -150,7 +150,8 @@ define(function(require, exports) {
 			type:"POST",
 			data: {
 				pageNo: page,
-				sortType: 'auto',
+				sortType: 'touristGroup.startTime',
+				order: transit.$searchArea.find("#order_by").val(),
 				fromPartnerAgencyName: fromPartnerAgencyName,
 				fromPartnerAgencyId: fromPartnerAgencyId,
 				lineProductName: lineProductName,
@@ -647,7 +648,7 @@ define(function(require, exports) {
 		'<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="'+type+'" />'+
 		'<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />'+
 		'<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
-		'<td><input type="text" class="col-sm-12 T-chooseSeatCount F-float F-count" name="seatCount" value="" /></td>'+
+		'<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>'+
 		'<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
 		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
 		'<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
@@ -1063,13 +1064,13 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
-					clearData(parents, 'companyName');
+					clearData(parents, 'licenseNumber');
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 					parents.find("input[name=busLicenseNumberId]").val(ui.item.id).trigger('change');
-					checkBusCompay(parents, 'companyName');
+					checkBusCompay(parents, 'licenseNumber');
 			}
 		}).unbind("click").click(function(){
 			var obj = this,parents = $(obj).closest('tr'),

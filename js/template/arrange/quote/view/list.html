@@ -1,6 +1,6 @@
 
 <table class="table table-striped overflow-table table-bordered table-hover T-showHighLight">
-    <thead>
+    
         <colgroup>
             <col></col>
             <col></col>
@@ -15,6 +15,7 @@
             <col></col>
             <col width="277"></col>
         </colgroup>
+        <thead>
         <tr class="bg-blur T-tr-fixed">
             <th>报价单号</th>
             <th>产品信息</th>
@@ -34,11 +35,12 @@
         <tr data-entity-id="{{quote.id}}">
             <td>{{quote.quoteNumber}}</td>
             <td class="h-touristGroupInfo">
-                <p class="h-lineName"><{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}></p>
+                <p class="h-lineName">&lt;{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}&gt;</p>
                 <p>
-                    <span class="h-agencyName">{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}}</span>
-                    <span class="h-agencyName">{{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</span>
-                    <label><span class="F-float F-count h-peopleCount">{{if quote.lineProduct != null}}{{quote.lineProduct.days}}天{{/if}}</span></label>
+                    <span class="h-agencyName">{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}} 
+                    </span>
+                    <span class="h-agencyName"> {{if quote.lineProduct != null}}{{quote.lineProduct.type}}{{/if}}</span>
+                    <label><span class="F-float F-count h-peopleCount"> {{if quote.lineProduct != null}}{{quote.lineProduct.days}}天{{/if}} </span></label>
                 </p>
             </td>
             <td>{{if !!quote.startTime}}{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
@@ -51,7 +53,7 @@
             <td>{{if quote.user != null}}{{quote.user.realName}}{{/if}}</td>
             <td>{{quote.createTime}}</td>
             <td>
-                <div class="hidden-sm hidden-xs btn-group">
+                <div class="btn-group">
                     <a class="cursor R-right T-action {{if !quote.touristGroupId}}T-status{{/if}}" data-right="1440002" {{if !!quote.touristGroupId}} style="color:#bbb;" {{/if}}>
                         询价状态 <span style='margin-left:5px;'>|</span>
                     </a>

@@ -64,7 +64,7 @@
 
             <div class="form-group mar-r-10">
                 <label class="control-label">收款方式：</label>
-                <select class="form-control T-sumPayType" name="payType">
+                <select class="form-control T-sumPayType" name="sumPayType">
                     {{getPayTypeOptions}}
                 </select>
             </div>
@@ -123,20 +123,20 @@
                 <col style="width:7%; min-width: 105px;"> 
             </colgroup>
             <thead>
-                <tr class="T-tr-fixed">
-                    <th class="th-border">代订单号</th>
-                    <th class="th-border">代订日期（账期）</th>
-                    <th class="th-border">项目</th>
-                    <th class="th-border">明细</th>
-                    <th class="th-border">代订金额</th>
-                    <th class="th-border">已收金额</th>
-                    <th class="th-border">结算金额</th>
-                    <th class="th-border">未收金额</th>
-                    <th class="th-border">本次收款金额</th>
-                    <th class="th-border">备注</th>
-                    <th class="th-border">对账时间</th>
-                    <th class="th-border">对账人</th>
-                    <th class="th-border">对账</th>
+                <tr class="T-tr-fixed bg-blur">
+                    <th>代订单号</th>
+                    <th>代订日期（账期）</th>
+                    <th>项目</th>
+                    <th>明细</th>
+                    <th>代订金额</th>
+                    <th>已收金额</th>
+                    <th>结算金额</th>
+                    <th>未收金额</th>
+                    <th>本次收款金额</th>
+                    <th>备注</th>
+                    <th>对账时间</th>
+                    <th>对账人</th>
+                    <th>对账</th>
                 </tr>
             </thead>
             <tbody class="T-list T-clearList">

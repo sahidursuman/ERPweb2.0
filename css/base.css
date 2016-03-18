@@ -101,7 +101,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 
 /***发团计划样式**/
 
-input.datepicker {
+input.datepicker:not([class^="col-"]) {
 	border-radius: 0;
 	width: 90px;
 }
@@ -293,16 +293,18 @@ input.datepicker {
 	padding-right: 15px!important;
 }
 .hct-absolute-group{
-	position: relative;
 }
 .hct-absolute-group .hct-span-left{
 	padding-right: 40px;
 }
+.hct-absolute-group .hct-button-right .btn,
+.table tr .btn{
+	position: initial;
+}
 .hct-button-right{
-	position: absolute;
-    right: 10px;
-    top: 50%;
-    margin-top: -12px;
+	margin-top: -4px;
+    float: right;
+    margin-right: 10px;
 }
 .tripplan-area .btn .fa-minus{
 	color: #81a87b;
@@ -846,6 +848,7 @@ input.datepicker {
     height: 100%;
 	outline: none;
 	resize: none;
+	position: static;
 }
 .hct-textarea:disabled{
 	color: #848484!important;
@@ -855,6 +858,9 @@ input.datepicker {
 .financial-search-planProfit{
 	display: inline-block;
     padding-left: 15px;
+}
+.F-money,.pos-rel,label input[type=checkbox].ace,input[type=checkbox].ace+.lbl,input[type=checkbox].ace+.lbl::before{
+	position: static;
 }
 /**公共方法**/
 
@@ -866,6 +872,13 @@ input.datepicker {
 		padding-top: 49px;
 	}
 } */
+.breadcrumbs-fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    z-index: 1024;
+}
 /*布局全局变量*/
 .main-content-inner > .page-content{
 	padding: 0;
@@ -942,6 +955,7 @@ input.datepicker {
 .main-content-inner > .page-content,
 .main-content-inner > .page-content > .tab-content{
 	height: 100%;
+	background: #F9FFF9;
 }
 #tabContent{
 	padding: 0;
@@ -955,8 +969,9 @@ input.datepicker {
     height: 100%;
     overflow: auto;
 	padding: 20px 20px 15px 25px;
+	background-color: #f9fff9;
 }
-.main-content-inner > .page-content > .tab-content > .tab-pane > *{
+.main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
 	min-width: 1085px;
 }
 .main-content-inner > .page-content > .tab-content > .tab-pane > .row{
@@ -973,6 +988,14 @@ input.datepicker {
 .table-bordered{
 	border:none;
 }
+.table>thead>tr.T-tr-fixed>th{
+	border:none!important;
+	position: relative;
+	border-left: 1px solid #ddd!important;
+}
+.table>thead>tr.T-tr-fixed>th:last-child{
+	border-right: 1px solid #ddd!important;
+}
 .table>thead>tr.bg-blur.T-tr-fixed>th{
 	border:none;
 	position: relative;
@@ -987,13 +1010,22 @@ input.datepicker {
 .table>thead>tr.bg-blur.T-tr-fixed>th:last-child{
 	border-right: 1px solid #51B0C2;
 }
-.table>thead>tr.bg-blur.T-tr-fixed>th:after{
+.table>thead>tr.T-tr-fixed>th:after{
 	content: '';
 	position: absolute;;
 	width: 100%;
 	height: 1px;
 	left: 0;
 	bottom: 0;
+	background-color: #ddd;
+}
+.table>thead>tr.T-tr-fixed>th:before{
+	content: '';
+	position: absolute;;
+	width: 100%;
+	height: 1px;
+	top: 0;
+	left: 0;
 	background-color: #ddd;
 }
 .table .btn-group, 

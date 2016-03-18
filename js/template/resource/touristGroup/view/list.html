@@ -20,6 +20,7 @@
                 <th>收客信息</th>
                 <th>出游日期</th>
                 <th>游客信息</th>
+                <th>外联销售</th>
                 <th>应收</th>
                 <th>预收款</th>
                 <th>已收</th>
@@ -33,7 +34,7 @@
             </tr>
         </thead>
         <tbody calss="T-touristGroup">{{each touristGroupList as touristGroup}}
-            <tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}">
+            <tr class="touristGroup-{{touristGroup.id}}" id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">
                         {{if touristGroup.orderNumber}}
@@ -46,9 +47,6 @@
                     <p class="h-OPUser">
                         <span>{{if touristGroup.partnerAgency != null}}
 						{{touristGroup.partnerAgency.travelAgencyName}}
-						{{/if}}</span>
-                        <span>{{if touristGroup.outOPUser != null}}
-						外联销售：{{touristGroup.outOPUser.realName}}
 						{{/if}}</span>
                     </p>
                     <p class="h-orderNumber">
@@ -63,17 +61,29 @@
                             (<span class="F-float F-count">{{touristGroup.adultCount}}</span>大
                             <span class="F-float F-count">{{touristGroup.childCount}}</span>小)
                         </label>
+                        <span class="hidden">
+                            {{adultCount += touristGroup.adultCount}}
+                            {{childCount += touristGroup.childCount}}
+                        </span>
                     </p>
                     <p class="mar-0">
+                        <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
+                            {{touristGroup.touristGroupMember.name}}
+                        {{/if}}</span>
                         <span class="h-agencyName">{{if touristGroup.customerType==0}} 散客
                         {{else if touristGroup.customerType==1}}团体  
                         {{/if}} </span>
                     </p>
                     <p class="mar-0">
                         <span class="h-memberName">{{if touristGroup.touristGroupMember != null}}
-                            {{touristGroup.touristGroupMember.name}}
+                            {{touristGroup.touristGroupMember.mobileNumber}}
                         {{/if}}</span>
                     </p>
+                </td>
+                <td>
+                    <span>{{if touristGroup.outOPUser != null}}
+                    {{touristGroup.outOPUser.realName}}
+                    {{/if}}</span>
                 </td>
                 <td>
                     <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
@@ -97,53 +107,24 @@
                     {{ if touristGroup.status==0 }} 已发团 {{else if touristGroup.status==1 }} 未分团 {{else if touristGroup.status==2 }} 已分团 {{else if touristGroup.status==3 }} 已外转 {{else if touristGroup.status==4 }} 已取消 {{else if touristGroup.status==5 }} 已分段 {{else if touristGroup.status==6 }} 已内转 {{/if}}
                 </td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group" style="width:120px;">
+                    <div class="btn-group" style="width:120px;">
                         <a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
 							查看
 						</a>
-                        <a data-entity-id="{{touristGroup.id}}" class="T-action  {{if (touristGroup.status<3 || touristGroup.status == 6 ) && (touristGroup.isInnerTransferConfirm == 0 && touristGroup.isConfirmAccount == 0) || (touristGroup.isBackStatus == 1)}}T-edit{{/if}} cursor  R-right" data-right="1120003" {{if !((touristGroup.status<3 || touristGroup.status==6 ) && touristGroup.isConfirmAccount==0 && touristGroup.isInnerTransferConfirm==0 || touristGroup.isBackStatus == 1)}}style="color:#bbb;" {{/if}}>
+                        <a data-entity-id="{{touristGroup.id}}" class="T-action  {{if touristGroup.canEdit}}T-edit{{/if}} cursor  R-right" data-right="1120003" {{if !touristGroup.canEdit}}style="color:#bbb;"  title={{touristGroup.editTitle}}{{/if}}>
                             <label class="padding-right20">|</label>
                             <span>编辑</span>
                         </a>
-                        <a data-entity-id="{{touristGroup.id}}" class="T-action {{if (touristGroup.status == 1 && touristGroup.isConfirmAccount == 0 && touristGroup.isInnerTransferConfirm == 0) || (touristGroup.isBackStatus == 1)}}T-del{{/if}} cursor R-right" data-right="1120004" {{if !(touristGroup.status==1 && touristGroup.isConfirmAccount==0 && touristGroup.isInnerTransferConfirm==0 || touristGroup.isBackStatus == 1)}}style="color:#bbb;" {{/if}}>
+                        <a data-entity-id="{{touristGroup.id}}" class="T-action {{if touristGroup.canDelete}}T-del{{/if}} cursor R-right" data-right="1120004" {{if !touristGroup.canDelete}}style="color:#bbb;"   title={{touristGroup.deleteTitle}}{{/if}}>
                             <label class="padding-right20">|</label>
                             删除
                         </a>
-                    </div>
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-error btn-touristGroup-view" data-rel="tooltip">
-                                        <span class="red">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-success btn-touristGroup-edit" data-rel="tooltip">
-                                        <span class="green">
-											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-entity-id="{{touristGroup.id}}" href="javascript:void(0)" class="tooltip-error btn-touristGroup-delete" data-rel="tooltip">
-                                        <span class="red">
-											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </td>
             </tr>{{/each}}
         </tbody>
     </table>
+    <div >本页合计人数：{{adultCount}}大{{childCount}}小</div>
     <div class="row pageMode">
         <div class="col-xs-6">
             <small>共计 {{recordSize}} 条记录</small>

@@ -373,7 +373,9 @@ define(function(require, exports) {
                 // 查看已付
                 FinGuide.viewOperationDetail(id, 1);
             } else if ($that.hasClass('T-gid')) {
-                // 查看费用明细
+                // 查看费用明细、并加载打印插件
+                var pluginKey = 'plugin_print';
+                Tools.loadPluginScript(pluginKey);
                 FinGuide.viewFeeDetail($that.data('id'));
             } else if($that.hasClass('T-borrow-detail')){
                 FinGuide.viewOperationDetail(id, 2);
@@ -383,6 +385,14 @@ define(function(require, exports) {
         //确认按钮事件
         $tab.find(".T-saveClear").click(function() {
             if (!validatorCheck.form())return;
+            if($tab.data('isBorrowSave')){
+                $tab.find('input[name="payMoney"]').each(function() {
+                    var $that = $(this);
+                    if (!!$that.val())  {
+                        $that.trigger('change');
+                    }
+                });
+            }
             if (type) {
                 FinGuide.savePayingData($tab);
             } else {
@@ -467,7 +477,7 @@ define(function(require, exports) {
             return false;
         }
         var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
-        var payType = $tab.find('.T-sumPayType').val();
+        var payType = $tab.find('select[name=sumPayType]').val();
 		var bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val(),
@@ -541,7 +551,7 @@ define(function(require, exports) {
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
-                payType: $tab.find('.T-sumPayType').val()
+                payType: $tab.find('select[name=sumPayType]').val()
             };
 
             if (args.lineProductName === '全部') {
@@ -617,6 +627,13 @@ define(function(require, exports) {
                             data.isOuter = FinGuide.isOuter;
                             if($tab.find('.T-saveClear').data('borrow') == "borrow" || FinGuide.payingJson.length > 0){
                                 data.isPayMoney = true;
+                                var sumPayMoney = 0;
+                                for(var i = 0; i < data.list.length; i++){
+                                    if(data.list[i].payMoney && data.list[i].payMoney != 0){
+                                        sumPayMoney = sumPayMoney + data.list[i].payMoney*1;
+                                    }
+                                }
+                                $tab.find('.T-sumPayMoney').val(sumPayMoney);
                             }
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
@@ -647,13 +664,7 @@ define(function(require, exports) {
 
                         // 当存在预支款时，触发change，以便可直接保存
                         if ($tab.find('.T-saveClear').data('borrow') === 'borrow') {
-                            $tbody.find('input[name="payMoney"]').each(function() {
-                                var $that = $(this);
-
-                                if (!!$that.val())  {
-                                    $that.trigger('change');
-                                }
-                            });
+                            $tab.data('isBorrowSave', true);
                         }
                     }
                 });
@@ -751,10 +762,17 @@ define(function(require, exports) {
                 .done(function(data) {
                     if (showDialog(data)) {
                     	data.touristGroupList = JSON.parse(data.touristGroupList || false) || [];
-                        Tools.addTab(menuKey + "-costDetail", "费用明细", costDetailTemplate(data));
+                        Tools.addTab(menuKey + "-costDetail", "导游报账表", costDetailTemplate(data));
+                        var $tab = $("#tab-" + menuKey + "-costDetail-content");
                         //查看图片事件
-                        $("#tab-" + menuKey + "-costDetail-content").find(".T-view-bill").click(function() {
+                        $tab.find(".T-view-bill").on('click',function(){
                             FinGuide.viewBillImage($(this).data('fn'));
+                        })
+                        //打印事件
+                        $tab.find('.T-export').on('click',function(){
+                            $tab.print({
+                                globalStyles:true
+                            });
                         });
                     }
                 });
@@ -789,30 +807,7 @@ define(function(require, exports) {
             content: html,
             scrollbar: false, // 推荐禁用浏览器外部滚动条
             success: function() {
-                var colorbox_params = {
-                	photo: true,
-                    rel: 'colorbox',
-                    reposition: true,
-                    scalePhotos: true,
-                    scrolling: false,
-                    previous: '<i class="ace-icon fa fa-arrow-left"></i>',
-                    next: '<i class="ace-icon fa fa-arrow-right"></i>',
-                    close: '&times;',
-                    current: '{current} of {total}',
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    onOpen: function() {
-                        $overflow = document.body.style.overflow;
-                        document.body.style.overflow = 'hidden';
-                    },
-                    onClosed: function() {
-                        document.body.style.overflow = $overflow;
-                    },
-                    onComplete: function() {
-                        $.colorbox.resize();
-                    }
-                };
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
             }
         });
     };

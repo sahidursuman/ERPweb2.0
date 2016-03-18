@@ -36,7 +36,9 @@
         {{if busCompany != null}}
         <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
             <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+
             <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+
             <td>{{if busCompany.busCompany != null}}
                 {{ if busCompany.taskType == 0}}
                         全程
@@ -52,53 +54,71 @@
                         后段
                 {{/if}}
             {{/if}}</td>
+
             <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+
             <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
+
             <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>
-            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.price}}</span>{{else}}<input type="text" name="price" value="{{busCompany.price}}" class="w-80 F-float F-money" 
-            {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="price" value="{{busCompany.price}}" /><input type="hidden" name="realPrice" value="{{busCompany.price}}" /><input type="hidden" name="realCount" value="1" /></td>
+
+            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realPrice}}</span>{{else}}<input type="text" name="price" value="{{busCompany.realPrice}}" class="w-80 F-float F-money" 
+            {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="price" value="{{busCompany.realPrice}}" /><input type="hidden" name="realPrice" value="{{busCompany.realPrice}}" /><input type="hidden" name="realCount" value="1" /></td>
+
             <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"{{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}</td>
+
             <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney F-float F-money">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney F-float F-money"></span>{{/if}}
             <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
+
             <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
             
-            <td><div class="inline-flex col-xs-12">
+            <td><div class="inline-flex">
     
             {{if busCompany.badStatus == 1}}
             <span>
-                {{if busCompany.payType == 0}}
+                {{if busCompany.realPayType == 0}}
                     现金
-                    {{else if busCompany.payType == 1}}
+                    {{else if busCompany.realPayType == 1}}
                     刷卡
-                    {{else if busCompany.payType == 2}}
+                    {{else if busCompany.realPayType == 2}}
                     签单
                 {{/if}}
             </span>
             &nbsp;
             <span class="F-float F-money">
-            {{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
-            </span>{{else}}
+                {{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
+            </span>
+            {{else}}
             <select name="payType">
-                <option value="0" {{if busCompany.payType == 0}}selected="selected"{{/if}}>现金</option>
-                <option value="1" {{if busCompany.payType == 1}}selected="selected"{{/if}}>刷卡</option>
-                <option value="2" {{if busCompany.payType == 2}}selected="selected"{{/if}}>签单</option>
+                <option value="0" {{if busCompany.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+                <option value="1" {{if busCompany.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+                <option value="2" {{if busCompany.realPayType == 2}}selected="selected"{{/if}}>签单</option>
             </select>
             &nbsp;
-            <input style="width:90px;" class="F-float F-money" type="text" name="realGuidePayMoney" 
-            {{if busCompany.billUpdateTime != null}}{{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.realGuidePayMoney}}"{{/if}}{{else}}
-            {{if busCompany.payType == 2}}value="{{busCompany.signMoney}}"{{else}}value="{{busCompany.guidePayMoney}}" {{/if}}
-            {{/if}} 
+            <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
+            {{if busCompany.realPayType==2 }}
+                value="{{busCompany.realSignMoney}}" 
+            {{else}}
+                {{if !!busCompany.billUpdateTime}} 
+                    value="{{busCompany.realGuidePayMoney}}" 
+                {{else}}
+                    value="{{busCompany.guidePayMoney}}" 
+                {{/if}} 
+            {{/if}}
             old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
                 <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></div></td>
+
              <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
                     <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
                 {{else}}
                     <span style="color:#bbb;">查看</span>
                 {{/if}}
             </td>
+
             <td><span class="difference F-float F-money"></span></td>
+
             <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" ></td>
+
             <td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
         </tr>
         {{/if}}

@@ -104,7 +104,7 @@ define(function(require, exports) {
                 memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
                 orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
                 sortType: 'startTime',
-                'order':'asc'
+                'order': touristGroup.$searchArea.find('#order_by').val()
             }
         }
         //保存查询数据
@@ -160,11 +160,10 @@ define(function(require, exports) {
     touristGroup.initEvents = function() {
         var $searchAreaObj = touristGroup.$searchArea;
         //选择框事件
-        $searchAreaObj.find(".T-select-status").on('click', 'a', function(event) {
+        
+        $searchAreaObj.find("select").on('change',  function(event) {
             event.preventDefault();
-            var $that = $(this);
-            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
-            touristGroup.listTouristGroup(touristGroup.args);
+            touristGroup.listTouristGroup(touristGroup.getSearParam());
         });
         //搜索按钮事件
         $searchAreaObj.find(".T-touristGroupList-search").on('click', function(event) {
@@ -216,13 +215,15 @@ define(function(require, exports) {
             customerType: touristGroup.$searchArea.find('select[name=customerType]').val(),
             memberType: touristGroup.$searchArea.find('select[name=memberType]').val(),
             orderNumber: touristGroup.$searchArea.find('input[name=orderNumber]').val(),
-            sortType: 'auto'
+            sortType: 'startTime',
+            order: touristGroup.$searchArea.find('#order_by').val()
         }
         return touristGroup.args;         
     };
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
+        //报表事件
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -470,7 +471,7 @@ define(function(require, exports) {
         //添加tab切换
         touristGroup.init_CRU_event($updateTabId, id, 2, typeInner);
         //游客的序号
-        touristGroup.memberNumber($groupMemberForm);
+        touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));        
         //小组信息模块处理
         touristGroup.groupInfoDispose($groupInfoForm, 2, typeInner);
         //游客名单模块处理
@@ -871,19 +872,23 @@ define(function(require, exports) {
             touristGroup.addVisotorMore($obj);
             touristGroup.validator = rule.checktouristGroup($obj);
         });
-        //删除原有游客
-        if (typeFlag == 2) {
-            $obj.find(".oldbtnDeleteTourist").on('click', function() {
-                var $tr = $(this).closest('tr');
-                var touristListTrId = $tr.attr("data-entity-id");
-                if (touristListTrId != null && touristListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                    })
-                }
-            });
-        };
+        // 删除游客
+        $obj.find('.T-addTouristTbody').on('click', '.T-delete', function(event) {
+            event.preventDefault();
+            var $tr = $(this).closest('tr');
+            var id = $tr.attr("data-entity-id");
+            if (!!id && typeFlag == 2) {
+                $tr.addClass("deleted");
+                $tr.fadeOut(function() {
+                    $tr.hide();
+                })
+            } else {
+                $tr.fadeOut(function() {
+                    $tr.remove();
+                    touristGroup.memberNumber($obj);
+                });
+            };          
+        });
     };
     //处理中转
     touristGroup.innerTransferDispose = function($obj) {
@@ -1244,34 +1249,6 @@ define(function(require, exports) {
         });
     };
 
-
-    //处理游客名单
-    touristGroup.groupMemberDispose = function($obj, typeFlag) {
-        //添加成员
-        $obj.find('.T-add-tourist').on('click', function() {
-            touristGroup.addVisotor($obj);
-            touristGroup.validator = rule.checktouristGroup($obj);
-        });
-        //批量添加
-        $obj.find('.T-add-tourist-more').on('click', function() {
-            touristGroup.addVisotorMore($obj);
-            touristGroup.validator = rule.checktouristGroup($obj);
-        });
-        //删除原有游客
-        if (typeFlag == 2) {
-            $obj.find(".oldbtnDeleteTourist").on('click', function() {
-                var $tr = $(this).closest('tr');
-                var touristListTrId = $tr.attr("data-entity-id");
-                if (touristListTrId != null && touristListTrId != "") {
-                    $tr.addClass("deleted");
-                    $tr.fadeOut(function() {
-                        $(this).hide();
-                    })
-                }
-            });
-        };
-    };
-
     /**
      * 用报价产品信息，初始化小组页面
      * @param  {object} $mainForm   对应小组页面容器
@@ -1483,26 +1460,18 @@ define(function(require, exports) {
             '<td>' + '</td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
-            '<td><select name="idCardType" value="idCardTypeId"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
+            '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
-            '<td><a class="cursor btnDeleteTourist">删除</a></td>' +
+            '<td><a class="cursor T-delete">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
         $tbody.append(html);
-        touristGroup.memberNumber($obj);
-        //删除事件
-        $tbody.find('.btnDeleteTourist').on('click', function() {
-            $tr = $(this).closest('tr');
-            $tr.fadeOut(function() {
-                $(this).remove();
-                touristGroup.memberNumber($obj);
-            });
-        });
+        touristGroup.memberNumber($obj);        
     };
     //游客列表序号自动升序
     touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('.T-addTouristTbody tr');
+        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
         $tbody.each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
@@ -1511,94 +1480,11 @@ define(function(require, exports) {
     };
     //批量添加游客
     touristGroup.addVisotorMore = function($obj) {
-        var html = addVisitorMoreTemplate();
-        var addVisotorMoreLayer = layer.open({
-            type: 1,
-            title: '批量添加游客',
-            skin: 'layui-layer-rim',
-            area: '40%',
-            zIndex: 1028,
-            content: html,
-            success: function() {
-                var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
-                $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-                    touristGroup.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj);
-                });
-            }
+        seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
+            module.addVisotorMore($obj.find('.T-addTouristTbody'), touristGroup.memberNumber);
         });
     };
-    //批量添加游客保存
-    touristGroup.saveVisitorMore = function($panelObj, addVisotorMoreLayer, $obj) {
-        var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
-        function numReg(str) {
-            if (/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(str)) {
-                idCardNumber = str;
-            } else if (/^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\d{8}$/.test(str)) {
-                mobileNumber = str;
-            }
-        }
-        if (data == "") {
-            showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
-        } else {
-            var dataArray = data.split(/\r?\n/);
-            if (dataArray.length > 0) {
-                var memberInfo, memberInfoArray, name, mobileNumber, idCardNumber;
-                for (var i = 0; i < dataArray.length; i++) {
-                    memberInfo = trim(dataArray[i]);
-                    memberInfoArray = memberInfo.split(/\s+/);
-                    name = "";
-                    mobileNumber = "";
-                    idCardNumber = "";
-                    if (memberInfoArray.length == 1) {
-                        name = memberInfoArray[0];
-                    } else if (memberInfoArray.length == 2) {
-                        name = memberInfoArray[0];
-                        numReg(memberInfoArray[1]);
-                    } else if (memberInfoArray.length == 3) {
-                        name = memberInfoArray[0];
-                        numReg(memberInfoArray[1]);
-                        numReg(memberInfoArray[2]);
-                    }
 
-                    
-                    // 如果第一行数据为空，则删除第一行
-                    var html =
-                        "<tr>" +
-                        "<td>" + "</td>" +
-                        "<td><input name=\"name\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + name + "\"/></td>" +
-                        "<td><input name=\"mobileNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\"  value=\"" + mobileNumber + "\"/></td>" +
-                        "<td><select name=\"idCardType\"><option value=\"0\" selected=\"selected\">身份证</option>><option value=\"1\">护照</option><option value=\"2\">其它</option></select></td>" +
-                        "<td><input name=\"idCardNumber\" type=\"text\" class=\"col-sm-12  no-padding-right\" value=\"" + idCardNumber + "\" /></td>" +
-                        "<td><div class=\"checkbox\"><label><input type=\"checkbox\" class=\"ace \" value=\"1\" name=\"isContactUser\"><span class=\"lbl\"></span></label></div></td>" +
-                        "<td><a class=\"cursor btnDeleteTourist\">删除</i></a></td>" +
-                        "</tr>";
-
-                    var $formObj = $obj.closest('form');
-                    $formObj.find(".T-addTouristTbody").append(html);
-                    var $tableObj = $formObj.find(".T-addTouristList");
-                    touristGroup.memberNumber($tableObj);
-                    //游客名单删除事件
-                    $tableObj.find('.btnDeleteTourist').on('click', function() {
-                        var $tr = $(this).closest('tr');
-                        var touristListTrId = $tr.attr("data-entity-id");
-                        if (!(touristListTrId != null && touristListTrId != "")) {
-                            $tr.addClass("deleted");
-                            $tr.fadeOut(function() {
-                                $(this).remove();
-                            })
-                        } else {
-                            $tr.fadeOut(function() {
-                                $(this).remove();
-                                touristGroup.memberNumber($tableObj);
-                            });
-                        };
-
-                    });
-                    layer.close(addVisotorMoreLayer);
-                }
-            }
-        }
-    };
     //新增同行联系人
     touristGroup.addPartnerManager = function($obj) {
         var $parentsObj = $obj.closest('.form-inline');
@@ -1742,13 +1628,73 @@ define(function(require, exports) {
                     var touristGroupList = data.touristGroupList;
                     //实例化对象
                     touristGroupList = JSON.parse(touristGroupList);
+                    for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
+                        tmp = touristGroupList[i];
+                        tmp.editTitle = '';
+                        tmp.deleteTitle = '';
+
+                        // can edit
+                        if (((tmp.status < 3 || tmp.status == 6) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                            tmp.canEdit = true;
+                        } else {
+                            tmp.canEdit = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.editTitle = '内转成功，不能编辑';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.editTitle = '客户账务已对账，不能编辑';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 5:
+                                        tmp.editTitle = '该小组已经分段，不能编辑';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+
+                        // can delete
+                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                            tmp.canDelete = true;
+                        } else {
+                            tmp.canDelete = false;
+
+                            if (tmp.isInnerTransferConfirm) {
+                                tmp.deleteTitle = '内转成功，不能删除';
+                            } else if (tmp.isConfirmAccount) {
+                                tmp.deleteTitle = '客户账务已对账，不能删除';
+                            } else {
+                                switch(tmp.status*1) {
+                                    case 2:
+                                        tmp.deleteTitle = '该小组已分团，不能删除';
+                                        break;
+                                    case 3:
+                                        tmp.deleteTitle = '该小组已外转，不能删除';
+                                        break;
+                                    case 5:
+                                        tmp.deleteTitle = '该小组已分段，不能删除';
+                                        break;
+                                    case 6:
+                                        tmp.deleteTitle = '该小组已内转，不能删除';
+                                        break;
+                                    default: 
+                                        break;
+                                } 
+                            }
+                        }
+                    }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
+                    data.adultCount = 0;
+                    data.childCount = 0;
+
                     var html = listTemplate(data);
                     //权限过滤
                     html = filterUnAuth(html);
                     $listObj.html(html);
                     touristGroup.listEvents($listObj);
+                   
                     //绑定分页插件
                     laypage({
                         cont: $mainList.find('.T-pagenation'),
@@ -1765,6 +1711,9 @@ define(function(require, exports) {
             }
         });
     };
+
+
+  
 
     //刷新数据合计
     touristGroup.freshHeader = function($args) {
