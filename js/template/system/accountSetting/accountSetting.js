@@ -7,6 +7,7 @@ define(function(require, exports) {
 		newPhonelate = require("./view/newPhone"),
 		applylate = require("./view/apply"),
 		solutionlate = require("./view/solution"),
+		addPhonelate = require("./view/addPhone"),
 		tabId = "tab-" + menuKey + "-content";
 	var sKey = menuKey+"-loanApplication";
 	var accountSetting = {
@@ -112,7 +113,10 @@ define(function(require, exports) {
 				var mobile = accountSetting.$tab.find('.phoneNumber').text();
 				accountSetting.newPhone(mobile);
 			});
-
+			//添加绑定的新号码
+			accountSetting.$tab.find(".T-btn-addPhone").click(function(){
+				accountSetting.addPhone();
+			});
 			//借款申请
 			var $obj = $('.T-accountSetList');
 				$obj.find(".T-btn-apply").click(function(){
@@ -124,6 +128,7 @@ define(function(require, exports) {
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
+
 
 		};
 
@@ -214,6 +219,75 @@ define(function(require, exports) {
 			});	
 		};
 
+		//新添默认新号码
+		accountSetting.addPhone = function(){
+			$.ajax({
+				url:KingServices.build_url("accountSetting/applyLoan","findMobile"),
+				type: "POST",
+			})
+			.done(function(data) {
+				var addPhoneLayer = layer.open({
+			    	type: 1,
+				    title:"绑定新手机",
+				    skin: 'layui-layer-rim',
+				    area: '450px', 
+				    zIndex:1028,
+				    content: addPhonelate(data),
+				    scrollbar: false
+					});
+				var $obj = $(".applicationMain-other");
+					$obj.find('#sended').click(function() {
+				    	var searchData = {};
+							searchData.mobile = $obj.find("[name=mobile]").val();
+							$.ajax({
+								url:KingServices.build_url("accountSetting/applyLoan","sendMessage"),
+					            type: "GET",
+					            data: {
+					            	searchParam:JSON.stringify(searchData)
+				            	},
+				            	success:function(){
+				            		$obj.find('.T-newChangePhone').click(function() {
+									var searchData = {};
+									searchData.mobile = $obj.find("[name=mobile]").val();
+									searchData.verifyCode = $obj.find("[name=verifyCode]").val();
+									$.ajax({
+										url:KingServices.build_url("accountSetting/applyLoan","saveMobile"),
+							            type: "GET",
+							            data: {
+							            	searchParam:JSON.stringify(searchData)
+						            	},
+										success:function(data){
+											if (showDialog(data)) {
+												layer.close(addPhoneLayer);
+												/*$(".T-btn-addPhone").toggleClass("hide");*/
+												accountSetting.accountSeList();
+											}
+										}
+									})
+								});
+				            	}
+							});
+					      	times=60,
+					      	timer=null;
+						     // 计时开始
+						    var that = this;
+						    this.disabled=true;
+						    timer = setInterval(function(){
+						    times --;
+						    that.value = times + "秒后重试";
+						    if(times <= 0){
+					        that.disabled =false;
+					        that.value = "发送验证码";
+					        clearInterval(timer);
+					        times = 60;
+        					}
+	     			},1000);  
+				});
+			})
+			
+			
+		}
+
 		// 更换新手机号
 		accountSetting.newPhoneChange = function(newMobile,verifyCode){
     		var html = newPhonelate();
@@ -251,9 +325,12 @@ define(function(require, exports) {
 							            	searchParam:JSON.stringify(searchData)
 						            	},
 										success:function(data){
-											if (showDialog(data)) {
+											var result = showDialog(data);
+											if (result) {
+												showMessageDialog($("#confirm-dialog-message"),data.message, function() {
 												layer.close(changePhoneLayer);
 												accountSetting.accountSeList();
+												});
 											}
 										}
 									})

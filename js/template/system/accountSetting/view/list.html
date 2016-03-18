@@ -1,7 +1,9 @@
 <div class="T-accountSetList">
 	<label class="col-xs-1" style="width: 180px;">账号名:{{travelAgency.name}}</label>
 	<label class="pull-left col-xs-1" style="width: 160px;">手机号: <span class="phoneNumber">{{travelAgency.contactNumber}}</span>	</label>
-	<button class=" btn-sm T-btn-accountSet search-btn"> 绑定新号码 </button>
+	
+	<button class=" btn-sm T-btn-addPhone search-btn {{if !!travelAgency.contactNumber}}hide{{/if}}"> 绑定新号码 </button>
+	<button class=" btn-sm T-btn-accountSet search-btn {{if !travelAgency.contactNumber}}hide{{/if}}"> 更换新号码 </button>
 	<label class="pull-left col-xs-1" style="width: 160px;">账户余额：￥{{travelAgency.balance}}</label>
 	<button class=" btn-sm T-btn-apply search-btn">申请借款 </button>
 </div>
