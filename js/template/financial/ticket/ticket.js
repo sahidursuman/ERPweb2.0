@@ -615,7 +615,7 @@ define(function(require, exports) {
 		var argLen = arguments.length,
 			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
 		if (!json) { return false; }
-		var payType = $tab.find('.T-sumPayType').val(),
+		var payType = $tab.find('select[name=sumPayType]').val(),
 			argsData = {
                 ticketId: Ticket.clearingId,
                 sumCurrentPayMoney: $tab.find('.T-sumReciveMoney').val(),

@@ -289,7 +289,7 @@ define(function(require, exports) {
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, new FinRule(args.isAutoPay== 2?3: 1));
                                 restaurant.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=payType]').val()),
+                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
                                 restaurant.clearTempSumDate = {
                                     id : args.restaurantId,
@@ -338,7 +338,7 @@ define(function(require, exports) {
             var startDate = $tab.find("input[name=startDate]").val(),
                 endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
-                var payType = $tab.find('select[name=payType]').val();
+                var payType = $tab.find('select[name=sumPayType]').val();
                 restaurant.clearTempSumDate = {
                     id : args.restaurantId,
                     sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -486,7 +486,7 @@ define(function(require, exports) {
         }
         var argumentsLen = arguments.length,
             clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args ? args.saveRule : $tab.data('saveRule'));
-        var payType = restaurant.$clearTab.find('select[name=payType]').val(),
+        var payType = restaurant.$clearTab.find('select[name=sumPayType]').val(),
             searchParam = {
                 restaurantId : args ? args.restaurantId : $tab.data('restaurantId'),
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
