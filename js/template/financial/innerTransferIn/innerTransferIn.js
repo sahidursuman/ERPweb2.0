@@ -662,9 +662,9 @@ define(function(require, exports) {
                     pageNo : 0,
                     businessGroupId: ui.item.id,
                     businessGroupName: ui.item.value,
-                    startAccountTime: $tab.find("input[name=startDate]"),
-                    endAccountTime: $tab.find("input[name=endDate]"),
-                    accountStatus : $tab.find("input[name=accountStatus]")
+                    startAccountTime: $tab.find("input[name=startDate]").val(),
+                    endAccountTime: $tab.find("input[name=endDate]").val(),
+                    accountStatus : $tab.find("input[name=accountStatus]").val()
                 };
                 FinTransIn.getCheckList(args,null,type)
             }
