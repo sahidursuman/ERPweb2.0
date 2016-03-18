@@ -190,6 +190,7 @@ define(function(require, exports) {
         var ruleCheck = new FinRule(0);
         hotel.init_event(args,$tab,"check");
         FinancialService.updateUnpayMoney($tab,ruleCheck);
+        hotel.getHotelList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
@@ -315,6 +316,7 @@ define(function(require, exports) {
         var autoPayRule = (new FinRule(2)).check($tab);
             args.saveRule = new FinRule(args.isAutoPay== 2?3: 1);
         hotel.init_event(args,$tab,"clear");
+        hotel.getHotelList($tab,true);
 
         FinancialService.initPayEvent($tab);
 
@@ -593,6 +595,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        hotel.hotelList = hotelList.slice(all);
         hotelList.unshift(all);
 
         //酒店
@@ -630,6 +633,37 @@ define(function(require, exports) {
                 // 应收明细
                 hotel.needPayDetail(id);
             }
+        });
+    };
+
+    hotel.getHotelList = function($tab,type){
+        var $obj = $tab.find('input[name=hotelName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : hotel.hotelList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    hotelId : ui.item.id,
+                    hotelName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = 0;
+                    hotel.hotelClear(args);
+                } else {
+                    hotel.hotelCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
         });
     };
 

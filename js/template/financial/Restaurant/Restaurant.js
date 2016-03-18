@@ -191,6 +191,7 @@ define(function(require, exports) {
         restaurant.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney($tab,ruleCheck);
+        restaurant.getRestaurantList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
@@ -316,6 +317,7 @@ define(function(require, exports) {
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        restaurant.getRestaurantList($tab,true);
 
         //搜索事件
         $tab.find(".T-search").off().click(function(){
@@ -597,6 +599,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        restaurant.restaurantList = restaurantList.slice(all);
         restaurantList.unshift(all);
 
         //餐厅
@@ -634,6 +637,38 @@ define(function(require, exports) {
                 // 应收明细
                 restaurant.needPayDetail(id);
             }
+        });
+    };
+
+    restaurant.getRestaurantList = function($tab,type){
+        var $obj = $tab.find('input[name=restaurantName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : restaurant.restaurantList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    restaurantId : ui.item.id,
+                    restaurantName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = 0;
+                    restaurant.restaurantClear(args);
+                } else {
+                    restaurant.restaurantCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
         });
     };
 
