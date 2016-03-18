@@ -452,7 +452,7 @@ define(function(require, exports) {
 	            })
 	            .done(function(data) {
 	                if (showDialog(data)) {
-	                	var payType = $tab.find('.T-sumPayType').val(),
+	                	var payType = $tab.find('select[name=sumPayType]').val(),
 	                		bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 						var voucher = $tab.find('input[name=credentials-number]').val();
 						var billTime = $tab.find('input[name=tally-date]').val();
@@ -800,7 +800,7 @@ define(function(require, exports) {
         };
 		var argLen = arguments.length,
 			json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
-		var payType = $tab.find('.T-sumPayType').val(),
+		var payType = $tab.find('select[name=sumPayType]').val(),
 			bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
 		var billTime = $tab.find('input[name=tally-date]').val();		
