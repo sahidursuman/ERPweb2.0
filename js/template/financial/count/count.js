@@ -2894,26 +2894,31 @@ define(function(require, exports){
 			},
 			success:function(data){
 				var result = showDialog(data);
-				if($obj.attr('selfpayarrangeid')){
-					$obj.find('.marketPrice').text(data.marketPrice);
-					$obj.find('.price').text(data.price);
-					$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
-					$obj.find('input[name=marketPrice]').val(data.marketPrice);
-					$obj.find('input[name=price]').val(data.price);
-					$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
-					$obj.find('input[name=travelAgencyRate]').val(data.travelAgencyRate);
-					$obj.find('input[name=guideRate]').val(data.guideRate);
-					Count.autoSelfSum($td,$parentObj);
+				if(result){
+					var travelAgencyRate = parseFloat(data.travelAgencyRate);
+					var guideRate = parseFloat(data.guideRate);
+					if($obj.attr('selfpayarrangeid')){
+						$obj.find('.marketPrice').text(data.marketPrice);
+						$obj.find('.price').text(data.price);
+						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
+						$obj.find('input[name=marketPrice]').val(data.marketPrice);
+						$obj.find('input[name=price]').val(data.price);
+						$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
+						$obj.find('input[name=travelAgencyRate]').val(travelAgencyRate);
+						$obj.find('input[name=guideRate]').val(guideRate);
+						Count.autoSelfSum($td,$parentObj);
 
-				}else{
-					$obj.find('input[name=marketPrice]').val(data.marketPrice);
-					$obj.find('input[name=price]').val(data.price);
-					$obj.find('input[name=realCount]').val(0);
-					$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
-					$obj.find('input[name=travelAgencyRate]').val(data.travelAgencyRate);
-					$obj.find('input[name=guideRate]').val(data.guideRate);
-					Count.autoSelfSum($td,$parentObj);
+					}else{
+						$obj.find('input[name=marketPrice]').val(data.marketPrice);
+						$obj.find('input[name=price]').val(data.price);
+						$obj.find('input[name=realCount]').val(0);
+						$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
+						$obj.find('input[name=travelAgencyRate]').val(travelAgencyRate);
+						$obj.find('input[name=guideRate]').val(guideRate);
+						Count.autoSelfSum($td,$parentObj);
+					};
 				}
+				
 				
 			}
 		});
