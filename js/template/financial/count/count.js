@@ -2194,15 +2194,15 @@ define(function(require, exports){
 		//获取餐厅数据
 		Count.getRestData($obj,$parentObj);
 		//下拉框事件
-		// $obj.find('select').off('change').on('change',function(){
-		// 	var $tr = $(this).closest('tr');
-		// 	var restaurantId = $tr.find('input[name=restaurantId]').val();
-		// 	if(restaurantId != null && restaurantId != ""){
-		// 		$tr.find('input[name=price]').val(0);
-		// 		Count.autoRestaurantSum($(this),$parentObj);
-		// 		Count.getRestPrice($tr,$parentObj);
-		// 	};
-		// });
+		$obj.find('select[name=type]').off('change').on('change',function(){
+			var $tr = $(this).closest('tr');
+			var restaurantId = $tr.find('input[name=restaurantId]').val();
+			if(restaurantId != null && restaurantId != ""){
+				$tr.find('input[name=price]').val(0);
+				Count.autoRestaurantSum($(this),$parentObj);
+				Count.getRestPrice($tr,$parentObj);
+			};
+		});
 		//设置下拉框
 		Count.setChooseDays($obj,$parentObj);
 		//绑定事件
