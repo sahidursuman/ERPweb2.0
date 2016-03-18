@@ -3675,21 +3675,20 @@ define(function(require, exports){
 	                		guideRate = Count.changeTwoDecimal(guideRate);
 	                		var $tr = $obj.closest('tr');
 	                		
-	                		if(travelAgencyRate > 0 && $tr.find("input[name=travelAgencyRate]").val() > 0) {
+	                		if(travelAgencyRate > 0) {
 	                			$tr.find("input[name=travelAgencyRate]").val(travelAgencyRate);
 	                			Count.autoShopSum($obj,$bodyObj);
 	                		}
-	                		if(guideRate > 0 && $tr.find("input[name=guideRate]").val() > 0) {
+	                		if(guideRate > 0) {
 	                			$tr.find("input[name=guideRate]").val(guideRate);
 	                			Count.autoShopSum($obj,$bodyObj);
 	                		}	                		
-	                	}
-	                	// 禁用清空
-	                	// else{
-	                	// 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
-	                	// 	$obj.closest('tr').find("input[name=guideRate]").val(0);
-	                	// 	Count.autoShopSum($obj,$bodyObj);
-	                	// }
+	                	}else{
+	                	 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
+	                	 	$obj.closest('tr').find("input[name=guideRate]").val(0);
+	                	 	Count.autoShopSum($obj,$bodyObj);
+	                	};
+	                	 
 					}
 				}
 			});
