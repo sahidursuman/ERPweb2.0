@@ -34,6 +34,7 @@
 						<th>申请时间</th>
 						<th>审核时间</th>
 						<th>状态</th>
+						<th hidden="hidden">操作</th>
 					</tr>
 				</thead>
 				<tbody class="T-accObjList">
@@ -54,6 +55,13 @@
 							{{else if result.applyStatus==2 }}
 								未通过
 						{{/if}}
+						</td>
+						<td hidden="hidden">
+							<div class="hidden-sm hidden-xs btn-group">
+							<a class="cursor T-option T-update" title="编辑">
+									编辑
+								</a>
+							</div>
 						</td>
 					</tr>
 					{{/each}}
