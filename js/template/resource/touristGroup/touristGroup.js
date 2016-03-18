@@ -223,6 +223,7 @@ define(function(require, exports) {
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
+        //报表事件
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -1685,11 +1686,15 @@ define(function(require, exports) {
                     }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
+                    data.adultCount = 0;
+                    data.childCount = 0;
+
                     var html = listTemplate(data);
                     //权限过滤
                     html = filterUnAuth(html);
                     $listObj.html(html);
                     touristGroup.listEvents($listObj);
+                   
                     //绑定分页插件
                     laypage({
                         cont: $mainList.find('.T-pagenation'),
@@ -1706,6 +1711,9 @@ define(function(require, exports) {
             }
         });
     };
+
+
+  
 
     //刷新数据合计
     touristGroup.freshHeader = function($args) {
