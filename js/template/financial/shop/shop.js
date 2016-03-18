@@ -638,6 +638,8 @@ define(function(require, exports) {
     }
 
     FinShop.saveSettlement = function($tab,args,tabArgs) {
+        var check = new FinRule(5).check($tab);
+        if (!check.form()) { return false;}
         var argLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();

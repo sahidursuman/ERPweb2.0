@@ -825,6 +825,11 @@ define(function(require, exports) {
     };
 
     Client.saveClearData = function($tab,args,tabArgs) {
+        var check =  new FinRule(5).check($tab);
+        if(!check.form()){ return false; }
+        var validator = (new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1)).check($tab);
+        if (!validator.form()) { return; }
+            
         var argLen = arguments.length;
         var payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
