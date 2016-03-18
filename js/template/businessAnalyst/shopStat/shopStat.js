@@ -76,6 +76,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
+					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//绑定页面事件
