@@ -573,7 +573,7 @@ FinRule.prototype.check = function($obj) {
                     $ele: $obj.find('input[name=settlementMoney]'),
                     rules: [
                         {
-                            type: 'nonnegative-float',
+                            type: 'float',//'nonnegative-float',
                             errMsg: '请输入非负数'
                         }
                     ]
