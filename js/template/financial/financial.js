@@ -554,7 +554,7 @@ function isAllChecked(checkboxList){
 /**
  * 财务校验方法
  * 使用方法：var rule = new FinRule(0);
- * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款
+ * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款、6：导游和客户对账
  */ 
 function FinRule(type) {
     this.type = type;
@@ -573,7 +573,7 @@ FinRule.prototype.check = function($obj) {
                     $ele: $obj.find('input[name=settlementMoney]'),
                     rules: [
                         {
-                            type: 'float',//'nonnegative-float',
+                            type: 'nonnegative-float',
                             errMsg: '请输入非负数'
                         }
                     ]
@@ -664,6 +664,17 @@ FinRule.prototype.check = function($obj) {
                     ]
                 }
             ]);
+        case 6:  // 导游和客户对账
+            return $obj.formValidate([
+                {   //结算金额
+                    $ele: $obj.find('input[name=settlementMoney]'),
+                    rules: [
+                        {
+                            type: 'float',
+                            errMsg: '请输入非负数'
+                        }
+                    ]
+                }]);
         default:
             return false;
     }

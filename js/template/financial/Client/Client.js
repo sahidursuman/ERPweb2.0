@@ -237,7 +237,7 @@ define(function(require, exports) {
     Client.initCheck = function($tab,args){
         var id = $tab.find('.T-saveClear').data('id');
         $tab.data('id', id);
-        var validator = (new FinRule(0)).check($tab);
+        var validator = (new FinRule(6)).check($tab);
         $tab.find(".T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
             $(this).closest('tr').data("change",true);
