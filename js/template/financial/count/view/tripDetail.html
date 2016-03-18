@@ -225,7 +225,7 @@
                             <th class="th-border" colspan="5">打单</th>
                             <th class="th-border" colspan="2">社佣</th>
                             <th class="th-border" colspan="2">导佣</th>
-                            <th class="th-border" rowspan="2">现收</th>
+                            <th class="th-border hidden" rowspan="2">现收</th>
                             <th class="th-border" rowspan="2">导游报账备注</th>
                             <th class="th-border" rowspan="2">是否对账</th>
                         </tr>
@@ -279,7 +279,7 @@
                 
                 <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span></td>
 
-                <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                <td class="hidden" rowspan="{{arrange.shopArrangeItemSet.length}}">
                     <span class="T-float T-money">{{arrange.rebateCurrentIncomeMoney}}</span>
                 </td>
 
