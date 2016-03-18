@@ -671,7 +671,7 @@ FinRule.prototype.check = function($obj) {
                     rules: [
                         {
                             type: 'float',
-                            errMsg: '数字'
+                            errMsg: '请输入数字'
                         }
                     ]
                 }]);
