@@ -327,7 +327,11 @@ define(function(require, exports) {
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
                 if (!validatorCheck.form())return;
-                FinGuide.saveCheckingData($tab, [tab_id, title, html]);
+                if(type){
+                    FinGuide.savePayingData($tab, [tab_id, title, html]);
+                } else {
+                    FinGuide.saveCheckingData($tab, [tab_id, title, html]);
+                }
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
                 FinGuide.initOperationEvent($tab, type);
@@ -335,7 +339,11 @@ define(function(require, exports) {
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
                 if (!validatorCheck.form())return;
-                FinGuide.saveCheckingData($tab);
+                if(type){
+                    FinGuide.savePayingData($tab);
+                } else {
+                    FinGuide.saveCheckingData($tab);
+                }
             });
 
         // 计算

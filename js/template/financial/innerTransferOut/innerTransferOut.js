@@ -614,6 +614,9 @@ define(function(require,exports) {
 		var showBtnFlag = (arguments.length > 1) ? args.showBtnFlag : $tab.data('showBtnFlag'),
 			settlermentValidator =  new FinRule((showBtnFlag == true) ? 3 : 1),
 			argumentsLen = arguments.length;
+		if(!FinancialService.isClearSave($tab,settlermentValidator)){
+			return false;
+		}
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			sumRemark = $tab.find('input[name=sumRemark]').val();
