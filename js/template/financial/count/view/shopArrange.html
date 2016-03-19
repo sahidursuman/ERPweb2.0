@@ -133,10 +133,20 @@
             {{/each}}
             {{/if}}
         {{/if}}
+        <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
+            <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;">导佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+        </tr>
         {{/each}}  
         {{/each}}
         {{/if}}
         {{/each}}
+        
         </tbody>
     </table>
 

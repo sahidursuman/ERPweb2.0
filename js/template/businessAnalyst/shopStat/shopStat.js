@@ -76,6 +76,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
+					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//绑定页面事件
@@ -104,7 +105,7 @@ define(function(require, exports) {
 	 */
 	shopStat.initEvent = function(){
 
-		//搜索事件
+		//搜索事件 T-shopStat-outToexcel
 		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
@@ -115,6 +116,8 @@ define(function(require, exports) {
 			$obj.print({
 				globalStyles:true
 			});
+		}).on('click','.T-shopStat-outToexcel',function(){
+			//导出事件
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');

@@ -145,18 +145,22 @@
             <!-- 团款 -->
             <div id="financial-count-tripdetail-money" class="tab-pane fade active in T-tripCost">
                 <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="th-border">序号</th>
+                            <th class="th-border">客户</th>
+                            <th class="th-border">收客单号</th>
+                            <th class="th-border">游客信息</th>
+                            <th class="th-border">包含自费</th>
+                            <th class="th-border">备注</th>
+                            <th class="th-border">应收</th>
+                            <th class="th-border">社收</th>
+                            <th class="th-border">现收</th>
+                            <th class="th-border">明细</th>
+                        </tr>
+                    </thead>
                     <tbody class="T-tripDetail">
                     <tr>
-                        <td>序号</td>
-                        <td>客户</td>
-                        <th>收客单号</th>
-                        <th>游客信息</th>
-                        <th>包含自费</th>
-                        <th>备注</th>
-                        <td>应收</td>
-                        <td>社收</td>
-                        <td>现收</td>
-                        <td>明细</td>
                    {{each touristGroups as touristGroup index}}
                         <tr>
                             <td>{{index+1}}</td>
@@ -272,12 +276,12 @@
                 <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 
                 <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span>
-                    
                 </td>
                 
                 <td><span class="F-float F-count">{{itemSet.guideRate*100}}</span></td>
                 
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span></td>
+                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span>
+                </td>
 
                 <td class="hidden" rowspan="{{arrange.shopArrangeItemSet.length}}">
                     <span class="T-float T-money">{{arrange.rebateCurrentIncomeMoney}}</span>
@@ -326,21 +330,40 @@
                 
                 <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
                 
-                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span></td>
+                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span>
+                </td>
                 
                 <td><span class="F-float F-count">{{itemSet.guideRate * 100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span></td>
+                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span>
+                </td>
 
                 <td >
                 {{if editStatus == 1}}
                     {{itemSet.billRemark}}
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                </td></tr>
+                {{else}}
+                    {{if arrange.shopPolicy != null}}
+                        {{arrange.shopPolicy.remark}}
+                    {{else}}
+                        {{itemSet.billRemark}}
+                    {{/if}}
                 {{/if}}
+                </td>
+            </tr>
+                {{/if}}
+
             {{/each}}
             {{/if}}
         {{/if}}
+        <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
+            <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;">导佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+        </tr>
         {{/each}}  
         {{/each}}
         {{/if}}
