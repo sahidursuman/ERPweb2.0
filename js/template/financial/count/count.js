@@ -4449,7 +4449,7 @@ define(function(require, exports){
 			var $this = $(this), $parent = $(this).closest('tr'), id = $parent.attr('id'), status = $this.attr('data-status');
 			var addFeeLayer = layer.open({
 			    type: 1,
-			    title:'新增明细',
+			    title:'费用调整',
 			    skin: 'layui-layer-rim', //加上边框
 			    area: ['1000px', '250px'], //宽高
 			    zIndex:1028,
