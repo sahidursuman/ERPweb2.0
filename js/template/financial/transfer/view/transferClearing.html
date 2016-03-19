@@ -39,7 +39,7 @@
         </form>
         <div class="form-inline row globalAdd T-summary">
             <div class="form-group mar-r-10">
-                <label class="control-label">本次付款金额：</label>
+                <label class="control-label">本次付款金额{{isAutoPay}}：</label>
                 <label class="control-label">
                     <input name="sumPayMoney" type="text" value="{{sumPayMoney}}" class="T-sumReciveMoney money F-float F-money"  {{if type || isAutoPay != 0}}disabled {{/if}}>
                 </label>
@@ -51,7 +51,7 @@
                 <button class="btn btn-xs btn-primary T-clear-auto">
                     <i class="ace-icon fa fa-check-circle"></i> 自动下账
                 </button>
-                {{else isAutoPay == 1}}
+                {{else if isAutoPay == 1}}
                 <button class="btn btn-xs btn-warning T-cancel-auto">
                     <i class="ace-icon fa fa-times-circle"></i> 取消下账
                 </button>

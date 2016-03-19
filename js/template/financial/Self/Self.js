@@ -583,8 +583,7 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var $selfPay = Self.$tab.find(".T-chooseSelfPay"),
-                            selfPayList = data.selfPayNames;
+                        var selfPayList = data.selfPayNames;
                         if(selfPayList != null && selfPayList.length > 0){
                             for(var i=0;i<selfPayList.length;i++){
                                 selfPayList[i].value = selfPayList[i].name;
@@ -621,14 +620,18 @@ define(function(require, exports) {
         } else if (!isMainList && list[0].value === '全部') {
             list.shift(all);
         }
-        
+        var name = $obj.val();
         //车队
         $obj.autocomplete({
             minLength: 0,
             source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $obj.nextAll('input[name="selfPayId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else {
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="selfPayId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {

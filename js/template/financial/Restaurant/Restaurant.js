@@ -641,13 +641,14 @@ define(function(require, exports) {
     };
 
     restaurant.getRestaurantList = function($tab,type){
-        var $obj = $tab.find('input[name=restaurantName]');
+        var $obj = $tab.find('input[name=restaurantName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : restaurant.restaurantList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -661,7 +662,7 @@ define(function(require, exports) {
                     sortType : "accountTime"
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     restaurant.restaurantClear(args);
                 } else {
                     restaurant.restaurantCheck(args);
@@ -681,8 +682,28 @@ define(function(require, exports) {
             endDate : options.endDate,
             accountStatus : options.accountStatus,
             isAutoPay : 2
-        }
-        restaurant.restaurantClear(args); 
+        };
+         $.ajax({
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               layer.close(globalLoadingLayer);
+               var result = showDialog(data);
+                if(result){
+                    var restaurantList = data.restaurantNameList;
+                    if(restaurantList != null && restaurantList.length > 0){
+                        for(var i=0;i<restaurantList.length;i++){
+                            restaurantList[i].id = restaurantList[i].restaurantId;
+                            restaurantList[i].value = restaurantList[i].restaurantName;
+                        }
+                    }
+                    restaurant.restaurantList = restaurantList;
+                    args.isAutoPay = 2;
+                    restaurant.restaurantClear(args);
+                }
+            }
+        });
     };
 
     exports.init = restaurant.initModule;

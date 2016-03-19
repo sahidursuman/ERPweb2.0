@@ -443,6 +443,7 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     Client.initIncome = function(options) {
+        Client.getTravelAgencyList();
         Client.ClientClear(0, {
             pageNo:0,
             fromPartnerAgencyId: options.id,
@@ -950,10 +951,12 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Client.getTravelAgencyList = function($obj){
-        var val = Client.$tab.find('.T-search-head-office').val();
-        if (val === '全部') {
-            val = '';
+        var val = "";
+        if(!!Client.$tab){
+            val = Client.$tab.find('.T-search-head-office').val();
+             if (val === '全部') { val = ''; }
         }
+       
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'selectPartnerAgency'),
             type : 'POST',
@@ -966,21 +969,23 @@ define(function(require, exports) {
             }
             var all = {id:'', value: '全部'};
             Client.partnerAgencyList = data.fromPartnerAgencyList.slice(all);
-            data.fromPartnerAgencyList.unshift(all);
-            $obj.autocomplete({
-                minLength: 0,
-                source : data.fromPartnerAgencyList,
-                change: function(event, ui) {
-                    if (!ui.item)  {
-                        $(this).data('id', '');
+            if(!!$obj){
+                data.fromPartnerAgencyList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.fromPartnerAgencyList,
+                    change: function(event, ui) {
+                        if (!ui.item)  {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                },
-                select: function(event, ui) {
-                    $(this).blur().data('id', ui.item.id);
-                }
-            }).on("click",function(){
-                $obj.autocomplete('search', '');
-            });
+                }).on("click",function(){
+                    $obj.autocomplete('search', '');
+                });
+            }
         });       
     };
 
@@ -1129,13 +1134,14 @@ define(function(require, exports) {
     }
 
     Client.getAgencyList = function($tab,type){
-        var $obj = $tab.find('.T-partnerAgencyName');
+        var $obj = $tab.find('.T-partnerAgencyName'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Client.partnerAgencyList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {

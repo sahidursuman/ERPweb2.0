@@ -637,13 +637,14 @@ define(function(require, exports) {
     };
 
     hotel.getHotelList = function($tab,type){
-        var $obj = $tab.find('input[name=hotelName]');
+        var $obj = $tab.find('input[name=hotelName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : hotel.hotelList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -656,7 +657,7 @@ define(function(require, exports) {
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     hotel.hotelClear(args);
                 } else {
                     hotel.hotelCheck(args);
@@ -674,10 +675,29 @@ define(function(require, exports) {
             hotelName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         };
-        hotel.hotelClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               var result = showDialog(data);
+                if(result){
+                    var hotelList = data.hotelNameList;
+                    if(hotelList != null && hotelList.length > 0){
+                        for(var i=0;i<hotelList.length;i++){
+                            hotelList[i].id = hotelList[i].hotelId;
+                            hotelList[i].value = hotelList[i].hotelName;
+                        }
+                    }
+                    hotel.hotelList = hotelList;
+                    args.isAutoPay=2;
+                    hotel.hotelClear(args);
+                }
+            }
+        });
+         
     };
 
     exports.init = hotel.initModule;

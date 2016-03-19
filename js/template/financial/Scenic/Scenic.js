@@ -645,14 +645,18 @@ define(function(require, exports) {
         } else if (!isMainList && list[0].value === '全部') {
             list.shift(all);
         }        
-
+        var name = $obj.val();
         //景区 
         $obj.autocomplete({
             minLength: 0,
             source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $obj.nextAll('input[name="scenicId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="scenicId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {

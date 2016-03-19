@@ -666,13 +666,14 @@ define(function(require, exports) {
     };
 
     busCompany.getBusCompanyList = function($tab,type){
-        var $obj = $tab.find('input[name=busCompanyName]');
+        var $obj = $tab.find('input[name=busCompanyName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : busCompany.busCompanyList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -686,7 +687,7 @@ define(function(require, exports) {
                     sortType : "accountTime"
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     busCompany.busCompanyClear(args);
                 } else {
                     busCompany.busCompanyCheck(args);
@@ -700,14 +701,31 @@ define(function(require, exports) {
     busCompany.initPay = function(options) {
         var args = {
             pageNo : 0,
-            busCompanyId : options.id,
-            busCompanyName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
             accountStatus : options.accountStatus,
-            isAutoPay : 2
         }
-        busCompany.busCompanyClear(args);
+        $.ajax({
+            url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
+            type: "POST",
+            data: { searchParam: JSON.stringify(args) },
+            success: function(data) {
+                if (showDialog(data)) {
+                    busCompanyList = data.busCompanyNameList;
+                    if (busCompanyList != null && busCompanyList.length > 0) {
+                        for (var i = 0; i < busCompanyList.length; i++) {
+                            busCompanyList[i].id = busCompanyList[i].busCompanyId;
+                            busCompanyList[i].value = busCompanyList[i].busCompanyName;
+                        }
+                    }
+                    busCompany.busCompanyList = busCompanyList;
+                    args.busCompanyId = options.id;
+                    args.busCompanyName = options.name;
+                    args.isAutoPay = 2;
+                    busCompany.busCompanyClear(args);
+                }
+            }
+        });
     };
 
     exports.init = busCompany.initModule;
