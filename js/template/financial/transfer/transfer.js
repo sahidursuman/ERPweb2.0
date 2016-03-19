@@ -57,7 +57,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                	Transfer.partnerList = data.partnerAgencyNameList;
+                    Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转账务",html);
                     Transfer.$tab = $('#tab-' + menuKey + "-content");
@@ -208,6 +208,7 @@ define(function(require, exports) {
         Transfer.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateMoney_checking($tab,3);
+        Transfer.getPartnerList($tab,false);
 
         //表单验证
         var validator = new FinRule(0);
@@ -316,6 +317,7 @@ define(function(require, exports) {
                     }
                     data.financialTransferList = resultList;
 
+                    data.isAutoPay = args.isAutoPay;
                     var html = transferClearing(data);
                     var validator;
                     // 初始化页面
@@ -365,21 +367,10 @@ define(function(require, exports) {
     };
 
     Transfer.initClear = function(args,$tab){
-        console.log(args);
         Transfer.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        Transfer.getPartnerList($tab,true);
 
-        if(args.isAutoPay == 0){
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            if(args.isAutoPay == 1){
-                $tab.data('isEdited',true);
-            } else if(args.isAutoPay == 2){
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
         //表单验证
         var settleValidator = args.isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
             autoValidator = new FinRule(2);
@@ -670,6 +661,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        Transfer.partnerList = partnerList.slice(all);
         partnerList.unshift(all);
 
         //同行地接
@@ -839,6 +831,37 @@ define(function(require, exports) {
             isAutoPay : 2
         }
         Transfer.transferClear(args); 
+    };
+
+    Transfer.getPartnerList = function($tab,type){
+        var $obj = $tab.find('input[name=partnerAgencyName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : Transfer.partnerList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    partnerAgencyId : ui.item.id,
+                    partnerAgencyName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = 0;
+                    Transfer.transferClear(args);
+                } else {
+                    Transfer.transferCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     exports.init = Transfer.initModule;

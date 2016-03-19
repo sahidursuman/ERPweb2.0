@@ -4,9 +4,9 @@
             <form class="form-inline" role="form" onsubmit="return false">
                 <div class="form-group mar-r-10">
                     <label  class="control-label pull-left" style="margin-left: 0px;">部门：</label>
-                    <span>{{businessGroupName}}</span>
+                    <input type="text" name="businessGroupName" value="{{businessGroupName}}" />
                     <input type="hidden" value="{{searchParam.businessGroupId}}" name="businessGroupId">
-                    <input type="hidden" value="{{searchParam.businessGroupName}}" name="businessGroupName"> 
+                    <input type="hidden" value="{{searchParam.accountStatus}}" name="accountStatus">  
                 </div>
                 <div class="form-group mar-r-10">
                     <label class="control-label">账期：</label>

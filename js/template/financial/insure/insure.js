@@ -143,6 +143,8 @@ define(function(require, exports) {
   	// 保险对账
 	Insure.GetChecking = function(args,$tab){
 		if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -158,6 +160,7 @@ define(function(require, exports) {
 				if(showDialog(data)){
 					var fiList = data.financialInsuranceList;
                     data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
 					var html = insuranceChecking(data);
 
                     // 初始化页面
@@ -230,6 +233,8 @@ define(function(require, exports) {
   	// 结算
   	Insure.getClearing = function(args,$tab){
         if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -248,6 +253,7 @@ define(function(require, exports) {
 			success : function(data){
 				if(showDialog(data)){
 					data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
                     if(args.isAutoPay == 1){
                         Insure.clearTempData = data.autoPaymentJson;
                     }
@@ -560,41 +566,91 @@ define(function(require, exports) {
             }
         });
 
+        Insure.getInsureComList($tab.find('.T-insuranceName'));
+
         //报表内的操作
         Insure.listOption($tab);
         //关闭按钮
         FinancialService.closeTab(menuKey + "-" + option + "ing");
     };
 
-	Insure.getQueryList = function(){
-        var $Insure = Insure.$tab.find(".T-chooseInsure"),
-            insureList = Insure.insureList;
-        if(insureList != null && insureList.length > 0){
-            for(var i=0;i<insureList.length;i++){
-            	insureList[i].id = insureList[i].insuranceId;
-                insureList[i].value = insureList[i].insuranceName;
-            }
+    Insure.getInsureComList = function($obj) {
+        if (!!Insure.insureList) {
+            Insure.getQueryList($obj);
+        } else {
+            $.ajax({
+               url:KingServices.build_url("account/insuranceFinancial","listSumFinancialInsurance"),
+                type:"POST",
+                data:{ searchParam : JSON.stringify({
+                    insuranceId: '-1'
+                }) },
+                showLoading: false,
+                success: function(data){
+                    if (showDialog(data)) {
+                        Insure.insureList = data.insuranceNameList;
+                        Insure.getQueryList($obj);
+                    }
+                }
+            });
         }
+    };
+
+    /**
+     * 绑定保险公司列表
+     * @param  {object} $obj 绑定的控件，为空说明是主列表
+     * @return {[type]}      [description]
+     */
+	Insure.getQueryList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = Insure.$tab.find(".T-chooseInsure");
+        }
+
+        var list = Insure.insureList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+
+        for(var i=0;i<list.length;i++){
+            list[i].id = list[i].insuranceId;
+            list[i].value = list[i].insuranceName;
+        }
+
         var all = {
             id : "",
             value : "全部"
-        };
-        insureList.unshift(all);
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }        
 
-        //车队
-        $Insure.autocomplete({
+        //保险
+        $obj.autocomplete({
             minLength: 0,
-            source : insureList,
+            source : list,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $(this).nextAll('input[name="insuranceId"]').val('');
+                    $obj.nextAll('input[name="insuranceId"]').val('');
                 }
             },
             select: function(event,ui) {
-                $(this).blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                $obj.blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="accountInfo"]').val('');
+                    $tab.find('.T-insuranceId').val(ui.item.id);
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
         }).on("click",function(){
-            $Insure.autocomplete('search','');
+            $obj.autocomplete('search','');
         });      
     };
 
