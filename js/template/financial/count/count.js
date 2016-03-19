@@ -479,7 +479,10 @@ define(function(require, exports){
 		});
 
 		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+			selfPayItemNameObj.each(function(){
+				Count.getSelfItemData($(this).closest('tr'),$obj);
+			});
 		};
 		//新增自费安排
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
@@ -775,7 +778,10 @@ define(function(require, exports){
 			Count.addSelf($selfObj,$obj);
 		});
 		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			Count.getSelfItemData($selfObj.find('input[name=selfPayItemName]').closest('tr'),$obj);
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+			selfPayItemNameObj.each(function(){
+				Count.getSelfItemData($(this).closest('tr'),$obj);
+			});
 		};
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
@@ -2025,8 +2031,8 @@ define(function(require, exports){
 		'<td><span class="travelAgencyRebateMoney"></span></td>'+
 		'<td><input name="guideRate" class="w-50" type="text"></td>'+
 		'<td><span class="guideRebateMoney"></span></td>'+
-		'<td><input name="billRemark" class="w-80" type="text"><a class="T-del" href="javascript:void(0)" style="margin-left:20px;">删除</a></td>'+
-		'<td>未对账</td>'+
+		'<td><input name="billRemark" type="text"></td>'+
+		'<td>未对账<a class="T-del" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -2074,8 +2080,20 @@ define(function(require, exports){
 			var $prev = $tr.prevAll(),
 				td_cnt = $tr.children('td').length;
 			var rowSpan = $tr.children('td').eq(0).attr('rowspan');
-			if(!!rowSpan && rowSpan == 1){
-				$tr.remove();
+			if(!!rowSpan){
+				if(rowSpan == 1){
+					$tr.remove();
+				}else{
+					var whichDay = $tr.find('.whichDay').text(),
+						selfPayName = $tr.find('.selfPayName').text()
+						$nextTr = $tr.next();
+					rowSpan = rowSpan*1 - 1;
+					var html = '<td class="whichDay" rowspan = '+rowSpan+'>'+whichDay+'</td>'+
+						'<td class="selfPayName">'+selfPayName+'</td>';
+						$nextTr.children('td').eq(0).before(html);
+						$tr.remove();
+				};
+				
 			}else{
 				for(var i = 0; i<$prev.length;i++){
 					var tdLen = $prev.eq(i).children('td').length;
@@ -2990,7 +3008,7 @@ define(function(require, exports){
 	};
 	//获取自费项目的数据
 	Count.getSelfItemData = function($obj,$parentObj){
-		var $selfPayItemObj = false,$selfId = $obj.find('input[name=selfPayId]').val() || $obj.attr('selfPayId');
+		var $selfPayItemObj = false;
 		if($obj.attr('selfpayarrangeid')){
 			$selfPayItemObj = $obj.find('input[name=selfPayItemName]');
 		}else{
@@ -3017,11 +3035,12 @@ define(function(require, exports){
 				}
 			}
 		}).off('click').on('click', function() {
-			var obj = $(this);
+			var obj = $(this),
+				selfId = $obj.find('input[name=selfPayId]').val() || $obj.attr('selfPayId');
 			$.ajax({
 				url:KingServices.build_url('selfpay','findSelfPayItemBySelfPayId'),
 				data:{
-					id:$selfId
+					id:selfId
 				},
 				showLoading:false,
 				type:'POST',
@@ -3029,11 +3048,19 @@ define(function(require, exports){
 					var result = showDialog(data);
 					if(result){
 						var selfpay = JSON.parse(data.selfPayItemList);
-						for(var i=0; i < selfpay.length; i++){
-							selfpay[i].value = selfpay[i].name;
-						};
-						obj.autocomplete('option','source', selfpay);
-						obj.autocomplete('search', '');
+						if(selfpay.length>0){
+							for(var i=0; i < selfpay.length; i++){
+								selfpay[i].value = selfpay[i].name;
+							};
+							obj.autocomplete('option','source', selfpay);
+							obj.autocomplete('search', '');
+						}else{
+							layer.tips('无数据', obj, {
+							    tips: [1, '#3595CC'],
+							    time: 2000
+							});
+						}
+						
 					};
 				}
 			});
