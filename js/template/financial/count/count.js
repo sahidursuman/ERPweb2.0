@@ -4665,7 +4665,11 @@ define(function(require, exports){
 		                        {
 		                            type: 'nonnegative-float',
 		                            errMsg: '请输入非负数'
-		                        }
+		                        },
+                                {
+                                    type: 'null',
+                                    errMsg: '数量不能为空'
+                                }
 		                    ]
 		                },
 		                {	//明细价格
@@ -4674,7 +4678,11 @@ define(function(require, exports){
 		                		{
 		                			type: 'float',
 		                			errMsg:'请输入数字金额'
-		                		}
+		                		},
+                                {
+                                    type: 'null',
+                                    errMsg: '单价不能为空'
+                                }
 		                	]
 		                }
 		            ]);
