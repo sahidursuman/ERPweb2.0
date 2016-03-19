@@ -312,7 +312,7 @@ define(function(require,exports) {
         //监听扣款输入框的改变
         FinancialService.updateMoney_checking($tab,3);
         //查看对账明细
-        $tab.on('click','.T-check-Detail',function(){
+        $tab.off('click.checkDetail').on('click.checkDetail','.T-check-Detail',function(){
         	var id = $(this).closest('tr').data('id');
         	InnerTransferOut.viewAccountDetail(id);
         });
