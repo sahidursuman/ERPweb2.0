@@ -149,6 +149,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-balance')) {
                 // 结算
                 Client.ClientClear(0, options);
+            } else if ($that.hasClass('T-view')) {
+                //查看
+                Client.ClientCheck(0, options, '', true)// 4参数为是否查看
             }
         });
     };
@@ -171,7 +174,7 @@ define(function(require, exports) {
         
     };
 
-    Client.ClientCheck = function(pageNo, args, $tab){
+    Client.ClientCheck = function(pageNo, args, $tab, isView){
         if(!!$tab){
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
@@ -209,8 +212,17 @@ define(function(require, exports) {
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
                 data.customerAccountList = resultList; 
-                
-                if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
+                var title = '客户对账';
+                if (isView) {
+                    data.view = 1;
+                    ClientCheckTab = ClientCheckTab + '-view';
+                    title = '查看客户对账';
+                }else {
+                    data.view = '';
+                    ClientCheckTab = 'financial_Client_checking';
+                }
+                console.log(data)
+                if (Tools.addTab(ClientCheckTab, title, ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
                     Client.initCheck($tab,args);
