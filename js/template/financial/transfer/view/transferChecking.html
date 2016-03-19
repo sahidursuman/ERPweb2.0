@@ -3,7 +3,7 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area T-search-area">
                 <div class="form-group">
-                    <label class="control-label pull-left "> 同行地接1：{{partnerAgencyName}}</label>
+                    <label class="control-label pull-left "> 同行地接：{{partnerAgencyName}}</label>
                     <input value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" type="hidden">
                     <label>账期：</label>
                     <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
@@ -90,7 +90,7 @@
                         <span class="F-float F-count">{{of.count}}</span>=
                         <span class="F-float F-money">{{of.price * of.count}}</span>
                         <br> {{/each}} <a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{else}}
-                        <!-- 若无费用明细 -->- {{/if}}
+                        <!-- 若无费用明细 -->- <br><a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{/if}}
                     </td>
                     <td rowspan="{{rs.rowLen}}"><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                     {{if rs.outFeeList.length > 0}}

@@ -217,7 +217,8 @@ define(function(require, exports) {
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            Transfer.transferCheck({pageNo : 0},$tab);
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
         });
 
         //费用调整
