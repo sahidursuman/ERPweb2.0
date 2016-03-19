@@ -266,7 +266,8 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     OtherAccounts.getTravelAgencyList = function($obj) {
-        var isMainList = $obj.closest('#tab-financial_Other_accounts-content').length === 1;
+        var isMainList = $obj.closest('#tab-financial_Other_accounts-content').length === 1,
+            name = $obj.val();
         if (!!OtherAccounts.projList) {
             if (OtherAccounts.projList.length) {
                 var isAll = OtherAccounts.projList[0].value == '全部';
@@ -282,8 +283,12 @@ define(function(require, exports) {
                 $obj.autocomplete({
                     minLength: 0,
                     change: function(event, ui) {
-                        if (!ui.item) {
-                            $(this).data('id', '');
+                        if(!isMainList){
+                            $obj.val(name);
+                        } else {
+                            if (!ui.item) {
+                                $(this).data('id', '');
+                            }
                         }
                     },
                     select: function(event, ui) {
@@ -299,8 +304,12 @@ define(function(require, exports) {
         return $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
+                if(!isMainList){
+                    $obj.val(name);
+                } else {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
                 }
             },
             select: function(event, ui) {
@@ -360,6 +369,7 @@ define(function(require, exports) {
     //付款
     OtherAccounts.AccountsPayment = function(args,$tab) {
         if (!!$tab) {
+            args.name = $tab.find("input[name=itemName]").val();
             args.startAccountTime = $tab.find(".T-startTime").val();
             args.endAccountTime = $tab.find(".T-endTime").val();
             args.info = $tab.find('.T-creatorUserChoose').val();

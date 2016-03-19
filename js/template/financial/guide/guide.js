@@ -182,21 +182,23 @@ define(function(require, exports) {
                 value: '全部'
             };
             FinGuide.guideList = data.guideList.slice(all);
-            data.guideList.unshift(all);
-            $obj.autocomplete({
-                minLength: 0,
-                source : data.guideList,
-                change: function(event, ui) {
-                    if (!ui.item) {
-                        $(this).data('id', '');
+            if($obj){
+                data.guideList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.guideList,
+                    change: function(event, ui) {
+                        if (!ui.item) {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                },
-                select: function(event, ui) {
-                    $(this).blur().data('id', ui.item.id);
-                }
-            }).on("click", function() {
-                $obj.autocomplete('search', '');
-            });
+                }).on("click", function() {
+                    $obj.autocomplete('search', '');
+                });
+            }
         });
     };
 
@@ -287,7 +289,7 @@ define(function(require, exports) {
         // 绑定搜索
         var $searchArea = $tab.find('.T-search-area');
 
-        FinGuide.getPartnerAgencyList($tab,type);
+        FinGuide.getGuideList($tab,type);
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
@@ -1064,14 +1066,15 @@ define(function(require, exports) {
         });
     };
 
-    FinGuide.getPartnerAgencyList = function($tab,type){
-        var $obj = $tab.find('.T-guideName');
+    FinGuide.getGuideList = function($tab,type){
+        var $obj = $tab.find('.T-guideName'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : FinGuide.guideList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -1083,6 +1086,7 @@ define(function(require, exports) {
                     endDate : $tab.find('.T-search-end-date').val(),
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
+                args.isOuter = FinGuide.isOuter = true;
                 FinGuide.initOperationModule(args,type);
             }
         }).on("click",function(){
@@ -1094,7 +1098,7 @@ define(function(require, exports) {
         options.guideId = options.id;
         delete(options.id);
         options.isOuter = FinGuide.isOuter = true;
-
+        FinGuide.getGuideNameList(false,[options.startDate,options.endDate]);
         FinGuide.initOperationModule(options, 1)
     };
 

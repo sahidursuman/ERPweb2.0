@@ -91,7 +91,6 @@ define(function(require, exports) {
 
     //获取首页搜索框的数据
 	FinTransIn.getQuery = function($obj){
-        console.log($obj);
         $.ajax({
             url:KingServices.build_url('account/innerTransferIn','getQueryTerms'),
             type:'POST',
@@ -106,23 +105,25 @@ define(function(require, exports) {
                         }
                         var all = { id: '', value: '全部' };
                         FinTransIn.groupList = businessGroupList.slice(all);
-                        businessGroupList.unshift(all);
-                        $obj.autocomplete({
-                            minLength:0,
-                            source : businessGroupList,
-                            change:function(event,ui){
-                                if(ui.item == null){
+                        if(!!$obj){
+                            businessGroupList.unshift(all);
+                            $obj.autocomplete({
+                                minLength:0,
+                                source : businessGroupList,
+                                change:function(event,ui){
+                                    if(ui.item == null){
+                                        var $div = $obj.closest('div');
+                                        $obj.find('input[name=toBusinessGroupId]').val('');
+                                    }
+                                },
+                                select:function(event,ui){
                                     var $div = $obj.closest('div');
-                                    $obj.find('input[name=toBusinessGroupId]').val('');
+                                    $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
                                 }
-                            },
-                            select:function(event,ui){
-                                var $div = $obj.closest('div');
-                                $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-                            }
-                        }).on("click",function(){
-                            $obj.autocomplete('search', '');
-                        });
+                            }).on("click",function(){
+                                $obj.autocomplete('search', '');
+                            });
+                        }
                     } else{
                         layer.tips('没有内容', $obj, {
                             tips: [1, '#3595CC'],
@@ -648,13 +649,14 @@ define(function(require, exports) {
     };
 
     FinTransIn.getGroupList = function($tab,type){
-        var $obj = $tab.find('input[name=businessGroupName]');
+        var $obj = $tab.find('input[name=businessGroupName]'),
+            name = $obj.val();;
         $obj.autocomplete({
             minLength: 0,
             source : FinTransIn.groupList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -683,6 +685,7 @@ define(function(require, exports) {
                 accountStatus : options.accountStatus
             };
         FinTransIn.isOut = true;
+        FinTransIn.getQuery();
         FinTransIn.getCheckList(args,null,2); 
     };
 

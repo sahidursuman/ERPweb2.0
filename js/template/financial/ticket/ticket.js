@@ -385,10 +385,24 @@ define(function(require, exports) {
 			ticketName : options.name,
 			startDate : options.startDate,
 			endDate : options.endDate,
-			accountStatus : options.accountStatus,
-			type : 1
+			accountStatus : options.accountStatus
 		}
-		Ticket.clearingList(args);
+		$.ajax({
+			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
+			type : 'POST',
+            data : {searchParam : JSON.stringify(args)}
+		}).done(function(data){
+			if(showDialog(data)){
+				var ticketNameList = data.ticketNameList;
+				for(var i=0; i<ticketNameList.length; i++){
+					ticketNameList[i].id = ticketNameList[i].ticketId;
+					ticketNameList[i].value = ticketNameList[i].ticketName;
+				}
+				Ticket.ticketNameList = ticketNameList;
+				args.type = 1;
+				Ticket.clearingList(args);
+			}
+		});
 	};
 	Ticket.clearingList = function(args,$tab){
 		if(!!$tab){
@@ -649,13 +663,14 @@ define(function(require, exports) {
 	};
 
 	Ticket.getTicketList = function($tab,type){
-        var $obj = $tab.find('input[name=ticketName]');
+        var $obj = $tab.find('input[name=ticketName]'),
+        	name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Ticket.ticketNameList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                	$obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -668,6 +683,7 @@ define(function(require, exports) {
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
+                	args.type = $tab.find('.T-btn-autofill').length ? 0 : 1;
                     Ticket.clearingList(args)
                 } else {
                     Ticket.checkingList(args)
