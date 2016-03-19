@@ -696,12 +696,13 @@ define(function(require,exports) {
 		}
 	};
 	//获取搜索框的数据
-	InnerTransferOut.getToBusinessGroupName = function($obj,nameData){
-		var $nameObj = $obj.find('input[name=toBusinessGroupName]');
-		var obj = $(this);
+	InnerTransferOut.getToBusinessGroupName = function($obj,args){
 		$.ajax({
 			url:KingServices.build_url('account/innerTransferOutFinancial','listFinancialInnerTransferOutQuery'),
-			data:nameData,
+			data:{
+				startDate :args.startDate,
+				endDate:args.endDate
+			},
 			type:'POST',
 			showLoading:false,
 			success:function(data){
@@ -717,23 +718,26 @@ define(function(require,exports) {
 						businessGroupList[i].value = businessGroupList[i].name;
 					}
 					InnerTransferOut.businessGroupList = businessGroupList.slice(allItem);
-					businessGroupList.unshift(allItem);
-					$nameObj.autocomplete({
-						minLength:0,
-						source : businessGroupList,
-						change:function(event,ui){
-							if(ui.item == null){
+					if($obj){
+						businessGroupList.unshift(allItem);
+						var $nameObj = $obj.find('input[name=toBusinessGroupName]');
+						$nameObj.autocomplete({
+							minLength:0,
+							source : businessGroupList,
+							change:function(event,ui){
+								if(ui.item == null){
+									var $div = $(this).closest('div');
+									$div.find('input[name=toBusinessGroupId]').val('');
+								}
+							},
+							select:function(event,ui){
 								var $div = $(this).closest('div');
-								$div.find('input[name=toBusinessGroupId]').val('');
+								$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
 							}
-						},
-						select:function(event,ui){
-							var $div = $(this).closest('div');
-							$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-						}
-					}).on('click',function(){
-						$nameObj.autocomplete('search','');
-					});
+						}).on('click',function(){
+							$nameObj.autocomplete('search','');
+						});
+					}
 				}
 			}
 		});
@@ -787,27 +791,27 @@ define(function(require,exports) {
 	InnerTransferOut.initPay = function(options){
 		var args = {
 			pageNo:0,
-			toBusinessGroupId:options.id,
-			toBusinessGroupName:options.name,
-			lineProductId:"",
-			lineProductName:"",
-			operateUserId:"",
 			startDate:options.startDate,
 			endDate:options.endDate,
 			accountStatus:options.accountStatus,
-			showBtnFlag:true
 		};
+		InnerTransferOut.getToBusinessGroupName(false,args);
+
+		args.toBusinessGroupId = options.id;
+		args.toBusinessGroupName = options.name;
+		args.showBtnFlag = true;
         InnerTransferOut.settlement(args,0); 
     };
 
     InnerTransferOut.getGroupList = function($tab,type){
-    	var $obj = $tab.find('input[name=toBusinessGroupName]');
+    	var $obj = $tab.find('input[name=toBusinessGroupName]'),
+    		name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : InnerTransferOut.businessGroupList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                	$obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -822,6 +826,7 @@ define(function(require,exports) {
                 if(type == 1){
                 	InnerTransferOut.chenking(args);
                 } else {
+                	args.showBtnFlag = $tab.find('.T-btn-autofill').length ? false : true;
                 	InnerTransferOut.settlement(args);
                 }
             }

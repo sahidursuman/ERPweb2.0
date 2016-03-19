@@ -6,7 +6,8 @@ define(function(require, exports) {
 	    transferClearing = require("./view/transferClearing"),
 	    payedDetailTempLate = require("./view/viewPayedDetail"),
         needPayDetailTempLate = require("./view/viewNeedPayDetail"),
-        viewGroupTemplate = require("./view/viewTouristGroup");
+        viewGroupTemplate = require("./view/viewTouristGroup"),
+        addFeeTemplate = require("./view/addFee");
 
     var Transfer = {
     	searchData : false,
@@ -172,7 +173,7 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(args,$tab);                      
+                        Transfer.initCheck(args,$tab);
                     } else {
                         Transfer.$checkTab.data("next",args);
                     }
@@ -217,8 +218,12 @@ define(function(require, exports) {
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            Transfer.transferCheck({pageNo : 0},$tab);
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
         });
+
+        //费用调整
+        Transfer.addFee(args,$tab);
 
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
@@ -820,6 +825,97 @@ define(function(require, exports) {
         return JSON.stringify(saveJson);
     };
 
+    Transfer.addFee = function(args, $tab) {
+        $tab.find('.T-addFee').on('click', function() {
+            var $this = $(this), id = $this.attr('data-id');
+            var addFeeLayer = layer.open({
+                type: 1,
+                title:'费用调整',
+                skin: 'layui-layer-rim', //加上边框
+                area: ['1000px', '450px'], //宽高
+                zIndex:1028,
+                content: addFeeTemplate(),
+                success: function() {
+                    var $content = $('.T-transfer-addFee');
+
+                    var rule = $content.formValidate([
+                        {   //明细数量
+                            $ele: $content.find('input[name=count]'),
+                            rules: [
+                                {
+                                    type: 'nonnegative-float',
+                                    errMsg: '请输入非负数'
+                                }
+                            ]
+                        },
+                        {   //明细价格
+                            $ele: $content.find('input[name=price]'),
+                            rules: [
+                                {
+                                    type: 'float',
+                                    errMsg:'请输入数字金额'
+                                }
+                            ]
+                        }
+                    ]);
+                    function getValue($obj, name) {
+                        return $obj.find('[name='+name+']').val();
+                    }
+
+                    $content.find('.T-addCostTbody, .T-addTransferCostTbody').on('change', '.T-calc', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $parent.find('.T-payMoney').val(count * price);
+                    })
+                    $content.find('.T-addCostTbody').on('change', '[name=type],[name=count],[name=price]', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var type = getValue($parent, 'type') || 0,
+                            count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $content.find('.T-addTransferCostTbody').find('[name=type]').val(type);
+                        $content.find('.T-addTransferCostTbody').find('[name=count]').val(count).trigger('change');
+                        $content.find('.T-addTransferCostTbody').find('[name=price]').val(price).trigger('change');
+                    })
+                    $content.find('.T-add-Fee-submit').off('click').on('click', function() {
+                        if (!rule.form()) {
+                            return;
+                        }
+                        var feeJson = {
+                            type: getValue( $content.find('.T-addCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addCostTbody'), 'remark')
+                        },transferJson = {
+                            type: getValue($content.find('.T-addTransferCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addTransferCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addTransferCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addTransferCostTbody'), 'remark')
+                        }
+                        feeJson = JSON.stringify(feeJson);
+                        transferJson = JSON.stringify(transferJson);
+
+                        $.ajax({
+                            url: KingServices.build_url('account/financialTransfer','addFee'),
+                            type: 'POST',
+                            data: {
+                                id: id, 
+                                touristGroupFeeJson: feeJson,
+                                touristGroupTransferFeeJson: transferJson
+                            },
+                        })
+                        .done(function(data) {
+                            if (showDialog(data)) {
+                                layer.close(addFeeLayer);
+                                Transfer.transferCheck(args);
+                            }
+                        });
+                    })
+                }
+            });
+        })
+    };
+
     Transfer.initPay = function(options){
         var args = {
             pageNo : 0,
@@ -827,20 +923,38 @@ define(function(require, exports) {
             partnerAgencyName : options.name,
             startDate : options.startDate,
             endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         }
-        Transfer.transferClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args)},
+            success:function(data){
+                if(showDialog(data)){
+                    var partnerList = data.partnerAgencyNameList;
+                    if(partnerList != null && partnerList.length > 0){
+                        for(var i=0;i < partnerList.length;i++){
+                            partnerList[i].id = partnerList[i].partnerAgencyId;
+                            partnerList[i].value = partnerList[i].partnerAgencyName;
+                        }
+                    }
+                    Transfer.partnerList = partnerList;
+                    args.isAutoPay = 2;
+                    Transfer.transferClear(args);
+                }
+            }
+        });
     };
 
     Transfer.getPartnerList = function($tab,type){
-        var $obj = $tab.find('input[name=partnerAgencyName]');
+        var $obj = $tab.find('input[name=partnerAgencyName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Transfer.partnerList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -853,7 +967,7 @@ define(function(require, exports) {
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     Transfer.transferClear(args);
                 } else {
                     Transfer.transferCheck(args);

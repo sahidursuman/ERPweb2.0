@@ -149,6 +149,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-balance')) {
                 // 结算
                 Client.ClientClear(0, options);
+            } else if ($that.hasClass('T-view')) {
+                //查看
+                Client.ClientCheck(0, options, '', true)// 4参数为是否查看
             }
         });
     };
@@ -171,7 +174,7 @@ define(function(require, exports) {
         
     };
 
-    Client.ClientCheck = function(pageNo, args, $tab){
+    Client.ClientCheck = function(pageNo, args, $tab, isView){
         if(!!$tab){
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
@@ -209,8 +212,17 @@ define(function(require, exports) {
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
                 data.customerAccountList = resultList; 
-                
-                if (Tools.addTab(ClientCheckTab, "客户对账", ClientCheckingTemplate(data))) {
+                var title = '客户对账';
+                if (isView) {
+                    data.view = 1;
+                    ClientCheckTab = ClientCheckTab + '-view';
+                    title = '查看客户对账';
+                }else {
+                    data.view = '';
+                    ClientCheckTab = 'financial_Client_checking';
+                }
+                console.log(data)
+                if (Tools.addTab(ClientCheckTab, title, ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ ClientCheckTab + '-content');
 
                     Client.initCheck($tab,args);
@@ -431,6 +443,7 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     Client.initIncome = function(options) {
+        Client.getTravelAgencyList();
         Client.ClientClear(0, {
             pageNo:0,
             fromPartnerAgencyId: options.id,
@@ -938,10 +951,12 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Client.getTravelAgencyList = function($obj){
-        var val = Client.$tab.find('.T-search-head-office').val();
-        if (val === '全部') {
-            val = '';
+        var val = "";
+        if(!!Client.$tab){
+            val = Client.$tab.find('.T-search-head-office').val();
+             if (val === '全部') { val = ''; }
         }
+       
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'selectPartnerAgency'),
             type : 'POST',
@@ -954,21 +969,23 @@ define(function(require, exports) {
             }
             var all = {id:'', value: '全部'};
             Client.partnerAgencyList = data.fromPartnerAgencyList.slice(all);
-            data.fromPartnerAgencyList.unshift(all);
-            $obj.autocomplete({
-                minLength: 0,
-                source : data.fromPartnerAgencyList,
-                change: function(event, ui) {
-                    if (!ui.item)  {
-                        $(this).data('id', '');
+            if(!!$obj){
+                data.fromPartnerAgencyList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.fromPartnerAgencyList,
+                    change: function(event, ui) {
+                        if (!ui.item)  {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                },
-                select: function(event, ui) {
-                    $(this).blur().data('id', ui.item.id);
-                }
-            }).on("click",function(){
-                $obj.autocomplete('search', '');
-            });
+                }).on("click",function(){
+                    $obj.autocomplete('search', '');
+                });
+            }
         });       
     };
 
@@ -1117,13 +1134,14 @@ define(function(require, exports) {
     }
 
     Client.getAgencyList = function($tab,type){
-        var $obj = $tab.find('.T-partnerAgencyName');
+        var $obj = $tab.find('.T-partnerAgencyName'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Client.partnerAgencyList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {

@@ -630,13 +630,18 @@ define(function(require, exports) {
             list.shift(all);
         }        
 
+        var name = $obj.val();
         //保险
         $obj.autocomplete({
             minLength: 0,
             source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $obj.nextAll('input[name="insuranceId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="insuranceId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {
