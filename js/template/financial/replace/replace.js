@@ -151,21 +151,23 @@ define(function(require, exports) {
 	            }
 	            var all = {id:'', value: '全部'};
 	            Replace.customerList = data.partnerAgencyList.slice(all);
-	            data.partnerAgencyList.unshift(all);
-	            $obj.autocomplete({
-					minLength: 0,
-					source : data.partnerAgencyList,
-				    change: function(event, ui) {
-				        if (!ui.item)  {
-				            $(this).data('id', '');
-				        }
-				    },
-				    select: function(event, ui) {
-				        $(this).blur().data('id', ui.item.id);
-				    }
-				}).on('click', function(){
-				    $obj.autocomplete('search', '');
-				});
+	            if(!!$obj){
+	            	data.partnerAgencyList.unshift(all);
+		            $obj.autocomplete({
+						minLength: 0,
+						source : data.partnerAgencyList,
+					    change: function(event, ui) {
+					        if (!ui.item)  {
+					            $(this).data('id', '');
+					        }
+					    },
+					    select: function(event, ui) {
+					        $(this).blur().data('id', ui.item.id);
+					    }
+					}).on('click', function(){
+					    $obj.autocomplete('search', '');
+					});
+	            }
         	}
 		});
 	};
@@ -708,6 +710,7 @@ define(function(require, exports) {
 		Replace.isBalanceSource = true;
 		args.pageNo = 0;
 		args.partnerAgencyId = args.id;
+		Replace.chooseCustomer();
 		Replace.balanceList(args);
 	};
 
@@ -830,13 +833,14 @@ define(function(require, exports) {
 	};
 
 	Replace.getCustomerList = function($tab,isCheck){
-		var $obj = $tab.find('input[name=partnerAgencyName]');
+		var $obj = $tab.find('input[name=partnerAgencyName]'),
+			name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Replace.customerList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {

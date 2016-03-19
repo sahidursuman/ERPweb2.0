@@ -1122,13 +1122,14 @@ define(function(require, exports) {
     }
 
     Client.getAgencyList = function($tab,type){
-        var $obj = $tab.find('.T-partnerAgencyName');
+        var $obj = $tab.find('.T-partnerAgencyName'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Client.partnerAgencyList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {

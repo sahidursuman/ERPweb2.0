@@ -289,7 +289,7 @@ define(function(require, exports) {
         // 绑定搜索
         var $searchArea = $tab.find('.T-search-area');
 
-        FinGuide.getPartnerAgencyList($tab,type);
+        FinGuide.getGuideList($tab,type);
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
@@ -1066,14 +1066,15 @@ define(function(require, exports) {
         });
     };
 
-    FinGuide.getPartnerAgencyList = function($tab,type){
-        var $obj = $tab.find('.T-guideName');
+    FinGuide.getGuideList = function($tab,type){
+        var $obj = $tab.find('.T-guideName'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : FinGuide.guideList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -1085,6 +1086,7 @@ define(function(require, exports) {
                     endDate : $tab.find('.T-search-end-date').val(),
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
+                args.isOuter = FinGuide.isOuter = true;
                 FinGuide.initOperationModule(args,type);
             }
         }).on("click",function(){

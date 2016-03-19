@@ -637,13 +637,14 @@ define(function(require, exports) {
     };
 
     hotel.getHotelList = function($tab,type){
-        var $obj = $tab.find('input[name=hotelName]');
+        var $obj = $tab.find('input[name=hotelName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : hotel.hotelList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -656,7 +657,7 @@ define(function(require, exports) {
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     hotel.hotelClear(args);
                 } else {
                     hotel.hotelCheck(args);

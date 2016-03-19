@@ -666,13 +666,14 @@ define(function(require, exports) {
     };
 
     busCompany.getBusCompanyList = function($tab,type){
-        var $obj = $tab.find('input[name=busCompanyName]');
+        var $obj = $tab.find('input[name=busCompanyName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : busCompany.busCompanyList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -686,7 +687,7 @@ define(function(require, exports) {
                     sortType : "accountTime"
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     busCompany.busCompanyClear(args);
                 } else {
                     busCompany.busCompanyCheck(args);

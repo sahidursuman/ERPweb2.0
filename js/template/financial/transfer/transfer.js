@@ -827,20 +827,38 @@ define(function(require, exports) {
             partnerAgencyName : options.name,
             startDate : options.startDate,
             endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         }
-        Transfer.transferClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args)},
+            success:function(data){
+                if(showDialog(data)){
+                    var partnerList = data.partnerAgencyNameList;
+                    if(partnerList != null && partnerList.length > 0){
+                        for(var i=0;i < partnerList.length;i++){
+                            partnerList[i].id = partnerList[i].partnerAgencyId;
+                            partnerList[i].value = partnerList[i].partnerAgencyName;
+                        }
+                    }
+                    Transfer.partnerList = partnerList;
+                    args.isAutoPay = 2;
+                    Transfer.transferClear(args);
+                }
+            }
+        });
     };
 
     Transfer.getPartnerList = function($tab,type){
-        var $obj = $tab.find('input[name=partnerAgencyName]');
+        var $obj = $tab.find('input[name=partnerAgencyName]'),
+            name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
             source : Transfer.partnerList,
             change: function(event,ui) {
                 if (!ui.item)  {
-                    $obj.data("id","");
+                    $obj.val(name);
                 }
             },
             select: function(event,ui) {
@@ -853,7 +871,7 @@ define(function(require, exports) {
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
-                    args.isAutoPay = 0;
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
                     Transfer.transferClear(args);
                 } else {
                     Transfer.transferCheck(args);
