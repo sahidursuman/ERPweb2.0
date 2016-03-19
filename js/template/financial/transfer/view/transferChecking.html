@@ -84,14 +84,14 @@
                         <span class="F-float F-money">{{tf.price}}</span> x
                         <span class="F-float F-count">{{tf.count}}</span> =
                         <span class="F-float F-money">{{tf.price * tf.count}}</span>
-                        <br> {{/each}} {{else if rs.otherFeeList.length > 0}}
+                        <br> {{/each}} {{if rs.otherFeeList.length == 0}}<a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{/if}}{{else if rs.otherFeeList.length > 0}}
                         <!-- 若无中转结算价 -->
                         {{each rs.otherFeeList as of index}} {{of.describe}}：
                         <span class="F-float F-money">{{of.price}}</span>x
                         <span class="F-float F-count">{{of.count}}</span>=
                         <span class="F-float F-money">{{of.price * of.count}}</span>
-                        <br> {{/each}} {{else}}
-                        <!-- 若无费用明细 -->- {{/if}}
+                        <br> {{/each}} <a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{else}}
+                        <!-- 若无费用明细 -->- <br><a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{/if}}
                     </td>
                     <td rowspan="{{rs.rowLen}}"><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                     {{if rs.outFeeList.length > 0}}
@@ -129,7 +129,7 @@
                         <span class="F-float F-money">{{of.price}}</span> x
                         <span class="F-float F-count">{{of.count}}</span> =
                         <span class="F-float F-money">{{of.price * of.count}}</span>
-                        <br> {{/each}}
+                        <br> {{/each}}<a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>
                     </td>
                     <td>
                         <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.punishMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>
