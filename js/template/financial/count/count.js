@@ -24,6 +24,7 @@ define(function(require, exports){
 		ticketArrangeTemplate = require('./view/ticketArrange'),
 		otherOutTemplate = require('./view/otherOutArrange'),
 		guideTamplate = require('./view/guideAccount'),
+		addFeeTemplate = require('./view/addFee'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -384,7 +385,8 @@ define(function(require, exports){
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
 	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
-	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList)
+	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList),
+	                    "id": $id
 	                };
 	                var html = Reimbursement(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
@@ -658,7 +660,8 @@ define(function(require, exports){
 							"financialTripPlanId":data.financialTripPlanId,
 							"insurancePrice":data.insurancePrice,
 							"arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
-							"remarkArrangeList": JSON.parse(data.remarkArrangeList)
+							"remarkArrangeList": JSON.parse(data.remarkArrangeList),
+							"id": $id
                         };
 					if(isAuth("1190002")){
                         tmp.isOp = true;
@@ -668,7 +671,6 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
-					console.log()
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
@@ -984,6 +986,7 @@ define(function(require, exports){
 		}else {
 			Count.updateEvent($obj);
 		};
+		Count.addFee($obj, data.id)
 	};
 	//查看操作记录事件
 	Count.viewTripLog = function(id){
@@ -4440,6 +4443,85 @@ define(function(require, exports){
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
 	};
+	//单团审核 和 单团报账 添加明细
+	Count.addFee = function($tab, dataId) {
+		$tab.find('.T-addFee').on('click', function() {
+			var $this = $(this), $parent = $(this).closest('tr'), id = $parent.attr('id'), status = $this.attr('data-status');
+			var addFeeLayer = layer.open({
+			    type: 1,
+			    title:'新增明细',
+			    skin: 'layui-layer-rim', //加上边框
+			    area: ['1000px', '250px'], //宽高
+			    zIndex:1028,
+			    content: addFeeTemplate(),
+			    success: function() {
+			    	var $content = $('.T-count-addFee');
+
+			    	var rule = $content.formValidate([
+		                {   //明细数量
+		                    $ele: $content.find('input[name=count]'),
+		                    rules: [
+		                        {
+		                            type: 'nonnegative-float',
+		                            errMsg: '请输入非负数'
+		                        }
+		                    ]
+		                },
+		                {	//明细价格
+		                	$ele: $content.find('input[name=price]'),
+		                	rules: [
+		                		{
+		                			type: 'float',
+		                			errMsg:'请输入数字金额'
+		                		}
+		                	]
+		                }
+		            ]);
+		            function getValue($obj, name) {
+		            	return $obj.find('[name='+name+']').val();
+		            }
+
+		            $content.find('.T-addCostTbody').on('change', '.T-calc', function() {
+		            	var $this = $(this), $parent = $this.closest('tr');
+		            	var count = getValue($parent, 'count') || 0,
+		            		price = getValue($parent, 'price') || 0;
+		            	$parent.find('.T-payMoney').val(count * price);
+		            })
+		            $content.find('.T-add-Fee-submit').off('click').on('click', function() {
+		            	if (!rule.form()) {
+			                return;
+			            }
+			            var json = {
+			            	type: getValue($content, 'type'),
+			            	count: getValue($content, 'count'),
+			            	price: getValue($content, 'price'),
+			            	remark: getValue($content, 'remark')
+			            }
+			            json = JSON.stringify(json);
+
+		            	$.ajax({
+		            		url: KingServices.build_url('financialTripPlan','addTouristGroupFee'),
+		            		type: 'POST',
+		            		data: {
+		            			touristGroupId: id, 
+		            			touristGroupFeeJson: json
+		            		},
+		            	})
+		            	.done(function(data) {
+		            		if (showDialog(data)) {
+		            			layer.close(addFeeLayer);
+		            			if (status == 0) {
+			            			Count.Reimbursement(dataId);
+			            		}else if (status == 1) {
+		            				Count.updateExamine(dataId);
+		            			}
+		            		}
+		            	});
+		            })
+			    }
+			});
+		})
+	}
 	//报账备注处理
 	Count.handleRemark = function(data){
 		var remarkList = {
