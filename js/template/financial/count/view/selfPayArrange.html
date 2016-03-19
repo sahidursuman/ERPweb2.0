@@ -48,11 +48,22 @@
         {{each day.selfPayArrange as arrangeList}}
         {{each arrangeList.selfPayArrangeList as arrange index}}
         {{if arrange != null}}
-        <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = {{arrange.whichDay}}>
+        <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = {{arrange.whichDay}} {{if index == 0}}rowspan="{{arrangeList.selfPayArrangeList.length}}"{{/if}}>
                 {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
-                {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.selfPay.name}}</td>{{/if}}
-                <td>{{if arrange.selfPayItem != null}}{{if arrange.selfPayItem != null}}{{arrange.selfPayItem.name}}{{/if}}
-                    {{else}}<input name="selfPayItemName" value="" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}><input name="selfPayItemId" type="hidden">{{/if}}</td>
+                {{if index == 0 }}
+                    <td rowspan="{{arrangeList.selfPayArrangeList.length}}">
+                        <span class="selfPayName">{{arrange.selfPay.name}}</span>
+                    </td>
+                {{/if}}
+                <td>
+                {{if arrange.selfPayItem != null}}
+                    {{if arrange.selfPayItem != null}}
+                        {{arrange.selfPayItem.name}}
+                    {{/if}}
+                {{else}}
+                <input name="selfPayItemName" value="" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}><input name="selfPayItemId" type="hidden">
+                {{/if}}
+                </td>
                 <td>
                 
                 <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50"/></td>
@@ -133,19 +144,58 @@
                 <td>{{if arrange.badStatus == 1}}<span>{{arrange.travelAgencyRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="travelAgencyRate" value="{{arrange.travelAgencyRate*100 | parseInt}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />{{/if}}
                     </td>
                 
-                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.travelAgencyRebateMoney}}</span>{{else}}<span class="travelAgencyRebateMoney F-float F-money">{{arrange.travelAgencyRebateMoney}}</span>{{/if}}
-                    <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="F-float F-money">
+                            {{arrange.travelAgencyRebateMoney}}
+                        </span>
+                    {{else}}
+                        <span class="travelAgencyRebateMoney F-float F-money">
+                            {{arrange.travelAgencyRebateMoney}}
+                        </span>
+                    {{/if}}
+                    <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                </td>
                 
                 <td>{{if arrange.badStatus == 1}}<span>{{arrange.guideRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" maxlength="5"
                 {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                 </td>
                 
-                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.guideRebateMoney}}</span>{{else}} <span class="guideRebateMoney F-float F-money">{{arrange.guideRebateMoney}}</span>{{/if}}
-                    <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="F-float F-money">
+                            {{arrange.guideRebateMoney}}
+                        </span>
+                    {{else}} 
+                        <span class="guideRebateMoney F-float F-money">
+                            {{arrange.guideRebateMoney}}
+                        </span>
+                    {{/if}}
+                    <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                </td>
                 
-                <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}&nbsp;&nbsp;{{if arrange.selfPayItem == null}}<a href="javascript:void(0)" class="T-selfArrDel">删除</a>{{/if}}</td>
+                <td>
+                    {{if editStatus == 1}}
+                        <input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    {{else}}
+                        {{arrange.billRemark}}
+                    {{/if}}
+                    
+                </td>
                 
-                <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>                             
+                <td>
+                    {{if arrange.isConfirmAccount == 0}}
+                        未对账
+                    {{else}}
+                        已对账
+                    {{/if}}
+                    &nbsp;&nbsp;
+                    {{if arrange.payedMoney == 0}}
+                        <a href="javascript:void(0)" class="T-selfArrDel">删除</a>
+                    {{else}}
+                        <span style="color:#bbb;">删除</span>
+                    {{/if}}
+                </td>                             
         </tr>
         {{/if}}
         {{/each}}
