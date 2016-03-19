@@ -191,7 +191,7 @@
                         <input type="checkbox" class="ace T-checkbox"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
-                    <label class="cursor"<a> |</a></label>{{/if}}
+                    <label class="cursor R-right"{{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}><a> |</a></label>{{/if}}
                     <a class="cursor T-action T-view">查看</a>
                 </td>
             </tr>
