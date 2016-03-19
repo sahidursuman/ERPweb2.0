@@ -815,9 +815,9 @@ define(function(require,exports) {
                     pageNo : 0,
                     toBusinessGroupId : ui.item.id,
 					toBusinessGroupName : ui.item.value,
-					startDate : $tab.find('input[name=startDate]'),
-					endDate : $tab.find('input[name=endDate]'),
-					accountStatus : $tab.find('input[name=accountStatus]')
+					startDate : $tab.find('input[name=startDate]').val(),
+					endDate : $tab.find('input[name=endDate]').val(),
+					accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type == 1){
                 	InnerTransferOut.chenking(args);
