@@ -62,6 +62,10 @@ define(function(require, exports) {
 	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber')
 	   		}
 		};
+		if(searchData.startTime > searchData.endTime){
+	        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+	        return false;
+	    }
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
 	   	//购物统计列表请求Ajax
@@ -72,6 +76,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
+					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//绑定页面事件
@@ -100,7 +105,7 @@ define(function(require, exports) {
 	 */
 	shopStat.initEvent = function(){
 
-		//搜索事件
+		//搜索事件 T-shopStat-outToexcel
 		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
@@ -111,6 +116,8 @@ define(function(require, exports) {
 			$obj.print({
 				globalStyles:true
 			});
+		}).on('click','.T-shopStat-outToexcel',function(){
+			//导出事件
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');

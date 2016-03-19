@@ -196,6 +196,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "check");
         FinancialService.updateUnpayMoney($tab, ruleCheck);
+        busCompany.getBusCompanyList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
@@ -325,6 +326,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "clear");
         FinancialService.initPayEvent($tab);
+        busCompany.getBusCompanyList($tab,true);
         //搜索事件
        $tab.find(".T-search").click(function() {
             if (args.isAutoPay == 1) {
@@ -607,6 +609,7 @@ define(function(require, exports) {
             id: "",
             value: "全部"
         };
+        busCompany.busCompanyList = busCompanyList.slice(all);
         busCompanyList.unshift(all);
 
         //车队
@@ -660,6 +663,38 @@ define(function(require, exports) {
             }
         }
         return dataList;
+    };
+
+    busCompany.getBusCompanyList = function($tab,type){
+        var $obj = $tab.find('input[name=busCompanyName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : busCompany.busCompanyList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    busCompanyId : ui.item.id,
+                    busCompanyName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = 0;
+                    busCompany.busCompanyClear(args);
+                } else {
+                    busCompany.busCompanyCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     busCompany.initPay = function(options) {

@@ -142,34 +142,34 @@ define(function(require, exports) {
     };
 
     FinShop.getShopName = function($obj) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
+        $.ajax({
+            url: KingServices.build_url('financial/shopAccount', 'selectShopName'),
+            type: "POST",
+            showLoading: false
+        }).done(function(data) {
+            if (showDialog(data)) {
+                for (var i = 0; i < data.shopList.length; i++) {
+                    data.shopList[i].value = data.shopList[i].shopName;
+                    data.shopList[i].id = data.shopList[i].shopId;
                 }
-            },
-            select: function(event, ui) {
-                $(this).blur().data('id', ui.item.id);
-            }
-        }).on('click', function() {
-            $.ajax({
-                url: KingServices.build_url('financial/shopAccount', 'selectShopName'),
-                type: "POST",
-                showLoading: false
-            }).done(function(data) {
-                if (showDialog(data)) {
-                    for (var i = 0; i < data.shopList.length; i++) {
-                        data.shopList[i].value = data.shopList[i].shopName;
-                        data.shopList[i].id = data.shopList[i].shopId;
+                var all = { id: '', value: '全部' };
+                FinShop.shopList = data.shopList.slice(all);
+                data.shopList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.shopList,
+                    change: function(event, ui) {
+                        if (!ui.item) {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                    data.shopList.unshift({ id: '', value: '全部' });
-                    $obj.autocomplete('option', 'source', data.shopList);
-                    $obj.autocomplete('search', '');
-
-                    //$obj.data('ajax', true);
-                }
-            });
+                }).on('click', function() {
+                    $obj.autocomplete('search','');
+                });
+            }
         });
     };
 
@@ -287,6 +287,7 @@ define(function(require, exports) {
      */
     FinShop.initOperationEvent = function($tab,args,type) {
         var validator = (new FinRule(!type ? 0 : (FinShop.isBalanceSource ? 3 : 1))).check($tab);
+        FinShop.getShopList($tab,type);
 
         //搜索顶部的事件绑定
         var $searchArea = $tab.find('.T-search-area');
@@ -638,6 +639,8 @@ define(function(require, exports) {
     }
 
     FinShop.saveSettlement = function($tab,args,tabArgs) {
+        var check = new FinRule(5).check($tab);
+        if (!check.form()) { return false;}
         var argLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
@@ -676,6 +679,32 @@ define(function(require, exports) {
         } else {
             showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
         }
+    };
+
+    FinShop.getShopList = function($tab,type){
+        var $obj = $tab.find('input[name=shopName]');
+        $obj.autocomplete({
+            minLength: 0,
+            source : FinShop.shopList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.data("id","");
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    shopId : ui.item.id,
+                    shopName : ui.item.value,
+                    startDate : $tab.find('.T-search-start-date').val(),
+                    endDate : $tab.find('.T-search-end-date').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                FinShop.initOperationList(args, type,false);
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     // 暴露方法

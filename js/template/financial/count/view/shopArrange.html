@@ -126,17 +126,27 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>&nbsp;&nbsp;<span style="color:#bbb;">删除</span>
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
                 </td></tr>
                 {{/if}}
             {{/each}}
             {{/if}}
         {{/if}}
+        <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
+            <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;">导佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+        </tr>
         {{/each}}  
         {{/each}}
         {{/if}}
         {{/each}}
+        
         </tbody>
     </table>
 

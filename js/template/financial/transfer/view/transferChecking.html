@@ -3,7 +3,8 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area T-search-area">
                 <div class="form-group">
-                    <label class="control-label pull-left "> 同行地接：{{partnerAgencyName}}</label>
+                    <label class="control-label pull-left "> 同行地接：</label>
+                    <input type="text" class="mar-r-10" name="partnerAgencyName" value="{{partnerAgencyName}}" />
                     <input value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" type="hidden">
                     <label>账期：</label>
                     <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
