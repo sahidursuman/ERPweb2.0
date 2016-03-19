@@ -700,14 +700,31 @@ define(function(require, exports) {
     busCompany.initPay = function(options) {
         var args = {
             pageNo : 0,
-            busCompanyId : options.id,
-            busCompanyName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
             accountStatus : options.accountStatus,
-            isAutoPay : 2
         }
-        busCompany.busCompanyClear(args);
+        $.ajax({
+            url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
+            type: "POST",
+            data: { searchParam: JSON.stringify(args) },
+            success: function(data) {
+                if (showDialog(data)) {
+                    busCompanyList = data.busCompanyNameList;
+                    if (busCompanyList != null && busCompanyList.length > 0) {
+                        for (var i = 0; i < busCompanyList.length; i++) {
+                            busCompanyList[i].id = busCompanyList[i].busCompanyId;
+                            busCompanyList[i].value = busCompanyList[i].busCompanyName;
+                        }
+                    }
+                    busCompany.busCompanyList = busCompanyList;
+                    args.busCompanyId = options.id;
+                    args.busCompanyName = options.name;
+                    args.isAutoPay = 2;
+                    busCompany.busCompanyClear(args);
+                }
+            }
+        });
     };
 
     exports.init = busCompany.initModule;

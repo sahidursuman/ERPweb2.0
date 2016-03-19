@@ -182,21 +182,23 @@ define(function(require, exports) {
                 value: '全部'
             };
             FinGuide.guideList = data.guideList.slice(all);
-            data.guideList.unshift(all);
-            $obj.autocomplete({
-                minLength: 0,
-                source : data.guideList,
-                change: function(event, ui) {
-                    if (!ui.item) {
-                        $(this).data('id', '');
+            if($obj){
+                data.guideList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.guideList,
+                    change: function(event, ui) {
+                        if (!ui.item) {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                },
-                select: function(event, ui) {
-                    $(this).blur().data('id', ui.item.id);
-                }
-            }).on("click", function() {
-                $obj.autocomplete('search', '');
-            });
+                }).on("click", function() {
+                    $obj.autocomplete('search', '');
+                });
+            }
         });
     };
 
@@ -1094,7 +1096,7 @@ define(function(require, exports) {
         options.guideId = options.id;
         delete(options.id);
         options.isOuter = FinGuide.isOuter = true;
-
+        FinGuide.getGuideNameList(false,[options.startDate,options.endDate]);
         FinGuide.initOperationModule(options, 1)
     };
 
