@@ -377,7 +377,7 @@ define(function(require,exports) {
 	        	var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
 		        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
 		    var sumMoney = $tab.find('input[name=sumPayMoney]').data("money");
-		    if(sumPayMoney != sumMoney){
+		    if(!Tools.Math.isFloatEqual(sumPayMoney,sumMoney)){
 		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 		        return false;
 		    }
