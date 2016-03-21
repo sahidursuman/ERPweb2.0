@@ -211,7 +211,8 @@ define(function(require, exports) {
                 busCompanyId: args.busCompanyId,
                 accountInfo: $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find("input[name=startDate]").val(),
-                endTime: $tab.find("input[name=endDate]").val()
+                endTime: $tab.find("input[name=endDate]").val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });
@@ -393,11 +394,8 @@ define(function(require, exports) {
                         if (argumentsLen == 1) {
                             Tools.closeTab(menuKey + "-checking");
                             busCompany.listBusCompany(busCompany.listPage);
-                        } else if (argumentsLen == 2) {
+                        } else {
                             busCompany.busCompanyCheck(args,$tab);
-                        } else if (argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            busCompany.initCheck(args,$tab);
                         }
                     });
                 }
@@ -438,12 +436,10 @@ define(function(require, exports) {
                         if (argumentsLen === 1) {
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.listPage);
-                        } else if (argumentsLen === 2) {
+                        } else {
                             if (args.isAutoPay == 1) {
                                 args.isAutoPay = 0;
                             }
-                            busCompany.busCompanyClear(args,$tab);
-                        } else if (argumentsLen === 3){
                             busCompany.busCompanyClear(args,$tab);
                         }
                     });
@@ -550,7 +546,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 if (option == "check") {
-                    busCompany.initCheck(args,$tab);
+                    busCompany.busCompanyCheck($tab.data('next'),$tab);
                 } else if (option == "clear") {
                     busCompany.clearTempData = false;
                     busCompany.clearTempSumDate = false;
@@ -561,7 +557,7 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if (option == "check") {
-                    busCompany.saveChecking($tab,args,[tab_id, title, html]);
+                    busCompany.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if (option == "clear") {
                     busCompany.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }

@@ -256,13 +256,13 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initCheck($tab,Client.$checkTab.data("next"));
+            Client.ClientCheck(Client.$checkTab.data("next").pageNo,Client.$checkTab.data("next"));
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             if (!validator.form()) { return; }
-            Client.saveCheckingData($tab,args,[tab_id, title, html])
+            Client.saveCheckingData($tab,Client.$checkTab.data("next"),[tab_id, title, html])
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -297,7 +297,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $btn = $tab.find('.T-saveClear'),
                 $datePicker = Client.$checkSearchArea.find('.date-picker'),
-                args = {
+                argsData = {
                     fromPartnerAgencyId: $tab.data("id"), 
                     startDate: $datePicker.eq(0).val(),
                     endDate: $datePicker.eq(1).val(),
@@ -305,11 +305,12 @@ define(function(require, exports) {
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
-                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val(),
+                    accountStatus : args.accountStatus
                 };
-            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-            args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
-            FinancialService.exportReport(args,"exportPartnerAgencyFinancial");
+            argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+            argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
+            FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
         });
 
         //给全选按钮绑定事件
@@ -541,13 +542,13 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
-            Client.initClear($tab,Client.$clearTab.data("next"));
+            Client.ClientClear(Client.$clearTab.data("next").pageNo,Client.$clearTab.data("next"));
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             if (autoValidator.form()) {
-                Client.saveClearData($tab,args,[tab_id, title, html]);
+                Client.saveClearData($tab,Client.$clearTab.data("next"),[tab_id, title, html]);
             }
         })
         // 保存后关闭
@@ -743,11 +744,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
                             Client.listClient(Client.listPage);
-                        } else if(argLen === 2){
-                            Client.ClientCheck(args.pageNo,false, $tab);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            Client.initCheck($tab,args);
+                        } else {
+                            Client.ClientCheck(args.pageNo,args);
                         }
                     });
                 }
@@ -796,11 +794,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
                             Client.listClient(Client.listPage);
-                        } else if(argLen === 2){
-                            Client.ClientClear(args.pageNo, false, $tab);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            Client.initClear($tab,args);
+                        } else {
+                            Client.ClientClear(args.pageNo, args);
                         }
                     });
                 }
