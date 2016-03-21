@@ -134,6 +134,8 @@ define(function(require, exports) {
     //对账
     scenic.scenicCheck = function(args,$tab){
         if (!!$tab) {
+            args.scenicName = $tab.find("input[name=scenicName]").val();
+            args.scenicId = $tab.find("input[name=scenicId]").val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -239,6 +241,8 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(args,$tab){
         if (!!$tab) {
+            args.scenicName = $tab.find("input[name=scenicName]").val();
+            args.scenicId = $tab.find("input[name=scenicId]").val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -577,6 +581,7 @@ define(function(require, exports) {
                 }
             });
 
+            scenic.getScenicList($tab.find("input[name=scenicName]"));
             //报表内的操作
             scenic.listOption($tab);
 
@@ -585,35 +590,87 @@ define(function(require, exports) {
         }
     };
 
-    scenic.getQueryList = function(){
-        var $scenic = scenic.$tab.find(".T-chooseScenic"),
-            scenicList = scenic.scenicList;
-        if(scenicList != null && scenicList.length > 0){
-            for(var i=0;i<scenicList.length;i++){
-                scenicList[i].id = scenicList[i].scenicId;
-                scenicList[i].value = scenicList[i].scenicName;
-            }
+    /**
+     * 绑定景区事件
+     * @param  {object} $obj 绑定对象
+     * @return {[type]}      [description]
+     */
+    scenic.getScenicList = function($obj) {
+        if (!!scenic.scenicList) {
+            scenic.getQueryList($obj);
+        } else {
+            $.ajax({
+               url:KingServices.build_url("financial/financialScenic","listSumFinancialScenic"),
+                type:"POST",
+                data:{ searchParam : JSON.stringify({
+                    scenicId: '-1'
+                }) },
+                showLoading: false,
+                success: function(data){
+                    if (showDialog(data)) {
+                        scenic.scenicList = data.scenicNameList;
+                        scenic.getQueryList($obj);
+                    }
+                }
+            });
         }
+    };
+
+    scenic.getQueryList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = scenic.$tab.find(".T-chooseScenic");
+        }
+
+        var list = scenic.scenicList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+
+        for(var i=0;i<list.length;i++){
+            list[i].id = list[i].scenicId;
+            list[i].value = list[i].scenicName;
+        }
+
         var all = {
             id : "",
             value : "全部"
-        };
-        scenicList.unshift(all);
-
-        //景区
-        $scenic.autocomplete({
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }        
+        var name = $obj.val();
+        //景区 
+        $obj.autocomplete({
             minLength: 0,
-            source : scenicList,
+            source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $(this).nextAll('input[name="scenicId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="scenicId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {
-                $(this).blur().nextAll('input[name="scenicId"]').val(ui.item.id);
+                $obj.blur().nextAll('input[name="scenicId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="accountInfo"]').val('');
+                    $tab.find('.T-insuranceId').val(ui.item.id);
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
         }).on("click",function(){
-            $scenic.autocomplete('search','');
+            $obj.autocomplete('search','');
         });      
     };
 

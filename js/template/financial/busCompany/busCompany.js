@@ -196,6 +196,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "check");
         FinancialService.updateUnpayMoney($tab, ruleCheck);
+        busCompany.getBusCompanyList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
@@ -325,6 +326,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "clear");
         FinancialService.initPayEvent($tab);
+        busCompany.getBusCompanyList($tab,true);
         //搜索事件
        $tab.find(".T-search").click(function() {
             if (args.isAutoPay == 1) {
@@ -607,6 +609,7 @@ define(function(require, exports) {
             id: "",
             value: "全部"
         };
+        busCompany.busCompanyList = busCompanyList.slice(all);
         busCompanyList.unshift(all);
 
         //车队
@@ -662,17 +665,67 @@ define(function(require, exports) {
         return dataList;
     };
 
+    busCompany.getBusCompanyList = function($tab,type){
+        var $obj = $tab.find('input[name=busCompanyName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : busCompany.busCompanyList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    busCompanyId : ui.item.id,
+                    busCompanyName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    busCompany.busCompanyClear(args);
+                } else {
+                    busCompany.busCompanyCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     busCompany.initPay = function(options) {
         var args = {
             pageNo : 0,
-            busCompanyId : options.id,
-            busCompanyName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
             accountStatus : options.accountStatus,
-            isAutoPay : 2
         }
-        busCompany.busCompanyClear(args);
+        $.ajax({
+            url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
+            type: "POST",
+            data: { searchParam: JSON.stringify(args) },
+            success: function(data) {
+                if (showDialog(data)) {
+                    busCompanyList = data.busCompanyNameList;
+                    if (busCompanyList != null && busCompanyList.length > 0) {
+                        for (var i = 0; i < busCompanyList.length; i++) {
+                            busCompanyList[i].id = busCompanyList[i].busCompanyId;
+                            busCompanyList[i].value = busCompanyList[i].busCompanyName;
+                        }
+                    }
+                    busCompany.busCompanyList = busCompanyList;
+                    args.busCompanyId = options.id;
+                    args.busCompanyName = options.name;
+                    args.isAutoPay = 2;
+                    busCompany.busCompanyClear(args);
+                }
+            }
+        });
     };
 
     exports.init = busCompany.initModule;

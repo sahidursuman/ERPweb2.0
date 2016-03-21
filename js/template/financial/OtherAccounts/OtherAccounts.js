@@ -190,6 +190,8 @@ define(function(require, exports) {
         var checkRule = new FinRule(0);
         FinancialService.updateUnpayMoney($tab, checkRule);
 
+        //绑定项目
+        OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
         // 表格内操作
         $tab.find('.T-checkListNum').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -264,15 +266,54 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     OtherAccounts.getTravelAgencyList = function($obj) {
-        $obj.autocomplete({
+        var isMainList = $obj.closest('#tab-financial_Other_accounts-content').length === 1,
+            name = $obj.val();
+        if (!!OtherAccounts.projList) {
+            if (OtherAccounts.projList.length) {
+                var isAll = OtherAccounts.projList[0].value == '全部';
+                if (isMainList && !isAll) {
+                    OtherAccounts.projList.unshift({
+                                value: '全部'
+                            });
+                } else if (!isMainList && isAll) {
+                    OtherAccounts.projList.shift({
+                                value: '全部'
+                            });
+                }
+                $obj.autocomplete({
+                    minLength: 0,
+                    change: function(event, ui) {
+                        if(!isMainList){
+                            $obj.val(name);
+                        } else {
+                            if (!ui.item) {
+                                $(this).data('id', '');
+                            }
+                        }
+                    },
+                    select: function(event, ui) {
+                        $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
+                    },
+                    source: OtherAccounts.projList,
+                }).off('click').on('click', function() {
+                    $obj.autocomplete('search', '');
+                })
+            }
+            return $obj;
+        }
+        return $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
+                if(!isMainList){
+                    $obj.val(name);
+                } else {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
                 }
             },
             select: function(event, ui) {
-                $(this).blur().data('id', ui.item.id);
+                $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
             }
         }).off("click").on("click", function() {
             var obj = $(this);
@@ -283,14 +324,17 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var $nameList = data.nameList
-                        for (var i = 0; i < $nameList.length; i++) {
-                            $nameList[i].value = $nameList[i].name;
+                        var projList = data.nameList
+                        for (var i = 0; i < projList.length; i++) {
+                            projList[i].value = projList[i].name;
                         };
-                        $nameList.unshift({
-                            value: '全部'
-                        });
-                        obj.autocomplete('option', 'source', $nameList);
+                        if (isMainList) {
+                            projList.unshift({
+                                value: '全部'
+                            });
+                        }
+                        OtherAccounts.projList = projList;
+                        obj.autocomplete('option', 'source', projList);
                         obj.autocomplete('search', '');
                     };
                 }
@@ -325,6 +369,7 @@ define(function(require, exports) {
     //付款
     OtherAccounts.AccountsPayment = function(args,$tab) {
         if (!!$tab) {
+            args.name = $tab.find("input[name=itemName]").val();
             args.startAccountTime = $tab.find(".T-startTime").val();
             args.endAccountTime = $tab.find(".T-endTime").val();
             args.info = $tab.find('.T-creatorUserChoose').val();
@@ -418,6 +463,9 @@ define(function(require, exports) {
         var autoValidator = new FinRule(2).check($tab.find('.T-count'));
         var settleValidator = OtherAccounts.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
         var payValidator = settleValidator.check($tab);
+        //绑定项目
+        OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
+
         if (OtherAccounts.saveJson.btnShowStatus) {
             $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
             OtherAccounts.setAutoFillEdit($tab, true);
@@ -473,7 +521,7 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find('.datepicker'), true);
         
         //付款搜索
-        $tab.find('.T-paymentSearch').click(function(event) {
+        $tab.find('.T-search').click(function(event) {
             args.pageNo = 0;
             OtherAccounts.AccountsPayment(args,$tab);
         });

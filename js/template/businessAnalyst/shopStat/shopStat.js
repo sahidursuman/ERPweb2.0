@@ -40,8 +40,11 @@ define(function(require, exports) {
 		//获取客户、团号和购物店列表
    		shopStat.autocompleteDate(shopStat.$tab);
    		//加载打印插件
-   		var pluginKey = 'plugin_print';
-		Tools.loadPluginScript(pluginKey);
+   		var printPluginKey = 'plugin_print';
+		Tools.loadPluginScript(printPluginKey);
+		//加载导出插件
+		var exportPluginKey = 'plugin_export';
+		Tools.loadPluginScript(exportPluginKey);
 		
 	}
 
@@ -76,6 +79,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
+					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
 		       		//绑定页面事件
@@ -104,7 +108,7 @@ define(function(require, exports) {
 	 */
 	shopStat.initEvent = function(){
 
-		//搜索事件
+		//搜索事件 T-shopStat-outToexcel
 		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
 			shopStat.listShopStat(0);
@@ -114,6 +118,13 @@ define(function(require, exports) {
 			//打印事件
 			$obj.print({
 				globalStyles:true
+			});
+		}).on('click','.T-shopStat-outToexcel',function(){
+			//导出事件
+			shopStat.$tab.find('.T-showHighLight').table2excel({
+				name:'购物统计表',
+				filename:'购物统计',
+				exclude_links:false
 			});
 		});
 		//列表事件

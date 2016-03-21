@@ -191,6 +191,7 @@ define(function(require, exports) {
         restaurant.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney($tab,ruleCheck);
+        restaurant.getRestaurantList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
@@ -316,6 +317,7 @@ define(function(require, exports) {
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        restaurant.getRestaurantList($tab,true);
 
         //搜索事件
         $tab.find(".T-search").off().click(function(){
@@ -597,6 +599,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        restaurant.restaurantList = restaurantList.slice(all);
         restaurantList.unshift(all);
 
         //餐厅
@@ -637,6 +640,39 @@ define(function(require, exports) {
         });
     };
 
+    restaurant.getRestaurantList = function($tab,type){
+        var $obj = $tab.find('input[name=restaurantName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : restaurant.restaurantList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    restaurantId : ui.item.id,
+                    restaurantName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    restaurant.restaurantClear(args);
+                } else {
+                    restaurant.restaurantCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     restaurant.initPay = function(options){
         var args = {
             pageNo : 0,
@@ -646,8 +682,28 @@ define(function(require, exports) {
             endDate : options.endDate,
             accountStatus : options.accountStatus,
             isAutoPay : 2
-        }
-        restaurant.restaurantClear(args); 
+        };
+         $.ajax({
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               layer.close(globalLoadingLayer);
+               var result = showDialog(data);
+                if(result){
+                    var restaurantList = data.restaurantNameList;
+                    if(restaurantList != null && restaurantList.length > 0){
+                        for(var i=0;i<restaurantList.length;i++){
+                            restaurantList[i].id = restaurantList[i].restaurantId;
+                            restaurantList[i].value = restaurantList[i].restaurantName;
+                        }
+                    }
+                    restaurant.restaurantList = restaurantList;
+                    args.isAutoPay = 2;
+                    restaurant.restaurantClear(args);
+                }
+            }
+        });
     };
 
     exports.init = restaurant.initModule;

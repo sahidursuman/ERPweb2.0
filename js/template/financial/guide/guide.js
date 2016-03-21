@@ -161,45 +161,43 @@ define(function(require, exports) {
     };
 
     FinGuide.getGuideNameList = function($obj, valArray) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
-                }
-            },
-            select: function(event, ui) {
-                $(this).blur().data('id', ui.item.id);
+        var args = {};
+
+        if (!!valArray && valArray.length === 2) {
+            args.startDate = valArray[0];
+            args.endDate = valArray[1];
+        }
+        $.ajax({
+            url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideQuery'),
+            type: "POST",
+            showLoading: false,
+            data: args
+        }).done(function(data) {
+            for (var i = 0; i < data.guideList.length; i++) {
+                data.guideList[i].value = data.guideList[i].realname;
+                data.guideList[i].id = data.guideList[i].guideId;
             }
-        }).on("click", function() {
-            if (!$obj.data('ajax')) { // 避免重复请求
-                var args = {};
-
-                if (!!valArray && valArray.length === 2) {
-                    args.startDate = valArray[0];
-                    args.endDate = valArray[1];
-                }
-                $.ajax({
-                    url: KingServices.build_url('account/guideFinancial', 'listFinancialGuideQuery'),
-                    type: "POST",
-                    showLoading: false,
-                    data: args
-                }).done(function(data) {
-                    for (var i = 0; i < data.guideList.length; i++) {
-                        data.guideList[i].value = data.guideList[i].realname;
-                        data.guideList[i].id = data.guideList[i].guideId;
+            var all = {
+                id: '',
+                value: '全部'
+            };
+            FinGuide.guideList = data.guideList.slice(all);
+            if($obj){
+                data.guideList.unshift(all);
+                $obj.autocomplete({
+                    minLength: 0,
+                    source : data.guideList,
+                    change: function(event, ui) {
+                        if (!ui.item) {
+                            $(this).data('id', '');
+                        }
+                    },
+                    select: function(event, ui) {
+                        $(this).blur().data('id', ui.item.id);
                     }
-                    data.guideList.unshift({
-                        id: '',
-                        value: '全部'
-                    });
-                    $obj.autocomplete('option', 'source', data.guideList);
+                }).on("click", function() {
                     $obj.autocomplete('search', '');
-
-                    $obj.data('ajax', true);
                 });
-            } else {
-                $obj.autocomplete('search', '');
             }
         });
     };
@@ -246,8 +244,6 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    //data.guideName = args.name;
-                    console.log(args);
                     data.id = args.guideId;
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
@@ -292,6 +288,8 @@ define(function(require, exports) {
     FinGuide.initOperationEvent = function($tab, type) {
         // 绑定搜索
         var $searchArea = $tab.find('.T-search-area');
+
+        FinGuide.getGuideList($tab,type);
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
@@ -1068,11 +1066,39 @@ define(function(require, exports) {
         });
     };
 
+    FinGuide.getGuideList = function($tab,type){
+        var $obj = $tab.find('.T-guideName'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : FinGuide.guideList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    guideId : ui.item.id,
+                    guideName : ui.item.value,
+                    startDate : $tab.find('.T-search-start-date').val(),
+                    endDate : $tab.find('.T-search-end-date').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                args.isOuter = FinGuide.isOuter = true;
+                FinGuide.initOperationModule(args,type);
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     FinGuide.initPayModule = function(options) {
         options.guideId = options.id;
         delete(options.id);
         options.isOuter = FinGuide.isOuter = true;
-
+        FinGuide.getGuideNameList(false,[options.startDate,options.endDate]);
         FinGuide.initOperationModule(options, 1)
     };
 

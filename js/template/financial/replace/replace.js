@@ -139,38 +139,36 @@ define(function(require, exports) {
 		});
 	};
 	Replace.chooseCustomer = function($obj){
-		$obj.autocomplete({
-			minLength: 0,
-		    change: function(event, ui) {
-		        if (!ui.item)  {
-		            $(this).data('id', '');
-		        }
-		    },
-		    select: function(event, ui) {
-		        $(this).blur().data('id', ui.item.id);
-		    }
-		}).on('click', function(){
-			if (!$obj.data('ajax')) {  // 避免重复请求
-				$.ajax({
-					url : KingServices.build_url('financial/bookingAccount', 'selectPartnerAgency'),
-					type : "POST"
-				}).done(function(data){
-					if(showDialog(data)){
-						if(!data.partnerAgencyList)return;
-						for(var i=0; i<data.partnerAgencyList.length; i++){
-			                data.partnerAgencyList[i].value = data.partnerAgencyList[i].fromPartnerAgencyName;
-			                data.partnerAgencyList[i].id = data.partnerAgencyList[i].partnerAgencyId;
-			            }
-			            data.partnerAgencyList.unshift({id:'', value: '全部'});
-			            $obj.autocomplete('option', 'source', data.partnerAgencyList);
-			            $obj.autocomplete('search', '');
-
-			            $obj.data('ajax', true);
-		        	}
-				});
-			} else {
-		        $obj.autocomplete('search', '');
-		    }
+		$.ajax({
+			url : KingServices.build_url('financial/bookingAccount', 'selectPartnerAgency'),
+			type : "POST"
+		}).done(function(data){
+			if(showDialog(data)){
+				if(!data.partnerAgencyList)return;
+				for(var i=0; i<data.partnerAgencyList.length; i++){
+	                data.partnerAgencyList[i].value = data.partnerAgencyList[i].fromPartnerAgencyName;
+	                data.partnerAgencyList[i].id = data.partnerAgencyList[i].partnerAgencyId;
+	            }
+	            var all = {id:'', value: '全部'};
+	            Replace.customerList = data.partnerAgencyList.slice(all);
+	            if(!!$obj){
+	            	data.partnerAgencyList.unshift(all);
+		            $obj.autocomplete({
+						minLength: 0,
+						source : data.partnerAgencyList,
+					    change: function(event, ui) {
+					        if (!ui.item)  {
+					            $(this).data('id', '');
+					        }
+					    },
+					    select: function(event, ui) {
+					        $(this).blur().data('id', ui.item.id);
+					    }
+					}).on('click', function(){
+					    $obj.autocomplete('search', '');
+					});
+	            }
+        	}
 		});
 	};
 	/**
@@ -179,7 +177,7 @@ define(function(require, exports) {
 	 */
 	Replace.checking = function(args){
 		Replace.checkingId = args.partnerAgencyId;
-		Replace.checkingName = name;
+		Replace.checkingName = args.name;
 		Replace.checkingList(args);
 	};
 	Replace.clearComma = function(str){
@@ -189,14 +187,11 @@ define(function(require, exports) {
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-			args = {
-				pageNo : (args.pageNo || 0),
-				partnerAgencyId : args.partnerAgencyId || Replace.checkingId,
-				orderNumber : order == '全部' ? '' : order,
-				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
-				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
-				accountStatus : Replace.$checkingTab.find("[name=accountStatus]").val(),
-			};
+				args.pageNo = (args.pageNo || 0);
+				args.orderNumber = order == '全部' ? '' : order;
+				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
+				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+				args.accountStatus = Replace.$checkingTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -219,7 +214,7 @@ define(function(require, exports) {
 			data: args
 		}).done(function(data){
 			if (showDialog(data)) {
-				data.name = Replace.checkingName;
+				data.name = args.name;
 				for(var j=0; j<data.bookinAccountList.length; j++){
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
@@ -256,6 +251,7 @@ define(function(require, exports) {
 	Replace.CM_event = function($tab,args,isCheck){
 		var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1)),
 		validatorCheck = validator.check($tab);
+		Replace.getCustomerList($tab,isCheck);
 		// 处理关闭与切换tab
         $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
             event.preventDefault();
@@ -703,7 +699,7 @@ define(function(require, exports) {
 	 */
 	Replace.balance = function(args){
 		Replace.balanceId = args.partnerAgencyId;
-		Replace.balanceName = name;
+		Replace.balanceName = args.name;
 		Replace.isBalanceSource = false;
 		args.accountStatus  =  args.accountStatus || Replace.$tab.find(".T-finance-status").find("button").data("value");
 		Replace.balanceList(args);
@@ -714,6 +710,7 @@ define(function(require, exports) {
 		Replace.isBalanceSource = true;
 		args.pageNo = 0;
 		args.partnerAgencyId = args.id;
+		Replace.chooseCustomer();
 		Replace.balanceList(args);
 	};
 
@@ -723,14 +720,11 @@ define(function(require, exports) {
 		if(!!Replace.$balanceTab){
 			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
 			var order = Replace.$balanceTab.find(".T-search-order").val();
-			args = {
-				pageNo : (args.pageNo || 0),
-				partnerAgencyId : args.partnerAgencyId || Replace.balanceId,
-				orderNumber : order == '全部' ? '' : order,
-				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
-				accountStatus : Replace.$balanceTab.find("[name=accountStatus]").val()
-			};
+			args.pageNo = (args.pageNo || 0);
+			args.orderNumber = order == '全部' ? '' : order;
+			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
+			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
+			args.accountStatus = Replace.$balanceTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -754,7 +748,7 @@ define(function(require, exports) {
 		}).done(function(data){
 			if (showDialog(data)) {
 				var html;
-				data.name = Replace.balanceName;
+				data.name = args.name;
 				data.source = Replace.isBalanceSource;
 				for(var j=0; j<data.bookinAccountList.length; j++){
 					var detailList = data.bookinAccountList[j].detailList;
@@ -836,6 +830,37 @@ define(function(require, exports) {
         } else {
             showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
         }
+	};
+
+	Replace.getCustomerList = function($tab,isCheck){
+		var $obj = $tab.find('input[name=partnerAgencyName]'),
+			name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : Replace.customerList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    partnerAgencyId : ui.item.id, 
+					name : ui.item.value,
+					startDate : $tab.find('.T-search-start-date').val(),
+					endDate : $tab.find('.T-search-end-date').val(),
+					accountStatus : $tab.find('input[name=accountStatus]').val(),
+                };
+                if(isCheck){
+                	Replace.checkingList(args);
+                } else {
+                	Replace.balanceList(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
 	};
 	exports.init = Replace.initModule;
 	exports.initIncome = Replace.initIncome;
