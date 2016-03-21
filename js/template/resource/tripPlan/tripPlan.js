@@ -1695,13 +1695,17 @@ define(function(require, exports) {
 	 * @return {[type]}     [description]
 	 */
 	tripPlan.deleteTripPlan = function($this, id, $name, $tab, isBooking) {
+		var isPayed = $this.data('entity-ispayed'), text = '你确定要删除该条记录？'
+		if (isPayed != 0) {
+			text = '财务已付款，是否删除？'
+		}
 		if(id){
 			//默认等于0，说明数据来源于模板表，直接移除tr行，不做后台删除请求
 			//等于1说明数据来源于安排表，发送删除请求
 			var isArranged = $('#isArranged').val() == "1";
 			
 			if(isArranged || !!isBooking) {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog($( "#confirm-dialog-message" ), text, function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
 	                    type: "post",
