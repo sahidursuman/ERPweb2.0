@@ -98,7 +98,7 @@
             {{if arrange.badStatus == 1}}
                 <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" readOnly="readOnly"/>
             {{else}}
-                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" /><input type="hidden" name="standardId">
+                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/><input type="hidden" name="standardId">
             {{/if}}
         {{/if}}
         </td>
@@ -145,7 +145,7 @@
         </select>
         &nbsp;
         <input  type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}{{/if}}/>{{/if}}
+        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} maxlength="11" {{/if}} {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
         <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
         <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>
         
