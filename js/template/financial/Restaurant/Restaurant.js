@@ -203,7 +203,7 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsDate = {
-                restaurantId: id, 
+                restaurantId: args.restaurantId, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val()
