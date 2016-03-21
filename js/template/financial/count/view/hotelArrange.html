@@ -37,7 +37,15 @@
                 <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}" whichDay = "{{arrange.whichDay}}">
                     {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
 
-                    {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">{{if arrange.hotel != null}}{{arrange.hotel.name}}{{/if}}</td>{{/if}}
+                    {{if index == 0}}
+                        <td rowspan="{{arrangeList.hotelArrangeList.length}}">
+                            {{if arrange.hotel != null}}
+                                <span class="nameType">
+                                    {{arrange.hotel.name}}
+                                </span>
+                            {{/if}}
+                        </td>
+                    {{/if}}
 
                     <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
 
@@ -106,7 +114,19 @@
 
                     <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}</td>
 
-                    <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+                    <td>
+                        {{if arrange.isConfirmAccount == 0}}
+                            未对账
+                        {{else}}
+                            已对账
+                        {{/if}}
+                        &nbsp;&nbsp;
+                        {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
+                            <a href="javascript:void(0)" class="T-hotelArrDel">删除</a>
+                        {{else}}
+                            <span style="color:#bbb;">删除</span>
+                        {{/if}}
+                    </td>
                 </tr>
             {{/if}}
             {{/each}}

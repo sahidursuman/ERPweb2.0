@@ -50,7 +50,7 @@
                         </select>
                     {{else}}
                         {{if arrange.restaurant != null}}
-                            <span>{{arrange.restaurant.name}}</span>
+                            <span class="nameType">{{arrange.restaurant.name}}</span>
                         {{/if}}
                     {{/if}}
                 {{else}}
@@ -64,18 +64,18 @@
                                 {{/each}}
                             </select>
                         {{else if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length == 0}}
-                            导游自选
+                            <span class="nameType">导游自选</span>
                         {{else if arrange.restaurantId != -1}}
                             {{if arrange.restaurant !=null}}
-                                {{arrange.restaurant.name}}
+                                <span class="nameType">{{arrange.restaurant.name}}</span>
                             {{/if}}
                         {{/if}}
                     {{else}}
                         {{if arrange.restaurantId == -1}}
-                            导游自选
+                            <span class="nameType">导游自选</span>
                         {{else}}
                             {{if arrange.restaurant !=null}}
-                                {{arrange.restaurant.name}}
+                                <span class="nameType">{{arrange.restaurant.name}}</span>
                             {{/if}}
                         {{/if}}
                     {{/if}}
@@ -167,7 +167,19 @@
             {{/if}}
         </td>
 
-        <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+        <td>
+            {{if arrange.isConfirmAccount == 0}}
+                未对账
+            {{else}}
+                已对账
+            {{/if}}
+            &nbsp;&nbsp;
+            {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
+                <a href="javascript:void(0)" class="T-restArrDel">删除</a>
+            {{else}}
+                <span style="color:#bbb;">删除</span>
+            {{/if}}
+        </td>
     </tr>
     {{/if}}
     {{/each}}
