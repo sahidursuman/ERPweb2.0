@@ -1696,7 +1696,7 @@ define(function(require, exports) {
 	 */
 	tripPlan.deleteTripPlan = function($this, id, $name, $tab, isBooking) {
 		var isPayed = $this.data('entity-ispayed'), text = '你确定要删除该条记录？'
-		if (isPayed != 0 && ispayed != '') {
+		if (isPayed != '' && isPayed != 0) {
 			text = '财务已付款，是否删除？'
 		}
 		if(id){
