@@ -238,7 +238,7 @@ define(function(require, exports) {
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
-                    data.name = FinShop.checkingName;
+                    data.name = args.shopName;
                     template = shopCheckingTemplate;
                     title = '购物对账';
                     key = checkMenuKey;

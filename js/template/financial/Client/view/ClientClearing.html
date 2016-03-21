@@ -237,7 +237,7 @@
                     <input type="text" name="payMoney" data-le="{{rs.unReceivedMoney}}" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}} class="col-sm-12 T-reciveMoney money F-float F-money">
                 </td>
                 <td rowspan="{{rs.rowLen}}">
-                    <textarea class="col-sm-12 T-remark hct-textarea" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}}></textarea>
+                    <textarea class="col-sm-12 T-remark hct-textarea" name="payRemark" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}}></textarea>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkTime}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkUserName}}</td>
