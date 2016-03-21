@@ -420,7 +420,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type == 1){
-                FinTransIn.getCheckList($tab.data('next'),$tab,1);
+                FinTransIn.getCheckList($tab.data('next'),false,1);
             } else {
                 FinTransIn.clearTempData = false;
                 FinTransIn.getClearList($tab.data('next'),$tab);
@@ -605,7 +605,7 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-checking");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else {
-                        FinTransIn.getCheckList(args,$tab,1);
+                        FinTransIn.getCheckList(args,false,1);
                     }
                 });
             }
@@ -641,7 +641,7 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-clearing");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else{
-                        FinTransIn.getCheckList(args,$tab,2);
+                        FinTransIn.getCheckList(args,false,2);
                     }
                 });
             }
