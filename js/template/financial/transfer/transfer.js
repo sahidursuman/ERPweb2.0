@@ -235,7 +235,8 @@ define(function(require, exports) {
                     partnerAgencyId:$tab.find('input[name=partnerAgencyId]').val(),
                     travelAgencyId:"",
                     startDate: $tab.find('input[name=startDate]').val(),
-                    endDate: $tab.find('input[name=endDate]').val()
+                    endDate: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;
@@ -510,11 +511,8 @@ define(function(require, exports) {
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        } else if(argLen === 2){
+                        } else {
                             Transfer.transferCheck(args,$tab);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Transfer.initCheck(args,$tab);
                         }
                     });
                 }
@@ -561,11 +559,8 @@ define(function(require, exports) {
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        }else if(argLen === 2){
+                        } else {
                             args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
-                            Transfer.transferClear(args,$tab);
-                        } else if(argLen === 3){
-                            args.isAutoPay = (isAutoPay == 1) ? 0 : args.isAutoPay
                             Transfer.transferClear(args,$tab);
                         }
                     }); 
@@ -585,7 +580,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    Transfer.initCheck($tab.data('next'),$tab);
+                    Transfer.transferCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     Transfer.clearTempData = false;
                     Transfer.clearTempSumDate = false;
@@ -598,9 +593,9 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    Transfer.saveChecking($tab,args,[tab_id, title, html]);
+                    Transfer.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if(option == "clear"){
-                    Transfer.saveClear($tab,args,[tab_id, title, html]);
+                    Transfer.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }
             })
             // 保存后关闭

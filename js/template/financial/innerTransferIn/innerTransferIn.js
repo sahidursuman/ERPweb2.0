@@ -142,7 +142,7 @@ define(function(require, exports) {
             event.preventDefault(); 
             var $this = $(this);
             // 设置选择的效果
-            $this.closest('ul').prev().attr('data-value', $this.data('value')).children('span').text($this.text());
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
             FinTransIn.getList({pageNo : 0},$tab);
         });
         $tab.find('.T-btn-search').on('click', function(event) {
@@ -314,7 +314,7 @@ define(function(require, exports) {
 
             //导出报表事件
             $tab.find(".T-btn-export").on('click',function(event){
-                var argsDate = { 
+                var argsData = { 
                         businessGroupId : args.businessGroupId,
                         lineProductId : $tab.find('input[name=lineProductId]').val(),
                         lineProductName : $tab.find('input[name=lineProductName]').val(),
@@ -322,11 +322,12 @@ define(function(require, exports) {
                         receiveUserId : $tab.find('input[name=receiveUserId]').val(),
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
-                        endAccountTime : $tab.find('input[name=endDate]').val()
+                        endAccountTime : $tab.find('input[name=endDate]').val(),
+                        accountStatus : args.accountStatus
                     };
-                argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
-                argsDate.receiveUserName = argsDate.receiveUserName === "全部" ? "" : argsDate.receiveUserName;
-                FinancialService.exportReport(argsDate,"exportArrangeInnerTransferInFinancial");
+                argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+                argsData.receiveUserName = argsData.receiveUserName === "全部" ? "" : argsData.receiveUserName;
+                FinancialService.exportReport(argsData,"exportArrangeInnerTransferInFinancial");
             });
 
             //确认对账事件
@@ -420,7 +421,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type == 1){
-                FinTransIn.getCheckList($tab.data('next'),$tab,1);
+                FinTransIn.getCheckList($tab.data('next'),false,1);
             } else {
                 FinTransIn.clearTempData = false;
                 FinTransIn.getClearList($tab.data('next'),$tab);
@@ -605,7 +606,7 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-checking");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else {
-                        FinTransIn.getCheckList(args,$tab,1);
+                        FinTransIn.getCheckList(args,false,1);
                     }
                 });
             }
@@ -641,7 +642,7 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-clearing");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else{
-                        FinTransIn.getCheckList(args,$tab,2);
+                        FinTransIn.getCheckList(args,false,2);
                     }
                 });
             }
