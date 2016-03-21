@@ -797,7 +797,7 @@ define(function(require, exports){
 				} else {
 					Count.sumRateMoney($(this),$obj);
 				}
-				Count.formatDays($that,$obj);
+				Count.formatDays($(this),$obj);
 			}
 		});
 		//删除只安排了自费点没有安排自费项目的数据
