@@ -240,7 +240,8 @@ define(function(require, exports) {
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 				    		Replace.$checkingTab.data('isEdited',false);
-				    		Replace.checkingList({pageNo : obj.curr -1});
+				    		args.pageNo = obj.curr -1;
+				    		Replace.checkingList(args);
 				    	}
 				    }
 				});	
@@ -300,10 +301,11 @@ define(function(require, exports) {
 
 		$searchArea.find('.T-btn-search').off().on('click', function(event){
 			event.preventDefault();
+			args.pageNo = 0;
 			if(isCheck){
-				Replace.checkingList({pageNo : 0});
+				Replace.checkingList(args,$tab);
 			}else{
-				Replace.balanceList({pageNo : 0});
+				Replace.balanceList(args,$tab);
 			}
 		});
 		if (!isCheck) {
@@ -547,7 +549,8 @@ define(function(require, exports) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
 					    		Replace.$balanceTab.data('isEdited',false);
-					    		Replace.getOperationList({pageNo : obj.curr -1},$tab);
+					    		args.pageNo = obj.curr -1;
+					    		Replace.getOperationList(args);
 					    	}
 					    }
 					});	

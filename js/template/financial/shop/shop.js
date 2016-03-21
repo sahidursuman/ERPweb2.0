@@ -233,6 +233,7 @@ define(function(require, exports) {
                     title = '购物收款',
                     key = settMenuKey;
                 if (type) {
+                    data.id = args.shopId;
                     data.name = args.shopName;
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
@@ -297,7 +298,8 @@ define(function(require, exports) {
         var $searchArea = $tab.find('.T-search-area');
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            FinShop.initOperationList({}, type, $tab);
+            args.pageNo = 0;
+            FinShop.initOperationList(args, type, $tab);
         });
         var $datepicker = $searchArea.find('.datepicker');
         Tools.setDatePicker($datepicker, true);
@@ -598,7 +600,8 @@ define(function(require, exports) {
         if ($tab) {
             var args = {
                 pageNo: pageNo || 0,
-                shopId: FinShop.settlementId,
+                shopId: $tab.find('input[name=shopName]').data('id'),
+                shopName : $tab.find('input[name=shopName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val()
