@@ -231,7 +231,6 @@ define(function(require, exports) {
 
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
-            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
 
         if(type == 1){
