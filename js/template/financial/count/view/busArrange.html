@@ -88,7 +88,7 @@
                 {{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
             </span>
             {{else}}
-            <select name="payType">
+            <select name="payType" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}>
                 <option value="0" {{if busCompany.realPayType == 0}}selected="selected"{{/if}}>现金</option>
                 <option value="1" {{if busCompany.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
                 <option value="2" {{if busCompany.realPayType == 2}}selected="selected"{{/if}}>签单</option>
