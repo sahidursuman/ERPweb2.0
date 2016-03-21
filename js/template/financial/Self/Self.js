@@ -202,6 +202,7 @@ define(function(require, exports) {
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
                     selfPayId: args.selfPayId, 
+                    accountStatus: $tab.find('input[name=accountStatus]').val(),
                     tripInfo: $tab.find('input[name=tripInfo]').val(),
                     startTime: $tab.find('input[name=startDate]').val(),
                     endTime: $tab.find('input[name=endDate]').val(),

@@ -332,7 +332,7 @@ define(function(require, exports) {
 
             //确认对账事件
             $tab.find(".T-checking").off().on('click',function(event){
-                if(!(new FinRule(0).check($tab)).form()){return;}
+                if(!(new FinRule(6).check($tab)).form()){return;}
                 FinancialService.changeUncheck($tab.find('.T-checkList tr'),function(){
                     FinTransIn.saveCheck($tab,args);
                 });

@@ -247,6 +247,7 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsData = { 
+            	accountStatus:$tab.find('input[name=accountStatus]').val(),
                 ticketId: $tab.find('input[name=ticketId]').val(),
                 ticketName: $tab.find('input[name=ticketName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),

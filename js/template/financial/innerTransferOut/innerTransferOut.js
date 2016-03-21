@@ -212,7 +212,7 @@ define(function(require,exports) {
 					$tab.find('.T-recordSize').text(data.recordSize);
 					if(typeFlag != 2){
 						//表单验证
-						var validator = new FinRule(0);
+						var validator = new FinRule(6);
 					    InnerTransferOut.validatorCheck = validator.check($tab);
 						//取消对账权限过滤
 						var fiList= data.list;
@@ -293,7 +293,7 @@ define(function(require,exports) {
 		//导出报表事件
 		$tab.find(".T-btn-export").on('click',function(event){
 			var argsData = { 
-					toBusinessGroupId:$tab.find('input[name=toBusinessGroupId]').val(),
+					toBusinessGroupId:args.toBusinessGroupId,
 					lineProductId:$tab.find('input[name=lineProductId]').val(),
 					lineProductName:$tab.find('input[name=lineProductName]').val(),
 					operateUserId:$tab.find('select[name=operater]').val(),
