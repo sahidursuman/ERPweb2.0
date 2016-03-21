@@ -338,9 +338,27 @@ define(function(require, exports) {
 
     		if ($that.hasClass('T-shop-standard-delete'))  {
     			// 删除政策
-    			$that.closest('tr').fadeOut(function() {
-    				$(this).remove();
-    			});
+    			var $parent = $that.closest('tr'), id = $parent.data('entity-id');
+    			if (!!id) {
+    				showConfirmDialog($( "#confirm-dialog-message" ),'确定删除此商品？',function() {
+    					$.ajax({
+    						url: KingServices.build_url('shop','deleteShopPolicy'),
+    						type: 'POST',
+    						data: {id: id},
+    					})
+    					.done(function(data) {
+    						if (showDialog(data)) {
+				    			$parent.fadeOut(function() {
+				    				$(this).remove();
+				    			});
+			    			}
+    					});
+    				})
+    			}else{
+	    			$parent.fadeOut(function() {
+	    				$(this).remove();
+	    			});
+    			}
     		} else if ($that.hasClass('T-shop-rate-add')){
     			// 添加/修改政策
 	    		var $policyInput = $(this).next(),
