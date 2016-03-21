@@ -3161,6 +3161,12 @@ define(function(require, exports){
 				if(result){
 					var travelAgencyRate = parseFloat(data.travelAgencyRate);
 					var guideRate = parseFloat(data.guideRate);
+					if(guideRate<=1){
+						guideRate = guideRate*100;
+					};
+					if(travelAgencyRate<=1){
+						travelAgencyRate = travelAgencyRate*100;
+					};
 					if($obj.attr('selfpayarrangeid')){
 						$obj.find('.marketPrice').text(data.marketPrice);
 						$obj.find('.price').text(data.price);
