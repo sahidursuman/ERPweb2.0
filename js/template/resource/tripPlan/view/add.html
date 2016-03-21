@@ -255,7 +255,7 @@
                                     <td>
                                         <input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" />
                                     </td>
-                                    <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{insurance.financialMoney}}" data-entity-name="insurance" title="删除"> 删除 </a> </td>
                                 </tr>
                                 {{/if}} {{/each}}
                             </tbody>
@@ -503,7 +503,7 @@
                                             <td>
                                                 <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
                                                 <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
-                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a>
+                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{busCompany.financialMoney}}" title="删除" data-entity-name="busCompany">删除</a>
                                             </td>
                                             {{if busCompany.offerId!=null}}
                                             <!-- <td>
@@ -617,7 +617,7 @@
                                             <input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{restaurant.financialMoney}}" data-entity-name="restaurant" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -749,7 +749,7 @@
                                         </td>
                                         <td>
                                             <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{hotel.financialMoney}}" data-entity-name="hotel">删除</a>
                                         </td>
                                         <!-- <td>
                                                 {{if hotel.offerId!=null}}
@@ -865,7 +865,7 @@
                                             <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{scenic.financialMoney}}" data-entity-name="scenic" title="删除">
                                                                                         删除
                                                                                     </a>
                                         </td>
@@ -954,7 +954,7 @@
                                         <input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" />
                                     </td>
                                     <td>
-                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" title="删除">
+                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" data-entity-ispayed="{{shop.alreadyIncomeMoney}}" title="删除">
                                                 删除
                                             </a>
                                     </td>
@@ -1056,7 +1056,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{selfPay.financialMoney}}" data-entity-name="selfpay" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -1175,7 +1175,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{ticket.financialMoney}}" data-entity-name="ticket" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -1268,7 +1268,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{other.financialMoney}}" data-entity-name="other" title="删除">
                                                     删除
                                                 </a>
                                         </td>
