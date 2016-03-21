@@ -307,9 +307,6 @@ define(function(require, exports) {
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
-                                if (args.isAutoPay == 1) {
-                                    args.isAutoPay = 0;
-                                }
                                 busCompany.busCompanyClear(args);
                             }
                         }

@@ -7,7 +7,8 @@ var globelEditorInstants = {};
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
-var $tabList = $('#tabList'), $tabContent = $("#tabContent");
+var $tabList = $('#tabList'), $tabContent = $("#tabContent"),
+	tabHistory = [];
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
@@ -1439,7 +1440,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 	// tab已经打开了
 	if ($next_li.length)  {
 		// show tab
-		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
+		$next_li.children('a').trigger('click').children('span').text(tab_name);	
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
@@ -1473,6 +1474,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		if($content.length){
 			$content.addClass("active");
 			$next_li.find('span').text(tab_name);
+			Tools.processTabHistory($current_li, true);
 		}
 		else{
 			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close T-close\"></i></a></li>");
@@ -1502,7 +1504,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 				} else {
 					Tools.closeTab(tab_id);
 				}
+
 			});
+			Tools.processTabHistory($tab_li, true);
 
 			Tools.justifyTab();
 		}
@@ -1524,15 +1528,45 @@ Tools.closeTab = function(tab_id) {
 		index = $tab_li.index();
 
 	$tabContent.find('#tab-' + tab_id + '-content').remove();
-	$tab_li.remove();
 
-	index = index === 0? 0: (index-1);
-
-	if (index >= 0) {
-		$tabList.children('li').children('a').trigger('click');
+	Tools.processTabHistory($tab_li);
+	if ($tab_li.hasClass('active')) {
+		if (tabHistory.length) {
+			$tabList.find('[href="'+ tabHistory[0] + '"]').trigger('click');
+		} else {
+			$tabList.find('a').eq(0).trigger('click');
+		}
 	}
 
+	$tab_li.remove();
+
 	Tools.justifyTab();
+};
+
+/**
+ * 围护历史数据
+ * @param  {object} $obj         tab li对象
+ * @param  {Boolean} isAdd true： 添加，false:删除
+ * @return {[type]}             [description]
+ */
+Tools.processTabHistory = function($obj, isAdd) {
+	var key = $obj.children('a').attr('href');
+
+	if (!!key) {
+		var index = tabHistory.indexOf(key);
+		if (isAdd) {
+			if (index >= 0) {
+				if (index != 0) {
+					tabHistory.splice(index, 1);
+					tabHistory.unshift(key);
+				}
+			} else {
+				tabHistory.unshift(key);
+			}
+		} else if (index >= 0) {
+			tabHistory.splice(index, 1);
+		}
+	}
 };
 
 /**

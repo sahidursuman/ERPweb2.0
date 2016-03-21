@@ -209,6 +209,7 @@ define(function(require, exports) {
         //导出报表事件
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
+                accountStatus:$tab.find('input[name=accountStatus]').val(),
                 insuranceId : args.insuranceId,
                 insuranceName: args.insuranceName, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),

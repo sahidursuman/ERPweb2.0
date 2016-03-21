@@ -247,6 +247,7 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsData = { 
+            	accountStatus:$tab.find('input[name=accountStatus]').val(),
                 ticketId: $tab.find('input[name=ticketId]').val(),
                 ticketName: $tab.find('input[name=ticketName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
@@ -439,8 +440,6 @@ define(function(require, exports) {
 				    jump: function(obj, first) {
 				    	if (!first) { 
 				    		Ticket.payingJson = FinancialService.clearSaveJson(Ticket.$clearingTab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));	
-				    		console.log("clearingList");
-				    		console.log(Ticket.payingJson);
 				    		Ticket.$clearingTab.data('isEdited',false);
 				    		args.pageNo = obj.curr -1;
 				    		Ticket.getOperationList(args,Ticket.$clearingTab);
@@ -466,7 +465,7 @@ define(function(require, exports) {
             Ticket.savePayingData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
-        	Ticket.payingJson = [];
+        	Ticket.payingJson = false;
             Ticket.clearingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -478,7 +477,7 @@ define(function(require, exports) {
         })
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
-            Ticket.payingJson = [];
+            Ticket.payingJson = false;
         });
 
         FinancialService.initPayEvent($tab);
@@ -530,7 +529,7 @@ define(function(require, exports) {
                 	});
                 }
             } else {
-                Ticket.payingJson = [];
+                Ticket.payingJson = false;
                 Ticket.setAutoFillEdit($tab,args,false);
             }
 		})
@@ -587,7 +586,7 @@ define(function(require, exports) {
 
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                        if(Ticket.payingJson.length > 0){
+                        if(Ticket.payingJson){
                         	$tab.data('isEdited',true);
                         }
                         $tab.find('.T-saveClear').data('pageNo', args.pageNo);
@@ -599,8 +598,6 @@ define(function(require, exports) {
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 						    		Ticket.payingJson = FinancialService.clearSaveJson($tab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));
-						    		console.log("getOperationList");
-						    		console.log(Ticket.payingJson);
 						    		$tab.data('isEdited',false);
 						    		args.pageNo = obj.curr -1;
 						    		Ticket.getOperationList(args,$tab);
@@ -650,7 +647,7 @@ define(function(require, exports) {
         .done(function(data) {
             showMessageDialog($('#confirm-dialog-message'), data.message, function() {
             	$tab.data('isEdited', false);
-            	Ticket.payingJson = [];
+            	Ticket.payingJson = false;
                 if (argLen === 1) {
                 	Ticket.getList(Ticket.listPageNo);
                 } else if(argLen === 2){

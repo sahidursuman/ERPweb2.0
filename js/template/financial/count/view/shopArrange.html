@@ -75,7 +75,12 @@
                 {{if editStatus == 1}}
                     <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" />
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                &nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDel">删除</a>
+               <!--  &nbsp;&nbsp;
+               {{if arrange.incomeStatus == 0}}
+                   <a href="javascript:void(0)" class="T-shopArrDel">删除</a>
+               {{else}}
+                   <span style="color:#bbb;">删除</span>
+               {{/if}} -->
                 </td>
                 {{/if}}
             {{/each}}
@@ -126,7 +131,7 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>&nbsp;&nbsp;<span style="color:#bbb;">删除</span>
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/><!-- &nbsp;&nbsp;<span style="color:#bbb;margin-left:6px;">删除</span> -->
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
                 </td></tr>
                 {{/if}}
