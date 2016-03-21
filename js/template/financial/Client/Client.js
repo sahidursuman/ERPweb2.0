@@ -178,7 +178,7 @@ define(function(require, exports) {
         if(!!$tab){
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
-            partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
+            partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
         } else {
             partnerAgencyName = args.name;
         }
@@ -462,7 +462,7 @@ define(function(require, exports) {
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data('id');
 
-            partnerAgencyName = $tab.find('.T-partnerAgencyName').text();
+            partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
             type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
