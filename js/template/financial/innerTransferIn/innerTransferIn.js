@@ -591,13 +591,23 @@ define(function(require, exports) {
 
     FinTransIn.saveCheck = function($tab,args,tabArgs) {
         var argLen = arguments.length,
+            saveData = [],
             json = FinancialService.saveJson_checking($tab);
+        //暂时组装数据，后台统一后删除
+        for(var i = 0;i<json.length;i++){
+            var saveJson = {
+                id:json[i].id,
+                backMoney:json[i].detailList[0].backMoney,
+                checkRemark:json[i].checkRemark
+            }
+            saveData.push(saveJson);
+        };
         if(!json){ return false; }
 
         $.ajax({
             url: KingServices.build_url("account/innerTransferIn","saveReconciliation"),
             type: "POST",
-            data: { reconciliation: JSON.stringify(json) }
+            data: { reconciliation: JSON.stringify(saveData) }
         }).done(function(data) {
             if (showDialog(data)) {
                 $tab.data('isEdited', false);
