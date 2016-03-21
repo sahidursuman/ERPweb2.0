@@ -469,11 +469,8 @@ define(function(require, exports) {
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Self.listSelf(Self.searchData.pageNo);
-                        } else if(argumentsLen === 2){
-                            Self.Getcheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Self.initCheck(args,$tab);
+                        } else {
+                            Self.Getcheck(args);
                         }
                     });
                 }
@@ -512,7 +509,7 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo);
                         }else{
                             args.isAutoPay = Self.showBtnFlag ? 2: 0;
-                            Self.GetClear(args,$tab);
+                            Self.GetClear(args);
                         }
                     });
                 }
@@ -533,7 +530,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(option == "check"){
-                Self.initCheck($tab.data('next'),$tab);
+                Self.Getcheck($tab.data('next'),$tab);
             } else if(option == "clear"){
                 Self.clearTempData = false;
                 Self.clearTempSumDate = false;

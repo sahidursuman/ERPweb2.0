@@ -480,11 +480,8 @@ define(function(require, exports) {
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             scenic.listScenic(scenic.searchData.pageNo);
-                        } else if(argumentsLen === 2){
-                            scenic.scenicCheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            scenic.initCheck(args,$tab);
+                        } else {
+                            scenic.scenicCheck(args);
                         }
                     });
                 }
@@ -527,7 +524,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
                             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
-                            scenic.scenicClear(args,$tab);
+                            scenic.scenicClear(args);
                         }
                     }); 
                 }
@@ -549,7 +546,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    scenic.initCheck(args,$tab);
+                    scenic.scenicCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                     scenic.clearTempData = false;
