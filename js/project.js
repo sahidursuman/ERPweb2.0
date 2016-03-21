@@ -1889,6 +1889,32 @@ Tools.delBlankJson = function(json) {
 }
 
 /**
+ * 计算相关方法
+ * @type {Object}
+ */
+Tools.Math = {};
+
+/**
+ * 浮点数比较。用于解决加减过程中精度所产生的误差
+ * @param  {string/float}  src  比较数据
+ * @param  {string/float}  dest 被比较数据
+ * @return {Boolean}      true 相等,否则不相等
+ */
+Tools.Math.isFloatEqual = function(src, dest) {
+	if (isNaN(src) || isNaN(dest)) {
+		return false;
+	}
+
+	src = src * 1,
+	dest = dest * 1;
+	if (src == dest || Math.abs(src - dest) < 0.000001) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * 绑定日期控件
  * @param {object}  $obj         绑定日期控件的元素
  * @param {Boolean} isInputRange true：设置起始控制，false：不设置
