@@ -205,7 +205,8 @@ define(function(require, exports) {
                 hotelId: args.hotelId, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find('input[name=startDate]').val(),
-                endTime: $tab.find('input[name=endDate]').val()
+                endTime: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");
         });

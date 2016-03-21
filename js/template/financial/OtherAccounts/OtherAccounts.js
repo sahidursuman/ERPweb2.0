@@ -253,7 +253,8 @@ define(function(require, exports) {
                     name: args.name,
                     info: $tab.find('.T-creatorUserChoose').val(),
                     startAccountTime: $tab.find('.T-startTime').val(),
-                    endAccountTime: $tab.find('.T-endTime').val()
+                    endAccountTime: $tab.find('.T-endTime').val(),
+                    accountStatus : args.accountStatus
                 };
             FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });

@@ -251,7 +251,8 @@ define(function(require, exports) {
                 ticketName: $tab.find('input[name=ticketName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
                 accountInfo: $tab.find('.T-search-type').val(),
-                endDate: $tab.find('.T-search-end-date').val()
+                endDate: $tab.find('.T-search-end-date').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeTicketFinancial");
         });

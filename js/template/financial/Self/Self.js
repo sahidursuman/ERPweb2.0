@@ -204,7 +204,8 @@ define(function(require, exports) {
                     selfPayId: args.selfPayId, 
                     tripInfo: $tab.find('input[name=tripInfo]').val(),
                     startTime: $tab.find('input[name=startDate]').val(),
-                    endTime: $tab.find('input[name=endDate]').val()
+                    endTime: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus
                 };
             FinancialService.exportReport(argsData,"exportSelfPayFinancial");
         });

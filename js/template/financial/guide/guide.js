@@ -353,16 +353,18 @@ define(function(require, exports) {
             $searchArea.find('.T-btn-export').on('click', function(event) {
                 event.preventDefault();
                 var $btn = $tab.find('.T-saveClear'),
-                    args = {
+                    argsData = {
                         guideId: $btn.data('id'), 
                         startDate: $datePicker.eq(0).val(),
                         endDate: $datePicker.eq(1).val(),
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
                         lineProductId: $searchArea.find('.T-lineProductName').data('id'),
+                        accountStatus : args.accountStatus
+
                     };
-                args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-                FinancialService.exportReport(args,"exportArrangeGuideFinancial");
+                argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+                FinancialService.exportReport(argsData,"exportArrangeGuideFinancial");
             });
         }
 

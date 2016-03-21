@@ -297,7 +297,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $btn = $tab.find('.T-saveClear'),
                 $datePicker = Client.$checkSearchArea.find('.date-picker'),
-                args = {
+                argsData = {
                     fromPartnerAgencyId: $tab.data("id"), 
                     startDate: $datePicker.eq(0).val(),
                     endDate: $datePicker.eq(1).val(),
@@ -305,11 +305,12 @@ define(function(require, exports) {
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
-                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val()
+                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val(),
+                    accountStatus : args.accountStatus
                 };
-            args.lineProductName = args.lineProductName === "全部" ? "" : args.lineProductName;
-            args.creatorName = args.creatorName === "全部" ? "" : args.creatorName;
-            FinancialService.exportReport(args,"exportPartnerAgencyFinancial");
+            argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+            argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
+            FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
         });
 
         //给全选按钮绑定事件

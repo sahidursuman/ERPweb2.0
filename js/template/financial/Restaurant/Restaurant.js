@@ -143,7 +143,6 @@ define(function(require, exports) {
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
-            args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
 
         $.ajax({
@@ -203,10 +202,11 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsDate = {
-                restaurantId: id, 
+                restaurantId: args.restaurantId, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });

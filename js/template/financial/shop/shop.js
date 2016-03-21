@@ -364,14 +364,15 @@ define(function(require, exports) {
 
             //导出报表事件 btn-hotelExport
             $tab.find(".T-btn-export").click(function() {
-                var args = {
+                var argsData = {
                     shopId: $tab.find('input[name=shopId]').val(),
                     shopName: $tab.find('input[name=shopName]').val(),
                     tripMessage: $tab.find('.T-search-trip').val(),
                     startDate: $tab.find('.T-search-start-date').val(),
-                    endDate: $tab.find('.T-search-end-date').val()
+                    endDate: $tab.find('.T-search-end-date').val(),
+                    accountStatus : args.accountStatus
                 };
-                FinancialService.exportReport(args, "exportArrangeShopFinancial");
+                FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });
         }
 

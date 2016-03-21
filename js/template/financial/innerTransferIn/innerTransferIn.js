@@ -314,7 +314,7 @@ define(function(require, exports) {
 
             //导出报表事件
             $tab.find(".T-btn-export").on('click',function(event){
-                var argsDate = { 
+                var argsData = { 
                         businessGroupId : args.businessGroupId,
                         lineProductId : $tab.find('input[name=lineProductId]').val(),
                         lineProductName : $tab.find('input[name=lineProductName]').val(),
@@ -322,11 +322,12 @@ define(function(require, exports) {
                         receiveUserId : $tab.find('input[name=receiveUserId]').val(),
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
-                        endAccountTime : $tab.find('input[name=endDate]').val()
+                        endAccountTime : $tab.find('input[name=endDate]').val(),
+                        accountStatus : args.accountStatus
                     };
-                argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
-                argsDate.receiveUserName = argsDate.receiveUserName === "全部" ? "" : argsDate.receiveUserName;
-                FinancialService.exportReport(argsDate,"exportArrangeInnerTransferInFinancial");
+                argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+                argsData.receiveUserName = argsData.receiveUserName === "全部" ? "" : argsData.receiveUserName;
+                FinancialService.exportReport(argsData,"exportArrangeInnerTransferInFinancial");
             });
 
             //确认对账事件
