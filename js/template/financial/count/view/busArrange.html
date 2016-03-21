@@ -117,7 +117,7 @@
 
             <td><span class="difference F-float F-money"></span></td>
 
-            <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" ></td>
+            <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
             <td>
                 {{if busCompany.isConfirmAccount == 0}}
