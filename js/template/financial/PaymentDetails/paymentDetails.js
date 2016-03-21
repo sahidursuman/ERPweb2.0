@@ -18,12 +18,13 @@ define(function(require, exports){
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(args){
+	Payment.initModule = function(argsData){
 		Payment.$tab = null;
 		var date = new Date(),
 	        year = date.getFullYear(),
 	        month = Tools.addZero2Two(date.getMonth() + 1),
-	        day = Tools.addZero2Two(date.getDate());
+	        day = Tools.addZero2Two(date.getDate()),
+	        args = argsData || {};
 		args.pageNo = 0;
 		args.endTime = year + "-" + month + "-" + day;
 		args.startTime = year + "-" + month + "-01";

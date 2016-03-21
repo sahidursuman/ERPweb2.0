@@ -18,6 +18,7 @@
                 <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
             </div>
         </form>
+        <input type="hidden" name="accountStatus" value="{{searchParam.accountStatus}}" />
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
                 <label class="control-label pull-left">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>

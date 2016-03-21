@@ -150,11 +150,10 @@
                             {{arrange.travelAgencyRebateMoney}}
                         </span>
                     {{else}}
-                        <span class="travelAgencyRebateMoney F-float F-money">
-                            {{arrange.travelAgencyRebateMoney}}
-                        </span>
+                        <input name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                    
                 </td>
                 
                 <td>{{if arrange.badStatus == 1}}<span>{{arrange.guideRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" maxlength="5"
@@ -167,11 +166,9 @@
                             {{arrange.guideRebateMoney}}
                         </span>
                     {{else}} 
-                        <span class="guideRebateMoney F-float F-money">
-                            {{arrange.guideRebateMoney}}
-                        </span>
+                        <input name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                 </td>
                 
                 <td>
