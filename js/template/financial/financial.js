@@ -670,7 +670,7 @@ FinRule.prototype.check = function($obj) {
                     ]
                 }
             ]);
-        case 6:  // 导游和客户对账
+        case 6:  // 导游和客户/内转转入/内转转出对账
             return $obj.formValidate([
                 {   //结算金额
                     $ele: $obj.find('input[name=settlementMoney]'),
