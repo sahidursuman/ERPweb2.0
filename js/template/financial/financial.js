@@ -50,17 +50,18 @@ function getBankList($obj,payType){
         change :function(event, ui){
             if(ui.item == null){
                 $(this).val('').nextAll('.T-accountId').val('');
-                $(this).nextAll('input[name=beginningBalance]').val('').trigger('change');
+                $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
             }
         },
         select :function(event, ui){
+            $bBala = $(this).closest(".T-search-area").find('input[name=beginningBalance]');
             if(payType == 0){
                 $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').next().find('input').val("");
             } else if(payType == 1){
                 $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').prev().find('input').val("");
             }
         }
