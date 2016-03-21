@@ -1154,7 +1154,7 @@ define(function(require, exports){
         		var result = showDialog(data);
         		if(result){
         			showMessageDialog($( "#confirm-dialog-message" ),data.message);
-        			Count.updateExamine(id);
+        			Count.updateExamine(financialTripPlanId);
         			Count.listCountHeader(0);
         		}
         	}
