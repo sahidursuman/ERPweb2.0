@@ -34,7 +34,12 @@
                 {{if index == 0}}
                 <td rowspan="{{arrangeList.scenicArrangeList.length}}"><span class="whichDay"></span></td>{{/if}} {{if index == 0}}
 
-                <td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
+                <td rowspan="{{arrangeList.scenicArrangeList.length}}">
+                    {{if arrange.scenic != null}}
+                        <span class="nameType">{{arrange.scenic.name}}</span>
+                    {{/if}}
+                </td>
+                {{/if}}
 
                 <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
 
@@ -105,7 +110,20 @@
                     <input value="{{arrange.billRemark}}" name="billRemark" type="text" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}>
                 </td>
 
-                <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+                <td>
+                    {{if arrange.isConfirmAccount == 0}}
+                        未对账
+                    {{else}}
+                        已对账
+                    {{/if}}
+                    <!-- &nbsp;&nbsp;
+                    {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
+                        <a href="javascript:void(0)" class="T-secnicArrDel">删除</a>
+                    {{else}}
+                        <span style="color:#bbb;">删除</span>
+                    {{/if}} -->
+
+                </td>
             </tr>
             {{/if}} {{/each}} {{/each}} {{/if}} {{/each}}
         </tbody>
