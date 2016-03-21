@@ -2588,11 +2588,18 @@ Tools.trFixed = function(obj){
 
 //根据需要加载插件js
 var modulePlugin = {
-	"plugin_print":'components/jquery-print/jQuery.print.js'//加载打印插件
+	"plugin_print":'components/jquery-plugin/jQuery.print.js',//加载打印插件
+	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js'//加载导出插件
 };
 Tools.loadPluginScript = function(pluginKey){
-	if(pluginKey == 'plugin_print'){
-		$.getScript(modulePlugin.plugin_print);
+	
+	switch(pluginKey){
+		case  'plugin_print' :
+			$.getScript(modulePlugin.plugin_print);	
+			break;
+		case  'plugin_export' :
+			$.getScript(modulePlugin.plugin_export);
+		break;	
 	};	
 };
 
