@@ -212,7 +212,7 @@ define(function(require,exports) {
 					$tab.find('.T-recordSize').text(data.recordSize);
 					if(typeFlag != 2){
 						//表单验证
-						var validator = new FinRule(0);
+						var validator = new FinRule(6);
 					    InnerTransferOut.validatorCheck = validator.check($tab);
 						//取消对账权限过滤
 						var fiList= data.list;
