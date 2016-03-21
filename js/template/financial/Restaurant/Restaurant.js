@@ -205,6 +205,7 @@ define(function(require, exports) {
         $tab.find(".T-btn-export").click(function(){
             var argsDate = {
                 restaurantId: args.restaurantId, 
+                accountStatus :$tab.find('input[name=accountStatus]').val(),
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
