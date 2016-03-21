@@ -1,4 +1,4 @@
-<div class="T-search-area">
+<div class="T-search-area" data-isview="{{view}}" data-id="{{fromPartnerAgencyId}}">
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label class="control-label">客户：</label>
@@ -6,9 +6,9 @@
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">收客单号：</label>

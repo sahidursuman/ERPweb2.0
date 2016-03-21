@@ -211,17 +211,17 @@ define(function(require, exports) {
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
                 data.customerAccountList = resultList; 
-                var title = '客户对账';
+                var title = '客户对账', tab_id;
                 if (isView) {
                     data.view = 1;
-                    ClientCheckTab = ClientCheckTab + '-view';
+                    tab_id = ClientCheckTab + '-view';
                     title = '查看客户对账';
                 }else {
                     data.view = '';
-                    ClientCheckTab = 'financial_Client_checking';
+                    tab_id = 'financial_Client_checking';
                 }
-                if (Tools.addTab(ClientCheckTab, title, ClientCheckingTemplate(data))) {
-                    $tab = $('#tab-'+ ClientCheckTab + '-content');
+                if (Tools.addTab(tab_id, title, ClientCheckingTemplate(data))) {
+                    $tab = $('#tab-'+ tab_id + '-content').data('id', args.fromPartnerAgencyId);
 
                     Client.initCheck($tab,args);
                 } else {
@@ -245,7 +245,7 @@ define(function(require, exports) {
     };
 
     Client.initCheck = function($tab,args){
-        var id = $tab.find('.T-saveClear').data('id');
+        var id = $tab.find('.T-search-area').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(6)).check($tab);
         Client.getAgencyList($tab,false);
@@ -289,7 +289,7 @@ define(function(require, exports) {
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            Client.ClientCheck(0, false, $tab);
+            Client.ClientCheck(0, false, $tab, $(this).closest('.T-search-area').data('isview'));
         });
 
         //导出报表事件
@@ -1060,7 +1060,7 @@ define(function(require, exports) {
                 if(type){
                     Client.ClientClear(0,args);
                 } else {
-                    Client.ClientCheck(0,args);
+                    Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
                 }
             }
         }).on("click",function(){
