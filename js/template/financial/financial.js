@@ -365,7 +365,12 @@ FinancialService.isClearSave = function($tab,rule){
         if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
             sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
         }
-    if(sumPayMoney != sumListMoney){
+    console.log("sumPayMoney:" + sumPayMoney);
+    console.log("sumListMoney:" + sumListMoney);
+    console.log(typeof sumPayMoney);
+    console.log(typeof sumListMoney);
+    console.log(Tools.Math.isFloatEqual(sumPayMoney,sumListMoney));
+    if(!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };

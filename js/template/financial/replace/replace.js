@@ -379,7 +379,7 @@ define(function(require, exports) {
 				if (sumMoney === undefined) {  // 未修改付款的时候，直接读取
 		            sumMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
 		        };
-			    if(sumMoney != sumPayMoney){
+			    if(!Tools.Math.isFloatEqual(sumMoney,sumPayMoney)){
 			        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 			        return false;
 			    };
