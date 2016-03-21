@@ -784,7 +784,8 @@ define(function(require, exports) {
                 bankId:bankId,
                 voucher:voucher,
                 billTime:billTime,
-                remark: $tab.find('.T-sumRemark').val()
+                remark: $tab.find('.T-sumRemark').val(),
+                sumPayMoney : $tab.find("input[name=sumPayMoney]").val()
             },
             success:function(data){
                 if(showDialog(data)){
