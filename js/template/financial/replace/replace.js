@@ -191,7 +191,6 @@ define(function(require, exports) {
 				args.orderNumber = order == '全部' ? '' : order;
 				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
 				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
-				args.accountStatus = Replace.$checkingTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -728,7 +727,6 @@ define(function(require, exports) {
 			args.orderNumber = order == '全部' ? '' : order;
 			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
 			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
-			args.accountStatus = Replace.$balanceTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){

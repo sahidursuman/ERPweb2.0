@@ -107,7 +107,7 @@ define(function(require, exports) {
             event.preventDefault(); //阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
-            $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             FinShop.getList(0,$tab);
         });
         $searchArea.find('.T-btn-search').on('click', function(event) {
