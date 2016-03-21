@@ -479,11 +479,8 @@ define(function(require,exports) {
 							if(argumentsLen === 1){
 	                            Tools.closeTab(menuKey + "-checking");
 	                            InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
-                        	} else if(argumentsLen == 2){
+                        	} else {
                         		InnerTransferOut.chenking(args);
-                        	} else if(argumentsLen == 3){
-	                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-	                            InnerTransferOut.getListData($tab,args,1);
                         	}
 						});
 					}
@@ -644,11 +641,8 @@ define(function(require,exports) {
                 		if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-settlement");
                             InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
-                    	} else if(argumentsLen == 2){
+                    	} else {
                             InnerTransferOut.settlement(args);
-                    	} else if(argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            InnerTransferOut.getListData($tab,args,2);
                     	}
                 	});
                 	

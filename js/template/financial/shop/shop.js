@@ -317,14 +317,14 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type){
-                FinShop.payingJson = [];
+                FinShop.payingJson = false;
             }
-            FinShop.initOperationList($tab.data("next"), true,false);
+            FinShop.initOperationList($tab.data("next"), type,false);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            saveData($tab,args,[tab_id, title, html]);
+            saveData($tab,$tab.data("next"),[tab_id, title, html]);
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -334,7 +334,7 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
             if(type){
-                FinShop.payingJson = [];
+                FinShop.payingJson = false;
             }
         });
 
@@ -350,7 +350,7 @@ define(function(require, exports) {
                         });
                     }
                 } else {
-                    FinShop.payingJson = [];
+                    FinShop.payingJson = false;
                     FinShop.setAutoFillEdit($tab, false);
                 }
             });
@@ -525,11 +525,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                             Tools.closeTab(checkMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else if(argLen === 2){
+                        } else {
                             FinShop.initOperationList(args, false, false);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            FinShop.initOperationEvent($tab,args,false);
                         }
                     });
                 }
@@ -673,13 +670,11 @@ define(function(require, exports) {
                 .done(function(data) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         $tab.data('isEdited', false);
-                        FinShop.payingJson = [];
+                        FinShop.payingJson = false;
                         if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else if(argLen === 2){
-                            FinShop.initOperationList(args, true,false);
-                        } else if(argLen === 3){
+                        } else {
                             FinShop.initOperationList(args, true,false);
                         }
                     })

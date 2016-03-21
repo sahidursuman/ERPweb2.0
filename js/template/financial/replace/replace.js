@@ -263,9 +263,9 @@ define(function(require, exports) {
             event.preventDefault();
             if (!validatorCheck.form())return;
             if (isCheck) {
-            	Replace.saveCheckingData($tab,args,[tab_id, title, html]);
+            	Replace.saveCheckingData($tab,$tab.data('next'),[tab_id, title, html]);
         	}else{
-            	Replace.savePayingData($tab,args,[tab_id, title, html]);
+            	Replace.savePayingData($tab,$tab.data('next'),[tab_id, title, html]);
         	}
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
@@ -684,11 +684,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                         	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);
-                        } else if(argLen === 2){
+                        } else {
                             Replace.checkingList(args);
-                        } else if(argLen === 3){
-                        	Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Replace.CM_event($tab,args,true);
                         }
                     })
                 }
@@ -821,11 +818,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                         	Tools.closeTab(blanceMenuKey);
                             Replace.getList(Replace.listPageNo);                            
-                        } else if(argLen === 2){
+                        } else {
                             Replace.balanceList(args);
-                        } else if(argLen === 3){
-                        	Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                        	Replace.getOperationList(args,$tab);
                         }
                     })
                 });

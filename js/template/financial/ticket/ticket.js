@@ -365,11 +365,8 @@ define(function(require, exports) {
 	                    if (argLen === 1) {
 	                        Tools.closeTab(checkMenuKey);
 	                        Ticket.getList(Ticket.listPageNo);
-	                    } else if (argLen === 2){
+	                    } else {
 	                        Ticket.checkingList(args,$tab);
-	                    } else if (argLen === 3){
-	                    	Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-	                        Ticket.check_event(args,$tab);
 	                    }
 	                });
 	            }
@@ -651,11 +648,9 @@ define(function(require, exports) {
             	Ticket.payingJson = false;
                 if (argLen === 1) {
                 	Ticket.getList(Ticket.listPageNo);
-                } else if(argLen === 2){
+                } else {
                     Ticket.clearingList(args,$tab);
-                } else if(argLen === 3){
-                	Ticket.clearingList(args,$tab);
-                }
+                } 
             })
         });
 	};

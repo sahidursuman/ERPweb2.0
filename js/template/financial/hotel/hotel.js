@@ -468,11 +468,8 @@ define(function(require, exports) {
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             hotel.listHotel(hotel.listPage);
-                        } else if(argumentsLen === 2){
+                        } else {
                             hotel.hotelCheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            hotel.initCheck(args,$tab);
                         }
                     });
                 }
@@ -513,12 +510,10 @@ define(function(require, exports) {
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listHotel(hotel.listPage);
-                        }else if(argumentsLen === 2){
+                        }else {
                             if(args.isAutoPay == 1){
                                 args.isAutoPay = 0;
                             }
-                            hotel.hotelClear(args,$tab);
-                        } else if(argumentsLen === 3){
                             hotel.hotelClear(args,$tab);
                         }
                     }); 
@@ -541,7 +536,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    hotel.initCheck(args,$tab);
+                    hotel.hotelCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     hotel.clearTempData = false;
                     hotel.clearTempSumDate = false;
