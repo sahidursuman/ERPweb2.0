@@ -771,13 +771,11 @@ define(function(require, exports) {
 
 			if ($that.is('input[name="isAccountGuide"]')) {
 				var $priceObj = $that.closest('tbody').find('.price:not(.hidden)').addClass('hidden'),
-					$price = $priceObj.filter('input[name="price"]'),
-					$manageFee = $priceObj.filter('input[name="manageFee"]'),
+					$price = $priceObj.eq(0).text(),
 					$trPriceObj = $that.closest('tr').find('.price');
 
-				$trPriceObj.filter('input[name="price"]').removeClass('hidden').val($price.val());
-				$trPriceObj.filter('input[name="manageFee"]').removeClass('hidden').val($manageFee.val());
-				$that.closest('tbody').find('.price').filter('.hidden').val(0);
+				$trPriceObj.removeClass('hidden').text($price);
+				$that.closest('tbody').find('.price').filter('.hidden').text(0);
 			} else {
 				var $parents = $that.closest('tr'), id = $parents.data('entity-arrangeid'),
 					$name = $that.data('entity-name'), isBooking = $parents.data('entity-isbooking');
@@ -804,7 +802,77 @@ define(function(require, exports) {
 		$tab.find(".T-cancel").on("click",function(){
 			 Tools.closeTab(Tools.getTabKey($tab.prop('id')));
 		});  
-	};
+		//计算计划预支款
+		$tab.find('#tripPlan_addPlan_guide').on('change', 'input[name=guidePlanPreMoney]', function() {
+			var $inputs = $tab.find('#tripPlan_addPlan_guide').find('input[name=guidePlanPreMoney]'), guideAllPlanPreMoney = 0;
+			$inputs.each(function(index) {
+				var $this = $inputs.eq(index);
+				guideAllPlanPreMoney += $this.val()-0;
+			});
+			$tab.find('.T-guidePlanAllPreMoney').text(guideAllPlanPreMoney);
+		});
+
+		//选择已添加导游
+		$tab.find('.tab-content').on('click.chooseGuide', '.T-chooseGuide', function() {
+			var $this = $(this), $guideList = [], guideList = [],
+				$parent = $this.closest('tr');
+			$tab.find('#tripPlan_addPlan_guide tbody tr').each(function() {
+				var $that = $(this);
+				if (!!$that.find('[name=guideId]').val()) {
+					$guideList.push($that)
+				}
+			});
+			console.log($guideList)
+			for (var i = $guideList.length - 1; i >= 0; i--) {
+				var $that = $guideList[i];
+				var guide = {
+					index: i,
+					name: $that.find('[name=guideName]').val(),
+					id: $that.find('[name=guideId]').val()
+				}
+				if (!!guide.id) {
+					guideList.push(guide);
+				}
+			}
+			/*$guideList.each(function(i) {
+				var $that = $guideList.eq(i);
+				var guide = {
+					index: i,
+					name: $that.find('[name=guideName]').val(),
+					id: $that.find('[name=guideId]').val()
+				}
+				if (!!guide.id) {
+					guideList.push(guide);
+				}
+			})*/
+			console.log(guideList);
+			$this.autocomplete({
+				minLength: 0,
+				change: function(event, ui) {
+					if(ui.item == null){
+						$this.data('entity-index','');
+						$this.data('entity-guideid', '');
+					}
+				},
+				select: function(event, ui) {
+					$this.data('entity-index', ui.item.index);
+					$this.data('entity-guideid', ui.item.id);
+				}
+			})
+			if(guideList && guideList.length > 0){
+				for(var i=0; i < guideList.length; i++){
+					guideList[i].value = guideList[i].name;
+				}
+				$this.autocomplete('option','source', guideList);
+				$this.autocomplete('search', '');
+			}else{
+				layer.tips('没有安排导游', $this, {
+				    tips: [1, '#3595CC'],
+				    time: 2000
+				});
+			}
+		})
+	}
 
 	/**
 	 * 车队通知游客操作
@@ -1374,8 +1442,11 @@ define(function(require, exports) {
 			+'<td><div class="col-sm-12 feild-relative"><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"><span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td> '
 			+'<!-- <td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"/></td> -->'
 			+'<td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"></td>'
-			+'<td><input type="text" name="price" class="col-sm-12 price input-success F-float F-money" maxlength="9"></td>'
-			+'<td><input type="text" name="manageFee" class="col-sm-12 price input-success F-float F-money" maxlength="9"></td>'
+			+'<td><input type="text" name="price" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
+			+'<td><input type="text" name="manageFee" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
+            +'<td><span class="price F-float F-money"></span></td>'
+            +'<td><span class="T-guidePlanPayMoney F-float F-money"></span></td>'
+            +'<td><input type="text" name="guidePlanPreMoney" /></td>'
 			+'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"></td>'
 			+'<td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除"> 删除 </a> </td> </tr>  ',
 
@@ -1393,7 +1464,7 @@ define(function(require, exports) {
 			$tr.find('input[name="isAccountGuide"]')[0].checked = true;
 		} else {
 			// 其他条时，默认隐藏费用项
-			$tr.find('.price').addClass('hidden');
+			$tr.find('.price').addClass('hidden').text(0);
 		}
 
 		if ($tab.find('.T-status').text() != 0) {
@@ -1433,7 +1504,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
-					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
+					+ '<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -1464,7 +1535,7 @@ define(function(require, exports) {
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input name="prePayMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
@@ -1492,7 +1563,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="orderStatus"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
@@ -1524,7 +1595,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1573,7 +1644,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1604,7 +1675,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1633,7 +1704,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
@@ -1954,8 +2025,7 @@ define(function(require, exports) {
 				});
 			}
 		})
-	}
-	
+	}	
 
 	/**
 	 * 绑定导游选择
@@ -3246,6 +3316,8 @@ define(function(require, exports) {
 		var guideAllPayMoney = 0,	//总计划导付
 			detail = [0,0,0],
 			index = 0,
+			guidePayMoney = [],
+			guideIndex = 0,
 			money;
 		
 		var $objs = $tab.find('.tab-content').find("input[name=guidePayMoney]");
@@ -3255,7 +3327,15 @@ define(function(require, exports) {
 			guideAllPayMoney += money;
 
 			index = $objs.eq(i).prevAll('select[name="payType"]').val() * 1;
+			guideIndex = $objs.eq(i).prevAll('input[name=arrangeGuide]').data('entity-index');
 			detail[index] += money;
+
+			var guideMoney = {
+				type: index,
+				guideIndex: guideIndex,
+				money: money
+			}
+			guidePayMoney.push(guideMoney);
 		}
 		$tab.find(".T-guidePayedMoney").html(guideAllPayMoney);
 
@@ -3267,6 +3347,23 @@ define(function(require, exports) {
 		}
 
 		$tab.find('.T-guidePayedMoneyLabel').text(text.length?text.join(','): 0);
+		//每个导游 导付
+		var $guideListTr = $tab.find('#tripPlan_addPlan_guide tbody tr')
+		$guideListTr.each(function(index) {
+			var thisGuideMoney = [0,0,0], thisGuideText = [];
+			for (var i = guidePayMoney.length - 1; i >= 0; i--) {
+				var $this = guidePayMoney[i];
+				if ($this.guideIndex == index) {
+					thisGuideMoney[$this.type] += $this.money;
+				}
+			}
+			for (var i = 0; i < 3;i ++) {
+				if (thisGuideMoney[i] != 0) {
+					thisGuideText.push(label[i] + thisGuideMoney[i]);
+				}
+			}
+			$guideListTr.eq(index).find('.T-guidePlanPayMoney').text(thisGuideText.length?thisGuideText.join(','): 0);
+		});
 	};
 
 	/**
@@ -3421,7 +3518,7 @@ define(function(require, exports) {
 			ticketList : Tools.getTableVal($tab.find('#tripPlan_addPlan_ticket').find('tbody'), 'entity-arrangeid'),
 		},
 		json = JSON.stringify(tripPlanJson),arrangeStatus = {};
-
+		console.log(tripPlanJson.hotelList);
 		$tab.find('.T-finishedArrange').each(function() {
 			var $that = $(this);
 
@@ -3599,6 +3696,15 @@ define(function(require, exports) {
 		}else {
 			return 0;
 		}
+	}
+
+	/**
+	 * 计算计划导付
+	 * @param  {[type]} $tab [容器]
+	 * @return {[type]}      [description]
+	 */
+	tripPlan.clacPlanGuidePay = function($tab) {
+		var $guideListTr = $tab.find('#tripPlan_addPlan_guide tbody tr');
 	}
 
 	exports.init = tripPlan.initModule;
