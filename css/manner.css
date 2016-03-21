@@ -1799,6 +1799,9 @@ p#back-top a span {
 .h-touristGroupInfo p span{
     margin-right: 10px;
 }
+#shopFormCol-x12 .col-sm-12{
+    float: none;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {

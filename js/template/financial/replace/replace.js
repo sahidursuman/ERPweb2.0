@@ -191,7 +191,6 @@ define(function(require, exports) {
 				args.orderNumber = order == '全部' ? '' : order;
 				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
 				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
-				args.accountStatus = Replace.$checkingTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -264,9 +263,9 @@ define(function(require, exports) {
             event.preventDefault();
             if (!validatorCheck.form())return;
             if (isCheck) {
-            	Replace.saveCheckingData($tab,args,[tab_id, title, html]);
+            	Replace.saveCheckingData($tab,$tab.data('next'),[tab_id, title, html]);
         	}else{
-            	Replace.savePayingData($tab,args,[tab_id, title, html]);
+            	Replace.savePayingData($tab,$tab.data('next'),[tab_id, title, html]);
         	}
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
@@ -335,29 +334,30 @@ define(function(require, exports) {
 			//导出报表事件 btn-hotelExport
 	        $tab.find(".T-btn-export").click(function(){
 
-	            var args = {
+	            var argsData = {
 	                    orderNumber: $tab.find('.T-search-order').val(),
 	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
 	                    travelAgencyName: $tab.find('input[name=name]').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
-	                    endDate: $tab.find('.T-search-end-date').val()
+	                    endDate: $tab.find('.T-search-end-date').val(),
+	                    accountStatus : args.accountStatus
 	                };
-	            args.orderNumber = args.orderNumber === "全部" ? "" : args.orderNumber;
+	            argsData.orderNumber = argsData.orderNumber === "全部" ? "" : argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
 	        	if(project.length > 0){
 					for(var i=0; i<project.length; i++){
 						if(project[i] == "车队"){
-							args.busCompanyOrderStatus = 1;
+							argsData.busCompanyOrderStatus = 1;
 						}else if(project[i] == "酒店"){
-							args.hotelOrderStatus = 1;
+							argsData.hotelOrderStatus = 1;
 						}else if(project[i] == "景区"){
-							args.scenicOrderStatus = 1;
+							argsData.scenicOrderStatus = 1;
 						}else if(project[i] == "票务"){
-							args.ticketOrderStatus = 1;
+							argsData.ticketOrderStatus = 1;
 						}
 					}
 				}
-	            FinancialService.exportReport(args,"exportArrangeBookingOrderFinancial");
+	            FinancialService.exportReport(argsData,"exportArrangeBookingOrderFinancial");
 	        });
         }
         FinancialService.closeTab(oMenuKey);
@@ -684,11 +684,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                         	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);
-                        } else if(argLen === 2){
+                        } else {
                             Replace.checkingList(args);
-                        } else if(argLen === 3){
-                        	Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Replace.CM_event($tab,args,true);
                         }
                     })
                 }
@@ -727,7 +724,6 @@ define(function(require, exports) {
 			args.orderNumber = order == '全部' ? '' : order;
 			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
 			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
-			args.accountStatus = Replace.$balanceTab.find("[name=accountStatus]").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -822,11 +818,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                         	Tools.closeTab(blanceMenuKey);
                             Replace.getList(Replace.listPageNo);                            
-                        } else if(argLen === 2){
+                        } else {
                             Replace.balanceList(args);
-                        } else if(argLen === 3){
-                        	Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                        	Replace.getOperationList(args,$tab);
                         }
                     })
                 });

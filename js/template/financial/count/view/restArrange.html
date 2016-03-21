@@ -88,8 +88,7 @@
         <td>
         {{if tripPlan.billStatus == -1}}
             {{if arrange.isChoose == 1}}
-                <input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.realPrice}}" 
-                type="text" name="price" class="w-80"/>
+                <input  value="{{arrange.realPrice}}" type="text" name="price" class="w-80" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
             {{else}}
                 <span class="F-float F-money">{{arrange.realPrice}}</span>
@@ -99,7 +98,7 @@
             {{if arrange.badStatus == 1}}
                 <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" readOnly="readOnly"/>
             {{else}}
-                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80"/><input type="hidden" name="standardId">
+                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" /><input type="hidden" name="standardId">
             {{/if}}
         {{/if}}
         </td>
@@ -139,7 +138,7 @@
         </span>
         &nbsp;
         <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-        <select name="payType">
+        <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
             <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
             <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
             <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>

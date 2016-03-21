@@ -66,9 +66,9 @@
                 </td>
                 <td>
                 
-                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50"/></td>
+                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
-                <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50"></td>
+                <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}></td>
     
                  <td><span class="needInReduceMoney"></span></td>
                 
@@ -88,7 +88,7 @@
                     {{/if}}
                     <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
                 {{else}}
-                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50"/>
+                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 {{/if}}
                 </td>
                 
@@ -116,7 +116,7 @@
                 </span>
                 &nbsp;
                 <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-                <select name="payType">
+                <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
                     <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
                     <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
@@ -150,11 +150,10 @@
                             {{arrange.travelAgencyRebateMoney}}
                         </span>
                     {{else}}
-                        <span class="travelAgencyRebateMoney F-float F-money">
-                            {{arrange.travelAgencyRebateMoney}}
-                        </span>
+                        <input name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                    
                 </td>
                 
                 <td>{{if arrange.badStatus == 1}}<span>{{arrange.guideRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" maxlength="5"
@@ -167,11 +166,9 @@
                             {{arrange.guideRebateMoney}}
                         </span>
                     {{else}} 
-                        <span class="guideRebateMoney F-float F-money">
-                            {{arrange.guideRebateMoney}}
-                        </span>
+                        <input name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                 </td>
                 
                 <td>

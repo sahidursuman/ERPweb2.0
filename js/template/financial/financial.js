@@ -262,11 +262,7 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
     $tab.find("input[name=sumPayMoney]").data("money",$tab.find("input[name=sumPayMoney]").val());
-    $tab.on('focusin', 'input[name="payMoney"]',function(){
-        if(!$(this).data("oldVal")){
-            $(this).data("oldVal",$(this).val());
-        }
-    }).on("change", 'input[name="payMoney"]', function(){
+    $tab.on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
             $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);

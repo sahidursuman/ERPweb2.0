@@ -2326,9 +2326,9 @@ KingServices.viewTransit = function(id){
 	});
 };
 //查看收支明细 
-KingServices.viewPayMentDetail = function(id,num,type){
+KingServices.viewPayMentDetail = function(args){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
-		module.init(id,num,type);
+		module.init(args);
 	});
 };
 //报账审核--跳转发团安排的查看页面
