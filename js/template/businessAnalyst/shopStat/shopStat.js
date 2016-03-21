@@ -40,8 +40,11 @@ define(function(require, exports) {
 		//获取客户、团号和购物店列表
    		shopStat.autocompleteDate(shopStat.$tab);
    		//加载打印插件
-   		var pluginKey = 'plugin_print';
-		Tools.loadPluginScript(pluginKey);
+   		var printPluginKey = 'plugin_print';
+		Tools.loadPluginScript(printPluginKey);
+		//加载导出插件
+		var exportPluginKey = 'plugin_export';
+		Tools.loadPluginScript(exportPluginKey);
 		
 	}
 
@@ -118,6 +121,11 @@ define(function(require, exports) {
 			});
 		}).on('click','.T-shopStat-outToexcel',function(){
 			//导出事件
+			shopStat.$tab.find('.T-showHighLight').table2excel({
+				name:'购物统计表',
+				filename:'购物统计',
+				exclude_links:false
+			});
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');
