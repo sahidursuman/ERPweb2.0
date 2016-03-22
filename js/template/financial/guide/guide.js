@@ -213,14 +213,12 @@ define(function(require, exports) {
         
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
-            args = {
-                guideId: $tab.find('.T-saveClear').data('id'),
-                startDate: $tab.find('.T-search-start-date').val(),
-                endDate: $tab.find('.T-search-end-date').val(),
-                tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
-                lineProductId: $line.data('id'),
-                lineProductName: $line.val()
-            };
+            args.guideId = $tab.find('.T-saveClear').data('id');
+            args.startDate = $tab.find('.T-search-start-date').val();
+            args.endDate = $tab.find('.T-search-end-date').val();
+            args.tripPlanNumber = $tab.find('.T-tripPlanNumber').val();
+            args.lineProductId = $line.data('id');
+            args.lineProductName = $line.val();
 
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
@@ -302,8 +300,7 @@ define(function(require, exports) {
                 guideName:$btn.data('name'),
                 startDate: $datePicker.eq(0).val(),
                 endDate: $datePicker.eq(1).val(),
-                accountStatus : $tab.find('[name=accountStatus]').val()
-
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             };
             if(type){
                 args.isOuter = FinGuide.isOuter;
