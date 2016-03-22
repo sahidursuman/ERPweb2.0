@@ -91,7 +91,7 @@ define(function(require, exports) {
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
     Self.initList = function(startDate,endDate,accountStatus) {
-        Self.getQueryList();
+        Self.bindTraderList();
         Tools.setDatePicker(Self.$tab.find(".date-picker"),true);
 
         //搜索按钮事件
@@ -135,6 +135,8 @@ define(function(require, exports) {
 
     Self.Getcheck = function(args,$tab) {
         if (!!$tab) {
+            args.selfPayName = $tab.find('input[name="selfPayName"]').val();
+            args.selfPayId = $tab.find('input[name="selfPayId"]').val();
             args.tripInfo = $tab.find("input[name=tripInfo]").val();
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
@@ -200,9 +202,11 @@ define(function(require, exports) {
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
                     selfPayId: args.selfPayId, 
+                    accountStatus: $tab.find('input[name=accountStatus]').val(),
                     tripInfo: $tab.find('input[name=tripInfo]').val(),
                     startTime: $tab.find('input[name=startDate]').val(),
-                    endTime: $tab.find('input[name=endDate]').val()
+                    endTime: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus
                 };
             FinancialService.exportReport(argsData,"exportSelfPayFinancial");
         });
@@ -220,6 +224,8 @@ define(function(require, exports) {
     // 付款
     Self.GetClear = function(args,$tab) {
         if (!!$tab) {
+            args.selfPayName = $tab.find('input[name="selfPayName"]').val();
+            args.selfPayId = $tab.find('input[name="selfPayId"]').val();
             args.tripInfo = $tab.find("input[name=tripInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -463,11 +469,8 @@ define(function(require, exports) {
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Self.listSelf(Self.searchData.pageNo);
-                        } else if(argumentsLen === 2){
-                            Self.Getcheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Self.initCheck(args,$tab);
+                        } else {
+                            Self.Getcheck(args);
                         }
                     });
                 }
@@ -506,7 +509,7 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo);
                         }else{
                             args.isAutoPay = Self.showBtnFlag ? 2: 0;
-                            Self.GetClear(args,$tab);
+                            Self.GetClear(args);
                         }
                     });
                 }
@@ -527,7 +530,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(option == "check"){
-                Self.initCheck($tab.data('next'),$tab);
+                Self.Getcheck($tab.data('next'),$tab);
             } else if(option == "clear"){
                 Self.clearTempData = false;
                 Self.clearTempSumDate = false;
@@ -561,51 +564,87 @@ define(function(require, exports) {
             }
         });
 
+        Self.bindTraderList($tab.find('.T-selfPayName'));
         //报表内的操作
         Self.listOption($tab);
         FinancialService.closeTab(menuKey + "-" + option + "ing");
     };
 
-    Self.getQueryList = function(){
-        $.ajax({
-            url: KingServices.build_url("account/selfPayFinancial","getSelfPayNames"),
-            type: "POST",
-            data: Self.ClearData,
-            dataType: "json",
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var $selfPay = Self.$tab.find(".T-chooseSelfPay"),
-                        selfPayList = data.selfPayNames;
-                    if(selfPayList != null && selfPayList.length > 0){
-                        for(var i=0;i<selfPayList.length;i++){
-                            selfPayList[i].value = selfPayList[i].name;
-                        }
-                    }
-                    var all = {
-                        id : "",
-                        value : "全部"
-                    };
-                    selfPayList.unshift(all);
-
-                    //车队
-                    $selfPay.autocomplete({
-                        minLength: 0,
-                        source : selfPayList,
-                        change: function(event,ui) {
-                            if (!ui.item)  {
-                                $(this).nextAll('input[name="busCompanyId"]').val('');
+    Self.bindTraderList = function($obj) {
+        if (!!Self.tranderList)  {
+            Self._bindTranderList($obj);
+        } else {
+            $.ajax({
+                url: KingServices.build_url("account/selfPayFinancial","getSelfPayNames"),
+                type: "POST",
+                data: Self.ClearData,
+                dataType: "json",
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var selfPayList = data.selfPayNames;
+                        if(selfPayList != null && selfPayList.length > 0){
+                            for(var i=0;i<selfPayList.length;i++){
+                                selfPayList[i].value = selfPayList[i].name;
                             }
-                        },
-                        select: function(event,ui) {
-                            $(this).blur().nextAll('input[name="busCompanyId"]').val(ui.item.id);
                         }
-                    }).on("click",function(){
-                        $selfPay.autocomplete('search','');
-                    });
+
+                        Self.tranderList = selfPayList;
+                        Self._bindTranderList($obj);
+                    }
                 }
+            }); 
+        }
+    }
+    Self._bindTranderList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = Self.$tab.find(".T-chooseSelfPay");
+        }
+
+        var list = Self.tranderList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+        var all = {
+            id : "",
+            value : "全部"
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }
+        var name = $obj.val();
+        //车队
+        $obj.autocomplete({
+            minLength: 0,
+            source : list,
+            change: function(event,ui) {
+                if(!isMainList){
+                    $obj.val(name);
+                } else {
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="selfPayId"]').val('');
+                    }
+                }
+            },
+            select: function(event,ui) {
+                $obj.blur().nextAll('input[name="selfPayId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="tripInfo"]').val('');
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
-        });      
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     // 对账、付款报表内的操作

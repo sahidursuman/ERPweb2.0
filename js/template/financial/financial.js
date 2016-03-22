@@ -50,17 +50,18 @@ function getBankList($obj,payType){
         change :function(event, ui){
             if(ui.item == null){
                 $(this).val('').nextAll('.T-accountId').val('');
-                $(this).nextAll('input[name=beginningBalance]').val('').trigger('change');
+                $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
             }
         },
         select :function(event, ui){
+            $bBala = $(this).closest(".T-search-area").find('input[name=beginningBalance]');
             if(payType == 0){
                 $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').next().find('input').val("");
             } else if(payType == 1){
                 $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').prev().find('input').val("");
             }
         }
@@ -261,11 +262,7 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
     $tab.find("input[name=sumPayMoney]").data("money",$tab.find("input[name=sumPayMoney]").val());
-    $tab.on('focusin', 'input[name="payMoney"]',function(){
-        if(!$(this).data("oldVal")){
-            $(this).data("oldVal",$(this).val());
-        }
-    }).on("change", 'input[name="payMoney"]', function(){
+    $tab.on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
             $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);
@@ -364,7 +361,12 @@ FinancialService.isClearSave = function($tab,rule){
         if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
             sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
         }
-    if(sumPayMoney != sumListMoney){
+    console.log("sumPayMoney:" + sumPayMoney);
+    console.log("sumListMoney:" + sumListMoney);
+    console.log(typeof sumPayMoney);
+    console.log(typeof sumListMoney);
+    console.log(Tools.Math.isFloatEqual(sumPayMoney,sumListMoney));
+    if(!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };
@@ -554,7 +556,7 @@ function isAllChecked(checkboxList){
 /**
  * 财务校验方法
  * 使用方法：var rule = new FinRule(0);
- * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款
+ * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款、6：导游和客户对账
  */ 
 function FinRule(type) {
     this.type = type;
@@ -664,6 +666,17 @@ FinRule.prototype.check = function($obj) {
                     ]
                 }
             ]);
+        case 6:  // 导游和客户/内转转入/内转转出对账
+            return $obj.formValidate([
+                {   //结算金额
+                    $ele: $obj.find('input[name=settlementMoney]'),
+                    rules: [
+                        {
+                            type: 'float',
+                            errMsg: '请输入数字'
+                        }
+                    ]
+                }]);
         default:
             return false;
     }

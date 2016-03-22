@@ -107,7 +107,7 @@ define(function(require, exports) {
             event.preventDefault(); //阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
-            $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             FinShop.getList(0,$tab);
         });
         $searchArea.find('.T-btn-search').on('click', function(event) {
@@ -123,8 +123,8 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('id'),
                 name = $that.closest('tr').data('name'),
                 argsData = {
-                    id: id,
-                    name: name,
+                    shopId: id,
+                    shopName: name,
                     source: true,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
@@ -142,34 +142,36 @@ define(function(require, exports) {
     };
 
     FinShop.getShopName = function($obj) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
+        $.ajax({
+            url: KingServices.build_url('financial/shopAccount', 'selectShopName'),
+            type: "POST",
+            showLoading: false
+        }).done(function(data) {
+            if (showDialog(data)) {
+                for (var i = 0; i < data.shopList.length; i++) {
+                    data.shopList[i].value = data.shopList[i].shopName;
+                    data.shopList[i].id = data.shopList[i].shopId;
                 }
-            },
-            select: function(event, ui) {
-                $(this).blur().data('id', ui.item.id);
+                var all = { id: '', value: '全部' };
+                FinShop.shopList = data.shopList.slice(all);
+                if(!!$obj){
+                    data.shopList.unshift(all);
+                    $obj.autocomplete({
+                        minLength: 0,
+                        source : data.shopList,
+                        change: function(event, ui) {
+                            if (!ui.item) {
+                                $(this).data('id', '');
+                            }
+                        },
+                        select: function(event, ui) {
+                            $(this).blur().data('id', ui.item.id);
+                        }
+                    }).on('click', function() {
+                        $obj.autocomplete('search','');
+                    });
+                }
             }
-        }).on('click', function() {
-            $.ajax({
-                url: KingServices.build_url('financial/shopAccount', 'selectShopName'),
-                type: "POST",
-                showLoading: false
-            }).done(function(data) {
-                if (showDialog(data)) {
-                    for (var i = 0; i < data.shopList.length; i++) {
-                        data.shopList[i].value = data.shopList[i].shopName;
-                        data.shopList[i].id = data.shopList[i].shopId;
-                    }
-                    data.shopList.unshift({ id: '', value: '全部' });
-                    $obj.autocomplete('option', 'source', data.shopList);
-                    $obj.autocomplete('search', '');
-
-                    //$obj.data('ajax', true);
-                }
-            });
         });
     };
 
@@ -178,8 +180,8 @@ define(function(require, exports) {
      * @param  {[int]} id 购物账务ID
      */
     FinShop.accountChecking = function(args) {
-        FinShop.checkingId = args.shopId = args.id;
-        FinShop.checkingName = args.name;
+        FinShop.checkingId = args.shopId;
+        FinShop.checkingName = args.shopName;
         args.page = 0;
         FinShop.initOperationList(args, false,false);
     };
@@ -187,13 +189,18 @@ define(function(require, exports) {
      * 初始化付款模块
      * @param  {[type]} args 
      */
-    FinShop.initPay = FinShop.settlement = function(args) {
-        FinShop.settlementId = args.shopId = args.id;
-        FinShop.settlementName = args.name;
+    FinShop.settlement = function(args) {
+        FinShop.settlementId = args.shopId;
+        FinShop.settlementName = args.shopName;
         FinShop.isBalanceSource = !args.source;
         args.page = 0;
-        //args.accountStatus = 
         FinShop.initOperationList(args, true,false);
+    };
+    FinShop.initPay = function(args){
+        FinShop.getShopName();
+        args.shopId = args.id;
+        args.shopName = args.name;
+        FinShop.settlement(args);
     };
     /**
      * 对账和收款列表
@@ -203,13 +210,10 @@ define(function(require, exports) {
      */
     FinShop.initOperationList = function(args, type, $tab) {
         if (!!$tab) {
-            args = {
-                pageNo: (args.page || 0),
-                shopId: args.id || $tab.data('id'),
-                startDate: args.start || $tab.find('.T-search-start-date').val(),
-                endDate: args.end || $tab.find('.T-search-end-date').val(),
-                tripMessage: $tab.find('.T-search-trip').val()
-            };
+            args.pageNo = (args.page || 0);
+            args.startDate = $tab.find('.T-search-start-date').val();
+            args.endDate = $tab.find('.T-search-end-date').val();
+            args.tripMessage = $tab.find('.T-search-trip').val();
             args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.sortType = 'accountTime';
@@ -229,11 +233,12 @@ define(function(require, exports) {
                     title = '购物收款',
                     key = settMenuKey;
                 if (type) {
-                    data.name = FinShop.settlementName;
+                    data.id = args.shopId;
+                    data.name = args.shopName;
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
-                    data.name = FinShop.checkingName;
+                    data.name = args.shopName;
                     template = shopCheckingTemplate;
                     title = '购物对账';
                     key = checkMenuKey;
@@ -287,12 +292,14 @@ define(function(require, exports) {
      */
     FinShop.initOperationEvent = function($tab,args,type) {
         var validator = (new FinRule(!type ? 0 : (FinShop.isBalanceSource ? 3 : 1))).check($tab);
+        FinShop.getShopList($tab,type);
 
         //搜索顶部的事件绑定
         var $searchArea = $tab.find('.T-search-area');
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            FinShop.initOperationList({}, type, $tab);
+            args.pageNo = 0;
+            FinShop.initOperationList(args, type, $tab);
         });
         var $datepicker = $searchArea.find('.datepicker');
         Tools.setDatePicker($datepicker, true);
@@ -310,14 +317,14 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type){
-                FinShop.payingJson = [];
+                FinShop.payingJson = false;
             }
-            FinShop.initOperationList($tab.data("next"), true,false);
+            FinShop.initOperationList($tab.data("next"), type,false);
         })
         // 监听保存，并切换tab
         .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
-            saveData($tab,args,[tab_id, title, html]);
+            saveData($tab,$tab.data("next"),[tab_id, title, html]);
         })
         // 保存后关闭
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -327,7 +334,7 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
             if(type){
-                FinShop.payingJson = [];
+                FinShop.payingJson = false;
             }
         });
 
@@ -343,7 +350,7 @@ define(function(require, exports) {
                         });
                     }
                 } else {
-                    FinShop.payingJson = [];
+                    FinShop.payingJson = false;
                     FinShop.setAutoFillEdit($tab, false);
                 }
             });
@@ -357,14 +364,15 @@ define(function(require, exports) {
 
             //导出报表事件 btn-hotelExport
             $tab.find(".T-btn-export").click(function() {
-                var args = {
+                var argsData = {
                     shopId: $tab.find('input[name=shopId]').val(),
                     shopName: $tab.find('input[name=shopName]').val(),
                     tripMessage: $tab.find('.T-search-trip').val(),
                     startDate: $tab.find('.T-search-start-date').val(),
-                    endDate: $tab.find('.T-search-end-date').val()
+                    endDate: $tab.find('.T-search-end-date').val(),
+                    accountStatus : args.accountStatus
                 };
-                FinancialService.exportReport(args, "exportArrangeShopFinancial");
+                FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });
         }
 
@@ -403,7 +411,7 @@ define(function(require, exports) {
                 }
                 var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
                     sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
-                if (sumPayMoney != sumListMoney) {
+                if (!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)) {
                     showMessageDialog($("#confirm-dialog-message"), "本次收款金额合计与单条记录本收付款金额的累计值不相等，请检查！");
                     return false;
                 }
@@ -517,11 +525,8 @@ define(function(require, exports) {
                         if (argLen === 1) {
                             Tools.closeTab(checkMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else if(argLen === 2){
+                        } else {
                             FinShop.initOperationList(args, false, false);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            FinShop.initOperationEvent($tab,args,false);
                         }
                     });
                 }
@@ -593,7 +598,8 @@ define(function(require, exports) {
         if ($tab) {
             var args = {
                 pageNo: pageNo || 0,
-                shopId: FinShop.settlementId,
+                shopId: $tab.find('input[name=shopName]').data('id'),
+                shopName : $tab.find('input[name=shopName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val()
@@ -638,6 +644,8 @@ define(function(require, exports) {
     }
 
     FinShop.saveSettlement = function($tab,args,tabArgs) {
+        var check = new FinRule(5).check($tab);
+        if (!check.form()) { return false;}
         var argLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
@@ -662,13 +670,11 @@ define(function(require, exports) {
                 .done(function(data) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         $tab.data('isEdited', false);
-                        FinShop.payingJson = [];
+                        FinShop.payingJson = false;
                         if (argLen === 1) {
                             Tools.closeTab(settMenuKey);
                             FinShop.getList(FinShop.listPageNo);
-                        } else if(argLen === 2){
-                            FinShop.initOperationList(args, true,false);
-                        } else if(argLen === 3){
+                        } else {
                             FinShop.initOperationList(args, true,false);
                         }
                     })
@@ -676,6 +682,33 @@ define(function(require, exports) {
         } else {
             showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
         }
+    };
+
+    FinShop.getShopList = function($tab,type){
+        var $obj = $tab.find('input[name=shopName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : FinShop.shopList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    shopId : ui.item.id,
+                    shopName : ui.item.value,
+                    startDate : $tab.find('.T-search-start-date').val(),
+                    endDate : $tab.find('.T-search-end-date').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                FinShop.initOperationList(args, type,false);
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     // 暴露方法

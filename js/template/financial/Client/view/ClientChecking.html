@@ -1,14 +1,14 @@
-<div class="T-search-area">
+<div class="T-search-area" data-isview="{{view}}" data-id="{{fromPartnerAgencyId}}">
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label class="control-label">客户：</label>
-            <label class="control-label T-partnerAgencyName">{{partnerAgencyName}}</label>
+            <input type="text" class="control-label T-partnerAgencyName" value="{{partnerAgencyName}}" />
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">收客单号：</label>
@@ -157,7 +157,7 @@
                 </td>
                 {{if rs.detailList.transitFee.transitFeeList.length > 0}}
                 <!-- 若有中转结算价 -->
-                    <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.transitFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                    <td>{{if view == 1}}<span class="F-float F-money">{{rs.detailList.transitFee.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.transitFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                     <td class="T-settlementMoney F-float F-money">{{rs.detailList.transitFee.settlementMoney}}</td>
                 {{else}}
                 <!-- 若无中转结算价 -->
@@ -165,31 +165,33 @@
                     <!-- 中转，otherFee中多条数据 -->
                         {{each rs.detailList.otherFee as of index}}
                             {{if index == 0}}
-                                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{of.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                                <td>{{if view == 1}}<span class="F-float F-money">{{of.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{of.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                                 <td class="T-settlementMoney F-float F-money">{{of.settlementMoney}}</td>
                             {{/if}}
                         {{/each}}
                     {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
-                        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                        <td>{{if view == 1}}<span class="F-float F-money">{{rs.detailList.otherFee.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                         <td class="T-settlementMoney F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</td>
                     {{else}}
                     <!-- 若无费用明细 -->
-                        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                        <td>{{if view == 1}}<span class="F-float F-money">{{rs.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                         <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                     {{/if}}
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}" class="T-unReceivedMoney F-float F-money">{{rs.unReceivedMoney}}</td>
-                <td rowspan="{{rs.rowLen}}">
+                <td rowspan="{{rs.rowLen}}">{{if view == 1}}{{rs.checkRemark}}{{else}}
                     <textarea class="col-sm-12 T-remark hct-textarea" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{rs.checkRemark}}</textarea>
+                    {{/if}}
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkTime}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkUserName}}</td>
                 <td rowspan="{{rs.rowLen}}">
+                    {{if view == 1}}{{else}}
                     <label class="pos-rel  R-right" {{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}>
                         <input type="checkbox" class="ace T-checkbox"  {{ if rs.isConfirmAccount }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
-                    <label class="cursor"<a> |</a></label>
+                    <label class="cursor R-right"{{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}><a> |</a></label>{{/if}}
                     <a class="cursor T-action T-view">查看</a>
                 </td>
             </tr>
@@ -204,7 +206,7 @@
                                     <span class="F-float F-money">{{of.price * of.count}}</span><br>
                                 {{/each}}
                             </td>
-                            <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                            <td>{{if view == 1}}<span class="F-float F-money">{{temp.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                             <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
                         </tr>
                     {{/each}}
@@ -216,7 +218,7 @@
                             <span class="F-float F-money">{{of.price * of.count}}</span><br>
                             {{/each}}
                         </td>
-                        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                        <td>{{if view == 1}}<span class="F-float F-money">{{rs.detailList.otherFee.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.detailList.otherFee.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                         <td class="T-settlementMoney F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</td>
                     </tr>
                 {{/if}}
@@ -231,7 +233,7 @@
                                         <span class="F-float F-money">{{of.price * of.count}}</span><br>
                                     {{/each}}
                                 </td>
-                                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                                <td>{{if view == 1}}<span class="F-float F-money">{{temp.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
                                 <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
                             </tr>
                         {{/if}}
@@ -250,10 +252,12 @@
         <small>共计 {{searchParam.recordSize}} 条记录</small>
     </div>
     <div class="col-xs-8">
+    {{if view == 1}}{{else}}
         <label class="pos-rel pull-right" style="line-height: 2.2em;">
             <input type="checkbox" class="ace T-checkAll"/> 
             <span class="lbl">全选</span>
         </label>
+        {{/if}}
         <div class="dataTables_paginate paging_simple_numbers T-pagenation pull-right">
         </div>
     </div>
@@ -264,8 +268,9 @@
         <button class="btn btn-xs btn-primary T-btn-close">
             <i class="ace-icon fa fa-times-circle"></i> 关闭
         </button>
+        {{if view == 1}}{{else}}
         <button class="btn btn-xs btn-primary T-saveClear" data-right="1280002|1280005" data-id="{{fromPartnerAgencyId}}" style="margin-left: 20px">
             <i class="ace-icon fa fa-check-circle"></i> 确认对账
-        </button>
+        </button>{{/if}}
     </div>
 </form>
