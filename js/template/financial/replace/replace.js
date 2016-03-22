@@ -223,9 +223,13 @@ define(function(require, exports) {
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
+				data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
+					if(Replace.checkTemp){
+                        Replace.$checkingTab.data('isEdited',true);
+                    }
 					Replace.CM_event(Replace.$checkingTab,args,true);
 				} else {
 					Replace.$checkingTab.data('next', args)
@@ -238,9 +242,15 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Replace.$checkingTab.data('isEdited',false);
-				    		args.pageNo = obj.curr -1;
-				    		Replace.checkingList(args);
+				    		var temp = FinancialService.checkSaveJson(Replace.$checkingTab,Replace.checkTemp,new FinRule(0));
+                            if(!temp){
+                                return false;
+                            } else {
+                                Replace.checkTemp = temp;
+                                Replace.$checkingTab.data('isEdited',false);
+					    		args.pageNo = obj.curr -1;
+					    		Replace.checkingList(args);
+                            }
 				    	}
 				    }
 				});	
@@ -273,6 +283,7 @@ define(function(require, exports) {
             	Replace.payingJson = [];
 				Replace.balanceList($tab.data('next'));
             }else{
+            	Replace.checkTemp = false;
             	Replace.checkingList($tab.data('next'));
             }
         })
@@ -289,6 +300,8 @@ define(function(require, exports) {
             event.preventDefault();
             if(!isCheck){
                 Replace.payingJson = [];
+            } else {
+            	Replace.checkTemp = false;
             }
         });
 		//搜索
@@ -496,7 +509,8 @@ define(function(require, exports) {
 				partnerAgencyId : Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
+				accountStatus : Replace.$balanceTab.find("input[name=accountStatus]").val() 
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -667,7 +681,7 @@ define(function(require, exports) {
 	Replace.saveCheckingData = function($tab,args,tabArgs){
 		var argLen = arguments.length,
 			validator = new FinRule(0);
-		var json = FinancialService.checkSaveJson($tab, validator);
+		var json = FinancialService.checkSaveJson($tab,Replace.checkTemp,validator,true);
 		if (json) { // 有值
 			$.ajax({
                 url: KingServices.build_url('financial/bookingAccount', 'checkBookingAccount'),
@@ -678,9 +692,9 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    $tab.data('isEdited', false);
-
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    	$tab.data('isEdited', false);
+                    	Replace.checkTemp = false;
                         if (argLen === 1) {
                         	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);

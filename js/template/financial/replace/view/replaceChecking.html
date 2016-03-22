@@ -87,7 +87,7 @@
         </thead>
         <tbody class="T-list T-checkList">
         {{each bookinAccountList as rs index}}
-            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
@@ -95,7 +95,7 @@
                 <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
                 <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
-                <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
+                <td name="unPayedMoney"><span class="F-float F-money">{{if rs.unPayedMoney}}{{rs.unPayedMoney}}{{else}}{{rs.unReceiveMoney}}</span></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
                     <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
                     {{/if}}
@@ -104,7 +104,7 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
+                        <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} /> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"> <a> |</a></label>

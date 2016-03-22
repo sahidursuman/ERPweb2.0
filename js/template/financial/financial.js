@@ -146,11 +146,11 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参
     if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
 
     if(!$tab.data('isEdited')){
-        if(isSave){
+        if(isSave && !tempJson){
             showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
             return false;
         } else {
-            return tempJson;
+            // return tempJson;
         }
     }
 
@@ -203,6 +203,7 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参
         for(var i = 0; i < saveJson.length; i++){
             if(saveJson[i].confirm == 0 && saveJson[i].isChecked == 0){
                 saveJson.splice(i,1);//删除不需提交的行
+                i--;
             } else {
                 saveJson[i].isConfirmAccount = saveJson[i].isChecked;
             }
@@ -302,11 +303,6 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
         fn();
     }
 };
-
-
-
-
-
 
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
