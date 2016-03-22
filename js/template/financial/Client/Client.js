@@ -305,9 +305,11 @@ define(function(require, exports) {
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
-                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val(),
+                    orderNumber : $tab.find('.T-search-orderNumber').val(),
+                    otaOrderNumber : $tab.find('.T-search-number').val(),
                     accountStatus : args.accountStatus
                 };
+            console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
             FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
