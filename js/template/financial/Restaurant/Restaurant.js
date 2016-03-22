@@ -155,11 +155,15 @@ define(function(require, exports) {
                     var frList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.isGuidePay(frList);
                     data.restaurantName = args.restaurantName;
+                    data.financialRestaurantList = FinancialService.getCheckTempData(data.financialRestaurantList,restaurant.checkTemp);
                     var html = restaurantChecking(data);
                     
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
                         restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(restaurant.checkTemp){
+                            restaurant.$checkTab.data('isEdited',true);
+                        }
                         restaurant.initCheck(args,restaurant.$checkTab); 
                         //取消对账权限过滤
                         checkDisabled(frList,restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
@@ -174,9 +178,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                restaurant.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                restaurant.restaurantCheck(args);
+                                var temp = FinancialService.checkSaveJson(restaurant.$checkTab,restaurant.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    restaurant.checkTemp = temp;
+                                    restaurant.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    restaurant.restaurantCheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -456,7 +467,7 @@ define(function(require, exports) {
     //对账数据保存
     restaurant.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,restaurant.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -469,6 +480,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        restaurant.checkTemp = false;
                         restaurant.$checkTab.data('isEdited',false);
                         if(argumentsLen == 1){
                             Tools.closeTab(menuKey + "-checking");
@@ -540,6 +552,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
+                    restaurant.checkTemp = false;
                     restaurant.restaurantCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     restaurant.clearTempSumDate = false;
@@ -576,6 +589,8 @@ define(function(require, exports) {
                 if(option == "clear"){
                     restaurant.clearTempSumDate = false;
                     restaurant.clearTempData = false;
+                }else if(option == "check"){
+                    restaurant.checkTemp = false;
                 }
             });
 

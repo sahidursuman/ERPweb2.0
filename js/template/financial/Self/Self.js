@@ -152,13 +152,18 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     data.sumData = Self.getSumData(args);
                     var fsList = data.list;
+                    data.list = FinancialService.isGuidePay(fhList);
                     data.selfPayName = args.selfPayName;
                     data.searchParam.accountStatus = args.accountStatus;
+                    data.list = FinancialService.getCheckTempData(data.list,Self.checkTemp);
                     var html = SelfChecking(data);
-                    
+
                     // 初始化页面
                     if (Tools.addTab(checkTabId, "自费对账", html)) {
                         Self.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(Self.checkTemp){
+                            Self.$checkTab.data('isEdited',true);
+                        }
                         Self.initCheck(args,Self.$checkTab); 
                         //取消对账权限过滤
                         var checkTr = Self.$checkTab.find(".T-checkTr");
@@ -175,9 +180,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Self.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                Self.Getcheck(args);
+                                var temp = FinancialService.checkSaveJson(Self.$checkTab,Self.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    Self.checkTemp = temp;
+                                    Self.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    Self.Getcheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -456,7 +468,7 @@ define(function(require, exports) {
     //对账数据保存
     Self.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab,new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(Self.$checkTab,Self.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -466,6 +478,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        Self.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Self.listSelf(Self.searchData.pageNo);
@@ -530,6 +543,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(option == "check"){
+                Self.checkTemp = false;
                 Self.Getcheck($tab.data('next'),$tab);
             } else if(option == "clear"){
                 Self.clearTempData = false;
@@ -561,6 +575,8 @@ define(function(require, exports) {
             if(option == "clear"){
                 Self.clearTempData = false;
                 Self.clearTempSumDate = false;
+            }else if(option == "check"){
+                Self.checkTemp = false;
             }
         });
 
