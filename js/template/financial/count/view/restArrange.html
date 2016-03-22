@@ -50,7 +50,7 @@
                         </select>
                     {{else}}
                         {{if arrange.restaurant != null}}
-                            <span>{{arrange.restaurant.name}}</span>
+                            <span class="nameType">{{arrange.restaurant.name}}</span>
                         {{/if}}
                     {{/if}}
                 {{else}}
@@ -64,18 +64,18 @@
                                 {{/each}}
                             </select>
                         {{else if arrange.restaurantId == -1 && arrange.restaurantChooseArrangeList.length == 0}}
-                            导游自选
+                            <span class="nameType">导游自选</span>
                         {{else if arrange.restaurantId != -1}}
                             {{if arrange.restaurant !=null}}
-                                {{arrange.restaurant.name}}
+                                <span class="nameType">{{arrange.restaurant.name}}</span>
                             {{/if}}
                         {{/if}}
                     {{else}}
                         {{if arrange.restaurantId == -1}}
-                            导游自选
+                            <span class="nameType">导游自选</span>
                         {{else}}
                             {{if arrange.restaurant !=null}}
-                                {{arrange.restaurant.name}}
+                                <span class="nameType">{{arrange.restaurant.name}}</span>
                             {{/if}}
                         {{/if}}
                     {{/if}}
@@ -88,8 +88,7 @@
         <td>
         {{if tripPlan.billStatus == -1}}
             {{if arrange.isChoose == 1}}
-                <input {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} value="{{arrange.realPrice}}" 
-                type="text" name="price" class="w-80"/>
+                <input  value="{{arrange.realPrice}}" type="text" name="price" class="w-80" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
             {{else}}
                 <span class="F-float F-money">{{arrange.realPrice}}</span>
@@ -99,14 +98,21 @@
             {{if arrange.badStatus == 1}}
                 <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" readOnly="readOnly"/>
             {{else}}
-                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80"/><input type="hidden" name="standardId">
+                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/><input type="hidden" name="standardId">
             {{/if}}
         {{/if}}
         </td>
 
-        <td>{{if arrange.badStatus == 1}}<span class="F-float F-count">{{arrange.memberCount}}</span>{{else}}<input  type="text" class="F-float F-count w-50" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
-        {{else}}value="{{arrange.memberCount}}"{{/if}}  maxlength="5"
-        {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+        <td>
+            {{if arrange.badStatus == 1}}
+                <span class="F-float F-count">
+                    {{arrange.memberCount}}
+                </span>
+                {{else}}
+                    <input  type="text" class="F-float F-count w-50" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"
+                    {{else}}value="{{arrange.memberCount}}"{{/if}}  maxlength="5"
+                    {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+            {{/if}}
         </td>
 
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-money w-80">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" 
@@ -132,14 +138,14 @@
         </span>
         &nbsp;
         <span class="F-float F-money">{{if arrange.payType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-        <select name="payType">
+        <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
             <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
             <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
             <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
         </select>
         &nbsp;
         <input  type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.realGuidePayMoney}}" {{/if}} maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}{{/if}}/>{{/if}}
+        {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime != null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} maxlength="11" {{/if}} {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
         <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
         <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>
         
@@ -152,9 +158,27 @@
 
         <td><span class="difference"></span></td>
 
-        <td style="text-align: left;">{{if editStatus == 1}}<input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}</td>
+        <td style="text-align: left;">
+            {{if editStatus == 1}}
+                <input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+            {{else}}
+                {{arrange.billRemark}}
+            {{/if}}
+        </td>
 
-        <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+        <td>
+            {{if arrange.isConfirmAccount == 0}}
+                未对账
+            {{else}}
+                已对账
+            {{/if}}
+            <!-- &nbsp;&nbsp;
+            {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
+                <a href="javascript:void(0)" class="T-restArrDel">删除</a>
+            {{else}}
+                <span style="color:#bbb;">删除</span>
+            {{/if}} -->
+        </td>
     </tr>
     {{/if}}
     {{/each}}

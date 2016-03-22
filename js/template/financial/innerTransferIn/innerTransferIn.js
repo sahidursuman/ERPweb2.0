@@ -91,46 +91,46 @@ define(function(require, exports) {
 
     //获取首页搜索框的数据
 	FinTransIn.getQuery = function($obj){
-		$obj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					var $div = $obj.closest('div');
-					$obj.find('input[name=toBusinessGroupId]').val('');
-				}
-			},
-			select:function(event,ui){
-				var $div = $obj.closest('div');
-				$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-			}
-		}).one('click',function(){
-			$.ajax({
-				url:KingServices.build_url('account/innerTransferIn','getQueryTerms'),
-				type:'POST',
-				showLoading:false,
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						var businessGroupList = data.businessGroupList;
-                        if(businessGroupList.length > 0){
-                            for(var i = 0;i<businessGroupList.length;i++){
-                                businessGroupList[i].value = businessGroupList[i].name;
-                            }
-                            businessGroupList.unshift({ id: '', value: '全部' });
-                            $obj.autocomplete('option','source', businessGroupList).data('ajax',true);
-                            $obj.autocomplete('search','');
-                        } else{
-                            layer.tips('没有内容', $obj, {
-                                tips: [1, '#3595CC'],
-                                time: 2000
+        $.ajax({
+            url:KingServices.build_url('account/innerTransferIn','getQueryTerms'),
+            type:'POST',
+            showLoading:false,
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    var businessGroupList = data.businessGroupList;
+                    if(businessGroupList.length > 0){
+                        for(var i = 0;i<businessGroupList.length;i++){
+                            businessGroupList[i].value = businessGroupList[i].name;
+                        }
+                        var all = { id: '', value: '全部' };
+                        FinTransIn.groupList = businessGroupList.slice(all);
+                        if(!!$obj){
+                            businessGroupList.unshift(all);
+                            $obj.autocomplete({
+                                minLength:0,
+                                source : businessGroupList,
+                                change:function(event,ui){
+                                    if(ui.item == null){
+                                        var $div = $obj.closest('div');
+                                        $obj.find('input[name=toBusinessGroupId]').val('');
+                                    }
+                                },
+                                select:function(event,ui){
+                                    var $div = $obj.closest('div');
+                                    $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
+                                }
+                            }).on("click",function(){
+                                $obj.autocomplete('search', '');
                             });
                         }
-					}
-				}
-			});
-		}).on("click",function(){
-            if ($obj.data('ajax')) {
-                $obj.autocomplete('search', '');
+                    } else{
+                        layer.tips('没有内容', $obj, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                }
             }
         });
 	};
@@ -142,7 +142,7 @@ define(function(require, exports) {
             event.preventDefault(); 
             var $this = $(this);
             // 设置选择的效果
-            $this.closest('ul').prev().attr('data-value', $this.data('value')).children('span').text($this.text());
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
             FinTransIn.getList({pageNo : 0},$tab);
         });
         $tab.find('.T-btn-search').on('click', function(event) {
@@ -181,7 +181,6 @@ define(function(require, exports) {
         	args.orderNumber = $tab.find('input[name=orderNumber]').val();
         	args.startAccountTime = $tab.find('input[name=startDate]').val();
         	args.endAccountTime = $tab.find('input[name=endDate]').val();
-            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -254,7 +253,6 @@ define(function(require, exports) {
             args.orderNumber = $tab.find('input[name=orderNumber]').val();
             args.startAccountTime = $tab.find('input[name=startDate]').val();
             args.endAccountTime = $tab.find('input[name=endDate]').val();
-            args.accountStatus = $tab.find('[name=accountStatus]').val();
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -296,7 +294,8 @@ define(function(require, exports) {
 
     //对账事件初始化
     FinTransIn.initCheck = function(args,$tab,type){
-        FinTransIn.init_event(args,$tab,type)
+        FinTransIn.init_event(args,$tab,type);
+        FinTransIn.getGroupList($tab,type);
 
     	//搜索顶部的事件绑定
         $tab.find('.T-btn-search').off().on('click', function(event) {
@@ -306,8 +305,6 @@ define(function(require, exports) {
                 FinTransIn.getCheckList(args,$tab,1);
             } else {
                 FinTransIn.getClearList(args,$tab);
-                FinTransIn.clearTempData = false;
-                FinTransIn.setAutoFillEdit($tab,false);
             }
         });
         if(type == 1){
@@ -317,7 +314,7 @@ define(function(require, exports) {
 
             //导出报表事件
             $tab.find(".T-btn-export").on('click',function(event){
-                var argsDate = { 
+                var argsData = { 
                         businessGroupId : args.businessGroupId,
                         lineProductId : $tab.find('input[name=lineProductId]').val(),
                         lineProductName : $tab.find('input[name=lineProductName]').val(),
@@ -325,16 +322,17 @@ define(function(require, exports) {
                         receiveUserId : $tab.find('input[name=receiveUserId]').val(),
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
-                        endAccountTime : $tab.find('input[name=endDate]').val()
+                        endAccountTime : $tab.find('input[name=endDate]').val(),
+                        accountStatus : args.accountStatus
                     };
-                argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
-                argsDate.receiveUserName = argsDate.receiveUserName === "全部" ? "" : argsDate.receiveUserName;
-                FinancialService.exportReport(argsDate,"exportArrangeInnerTransferInFinancial");
+                argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
+                argsData.receiveUserName = argsData.receiveUserName === "全部" ? "" : argsData.receiveUserName;
+                FinancialService.exportReport(argsData,"exportArrangeInnerTransferInFinancial");
             });
 
             //确认对账事件
             $tab.find(".T-checking").off().on('click',function(event){
-                if(!(new FinRule(0).check($tab)).form()){return;}
+                if(!(new FinRule(6).check($tab)).form()){return;}
                 FinancialService.changeUncheck($tab.find('.T-checkList tr'),function(){
                     FinTransIn.saveCheck($tab,args);
                 });
@@ -423,7 +421,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type == 1){
-                FinTransIn.getCheckList($tab.data('next'),$tab,1);
+                FinTransIn.getCheckList($tab.data('next'),false,1);
             } else {
                 FinTransIn.clearTempData = false;
                 FinTransIn.getClearList($tab.data('next'),$tab);
@@ -593,13 +591,23 @@ define(function(require, exports) {
 
     FinTransIn.saveCheck = function($tab,args,tabArgs) {
         var argLen = arguments.length,
+            saveData = [],
             json = FinancialService.saveJson_checking($tab);
+        //暂时组装数据，后台统一后删除
+        for(var i = 0;i<json.length;i++){
+            var saveJson = {
+                id:json[i].id,
+                backMoney:json[i].detailList[0].backMoney,
+                checkRemark:json[i].checkRemark
+            }
+            saveData.push(saveJson);
+        };
         if(!json){ return false; }
 
         $.ajax({
             url: KingServices.build_url("account/innerTransferIn","saveReconciliation"),
             type: "POST",
-            data: { reconciliation: JSON.stringify(json) }
+            data: { reconciliation: JSON.stringify(saveData) }
         }).done(function(data) {
             if (showDialog(data)) {
                 $tab.data('isEdited', false);
@@ -608,7 +616,7 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-checking");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else {
-                        FinTransIn.getCheckList(args,$tab,1);
+                        FinTransIn.getCheckList(args,false,1);
                     }
                 });
             }
@@ -644,10 +652,37 @@ define(function(require, exports) {
                         Tools.closeTab(menuKey + "-clearing");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);
                     } else{
-                        FinTransIn.getCheckList(args,$tab,2);
+                        FinTransIn.getCheckList(args,false,2);
                     }
                 });
             }
+        });
+    };
+
+    FinTransIn.getGroupList = function($tab,type){
+        var $obj = $tab.find('input[name=businessGroupName]'),
+            name = $obj.val();;
+        $obj.autocomplete({
+            minLength: 0,
+            source : FinTransIn.groupList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    businessGroupId: ui.item.id,
+                    businessGroupName: ui.item.value,
+                    startAccountTime: $tab.find("input[name=startDate]").val(),
+                    endAccountTime: $tab.find("input[name=endDate]").val(),
+                    accountStatus : $tab.find("input[name=accountStatus]").val()
+                };
+                FinTransIn.getCheckList(args,null,type)
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
         });
     };
 
@@ -661,6 +696,7 @@ define(function(require, exports) {
                 accountStatus : options.accountStatus
             };
         FinTransIn.isOut = true;
+        FinTransIn.getQuery();
         FinTransIn.getCheckList(args,null,2); 
     };
 

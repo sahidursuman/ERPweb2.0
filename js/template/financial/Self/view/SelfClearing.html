@@ -3,7 +3,9 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area">
                 <div class="form-group">
-                    <label class="mar-r-20">自费商家：{{selfPayName}}</label>
+                    <label>自费商家：</label>
+                    <input type="text" name="selfPayName" class="T-selfPayName mar-r-20" value="{{selfPayName}}" >
+                    <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}">
                     <label class="mar-r-10">账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>

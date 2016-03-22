@@ -196,6 +196,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "check");
         FinancialService.updateUnpayMoney($tab, ruleCheck);
+        busCompany.getBusCompanyList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
@@ -210,7 +211,8 @@ define(function(require, exports) {
                 busCompanyId: args.busCompanyId,
                 accountInfo: $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find("input[name=startDate]").val(),
-                endTime: $tab.find("input[name=endDate]").val()
+                endTime: $tab.find("input[name=endDate]").val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });
@@ -306,9 +308,6 @@ define(function(require, exports) {
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
-                                if (args.isAutoPay == 1) {
-                                    args.isAutoPay = 0;
-                                }
                                 busCompany.busCompanyClear(args);
                             }
                         }
@@ -325,6 +324,7 @@ define(function(require, exports) {
 
         busCompany.init_event(args,$tab, "clear");
         FinancialService.initPayEvent($tab);
+        busCompany.getBusCompanyList($tab,true);
         //搜索事件
        $tab.find(".T-search").click(function() {
             if (args.isAutoPay == 1) {
@@ -394,11 +394,8 @@ define(function(require, exports) {
                         if (argumentsLen == 1) {
                             Tools.closeTab(menuKey + "-checking");
                             busCompany.listBusCompany(busCompany.listPage);
-                        } else if (argumentsLen == 2) {
+                        } else {
                             busCompany.busCompanyCheck(args,$tab);
-                        } else if (argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            busCompany.initCheck(args,$tab);
                         }
                     });
                 }
@@ -439,12 +436,10 @@ define(function(require, exports) {
                         if (argumentsLen === 1) {
                             Tools.closeTab(menuKey + "-clearing");
                             busCompany.listBusCompany(busCompany.listPage);
-                        } else if (argumentsLen === 2) {
+                        } else {
                             if (args.isAutoPay == 1) {
                                 args.isAutoPay = 0;
                             }
-                            busCompany.busCompanyClear(args,$tab);
-                        } else if (argumentsLen === 3){
                             busCompany.busCompanyClear(args,$tab);
                         }
                     });
@@ -551,7 +546,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 if (option == "check") {
-                    busCompany.initCheck(args,$tab);
+                    busCompany.busCompanyCheck($tab.data('next'),$tab);
                 } else if (option == "clear") {
                     busCompany.clearTempData = false;
                     busCompany.clearTempSumDate = false;
@@ -562,7 +557,7 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if (option == "check") {
-                    busCompany.saveChecking($tab,args,[tab_id, title, html]);
+                    busCompany.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if (option == "clear") {
                     busCompany.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }
@@ -607,6 +602,7 @@ define(function(require, exports) {
             id: "",
             value: "全部"
         };
+        busCompany.busCompanyList = busCompanyList.slice(all);
         busCompanyList.unshift(all);
 
         //车队
@@ -662,17 +658,67 @@ define(function(require, exports) {
         return dataList;
     };
 
+    busCompany.getBusCompanyList = function($tab,type){
+        var $obj = $tab.find('input[name=busCompanyName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : busCompany.busCompanyList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    busCompanyId : ui.item.id,
+                    busCompanyName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    busCompany.busCompanyClear(args);
+                } else {
+                    busCompany.busCompanyCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     busCompany.initPay = function(options) {
         var args = {
             pageNo : 0,
-            busCompanyId : options.id,
-            busCompanyName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
             accountStatus : options.accountStatus,
-            isAutoPay : 2
         }
-        busCompany.busCompanyClear(args);
+        $.ajax({
+            url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
+            type: "POST",
+            data: { searchParam: JSON.stringify(args) },
+            success: function(data) {
+                if (showDialog(data)) {
+                    busCompanyList = data.busCompanyNameList;
+                    if (busCompanyList != null && busCompanyList.length > 0) {
+                        for (var i = 0; i < busCompanyList.length; i++) {
+                            busCompanyList[i].id = busCompanyList[i].busCompanyId;
+                            busCompanyList[i].value = busCompanyList[i].busCompanyName;
+                        }
+                    }
+                    busCompany.busCompanyList = busCompanyList;
+                    args.busCompanyId = options.id;
+                    args.busCompanyName = options.name;
+                    args.isAutoPay = 2;
+                    busCompany.busCompanyClear(args);
+                }
+            }
+        });
     };
 
     exports.init = busCompany.initModule;

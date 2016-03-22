@@ -2,7 +2,8 @@
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="T-search-area">
             <div class="form-group">
-                <label class="mar-r-20 ">车队：{{busCompanyName}}</label>
+                <label>车队：</label>
+                <input type="text" class="mar-r-20" name="busCompanyName" value="{{busCompanyName}}" />
                 <label>账期：</label>
                 <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
                 <label>&nbsp;至&nbsp;</label>
