@@ -357,7 +357,7 @@ define(function(require, exports) {
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
                         lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                        accountStatus : args.accountStatus
+                        accountStatus : $searchArea.find('inpput[name=accountStatus]').data('id')
 
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
