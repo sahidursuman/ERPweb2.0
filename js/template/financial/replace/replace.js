@@ -187,10 +187,11 @@ define(function(require, exports) {
 		if(!!Replace.$checkingTab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-				args.pageNo = (args.pageNo || 0);
-				args.orderNumber = order == '全部' ? '' : order;
-				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
-				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+			args.pageNo = (args.pageNo || 0);
+			args.orderNumber = order == '全部' ? '' : order;
+			args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
+			args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+			args.projects = Replace.$checkingTab.find(".T-search-project").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -582,15 +583,12 @@ define(function(require, exports) {
 		        }
 		    },
 		    select: function(event, ui) {
-		    	var terms = this.value.split( /,\s*/ );
-		    	//移除当前输入
-          		terms.pop();
-          		if($(this).val().indexOf(ui.item.value) == -1){
-	          		//添加被选项
-			        terms.push( ui.item.value );
-			        //添加占位符，在结尾添加逗号+空格
-			        terms.push( "" );
-			        this.value = terms.join( ", " );
+          		var val = $(this).val();
+          		if(val.indexOf(ui.item.value) == -1){
+          			if(val){ val += ", "; }
+	          		val += ui.item.value;
+			         
+			        this.value = val;
           		}
 		        return false;
 		    },
@@ -738,6 +736,7 @@ define(function(require, exports) {
 			args.orderNumber = order == '全部' ? '' : order;
 			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
 			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
+			args.projects = Replace.$balanceTab.find(".T-search-project").val();
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
