@@ -1055,10 +1055,12 @@ define(function(require, exports) {
                     name: ui.item.value,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : $tab.find('input[name=accountStatus]').val(),
-                    type: 1
+                    accountStatus : $tab.find('input[name=accountStatus]').val() 
                 };
                 if(type){
+                    if($tab.find('.T-btn-autofill').length == 0){
+                        args.type = 1;
+                    }
                     Client.ClientClear(0,args);
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
