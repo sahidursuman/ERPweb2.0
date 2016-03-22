@@ -153,12 +153,16 @@ define(function(require, exports) {
                     var fhList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(fhList);
                     data.scenicName = args.scenicName;
+                    data.financialScenicListData = FinancialService.getCheckTempData(data.financialScenicListData,scenic.checkTemp);
                     var html = scenicChecking(data);
                     
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
                         scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(scenic.checkTemp){
+                            scenic.$checkTab.data('isEdited',true);
+                        }
                         scenic.initCheck(args,scenic.$checkTab); 
                         validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
 
@@ -174,9 +178,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                scenic.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                scenic.scenicCheck(args);
+                                var temp = FinancialService.checkSaveJson(scenic.$checkTab,scenic.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    scenic.checkTemp = temp;
+                                    scenic.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    scenic.scenicCheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -466,7 +477,7 @@ define(function(require, exports) {
     //对账数据保存
     scenic.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab,scenic.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -476,6 +487,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        scenic.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
@@ -546,6 +558,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
+                    scenic.checkTemp = false;
                     scenic.scenicCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
@@ -577,6 +590,8 @@ define(function(require, exports) {
                 if(option == "clear"){
                     scenic.clearTempData = false;
                     scenic.clearTempSumDate = false;
+                }else if(option == "check"){
+                    scenic.checkTemp = false;
                 }
             });
 
