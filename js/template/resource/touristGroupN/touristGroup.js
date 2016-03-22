@@ -1,16 +1,16 @@
 define(function(require, exports) {
-	//key
-	var K = {
-			menu : "resource_touristGroup",
-			update : "resource_touristGroup_update",
+    //key
+    var K = {
+            menu : "resource_touristGroup",
+            update : "resource_touristGroup_update",
             add : "resource_touristGroup_add"
-		},
-		//模板文件
-		T = {
-			list : require('./view/list'),//列表页
-			listTable : require('./view/listTable'),//列表页表格
+        },
+        //模板文件
+        T = {
+            list : require('./view/list'),//列表页
+            listTable : require('./view/listTable'),//列表页表格
             add : require('./view/add'),//新增页面
-			update : require('./view/update'),//编辑页面
+            update : require('./view/update'),//编辑页面
             chooseClient : require('./view/chooseClient'),//选择客户
             chooseClientList : require('./view/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/chooseLineProduct'),//选择线路产品
@@ -23,16 +23,17 @@ define(function(require, exports) {
             updateInnerTurn : require('./view/updateInnerTurn'),//编辑内转
             updateOuterTurn : require('./view/updateOuterTurn'),//编辑外转
             chooseHotel : require('./view/chooseHotel'),//自选酒店
-		},
-
-		touristGroup = {};
-	/**
+            chooseHotelList : require('./view/chooseHotelList'),//自选酒店列表
+        },
+        rule = require('./rule'),
+        touristGroup = {};
+    /**
 	 * 游客管理页面初始化
 	 * @param  {object} args 请求参数
 	 * @return {[type]}      [description]
 	 */
     touristGroup.initModule = function(args){
-    	touristGroup.listTouristGroup(0, args);
+        touristGroup.listTouristGroup(0, args);
     };
     /**
      * 游客管理列表页
@@ -266,9 +267,13 @@ define(function(require, exports) {
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
             var $that = $(this);
             if($that.hasClass('T-single-group')){
-                $tab.find('.T-is-hidden').removeClass('hidden');
+                $tab.find('.T-is-hidden, .T-join-group, .T-send-group, .T-add-join-group, .T-add-send-group').removeClass('hidden');
+                $tab.find('.T-container').data('type', 'single');
+                $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 参团 ');
             }else{
-                $tab.find('.T-is-hidden').addClass('hidden');
+                $tab.find('.T-is-hidden, .T-join-group, .T-send-group, .T-add-join-group, .T-add-send-group').addClass('hidden');
+                $tab.find('.T-container').data('type', 'group');
+                $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 转团 ');
             }
         });
     	//添加接团
@@ -325,7 +330,9 @@ define(function(require, exports) {
     			touristGroup.updateJionGroupHotel(2, $that);
     		}else if($that.hasClass('T-other')){
     			touristGroup.updateJionGroupOther(2, $that);
-    		}
+    		}else if($that.hasClass('T-delete')){
+                $that.closest('tr').remove();
+            }
     	});
     	//其它信息收缩事件
     	$tab.find('.T-other-info-btn').on('click', function(){
@@ -343,6 +350,10 @@ define(function(require, exports) {
         F.setDateTimePicker($tab.find('.datetimepicker'));
         //外联销售
         touristGroup.getOPUserList($tab.find('.T-chooseUser')).trigger('click');
+        //保存信息
+        $tab.find('.T-btn-save').on('click', function(){
+            touristGroup.saveData($tab);
+        });
     };
 
     //选择客户
@@ -427,53 +438,65 @@ define(function(require, exports) {
         });
     };
 
-    //添加接团
+    /**
+     * 添加接团
+     * @param {object} $tab tab的jQuery对象
+     */
     touristGroup.addJoinGroup = function($tab){
-    	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker"></td>'+
-                    '<td><input type="text" class="col-xs-12"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bug F-float F-money" readonly></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor F-float F-money" readonly></td>'+
+    	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime"></td>'+
+                    '<td><input type="text" class="col-xs-12" name="arriveShift"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-bug F-float F-money" readonly name="receiveBus"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-join-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
     };
 
-    //添加参团
+    /**
+     * 添加参团
+     * @param {object} $tab tab的jQuery对象
+     */
     touristGroup.addPartGroup = function($tab){
+        var isHidden = $tab.find('.T-container').data('type') || "single";
     	var html =  '<tr><td>'+
-                        '<div class="hct-input-group col-xs-12">'+
-                                '<input type="text" class="col-xs-12" readonly name="lineProductName">'+
-                                '<span class="hct-group-add cursor T-action T-search-line">[搜索]</span>'+
+                        '<div class="hct-input-group col-xs-12 T-action T-search-line">'+
+                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName">'+
+                                '<span class="hct-group-add cursor">[搜索]</span>'+
                             '</div></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker"></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker"></td>'+
-                        '<td><input type="text" class="w-100 hct-cursor T-action T-line-cope" readonly></td>'+
-                        '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly></td>'+
-                        '<td><input type="text" class="w-100" readonly></td>'+
-                        '<td><label><input checked="checked" type="checkbox" class="ace" ><span class="lbl"></span></label></td>'+
-                        '<td><label><input checked="checked" type="checkbox" class="ace" ><span class="lbl"></span></label></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime"></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime"></td>'+
+                        '<td><input type="text" class="w-100 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100" name="operateCurrentNeedPayMoney"></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-inner-turn">内转</a> | <a class="cursor T-action T-outer-turn">外转</a> | <a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
     };
 
-    //添加送团
+    /**
+     * 添加送团
+     * @param {object} $tab tab的jQuery对象
+     */
     touristGroup.addSendGroup = function($tab){
-    	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker"></td>'+
-                    '<td><input type="text" class="col-xs-12"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bug" readonly></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other" readonly></td>'+
-                    '<td><input type="text" class="w-100" readonly></td>'+
+    	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime"></td>'+
+                    '<td><input type="text" class="col-xs-12" name="arriveShift"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-bug" readonly name="receiveBus"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-send-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
     };
 
-    //添加游客
+    /**
+     * 添加游客
+     * @param {object} $tab tab的jQuery对象
+     */
     touristGroup.addVisotor = function($obj) {
         var html = '<tr><td></td>' +
             '<td><input name="name" type="text" class="col-sm-12  no-padding-right" /></td>' +
@@ -488,7 +511,11 @@ define(function(require, exports) {
         touristGroup.memberNumber($tbody);
     };
 
-    //编辑客人信息
+    /**
+     * 编辑客人信息
+     * @param  {object} $that [description]
+     * @return {[type]}       [description]
+     */
     touristGroup.updateGuestInfo = function($that){
         var data = JSON.parse($that.data('json') || "{}");
     	layer.open({
@@ -519,6 +546,7 @@ define(function(require, exports) {
                     var infoData = F.guestInfoData($layer);
                     if(!!infoData){
                         $that.val(infoData.guestName+"  "+infoData.adultCount+"大"+infoData.childCount+"小").data('json', JSON.stringify(infoData));
+                        $that.closest('.T-team-info').find('[name="mobileNumber"]').val(infoData.mobileNumber);
                         layer.close(index);
                     }else{
 
@@ -550,6 +578,11 @@ define(function(require, exports) {
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
                     var moneyData = F.assemblyMoneyData($layer);
+
+                    if(!!type){
+                        moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
+                        delete moneyData.touristGroupFeeJsonAdd;
+                    }
                     $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData));
                     layer.close(index);
                 });
@@ -592,12 +625,13 @@ define(function(require, exports) {
                         baseInfo.isTransfer = 1;
                         baseInfo.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
                     }
-                    moneyData.outFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.busFee = moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonAdd;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
                     layer.close(index);
+                    F.subtotal($that.closest('tr'), 0);
                 });
 		    }
 		});
@@ -606,9 +640,12 @@ define(function(require, exports) {
     //更新接/参/送团房
     touristGroup.updateJionGroupHotel = function(type, $that){
     	var title = "接团住宿", data = JSON.parse($that.data('json') || "{}");
-    	if(type === 1 || type === 2){
+    	if(type === 1){
     		title = "返程住宿";
-    	};
+    	}else if(type === 2){
+            title = "送团住宿";
+        }
+        data.type = type;
     	layer.open({
 			type: 1,
 		    title: title,
@@ -621,10 +658,11 @@ define(function(require, exports) {
                 var $layer = $(obj);
                 touristGroup.bindLayerCommonFeeEvents($layer);
 		    	$layer.find('.T-choose-hotel').on('click', function() {
-                    touristGroup.chooseHotel();
+                    touristGroup.chooseHotel($(this));
                 });
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
+                    var hotelJson = $layer.find('[name="hotel"]').data('json');
                     var baseInfo = {
                             intakeTime : $layer.find('[name="intakeTime"]').val(),
                             level : $layer.find('[name="level"]').val(),
@@ -636,19 +674,22 @@ define(function(require, exports) {
                             dutyDepartmentName : $layer.find('[name="dutyDepartmentName"]').val(),
                             dutyDepartmentId : $layer.find('[name="dutyDepartmentName"]').data('id'),
                             dutyUserName : $layer.find('[name="dutyUserName"]').val(),
-                            dutyUserId : $layer.find('[name="dutyUserName"]').data('id')
+                            dutyUserId : $layer.find('[name="dutyUserName"]').data('id'),
+                            hotel : typeof hotelJson === "object" ? JSON.stringify(hotelJson) : hotelJson,
+                            hotelName : $layer.find('[name="hotel"]').val()
                         },
                         moneyData = F.assemblyMoneyData($layer);
                     if($layer.find('.T-abversion').is(":checked")){
                         baseInfo.isTransfer = 1;
                         baseInfo.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
                     }
-                    moneyData.outFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.hotelFee = moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonAdd;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
                     layer.close(index);
+                    F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
                 });
 		    }
 		});
@@ -733,12 +774,13 @@ define(function(require, exports) {
                             baseInfo.otherRequired.id = id;
                         }
                     }
-                    moneyData.outFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.otherFee = moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonAdd;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
                     layer.close(index);
+                    F.subtotal($that.closest('tr'), 0);
                 });
 		    }
 		});
@@ -755,11 +797,26 @@ define(function(require, exports) {
         var $tbody = $layer.find('.T-fee-list');
         //添加
         $layer.find('.T-add-fee').on('click', function(){
+            var  option = "";
+            if($tbody.data('type') == "1"){
+                option = '<option value="3">中转结算价</option>'+
+                         '<option value="8">酒店费用</option>';
+            }else{
+                option = '<option value="1">大人结算价</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="3">中转结算价</option>'+
+                         '<option value="4">车辆费用</option>'+
+                         '<option value="5">餐厅费用</option>'+
+                         '<option value="6">保险费用</option>'+
+                         '<option value="7">导服费</option>'+
+                         '<option value="8">酒店费用</option>'+
+                         '<option value="9">景区费用</option>'+
+                         '<option value="10">自费费用</option>'+
+                         '<option value="11">票务费用</option>'+
+                         '<option value="12">其他费用</option>';
+            }
             $tbody.append('<tr>'+
-                '<td><select class="col-xs-12" name="type">'+
-                '<option value="1">大人结算价</option>'+
-                '<option value="2">小孩结算价</option>'+
-                '</select></td>'+
+                '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
                 '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+
                 '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+
                 '<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>'+
@@ -776,6 +833,7 @@ define(function(require, exports) {
                 $peer.addClass('hidden');
             }
         });
+        //touristGroup.getOPUserList($layer.find('[name="dutyUserName"]')).trigger('click');
 
         //表内操作
         //删除
@@ -802,8 +860,15 @@ define(function(require, exports) {
             $tr = $that.closest('tr'),
             $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
             receivable = JSON.parse($tab.find('.T-team-info .T-receivable').data('json') || "{}");
-
-        data.lineData = JSON.parse($tr.find('[name="lineProductName"]').data('json') || "{}");
+        var lineData = $tr.find('[name="lineProductName"]').data('json');
+        if(!lineData){
+            layer.tips('请先选择线路产品！', $that.closest('tr').find('[name="lineProductName"]'), {
+                tips: [1, '#3595CC'],
+                time: 2000
+            });
+            return false;
+        }
+        data.lineData = JSON.parse(lineData || "{}");
         data.lineData.startTime = $tr.find('[name="startTime"]').val();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
 
@@ -825,6 +890,7 @@ define(function(require, exports) {
                             dutyUserName : $layer.find('[name="dutyUserName"]').val(),
                             dutyUserId : $layer.find('[name="dutyUserName"]').data('id'),
                             remark : $layer.find('[name="remark"]').val(),
+                            isNowIncome : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
                         },
                         moneyData = F.assemblyMoneyData($layer);
 
@@ -834,30 +900,74 @@ define(function(require, exports) {
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
                     layer.close(index);
+                    $that.closest('td').find('.T-outer-turn').addClass('hct-color-BBB').removeClass('T-action');
                 });
             }
         });
     };
 
     //参团外转操作
-    touristGroup.updateOuterTurn = function(){
+    touristGroup.updateOuterTurn = function($that){
+        var data = JSON.parse($that.data('json') || "{}"),
+            $tr = $that.closest('tr'),
+            $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
+            receivable = JSON.parse($tab.find('.T-team-info .T-receivable').data('json') || "{}");
+        var lineData = $tr.find('[name="lineProductName"]').data('json');
+        if(!lineData){
+            layer.tips('请先选择线路产品！', $that.closest('tr').find('[name="lineProductName"]'), {
+                tips: [1, '#3595CC'],
+                time: 2000
+            });
+            return false;
+        }
+        data.lineData = JSON.parse(lineData || "{}");
+        data.lineData.startTime = $tr.find('[name="startTime"]').val();
+        data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
+
         var layerIndex = layer.open({
             type: 1,
             title: "编辑外转信息",
             skin: 'layui-layer-rim', //加上边框
             area: '870px', //宽高
             zIndex:1028,
-            content: T.updateOuterTurn(),
+            content: T.updateOuterTurn(data),
             scrollbar: false,
-            success:function(){
-                
+            success:function(obj, index){
+                var $layer = $(obj);
+                touristGroup.bindLayerCommonFeeEvents($layer);
+                $layer.find('.T-btn-save').on('click', function(){
+                    var baseInfo = {
+                            dutyDepartmentName : $layer.find('[name="dutyDepartmentName"]').val(),
+                            dutyDepartmentId : $layer.find('[name="dutyDepartmentName"]').data('id'),
+                            dutyUserName : $layer.find('[name="dutyUserName"]').val(),
+                            dutyUserId : $layer.find('[name="dutyUserName"]').data('id'),
+                            remark : $layer.find('[name="remark"]').val(),
+                            isNowIncome : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
+                        },
+                        moneyData = F.assemblyMoneyData($layer);
+
+                    moneyData.outFee = moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonAdd;
+                    $.extend(baseInfo, moneyData);
+                    $that.val(moneyData.needPayAllMoney);
+                    $that.data('json', JSON.stringify(baseInfo));
+                    layer.close(index);
+                    $that.closest('td').find('.T-inner-turn').addClass('hct-color-BBB').removeClass('T-action');
+                });
             }
         });
     };
 
-    //自选酒店
-    touristGroup.chooseHotel = function(){
-        var layerIndex = layer.open({
+    //缓存选中的自选酒店
+    touristGroup.selectHotelCache = [];
+    /**
+     * 自选酒店
+     * @param  {object} $that 触发对象的jQuery对象
+     */
+    touristGroup.chooseHotel = function($that){
+        var data = typeof $that.data('json') === 'object' ? $that.data('json') : JSON.parse($that.data('json') || "[]");
+        touristGroup.selectHotelCache = data;
+        layer.open({
             type: 1,
             title: "自选酒店",
             skin: 'layui-layer-rim', //加上边框
@@ -865,8 +975,129 @@ define(function(require, exports) {
             zIndex:1028,
             content: T.chooseHotel(),
             scrollbar: false,
-            success:function(){
-                
+            success:function(obj, index){
+                var $layer = $(obj);
+                touristGroup.getHotelList(0, $layer);
+                $layer.find('.T-btn-search').on('click', function(){
+                    touristGroup.getHotelList({
+                        pageNo : 0,
+                        name : $layer.find('.T-hotel-name').val()
+                    }, $layer);
+                });
+                $layer.find('.T-hotel-list').on('change', '.T-select', function(){
+                    var $that = $(this);
+                    if($that.is(":checked")){
+                        cacheCheckData($that, 1);
+                    }else{
+                        cacheCheckData($that, 0);
+                    }
+                });
+                $layer.find('.T-btn-save').on('click', function(){
+                    var str = "";
+                    for(var i=0, len = touristGroup.selectHotelCache.length; i<len;i++){
+                        if(i != len - 1){
+                            str = str + touristGroup.selectHotelCache[i].name + ",";
+                        }else{
+                            str += touristGroup.selectHotelCache[i].name;
+                        }
+                    }
+                    $that.data('json', JSON.stringify(touristGroup.selectHotelCache)).val(str);
+                    layer.close(index);
+                });
+            }
+        });
+
+        return;
+        function cacheCheckData($that, operation) {
+            var $tr = $that.closest('tr'),
+                id = $tr.data('id'),
+                name = $tr.find('[name="hotelName"]').text();
+            if(touristGroup.selectHotelCache.length > 0){
+                for(var i=0, len = touristGroup.selectHotelCache.length; i<len; i++){
+                    if(operation === 1){
+                        if(touristGroup.selectHotelCache[i].id === id){
+                            break;
+                        }
+                        if(i === len - 1 && id !== touristGroup.selectHotelCache[i].id){
+                            touristGroup.selectHotelCache.push({
+                                id : id,
+                                name : name,
+                                ischeck : 1
+                            });
+                        }
+                    }else{
+                        if(touristGroup.selectHotelCache[i].id === id){
+                            touristGroup.selectHotelCache.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }else if(operation === 1){
+                touristGroup.selectHotelCache.push({
+                    id : id,
+                    name : name,
+                    ischeck : 1
+                });
+            }
+        }
+    };
+    /**
+     * 替换数据
+     * @param  {Array} resultList  原有的数据
+     * @param  {Array}  tempJson   新数据
+     */
+    touristGroup.getTempDate = function(resultList,tempJson){
+        if(!!tempJson && tempJson.length){
+            for(var i = 0; i < tempJson.length; i++){
+                var tempId = tempJson[i].id;
+                for(var j = 0; j < resultList.length; j++){
+                    var id = resultList[j].id;
+                    if(tempId == id){
+                        resultList[j].ischeck = tempJson[i].ischeck;
+                    }
+                }
+            }
+        };
+        return resultList;
+    };
+    /**
+     * 获取自选酒店列表
+     * @param  {number/object} args       请求参数
+     * @param  {object}        $layer     layer的jQuery对象
+     * @param  {number}        layerIndex layer的索引
+     */
+    touristGroup.getHotelList = function(args, $layer, layerIndex){
+        if(typeof args === "number"){
+            var page = args;
+            args = {};
+            args.pageNo = page;
+        }
+        $.ajax({
+            url : KingServices.build_url('hotel', 'selectHotel'),
+            data : args,
+            type: 'POST',
+            success : function(data){
+                if(showDialog(data)){
+                    data.hotelList = JSON.parse(data.hotelList);
+                    data.hotelList = touristGroup.getTempDate(data.hotelList, touristGroup.selectHotelCache);
+                    var html = T.chooseHotelList(data);
+                    $layer.find('.T-hotel-list').html(html);
+                    //绑定分页插件
+                    laypage({
+                        cont: $layer.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (args.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                args.pageNo = (obj.curr - 1);
+                                touristGroup.getHotelList(args, $layer);
+                            }
+                        }
+                    });
+                    $(document).trigger('resize');
+                }else if(!!layerIndex){
+                    layer.close(layerIndex);
+                }
             }
         });
     };
@@ -912,7 +1143,7 @@ define(function(require, exports) {
                         lineProductName : $tr.find('[name="lineProductName"]').text(),
                         days : $tr.find('[name="days"]').text()
                     }
-                    $that.prev('input').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData));
+                    $that.find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData));
                     layer.close(index);
                 });
                 
@@ -1012,6 +1243,112 @@ define(function(require, exports) {
             }
         })
     };
+
+    /**
+     * 保存新增/编辑数据
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    touristGroup.saveData = function($tab){
+        var data = {},
+            $baseInfo = $tab.find('.T-team-info'),
+            $joinGroup = $tab.find('.T-join-group-list'),
+            $partGroup = $tab.find('.T-part-group-list'),
+            $sendGroup = $tab.find('.T-send-group-list'),
+            $otherInfo = $tab.find('.T-other-info-cont'),
+            guestDetails = $baseInfo.find('[name="guestDetails"]').data('json') || "{}";
+
+        //转换客人信息并且删除
+        guestDetails = JSON.parse(guestDetails);
+        if(!$.isEmptyObject(guestDetails)){
+            delete guestDetails.guestName;
+            delete guestDetails.mobileNumber;
+        }
+
+        //小组信息
+        data.baseInfo = {
+            fromPartnerAgency : $baseInfo.find('[name="fromPartnerAgency"]').val(),
+            fromPartnerAgencyId : $baseInfo.find('[name="fromPartnerAgency"]').data("id"),
+            lineProductName : $baseInfo.find('[name="lineProductName"]').val(),
+            lineProductId : $baseInfo.find('[name="lineProductName"]').data("id"),
+            startTime : $baseInfo.find('[name="startTime"]').val(),
+            endTime : $baseInfo.find('[name="endTime"]').val(),
+            needPayAllMoney : JSON.parse($baseInfo.find('[name="needPayAllMoney"]').data('json') || "{}"),
+            touristGroupMemberJsonAdd : guestDetails
+        };
+
+        //接团
+        data.receiveTrip = [];
+        $joinGroup.find('tr').each(function(index){
+            var $that = $(this),
+                receiveHotel = JSON.parse($that.find('[name="receiveHotel"]').data('json') || "{}");
+            receiveHotel.hotel = JSON.parse(receiveHotel.hotel || "[]");
+            data.receiveTrip.push({
+                arriveTime : $that.find('[name="arriveTime"]').val(),
+                arriveShift : $that.find('[name="arriveShift"]').val(),
+                receiveBus : JSON.parse($that.find('[name="receiveBus"]').data('json') || "{}"),
+                receiveHotel : receiveHotel,
+                receiveOther : JSON.parse($that.find('[name="receiveOther"]').data('json') || "{}"),
+                totalMoney : $that.find('[name="totalMoney"]').val()
+            });
+        });
+
+        //参团
+        data.joinTrip = [];
+        $partGroup.find('tr').each(function(index){
+            var $that = $(this),
+                hotelNeedPayMoney = JSON.parse($that.find('[name="hotelNeedPayMoney"]').data('json') || "{}");
+            hotelNeedPayMoney.hotel = JSON.parse(hotelNeedPayMoney.hotel || "[]");
+            data.joinTrip.push({
+                lineProductId : $that.find('[name="lineProductName"]').data('id'),
+                tripStartTime : $that.find('[name="tripStartTime"]').val(),
+                tripEndTime : $that.find('[name="tripEndTime"]').val(),
+                lineNeedPayMoney : JSON.parse($that.find('[name="lineNeedPayMoney"]').data('json') || "{}"),
+                hotelNeedPayMoney : hotelNeedPayMoney,
+                operateCurrentNeedPayMoney : $that.find('[name="operateCurrentNeedPayMoney"]').val()
+            });
+        });
+
+        //送团
+        data.sendTrip = [];
+        $sendGroup.find('tr').each(function(index){
+            var $that = $(this),
+                receiveHotel = JSON.parse($that.find('[name="receiveHotel"]').data('json') || "{}");
+            receiveHotel.hotel = JSON.parse(receiveHotel.hotel || "[]");
+            data.sendTrip.push({
+                arriveTime : $that.find('[name="arriveTime"]').val(),
+                arriveShift : $that.find('[name="arriveShift"]').val(),
+                receiveBus : JSON.parse($that.find('[name="receiveBus"]').data('json') || "{}"),
+                receiveHotel : receiveHotel,
+                receiveOther : JSON.parse($that.find('[name="receiveOther"]').data('json') || "{}"),
+                totalMoney : $that.find('[name="totalMoney"]').val()
+            });
+        });
+
+        //其它信息
+        data.otherInfo = {
+            accompanyGuideName : $otherInfo.find('[name="accompanyGuideName"]').val(),
+            accompanyGuideMobile : $otherInfo.find('[name="accompanyGuideMobile"]').val(),
+            otaOrderNumber : $otherInfo.find('[name="otaOrderNumber"]').val(),
+            memberType : $otherInfo.find('[name="memberType"]').val(),
+            welcomeBoard : $otherInfo.find('[name="welcomeBoard"]').val(),
+            sendPosition : $otherInfo.find('[name="sendPosition"]').val(),
+            remark : $otherInfo.find('[name="remark"]').val(),
+        };
+
+        $.ajax({
+            url : KingServices.build_url('v2/touristGroup', 'saveTouristGroup'),
+            data : data,
+            type: 'POST',
+            success : function(data){
+                if(showDialog(data)){
+                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+
+                    });
+                }
+            }
+        })
+    };
     //公用方法
     var F = {
         //设置时间控件
@@ -1100,11 +1437,33 @@ define(function(require, exports) {
                 }
             });
             if($tr.find('[name="isContactUser"]:checked').length > 0){
-                guestData.guestName = $tr.find('[name="isContactUser"]:checked').eq(0).closest('tr').find('[name="name"]').val();
+                var $checkTr = $tr.find('[name="isContactUser"]:checked').eq(0).closest('tr');
+                guestData.guestName = $checkTr.find('[name="name"]').val();
+                guestData.mobileNumber = $checkTr.find('[name="mobileNumber"]').val();
             }else{
                 return false;
             }
             return guestData;
+        },
+        /**
+         * 接团小计
+         * @param  {object} $tr  tr的jQuery对象
+         * @param  {number} type 0为接\送团，1为参团
+         * @return {[type]}      [description]
+         */
+        subtotal : function($tr, type){
+            var lineNeedPayMoney = $tr.find('[name="lineNeedPayMoney"]').val() || 0,
+                hotelNeedPayMoney = $tr.find('[name="hotelNeedPayMoney"]').val() || 0,
+                receiveBus = $tr.find('[name="receiveBus"]').val() || 0,
+                receiveHotel = $tr.find('[name="receiveHotel"]').val() || 0,
+                receiveOther = $tr.find('[name="receiveOther"]').val() || 0,
+                sumNum = 0;
+            if(type === 1){
+                sumNum = lineNeedPayMoney * 1 + hotelNeedPayMoney * 1;
+            }else{
+                sumNum = receiveBus * 1 + receiveHotel * 1 + receiveOther * 1;
+            }
+            $tr.find('[name="totalMoney"]').val(sumNum);
         }
     };
     exports.init = touristGroup.initModule;

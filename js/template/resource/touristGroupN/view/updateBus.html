@@ -50,10 +50,14 @@
 					</tr>
 				</thead>
 				<tbody class="T-fee-list">
-				{{if outFee && outFee.length > 0}}
-					{{each outFee as rs}}
+				{{if busFee && busFee.length > 0}}
+					{{each busFee as rs}}
 					<tr>
-						<td><input type="text" class="col-xs-12" name="type" value="{{rs.type}}"></td>
+						<td>
+							<select class="col-xs-12" name="type">
+								{{#rs.type | getFeeItemType:true}}
+							</select>
+						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>

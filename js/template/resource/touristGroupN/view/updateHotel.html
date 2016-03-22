@@ -21,7 +21,7 @@
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">指定酒店</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12 hct-cursor T-choose-hotel" readonly value="{{hotelName}}" data-id="{{hotelId}}">
+				<input type="text" class="col-xs-12 hct-cursor T-choose-hotel" name="hotel" readonly value="{{hotelName}}" data-json="{{hotel}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
@@ -73,11 +73,22 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list">
-				{{if outFee && outFee.length > 0}}
-					{{each outFee as rs}}
+				<tbody class="T-fee-list" data-type="{{type}}">
+				{{if hotelFee && hotelFee.length > 0}}
+					{{each hotelFee as rs}}
 					<tr>
-						<td><input type="text" class="col-xs-12" name="type" value="{{rs.type}}"></td>
+						<td>
+							{{if type === 1}}
+							<select class="col-xs-12" name="type">
+								<option value="3">中转结算价</option>
+								<option value="8">酒店费用</option>
+							</select>
+							{{else}}
+							<select class="col-xs-12" name="type">
+								{{#rs.type | getFeeItemType:true}}
+							</select>
+							{{/if}}
+						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
