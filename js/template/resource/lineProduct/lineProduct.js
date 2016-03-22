@@ -2598,7 +2598,7 @@ define(function(require, exports) {
 	ResLineProduct.addBusCompany = function($btn, validator) {
 		var busCompanyDetails = ''
 		+'<tr>'
-		+'<td><input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" /></td>'
+		+'<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>'
 		+'<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>'
 		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>'
 		+'<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>'

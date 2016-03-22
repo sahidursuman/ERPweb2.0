@@ -501,7 +501,7 @@
             <tr data-entity-arrangeid="{{selfPay.id}}">
                 <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}">{{basicInfo.startTime | getDateText: selfPay.whichDay}}</td>
                 <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}</td>
-                <td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}</td>
+                <td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}</td>
                 <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}</td>
                 <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}</td>
                 <td class="F-float F-money">{{selfPay.marketPrice}}</td>

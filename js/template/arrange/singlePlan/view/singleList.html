@@ -70,7 +70,7 @@
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a class="cursor {{if rs.isEdit == 1||rs.status == -1}}gray{{else}}T-action T-update{{/if}} R-right" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}" data-right="1460003">
+                    <a class="cursor {{if rs.billStatus != -1||rs.status == -1}}gray{{else}}T-action T-update{{/if}} R-right" title="{{if rs.billStatus == 0}}导游已报账，不可编辑{{else if rs.billStatus == 1}}计调已审，不可编辑{{else if rs.billStatus == 2}}财务已审，不可编辑{{else}}编辑{{/if}}" data-right="1460003">
                         <label class="padding-right20">|</label>
                         <span>编辑</span>
                     </a>
@@ -78,7 +78,7 @@
                         <label class="padding-right20">|</label>
                         导出
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1460004" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
+                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.billStatus != -1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.billStatus == -1 && rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1460004" title="{{if rs.billStatus == 0}}导游已报账，不可取消{{else if rs.billStatus == 1}}计调已审，不可取消{{else if rs.billStatus == 2}}财务已审，不可取消{{else}}取消{{/if}}">
                         <label class="padding-right20">|</label>
                         <span>取消</span>
                     </a>

@@ -3,7 +3,8 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area" >
                 <div class="form-group"> 
-                    <label class="mar-r-10"> 酒店：{{hotelName}}</label>
+                    <label> 酒店：</label>
+                    <input class="mar-r-10" type="text" name="hotelName" value="{{hotelName}}" />
                     <label>账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
