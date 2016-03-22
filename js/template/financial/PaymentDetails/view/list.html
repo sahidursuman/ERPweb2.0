@@ -72,9 +72,9 @@
             <label>银行账号</label>
             <input type="text" class="form-control T-card-number" name="card-number" {{if searchParam.payType != 0}}value="{{searchParam.resourceName}}"{{/if}} style="width: 300px;">
             <input type="hidden" name="card-id" class="T-bankId" {{if searchParam.payType != 0}}value="{{searchParam.bankId}}"{{/if}}>
-            <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{searchParam.beginningBalance}}">
             <input type="hidden" name="tally-date" class="datepicker" value="{{searchParam.bankId}}">
         </div>
+        <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{searchParam.beginningBalance}}">
         <div class="form-group mar-r-10">
             <label>收款合计：</label>
             <label class="T-incomeMoney F-float F-money">{{total.incomeMoney}}</label>

@@ -3,7 +3,9 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area">
                 <div class="form-group">
-                    <label>保险公司：{{insuranceName}}</label>
+                    <label>保险公司：</label>
+                    <input type="text" class="T-insuranceName" value="{{insuranceName}}">
+                    <input type="hidden" class="T-insuranceId" value="{{insuranceId}}">
                     <label class="marginLeft-30">账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
@@ -13,6 +15,7 @@
                     <button class=" btn-sm T-search search-btn marginLeft-30">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
+                    <input type="hidden" name="accountStatus" value="{{searchParam.accountStatus}}">
                     <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>
                 </div>
             </div>

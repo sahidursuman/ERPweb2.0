@@ -190,6 +190,7 @@ define(function(require, exports) {
         var ruleCheck = new FinRule(0);
         hotel.init_event(args,$tab,"check");
         FinancialService.updateUnpayMoney($tab,ruleCheck);
+        hotel.getHotelList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
@@ -204,7 +205,8 @@ define(function(require, exports) {
                 hotelId: args.hotelId, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find('input[name=startDate]').val(),
-                endTime: $tab.find('input[name=endDate]').val()
+                endTime: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");
         });
@@ -315,6 +317,7 @@ define(function(require, exports) {
         var autoPayRule = (new FinRule(2)).check($tab);
             args.saveRule = new FinRule(args.isAutoPay== 2?3: 1);
         hotel.init_event(args,$tab,"clear");
+        hotel.getHotelList($tab,true);
 
         FinancialService.initPayEvent($tab);
 
@@ -465,11 +468,8 @@ define(function(require, exports) {
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             hotel.listHotel(hotel.listPage);
-                        } else if(argumentsLen === 2){
+                        } else {
                             hotel.hotelCheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            hotel.initCheck(args,$tab);
                         }
                     });
                 }
@@ -510,12 +510,10 @@ define(function(require, exports) {
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             hotel.listHotel(hotel.listPage);
-                        }else if(argumentsLen === 2){
+                        }else {
                             if(args.isAutoPay == 1){
                                 args.isAutoPay = 0;
                             }
-                            hotel.hotelClear(args,$tab);
-                        } else if(argumentsLen === 3){
                             hotel.hotelClear(args,$tab);
                         }
                     }); 
@@ -538,7 +536,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    hotel.initCheck(args,$tab);
+                    hotel.hotelCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     hotel.clearTempData = false;
                     hotel.clearTempSumDate = false;
@@ -593,6 +591,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        hotel.hotelList = hotelList.slice(all);
         hotelList.unshift(all);
 
         //酒店
@@ -633,6 +632,38 @@ define(function(require, exports) {
         });
     };
 
+    hotel.getHotelList = function($tab,type){
+        var $obj = $tab.find('input[name=hotelName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : hotel.hotelList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    hotelId : ui.item.id,
+                    hotelName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    hotel.hotelClear(args);
+                } else {
+                    hotel.hotelCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     hotel.initPay = function(options){
         var args = {
             pageNo : 0,
@@ -640,10 +671,29 @@ define(function(require, exports) {
             hotelName : options.name,
             startTime : options.startDate,
             endTime : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         };
-        hotel.hotelClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               var result = showDialog(data);
+                if(result){
+                    var hotelList = data.hotelNameList;
+                    if(hotelList != null && hotelList.length > 0){
+                        for(var i=0;i<hotelList.length;i++){
+                            hotelList[i].id = hotelList[i].hotelId;
+                            hotelList[i].value = hotelList[i].hotelName;
+                        }
+                    }
+                    hotel.hotelList = hotelList;
+                    args.isAutoPay=2;
+                    hotel.hotelClear(args);
+                }
+            }
+        });
+         
     };
 
     exports.init = hotel.initModule;
