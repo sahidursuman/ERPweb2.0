@@ -41,6 +41,7 @@ define(function(require, exports) {
         //搜索按钮事件
         TotalProfit.$searchArea.find('.T-search').off().on('click', function(){
             var args = {
+                orderNumber: TotalProfit.$searchArea.find("input[name=orderNumber]").val(),
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
