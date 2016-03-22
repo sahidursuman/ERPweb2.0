@@ -255,7 +255,7 @@
                                     <td>
                                         <input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" />
                                     </td>
-                                    <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{insurance.financialMoney}}" data-entity-name="insurance" title="删除"> 删除 </a> </td>
                                 </tr>
                                 {{/if}} {{/each}}
                             </tbody>
@@ -503,7 +503,7 @@
                                             <td>
                                                 <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
                                                 <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
-                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a>
+                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{busCompany.financialMoney}}" title="删除" data-entity-name="busCompany">删除</a>
                                             </td>
                                             {{if busCompany.offerId!=null}}
                                             <!-- <td>
@@ -617,7 +617,7 @@
                                             <input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{restaurant.financialMoney}}" data-entity-name="restaurant" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -700,7 +700,7 @@
                                                 <option {{if hotel.hotel.level==7 }}selected="selected" {{/if}} value="7">五星以上</option>
                                                 {{/if}}
                                             </select>
-                                            <input type="hidden" name="id" value="{{hotel.id}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" />
                                         </td>
                                         <td>
                                             <div class="col-sm-12">
@@ -749,7 +749,7 @@
                                         </td>
                                         <td>
                                             <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{hotel.financialMoney}}" data-entity-name="hotel">删除</a>
                                         </td>
                                         <!-- <td>
                                                 {{if hotel.offerId!=null}}
@@ -824,7 +824,7 @@
                                         </td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{scenic.id}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{scenic.id}}{{/if}}" />
                                                 <input type="text" name="name" class="col-sm-12 T-chooseScenic" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" />
                                                 <input type="hidden" name="scenicId" value="{{if scenic.scenic !=null}}{{scenic.scenic.id}}{{/if}}" />
                                                 <span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区">
@@ -865,7 +865,7 @@
                                             <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{scenic.financialMoney}}" data-entity-name="scenic" title="删除">
                                                                                         删除
                                                                                     </a>
                                         </td>
@@ -915,7 +915,7 @@
                                     <td class="T-whichDaysContainer" value="{{shop.whichDay}}"></td>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input type="hidden" name="id" value="{{shop.id}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}" />
                                             <input type="text" name="name" class="col-sm-12 T-chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" />
                                             <input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" />
                                             <span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店">
@@ -954,7 +954,7 @@
                                         <input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" />
                                     </td>
                                     <td>
-                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" title="删除">
+                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" data-entity-ispayed="{{shop.financialMoney}}" title="删除">
                                                 删除
                                             </a>
                                     </td>
@@ -1016,7 +1016,7 @@
                                         <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}"></td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{selfPay.id}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{selfPay.id}}{{/if}}" />
                                                 <input type="text" name="name" class="col-sm-12 T-chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" />
                                                 <input type="hidden" name="selfPayId" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.id}}{{/if}}" />
                                                 <span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家">
@@ -1056,7 +1056,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{selfPay.financialMoney}}" data-entity-name="selfpay" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -1122,7 +1122,7 @@
                                     <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}">
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{ticket.id}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}" />
                                                 <input type="text" name="name" class="col-sm-12 T-chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" />
                                                 <input type="hidden" name="ticketId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
@@ -1175,7 +1175,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{ticket.financialMoney}}" data-entity-name="ticket" title="删除">
                                                     删除
                                                 </a>
                                         </td>
@@ -1237,7 +1237,7 @@
                                     <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}">
                                         <td class="T-whichDaysContainer" value="{{other.whichDay}}"></td>
                                         <td>
-                                            <input type="hidden" name="id" value="{{other.id}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}" />
                                             <input type="text" maxlength="32" name="name" class="col-sm-12  T-other-name" value="{{other.name}}" />
                                         </td>
                                         <td>
@@ -1268,7 +1268,7 @@
                                             <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" />
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{other.financialMoney}}" data-entity-name="other" title="删除">
                                                     删除
                                                 </a>
                                         </td>
