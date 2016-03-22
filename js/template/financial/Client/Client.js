@@ -652,6 +652,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
+                        $tab.find('.T-sumReciveMoney').data('money',args.sumTemporaryIncomeMoney);
                         $tab.find('.T-clearList').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
