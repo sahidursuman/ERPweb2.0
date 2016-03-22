@@ -52,7 +52,7 @@
                 {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
                 {{if index == 0 }}
                     <td rowspan="{{arrangeList.selfPayArrangeList.length}}">
-                        <span class="selfPayName">{{arrange.selfPay.name}}</span>
+                        <span class="nameType">{{arrange.selfPay.name}}</span>
                     </td>
                 {{/if}}
                 <td>
@@ -66,9 +66,9 @@
                 </td>
                 <td>
                 
-                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50"/></td>
+                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                 
-                <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50"></td>
+                <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}></td>
     
                  <td><span class="needInReduceMoney"></span></td>
                 
@@ -88,14 +88,14 @@
                     {{/if}}
                     <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
                 {{else}}
-                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50"/>
+                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 {{/if}}
                 </td>
                 
                 
                 
                 <td>{{if arrange.badStatus == 1}}
-                <span class='F-floatF-count'>{{arrange.memberCount}}</span>{{else}}<input class="w-50" type="text" name="realCount" class="F-floatF-count" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5"/>{{/if}}<input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <span class='F-floatF-count'>{{arrange.memberCount}}</span>{{else}}<input class="w-50" type="text" name="realCount" class="F-floatF-count" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
                 <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                 </td>
@@ -116,14 +116,14 @@
                 </span>
                 &nbsp;
                 <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-                <select name="payType">
+                <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
                     <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
                     <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
                     <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
                 </select>
                 &nbsp;
                 <input type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-                {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} {{/if}}/>{{/if}}
+                {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11"  {{/if}} {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
                     
                     <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                     <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
@@ -150,11 +150,10 @@
                             {{arrange.travelAgencyRebateMoney}}
                         </span>
                     {{else}}
-                        <span class="travelAgencyRebateMoney F-float F-money">
-                            {{arrange.travelAgencyRebateMoney}}
-                        </span>
+                        <input name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                    
                 </td>
                 
                 <td>{{if arrange.badStatus == 1}}<span>{{arrange.guideRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" maxlength="5"
@@ -167,11 +166,9 @@
                             {{arrange.guideRebateMoney}}
                         </span>
                     {{else}} 
-                        <span class="guideRebateMoney F-float F-money">
-                            {{arrange.guideRebateMoney}}
-                        </span>
+                        <input name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                     {{/if}}
-                    <input type="hidden" name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
                 </td>
                 
                 <td>
@@ -189,12 +186,12 @@
                     {{else}}
                         已对账
                     {{/if}}
-                    &nbsp;&nbsp;
-                    {{if arrange.payedMoney == 0}}
+                    <!-- &nbsp;&nbsp;
+                    {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
                         <a href="javascript:void(0)" class="T-selfArrDel">删除</a>
                     {{else}}
                         <span style="color:#bbb;">删除</span>
-                    {{/if}}
+                    {{/if}} -->
                 </td>                             
         </tr>
         {{/if}}

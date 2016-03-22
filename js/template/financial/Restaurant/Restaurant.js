@@ -143,7 +143,6 @@ define(function(require, exports) {
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
-            args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
 
         $.ajax({
@@ -164,6 +163,8 @@ define(function(require, exports) {
                         restaurant.initCheck(args,restaurant.$checkTab); 
                         //取消对账权限过滤
                         checkDisabled(frList,restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
+                    } else {
+                        restaurant.$checkTab.data('next', args);
                     }
 
                     //绑定翻页组件
@@ -204,9 +205,11 @@ define(function(require, exports) {
         $tab.find(".T-btn-export").click(function(){
             var argsDate = {
                 restaurantId: args.restaurantId, 
+                accountStatus :$tab.find('input[name=accountStatus]').val(),
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });
@@ -470,11 +473,8 @@ define(function(require, exports) {
                         if(argumentsLen == 1){
                             Tools.closeTab(menuKey + "-checking");
                             restaurant.listRestaurant(restaurant.listPage);
-                        } else if(argumentsLen == 2){
+                        } else {
                             restaurant.restaurantCheck(args,$tab);
-                        } else if(argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            restaurant.initCheck(args,$tab);
                         }
                     });
                 }
@@ -540,7 +540,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    restaurant.initCheck(args,$tab);
+                    restaurant.restaurantCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     restaurant.clearTempSumDate = false;
                     restaurant.clearTempData = false;
@@ -555,7 +555,7 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    restaurant.saveChecking($tab,args,[tab_id, title, html]);
+                    restaurant.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if(option == "clear"){
                     restaurant.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }

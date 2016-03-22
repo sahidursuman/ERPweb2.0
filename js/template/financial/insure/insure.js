@@ -209,11 +209,13 @@ define(function(require, exports) {
         //导出报表事件
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
+                accountStatus:$tab.find('input[name=accountStatus]').val(),
                 insuranceId : args.insuranceId,
                 insuranceName: args.insuranceName, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
         });
