@@ -25,10 +25,10 @@ define(function(require, exports) {
 
 	Insure.initModule = function() {
 		var dateJson = FinancialService.getInitDate();
-        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate);
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2);
    	};
   	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus){
-  		if (Insure.$searchArea && arguments.length = == 1) {
+  		if (Insure.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             insuranceName = Insure.$searchArea.find("input[name=insuranceName]").val();
             insuranceId = Insure.$searchArea.find("input[name=insuranceId]").val();

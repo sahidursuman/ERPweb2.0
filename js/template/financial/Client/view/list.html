@@ -2,11 +2,11 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label>总社 </label>
-            <input type="text" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName || '全部'}}" maxlength="100">
+            <input type="text" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName}}" maxlength="100" placeholder="所有总社">
         </div>
         <div class="form-group mar-r-10">
             <label>客户 </label>
-            <input type="text" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName || '全部'}}" maxlength="100">
+            <input type="text" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName}}" maxlength="100" placeholder="所有客户">
         </div>
         <div class="form-group mar-r-10">
             <label>账期 </label>
