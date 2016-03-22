@@ -219,6 +219,7 @@ define(function(require, exports) {
             Ticket.saveCheckData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
+        	Ticket.checkTemp = false;
             Ticket.checkingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -227,6 +228,10 @@ define(function(require, exports) {
                 return;
             }
             Ticket.saveCheckData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Ticket.checkTemp = false;
         });
 
 		Tools.setDatePicker($tab.find('.datepicker'), true);
