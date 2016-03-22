@@ -1085,7 +1085,9 @@ define(function(require, exports) {
                     endDate : $tab.find('.T-search-end-date').val(),
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
-                args.isOuter = FinGuide.isOuter = true;
+                if($tab.find('.T-btn-autofill').length == 0){
+                    args.isOuter = FinGuide.isOuter = true;
+                }
                 FinGuide.initOperationModule(args,type);
             }
         }).on("click",function(){
