@@ -1117,6 +1117,9 @@ input.datepicker:not([class^="col-"]) {
 .hct-bg-1FADE0{
 	background: #1FADE0!important;
 }
+.hct-color-BBB{
+	color: #bbb!important;
+}
 .hct-group-input{
 	position: relative;
 }

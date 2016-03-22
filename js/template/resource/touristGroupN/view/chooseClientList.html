@@ -1,5 +1,5 @@
 {{each travelAgencyList as rs}}
-<tr class="cursor">
+<tr class="cursor" data-id="{{rs.travelAgencyId}}">
 	<td name="travelAgencyName">{{rs.travelAgencyName}}</td>
 	<td>{{rs.type | getTravelAgencyType}}</td>
 	<td>{{rs.level | getTravelAgencyLevel}}</td>
