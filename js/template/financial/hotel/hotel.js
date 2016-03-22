@@ -155,11 +155,15 @@ define(function(require, exports) {
                     var fhList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.isGuidePay(fhList);
                     data.hotelName = args.hotelName;
+                    data.financialHotelListData = FinancialService.getCheckTempData(data.financialHotelListData,hotel.checkTemp);
                     var html = hotelChecking(data);
                     
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "酒店对账", html)) {
                         hotel.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(hotel.checkTemp){
+                            hotel.$checkTab.data('isEdited',true);
+                        }
                         hotel.initCheck(args,hotel.$checkTab); 
                         //取消对账权限过滤
                         checkDisabled(fhList,hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
@@ -174,9 +178,15 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                hotel.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                hotel.hotelCheck(args);
+                                var temp = FinancialService.checkSaveJson(hotel.$checkTab,hotel.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    hotel.checkTemp = temp;
+                                    hotel.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    hotel.hotelCheck(args);
+                                }
                             }
                         }
                     });
@@ -453,7 +463,7 @@ define(function(require, exports) {
     //对账数据保存
     hotel.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab,new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab,hotel.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -464,6 +474,7 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        hotel.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
@@ -536,6 +547,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
+                    hotel.checkTemp = false;
                     hotel.hotelCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     hotel.clearTempData = false;
@@ -568,6 +580,8 @@ define(function(require, exports) {
                 if(option == "clear"){
                     hotel.clearTempData = false;
                     hotel.clearTempSumDate = false;
+                } else if(option == "check"){
+                    hotel.checkTemp = false;
                 }
             });
 

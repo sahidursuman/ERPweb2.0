@@ -141,48 +141,94 @@ FinancialService.updateUnpayMoney = function($tab,rule){
 };
 
 //对账-保存json组装
-FinancialService.checkSaveJson = function($tab,rule){
+FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参数标识返回数据是否用于提交保存，保存时值为true
     var validator = rule.check($tab);
-    if(!validator.form()){return false;}
+    if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
 
     if(!$tab.data('isEdited')){
-        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-        return false;
+        if(isSave){
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+            return false;
+        } else {
+            return tempJson;
+        }
     }
 
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
-        saveJson = []; 
+        saveJson = tempJson || [],
+        len = saveJson.length; 
     $tr.each(function(){
         var $this = $(this);
         if($this.data("change")){//遍历修改行
-            var validator = rule.check($this);
-            if(!validator.form()){ return false; }
-            var isConfirmAccount = "";
+            validator = rule.check($this);
+            if(!validator.form()){ return false; }//未通过验证退出当前行
+
+            var isChecked = "";
             if ($this.find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
+                isChecked = 1;
             } else {
-                isConfirmAccount = 0; 
+                isChecked = 0; 
             }
-            //提交修改了对账状态或已对账行数据的行
-            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
+            //已有数据更新
+            for(var i = 0; i < len; i++){
+                if(saveJson[i].id == $this.data("id")){
+                    saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
+                    saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
+                    saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
+                    saveJson[i].isChecked = isChecked;
+                    return;
+                }
+            }
+            //新数据
+            if(i >= len){
                 var checkRecord = {
                     id : $this.data("id"),
                     settlementMoney : $this.find("input[name=settlementMoney]").val(),
                     unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
                     checkRemark : $this.find("[name=checkRemark]").val(),
-                    isConfirmAccount : isConfirmAccount
+                    confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
+                    isChecked : isChecked
                 };
-                saveJson.push(checkRecord);
+                saveJson.push(checkRecord);  
             }
         }
     });
-    if(saveJson.length == 0){
-        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
-        return false;
+    if(isSave){
+        if(saveJson.length == 0){
+            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            return false;
+        }
+        //保存数据处理,
+        for(var i = 0; i < saveJson.length; i++){
+            if(saveJson[i].confirm == 0 && saveJson[i].isChecked == 0){
+                saveJson.splice(i,1);//删除不需提交的行
+            } else {
+                saveJson[i].isConfirmAccount = saveJson[i].isChecked;
+            }
+        }
+        saveJson = JSON.stringify(saveJson);
     }
-    saveJson = JSON.stringify(saveJson);
     return saveJson;
+};
+
+//对账-翻页暂存数据读取
+FinancialService.getCheckTempData = function(resultList,tempJson){
+    if(!!tempJson && tempJson.length){
+        for(var i = 0; i < tempJson.length; i++){
+            for(var j = 0; j < resultList.length; j++){
+                if(tempJson[i].id == resultList[j].id){
+                    resultList[j].change = true;
+                    resultList[j].settlementMoney = tempJson[i].settlementMoney;
+                    resultList[j].unPayedMoney = tempJson[i].unPayedMoney;
+                    resultList[j].checkRemark = tempJson[i].checkRemark;
+                    resultList[j].isChecked = tempJson[i].isChecked;
+                    break;
+                }
+            }
+        }
+    }
+    return resultList;
 };
 
 //对账-修改但未勾选提醒
@@ -256,6 +302,9 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
         fn();
     }
 };
+
+
+
 
 
 
