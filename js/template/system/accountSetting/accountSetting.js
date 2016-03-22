@@ -138,7 +138,6 @@ define(function(require, exports) {
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
-
 		};
 
 		//绑定手机号
@@ -376,6 +375,8 @@ define(function(require, exports) {
 				var $form = $(".T-form");
 				var validator=rule.check($form);			
 				var $obj = $('.fuelux-apply');
+				var $price=$obj.find('[name=applyMoney]');
+				Tools.inputCtrolFloat($price);
 				$obj.find(".T-btn-cancel").click(function(){
 				 	 Tools.closeTab(sKey);
 					});

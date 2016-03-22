@@ -68,7 +68,7 @@ define(function(require, exports) {
 							type: 'null',
 							errMsg: '金额不能为空'
 						},{
-							type: 'float',
+							type: 'positive-float',
 							errMsg: '格式不正确'
 						}
 					]
