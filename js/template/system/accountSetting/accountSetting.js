@@ -139,7 +139,6 @@ define(function(require, exports) {
 				accountSetting.BorrowingRecord(0);
 			});
 
-
 		};
 
 		//绑定手机号
@@ -171,12 +170,12 @@ define(function(require, exports) {
 							    scrollbar: false,
 							    success:function(){
 							    	var $obj = $(".account-solutionMain");
-							    	$obj.find('.T-closeSolution').click(function() {
+							    		$obj.find('.T-closeSolution').click(function() {
 							    		layer.close(solutionLayer);
 							    	});
 							    }
 							});
-							});
+						});
 
 						$obj.find('#send').click(function() {
 						var searchData = {};
@@ -208,7 +207,6 @@ define(function(require, exports) {
 										}
 									}
 								})
-										
 							});	
 							}
 						});
@@ -299,8 +297,6 @@ define(function(require, exports) {
 	     			},1000);  
 				});
 			})
-			
-			
 		}
 
 		// 更换新手机号
@@ -377,10 +373,9 @@ define(function(require, exports) {
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
 				//表单验证
-				//
 				var $form = $(".T-form");
 				var validator=rule.check($form);			
-				var $obj = $('.fuelux-apply');//
+				var $obj = $('.fuelux-apply');
 				$obj.find(".T-btn-cancel").click(function(){
 				 	 Tools.closeTab(sKey);
 					});
@@ -416,7 +411,6 @@ define(function(require, exports) {
 						}
 					}
 				});
-
 			};
 
 		/**
