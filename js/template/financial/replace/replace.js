@@ -355,7 +355,7 @@ define(function(require, exports) {
 	            var argsData = {
 	                    orderNumber: $tab.find('.T-search-order').val(),
 	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
-	                    travelAgencyName: $tab.find('input[name=name]').val(),
+	                    travelAgencyName: $tab.find('input[name=partnerAgencyName]').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val(),
 	                    accountStatus : args.accountStatus
