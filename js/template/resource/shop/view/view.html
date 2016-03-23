@@ -91,7 +91,7 @@
 			</td>
 			<td class="no-padding" width="200">
 				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}}" style="padding-bottom: 7px;">
+					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}} T-priceArea" style="padding-bottom: 7px;">
 						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
 							<label class="col-sm-12 control-label center">
 								{{shopCostRebate.costMoneyStart}} 至 {{shopCostRebate.costMoneyEnd}}<br>

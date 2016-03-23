@@ -8,7 +8,15 @@
                     新增
                 </button>
             </a>
+            <span style="color:#000;margin-left:20px;">
+                购物合计：<span class="T-sumShopMoney F-float F-money"></span>
+                &nbsp;&nbsp;
+                社佣合计：<span class="T-sumTravelMoney F-float F-money"></span>
+                &nbsp;&nbsp;
+                导佣合计：<span class="T-sumGuideMoney F-float F-money"></span>
+            </span>
         </h5>
+
     </div>
     <table class="table overflow-table table-striped table-bordered table-hover">
         <thead>
@@ -27,9 +35,23 @@
           <th class="th-border"><span class="necessary">*</span>金额</th>
           <th class="th-border">单据</th>
           <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border">返佣</th>
+          <th class="th-border"> 
+                <span>返佣</span>
+                <!-- <div style="float:right">
+                    <input type="checkbox" class="ace T-travelCheckbox"/>
+                    <span class="lbl"></span>清除小数
+                    &nbsp;
+                    </th>
+                </div> -->
           <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border">返佣</th>
+          <th class="th-border"> 
+                <span>返佣</span>
+                <!-- <div style="float:right">
+                    <input type="checkbox" class="ace T-guideCheckbox"/>
+                    <span class="lbl"></span>清除小数
+                    &nbsp;
+                    </th>
+                </div> -->
         </tr></thead>
         <tbody class="T-count-shopping"> 
         {{each dayList as day}}
@@ -38,7 +60,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -60,11 +82,11 @@
                 
                 <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old = "{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
                 
                 <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td rowspan="{{arrange.shopArrangeItemSet.length}}" class="hidden">
                     <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
@@ -77,7 +99,7 @@
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
                &nbsp;&nbsp;
                {{if arrange.incomeStatus == 0}}
-                   <a href="javascript:void(0)" class="T-shopArrDel">删除</a>
+                   <a href="javascript:void(0)" class="T-shopArrDelAll">删除</a>
                {{else}}
                    <span style="color:#bbb;">删除</span>
                {{/if}}
@@ -90,7 +112,8 @@
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}">
+            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
+            {{if index == 1}}class="noSumRate"{{/if}}>
                 <td>
                 <span class="span_shopPolicy">
                     <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
@@ -131,7 +154,16 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> &nbsp;&nbsp;<span style="color:#bbb;margin-left:6px;">删除</span>
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> &nbsp;&nbsp;
+                    {{if index == 1}}
+                        <span style="color:#bbb;">删除</span>
+                    {{else}}
+                        {{if arrange.incomeStatus == 0}}
+                           <a href="javascript:void(0)" class="T-shopArrDelItem">删除</a>
+                       {{else}}
+                           <span style="color:#bbb;">删除</span>
+                       {{/if}}
+                    {{/if}}
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
                 </td></tr>
                 {{/if}}
@@ -139,19 +171,19 @@
             {{/if}}
         {{/if}}
         <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
-            <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
-            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span>&nbsp;&nbsp;</td>
-            <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
-            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span>&nbsp;&nbsp;</td>
-            <td style="font-weight: bold;text-align:right;">导佣合计：</td>
-            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span>&nbsp;&nbsp;</td>
-            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+            <td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>
+            <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>
+            <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalTravelMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;">导佣小计：</td>
+            <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney"></span></td>
+            <td style="font-weight: bold;text-align:right;">佣金小计：</td>
+            <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-sumRebeMoney "></span></td>
         </tr>
         {{/each}}  
         {{/each}}
         {{/if}}
         {{/each}}
-        
         </tbody>
     </table>
 
