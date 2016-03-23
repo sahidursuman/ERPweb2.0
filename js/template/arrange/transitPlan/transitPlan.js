@@ -134,7 +134,7 @@ define(function(require, exports) {
             type: "POST",
             data:hotelsData,
             success: function(data) {
-                var result = showDialog(data);
+                var result = showDialog(data);n
                 if (result) {
                     // // 搜索域的html
                     var hotelsearch = hotelMainTemplate()
@@ -222,7 +222,6 @@ define(function(require, exports) {
                 //车查看
                 transitPlan.buslook(id,$tr);
             }else if($that.hasClass('T-inform')){
-                alert();
                 //通知
                 var status = {
                     receiveBusStatus: $tab.find('.receiveBusStatus').data('status'),
@@ -815,6 +814,7 @@ define(function(require, exports) {
      * @return {[type]}    [description]
      */
     transitPlan.sendTransit = function(id, status) {
+        console.log(id)
         var noticeLayer = layer.open({
             type: 1,
             title: '通知设置',
@@ -846,12 +846,7 @@ define(function(require, exports) {
                 $container.find('.T-btn-submit-notice').on('click', function() {
                     var noticeItems = {
                         bus: getValue('bus'),
-                        hotel: getValue('hotel'),
-                        other: getValue('other'),
-                        tourist: getValue('tourist'),
-                        sendDateTime: getValue('sendDateTime'),
-                        touristGroupId: id,
-                        smsSign: getValue('smsSign')
+                        id : id
                     }
                     $.ajax({
                         url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
