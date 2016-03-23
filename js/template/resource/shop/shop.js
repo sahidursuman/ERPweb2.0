@@ -297,9 +297,13 @@ define(function(require, exports) {
 						scrollbar: false,    // 推荐禁用浏览器外部滚动条
 					    success:function(){
 							$(".timeArea").each(function(i) {
-								var priceAreaHeight = $(".price" + i).height();
-								$(this).height(priceAreaHeight);
-								$(this).css("line-height",priceAreaHeight + "px")
+								$(".T-priceArea").each(function(j) {
+									if (i==j) {
+										var priceAreaHeight = $(".T-priceArea").eq(j).height();
+										$(".timeArea").eq(j).height(priceAreaHeight);
+										$(".timeArea").eq(j).css("line-height",priceAreaHeight + "px");
+									}
+								})
 							});
 					    }
 					});
