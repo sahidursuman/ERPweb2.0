@@ -173,7 +173,7 @@ define(function(require, exports) {
 				data.financialTicketList = FinancialService.getCheckTempData(data.financialTicketList,Ticket.checkTemp);
 				if(Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data))){
 					Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
-					if(Ticket.checkTemp){
+					if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
                         Ticket.$checkingTab.data('isEdited',true);
                     }
 					Ticket.check_event(args,Ticket.$checkingTab);

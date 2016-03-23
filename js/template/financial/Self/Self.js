@@ -161,7 +161,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(checkTabId, "自费对账", html)) {
                         Self.$checkTab = $("#tab-" + menuKey + "-checking-content");
-                        if(Self.checkTemp){
+                        if(Self.checkTemp && Self.checkTemp.length > 0){
                             Self.$checkTab.data('isEdited',true);
                         }
                         Self.initCheck(args,Self.$checkTab); 

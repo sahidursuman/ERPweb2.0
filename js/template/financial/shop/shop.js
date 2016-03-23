@@ -255,7 +255,7 @@ define(function(require, exports) {
                     } else {
                         $theTab = $tab || $('#tab-' + key + '-content');
                         FinShop.$checkingTab = $theTab;
-                        if(FinShop.checkTemp){
+                        if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
                         }
                     }

@@ -156,7 +156,7 @@ define(function(require, exports) {
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
-                                    if(OtherAccounts.checkTemp){
+                                    if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
                                         OtherAccounts.$checkTab.data('isEdited',true);
                                     }
                                     OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);

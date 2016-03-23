@@ -206,7 +206,7 @@ define(function(require,exports) {
 					}else{
 						data.list = FinancialService.getCheckTempData(data.list,InnerTransferOut.checkTemp,true);
 						html = checkTableTemplate(data);
-						if(InnerTransferOut.checkTemp){
+						if(InnerTransferOut.checkTemp && InnerTransferOut.checkTemp.length > 0){
                             InnerTransferOut.$checkTab.data('isEdited',true);
                         }
 
