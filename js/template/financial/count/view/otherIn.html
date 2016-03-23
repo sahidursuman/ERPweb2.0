@@ -19,7 +19,6 @@
                         <th class="th-border">金额</th>
                         <th class="th-border">单据</th>
                         <th class="th-border">导游报账备注</th>
-                        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr>
                     </thead>
                     <tbody class="T-count-otherIn">
@@ -54,9 +53,9 @@
                             {{/if}}
                         </td>
 
-                        <td>{{if editStatus == 1}}<input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{otherInCome.billRemark}}{{/if}}</td>
-
-                        {{if tripPlan.billStatus == 2}}<td>{{if otherInCome.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+                        <td>{{if editStatus == 1}}<input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{otherInCome.billRemark}}{{/if}}
+                        &nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>
+                        </td>
                     </tr>
                     {{/if}}
                     {{/each}}
