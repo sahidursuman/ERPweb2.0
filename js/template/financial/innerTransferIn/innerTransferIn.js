@@ -359,7 +359,7 @@ define(function(require, exports) {
                 if ($(this).hasClass('btn-primary')) {
                     if (new FinRule(2).check($tab).form()) {
                         FinancialService.autoPayConfirm($tab.find('input[name=startDate]').val(),$tab.find('input[name=endDate]').val(), function() {
-                            FinTransIn.autoFillMoney($tab);
+                            FinTransIn.autoFillMoney($tab,args);
                         });
                     }
                 } else {
@@ -371,7 +371,7 @@ define(function(require, exports) {
         }
     };
 
-    FinTransIn.autoFillMoney = function($tab){
+    FinTransIn.autoFillMoney = function($tab,args){
         var payType = $tab.find('select[name=sumPayType]').val(),
             argsData = {
                 lineProductId : $tab.find('input[name=lineProductId]').val(),
@@ -387,6 +387,7 @@ define(function(require, exports) {
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val(),
                 sumRemark : $tab.find('input[name=sumRemark]').val(),
+                accountStatus : args.accountStatus
             };
 
         $.ajax({
