@@ -56,6 +56,10 @@ define(function(require, exports) {
 	};
 
 		// 借款拨款记录
+		/**
+		 * [BorrowingRecord 借款拨款记录]
+		 * @param {[type]} pageNo [description]
+		 */
 		accountSetting.BorrowingRecord = function(pageNo) {
 		$.ajax({
 			url:KingServices.build_url("accountSetting/applyLoan","findApprovedRecord"),
@@ -141,6 +145,12 @@ define(function(require, exports) {
 		};
 
 		//绑定手机号
+		/**
+		 * [newPhone 绑定手机号]
+		 * @param  {[type]} mobile     [号码]
+		 * @param  {[type]} verifyCode [验证码]
+		 * @return {[type]}            [description]
+		 */
 		accountSetting.newPhone = function(mobile,verifyCode){
 			var data = {};
 				data.oldMobile = mobile;
@@ -230,6 +240,9 @@ define(function(require, exports) {
 		};
 
 		//新添默认新号码
+		/**
+		 * [addPhone 新添默认新号码]
+		 */
 		accountSetting.addPhone = function(){
 			$.ajax({
 				url:KingServices.build_url("accountSetting/applyLoan","findMobile"),
@@ -299,7 +312,11 @@ define(function(require, exports) {
 		}
 
 		// 更换新手机号
-		accountSetting.newPhoneChange = function(newMobile,verifyCode){
+		/**
+		 * [newPhoneChange 更换新手机号]
+		 * @return {[type]}[description]
+		 */
+		accountSetting.newPhoneChange = function(){
     		var html = newPhonelate();
 			var changePhoneLayer = layer.open({
 			    type: 1,
@@ -367,7 +384,11 @@ define(function(require, exports) {
 			});
 		};
 
-		//申请借款
+		
+		/**
+		 * [loanApplication 申请借款]
+		 * @return {[type]} [description]
+		 */
 		accountSetting.loanApplication = function(){
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
@@ -386,7 +407,11 @@ define(function(require, exports) {
 				});
 			};
 
-		//编辑申请借款
+		/**
+		 * [updatelication 编辑申请借款]
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
 		accountSetting.updatelication = function(id){
 				$.ajax({
 					url:KingServices.build_url("accountSetting/applyLoan","edit"),
