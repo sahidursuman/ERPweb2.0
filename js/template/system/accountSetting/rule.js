@@ -69,6 +69,9 @@ define(function(require, exports) {
 							errMsg: '金额不能为空'
 						},{
 							type: 'positive-float',
+							errMsg: '请输入大于0的数字'
+						},{
+							type: 'float',
 							errMsg: '格式不正确'
 						}
 					]

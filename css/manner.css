@@ -1877,6 +1877,10 @@ p#back-top a span {
 #shopFormCol-x12 .col-sm-12{
     float: none;
 }
+.graySearch-btn{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {

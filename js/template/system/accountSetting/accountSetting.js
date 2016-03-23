@@ -17,7 +17,6 @@ define(function(require, exports) {
 	};
 	accountSetting.initModule = function() {
 		accountSetting.accountSeList(0);
-		typeFlage = false;
 	};
 	accountSetting.accountSeList = function(pageNo) {
 		// 修正页码
@@ -56,6 +55,10 @@ define(function(require, exports) {
 	};
 
 		// 借款拨款记录
+		/**
+		 * [BorrowingRecord 借款拨款记录]
+		 * @param {[type]} pageNo [description]
+		 */
 		accountSetting.BorrowingRecord = function(pageNo) {
 		$.ajax({
 			url:KingServices.build_url("accountSetting/applyLoan","findApprovedRecord"),
@@ -107,8 +110,7 @@ define(function(require, exports) {
 					paymentStrea:'paymentStrea',
 					collateral:'collateral',
 					remark:'remark',
-					applyMoney:'applyMoney',
-					id:typeFlage == 2 ? $obj.find('input[name=nameId]').val():''
+					applyMoney:'applyMoney'
 				};
 
 			accountSetting.$tab = $('#' + tabId);
@@ -138,9 +140,24 @@ define(function(require, exports) {
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
+
+			//申请借款无绑定号码时提示
+			var $objNull = $(".T-accountSetList");
+			$objNull.find('.T-btn-Grayapply').hover(function(event) {
+				showMessageDialog($("#confirm-dialog-message"),"请先绑定手机号码后才能申请借款", function() {
+
+				});
+			});
+			
 		};
 
 		//绑定手机号
+		/**
+		 * [newPhone 绑定手机号]
+		 * @param  {[type]} mobile     [号码]
+		 * @param  {[type]} verifyCode [验证码]
+		 * @return {[type]}            [description]
+		 */
 		accountSetting.newPhone = function(mobile,verifyCode){
 			var data = {};
 				data.oldMobile = mobile;
@@ -230,6 +247,9 @@ define(function(require, exports) {
 		};
 
 		//新添默认新号码
+		/**
+		 * [addPhone 新添默认新号码]
+		 */
 		accountSetting.addPhone = function(){
 			$.ajax({
 				url:KingServices.build_url("accountSetting/applyLoan","findMobile"),
@@ -299,7 +319,11 @@ define(function(require, exports) {
 		}
 
 		// 更换新手机号
-		accountSetting.newPhoneChange = function(newMobile,verifyCode){
+		/**
+		 * [newPhoneChange 更换新手机号]
+		 * @return {[type]}[description]
+		 */
+		accountSetting.newPhoneChange = function(){
     		var html = newPhonelate();
 			var changePhoneLayer = layer.open({
 			    type: 1,
@@ -367,7 +391,11 @@ define(function(require, exports) {
 			});
 		};
 
-		//申请借款
+		
+		/**
+		 * [loanApplication 申请借款]
+		 * @return {[type]} [description]
+		 */
 		accountSetting.loanApplication = function(){
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
@@ -386,7 +414,11 @@ define(function(require, exports) {
 				});
 			};
 
-		//编辑申请借款
+		/**
+		 * [updatelication 编辑申请借款]
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
 		accountSetting.updatelication = function(id){
 				$.ajax({
 					url:KingServices.build_url("accountSetting/applyLoan","edit"),
@@ -402,6 +434,8 @@ define(function(require, exports) {
 						var $form = $(".T-form");
 						var validator=rule.check($form);			
 						var $obj = $('#updateApplyMain');
+						var $price=$obj.find('[name=applyMoney]');
+							Tools.inputCtrolFloat($price);
 						$obj.find(".T-btn-cancel").click(function(){
 						 	 Tools.closeTab(cKey);
 							});

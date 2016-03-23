@@ -5,7 +5,8 @@
 	<button class=" btn-sm T-btn-addPhone search-btn {{if !!travelAgency.contactNumber}}hide{{/if}}"> 绑定新号码 </button>
 	<button class=" btn-sm T-btn-accountSet search-btn {{if !travelAgency.contactNumber}}hide{{/if}}"> 更换新号码 </button>
 	<label class="pull-left col-xs-1" style="width: 160px;">账户余额：￥{{travelAgency.balance}}</label>
-	<button class=" btn-sm T-btn-apply search-btn">申请借款 </button>
+
+	<button class=" btn-sm {{if !!travelAgency.contactNumber}}T-btn-apply{{else}}graySearch-btn T-btn-Grayapply{{/if}} search-btn">申请借款 </button>
 </div>
 <div class="tabbable T-mainSetList" style="margin-top: 15px;">
 	<ul class="nav nav-tabs">
