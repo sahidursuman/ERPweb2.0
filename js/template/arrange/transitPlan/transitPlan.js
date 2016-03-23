@@ -134,7 +134,7 @@ define(function(require, exports) {
             type: "POST",
             data:hotelsData,
             success: function(data) {
-                var result = showDialog(data);n
+                var result = showDialog(data);
                 if (result) {
                     // // 搜索域的html
                     var hotelsearch = hotelMainTemplate()
@@ -814,7 +814,6 @@ define(function(require, exports) {
      * @return {[type]}    [description]
      */
     transitPlan.sendTransit = function(id, status) {
-        console.log(id)
         var noticeLayer = layer.open({
             type: 1,
             title: '通知设置',
@@ -826,7 +825,7 @@ define(function(require, exports) {
                 var $container = $('.T-transitNotice'),
                     $checkbox = $container.find('.T-checked'),
                     $touristDiv = $container.find(".T-touristCheckedShow");
-                // transit.dateTimePicker($container);
+                // transitPlan.dateTimePicker($container);
                 var $timeCheck = $touristDiv.find('.T-checked')
                 $timeCheck.click(function() {
                     var $this = $(this);
@@ -845,8 +844,8 @@ define(function(require, exports) {
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
                     var noticeItems = {
-                        bus: getValue('bus'),
-                        id : id
+                        id : id,
+                        bus: getValue('bus')
                     }
                     $.ajax({
                         url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
