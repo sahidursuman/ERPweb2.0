@@ -369,6 +369,7 @@ FinancialService.getTempDate = function(resultList,tempJson){
 
 //付款-保存(暂存)数据组装，数组，需转换为json
 FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
+    console.log(clearSaveJson);
     $tr = $tab.find(".T-clearList tr")
     $tr.each(function(){
         var $this = $(this);
@@ -420,14 +421,9 @@ FinancialService.isClearSave = function($tab,rule){
         sumListMoney = $tab.find('input[name=sumPayMoney]').data("money"),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
 
-        if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
-            sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
-        }
-    console.log("sumPayMoney:" + sumPayMoney);
-    console.log("sumListMoney:" + sumListMoney);
-    console.log(typeof sumPayMoney);
-    console.log(typeof sumListMoney);
-    console.log(Tools.Math.isFloatEqual(sumPayMoney,sumListMoney));
+    if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
+        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
+    }
     if(!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
@@ -784,66 +780,149 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
     });
 };
 
-//对账-保存json组装
-FinancialService.saveJson_checking = function($tab){
+//对账-保存json组装(客户账务)
+FinancialService.saveJson_checking = function($tab,tempJson,rule,isSave){
+    var validator = rule.check($tab);
+    if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
+
     if(!$tab.data('isEdited')){
-        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-        return false;
+        if(isSave && !tempJson){
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+            return false;
+        } else {
+            // return tempJson;
+        }
     }
 
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
-        saveJson = []; 
+        saveJson = tempJson || [],
+        len = saveJson.length; 
     $tr.each(function(){
-        var $this = $(this),
-            isConfirmAccount = $this.data("confirm"),
-            isCheck = "";
-        if ($this.find(".T-checkbox").is(':checked')) {
-            isCheck = 1;
-        } else {
-            isCheck = 0; 
-        }
+        var $this = $(this);
+        if($this.data("change")){//遍历修改行
+            validator = rule.check($this);
+            if(!validator.form()){ return false; }//未通过验证退出当前行
 
-        if(isCheck != isConfirmAccount || isConfirmAccount == 1){//修改了对账状态
-            var $childTr = $this,
-                detailList = [],
-                end = false;
-            while(!end && $childTr.length > 0){
-                if($childTr.data("change")){
-                    var detailJosn = {
-                        touristGroupId : $childTr.find(".T-touristGroupId").data("id"),
-                        backMoney : $childTr.find('.T-refund').val(),
-                        flag : $childTr.find(".T-touristGroupId").data("status")
-                    };
-                    detailList.push(detailJosn);
-                }
-                $childTr = $childTr.next();
-                if($childTr.hasClass('T-checkTr')){
-                    end = true;
+            var isChecked = "";
+            if ($this.find(".T-checkbox").is(':checked')) {
+                isChecked = 1;
+            } else {
+                isChecked = 0; 
+            }
+            //已有数据更新
+            for(var i = 0; i < len; i++){
+                var $childTr = $this,
+                    detailList = [],
+                    end = false;
+                while(!end && $childTr.length > 0){
+                    if(saveJson[i].id == $this.data("id")){
+                        saveJson[i].unPayedMoney = $this.find(".T-unReceivedMoney").text();
+                        saveJson[i].checkRemark = $this.find(".T-remark").val();
+                        saveJson[i].isChecked = isChecked;
+                        if(saveJson[i].detailList.length){
+                            for(var j = 0; j < saveJson[i].detailList.length; j++){
+                                saveJson[i].detailList[j].backMoney = $childTr.find('.T-refund').val();
+                                saveJson[i].detailList[j].settlementMoney = $childTr.find('.T-settlementMoney').text();
+                            }
+                        }
+                    }
+                    $childTr = $childTr.next();
+                    if($childTr.hasClass('T-checkTr')){
+                        end = true;
+                    }
                 }
             }
+            //新数据
+            if(i >= len){
+                var $childTr = $this,
+                    detailList = [],
+                    end = false;
+                while(!end && $childTr.length > 0){
+                    if($childTr.data("change")){
+                        var detailJosn = {
+                            touristGroupId : $childTr.find(".T-touristGroupId").data("id"),
+                            backMoney : $childTr.find('.T-refund').val(),
+                            settlementMoney : $childTr.find('.T-settlementMoney').text(),
+                            flag : $childTr.find(".T-touristGroupId").data("status")
+                        };
+                        if($childTr.find('.T-touristGroupId').data("trans")){//添加中转结算标识，用于合并缓存
+                            detailJosn.trans = true;
+                        }
+                        detailList.push(detailJosn);
+                    }
+                    $childTr = $childTr.next();
+                    if($childTr.hasClass('T-checkTr')){
+                        end = true;
+                    }
+                }
 
-            if(isCheck != isConfirmAccount || detailList.length > 0){
                 var checkRecord = {
                     id : $this.data("id"),
-                    isConfirmAccount : isCheck,
+                    isChecked : isChecked,
                     unPayedMoney : $this.find(".T-unReceivedMoney").text(),
                     checkRemark : $this.find(".T-remark").val(),
                     status : $this.data("status"),
+                    confirm : $this.data("confirm"),
                     detailList : detailList
                 };
                 saveJson.push(checkRecord);
             }
         }
     });
-    if(saveJson.length == 0){
-        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
-        return false;
+    if(isSave){
+        if(saveJson.length == 0){
+            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            return false;
+        }
+        //保存数据处理,
+        for(var i = 0; i < saveJson.length; i++){
+            if(saveJson[i].confirm == 0 && saveJson[i].isChecked == 0){
+                saveJson.splice(i,1);//删除不需提交的行
+                i--;
+            } else {
+                saveJson[i].isConfirmAccount = saveJson[i].isChecked;
+            }
+        }
+        saveJson = JSON.stringify(saveJson);
     }
-
     return saveJson;
 };
 
+//对账——合并缓存数据(客户账务)
+FinancialService.getCheckTempData_checking = function(resultList,tempJson){
+    if(!!tempJson && tempJson.length){
+        for(var i = 0; i < tempJson.length; i++){
+            for(var j = 0; j < resultList.length; j++){
+                if(tempJson[i].id == resultList[j].id){
+                    resultList[j].change = true;
+                    resultList[j].unPayedMoney = tempJson[i].unPayedMoney;
+                    resultList[j].checkRemark = tempJson[i].checkRemark;
+                    resultList[j].isChecked = tempJson[i].isChecked;
+                    var otherFeeIndex = 0;
+                    for(var k = 0; k < tempJson[i].detailList.length; k++){
+                        var detailList = tempJson[i].detailList[k];
+                        if(detailList.trans){
+                        console.log("detailList");
+                        console.log(detailList);
+                        console.log(detailList.backMoney);
+                        console.log(tempJson[i].detailList[k].backMoney);
+                            resultList[j].detailList.transitFee.backMoney = detailList.backMoney;
+                            resultList[j].detailList.transitFee.settlementMoney = detailList.settlementMoney;
+                            otherFeeIndex = 0;
+                        } else {
+                            resultList[j].detailList.otherFee[otherFeeIndex].backMoney = detailList.backMoney;
+                            resultList[j].detailList.otherFee[otherFeeIndex].settlementMoney = detailList.settlementMoney;
+                            otherFeeIndex++;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return resultList;
+};
 
 //支付
 /**
