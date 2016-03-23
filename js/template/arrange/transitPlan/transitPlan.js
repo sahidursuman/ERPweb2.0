@@ -222,7 +222,6 @@ define(function(require, exports) {
                 //车查看
                 transitPlan.buslook(id,$tr);
             }else if($that.hasClass('T-inform')){
-                alert();
                 //通知
                 var status = {
                     receiveBusStatus: $tab.find('.receiveBusStatus').data('status'),
@@ -826,7 +825,7 @@ define(function(require, exports) {
                 var $container = $('.T-transitNotice'),
                     $checkbox = $container.find('.T-checked'),
                     $touristDiv = $container.find(".T-touristCheckedShow");
-                // transit.dateTimePicker($container);
+                // transitPlan.dateTimePicker($container);
                 var $timeCheck = $touristDiv.find('.T-checked')
                 $timeCheck.click(function() {
                     var $this = $(this);
@@ -845,13 +844,8 @@ define(function(require, exports) {
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
                     var noticeItems = {
-                        bus: getValue('bus'),
-                        hotel: getValue('hotel'),
-                        other: getValue('other'),
-                        tourist: getValue('tourist'),
-                        sendDateTime: getValue('sendDateTime'),
-                        touristGroupId: id,
-                        smsSign: getValue('smsSign')
+                        id : id,
+                        bus: getValue('bus')
                     }
                     $.ajax({
                         url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
