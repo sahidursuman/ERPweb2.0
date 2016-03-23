@@ -1823,8 +1823,8 @@ define(function(require, exports){
 	//计算表头数据合计
 	Count.sumShopMoney = function($parentObj){
 		var $shopMoneyObj = $parentObj.find('.T-totalMoney');
-		var $guideMoneyObj = $parentObj.find('.T-totalTravelMoney');
-		var $travelMoneyObj = $parentObj.find('.T-totalGuideMoney');
+		var $guideMoneyObj = $parentObj.find('.T-totalGuideMoney');
+		var $travelMoneyObj = $parentObj.find('.T-totalTravelMoney');
 		var sumShopMoney = 0,
 			sumGuideMoney = 0,
 			sumTravelMoney = 0;
