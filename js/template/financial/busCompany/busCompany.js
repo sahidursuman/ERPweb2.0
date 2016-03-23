@@ -160,11 +160,15 @@ define(function(require, exports) {
                     data.accountStatus = args.accountStatus;
                     data.financialBusCompanyListData = FinancialService.isGuidePay(fbList); //获取是否显示导付标识
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData); //获取是否显示人数标识
+                    data.financialBusCompanyListData = FinancialService.getCheckTempData(data.financialBusCompanyListData,busCompany.checkTemp);
                     var html = checkBill(data);
 
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(busCompany.checkTemp){
+                            busCompany.$checkTab.data('isEdited',true);
+                        }
                         busCompany.initCheck(args,busCompany.$checkTab);
                         //取消对账权限过滤
                         checkDisabled(fbList, busCompany.$checkTab.find(".T-checkTr"), busCompany.$checkTab.find(".T-checkList").data("right"));
@@ -179,9 +183,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                busCompany.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr - 1;
-                                busCompany.busCompanyCheck(args);
+                                var temp = FinancialService.checkSaveJson(busCompany.$checkTab,busCompany.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    busCompany.checkTemp = temp;
+                                    busCompany.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr - 1;
+                                    busCompany.busCompanyCheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -212,7 +223,8 @@ define(function(require, exports) {
                 accountInfo: $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find("input[name=startDate]").val(),
                 endTime: $tab.find("input[name=endDate]").val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                licenseNumber : $tab.find("input[name=licenseNumber]").val()
             };
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });
@@ -377,7 +389,7 @@ define(function(require, exports) {
     //对账数据保存
     busCompany.saveChecking = function($tab,args,tabArgs) {
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(busCompany.$checkTab,busCompany.checkTemp,new FinRule(0),true);
         if (!checkSaveJson) {
             return false; }
 
@@ -390,6 +402,7 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        busCompany.checkTemp = false;
                         $tab.data('isEdited', false);
                         if (argumentsLen == 1) {
                             Tools.closeTab(menuKey + "-checking");
@@ -546,6 +559,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
                 event.preventDefault();
                 if (option == "check") {
+                    busCompany.checkTemp = false;
                     busCompany.busCompanyCheck($tab.data('next'),$tab);
                 } else if (option == "clear") {
                     busCompany.clearTempData = false;
@@ -579,6 +593,8 @@ define(function(require, exports) {
                 if(option == "clear"){
                     busCompany.clearTempData = false;
                     busCompany.clearTempSumDate = false;
+                }else if(option == "check"){
+                    busCompany.checkTemp = false;
                 }
             });
 

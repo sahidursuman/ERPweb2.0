@@ -129,9 +129,6 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			if(args.type == 0){
-				data.searchParam.payType = 0;
-			}
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 

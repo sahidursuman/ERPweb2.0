@@ -2123,9 +2123,9 @@ define(function(require, exports){
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input name="allPersonMoney" class="w-50" type="text"></td>'+
 		'<td><input name="travelAgencyRate" class="w-50" type="text"></td>'+
-		'<td><span class="travelAgencyRebateMoney"></span></td>'+
+		'<td><input name="travelAgencyRebateMoney" type="text" class="w-80"/></td>'+
 		'<td><input name="guideRate" class="w-50" type="text"></td>'+
-		'<td><span class="guideRebateMoney"></span></td>'+
+		'<td><input name="guideRebateMoney" type="text" class="w-80"/></td>'+
 		'<td><input name="billRemark" type="text"></td>'+
 		'<td>未对账<a class="T-del" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
 		'</tr>';

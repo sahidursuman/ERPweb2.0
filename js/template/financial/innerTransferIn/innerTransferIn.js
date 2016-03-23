@@ -350,7 +350,7 @@ define(function(require, exports) {
             $tab.find('.T-btn-autofill').off().on('click',function(){
                 if ($(this).hasClass('btn-primary')) {
                     if (new FinRule(2).check($tab).form()) {
-                        FinancialService.autoPayConfirm($tab.find('input[name=startDate]').val(),$tab.find('input[name=startDate]').val(), function() {
+                        FinancialService.autoPayConfirm($tab.find('input[name=startDate]').val(),$tab.find('input[name=endDate]').val(), function() {
                             FinTransIn.autoFillMoney($tab);
                         });
                     }

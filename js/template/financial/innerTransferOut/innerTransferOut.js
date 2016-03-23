@@ -299,7 +299,8 @@ define(function(require,exports) {
 					operateUserId:$tab.find('select[name=operater]').val(),
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    orderNumber : $tab.find('input[name=orderNumber]').val()
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             FinancialService.exportReport(argsData,"exportArrangeInnerTransferOutFinancial");

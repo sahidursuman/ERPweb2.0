@@ -55,7 +55,7 @@
             <label class="T-unpayMoney F-float F-money">{{totalList.sumUnReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
-            <label>未付金额合计(已对账)：</label>
+            <label>未收金额合计(已对账)：</label>
             <label class="F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
@@ -84,7 +84,7 @@
         </thead>
         <tbody class="T-list T-checkList">
         {{each shopAccountList as rs index}}
-            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.tripMessage}}</td>
                 <td>{{rs.accountTime}}</td>
                 <td><span>{{rs.count}}</span></td>
@@ -97,7 +97,7 @@
                 <td><a class="cursor T-action T-payDetails T-payedDetail" data-money="{{rs.receiveMoney + rs.rebateCurrentIncomeMoney}}">
                 &nbsp;&nbsp;社收:<span class="F-float F-money">{{rs.receiveMoney}}</span>&nbsp;&nbsp;导游现收:<span class="F-float F-money">{{rs.rebateCurrentIncomeMoney}}</span></a>
                 <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-sm-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
-                <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
+                <td name="unPayedMoney"><span class="F-float F-money">{{if rs.unPayedMoney}}{{rs.unPayedMoney}}{{else}}{{rs.unReceiveMoney}}{{/if}}</span></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
                     <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
                     {{/if}}
@@ -106,7 +106,7 @@
                 <td>{{rs.checkName}}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
+                        <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} /> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"> <a> |</a></label>

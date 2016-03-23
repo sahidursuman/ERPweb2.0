@@ -62,9 +62,8 @@ define(function(require,exports){
 				bankMoney = $that.closest('tr').attr('bankMoney'),
 				beginningBalance = $that.closest('tr').attr('beginningBalance'),
 				args = {
-					id : $that.closest('tr').attr('bankid'),
+					bankId : $that.closest('tr').attr('bankid'),
 					bankNo :"账户：" + aliasName + ",余额：" + bankMoney + ",期初余额：" + beginningBalance,
-					type : $that.closest('tr').data("type"),
 					beginningBalance : beginningBalance
 				};
 			if ($that.hasClass('T-view'))  {

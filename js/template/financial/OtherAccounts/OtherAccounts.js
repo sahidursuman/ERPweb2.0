@@ -152,9 +152,13 @@ define(function(require, exports) {
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
+                            data.financialOtherListData = FinancialService.getCheckTempData(data.financialOtherDetailsList,OtherAccounts.checkTemp);
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                                    if(OtherAccounts.checkTemp){
+                                        OtherAccounts.$checkTab.data('isEdited',true);
+                                    }
                                     OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);
                                 } else{
                                     OtherAccounts.$checkTab.data('next',args);
@@ -167,9 +171,16 @@ define(function(require, exports) {
                                     curr: (args.pageNo + 1),
                                     jump: function(obj, first) {
                                         if (!first) {
-                                            OtherAccounts.$checkTab.data('isEdited',false);
-                                            args.pageNo = obj.curr - 1;
-                                            OtherAccounts.AccountsChecking(args);
+                                            var temp = FinancialService.checkSaveJson(OtherAccounts.$checkTab,OtherAccounts.checkTemp,new FinRule(0));
+                                            if(!temp){
+                                                return false
+                                            } else{
+                                                OtherAccounts.checkTemp = temp;
+                                                OtherAccounts.$checkTab.data('isEdited',false);
+                                                args.pageNo = obj.curr - 1;
+                                                OtherAccounts.AccountsChecking(args);
+                                            }
+                                            
                                         }
                                     }
                                 });
@@ -228,12 +239,17 @@ define(function(require, exports) {
                 OtherAccounts.CheckConfirm($tab,$tab.data('next'),[tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
+                OtherAccounts.checkTemp = false;
                 OtherAccounts.AccountsChecking($tab.data('next'),$tab);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
                 OtherAccounts.CheckConfirm($tab);
-            });
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                OtherAccounts.checkTemp = false;
+            });;
 
         //对账保存
         $tab.find(".T-confirm").click(function(event) {
@@ -347,7 +363,7 @@ define(function(require, exports) {
     // 保存对账 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.CheckConfirm = function($tab,args,tabArgs) {
         var argumentLen = arguments.length
-        var json = FinancialService.checkSaveJson($tab, new FinRule(0));
+        var json = FinancialService.checkSaveJson(OtherAccounts.$checkTab,OtherAccounts.checkTemp,new FinRule(0),true);
         if(!json){ return false; }
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
@@ -355,8 +371,10 @@ define(function(require, exports) {
             data: { reconciliation: json },
         }).done(function(data) {
             if (showDialog(data)) {
-                $tab.data('isEdited', false);
+                
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    OtherAccounts.checkTemp = false;
+                    $tab.data('isEdited', false);
                     if (argumentLen === 1) {
                         Tools.closeTab(menuKey + "-checking");
                         OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
