@@ -464,6 +464,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
+            args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
@@ -775,7 +776,9 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
-
+        for(var i = 0; i < JsonStr.length; i++){
+            JsonStr[i].payMoney = JsonStr[i].temporaryIncomeMoney;
+        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

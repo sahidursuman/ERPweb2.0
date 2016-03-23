@@ -170,7 +170,7 @@ define(function(require, exports) {
                     if (Tools.addTab(checkTabId,"保险对账",html)) {
                         Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
                         Insure.$checkTab.data('account-status',args.accountStatus);
-                        if(Insure.checkTemp){
+                        if(Insure.checkTemp && Insure.checkTemp.length > 0){
                            Insure.$checkTab.data('isEdited',true); 
                         }
                         Insure.initCheck(args,Insure.$checkTab); 

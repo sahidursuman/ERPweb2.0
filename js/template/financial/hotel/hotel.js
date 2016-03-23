@@ -161,7 +161,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "酒店对账", html)) {
                         hotel.$checkTab = $("#tab-" + menuKey + "-checking-content");
-                        if(hotel.checkTemp){
+                        if(hotel.checkTemp && hotel.checkTemp.length > 0){
                             hotel.$checkTab.data('isEdited',true);
                         }
                         hotel.initCheck(args,hotel.$checkTab); 
