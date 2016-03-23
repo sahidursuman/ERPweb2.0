@@ -141,7 +141,7 @@ define(function(require,exports) {
 	//对账处理
 	InnerTransferOut.chenking = function(args,$tab){
 		if(!!$tab){
-			args.pageNo = args.pageNo || 0,
+			args.pageNo = args.pageNo || 0;
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
 			args.accountStatus = $tab.find('input[name=accountStatus]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
