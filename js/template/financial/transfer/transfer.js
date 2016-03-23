@@ -236,7 +236,8 @@ define(function(require, exports) {
                     travelAgencyId:"",
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    orderNumber : $tab.find("input[name=orderNumber]").val()
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;

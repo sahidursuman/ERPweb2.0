@@ -305,9 +305,11 @@ define(function(require, exports) {
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
-                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val(),
+                    orderNumber : $tab.find('.T-search-orderNumber').val(),
+                    otaOrderNumber : $tab.find('.T-search-number').val(),
                     accountStatus : args.accountStatus
                 };
+            console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
             FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
@@ -652,6 +654,7 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
+                        $tab.find('.T-sumReciveMoney').data('money',args.sumTemporaryIncomeMoney);
                         $tab.find('.T-clearList').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
@@ -1054,10 +1057,12 @@ define(function(require, exports) {
                     name: ui.item.value,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : $tab.find('input[name=accountStatus]').val(),
-                    type: 1
+                    accountStatus : $tab.find('input[name=accountStatus]').val() 
                 };
                 if(type){
+                    if($tab.find('.T-btn-autofill').length == 0){
+                        args.type = 1;
+                    }
                     Client.ClientClear(0,args);
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
