@@ -252,12 +252,14 @@ define(function(require, exports) {
                         if(FinShop.payingJson){
                             FinShop.$settlementTab.data('isEdited',true);
                         }
+                        FinShop.sumShopMoney(FinShop.$settlementTab);
                     } else {
                         $theTab = $tab || $('#tab-' + key + '-content');
                         FinShop.$checkingTab = $theTab;
                         if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
-                        }
+                        };
+                        FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
                     FinShop.initOperationEvent($theTab,args,type);
                     $theTab.data('id', args.shopId);
@@ -629,6 +631,7 @@ define(function(require, exports) {
                         data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                         var html = payingTableTemplate(data);
                         FinShop.$settlementTab.find('.T-checkList').html(html);
+
                         if(FinShop.payingJson){
                             FinShop.$settlementTab.data("isEdited",true);
                         }
@@ -724,7 +727,37 @@ define(function(require, exports) {
             $obj.autocomplete('search','');
         });
     };
-
+    //购物账务金额合计
+    FinShop.sumShopMoney = function($listObj){
+        var $trArr = $listObj.find('.T-hideTr');
+        for(var i = 0;i<$trArr.length;i++){
+            var $shopItemList = $trArr.eq(i).find('.T-shopItemList');
+            var $itemTr = $shopItemList.find('tr');
+            var sumShopMoney = 0,
+                sumTravelMoney = 0,
+                sumGuideMoney = 0;
+            for(var j = 2;j<$itemTr.length;j++){
+                var $thisTr = $itemTr.eq(j);
+                sumShopMoney += formatVal($thisTr.find('.T-consumeMoney').text());
+                sumTravelMoney += formatVal($thisTr.find('.T-travelAgencyRebateMoney').text());
+                sumGuideMoney += formatVal($thisTr.find('.T-guideRebateMoney').text());
+                if($thisTr.hasClass('T-sumMoney')){
+                    $thisTr.find('.T-shopMoney').text(sumShopMoney);
+                    $thisTr.find('.T-travelMoney').text(sumTravelMoney);
+                    $thisTr.find('.T-guideMoney').text(sumGuideMoney);
+                    break;
+                }
+            }
+        }
+        function formatVal (val){
+            var newVal = parseFloat(val);
+            if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                return 0;
+            }
+            var newVal = Math.round(val*100)/100;
+            return newVal;
+            }
+    };
     // 暴露方法
     exports.init = FinShop.initModule;
     exports.initIncome = FinShop.initPay;
