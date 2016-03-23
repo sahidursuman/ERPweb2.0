@@ -1,0 +1,13 @@
+{{each travelAgencyList as rs}}
+<tr class="cursor" data-id="{{rs.travelAgencyId}}">
+	<td name="travelAgencyName">{{rs.travelAgencyName}}</td>
+	<td>{{rs.type | getTravelAgencyType}}</td>
+	<td>{{rs.level | getTravelAgencyLevel}}</td>
+	<td>{{rs.contactRealname}}</td>
+	<td>{{rs.contactMobileNumber}}</td>
+	<td>
+		<input type="radio" name="chooseClient" class="ace">
+		<label class="lbl"></label>
+	</td>
+</tr>
+{{/each}}

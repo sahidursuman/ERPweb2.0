@@ -3,15 +3,15 @@
 		<div class="col-xs-12">
 			<div class="col-xs-10 T-action-plan">
 				<label class="control-label" data-type="restaurant">
-					<input type="checkbox" name="isContactUser" class="ace">
+					<input type="checkbox" name="isRestaurantRequired" class="ace" {{if isRestaurantRequired}}checked{{/if}}>
 					<span class="lbl"> 餐厅</span>
 				</label>
 				<label class="control-label" data-type="ticket">
-					<input type="checkbox" name="isContactUser" class="ace">
+					<input type="checkbox" name="isTicketRequired" class="ace" {{if isTicketRequired}}checked{{/if}}>
 					<span class="lbl"> 票务</span>
 				</label>
 				<label class="control-label" data-type="other">
-					<input type="checkbox" name="isContactUser" class="ace">
+					<input type="checkbox" name="isOtherRequired" class="ace" {{if isOtherRequired}}checked{{/if}}>
 					<span class="lbl"> 其它</span>
 				</label>
 			</div>
@@ -20,37 +20,35 @@
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary">*</span>消费日期</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12 datepicker" name="consumeTime" value="{{consumeTime}}">
 			</div>
 		</div>
-		<div class="col-xs-12 mar-t-10 hidden T-ask-restaurant">
+		<div class="col-xs-12 mar-t-10 {{if isRestaurantRequired != 1}}hidden {{/if}}T-ask-restaurant">
 			<div class="col-xs-1 text-right no-padding-right control-label">餐厅要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="restaurantRequired"{{if !!restaurantRequired}} value="{{restaurantRequired.requireContent}}" data-id="{{restaurantRequired.id}}"{{/if}}>
 			</div>
 		</div>
-		<div class="col-xs-12 mar-t-10 hidden T-ask-ticket">
+		<div class="col-xs-12 mar-t-10{{if isTicketRequired != 1}} hidden{{/if}} T-ask-ticket">
 			<div class="col-xs-1 text-right no-padding-right control-label">票务要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="ticketRequired"{{if !!ticketRequired}} value="{{ticketRequired.requireContent}}" data-val="{{ticketRequired.id}}"{{/if}}>
 			</div>
 		</div>
-		<div class="col-xs-12 mar-t-10 hidden T-ask-other">
+		<div class="col-xs-12 mar-t-10 {{if isOtherRequired != 1}}hidden {{/if}}T-ask-other">
 			<div class="col-xs-1 text-right no-padding-right control-label">其它要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="otherRequired"{{if !!otherRequired}} value="{{otherRequired.requireContent}}" data-val="{{otherRequired.id}}"{{/if}}>
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">责任部门</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
 			</div>
-		</div>
-		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">责任计调</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12">
+				<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -59,7 +57,7 @@
 			</div>
 			<div class="col-xs-8" style="padding-top: 4px;">
 				<label class="control-label pull-left" style="width: 35px;">应付</label>
-				<input type="text" readonly class="pull-left">
+				<input type="text" readonly class="pull-left" name="needPayAllMoney" value="{{needPayAllMoney}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -74,15 +72,23 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="T-fee-list">
+				{{if otherFee && otherFee.length > 0}}
+					{{each otherFee as rs}}
 					<tr>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><input type="text" class="col-xs-12" readonly></td>
-						<td><input type="text" class="col-xs-12"></td>
-						<td><a class="cursor">删除</a></td>
+						<td>
+							<select class="col-xs-12" name="type">
+								{{#rs.type | getFeeItemType:true}}
+							</select>
+						</td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
+					{{/each}}
+				{{/if}}
 				</tbody>
 			</table>
 		</div>

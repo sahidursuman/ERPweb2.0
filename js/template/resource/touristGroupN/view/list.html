@@ -25,9 +25,9 @@
                 </select>
             </div>
             <div class="form-group mar-r-10">
-                <input type="text" class="T-choosePAB form-control" placeholder="全部客户" style="{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
-                <input type="text" class="T-choosePartnerAgency T-PorB form-control" placeholder="客户" name="fromPartnerAgencyName" style="{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
-                <input type="text" class="T-chooseBussinessGroup T-PorB form-control" placeholder="客户" name="fromBussinessGroupName" style="{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == " "}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
+                <input type="text" class="T-choosePAB form-control{{if searchParam.type != 0}} hidden{{/if}}" placeholder="全部客户"readonly="readonly" />
+                <input type="text" class="T-choosePartnerAgency T-PorB form-control{{if searchParam.type != 1 || searchParam.type == null}} hidden{{/if}}" placeholder="客户" name="fromPartnerAgencyName" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
+                <input type="text" class="T-chooseBussinessGroup T-PorB form-control{{if searchParam.type != 2 || searchParam.type == null}} hidden{{/if}}" placeholder="客户" name="fromBussinessGroupName" value="{{if searchParam.fromBussinessGroupName == " "}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
                 <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
                 <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
             </div>
@@ -51,42 +51,18 @@
                 <label>出游时间</label>
                 <input class="datepicker" name="startTime" value="{{searchParam.startTime}}" type="text" />
             </div>
-
-            <div class="form-group mar-r-10" mar-l-5>
-                <label >报价单号</label>
-                <input type="text" class="form-control T-choose-quoteNumber" placeholder="报价单号" name="quoteNumber" value="{{searchParam.quoteNumber}}" />
-            </div>  
 		</div>
 		<div class="form-inline">
-			<div class="form-group mar-r-10">
-                <label >组团单号</label>
-                <input type="text" class="form-control T-choose-otaOrderNumber" placeholder="组团单号" name="otaOrderNumber" value="{{searchParam.otaOrderNumber}}" />
-            </div>
-            <div class="form-group mar-r-10">
-                <label>接站牌</label>
-                <input type="text" class="form-control T-choose-welcomeBoard" placeholder="接站牌" name="welcomeBoard" value="{{searchParam.welcomeBoard}}" style="width: 140px;" />
-            </div>
             <div class="form-group mar-r-10">
                 <label>外联销售</label>
                 <input type="text" class="form-control T-choose-outUserList" placeholder="外联销售" name="realName" value="{{searchParam.realName}}" />
             </div>
-            <div class="form-group mar-r-10">
-                <label>客源类型</label>
-                <select name="memberType" style="width: 51px;">
-                    <option value="" {{if searchParam.memberType=="" }}selected="selected" {{/if}}>全部</option>
-                    <option value="0" {{if searchParam.memberType=="0" }}selected="selected" {{/if}}>内宾</option>
-                    <option value="1" {{if searchParam.memberType=="1" }}selected="selected" {{/if}}>外宾</option>
-                </select>
-            </div>
-            
-            
             <div class="form-group mar-r-10">
                 <label>录入日期</label>
                 <input type="text" name="createTimeStart" class="datepicker" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}">
                 <label>至</label>
                 <input type="text" name="createTimeEnd" class="datepicker" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}">
             </div>
-
             <div class="form-group">
                 <label>状态</label>
                 <select class="T-select-status" style="width: 62px;">
@@ -117,34 +93,30 @@
 	<div class="T-touristGroupList mar-t-10">
 		<table class="table table-striped table-bordered table-hover T-showHighLight">
 	        <colgroup>
-	            <col style="width: 300px">
-	            <col style="width: 90px;">
-	            <col style="width: 110px;">
+	            <col style="width: 180px">
+	            <col>
+	            <col>
+	            <col style="width: 85px;">
+	            <col style="width: 85px;">
 	            <col>
 	            <col>
 	            <col>
 	            <col>
 	            <col>
-	            <col>
-	            <col>
-	            <col>
-	            <col>
-	            <col style="width: 80px;">
+	            <col style="width: 130px;">
 	        </colgroup>
 	        <thead>
 	            <tr class="bg-blur T-tr-fixed">
-	                <th>收客信息</th>
-	                <th>出游日期</th>
-	                <th>游客信息</th>
+	                <th>收客单号</th>
+	                <th>客户</th>
+	                <th>行程</th>
+	                <th>接团日期</th>
+	                <th>送团日期</th>
 	                <th>应收</th>
-	                <th>预收款</th>
-	                <th>已收</th>
-	                <th>计划现收</th>
-	                <th>返款</th>
-	                <th>未收</th>
-	                <th>买保险</th>
-	                <th>录入时间</th>
-	                <th>状态</th>
+	                <th>客人信息</th>
+	                <th>联系电话</th>
+	                <th>外联销售</th>
+	                <th>团散界定</th>
 	                <th>操作</th>
 	            </tr>
 	        </thead>
@@ -154,7 +126,7 @@
     </div>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small>共计 <span class="T-record-size">...</span> 条记录</small>
+            <small>共计 <span class="T-record-size">0</span> 条记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
