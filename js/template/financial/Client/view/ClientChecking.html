@@ -201,22 +201,20 @@
                     {{/each}}
                 {{/if}}
             {{else}}
-                {{if rs.status != 5}}
-                    {{each rs.detailList.otherFee as temp index}}
-                        {{if index > 0}}
-                            <tr {{if rs.change}}class="success"{{/if}}><td>{{each temp.otherFeeList as of}}
-                                        {{of.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                        <span class="F-float F-count">{{of.count}}</span> =
-                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                    {{/each}}
-                                </td>
-                                <td>{{if view == 1}}<span class="F-float F-money">{{temp.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
-                                <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
-                            </tr>
-                        {{/if}}
-                    {{/each}}
-                {{/if}}
+                {{each rs.detailList.otherFee as temp index}}
+                    {{if index > 0}}
+                        <tr {{if rs.change}}class="success"{{/if}}><td>{{each temp.otherFeeList as of}}
+                                    {{of.name}}：
+                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                                    <span class="F-float F-count">{{of.count}}</span> =
+                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                {{/each}}
+                            </td>
+                            <td>{{if view == 1}}<span class="F-float F-money">{{temp.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{temp.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>
+                            <td class="T-settlementMoney F-float F-money">{{temp.settlementMoney}}</td>
+                        </tr>
+                    {{/if}}
+                {{/each}}
             {{/if}}
             {{/each}}
             {{else}}

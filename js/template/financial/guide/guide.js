@@ -315,7 +315,8 @@ define(function(require, exports) {
             autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-            .on('change', '.T-checkList', function() {
+            .on('change', '.T-checkList input', function() {
+                $(this).closest('tr').data('change', 'true');
                 $tab.data('isEdited', true);
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
@@ -328,6 +329,9 @@ define(function(require, exports) {
                 }
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
+                if(!type){
+                    FinGuide.checkTemp = false;
+                }
                 FinGuide.initOperationEvent($tab, type);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
@@ -337,6 +341,11 @@ define(function(require, exports) {
                     FinGuide.savePayingData($tab);
                 } else {
                     FinGuide.saveCheckingData($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                if(!type){
+                    FinGuide.checkTemp = false;
                 }
             });
 
@@ -442,7 +451,7 @@ define(function(require, exports) {
      */
     FinGuide.saveCheckingData = function($tab, tabArgs) {
         var validator = new FinRule(3);
-        var json = FinancialService.checkSaveJson($tab, validator);
+        var json = FinancialService.checkSaveJson($tab,FinGuide.checkTemp,validator,true);
 
         if (json) { // 有值
             $.ajax({
@@ -454,9 +463,9 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        $tab.data('isEdited', false);
-
                         showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                            $tab.data('isEdited', false);
+                            FinGuide.checkTemp = false;
                             if (!!tabArgs) {
                                 Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
                                 FinGuide.initOperationEvent($tab, 0);
@@ -642,7 +651,11 @@ define(function(require, exports) {
                             }
                             html = filterUnAuth(payingTableTemplate(data));
                         } else {
+                            data.list = FinancialService.getCheckTempData(data.list,FinGuide.checkTemp);
                             html = filterUnAuth(checkingTableTemplate(data));
+                            if(FinGuide.checkTemp && FinGuide.checkTemp.length > 0){
+                                $tab.data('isEdited',true);
+                            }
                         }
                         var $tbody = $tab.find('.T-checkList').html(html);
 
@@ -662,7 +675,19 @@ define(function(require, exports) {
                             curr: (data.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                    FinGuide.getOperationList(obj.curr - 1, $tab);
+                                    if(!type){
+                                        var temp = FinancialService.checkSaveJson($tab,FinGuide.checkTemp,new FinRule(6));
+                                        if(!temp){
+                                            return false;
+                                        } else {
+                                            FinGuide.checkTemp = temp;
+                                            $tab.data('isEdited',false);
+                                            args.pageNo = obj.curr-1;
+                                            FinGuide.getOperationList(obj.curr - 1, $tab);
+                                        }
+                                    } else {
+                                        FinGuide.getOperationList(obj.curr - 1, $tab);
+                                    }
                                 }
                             }
                         });
