@@ -192,12 +192,18 @@ define(function(require, exports) {
                 for(var i = 0; i < data.innerTransferIncomeDetailsList.length; i++){
                     data.innerTransferIncomeDetailsList[i].tgMemberList = JSON.stringify(data.innerTransferIncomeDetailsList[i].tgMemberList);
                 }
+                if(type == 1) {
+                    data.innerTransferIncomeDetailsList = FinancialService.getCheckTempData(data.innerTransferIncomeDetailsList,FinTransIn.checkTemp,true);
+                }
                 var tabId = menuKey + ((type == 1) ? "-checking" : "-clearing"),
                     title = (type == 1) ? "内转转入对账" : "内转转入收款",
                     html = (type == 1) ? checkTemplate(data) : clearTemplate(data);
                 if (Tools.addTab(tabId, title,html)) {
                     if(type == 1){
                         FinTransIn.$checkTab = $('#tab-' + menuKey + '-checking-content');
+                        if(FinTransIn.checkTemp){
+                            FinTransIn.$checkTab.data('isEdited',true);
+                        }
                         FinTransIn.initCheck(args,FinTransIn.$checkTab,1);
                         //取消对账权限过滤
                         var fiList= data.innerTransferIncomeDetailsList
@@ -227,7 +233,14 @@ define(function(require, exports) {
                             currTab.data('isEdited',false);
                             args.pageNo = obj.curr - 1;
                             if(type == 1){
-                                FinTransIn.getCheckList(args,null,1);
+                                var temp = FinancialService.checkSaveJson(FinTransIn.$checkTab,FinTransIn.checkTemp,new FinRule(0),false,true);
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    FinTransIn.checkTemp = temp;
+                                    FinTransIn.$checkTab.data('isEdited',false);
+                                    FinTransIn.getCheckList(args,null,1);
+                                }
                             } else {
                                 FinTransIn.getClearList(args,currTab);
                             }
@@ -416,6 +429,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             if(type == 1){
+                FinTransIn.checkTemp = false;
                 FinTransIn.getCheckList($tab.data('next'),false,1);
             } else {
                 FinTransIn.clearTempData = false;
@@ -436,6 +450,8 @@ define(function(require, exports) {
             event.preventDefault();
             if(type == 2){
                 FinTransIn.clearTempData = false;
+            } else if(type == 1){
+                FinTransIn.checkTemp = false;
             }
         });
 
@@ -586,27 +602,18 @@ define(function(require, exports) {
 
     FinTransIn.saveCheck = function($tab,args,tabArgs) {
         var argLen = arguments.length,
-            saveData = [],
-            json = FinancialService.saveJson_checking($tab);
-        //暂时组装数据，后台统一后删除
-        for(var i = 0;i<json.length;i++){
-            var saveJson = {
-                id:json[i].id,
-                backMoney:json[i].detailList[0].backMoney,
-                checkRemark:json[i].checkRemark
-            }
-            saveData.push(saveJson);
-        };
-        if(!json){ return false; }
+            json = FinancialService.checkSaveJson(FinTransIn.$checkTab,FinTransIn.checkTemp,new FinRule(0),true,true);
+        if(!json){ return false; }        
 
         $.ajax({
             url: KingServices.build_url("account/innerTransferIn","saveReconciliation"),
             type: "POST",
-            data: { reconciliation: JSON.stringify(saveData) }
+            data: { reconciliation: json }
         }).done(function(data) {
             if (showDialog(data)) {
-                $tab.data('isEdited', false);
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    FinTransIn.checkTemp = false;
+                    $tab.data('isEdited', false);
                     if (argLen === 1) {
                         Tools.closeTab(menuKey + "-checking");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);

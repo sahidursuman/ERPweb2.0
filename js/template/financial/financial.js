@@ -141,7 +141,11 @@ FinancialService.updateUnpayMoney = function($tab,rule){
 };
 
 //对账-保存json组装
-FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参数标识返回数据是否用于提交保存，保存时值为true
+/*
+    isSave参数标识返回数据是否用于提交保存，保存时值为true
+    inner参数用于标识内转转入和转出
+ */
+FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
     var validator = rule.check($tab);
     if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
 
@@ -173,7 +177,12 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参
             //已有数据更新
             for(var i = 0; i < len; i++){
                 if(saveJson[i].id == $this.data("id")){
-                    saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
+                    if(inner){
+                        saveJson[i].backMoney = $this.find("input[name=settlementMoney]").val();
+                        saveJson[i].settlementMoney = $this.find(".T-settlementMoney").text();
+                    } else {
+                        saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
+                    }
                     saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
                     saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
                     saveJson[i].isChecked = isChecked;
@@ -190,6 +199,10 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参
                     confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
                     isChecked : isChecked
                 };
+                if(inner){
+                    checkRecord.backMoney = $this.find("input[name=settlementMoney]").val();
+                    checkRecord.settlementMoney = $this.find(".T-settlementMoney").text();
+                }
                 saveJson.push(checkRecord);  
             }
         }
@@ -214,12 +227,16 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave){//isSave参
 };
 
 //对账-翻页暂存数据读取
-FinancialService.getCheckTempData = function(resultList,tempJson){
+//inner用于标识内转转入和转出
+FinancialService.getCheckTempData = function(resultList,tempJson,inner){
     if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             for(var j = 0; j < resultList.length; j++){
                 if(tempJson[i].id == resultList[j].id){
                     resultList[j].change = true;
+                    if(inner){
+                        resultList[j].backMoney = tempJson[i].backMoney;
+                    }
                     resultList[j].settlementMoney = tempJson[i].settlementMoney;
                     resultList[j].unPayedMoney = tempJson[i].unPayedMoney;
                     resultList[j].checkRemark = tempJson[i].checkRemark;

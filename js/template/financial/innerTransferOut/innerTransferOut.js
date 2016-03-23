@@ -141,7 +141,7 @@ define(function(require,exports) {
 	//对账处理
 	InnerTransferOut.chenking = function(args,$tab){
 		if(!!$tab){
-			args.pageNo = args.pageNo || 0,
+			args.pageNo = args.pageNo || 0;
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
 			args.accountStatus = $tab.find('input[name=accountStatus]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
@@ -204,7 +204,11 @@ define(function(require,exports) {
 							$tab.data('isEdited', true);
 						}
 					}else{
+						data.list = FinancialService.getCheckTempData(data.list,InnerTransferOut.checkTemp,true);
 						html = checkTableTemplate(data);
+						if(InnerTransferOut.checkTemp){
+                            InnerTransferOut.$checkTab.data('isEdited',true);
+                        }
 
 					}
 					$tab.find('.' + (typeFlag == 2 ? "T-clearList" : "T-checkList")).html(html);
@@ -236,6 +240,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		$tab.data('isEdited',false);
+					    		args.pageNo = obj.curr -1;
 					    		if(typeFlag == 2){
 					    			InnerTransferOut.saveJson.autoPayList = FinancialService.clearSaveJson($tab,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
                                     InnerTransferOut.saveJson.sumPayMoney = $tab.find('input[name=sumPayMoney]').val();
@@ -243,11 +248,15 @@ define(function(require,exports) {
                                     InnerTransferOut.saveJson.sumPayRemark = $tab.find('input[name=sumRemark]').val();
                                     InnerTransferOut.saveJson.bankId = (InnerTransferOut.saveJson.sumPayType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val;
                                     InnerTransferOut.saveJson.bankNo = (InnerTransferOut.saveJson.sumPayType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val;
-	                                args.pageNo = obj.curr -1;
 									InnerTransferOut.getListData($tab,args,2);
                                 }else{
-                                	args.pageNo = obj.curr -1;
-                                	InnerTransferOut.chenking(args);
+                                	var temp = FinancialService.checkSaveJson(InnerTransferOut.$checkTab,InnerTransferOut.checkTemp,new FinRule(0),false,true);
+	                                if(!temp){
+	                                    return false;
+	                                } else {
+	                                    InnerTransferOut.checkTemp = temp;
+	                                    InnerTransferOut.chenking(args);
+	                                }
                                 }
 							}
 					    }
@@ -433,61 +442,36 @@ define(function(require,exports) {
 	};
 	//确认对账
 	InnerTransferOut.saveCheckingData = function($tab,args,tabArgs){
-    	var JsonStr = [],
+    	var JsonStr = FinancialService.checkSaveJson($tab,InnerTransferOut.checkTemp,new FinRule(0),true,true),
             selectFlag = 0,
-            argumentsLen = arguments.length,
-            checkList = $tab.find('.T-checkList'),
-			$tr = checkList.find('.T-checkbox');
-		$tr.each(function(i){
- 		   var flag = $(this).is(":checked");
- 		   var tr = $(this).closest('tr');
-		   if(flag){
-		   	    if(tr.attr("data-confirm") == 0 ){
-		   	    	var checkData = {
-					    id:tr.data("id"),
-					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
-					    punishMoney:tr.find('input[name=settlementMoney]').val()
- 			    	}
-			    	JsonStr.push(checkData)
-		   	    }
- 		   }else{
- 			    if(tr.attr("data-confirm") == 1){
- 				    var checkData = {
-	 					    id:tr.data("id"),
-	 					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
-	 					    punishMoney:tr.find('input[name=settlementMoney]').val()
-	     			    }
- 				    JsonStr.push(checkData)
- 			    }
- 		   }
-	    });
- 	   //判断用户是否操作
- 	    if(JsonStr.length == 0){
- 		   showMessageDialog($( "#confirm-dialog-message" ),"没有可提交的数据！");
- 		   return;
- 	    }else{
- 		   JsonStr = JSON.stringify(JsonStr);
-     	   $.ajax({
-     		    url:KingServices.build_url("account/innerTransferOutFinancial","operateCheckAccount"),
-                data:{
-                	checkJson:JsonStr
-                },
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						$tab.data('isEdited', false);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 1){
-	                            Tools.closeTab(menuKey + "-checking");
-	                            InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
-                        	} else {
-                        		InnerTransferOut.chenking(args);
-                        	}
-						});
-					}
+            argumentsLen = arguments.length;
+        if(!JsonStr){ return false; }
+        //数据处理
+        JsonStr = JSON.parse(JsonStr);
+        for(var i = 0; i < JsonStr.length; i++){
+        	JsonStr[i].punishMoney = JsonStr[i].backMoney;
+        }
+
+ 	    $.ajax({
+ 		    url:KingServices.build_url("account/innerTransferOutFinancial","operateCheckAccount"),
+            data:{
+            	checkJson: JSON.stringify(JsonStr)
+            },
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					$tab.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						if(argumentsLen === 1){
+                            Tools.closeTab(menuKey + "-checking");
+                            InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
+                    	} else {
+                    		InnerTransferOut.chenking(args);
+                    	}
+					});
 				}
-     	    });
- 	    }  	
+			}
+ 	    });  	
 	};
 	//查看付款明细
 	InnerTransferOut.viewPayedDetail = function(id){
@@ -671,6 +655,7 @@ define(function(require,exports) {
 					InnerTransferOut.saveJson = false;
 					InnerTransferOut.settlement($tab.data("next"));
 				} else {
+					InnerTransferOut.checkTemp = false;
 					InnerTransferOut.chenking($tab.data("next"));
 				}
 			})
@@ -687,6 +672,8 @@ define(function(require,exports) {
 	            event.preventDefault();
 	            if(typeFlag == 2){
 	                InnerTransferOut.saveJson = false;
+	            } else {
+	            	InnerTransferOut.checkTemp = false;
 	            }
 	        });
 		}
