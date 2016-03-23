@@ -468,7 +468,7 @@ define(function(require, exports){
 		};
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
-		$selfObj.find('input[type=text]').off('change').on('change',function(){
+		$selfObj.off('change').on('change','input[type=text]',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName" && $nameFlag !="selfPayItem"){
 				//校验输入的数据是否合法
@@ -797,7 +797,7 @@ define(function(require, exports){
 		};
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
-		$selfObj.find('input[type=text]').off('change').on('change',function(){
+		$selfObj.off('change').on('change','input[type=text]',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName"){
 				//校验输入的数据是否合法
@@ -2021,7 +2021,7 @@ define(function(require, exports){
 					default: break;
 				};
 			}else{
-				if(editFeildTagName != "travelAgencyRateMoney" && editFeildTagName != "guideRateMoney"){
+				if(editFeildTagName != "travelAgencyRebateMoney" && editFeildTagName != "guideRebateMoney"){
 					$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
 					$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
 				}
