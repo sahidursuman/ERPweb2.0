@@ -160,7 +160,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
                         scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
-                        if(scenic.checkTemp){
+                        if(scenic.checkTemp && scenic.checkTemp.length > 0){
                             scenic.$checkTab.data('isEdited',true);
                         }
                         scenic.initCheck(args,scenic.$checkTab); 

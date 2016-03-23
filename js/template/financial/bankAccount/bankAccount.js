@@ -64,7 +64,8 @@ define(function(require,exports){
 				args = {
 					bankId : $that.closest('tr').attr('bankid'),
 					bankNo :"账户：" + aliasName + ",余额：" + bankMoney + ",期初余额：" + beginningBalance,
-					beginningBalance : beginningBalance
+					beginningBalance : beginningBalance,
+					accountType : $that.closest('tr').data('type')
 				};
 			if ($that.hasClass('T-view'))  {
 				// 查看账户信息

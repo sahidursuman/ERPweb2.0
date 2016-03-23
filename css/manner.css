@@ -63,7 +63,7 @@
 }
 
 .search-btn:hover {
-    background: #359fb2!important;
+    background: #359fb2;
 }
 
 
@@ -1876,6 +1876,14 @@ p#back-top a span {
 }
 #shopFormCol-x12 .col-sm-12{
     float: none;
+}
+.graySearch-btn{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
+.graySearch-btn:hover{
+    background-color: gray;
+    border: 2px solid gray !important;
 }
 /*媒体查询-不同分辨率*/
 

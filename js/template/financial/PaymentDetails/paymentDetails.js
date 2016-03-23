@@ -139,8 +139,9 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				var $obj = (args.type == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				var $obj = (args.accountType == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
 				$obj.val(bankNo);
+				$obj.next().val(args.bankId);
 				$obj.closest('div').removeClass('hidden');
 			}
 		});

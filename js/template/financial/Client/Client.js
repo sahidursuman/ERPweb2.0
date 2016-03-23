@@ -203,13 +203,10 @@ define(function(require, exports) {
                     var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
-                    if(resultList[i].status == 5){
-                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
-                    } else {
-                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
-                    }
+                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? 1 : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
+                resultList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
                 data.customerAccountList = resultList; 
                 var title = '客户对账', tab_id;
                 if (isView) {
@@ -222,7 +219,9 @@ define(function(require, exports) {
                 }
                 if (Tools.addTab(tab_id, title, ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ tab_id + '-content').data('id', args.fromPartnerAgencyId);
-
+                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                        $tab.data('isEdited',true);
+                    }
                     Client.initCheck($tab,args);
                 } else {
                     Client.$checkTab.data("next",args);
@@ -235,8 +234,19 @@ define(function(require, exports) {
                     curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                            Client.$checkTab.data('isEdited',false);
-                            Client.ClientCheck(obj.curr - 1, false, $tab);
+                            if(!isView){
+                                var temp = FinancialService.saveJson_checking(Client.$checkTab,Client.checkTemp,new FinRule(6));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    Client.checkTemp = temp;
+                                    Client.$checkTab.data('isEdited',false);
+                                Client.ClientCheck(obj.curr - 1, false, $tab);
+                                }
+                            } else {
+                                Client.$checkTab.data('isEdited',false);
+                                Client.ClientCheck(obj.curr - 1, false, $tab);
+                            }
                         }
                     }
                 });
@@ -256,6 +266,7 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
+            Client.checkTemp = false;
             Client.ClientCheck(Client.$checkTab.data("next").pageNo,Client.$checkTab.data("next"));
         })
         // 监听保存，并切换tab
@@ -269,6 +280,10 @@ define(function(require, exports) {
             event.preventDefault();
             if (!validator.form()) { return; }
             Client.saveCheckingData($tab)
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Client.checkTemp = false;
         });
 
         // 初始化jQuery 对象 
@@ -464,6 +479,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
+            args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
@@ -730,20 +746,20 @@ define(function(require, exports) {
 
     Client.saveCheckingData = function($tab,args,tabArgs){
         var argLen = arguments.length,
-            JsonStr = FinancialService.saveJson_checking($tab);
+            JsonStr = FinancialService.saveJson_checking($tab,Client.checkTemp,new FinRule(6),true);
         if(!JsonStr){return false;}
 
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
             data:{
-                checkAccountList : JSON.stringify(JsonStr)
+                checkAccountList : JsonStr
             },
             success:function(data){
                 if(showDialog(data)){
-                    $tab.data('isEdited', false);
-
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        $tab.data('isEdited', false);
+                        Client.checkTemp = false;
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
                             Client.listClient(Client.listPage);
@@ -775,7 +791,9 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
-
+        for(var i = 0; i < JsonStr.length; i++){
+            JsonStr[i].payMoney = JsonStr[i].temporaryIncomeMoney;
+        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

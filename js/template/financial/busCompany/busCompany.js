@@ -166,7 +166,7 @@ define(function(require, exports) {
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "车队对账", html)) {
                         busCompany.$checkTab = $("#tab-" + menuKey + "-checking-content");
-                        if(busCompany.checkTemp){
+                        if(busCompany.checkTemp && busCompany.checkTemp.length > 0){
                             busCompany.$checkTab.data('isEdited',true);
                         }
                         busCompany.initCheck(args,busCompany.$checkTab);

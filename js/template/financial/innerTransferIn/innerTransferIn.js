@@ -201,7 +201,7 @@ define(function(require, exports) {
                 if (Tools.addTab(tabId, title,html)) {
                     if(type == 1){
                         FinTransIn.$checkTab = $('#tab-' + menuKey + '-checking-content');
-                        if(FinTransIn.checkTemp){
+                        if(FinTransIn.checkTemp && FinTransIn.checkTemp.length > 0){
                             FinTransIn.$checkTab.data('isEdited',true);
                         }
                         FinTransIn.initCheck(args,FinTransIn.$checkTab,1);
