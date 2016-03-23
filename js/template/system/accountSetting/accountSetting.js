@@ -140,14 +140,6 @@ define(function(require, exports) {
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
-
-			//申请借款无绑定号码时提示
-			var $objNull = $(".T-accountSetList");
-			$objNull.find('.T-btn-Grayapply').hover(function(event) {
-				showMessageDialog($("#confirm-dialog-message"),"请先绑定手机号码后才能申请借款", function() {
-
-				});
-			});
 			
 		};
 
