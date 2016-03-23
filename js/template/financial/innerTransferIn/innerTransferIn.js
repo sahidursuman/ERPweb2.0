@@ -124,12 +124,7 @@ define(function(require, exports) {
                                 $obj.autocomplete('search', '');
                             });
                         }
-                    } else{
-                        layer.tips('没有内容', $obj, {
-                            tips: [1, '#3595CC'],
-                            time: 2000
-                        });
-                    }
+                    };
                 }
             }
         });
