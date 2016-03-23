@@ -1,5 +1,8 @@
+/**
+ * 客户订单验证 
+ */
 define(function(require, exports) {
-	return {
+	var rule = {
 		checkedEditor : function($obj) {
 			var settings = [
 			{
@@ -101,7 +104,171 @@ define(function(require, exports) {
                     type: 'float',
                     errMsg: '本段现收团款必须为数字'
                 }]
-			}]
-		}
+			}];
+			return settings;
+		},
+		checktTourist : function($container){
+	        this.$container = $container;
+	        return $container.formValidate(this.checkedEditor($container));
+		},
+		update : function(validator) {
+	        if (!!validator)  {
+	            validator.update(this.checkedEditor(this.$container));
+	        }
+
+	        return validator;
+	    },
+	    //客人信息
+	    guestEditor : function($obj){
+	    	var settings = [{
+	    		//大人数
+				$ele: $obj.find('[name="adultCount"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '大人数不能为空'
+                },
+                {
+                    type: 'nonnegative-int',
+                    errMsg: '大人数为正整数'
+                }]
+	    	},
+	    	{
+	    		//小孩数
+				$ele: $obj.find('[name="childCount"]'),
+				rules : [{
+                    type: 'nonnegative-int',
+                    errMsg: '小孩数为正整数'
+                }]
+	    	},
+	    	{
+	    		//姓名
+				$ele: $obj.find('[name="name"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '姓名不能为空'
+                }]
+	    	},
+	    	{
+	    		//手机号码
+				$ele: $obj.find('[name="mobileNumber"]'),
+				rules : [{
+                    type: 'mobile-phone',
+                    errMsg: '请输入正确的手机号码'
+                }]
+	    	}];
+
+	        return settings;
+	    },
+		checkGuest : function($container){
+	        this.$guestContainer = $container;
+	        return $container.formValidate(this.guestEditor($container));
+		},
+		guestUpdate : function(validator) {
+	        if (!!validator)  {
+	            validator.update(this.guestEditor(this.$guestContainer));
+	        }
+
+	        return validator;
+	    },
+	    //应收&线路应付&...
+	    needEditor : function($obj){
+	    	var settings = [
+            { 
+                //入住时间
+                $ele: $obj.find('input[name="intakeTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '入住时间不能为空'
+                    }
+                ]
+            },
+            { 
+                //消费日期
+                $ele: $obj.find('input[name="consumeTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '消费日期不能为空'
+                    }
+                ]
+            },
+            { 
+                //间数
+                $ele: $obj.find('input[name="roomCount"]'),
+                rules : [
+                    {
+                        type: 'nonnegative-int',
+                        errMsg: '房间数必须为正整数'
+                    }
+                ]
+            },
+            {
+	    		//应收
+				$ele: $obj.find('[name="needPayAllMoney"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '应收不能为空'
+                }]
+	    	},
+	    	{
+                $ele: $obj.find('input[name="count"]'),
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '数量不能为空'
+                },
+                {
+                    type: 'NoNumber',
+                    errMsg: '数量必须为正整数'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="price"]'),
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '单价不能为空'
+                },
+                {
+                    type: 'float',
+                    errMsg: '单价必须为数字'
+                }]
+            },
+            {
+            	//预收款
+                $ele: $obj.find('input[name="preIncomeMoney"]'),
+                rules : [
+                    {
+                        type: 'float',
+                        errMsg: '预收款必须为数字'
+                    }
+                ]
+            },
+            { 
+                //计划现收
+                $ele: $obj.find('input[name="currentNeedPayMoney"]'),
+                rules : [
+                    {
+                        type: 'float',
+                        errMsg: '计划现收必须为数字'
+                    }
+                ]
+            }];
+
+	        return settings;
+	    },
+	    checkNeed : function($container){
+	        this.$needContainer = $container;
+	        return $container.formValidate(this.needEditor($container));
+		},
+		needUpdate : function(validator) {
+	        if (!!validator)  {
+	            validator.update(this.needEditor(this.$needContainer));
+	        }
+
+	        return validator;
+	    }
 	};
+	return rule;
 });

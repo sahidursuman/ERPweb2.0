@@ -25,9 +25,9 @@
 				</thead>
 				<tbody class="T-addTouristTbody">
 				{{if !!touristGroupMemberJsonAdd && touristGroupMemberJsonAdd.length > 0}}
-					{{each touristGroupMemberJsonAdd as rs}}
+					{{each touristGroupMemberJsonAdd as rs index}}
 					<tr>
-						<td>1</td>
+						<td>{{index+1}}</td>
 						<td><input type="text" class="col-xs-12" name="name" value="{{rs.name}}"></td>
 						<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{rs.mobileNumber}}"></td>
 						<td>
