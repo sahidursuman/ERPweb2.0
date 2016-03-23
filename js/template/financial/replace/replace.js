@@ -232,7 +232,7 @@ define(function(require, exports) {
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
-					if(Replace.checkTemp){
+					if(Replace.checkTemp && Replace.checkTemp.length > 0){
                         Replace.$checkingTab.data('isEdited',true);
                     }
 					Replace.CM_event(Replace.$checkingTab,args,true);
@@ -285,7 +285,7 @@ define(function(require, exports) {
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             if (!isCheck) {
-            	Replace.payingJson = [];
+            	Replace.payingJson = false;
 				Replace.balanceList($tab.data('next'));
             }else{
             	Replace.checkTemp = false;
@@ -304,7 +304,7 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
             if(!isCheck){
-                Replace.payingJson = [];
+                Replace.payingJson = false;
             } else {
             	Replace.checkTemp = false;
             }
@@ -833,7 +833,7 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
-                    Replace.payingJson = [];
+                    Replace.payingJson = false;
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                         	Tools.closeTab(blanceMenuKey);
