@@ -174,7 +174,7 @@ define(function(require, exports) {
 				if(Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data))){
 					Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
 					if(Ticket.checkTemp){
-                        Ticket.$checkTab.data('isEdited',true);
+                        Ticket.$checkingTab.data('isEdited',true);
                     }
 					Ticket.check_event(args,Ticket.$checkingTab);
 				} else {
@@ -188,7 +188,7 @@ define(function(require, exports) {
 				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		var temp = FinancialService.checkSaveJson(Ticket.$checkTab,Ticket.checkTemp,new FinRule(0));
+				    		var temp = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0));
                             if(!temp){
                                 return false;
                             } else {
@@ -368,7 +368,7 @@ define(function(require, exports) {
 
 	Ticket.saveCheckData = function($tab,args,tabArgs){
 		var argLen = arguments.length,
-			json = FinancialService.checkSaveJson(Ticket.$checkTab,Ticket.checkTemp,new FinRule(0),true);
+			json = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0),true);
 		if(json.length > 0){
 			$.ajax({
 				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
