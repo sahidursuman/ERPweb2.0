@@ -406,7 +406,7 @@ define(function(require, exports) {
             args.pageNo = page;
         }
         $.ajax({
-            url : KingServices.build_url('v2/partnerAgency', 'selectPartnerAgency'),
+            url : KingServices.build_url('partnerAgency', 'selectPartnerAgency'),
             data : {searchParam : JSON.stringify(args)},
             type: 'POST',
             success : function(data){
@@ -937,10 +937,7 @@ define(function(require, exports) {
                 touristGroup.bindLayerCommonFeeEvents($layer);
                 $layer.find('.T-btn-save').on('click', function(){
                     var baseInfo = {
-                            dutyDepartmentName : $layer.find('[name="dutyDepartmentName"]').val(),
-                            dutyDepartmentId : $layer.find('[name="dutyDepartmentName"]').data('id'),
-                            dutyUserName : $layer.find('[name="dutyUserName"]').val(),
-                            dutyUserId : $layer.find('[name="dutyUserName"]').data('id'),
+                            transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
                             remark : $layer.find('[name="remark"]').val(),
                             isNowIncome : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
                         },
@@ -1337,7 +1334,7 @@ define(function(require, exports) {
         };
 
         $.ajax({
-            url : KingServices.build_url('v2/touristGroup', 'saveTouristGroup'),
+            url : KingServices.build_url('customerOrder', 'saveCustomerOrder'),
             data : data,
             type: 'POST',
             success : function(data){
