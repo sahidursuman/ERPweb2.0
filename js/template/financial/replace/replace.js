@@ -183,15 +183,19 @@ define(function(require, exports) {
 	Replace.clearComma = function(str){
 		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
-	Replace.checkingList = function(args){
-		if(!!Replace.$checkingTab){
+	Replace.checkingList = function(args,$tab){
+		if(!!$tab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-			args.pageNo = (args.pageNo || 0);
-			args.orderNumber = order == '全部' ? '' : order;
-			args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
-			args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
-			args.projects = Replace.$checkingTab.find(".T-search-project").val();
+			args = {
+				pageNo : args.pageNo || 0,
+				partnerAgencyId : Replace.$checkingTab.find('input[name=partnerAgencyId]').val(),
+				name : Replace.$checkingTab.find('input[name=partnerAgencyName]').val(),
+				orderNumber : order == '全部' ? '' : order,
+				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
+				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
+				projects : Replace.$checkingTab.find(".T-search-project").val()
+			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -727,16 +731,19 @@ define(function(require, exports) {
 	};
 
 
-	Replace.balanceList = function(args){
-		console.log(Replace.$balanceTab);
-		if(!!Replace.$balanceTab){
-			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
-			var order = Replace.$balanceTab.find(".T-search-order").val();
-			args.pageNo = (args.pageNo || 0);
-			args.orderNumber = order == '全部' ? '' : order;
-			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
-			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
-			args.projects = Replace.$balanceTab.find(".T-search-project").val();
+	Replace.balanceList = function(args,$tab){
+		if(!!$tab){
+			var project = Replace.$balanceTab.find(".T-search-project").val().split(', '),
+				order = Replace.$balanceTab.find(".T-search-order").val();
+			args = {
+				pageNo : args.pageNo || 0,
+				partnerAgencyId : Replace.$balanceTab.find("input[name=partnerAgencyId]").val(),
+				name : Replace.$balanceTab.find("input[name=partnerAgencyName]").val(),
+				orderNumber : order == '全部' ? '' : order,
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				projects : Replace.$balanceTab.find(".T-search-project").val()
+			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -862,9 +869,9 @@ define(function(require, exports) {
 					accountStatus : $tab.find('input[name=accountStatus]').val(),
                 };
                 if(isCheck){
-                	Replace.checkingList(args);
+                	Replace.checking(args);
                 } else {
-                	Replace.balanceList(args);
+                	Replace.balance(args);
                 }
             }
         }).on("click",function(){
