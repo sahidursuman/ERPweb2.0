@@ -203,7 +203,7 @@ define(function(require, exports) {
                     var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
-                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? 1 : 0);
+                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
                 resultList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
