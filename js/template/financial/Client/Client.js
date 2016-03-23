@@ -464,6 +464,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
+            args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
