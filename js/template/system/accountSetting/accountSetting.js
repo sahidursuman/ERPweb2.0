@@ -17,7 +17,6 @@ define(function(require, exports) {
 	};
 	accountSetting.initModule = function() {
 		accountSetting.accountSeList(0);
-		typeFlage = false;
 	};
 	accountSetting.accountSeList = function(pageNo) {
 		// 修正页码
@@ -111,8 +110,7 @@ define(function(require, exports) {
 					paymentStrea:'paymentStrea',
 					collateral:'collateral',
 					remark:'remark',
-					applyMoney:'applyMoney',
-					id:typeFlage == 2 ? $obj.find('input[name=nameId]').val():''
+					applyMoney:'applyMoney'
 				};
 
 			accountSetting.$tab = $('#' + tabId);
@@ -142,6 +140,15 @@ define(function(require, exports) {
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
+
+			//申请借款无绑定号码时提示
+			var $objNull = $(".T-accountSetList");
+			$objNull.find('.T-btn-Grayapply').hover(function(event) {
+				showMessageDialog($("#confirm-dialog-message"),"请先绑定手机号码后才能申请借款", function() {
+
+				});
+			});
+			
 		};
 
 		//绑定手机号
@@ -427,6 +434,8 @@ define(function(require, exports) {
 						var $form = $(".T-form");
 						var validator=rule.check($form);			
 						var $obj = $('#updateApplyMain');
+						var $price=$obj.find('[name=applyMoney]');
+							Tools.inputCtrolFloat($price);
 						$obj.find(".T-btn-cancel").click(function(){
 						 	 Tools.closeTab(cKey);
 							});
