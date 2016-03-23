@@ -152,7 +152,7 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     data.sumData = Self.getSumData(args);
                     var fsList = data.list;
-                    data.list = FinancialService.isGuidePay(fhList);
+                    data.list = FinancialService.isGuidePay(fsList);
                     data.selfPayName = args.selfPayName;
                     data.searchParam.accountStatus = args.accountStatus;
                     data.list = FinancialService.getCheckTempData(data.list,Self.checkTemp);
