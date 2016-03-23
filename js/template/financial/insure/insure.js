@@ -25,7 +25,7 @@ define(function(require, exports) {
 
 	Insure.initModule = function() {
 		var dateJson = FinancialService.getInitDate();
-        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate);
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2);
    	};
   	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus){
   		if (Insure.$searchArea && arguments.length === 1) {
@@ -143,6 +143,8 @@ define(function(require, exports) {
   	// 保险对账
 	Insure.GetChecking = function(args,$tab){
 		if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -156,14 +158,21 @@ define(function(require, exports) {
 			data:{ searchParam : JSON.stringify(args) },
 			success : function(data){
 				if(showDialog(data)){
+
 					var fiList = data.financialInsuranceList;
+                    data.financialInsuranceList = FinancialService.isGuidePay(fiList);
+                    data.financialInsuranceList = FinancialService.getCheckTempData(data.financialInsuranceList,Insure.checkTemp);
                     data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
 					var html = insuranceChecking(data);
 
                     // 初始化页面
                     if (Tools.addTab(checkTabId,"保险对账",html)) {
                         Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
                         Insure.$checkTab.data('account-status',args.accountStatus);
+                        if(Insure.checkTemp){
+                           Insure.$checkTab.data('isEdited',true); 
+                        }
                         Insure.initCheck(args,Insure.$checkTab); 
                         var validator = new FinRule(0).check(Insure.$checkTab.find(".T-checkList"));                     
                         //取消对账权限过滤
@@ -180,9 +189,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Insure.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                Insure.GetChecking(args);
+                                var temp = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                }else{
+                                    Insure.$checkTab.data('isEdited',false);
+                                    Insure.checkTemp = temp;
+                                    args.pageNo = obj.curr-1;
+                                    Insure.GetChecking(args);
+                                }
+                                
                             }
                         }
                     });
@@ -206,11 +222,13 @@ define(function(require, exports) {
         //导出报表事件
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
+                accountStatus:$tab.find('input[name=accountStatus]').val(),
                 insuranceId : args.insuranceId,
                 insuranceName: args.insuranceName, 
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
         });
@@ -230,6 +248,8 @@ define(function(require, exports) {
   	// 结算
   	Insure.getClearing = function(args,$tab){
         if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -248,6 +268,7 @@ define(function(require, exports) {
 			success : function(data){
 				if(showDialog(data)){
 					data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
                     if(args.isAutoPay == 1){
                         Insure.clearTempData = data.autoPaymentJson;
                     }
@@ -447,7 +468,7 @@ define(function(require, exports) {
     //对账数据保存
     Insure.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -457,6 +478,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        Insure.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
@@ -526,6 +548,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
     		event.preventDefault();
             if(option == "check"){
+                Insure.checkTemp = false;
                 Insure.GetChecking($tab.data('next'),$tab);
             } else if(option == "clear"){
                 Insure.clearTempData = false;
@@ -557,8 +580,12 @@ define(function(require, exports) {
             if(option == "clear"){
                 Insure.clearTempData = false;
                 Insure.clearTempSumDate = false;
+            }else if(option == "check"){
+                Insure.checkTemp = false;
             }
         });
+
+        Insure.getInsureComList($tab.find('.T-insuranceName'));
 
         //报表内的操作
         Insure.listOption($tab);
@@ -566,35 +593,88 @@ define(function(require, exports) {
         FinancialService.closeTab(menuKey + "-" + option + "ing");
     };
 
-	Insure.getQueryList = function(){
-        var $Insure = Insure.$tab.find(".T-chooseInsure"),
-            insureList = Insure.insureList;
-        if(insureList != null && insureList.length > 0){
-            for(var i=0;i<insureList.length;i++){
-            	insureList[i].id = insureList[i].insuranceId;
-                insureList[i].value = insureList[i].insuranceName;
-            }
+    Insure.getInsureComList = function($obj) {
+        if (!!Insure.insureList) {
+            Insure.getQueryList($obj);
+        } else {
+            $.ajax({
+               url:KingServices.build_url("account/insuranceFinancial","listSumFinancialInsurance"),
+                type:"POST",
+                data:{ searchParam : JSON.stringify({
+                    insuranceId: '-1'
+                }) },
+                showLoading: false,
+                success: function(data){
+                    if (showDialog(data)) {
+                        Insure.insureList = data.insuranceNameList;
+                        Insure.getQueryList($obj);
+                    }
+                }
+            });
         }
+    };
+
+    /**
+     * 绑定保险公司列表
+     * @param  {object} $obj 绑定的控件，为空说明是主列表
+     * @return {[type]}      [description]
+     */
+	Insure.getQueryList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = Insure.$tab.find(".T-chooseInsure");
+        }
+
+        var list = Insure.insureList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+
+        for(var i=0;i<list.length;i++){
+            list[i].id = list[i].insuranceId;
+            list[i].value = list[i].insuranceName;
+        }
+
         var all = {
             id : "",
             value : "全部"
-        };
-        insureList.unshift(all);
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }        
 
-        //车队
-        $Insure.autocomplete({
+        var name = $obj.val();
+        //保险
+        $obj.autocomplete({
             minLength: 0,
-            source : insureList,
+            source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $(this).nextAll('input[name="insuranceId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="insuranceId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {
-                $(this).blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                $obj.blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="accountInfo"]').val('');
+                    $tab.find('.T-insuranceId').val(ui.item.id);
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
         }).on("click",function(){
-            $Insure.autocomplete('search','');
+            $obj.autocomplete('search','');
         });      
     };
 

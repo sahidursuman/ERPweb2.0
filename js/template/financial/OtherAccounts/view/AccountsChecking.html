@@ -3,8 +3,8 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area T-search-area">
                 <div class="form-group">
-                    <label>项目名称：{{searchParam.name}}</label>
-                    <input type="hidden" name="itemName" value="{{searchParam.name}}">
+                    <label>项目名称：</label>
+                    <input type="text" name="itemName" value="{{searchParam.name}}" class="T-item-name">
                     <label class="marginLeft-30">账期：</label>
                     <input class="datepicker T-time T-startTime" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
@@ -53,7 +53,8 @@
         </thead>
         <tbody class="T-checkListNum T-checkList">
             {{each financialOtherDetailsList as Checking index}}
-            <tr class="T-checkTr" data-id='{{Checking.id}}' data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}">
+            <tr class="T-checkTr {{if Checking.change}}success{{/if}}" data-id='{{Checking.id}}' data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}"
+            {{if Checking.change}}data-change="true"{{/if}}>
                 <td>{{Checking.info}}</td>
                 <td name="startTime">{{Checking.accountTime}}</td>
                 <td><span class="F-float F-count">{{Checking.adultCount}}</span>{{"大人"}}<span class="F-float F-count">{{Checking.childCount}}</span>{{"小孩"}}</td>
@@ -73,7 +74,7 @@
                 <td>{{Checking.checkUser }}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-checkbox T-insuanceFinancial" {{if Checking.isConfirmAccount}}checked="checked" {{/if}}/>
+                        <input type="checkbox" data-entity-checkStatus="{{Checking.isConfirmAccount}}" class="ace T-checkbox T-insuanceFinancial" {{if (!Checking.change && Checking.isConfirmAccount) || (Checking.isChecked && Checking.change)}}checked="checked" {{/if}}/>
                         <span class="lbl"></span> 对账
                         <a class="cursor"> |</a>
                         <a class="T-action T-viewhandle cursor">查看</a>

@@ -8,13 +8,16 @@ define(function(require, exports) {
 		applylate = require("./view/apply"),
 		solutionlate = require("./view/solution"),
 		addPhonelate = require("./view/addPhone"),
+		updateApplylate = require("./view/updateApply"),
 		tabId = "tab-" + menuKey + "-content";
 	var sKey = menuKey+"-loanApplication";
+	var cKey = menuKey+"-updatelication";
 	var accountSetting = {
 		$tab : false
 	};
 	accountSetting.initModule = function() {
 		accountSetting.accountSeList(0);
+		typeFlage = false;
 	};
 	accountSetting.accountSeList = function(pageNo) {
 		// 修正页码
@@ -104,7 +107,8 @@ define(function(require, exports) {
 					paymentStrea:'paymentStrea',
 					collateral:'collateral',
 					remark:'remark',
-					applyMoney:'applyMoney'
+					applyMoney:'applyMoney',
+					id:typeFlage == 2 ? $obj.find('input[name=nameId]').val():''
 				};
 
 			accountSetting.$tab = $('#' + tabId);
@@ -122,14 +126,18 @@ define(function(require, exports) {
 				$obj.find(".T-btn-apply").click(function(){
 				accountSetting.loanApplication(0);
 			});
+			//编辑借款申请
+			var $obj = $('.T-mainSetList');
+				$obj.find(".T-update").click(function(){
+				var id = $(this).closest('tr').attr('data-applyId');
+				accountSetting.updatelication(id);
+			});
 
 			//借款拨款申请list数据
 			var $obj = $('#tab-accountSetting-content');
 			$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
-
-
 		};
 
 		//绑定手机号
@@ -161,12 +169,12 @@ define(function(require, exports) {
 							    scrollbar: false,
 							    success:function(){
 							    	var $obj = $(".account-solutionMain");
-							    	$obj.find('.T-closeSolution').click(function() {
+							    		$obj.find('.T-closeSolution').click(function() {
 							    		layer.close(solutionLayer);
 							    	});
 							    }
 							});
-							});
+						});
 
 						$obj.find('#send').click(function() {
 						var searchData = {};
@@ -189,13 +197,15 @@ define(function(require, exports) {
 						            	searchParam:JSON.stringify(searchData)
 					            	},
 									success:function(data){
-										if (showDialog(data)) {
+										var result = showDialog(data);
+											if (result) {
+											showMessageDialog($("#confirm-dialog-message"),data.message, function() {
 											accountSetting.newPhoneChange();
 											layer.close(newPhoneLayer);
+											});
 										}
 									}
 								})
-										
 							});	
 							}
 						});
@@ -257,10 +267,12 @@ define(function(require, exports) {
 							            	searchParam:JSON.stringify(searchData)
 						            	},
 										success:function(data){
-											if (showDialog(data)) {
+											var result = showDialog(data);
+											if (result) {
+												showMessageDialog($("#confirm-dialog-message"),data.message, function() {
 												layer.close(addPhoneLayer);
-												/*$(".T-btn-addPhone").toggleClass("hide");*/
 												accountSetting.accountSeList();
+											});
 											}
 										}
 									})
@@ -284,8 +296,6 @@ define(function(require, exports) {
 	     			},1000);  
 				});
 			})
-			
-			
 		}
 
 		// 更换新手机号
@@ -362,45 +372,84 @@ define(function(require, exports) {
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
 				//表单验证
-				//
 				var $form = $(".T-form");
 				var validator=rule.check($form);			
 				var $obj = $('.fuelux-apply');
+				var $price=$obj.find('[name=applyMoney]');
+				Tools.inputCtrolFloat($price);
 				$obj.find(".T-btn-cancel").click(function(){
 				 	 Tools.closeTab(sKey);
 					});
 				$obj.find(".T-btn-saveApply").click(function(){
 					if (!validator.form()) { return; }
-					var searchData = {};
-					searchData.name = $obj.find("[name=name]").val();
-					searchData.mobileNumber = $obj.find("[name=mobileNumber]").val();
-					searchData.maritalStatus = $obj.find("[name=maritalStatus]").val();
-					searchData.idCard = $obj.find("[name=idCard]").val();
-					searchData.businessNumber = $obj.find("[name=businessNumber]").val();
-					searchData.code = $obj.find("[name=code]").val();
-					searchData.incomeStream = $obj.find("[name=incomeStream]").val();
-					searchData.purpose = $obj.find("[name=purpose]").val();
-					searchData.paymentStream = $obj.find("[name=paymentStream]").val();
-					searchData.collateral = $obj.find("[name=collateral]").val();
-					searchData.remark = $obj.find("[name=remark]").val();
-					searchData.applyMoney = $obj.find("[name=applyMoney]").val();
-					$.ajax({
-						url:KingServices.build_url("accountSetting/applyLoan","saveApplys"),
-			            type: "GET",
-			            data: {
-			            	searchParam:JSON.stringify(searchData)
-		            	},
-						success:function(data){
-							var result = showDialog(data);
-							if(result){
-								showMessageDialog($("#confirm-dialog-message"),data.message, function() {
-									Tools.closeTab(sKey);
-									accountSetting.accountSeList();
-									});
-							}
-						}
-					})
+					accountSetting.saveApplication($obj);
 				});
 			};
+
+		//编辑申请借款
+		accountSetting.updatelication = function(id){
+				$.ajax({
+					url:KingServices.build_url("accountSetting/applyLoan","edit"),
+		            type: "POST",
+		            data: {
+		            	id:id
+	            	},
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							Tools.addTab(cKey, "编辑申请借款",  updateApplylate(data));
+							//表单验证
+						var $form = $(".T-form");
+						var validator=rule.check($form);			
+						var $obj = $('#updateApplyMain');
+						$obj.find(".T-btn-cancel").click(function(){
+						 	 Tools.closeTab(cKey);
+							});
+						$obj.find(".T-btn-UpdateSaveApply").click(function(){
+							if (!validator.form()) { return; }
+							accountSetting.saveApplication($obj);
+						});
+						}
+					}
+				});
+			};
+
+		/**
+		 * [saveApplication 保存申请借款信息]
+		 * @param  {[type]} $obj [父容器对象]
+		 * @return {[type]}      [description]
+		 */
+	    accountSetting.saveApplication=function($obj){
+	    	var searchData = {};
+	    	searchData.id = $obj.find("[name=id]").val();
+			searchData.name = $obj.find("[name=name]").val();
+			searchData.mobileNumber = $obj.find("[name=mobileNumber]").val();
+			searchData.maritalStatus = $obj.find("[name=maritalStatus]").val();
+			searchData.idCard = $obj.find("[name=idCard]").val();
+			searchData.businessNumber = $obj.find("[name=businessNumber]").val();
+			searchData.code = $obj.find("[name=code]").val();
+			searchData.incomeStream = $obj.find("[name=incomeStream]").val();
+			searchData.purpose = $obj.find("[name=purpose]").val();
+			searchData.paymentStream = $obj.find("[name=paymentStream]").val();
+			searchData.collateral = $obj.find("[name=collateral]").val();
+			searchData.remark = $obj.find("[name=remark]").val();
+			searchData.applyMoney = $obj.find("[name=applyMoney]").val();
+			$.ajax({
+				url:KingServices.build_url("accountSetting/applyLoan","saveApplys"),
+			          type: "GET",
+			          data: {
+			          	searchParam:JSON.stringify(searchData)
+		          	},
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+							Tools.closeTab(sKey);
+							accountSetting.accountSeList();
+							});
+					}
+				}
+			})
+	    };
 	exports.init = accountSetting.initModule;
 }); 

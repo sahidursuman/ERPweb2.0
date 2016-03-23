@@ -35,22 +35,22 @@
 	<div style="margin-left: 15px;padding-bottom: 30px;">
 	<form class="T-form" role="form" onsubmit="return false">
 		<div class="apply-information" style="margin-top:15px;"> 
-			<label>借款人姓名：</label> <input type="text" name="name" class="">
-			<label style="margin-left: 90px;">联系电话：</label> <input type="text" name="mobileNumber" class="r">
+			<label><span class="necessary">*</span>借款人姓名：</label> <input type="text" name="name" class="">
+			<label style="margin-left: 90px;"><span class="necessary">*</span>联系电话：</label> <input type="text" name="mobileNumber" class="r">
 		</div>
 		<div class="apply-information" style="margin-top:12px;"> 
-		<label style="margin-left: 20px;">婚姻状况:</label>
+		<label style="margin-left: 20px;"><span class="necessary">*</span>婚姻状况:</label>
 			<select name="maritalStatus" id="" style="height: 30px !important;width: 250px !important;margin-top: 5px;">
 				<option value="0">未婚</option>
 				<option value="1">已婚</option>
 				<option value="2">离异</option>
 				<option value="3">丧偶</option>
 			</select>
-			<label style="margin-left: 90px;">身份证号：</label> <input type="text" name="idCard" class="">
+			<label style="margin-left: 90px;"><span class="necessary">*</span>身份证号：</label> <input type="text" name="idCard" class="">
 		</div>
 		<div class="apply-information" style="margin-top:15px;"> 
-			<label style="margin-left: 10px;">营业执照：</label> <input type="text" name="businessNumber" class="">
-			<label style="margin-left: 90px;">机构代码：</label> <input type="text" name="code" class="">
+			<label style="margin-left: 10px;"><span class="necessary">*</span>营业执照：</label> <input type="text" name="businessNumber" class="">
+			<label style="margin-left: 90px;"><span class="necessary">*</span>机构代码：</label> <input type="text" name="code" class="">
 		</div>
 	
 		<div class="col-xs-12" style="margin-top: 20px;"> 
@@ -69,7 +69,7 @@
 			<label style="margin-left: 15px;width: 60px;" class="col-sm-1 control-label no-padding-right">备注：</label> <input type="text" name="remark" class="col-xs-10" style="margin-left: -5px;height: 30px !important;">
 		</div>
 		<div class="col-xs-12" style="margin-top: 20px;margin-left: -15px;"> 
-		<label>申请借款金额：</label> <input type="text" name="applyMoney" style="width: 120px !important;"><span style="margin-left: 5px;">元</span>
+		<label><span class="necessary">*</span>申请借款金额：</label> <input type="text" class="T-applyMoney" name="applyMoney" style="width: 120px !important;"><span style="margin-left: 5px;">元</span>
 		</div>
 
 		</form>

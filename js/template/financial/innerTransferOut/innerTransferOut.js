@@ -141,10 +141,8 @@ define(function(require,exports) {
 	//对账处理
 	InnerTransferOut.chenking = function(args,$tab){
 		if(!!$tab){
-			args.pageNo = args.pageNo || 0,
+			args.pageNo = args.pageNo || 0;
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
-			args.toBusinessGroupId = $tab.find('input[name=toBusinessGroupId]').val();
-			args.toBusinessGroupName = $tab.find('input[name=toBusinessGroupName]').val();
 			args.accountStatus = $tab.find('input[name=accountStatus]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
 			args.lineProductName = $tab.find('input[name=lineProductName]').val();
@@ -206,7 +204,11 @@ define(function(require,exports) {
 							$tab.data('isEdited', true);
 						}
 					}else{
+						data.list = FinancialService.getCheckTempData(data.list,InnerTransferOut.checkTemp,true);
 						html = checkTableTemplate(data);
+						if(InnerTransferOut.checkTemp){
+                            InnerTransferOut.$checkTab.data('isEdited',true);
+                        }
 
 					}
 					$tab.find('.' + (typeFlag == 2 ? "T-clearList" : "T-checkList")).html(html);
@@ -214,7 +216,7 @@ define(function(require,exports) {
 					$tab.find('.T-recordSize').text(data.recordSize);
 					if(typeFlag != 2){
 						//表单验证
-						var validator = new FinRule(0);
+						var validator = new FinRule(6);
 					    InnerTransferOut.validatorCheck = validator.check($tab);
 						//取消对账权限过滤
 						var fiList= data.list;
@@ -238,6 +240,7 @@ define(function(require,exports) {
 					    jump: function(obj,first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 					    		$tab.data('isEdited',false);
+					    		args.pageNo = obj.curr -1;
 					    		if(typeFlag == 2){
 					    			InnerTransferOut.saveJson.autoPayList = FinancialService.clearSaveJson($tab,InnerTransferOut.saveJson.autoPayList,new FinRule(1));
                                     InnerTransferOut.saveJson.sumPayMoney = $tab.find('input[name=sumPayMoney]').val();
@@ -245,11 +248,15 @@ define(function(require,exports) {
                                     InnerTransferOut.saveJson.sumPayRemark = $tab.find('input[name=sumRemark]').val();
                                     InnerTransferOut.saveJson.bankId = (InnerTransferOut.saveJson.sumPayType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val;
                                     InnerTransferOut.saveJson.bankNo = (InnerTransferOut.saveJson.sumPayType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val;
-	                                args.pageNo = obj.curr -1;
 									InnerTransferOut.getListData($tab,args,2);
                                 }else{
-                                	args.pageNo = obj.curr -1;
-                                	InnerTransferOut.chenking(args);
+                                	var temp = FinancialService.checkSaveJson(InnerTransferOut.$checkTab,InnerTransferOut.checkTemp,new FinRule(0),false,true);
+	                                if(!temp){
+	                                    return false;
+	                                } else {
+	                                    InnerTransferOut.checkTemp = temp;
+	                                    InnerTransferOut.chenking(args);
+	                                }
                                 }
 							}
 					    }
@@ -261,7 +268,8 @@ define(function(require,exports) {
 	//对账页面事件
 	InnerTransferOut.chenkingEvent = function($tab,args,typeFlag){
 		//切换tab事件
-		InnerTransferOut.init_CRU_event($tab,args,typeFlag)
+		InnerTransferOut.init_CRU_event($tab,args,typeFlag);
+		InnerTransferOut.getGroupList($tab,typeFlag);
 		//监听已对账的数据是否被修改
 		if(typeFlag == 2){
 			$tab.find('.T-clearList').off('change').on('change','input',function(){
@@ -286,20 +294,22 @@ define(function(require,exports) {
 			event.preventDefault();
 			args.pageNo = 0;
 			if(typeFlag !=2){
-				InnerTransferOut.chenking(args);
+				InnerTransferOut.chenking(args,$tab);
 			}else{
-				InnerTransferOut.settlement(args);
+				InnerTransferOut.settlement(args,$tab);
 			}
 		});
 		//导出报表事件
 		$tab.find(".T-btn-export").on('click',function(event){
 			var argsData = { 
-					toBusinessGroupId:$tab.find('input[name=toBusinessGroupId]').val(),
+					toBusinessGroupId:args.toBusinessGroupId,
 					lineProductId:$tab.find('input[name=lineProductId]').val(),
 					lineProductName:$tab.find('input[name=lineProductName]').val(),
 					operateUserId:$tab.find('select[name=operater]').val(),
                     startDate: $tab.find('input[name=startDate]').val(),
-                    endDate: $tab.find('input[name=endDate]').val()
+                    endDate: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus,
+                    orderNumber : $tab.find('input[name=orderNumber]').val()
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             FinancialService.exportReport(argsData,"exportArrangeInnerTransferOutFinancial");
@@ -313,7 +323,7 @@ define(function(require,exports) {
         //监听扣款输入框的改变
         FinancialService.updateMoney_checking($tab,3);
         //查看对账明细
-        $tab.on('click','.T-check-Detail',function(){
+        $tab.off('click.checkDetail').on('click.checkDetail','.T-check-Detail',function(){
         	var id = $(this).closest('tr').data('id');
         	InnerTransferOut.viewAccountDetail(id);
         });
@@ -378,7 +388,7 @@ define(function(require,exports) {
 	        	var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
 		        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
 		    var sumMoney = $tab.find('input[name=sumPayMoney]').data("money");
-		    if(sumPayMoney != sumMoney){
+		    if(!Tools.Math.isFloatEqual(sumPayMoney,sumMoney)){
 		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
 		        return false;
 		    }
@@ -432,64 +442,36 @@ define(function(require,exports) {
 	};
 	//确认对账
 	InnerTransferOut.saveCheckingData = function($tab,args,tabArgs){
-    	var JsonStr = [],
+    	var JsonStr = FinancialService.checkSaveJson($tab,InnerTransferOut.checkTemp,new FinRule(0),true,true),
             selectFlag = 0,
-            argumentsLen = arguments.length,
-            checkList = $tab.find('.T-checkList'),
-			$tr = checkList.find('.T-checkbox');
-		$tr.each(function(i){
- 		   var flag = $(this).is(":checked");
- 		   var tr = $(this).closest('tr');
-		   if(flag){
-		   	    if(tr.attr("data-confirm") == 0 ){
-		   	    	var checkData = {
-					    id:tr.data("id"),
-					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
-					    punishMoney:tr.find('input[name=settlementMoney]').val()
- 			    	}
-			    	JsonStr.push(checkData)
-		   	    }
- 		   }else{
- 			    if(tr.attr("data-confirm") == 1){
- 				    var checkData = {
-	 					    id:tr.data("id"),
-	 					    checkRemark:tr.find('textarea[name=checkRemark]').val(),
-	 					    punishMoney:tr.find('input[name=settlementMoney]').val()
-	     			    }
- 				    JsonStr.push(checkData)
- 			    }
- 		   }
-	    });
- 	   //判断用户是否操作
- 	    if(JsonStr.length == 0){
- 		   showMessageDialog($( "#confirm-dialog-message" ),"没有可提交的数据！");
- 		   return;
- 	    }else{
- 		   JsonStr = JSON.stringify(JsonStr);
-     	   $.ajax({
-     		    url:KingServices.build_url("account/innerTransferOutFinancial","operateCheckAccount"),
-                data:{
-                	checkJson:JsonStr
-                },
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						$tab.data('isEdited', false);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-							if(argumentsLen === 1){
-	                            Tools.closeTab(menuKey + "-checking");
-	                            InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
-                        	} else if(argumentsLen == 2){
-                        		InnerTransferOut.chenking(args);
-                        	} else if(argumentsLen == 3){
-	                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-	                            InnerTransferOut.getListData($tab,args,1);
-                        	}
-						});
-					}
+            argumentsLen = arguments.length;
+        if(!JsonStr){ return false; }
+        //数据处理
+        JsonStr = JSON.parse(JsonStr);
+        for(var i = 0; i < JsonStr.length; i++){
+        	JsonStr[i].punishMoney = JsonStr[i].backMoney;
+        }
+
+ 	    $.ajax({
+ 		    url:KingServices.build_url("account/innerTransferOutFinancial","operateCheckAccount"),
+            data:{
+            	checkJson: JSON.stringify(JsonStr)
+            },
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					$tab.data('isEdited', false);
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						if(argumentsLen === 1){
+                            Tools.closeTab(menuKey + "-checking");
+                            InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
+                    	} else {
+                    		InnerTransferOut.chenking(args);
+                    	}
+					});
 				}
-     	    });
- 	    }  	
+			}
+ 	    });  	
 	};
 	//查看付款明细
 	InnerTransferOut.viewPayedDetail = function(id){
@@ -616,6 +598,9 @@ define(function(require,exports) {
 		var showBtnFlag = (arguments.length > 1) ? args.showBtnFlag : $tab.data('showBtnFlag'),
 			settlermentValidator =  new FinRule((showBtnFlag == true) ? 3 : 1),
 			argumentsLen = arguments.length;
+		if(!FinancialService.isClearSave($tab,settlermentValidator)){
+			return false;
+		}
 		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			sumRemark = $tab.find('input[name=sumRemark]').val();
@@ -641,11 +626,8 @@ define(function(require,exports) {
                 		if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-settlement");
                             InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
-                    	} else if(argumentsLen == 2){
+                    	} else {
                             InnerTransferOut.settlement(args);
-                    	} else if(argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            InnerTransferOut.getListData($tab,args,2);
                     	}
                 	});
                 	
@@ -673,6 +655,7 @@ define(function(require,exports) {
 					InnerTransferOut.saveJson = false;
 					InnerTransferOut.settlement($tab.data("next"));
 				} else {
+					InnerTransferOut.checkTemp = false;
 					InnerTransferOut.chenking($tab.data("next"));
 				}
 			})
@@ -689,50 +672,57 @@ define(function(require,exports) {
 	            event.preventDefault();
 	            if(typeFlag == 2){
 	                InnerTransferOut.saveJson = false;
+	            } else {
+	            	InnerTransferOut.checkTemp = false;
 	            }
 	        });
 		}
 	};
 	//获取搜索框的数据
-	InnerTransferOut.getToBusinessGroupName = function($obj,nameData){
-		var $nameObj = $obj.find('input[name=toBusinessGroupName]');
-		$nameObj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					var $div = $(this).closest('div');
-					$div.find('input[name=toBusinessGroupId]').val('');
-				}
+	InnerTransferOut.getToBusinessGroupName = function($obj,args){
+		$.ajax({
+			url:KingServices.build_url('account/innerTransferOutFinancial','listFinancialInnerTransferOutQuery'),
+			data:{
+				startDate :args.startDate,
+				endDate:args.endDate
 			},
-			select:function(event,ui){
-				var $div = $(this).closest('div');
-				$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-			}
-		}).off('click').on('click',function(){
-			var obj = $(this);
-			$.ajax({
-				url:KingServices.build_url('account/innerTransferOutFinancial','listFinancialInnerTransferOutQuery'),
-				data:nameData,
-				type:'POST',
-				showLoading:false,
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						var businessGroupList = data.businessGroupList;
-						var allItem = {
-							id:"",
-							name:"全部"
-						};
-						businessGroupList.unshift(allItem);
-						for(var i = 0;i<businessGroupList.length;i++){
+			type:'POST',
+			showLoading:false,
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var businessGroupList = data.businessGroupList;
+					var allItem = {
+						id:"",
+						name:"全部"
+					};
+					
+					for(var i = 0;i<businessGroupList.length;i++){
 						businessGroupList[i].value = businessGroupList[i].name;
-						}
-						obj.autocomplete('option','source', businessGroupList);
-						obj.autocomplete('search','');
+					}
+					InnerTransferOut.businessGroupList = businessGroupList.slice(allItem);
+					if($obj){
+						businessGroupList.unshift(allItem);
+						var $nameObj = $obj.find('input[name=toBusinessGroupName]');
+						$nameObj.autocomplete({
+							minLength:0,
+							source : businessGroupList,
+							change:function(event,ui){
+								if(ui.item == null){
+									var $div = $(this).closest('div');
+									$div.find('input[name=toBusinessGroupId]').val('');
+								}
+							},
+							select:function(event,ui){
+								var $div = $(this).closest('div');
+								$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
+							}
+						}).on('click',function(){
+							$nameObj.autocomplete('search','');
+						});
 					}
 				}
-			});
-			
+			}
 		});
 	};
 	//获取线路列表
@@ -784,17 +774,48 @@ define(function(require,exports) {
 	InnerTransferOut.initPay = function(options){
 		var args = {
 			pageNo:0,
-			toBusinessGroupId:options.id,
-			toBusinessGroupName:options.name,
-			lineProductId:"",
-			lineProductName:"",
-			operateUserId:"",
 			startDate:options.startDate,
 			endDate:options.endDate,
 			accountStatus:options.accountStatus,
-			showBtnFlag:true
 		};
+		InnerTransferOut.getToBusinessGroupName(false,args);
+
+		args.toBusinessGroupId = options.id;
+		args.toBusinessGroupName = options.name;
+		args.showBtnFlag = true;
         InnerTransferOut.settlement(args,0); 
+    };
+
+    InnerTransferOut.getGroupList = function($tab,type){
+    	var $obj = $tab.find('input[name=toBusinessGroupName]'),
+    		name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : InnerTransferOut.businessGroupList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                	$obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    toBusinessGroupId : ui.item.id,
+					toBusinessGroupName : ui.item.value,
+					startDate : $tab.find('input[name=startDate]').val(),
+					endDate : $tab.find('input[name=endDate]').val(),
+					accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type == 1){
+                	InnerTransferOut.chenking(args);
+                } else {
+                	args.showBtnFlag = $tab.find('.T-btn-autofill').length ? false : true;
+                	InnerTransferOut.settlement(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 	exports.init = InnerTransferOut.initModule;
 	exports.initPay = InnerTransferOut.initPay;

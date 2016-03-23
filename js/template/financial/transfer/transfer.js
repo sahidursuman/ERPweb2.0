@@ -6,7 +6,8 @@ define(function(require, exports) {
 	    transferClearing = require("./view/transferClearing"),
 	    payedDetailTempLate = require("./view/viewPayedDetail"),
         needPayDetailTempLate = require("./view/viewNeedPayDetail"),
-        viewGroupTemplate = require("./view/viewTouristGroup");
+        viewGroupTemplate = require("./view/viewTouristGroup"),
+        addFeeTemplate = require("./view/addFee");
 
     var Transfer = {
     	searchData : false,
@@ -57,7 +58,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                	Transfer.partnerList = data.partnerAgencyNameList;
+                    Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转账务",html);
                     Transfer.$tab = $('#tab-' + menuKey + "-content");
@@ -172,7 +173,7 @@ define(function(require, exports) {
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(args,$tab);                      
+                        Transfer.initCheck(args,$tab);
                     } else {
                         Transfer.$checkTab.data("next",args);
                     }
@@ -208,6 +209,7 @@ define(function(require, exports) {
         Transfer.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateMoney_checking($tab,3);
+        Transfer.getPartnerList($tab,false);
 
         //表单验证
         var validator = new FinRule(0);
@@ -216,8 +218,12 @@ define(function(require, exports) {
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            Transfer.transferCheck({pageNo : 0},$tab);
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
         });
+
+        //费用调整
+        Transfer.addFee(args,$tab);
 
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
@@ -229,7 +235,9 @@ define(function(require, exports) {
                     partnerAgencyId:$tab.find('input[name=partnerAgencyId]').val(),
                     travelAgencyId:"",
                     startDate: $tab.find('input[name=startDate]').val(),
-                    endDate: $tab.find('input[name=endDate]').val()
+                    endDate: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus,
+                    orderNumber : $tab.find("input[name=orderNumber]").val()
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;
@@ -316,6 +324,7 @@ define(function(require, exports) {
                     }
                     data.financialTransferList = resultList;
 
+                    data.isAutoPay = args.isAutoPay;
                     var html = transferClearing(data);
                     var validator;
                     // 初始化页面
@@ -365,21 +374,10 @@ define(function(require, exports) {
     };
 
     Transfer.initClear = function(args,$tab){
-        console.log(args);
         Transfer.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        Transfer.getPartnerList($tab,true);
 
-        if(args.isAutoPay == 0){
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            if(args.isAutoPay == 1){
-                $tab.data('isEdited',true);
-            } else if(args.isAutoPay == 2){
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
         //表单验证
         var settleValidator = args.isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
             autoValidator = new FinRule(2);
@@ -514,11 +512,8 @@ define(function(require, exports) {
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        } else if(argLen === 2){
+                        } else {
                             Transfer.transferCheck(args,$tab);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Transfer.initCheck(args,$tab);
                         }
                     });
                 }
@@ -565,11 +560,8 @@ define(function(require, exports) {
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        }else if(argLen === 2){
+                        } else {
                             args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
-                            Transfer.transferClear(args,$tab);
-                        } else if(argLen === 3){
-                            args.isAutoPay = (isAutoPay == 1) ? 0 : args.isAutoPay
                             Transfer.transferClear(args,$tab);
                         }
                     }); 
@@ -589,7 +581,7 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    Transfer.initCheck($tab.data('next'),$tab);
+                    Transfer.transferCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     Transfer.clearTempData = false;
                     Transfer.clearTempSumDate = false;
@@ -602,9 +594,9 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    Transfer.saveChecking($tab,args,[tab_id, title, html]);
+                    Transfer.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if(option == "clear"){
-                    Transfer.saveClear($tab,args,[tab_id, title, html]);
+                    Transfer.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }
             })
             // 保存后关闭
@@ -670,6 +662,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        Transfer.partnerList = partnerList.slice(all);
         partnerList.unshift(all);
 
         //同行地接
@@ -828,6 +821,105 @@ define(function(require, exports) {
         return JSON.stringify(saveJson);
     };
 
+    Transfer.addFee = function(args, $tab) {
+        $tab.find('.T-addFee').on('click', function() {
+            var $this = $(this), id = $this.attr('data-id');
+            var addFeeLayer = layer.open({
+                type: 1,
+                title:'费用调整',
+                skin: 'layui-layer-rim', //加上边框
+                area: ['1000px', '450px'], //宽高
+                zIndex:1028,
+                content: addFeeTemplate(),
+                success: function() {
+                    var $content = $('.T-transfer-addFee');
+
+                    var rule = $content.formValidate([
+                        {   //明细数量
+                            $ele: $content.find('input[name=count]'),
+                            rules: [
+                                {
+                                    type: 'nonnegative-float',
+                                    errMsg: '请输入非负数'
+                                },
+                                {
+                                    type: 'null',
+                                    errMsg: '数量不能为空'
+                                }
+                            ]
+                        },
+                        {   //明细价格
+                            $ele: $content.find('input[name=price]'),
+                            rules: [
+                                {
+                                    type: 'float',
+                                    errMsg:'请输入数字金额'
+                                },
+                                {
+                                    type: 'null',
+                                    errMsg: '单价不能为空'
+                                }
+                            ]
+                        }
+                    ]);
+                    function getValue($obj, name) {
+                        return $obj.find('[name='+name+']').val();
+                    }
+
+                    $content.find('.T-addCostTbody, .T-addTransferCostTbody').on('change', '.T-calc', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $parent.find('.T-payMoney').val(count * price);
+                    })
+                    $content.find('.T-addCostTbody').on('change', '[name=type],[name=count],[name=price]', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var type = getValue($parent, 'type') || 0,
+                            count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $content.find('.T-addTransferCostTbody').find('[name=type]').val(type);
+                        $content.find('.T-addTransferCostTbody').find('[name=count]').val(count).trigger('change');
+                        $content.find('.T-addTransferCostTbody').find('[name=price]').val(price).trigger('change');
+                    })
+                    $content.find('.T-add-Fee-submit').off('click').on('click', function() {
+                        if (!rule.form()) {
+                            return;
+                        }
+                        var feeJson = {
+                            type: getValue( $content.find('.T-addCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addCostTbody'), 'remark')
+                        },transferJson = {
+                            type: getValue($content.find('.T-addTransferCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addTransferCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addTransferCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addTransferCostTbody'), 'remark')
+                        }
+                        feeJson = JSON.stringify(feeJson);
+                        transferJson = JSON.stringify(transferJson);
+
+                        $.ajax({
+                            url: KingServices.build_url('account/financialTransfer','addFee'),
+                            type: 'POST',
+                            data: {
+                                id: id, 
+                                touristGroupFeeJson: feeJson,
+                                touristGroupTransferFeeJson: transferJson
+                            },
+                        })
+                        .done(function(data) {
+                            if (showDialog(data)) {
+                                layer.close(addFeeLayer);
+                                Transfer.transferCheck(args);
+                            }
+                        });
+                    })
+                }
+            });
+        })
+    };
+
     Transfer.initPay = function(options){
         var args = {
             pageNo : 0,
@@ -835,10 +927,59 @@ define(function(require, exports) {
             partnerAgencyName : options.name,
             startDate : options.startDate,
             endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         }
-        Transfer.transferClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args)},
+            success:function(data){
+                if(showDialog(data)){
+                    var partnerList = data.partnerAgencyNameList;
+                    if(partnerList != null && partnerList.length > 0){
+                        for(var i=0;i < partnerList.length;i++){
+                            partnerList[i].id = partnerList[i].partnerAgencyId;
+                            partnerList[i].value = partnerList[i].partnerAgencyName;
+                        }
+                    }
+                    Transfer.partnerList = partnerList;
+                    args.isAutoPay = 2;
+                    Transfer.transferClear(args);
+                }
+            }
+        });
+    };
+
+    Transfer.getPartnerList = function($tab,type){
+        var $obj = $tab.find('input[name=partnerAgencyName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : Transfer.partnerList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    partnerAgencyId : ui.item.id,
+                    partnerAgencyName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    Transfer.transferClear(args);
+                } else {
+                    Transfer.transferCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     exports.init = Transfer.initModule;

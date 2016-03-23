@@ -88,7 +88,7 @@
                 {{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
             </span>
             {{else}}
-            <select name="payType">
+            <select name="payType" {{if busCompany.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
                 <option value="0" {{if busCompany.realPayType == 0}}selected="selected"{{/if}}>现金</option>
                 <option value="1" {{if busCompany.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
                 <option value="2" {{if busCompany.realPayType == 2}}selected="selected"{{/if}}>签单</option>
@@ -117,9 +117,21 @@
 
             <td><span class="difference F-float F-money"></span></td>
 
-            <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" ></td>
+            <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
-            <td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+            <td>
+                {{if busCompany.isConfirmAccount == 0}}
+                    未对账
+                {{else}}
+                    已对账
+                {{/if}}
+                &nbsp;&nbsp;
+                {{if busCompany.payedMoney+busCompany.realGuidePayMoney == 0}}
+                    <a href="javascript:void(0)" class="T-busArrDel">删除</a>
+                {{else}}
+                    <span style="color:#bbb;">删除</span>
+                {{/if}}
+            </td>
         </tr>
         {{/if}}
         {{/each}}

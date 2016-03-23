@@ -50,17 +50,18 @@ function getBankList($obj,payType){
         change :function(event, ui){
             if(ui.item == null){
                 $(this).val('').nextAll('.T-accountId').val('');
-                $(this).nextAll('input[name=beginningBalance]').val('').trigger('change');
+                $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
             }
         },
         select :function(event, ui){
+            $bBala = $(this).closest(".T-search-area").find('input[name=beginningBalance]');
             if(payType == 0){
                 $(this).nextAll('input[name=cash-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').next().find('input').val("");
             } else if(payType == 1){
                 $(this).nextAll('input[name=card-id]').val(ui.item.id).trigger('change');
-                $(this).nextAll('input[name=beginningBalance]').val(ui.item.beginningBalance).trigger('change');
+                $bBala.val(ui.item.beginningBalance).trigger('change');
                 $(this).closest('div').prev().find('input').val("");
             }
         }
@@ -140,48 +141,112 @@ FinancialService.updateUnpayMoney = function($tab,rule){
 };
 
 //对账-保存json组装
-FinancialService.checkSaveJson = function($tab,rule){
+/*
+    isSave参数标识返回数据是否用于提交保存，保存时值为true
+    inner参数用于标识内转转入和转出
+ */
+FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
     var validator = rule.check($tab);
-    if(!validator.form()){return false;}
+    if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
 
     if(!$tab.data('isEdited')){
-        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-        return false;
+        if(isSave && !tempJson){
+            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+            return false;
+        } else {
+            // return tempJson;
+        }
     }
 
     var $list = $tab.find(".T-checkList"),
         $tr = $list.find(".T-checkTr"),
-        saveJson = []; 
+        saveJson = tempJson || [],
+        len = saveJson.length; 
     $tr.each(function(){
         var $this = $(this);
         if($this.data("change")){//遍历修改行
-            var validator = rule.check($this);
-            if(!validator.form()){ return false; }
-            var isConfirmAccount = "";
+            validator = rule.check($this);
+            if(!validator.form()){ return false; }//未通过验证退出当前行
+
+            var isChecked = "";
             if ($this.find(".T-checkbox").is(':checked')) {
-                isConfirmAccount = 1;
+                isChecked = 1;
             } else {
-                isConfirmAccount = 0; 
+                isChecked = 0; 
             }
-            //提交修改了对账状态或已对账行数据的行
-            if(($this.data("confirm") != isConfirmAccount) || ($this.data("confirm") == 1)){
+            //已有数据更新
+            for(var i = 0; i < len; i++){
+                if(saveJson[i].id == $this.data("id")){
+                    if(inner){
+                        saveJson[i].backMoney = $this.find("input[name=settlementMoney]").val();
+                        saveJson[i].settlementMoney = $this.find(".T-settlementMoney").text();
+                    } else {
+                        saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
+                    }
+                    saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
+                    saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
+                    saveJson[i].isChecked = isChecked;
+                    return;
+                }
+            }
+            //新数据
+            if(i >= len){
                 var checkRecord = {
                     id : $this.data("id"),
                     settlementMoney : $this.find("input[name=settlementMoney]").val(),
                     unPayedMoney : $this.find("td[name=unPayedMoney]").text(),
                     checkRemark : $this.find("[name=checkRemark]").val(),
-                    isConfirmAccount : isConfirmAccount
+                    confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
+                    isChecked : isChecked
                 };
-                saveJson.push(checkRecord);
+                if(inner){
+                    checkRecord.backMoney = $this.find("input[name=settlementMoney]").val();
+                    checkRecord.settlementMoney = $this.find(".T-settlementMoney").text();
+                }
+                saveJson.push(checkRecord);  
             }
         }
     });
-    if(saveJson.length == 0){
-        showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
-        return false;
+    if(isSave){
+        if(saveJson.length == 0){
+            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            return false;
+        }
+        //保存数据处理,
+        for(var i = 0; i < saveJson.length; i++){
+            if(saveJson[i].confirm == 0 && saveJson[i].isChecked == 0){
+                saveJson.splice(i,1);//删除不需提交的行
+                i--;
+            } else {
+                saveJson[i].isConfirmAccount = saveJson[i].isChecked;
+            }
+        }
+        saveJson = JSON.stringify(saveJson);
     }
-    saveJson = JSON.stringify(saveJson);
     return saveJson;
+};
+
+//对账-翻页暂存数据读取
+//inner用于标识内转转入和转出
+FinancialService.getCheckTempData = function(resultList,tempJson,inner){
+    if(!!tempJson && tempJson.length){
+        for(var i = 0; i < tempJson.length; i++){
+            for(var j = 0; j < resultList.length; j++){
+                if(tempJson[i].id == resultList[j].id){
+                    resultList[j].change = true;
+                    if(inner){
+                        resultList[j].backMoney = tempJson[i].backMoney;
+                    }
+                    resultList[j].settlementMoney = tempJson[i].settlementMoney;
+                    resultList[j].unPayedMoney = tempJson[i].unPayedMoney;
+                    resultList[j].checkRemark = tempJson[i].checkRemark;
+                    resultList[j].isChecked = tempJson[i].isChecked;
+                    break;
+                }
+            }
+        }
+    }
+    return resultList;
 };
 
 //对账-修改但未勾选提醒
@@ -256,16 +321,10 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
     }
 };
 
-
-
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
     $tab.find("input[name=sumPayMoney]").data("money",$tab.find("input[name=sumPayMoney]").val());
-    $tab.on('focusin', 'input[name="payMoney"]',function(){
-        if(!$(this).data("oldVal")){
-            $(this).data("oldVal",$(this).val());
-        }
-    }).on("change", 'input[name="payMoney"]', function(){
+    $tab.on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
             $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);
@@ -364,7 +423,12 @@ FinancialService.isClearSave = function($tab,rule){
         if (sumListMoney === undefined) {  // 未修改付款的时候，直接读取
             sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
         }
-    if(sumPayMoney != sumListMoney){
+    console.log("sumPayMoney:" + sumPayMoney);
+    console.log("sumListMoney:" + sumListMoney);
+    console.log(typeof sumPayMoney);
+    console.log(typeof sumListMoney);
+    console.log(Tools.Math.isFloatEqual(sumPayMoney,sumListMoney));
+    if(!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };
@@ -554,7 +618,7 @@ function isAllChecked(checkboxList){
 /**
  * 财务校验方法
  * 使用方法：var rule = new FinRule(0);
- * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款
+ * @param {int} type 0: 对账、1：付款、2：自动下账；3：财务收付款、4：收款、6：导游和客户对账
  */ 
 function FinRule(type) {
     this.type = type;
@@ -664,6 +728,17 @@ FinRule.prototype.check = function($obj) {
                     ]
                 }
             ]);
+        case 6:  // 导游和客户/内转转入/内转转出对账
+            return $obj.formValidate([
+                {   //结算金额
+                    $ele: $obj.find('input[name=settlementMoney]'),
+                    rules: [
+                        {
+                            type: 'float',
+                            errMsg: '请输入数字'
+                        }
+                    ]
+                }]);
         default:
             return false;
     }

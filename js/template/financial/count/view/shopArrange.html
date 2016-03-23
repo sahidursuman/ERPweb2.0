@@ -73,9 +73,14 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" />
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                {{if tripPlan.billStatus == -1}}&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDel">删除</a>{{/if}}
+               &nbsp;&nbsp;
+               {{if arrange.incomeStatus == 0}}
+                   <a href="javascript:void(0)" class="T-shopArrDel">删除</a>
+               {{else}}
+                   <span style="color:#bbb;">删除</span>
+               {{/if}}
                 </td>
                 {{/if}}
             {{/each}}
@@ -98,7 +103,7 @@
 
                     {{else}}{{itemSet.name}}
                     
-                    {{if index==1}}</a>
+                    {{if index==1 && arrange.isConfirmAccount == 0}}
                         <button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
                     {{/if}}
                     </span>
@@ -126,17 +131,27 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> &nbsp;&nbsp;<span style="color:#bbb;margin-left:6px;">删除</span>
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
                 </td></tr>
                 {{/if}}
             {{/each}}
             {{/if}}
         {{/if}}
+        <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
+            <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;">导佣合计：</td>
+            <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span>&nbsp;&nbsp;</td>
+            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+        </tr>
         {{/each}}  
         {{/each}}
         {{/if}}
         {{/each}}
+        
         </tbody>
     </table>
 
