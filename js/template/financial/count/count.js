@@ -796,7 +796,7 @@ define(function(require, exports){
 		$guideObj.find('input[type=text]').off('change').on('change',function(){
 			var $that = $(this);
 				tagName = $that.attr('name');
-			if (tagName !='remark')) {
+			if (tagName !='remark') {
 				Count.calculateCost($that);
 				//计算金额
 				Count.autoGuideSum($that,$obj);
