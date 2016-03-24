@@ -374,6 +374,7 @@ define(function(require, exports) {
         $tab.find(".T-cancel-auto").off().on("click",function(){
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
+            $tab.data('isEdited',false);
             args.isAutoPay = 0;
             hotel.hotelClear(args,$tab);
         });
