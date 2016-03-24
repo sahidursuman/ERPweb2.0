@@ -1557,12 +1557,23 @@ define(function(require, exports){
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
 
-		Count.totalRebeatMoney($obj,$parentObj);
+		
 		var $tr = $obj.closest('tr');
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
 		var shopArrangeId = $tr.attr('itemsId');
+		
+		if(!!shopArrangeId){
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				Count.delArrangeData(shopArrangeId,'shopItem',removeItem);
+			});
+		}else{
+			removeItem();
+		}
+		
+		Count.autoShopSum($obj,$parentObj);
 		function removeItem (){
+			Count.totalRebeatMoney($obj,$parentObj);
 			for(var i = 0; i<$prev.length;i++){
 				var tdLen = $prev.eq(i).children('td').length;
 				if(tdLen>td_cnt){
@@ -1574,16 +1585,6 @@ define(function(require, exports){
 				}
 			};
 		};
-		if(!!shopArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,'shopItem',removeItem);
-			});
-		}else{
-			removeItem();
-		}
-		
-		Count.autoShopSum($obj,$parentObj);
-		
 
 	};
 	//删除新增的购物安排
