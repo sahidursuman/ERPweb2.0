@@ -338,6 +338,8 @@ define(function(require, exports) {
             .on(SWITCH_TAB_BIND_EVENT, function() {
                 if(!type){
                     FinGuide.checkTemp = false;
+                } else {
+                    FinGuide.payingJson = false;
                 }
                 FinGuide.initOperationModule($tab.data('next'),type,$tab);
             })
@@ -353,6 +355,8 @@ define(function(require, exports) {
             .on(CLOSE_TAB_SAVE_NO, function(event) {
                 if(!type){
                     FinGuide.checkTemp = false;
+                } else {
+                    FinGuide.payingJson = false;
                 }
             });
 
@@ -534,13 +538,11 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
-                    FinGuide.payingJson = [];
+                    FinGuide.payingJson = false;
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argsLen === 2) {
                             FinGuide.getList(FinGuide.listPageNo);
                         } else {
-                            console.log("afterSave");
-                            console.log(args);
                             FinGuide.initOperationModule(argsData,1);
                         }
                     })
