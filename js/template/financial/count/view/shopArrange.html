@@ -9,11 +9,11 @@
                 </button>
             </a>
             <span style="color:#000;margin-left:20px;">
-                购物合计：<span class="T-sumShopMoney F-float F-money"></span>
+                购物合计：<span class="T-sumShopMoney F-float F-money">0</span>
                 &nbsp;&nbsp;
-                社佣合计：<span class="T-sumTravelMoney F-float F-money"></span>
+                社佣合计：<span class="T-sumTravelMoney F-float F-money">0</span>
                 &nbsp;&nbsp;
-                导佣合计：<span class="T-sumGuideMoney F-float F-money"></span>
+                导佣合计：<span class="T-sumGuideMoney F-float F-money">0</span>
             </span>
         </h5>
 
@@ -97,17 +97,19 @@
                 {{if editStatus == 1}}
                     <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-               &nbsp;&nbsp;
-               {{if arrange.incomeStatus == 0}}
+                &nbsp;&nbsp;
+                {{if arrange.incomeStatus == 0}}
                    <a href="javascript:void(0)" class="T-shopArrDelAll">删除</a>
-               {{else}}
+                {{else}}
                    <span style="color:#bbb;">删除</span>
-               {{/if}}
+                {{/if}}
                 </td>
                 {{/if}}
             {{/each}}
             {{/if}}
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+            <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}
+            
+            </td>
         </tr>
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
@@ -154,17 +156,19 @@
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> &nbsp;&nbsp;
-                    {{if index == 1}}
-                        <span style="color:#bbb;">删除</span>
-                    {{else}}
-                        {{if arrange.incomeStatus == 0}}
-                           <a href="javascript:void(0)" class="T-shopArrDelItem">删除</a>
-                       {{else}}
-                           <span style="color:#bbb;">删除</span>
-                       {{/if}}
-                    {{/if}}
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> 
+                    
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+                &nbsp;&nbsp;
+                {{if index == 1}}
+                        <span style="color:#bbb;">删除</span>
+                {{else}}
+                    {{if arrange.incomeStatus == 0}}
+                       <a href="javascript:void(0)" class="T-shopArrDelItem">删除</a>
+                    {{else}}
+                       <span style="color:#bbb;">删除</span>
+                    {{/if}}
+                {{/if}}
                 </td></tr>
                 {{/if}}
             {{/each}}

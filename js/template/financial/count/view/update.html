@@ -254,18 +254,20 @@
                             <td><input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
                                 {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
-                                    {{each touristGroup.touristGroupFeeList as touristGroupFee}}
-                                        {{touristGroupFee.name}} ：
-                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                    {{/each}}
-                                    {{else}}
-                                    {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
-                                        {{touristGroupFee.name}} ：
-                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                    {{/each}}
-                                {{/if}}<a data-status="1" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
+                                    <a href="#" class="T-viewCostDetail">
+                                        {{each touristGroup.touristGroupFeeList as touristGroupFee}}
+                                            {{touristGroupFee.name}} ：
+                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                        {{/each}}
+                                        {{else}}
+                                        {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
+                                            {{touristGroupFee.name}} ：
+                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                        {{/each}}
+                                    </a>
+                                {{/if}}<a style="margin-top:5px;" data-status="1" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                             </td>
                         </tr>
                     {{/each}}
