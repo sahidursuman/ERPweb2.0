@@ -165,9 +165,9 @@
         {{if guide != "[]" || guide != null}}
             <tr data-entity-arrangeid={{guide.id}} >
                 <td><input type="radio" name='isAccountGuide' disabled="disabled"  {{if guide.isAccountGuide == 1}} checked="checked" {{/if}}></td>
-                <td>{{guide.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{guide.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{#guide.taskType | getTaskDesc}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.sTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.eTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{#task.tType | getTaskDesc}}{{/each}}</p></td>
                 <td>{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}</td>
                 <td>{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}</td>
                 <td class="F-float F-money">{{guide.price}}</td>
