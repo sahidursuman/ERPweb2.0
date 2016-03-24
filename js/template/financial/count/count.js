@@ -437,9 +437,12 @@ define(function(require, exports){
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
 		$guideObj.find('input[type=text]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			//计算金额
-			Count.autoGuideSum($(this),$obj);
+			var $that = $(this);
+			if ($that.is('[name=remark]')) {
+				Count.calculateCost($that);
+				//计算金额
+				Count.autoGuideSum($that,$obj);
+			}
 
 		});
 		//购物处理--计算、新增
@@ -790,9 +793,12 @@ define(function(require, exports){
 		//导游数据处理
 		var $guideObj = $listObj.find('.T-count-guide');
 		$guideObj.find('input[type=text]').off('change').on('change',function(){
-			Count.calculateCost($(this));
-			//计算金额
-			Count.autoGuideSum($(this),$obj);
+			var $that = $(this);
+			if (!$that.is('[name=remark]')) {
+				Count.calculateCost($that);
+				//计算金额
+				Count.autoGuideSum($that,$obj);
+			}
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
