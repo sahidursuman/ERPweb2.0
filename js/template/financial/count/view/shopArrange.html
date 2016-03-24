@@ -94,9 +94,7 @@
                 </td>
 
                 <td >
-                {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+                    <input name="billRemark" type="text" value="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}" maxlength="1000"/>
                 &nbsp;&nbsp;
                 {{if arrange.incomeStatus == 0}}
                    <a href="javascript:void(0)" class="T-shopArrDelAll">删除</a>
@@ -155,10 +153,7 @@
                 {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
-                {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> 
-                    
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+                    <input name="billRemark" type="text" value="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}" maxlength="1000"/> 
                 &nbsp;&nbsp;
                 {{if index == 1}}
                         <span style="color:#bbb;">删除</span>
