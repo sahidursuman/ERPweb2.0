@@ -41,31 +41,31 @@
 				<tbody class="T-accObjList">
 				{{each result as result}}
 					<tr data-applyId="{{result.applyId}}"> 
-						<td>{{result.applyNumber}}</td>
-						<td>{{result.name}}</td>
-						<td>{{result.mobileNumber}}</td>
-						<td>{{result.applyMoney}}</td>
-						<td>{{result.approvedMoney}}</td>
-						<td>{{result.createTime}}</td>
-						<td>{{result.examineDate}}</td>
-						<td>
-							{{ if result.applyStatus==0 }}
-								未审核
-							{{else if result.applyStatus==1 }}
-								已通过
-							{{else if result.applyStatus==2 }}
-								未通过
-						{{/if}}
-						</td>
-						<td>
-							<div class="hidden-sm hidden-xs btn-group">
+					<td>{{result.applyNumber}}</td>
+					<td>{{result.name}}</td>
+					<td>{{result.mobileNumber}}</td>
+					<td>{{result.applyMoney}}</td>
+					<td>{{result.approvedMoney}}</td>
+					<td>{{result.createTime}}</td>
+					<td>{{result.examineDate}}</td>
+					<td>
+						{{ if result.applyStatus==0 }}
+						待审核
+						{{else if result.applyStatus==1 }}
+						已通过
+						{{else if result.applyStatus==2 }}
+						未通过
+					{{/if}}
+					</td>
+					<td>
+						<div class="hidden-sm hidden-xs btn-group">
 							<a class="cursor T-option T-update" title="编辑">
-									编辑
-								</a>
-							</div>
-						</td>
+								编辑
+							</a>
+						</div>
+					</td>
 					</tr>
-					{{/each}}
+				{{/each}}
 				</tbody>
 			</table>
 
