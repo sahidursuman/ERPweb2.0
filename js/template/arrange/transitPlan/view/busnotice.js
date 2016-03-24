@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":4,"md5":"2c51eac0b7e9c3895f08506f98949f66"}*/
+/*TMODJS:{"debug":true,"version":1,"md5":"2c51eac0b7e9c3895f08506f98949f66"}*/
 define(function(require) {
-    return require("../../../template")("arrange/transitPlan/view/notice", function($data, $filename) {
+    return require("../../../template")("arrange/transitPlan/view/busnotice", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), receiveBusStatus = $data.receiveBusStatus, sendBusStatus = $data.sendBusStatus, $out = "";
             return $out += '<div class="T-transitNotice col-xs-12 globalAdd"> <div class="form-group mar-t-20"> <label class="pos-rel mar-l-10"><input type="checkbox" name="tourist" class="ace T-checked" checked><span class="lbl">中转</span></label> <label class="pos-rel mar-l-10"><input type="checkbox" name="bus" class="ace T-checked" ', 
