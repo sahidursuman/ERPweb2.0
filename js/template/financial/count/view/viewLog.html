@@ -16,7 +16,7 @@
                 <tr>
                 	<td>{{index+1}}</td>
                 	<td>{{log.operationTime}}</td>
-                	<td>{{log.user.userName}}({{log.user.realName}})</td>
+                	<td>{{if !!log.user}}{{log.user.userName}}({{log.user.realName}}){{else}} -- {{/if}}</td>
                 	<td>{{log.type | getLogTypeText}}</td>
                 	<td>{{log.operateJson.info.message}}<span json="{{log.json}}"></span></td>
                 </tr>
