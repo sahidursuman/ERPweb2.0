@@ -369,7 +369,6 @@ FinancialService.getTempDate = function(resultList,tempJson){
 
 //付款-保存(暂存)数据组装，数组，需转换为json
 FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
-    console.log(clearSaveJson);
     $tr = $tab.find(".T-clearList tr")
     $tr.each(function(){
         var $this = $(this);
@@ -379,28 +378,33 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 
             clearSaveJson = clearSaveJson || [];
             var id = $this.data("id"),i = 0,
-                len = clearSaveJson.length;
+                len = clearSaveJson.length,
+                payMoney = $this.find("input[name=payMoney]").val();
 
             //已有数据更新
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
-                    clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                    clearSaveJson[i].payRemark = $this.find("[name=payRemark]").val();
+                    if(!payMoney){
+                        clearSaveJson.splice(i,1);//删除不需提交的行
+                        i--;
+                    } else {
+                        clearSaveJson[i].payMoney = payMoney;
+                        clearSaveJson[i].payRemark = $this.find("[name=payRemark]").val();
+                    }
                     return;
                 }
             }
             //新数据
-            if(i >= len){
+            if(i >= len && payMoney){
                 var clearTemp = {
                     id : $this.data("id"),
-                    payMoney : $this.find("input[name=payMoney]").val(),
+                    payMoney : payMoney,
                     payRemark : $this.find("[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
             }
         }
     });
-
     return clearSaveJson;
 };
 
