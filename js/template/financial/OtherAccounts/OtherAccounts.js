@@ -411,7 +411,7 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     //暂存数据读取
                     if(OtherAccounts.saveJson){
-                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
+                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney || 0;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
                         data.sumPayRemark = OtherAccounts.saveJson.sumPayRemark;
                         data.bankNo = OtherAccounts.saveJson.bankNo;

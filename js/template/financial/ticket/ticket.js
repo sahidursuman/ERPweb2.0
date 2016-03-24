@@ -507,6 +507,7 @@ define(function(require, exports) {
 		$tab.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			args.pageNo = 0;
+			args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
 			Ticket.clearingList(args,$tab);
 		});
 		$tab.find('.T-records').on('click', function(event){

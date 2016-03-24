@@ -438,7 +438,7 @@ define(function(require, exports) {
 		if(!!$tab && $tab.length){
 			var args = FinancialService.autoPayJson(Replace.balanceId, $tab, new FinRule(2), 1);
 			if(!args)return;
-			var project = $tab.find(".T-search-project").val(),
+			var project = $tab.find(".T-search-project").val().split(', '),
 				bus, hotel, scenic, ticket;
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
