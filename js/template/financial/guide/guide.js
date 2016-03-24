@@ -655,6 +655,8 @@ define(function(require, exports) {
                             data.list = FinancialService.getCheckTempData(data.list,FinGuide.checkTemp);
                             html = filterUnAuth(checkingTableTemplate(data));
                             if(FinGuide.checkTemp && FinGuide.checkTemp.length > 0){
+                                $tab.find('.T-stMoney').text(FinGuide.checkTemp.sumSttlementMoney);
+                                $tab.find('.T-unpayMoney').text(FinGuide.checkTemp.sumUnPayedMoney);
                                 $tab.data('isEdited',true);
                             }
                         }

@@ -228,7 +228,11 @@ define(function(require, exports) {
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
-				data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
+				if(Replace.checkTemp && Replace.checkTemp.length > 0){
+                    data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
+                    data.totalList.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
+                    data.totalList.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                }
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');

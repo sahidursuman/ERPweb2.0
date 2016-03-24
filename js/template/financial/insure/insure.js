@@ -161,7 +161,11 @@ define(function(require, exports) {
 
 					var fiList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.isGuidePay(fiList);
-                    data.financialInsuranceList = FinancialService.getCheckTempData(data.financialInsuranceList,Insure.checkTemp);
+                    if(Insure.checkTemp && Insure.checkTemp.length > 0){
+                        data.financialInsuranceList = FinancialService.getCheckTempData(data.financialInsuranceList,Insure.checkTemp);
+                        data.sumSettlementMoney = Insure.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = Insure.checkTemp.sumUnPayedMoney;
+                    }
                     data.insuranceName = args.insuranceName;
                     data.insuranceId = args.insuranceId;
 					var html = insuranceChecking(data);

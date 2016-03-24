@@ -238,7 +238,11 @@ define(function(require, exports) {
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
-                    data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
+                    if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
+                        data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
+                        data.totalList.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
+                    };
+                    
                     data.name = args.shopName;
                     template = shopCheckingTemplate;
                     title = '购物对账';

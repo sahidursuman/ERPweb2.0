@@ -238,6 +238,9 @@ define(function(require, exports) {
                                     return false;
                                 } else {
                                     FinTransIn.checkTemp = temp;
+                                    FinTransIn.checkTemp.backMoney = FinTransIn.$checkTab.find('.T-sumBackMoney').text();
+                                    FinTransIn.checkTemp.settlementMoney = FinTransIn.$checkTab.find('.T-sumSettlementMoney').text();
+                                    FinTransIn.checkTemp.unIncomeMoney = FinTransIn.$checkTab.find('.T-sumUnReceivedMoney').text()
                                     FinTransIn.$checkTab.data('isEdited',false);
                                     FinTransIn.getCheckList(args,null,1);
                                 }
@@ -483,6 +486,11 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+                    if(FinTransIn.checkTemp && FinTransIn.checkTemp.length > 0){
+                        data.backMoney = FinTransIn.checkTemp.backMoney;
+                        data.settlementMoney = FinTransIn.checkTemp.settlementMoney;
+                        data.unIncomeMoney = FinTransIn.checkTemp.unIncomeMoney;
+                    }
 					$tab.find('.T-sumTransCount').text(data.totalCount);
 					$tab.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
 					$tab.find('.T-sumPayedMoney').text(data.getedMoney);

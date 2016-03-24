@@ -152,7 +152,13 @@ define(function(require, exports) {
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
-                            dataTable.financialOtherListData = FinancialService.getCheckTempData(dataTable.financialOtherDetailsList,OtherAccounts.checkTemp);
+
+                            if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
+                                dataTable.financialOtherListData = FinancialService.getCheckTempData(dataTable.financialOtherDetailsList,OtherAccounts.checkTemp);
+                                dataTable.statistics.sumSettlementMoney = OtherAccounts.checkTemp.sumSttlementMoney;
+                                dataTable.statistics.sumUnPayedMoney = OtherAccounts.checkTemp.sumUnPayedMoney;
+                            }
+                            
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");

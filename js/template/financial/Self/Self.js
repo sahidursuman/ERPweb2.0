@@ -704,6 +704,10 @@ define(function(require, exports) {
                         unPayedMoney : 0
                     };
                 }
+                if(Self.checkTemp && Self.checkTemp.length > 0){
+                    sumData.settlementMoney = Self.checkTemp.sumSttlementMoney;
+                    sumData.unPayedMoney = Self.checkTemp.sumUnPayedMoney;
+                }
             }
         });
         return sumData;

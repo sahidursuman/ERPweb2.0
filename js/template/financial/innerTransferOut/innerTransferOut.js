@@ -158,6 +158,11 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					data.searchParam = args;
+					if(InnerTransferOut.checkTemp && InnerTransferOut.checkTemp.length > 0){
+						data.sumData.sumPunishMoney = InnerTransferOut.checkTemp.sumPunishMoney;
+						data.sumData.sumSettlementMoney = InnerTransferOut.checkTemp.sumSettlementMoney;
+						data.sumData.sumUnPayedMoney = InnerTransferOut.checkTemp.sumUnPayedMoney;
+					}
 					var html = checkTemplate(data);
 				    if(Tools.addTab(checkId,'内转转出对账',html)){
 						var $checkId = $("#tab-"+checkId+"-content");
@@ -255,6 +260,9 @@ define(function(require,exports) {
 	                                    return false;
 	                                } else {
 	                                    InnerTransferOut.checkTemp = temp;
+	                                    InnerTransferOut.checkTemp.sumPunishMoney = InnerTransferOut.$checkTab.find('.T-sumBackMoney').text();
+	                                    InnerTransferOut.checkTemp.sumSettlementMoney = InnerTransferOut.$checkTab.find('.T-sumSettlementMoney').text();
+	                                    InnerTransferOut.checkTemp.sumUnPayedMoney = InnerTransferOut.$checkTab.find('.T-sumUnReceivedMoney').text();
 	                                    InnerTransferOut.chenking(args);
 	                                }
                                 }

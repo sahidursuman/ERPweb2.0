@@ -153,7 +153,11 @@ define(function(require, exports) {
                     var fhList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(fhList);
                     data.scenicName = args.scenicName;
-                    data.financialScenicListData = FinancialService.getCheckTempData(data.financialScenicListData,scenic.checkTemp);
+                    if(scenic.checkTemp && scenic.checkTemp.length > 0){
+                        data.financialScenicListData = FinancialService.getCheckTempData(data.financialScenicListData,scenic.checkTemp);
+                        data.sumSettlementMoney = scenic.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = scenic.checkTemp.sumUnPayedMoney;
+                    }
                     var html = scenicChecking(data);
                     
                     var validator;

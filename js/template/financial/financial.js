@@ -222,6 +222,9 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
             }
         }
         saveJson = JSON.stringify(saveJson);
+    } else {
+       saveJson.sumSttlementMoney = $tab.find('.T-stMoney').text();
+       saveJson.sumUnPayedMoney = $tab.find('.T-unpayMoney').text();
     }
     return saveJson;
 };
@@ -896,6 +899,10 @@ FinancialService.saveJson_checking = function($tab,tempJson,rule,isSave){
             }
         }
         saveJson = JSON.stringify(saveJson);
+    } else {
+        saveJson.sumBackMoney = $tab.find('.T-sumBackMoney').text();
+        saveJson.sumSettlementMoney = $tab.find('.T-sumSettlementMoney').text();
+        saveJson.sumUnReceivedMoney = $tab.find('.T-sumUnReceivedMoney').text();
     }
     return saveJson;
 };
