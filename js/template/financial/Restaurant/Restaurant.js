@@ -155,7 +155,11 @@ define(function(require, exports) {
                     var frList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.isGuidePay(frList);
                     data.restaurantName = args.restaurantName;
-                    data.financialRestaurantList = FinancialService.getCheckTempData(data.financialRestaurantList,restaurant.checkTemp);
+                    if(restaurant.checkTemp && restaurant.checkTemp.length > 0){
+                        data.financialRestaurantList = FinancialService.getCheckTempData(data.financialRestaurantList,restaurant.checkTemp);
+                        data.sumSettlementMoney = restaurant.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = restaurant.checkTemp.sumUnPayedMoney;
+                    }
                     var html = restaurantChecking(data);
                     
                     // 初始化页面

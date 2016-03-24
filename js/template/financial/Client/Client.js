@@ -206,7 +206,6 @@ define(function(require, exports) {
                     resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
-                resultList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
                 data.customerAccountList = resultList; 
                 var title = '客户对账', tab_id;
                 if (isView) {
@@ -216,6 +215,12 @@ define(function(require, exports) {
                 }else {
                     data.view = '';
                     tab_id = 'financial_Client_checking';
+                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                        data.customerAccountList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
+                        data.totalList.sumBackMoney = Client.checkTemp.sumBackMoney;
+                        data.totalList.sumSettlementMoney = Client.checkTemp.sumSettlementMoney;
+                        data.totalList.sumUnReceivedMoney = Client.checkTemp.sumUnReceivedMoney;
+                    }
                 }
                 if (Tools.addTab(tab_id, title, ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ tab_id + '-content').data('id', args.fromPartnerAgencyId);
@@ -791,9 +796,6 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
-        for(var i = 0; i < JsonStr.length; i++){
-            JsonStr[i].payMoney = JsonStr[i].temporaryIncomeMoney;
-        }
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),

@@ -152,13 +152,21 @@ define(function(require, exports) {
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
-                            data.financialOtherListData = FinancialService.getCheckTempData(data.financialOtherDetailsList,OtherAccounts.checkTemp);
+
+                            if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
+                                dataTable.financialOtherListData = FinancialService.getCheckTempData(dataTable.financialOtherDetailsList,OtherAccounts.checkTemp);
+                                dataTable.statistics.sumSettlementMoney = OtherAccounts.checkTemp.sumSttlementMoney;
+                                dataTable.statistics.sumUnPayedMoney = OtherAccounts.checkTemp.sumUnPayedMoney;
+                            }
+                            
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
                                     if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
                                         OtherAccounts.$checkTab.data('isEdited',true);
                                     }
+                                    //取消对账权限过滤
+                                    checkDisabled(dataTable.financialOtherDetailsList,OtherAccounts.$checkTab.find(".T-checkTr"),OtherAccounts.$checkTab.find(".T-checkList").data("right"));
                                     OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);
                                 } else{
                                     OtherAccounts.$checkTab.data('next',args);
@@ -571,6 +579,7 @@ define(function(require, exports) {
                     endAccountTime: endAccountTime,
                     info: $tab.find('input[name=creator]').val(),
                     payType: $tab.find('select[name=sumPayType]').val(),
+                    accountStatus : args.accountStatus
                 };
                 FinancialService.autoPayConfirm(startAccountTime,endAccountTime,function() {
                     $.ajax({

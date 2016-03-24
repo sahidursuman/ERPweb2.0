@@ -565,7 +565,8 @@ define(function(require, exports) {
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
-                payType: $tab.find('select[name=sumPayType]').val()
+                payType: $tab.find('select[name=sumPayType]').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             };
 
             if (args.lineProductName === '全部') {
@@ -654,6 +655,8 @@ define(function(require, exports) {
                             data.list = FinancialService.getCheckTempData(data.list,FinGuide.checkTemp);
                             html = filterUnAuth(checkingTableTemplate(data));
                             if(FinGuide.checkTemp && FinGuide.checkTemp.length > 0){
+                                $tab.find('.T-stMoney').text(FinGuide.checkTemp.sumSttlementMoney);
+                                $tab.find('.T-unpayMoney').text(FinGuide.checkTemp.sumUnPayedMoney);
                                 $tab.data('isEdited',true);
                             }
                         }
