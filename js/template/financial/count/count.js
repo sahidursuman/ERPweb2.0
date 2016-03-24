@@ -4561,10 +4561,10 @@ define(function(require, exports){
 					payedMoney:$(this).find('input[name=hasPayedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
 					travelAgencyRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
-					travelAgencyRebateMoney:$(this).find('.travelAgencyRebateMoney').text(),
+					travelAgencyRebateMoney:$(this).find('[name=travelAgencyRebateMoney]').val(),
 					guideRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=guideRate]').val())/100),
 					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
-					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
+					guideRebateMoney:$(this).find('[name=guideRebateMoney]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
 					realPayType:$(this).find('[name=payType]').val(),
 					needIncomeCount:$(this).find('input[name=needCount]').val()
