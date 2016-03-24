@@ -360,14 +360,19 @@ FinancialService.updateSumPayMoney = function($tab,rule){
 };
 
 //付款-翻页暂存数据读取
-FinancialService.getTempDate = function(resultList,tempJson){
+FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide标识是否为导游付款
+    console.log(tempJson);
     if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
             for(var j = 0; j < resultList.length; j++){
                 var id = resultList[j].id;
                 if(tempId == id){
-                    resultList[j].payMoney = tempJson[i].payMoney;
+                    if(isGuide){
+                        resultList[j].payMoney2 = tempJson[i].payMoney;
+                    } else {
+                        resultList[j].payMoney = tempJson[i].payMoney;
+                    }
                     resultList[j].payRemark = tempJson[i].payRemark;
                 }
             }

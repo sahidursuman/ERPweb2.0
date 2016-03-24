@@ -411,7 +411,7 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     //暂存数据读取
                     if(OtherAccounts.saveJson){
-                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
+                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney || 0;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
                         data.sumPayRemark = OtherAccounts.saveJson.sumPayRemark;
                         data.bankNo = OtherAccounts.saveJson.bankNo;
@@ -420,6 +420,7 @@ define(function(require, exports) {
                         data.billTime = OtherAccounts.saveJson.billTime;
 
                         data.financialOtherDetailsList = FinancialService.getTempDate(data.financialOtherDetailsList,OtherAccounts.saveJson.autoPayList);
+                        console.log(data.financialOtherDetailsList);
                     }
                     data.financialOtherDetailsList = FinancialService.isGuidePay(data.financialOtherDetailsList);
                     //财务入口调用
@@ -453,20 +454,19 @@ define(function(require, exports) {
                                     curr: (args.pageNo + 1),
                                     jump: function(obj, first) {
                                         if (!first) {
-                                            var tempJson = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
-                                            OtherAccounts.saveJson.autoPayList = tempJson;
+                                            OtherAccounts.saveJson.autoPayList = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
+                                            console.log("OtherAccounts.saveJson.autoPayList");
+                                            console.log(OtherAccounts.saveJson.autoPayList);
                                             var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()),
                                                 sumPayType = parseFloat(OtherAccounts.$clearTab.find('select[name=sumPayType]').val()),
-                                                sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumRemark]').val();
-                                            OtherAccounts.saveJson = {
-                                                sumPayMoney: sumPayMoney,
-                                                sumPayType: sumPayType,
-                                                sumPayRemark: sumPayRemark,
-                                                bankNo : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-number]').val() : OtherAccounts.$clearTab.find('input[name=card-number]').val(),
-                                                bankId : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-id]').val() : OtherAccounts.$clearTab.find('input[name=card-id]').val(),
-                                                voucher : OtherAccounts.$clearTab.find('input[name=credentials-number]').val(),
-                                                billTime : OtherAccounts.$clearTab.find('input[name=tally-date]').val()
-                                            }
+                                                sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumPayRemark]').val();
+                                            OtherAccounts.saveJson.sumPayMoney = sumPayMoney;
+                                            OtherAccounts.saveJson.sumPayType = sumPayType;
+                                            OtherAccounts.saveJson.sumPayRemark = sumPayRemark;
+                                            OtherAccounts.saveJson.bankNo = (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-number]').val() : OtherAccounts.$clearTab.find('input[name=card-number]').val();
+                                            OtherAccounts.saveJson.bankId = (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-id]').val() : OtherAccounts.$clearTab.find('input[name=card-id]').val();
+                                            OtherAccounts.saveJson.voucher = OtherAccounts.$clearTab.find('input[name=credentials-number]').val();
+                                            OtherAccounts.saveJson.billTime = OtherAccounts.$clearTab.find('input[name=tally-date]').val();
                                             OtherAccounts.$clearTab.data('isEdited',false);
                                             args.pageNo = obj.curr - 1;
                                             OtherAccounts.AccountsPayment(args);
@@ -607,6 +607,8 @@ define(function(require, exports) {
                     });
                 });
             } else {
+                $tab.data('isEdited', false);
+                OtherAccounts.saveJson = {};
                 OtherAccounts.AccountsPayment(args,$tab);
             }
         });
