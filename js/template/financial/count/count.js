@@ -236,6 +236,10 @@ define(function(require, exports){
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
+	                //查看团款明细说明
+					$detailId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 	                //绑定自动计算事件
 	                Count.detailEvents($detailId);
 				}
@@ -408,6 +412,10 @@ define(function(require, exports){
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
+					//查看团款明细说明
+					$ReimbursementId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
 				}
@@ -746,17 +754,15 @@ define(function(require, exports){
 	};
 	//查看团款明细说明 viewCostRemarkTemplate
 	Count.viewCostDetail = function(data){
-		console.log(data);
 		var tmp = {
 			touristGroupFeeList:data[0].touristGroupFeeList
 		};
-		console.log(tmp);
 		var html = viewCostRemarkTemplate(tmp);
 		layer.open({
 		    type: 1,
 		    title:"费用详情",
 		    skin: 'layui-layer-rim', //加上边框
-		    area: ['1000px', '500px'], //宽高
+		    area: '1000px', //宽高
 		    zIndex:1028,
 		    content: html
 		});
