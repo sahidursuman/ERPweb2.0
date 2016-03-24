@@ -607,6 +607,8 @@ define(function(require, exports) {
                     });
                 });
             } else {
+                $tab.data('isEdited', false);
+                OtherAccounts.saveJson = {};
                 OtherAccounts.AccountsPayment(args,$tab);
             }
         });
