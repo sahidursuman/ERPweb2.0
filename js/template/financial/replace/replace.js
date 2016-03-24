@@ -235,6 +235,8 @@ define(function(require, exports) {
 					if(Replace.checkTemp && Replace.checkTemp.length > 0){
                         Replace.$checkingTab.data('isEdited',true);
                     }
+                    //取消对账权限过滤
+                    checkDisabled(data.bookinAccountList,Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
 					Replace.CM_event(Replace.$checkingTab,args,true);
 				} else {
 					Replace.$checkingTab.data('next', args)

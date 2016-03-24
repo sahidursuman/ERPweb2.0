@@ -159,6 +159,8 @@ define(function(require, exports) {
                                     if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
                                         OtherAccounts.$checkTab.data('isEdited',true);
                                     }
+                                    //取消对账权限过滤
+                                    checkDisabled(dataTable.financialOtherDetailsList,OtherAccounts.$checkTab.find(".T-checkTr"),OtherAccounts.$checkTab.find(".T-checkList").data("right"));
                                     OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);
                                 } else{
                                     OtherAccounts.$checkTab.data('next',args);

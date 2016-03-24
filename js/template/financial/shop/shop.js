@@ -259,6 +259,8 @@ define(function(require, exports) {
                         if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
                         };
+                        //取消对账权限过滤
+                        checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
                         FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
                     FinShop.initOperationEvent($theTab,args,type);
