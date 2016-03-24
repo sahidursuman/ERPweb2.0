@@ -625,7 +625,9 @@ define(function(require, exports) {
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val(),
-                accountStatus : $tab.find('input[name=accountStatus]').val()
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                sortType : "accountTime",
+                order : "asc"
             };
 
             $.ajax({
