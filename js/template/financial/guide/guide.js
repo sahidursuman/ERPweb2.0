@@ -565,7 +565,8 @@ define(function(require, exports) {
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
-                payType: $tab.find('select[name=sumPayType]').val()
+                payType: $tab.find('select[name=sumPayType]').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             };
 
             if (args.lineProductName === '全部') {

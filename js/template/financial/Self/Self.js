@@ -354,7 +354,8 @@ define(function(require, exports) {
                         payRemark : $tab.find('input[name=sumPayRemark]').val(),
                         accountTimeStart :startDate,
                         accountTimeEnd : endDate,
-                        tripInfo : $tab.find('select[name=tripInfo]').val()
+                        tripInfo : $tab.find('select[name=tripInfo]').val(),
+                        accountStatus : args.accountStatus
                     },
                     success:function(data){
                         if(showDialog(data)){

@@ -571,6 +571,7 @@ define(function(require, exports) {
                     endAccountTime: endAccountTime,
                     info: $tab.find('input[name=creator]').val(),
                     payType: $tab.find('select[name=sumPayType]').val(),
+                    accountStatus : args.accountStatus
                 };
                 FinancialService.autoPayConfirm(startAccountTime,endAccountTime,function() {
                     $.ajax({

@@ -457,7 +457,8 @@ define(function(require, exports) {
                 ticketOrderStatus : ticket,
                 sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val(),
                 startDate : $tab.find('.T-search-start-date').val(),
-                endDate : $tab.find('.T-search-end-date').val()
+                endDate : $tab.find('.T-search-end-date').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             }
 			var $datepicker = $tab.find('.T-search-area .datepicker');
             FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){

@@ -328,7 +328,7 @@ define(function(require,exports) {
         	InnerTransferOut.viewAccountDetail(id);
         });
         //查看付款明细事件
-        $tab.on('click',".T-viewDetail",function(){
+        $tab.find(".T-viewDetail").off().on("click",function(){
         	var id = $(this).closest('tr').data('id');
         	InnerTransferOut.viewPayedDetail(id);
         });

@@ -564,6 +564,7 @@ define(function(require, exports) {
             args.shopId = args.id;
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
             args.tripMessage = $tab.find('.T-search-trip').val();
+            args.accountStatus = $tab.find('input[name=accountStatus]').val();
             delete args.id;
             delete args.sumCurrentPayMoney;
 
