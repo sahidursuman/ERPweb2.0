@@ -762,6 +762,7 @@ FinancialService.updateMoney_checking = function($tab,minTdLen){
         while($mainTr.children('td').length <= minTdLen){
             $mainTr = $mainTr.prev();
         }
+        $mainTr.data('change',true);
 
         var backMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
             settlementMoney = $tr.find('.T-settlementMoney').text() *1,
@@ -903,10 +904,6 @@ FinancialService.getCheckTempData_checking = function(resultList,tempJson){
                     for(var k = 0; k < tempJson[i].detailList.length; k++){
                         var detailList = tempJson[i].detailList[k];
                         if(detailList.trans){
-                        console.log("detailList");
-                        console.log(detailList);
-                        console.log(detailList.backMoney);
-                        console.log(tempJson[i].detailList[k].backMoney);
                             resultList[j].detailList.transitFee.backMoney = detailList.backMoney;
                             resultList[j].detailList.transitFee.settlementMoney = detailList.settlementMoney;
                             otherFeeIndex = 0;
