@@ -1469,7 +1469,8 @@ define(function(require, exports){
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td rowspan="2" class="hidden"><input type="text" name="currInCome" class="w-80"/></td>'+
-		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:14px;" class="T-shopArrDelAll">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/></td>'+
+		'<td rowspan="2"><a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
 		'<tr class="noSumRate">'+
@@ -1480,7 +1481,7 @@ define(function(require, exports){
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="billRemark"/><span style="margin-left:14px;color:#bbb;">删除</span></td>'+
+		'<td><input type="text" name="billRemark"/></td>'+
 		'</tr>'+
 		'<tr class="sumMoney">'+
 			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
@@ -1489,7 +1490,8 @@ define(function(require, exports){
 			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
 			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2"></td>'+
+			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
+			'<td style="font-weight: bold;text-align:right;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1525,7 +1527,7 @@ define(function(require, exports){
 			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="guideRate" class="w-50"></td>'+
 			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
-			'<td><input type="text" name="billRemark"/><span style="margin-left:14px;color:#bbb;">删除</span></td>'+
+			'<td><input type="text" name="billRemark"/></td>'+
 			'</tr>';
 			
 			if($next.length>1){
@@ -1796,7 +1798,7 @@ define(function(require, exports){
 				sumGuideMoney = 0;//计算导佣合计
 				$preTr = $thisTr.prevAll(),
 				$nextTr = $thisTr.nextAll();
-				if($obj.hasClass('T-shopArrDelItem')){
+				if($obj.hasClass('T-shopArrDelItem') || $thisTr.hasClass('noSumRate')){
 					sumMoney = 0;//计算总金额
 					sumTravelMoney = 0;//计算社佣合计
 					sumGuideMoney = 0;//计算导佣合计
@@ -1841,6 +1843,12 @@ define(function(require, exports){
 			for(var i = 0;i<$nextTr.length;i++){
 				var $that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
+					//计算总金额
+					$that.find('.T-totalMoney').text(sumMoney);
+					$that.find('.T-totalTravelMoney').text(sumTravelMoney);
+					$that.find('.T-totalGuideMoney').text(sumGuideMoney);
+					var totalRateMoney = sumTravelMoney+sumGuideMoney;
+					$that.find('.T-sumRebeMoney').text(totalRateMoney);
 					break;
 				}else{
 					var	$moneyObj = $that.find('[name=consumeMoney]'),
@@ -1862,12 +1870,7 @@ define(function(require, exports){
 					};
 				}
 			};
-			//计算总金额
-			$that.find('.T-totalMoney').text(sumMoney);
-			$that.find('.T-totalTravelMoney').text(sumTravelMoney);
-			$that.find('.T-totalGuideMoney').text(sumGuideMoney);
-			var totalRateMoney = sumTravelMoney+sumGuideMoney;
-			$that.find('.T-sumRebeMoney').text(totalRateMoney);
+			
 			Count.sumShopMoney($parentObj);
 		};
 	};
@@ -4405,8 +4408,8 @@ define(function(require, exports){
 		});
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
-		$tr = $shopObj.find('tr'),
-		$dataTr = $shopObj.find('.oldData');
+		$tr = $shopObj.find('tr').not('.T-noSubmit'),
+		$dataTr = $shopObj.find('.oldData').not('.T-noSubmit');
 		$dataTr.each(function(i){
 			var shopArrange,shopArrangeItemSet = [],$that = $(this),$thatTd_len = $(this).children('td').length;
 			var id = "",shopId = '',whichDay = 1,td_len = $(this).children('td').length;
@@ -4567,10 +4570,10 @@ define(function(require, exports){
 					payedMoney:$(this).find('input[name=hasPayedMoney]').val(),
 					realGuidePayMoney:$(this).find('input[name=guidePayMoney]').val(),
 					travelAgencyRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=travelAgencyRate]').val())/100),
-					travelAgencyRebateMoney:$(this).find('.travelAgencyRebateMoney').text(),
+					travelAgencyRebateMoney:$(this).find('[name=travelAgencyRebateMoney]').val(),
 					guideRate:Count.changeTwoDecimal(parseFloat($(this).find('input[name=guideRate]').val())/100),
 					realGetMoney:$(this).find('input[name=realGetMoney]').val(),
-					guideRebateMoney:$(this).find('.guideRebateMoney').text(),
+					guideRebateMoney:$(this).find('[name=guideRebateMoney]').val(),
 					billRemark:$(this).find('input[name=billRemark]').val(),
 					realPayType:$(this).find('[name=payType]').val(),
 					needIncomeCount:$(this).find('input[name=needCount]').val()

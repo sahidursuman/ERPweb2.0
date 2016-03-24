@@ -26,6 +26,7 @@
             <th class="th-border" colspan="2">导佣</th>
             <th class="th-border hidden" rowspan="2">现收</th>
             <th class="th-border" rowspan="2">导游报账备注</th>
+            <th class="th-border" rowspan="2">操作</th>
             <th class="th-border" rowspan="2">是否对账</th>
         </tr>
         <tr>
@@ -60,7 +61,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -94,17 +95,23 @@
                 </td>
 
                 <td >
-                    <input name="billRemark" type="text" value="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}" maxlength="1000"/>
-                &nbsp;&nbsp;
-                {{if arrange.incomeStatus == 0}}
-                   <a href="javascript:void(0)" class="T-shopArrDelAll">删除</a>
-                {{else}}
-                   <span style="color:#bbb;">删除</span>
-                {{/if}}
+                {{if editStatus == 1}}
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+
                 </td>
                 {{/if}}
             {{/each}}
             {{/if}}
+            
+            <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                {{if arrange.incomeStatus == 0 && arrange.isConfirmAccount == 0}}
+                   <a href="javascript:void(0)" class="T-shopArrDelAll">删除</a>
+                {{else}}
+                   <span style="color:#bbb;">删除</span>
+                {{/if}}
+            </td>
+
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}
             
             </td>
@@ -113,7 +120,7 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
-            {{if index == 1}}class="noSumRate"{{/if}}>
+            {{if index == 1}}class="noSumRate"{{/if }} {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
                 <td>
                 <span class="span_shopPolicy">
                     <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
@@ -131,7 +138,14 @@
                     {{/if}}
                     </span>
                     {{/if}}
-
+                    &nbsp;&nbsp;
+                    {{if index > 1}}
+                        {{if arrange.incomeStatus == 0 && arrange.isConfirmAccount == 0}}
+                           &nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-shopArrDelItem"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>
+                        {{else}}
+                           &nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>
+                        {{/if}}
+                    {{/if}}
                 </td>
 
                 <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
@@ -153,17 +167,11 @@
                 {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
-                    <input name="billRemark" type="text" value="{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}" maxlength="1000"/> 
-                &nbsp;&nbsp;
-                {{if index == 1}}
-                        <span style="color:#bbb;">删除</span>
-                {{else}}
-                    {{if arrange.incomeStatus == 0}}
-                       <a href="javascript:void(0)" class="T-shopArrDelItem">删除</a>
-                    {{else}}
-                       <span style="color:#bbb;">删除</span>
-                    {{/if}}
-                {{/if}}
+                {{if editStatus == 1}}
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> 
+                    
+                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+
                 </td></tr>
                 {{/if}}
             {{/each}}
@@ -177,7 +185,7 @@
             <td style="font-weight: bold;text-align:right;">导佣小计：</td>
             <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney"></span></td>
             <td style="font-weight: bold;text-align:right;">佣金小计：</td>
-            <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-sumRebeMoney "></span></td>
+            <td style="font-weight: bold;text-align:left;" colspan="2">&nbsp;&nbsp;<span class="F-float F-money T-sumRebeMoney "></span></td>
         </tr>
         {{/each}}  
         {{/each}}
