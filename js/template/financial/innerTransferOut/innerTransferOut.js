@@ -628,7 +628,7 @@ define(function(require,exports) {
                 var result = showDialog(data);
                 if(result){
                 	$tab.data('isEdited', false);
-                	InnerTransferOut.saveJson = false;
+                	InnerTransferOut.saveJson = [];
                 	InnerTransferOut.btnSatus = 0;
                 	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                 		if(argumentsLen === 1){
@@ -660,7 +660,7 @@ define(function(require,exports) {
 				$tab.data('isEdited',false);
 				if(typeFlag == 2){
 					InnerTransferOut.btnSatus = 0;
-					InnerTransferOut.saveJson = false;
+					InnerTransferOut.saveJson = [];
 					InnerTransferOut.settlement($tab.data("next"));
 				} else {
 					InnerTransferOut.checkTemp = false;
@@ -679,7 +679,7 @@ define(function(require,exports) {
 			}).on(CLOSE_TAB_SAVE_NO, function(event) {
 	            event.preventDefault();
 	            if(typeFlag == 2){
-	                InnerTransferOut.saveJson = false;
+	                InnerTransferOut.saveJson = [];
 	            } else {
 	            	InnerTransferOut.checkTemp = false;
 	            }
