@@ -428,6 +428,10 @@ table tr td {
     margin: 0;
 }
 
+.mar-t-5 {
+    margin-top: 5px;
+}
+
 .mar-t-20 {
     margin-top: 20px;
 }
