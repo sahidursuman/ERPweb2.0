@@ -114,7 +114,7 @@
 
         <td><span class="difference"></span></td>
 
-        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text" arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+        <td><input value="{{arrange.billRemark}}" name="billRemark" type="text"{{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
         <td>{{if arrange.isConfirmAccount == 0}}
                 未对账
