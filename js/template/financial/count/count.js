@@ -8,10 +8,9 @@ define(function(require, exports){
 		
 		qualityTempLate = require("./view/quality"),
 		billImageTempLate = require("./view/billImage"),
-		viewLogTemplate = require("./view/viewLog"),
 		outDetailTempLate = require("./view/outDetail"),
 		tripDetailTempLate = require("./view/tripDetail"),
-		billImageTempLate = require("./view/billImage"),
+		
 		viewLogTemplate = require("./view/viewLog"),
 		shopArrangeTemplate = require('./view/shopArrange'),
 		selfArrangeTemplate = require('./view/selfPayArrange'),
@@ -25,6 +24,7 @@ define(function(require, exports){
 		otherOutTemplate = require('./view/otherOutArrange'),
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
+		viewCostRemarkTemplate = require('./view/viewCostRemark'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -236,6 +236,10 @@ define(function(require, exports){
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
+	                //查看团款明细说明
+					$detailId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 	                //绑定自动计算事件
 	                Count.detailEvents($detailId);
 				}
@@ -251,6 +255,21 @@ define(function(require, exports){
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
+		});
+		//按钮事件--单团核算表
+		$obj.find('.T-tripAccount').off('click').on('click',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			Count.viewTripAccount(id);
+		});
+		//导游报账事件
+		var $guideAccount = $obj.find('.T-guideAccount');
+		$guideAccount.off('click').on('click',function(){
+			var id = $obj.find('.financial-tripPlanId').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			KingServices.viewFeeDetail(id);
 		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
@@ -393,6 +412,10 @@ define(function(require, exports){
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
+					//查看团款明细说明
+					$ReimbursementId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
 				}
@@ -719,10 +742,29 @@ define(function(require, exports){
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
+					//查看团款明细说明
+					$updateTabId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 					//加载列表
 					Count.installList($updateTabId,tmp);
 				}
 			}
+		});
+	};
+	//查看团款明细说明 viewCostRemarkTemplate
+	Count.viewCostDetail = function(data){
+		var tmp = {
+			touristGroupFeeList:data[0].touristGroupFeeList
+		};
+		var html = viewCostRemarkTemplate(tmp);
+		layer.open({
+		    type: 1,
+		    title:"费用详情",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: '1000px', //宽高
+		    zIndex:1028,
+		    content: html
 		});
 	};
 	//单团审核页面事件
@@ -736,6 +778,7 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+		//团款明细的说明
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
@@ -1409,7 +1452,7 @@ define(function(require, exports){
 	};
 	//新增购物安排--报账、审核通用
 	Count.addShopping = function($bodyObj,$parentObj){
-		var html = '<tr class="oldData">'+
+		var html = '<tr class="oldData noSumRate">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
@@ -1423,7 +1466,7 @@ define(function(require, exports){
 		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:14px;" class="T-shopArrDelAll">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
-		'<tr>'+
+		'<tr class="noSumRate">'+
 		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy"><button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
@@ -1505,19 +1548,12 @@ define(function(require, exports){
 	};
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
+
 		Count.totalRebeatMoney($obj,$parentObj);
 		var $tr = $obj.closest('tr');
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
 		var shopArrangeId = $tr.attr('itemsId');
-		if(!!shopArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,'shopItem');
-				removeItem();
-			});
-		}else{
-			removeItem();
-		}
 		function removeItem (){
 			for(var i = 0; i<$prev.length;i++){
 				var tdLen = $prev.eq(i).children('td').length;
@@ -1529,21 +1565,29 @@ define(function(require, exports){
 					break;
 				}
 			};
+		};
+		if(!!shopArrangeId){
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				Count.delArrangeData(shopArrangeId,'shopItem',removeItem);
+			});
+		}else{
+			removeItem();
 		}
 		
 		Count.autoShopSum($obj,$parentObj);
+		
 
 	};
 	//删除新增的购物安排
 	Count.delShopArrange = function($obj,$parentObj){
+
 		var $tr = $obj.closest('tr'),
 			$nextTr = $tr.nextAll(),
 			td_cnt = $tr.children('td').length,
 			shopArrangeId = $tr.attr('shopArrangeId');
 		if(!!shopArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,'shop');
-				removeItem()
+				Count.delArrangeData(shopArrangeId,'shop',removeItem);
 			});
 		}else{
 			removeItem();
@@ -1576,6 +1620,7 @@ define(function(require, exports){
 				};
 			};
 			Count.autoShopSum($obj,$parentObj);
+			Count.sumShopMoney($parentObj);
 		};
 
 	};
@@ -1707,7 +1752,7 @@ define(function(require, exports){
 				sumMoney = 0,//总金额
 				sumTravelMoney = 0,//社佣合计
 				sumGuideMoney = 0;//导佣合计				
-			for(var i = 1;i<$nextTr.length;i++){
+			for(var i = 2;i<$nextTr.length;i++){
 				var thatTdLen = $nextTr.eq(i).children('td').length,
 					$that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
@@ -1745,7 +1790,7 @@ define(function(require, exports){
 				sumGuideMoney = 0;//计算导佣合计
 				$preTr = $thisTr.prevAll(),
 				$nextTr = $thisTr.nextAll();
-				if($obj.hasClass('T-delShop')){
+				if($obj.hasClass('T-shopArrDelItem')){
 					sumMoney = 0;//计算总金额
 					sumTravelMoney = 0;//计算社佣合计
 					sumGuideMoney = 0;//计算导佣合计
@@ -1844,8 +1889,6 @@ define(function(require, exports){
 		$parentObj.find('.T-sumTravelMoney').text(sumTravelMoney);
 		$parentObj.find('.T-sumGuideMoney').text(sumGuideMoney);
 	};
-	//删除购物后重新计算购物返佣及其相关的金额
-	Count.delShopAfSum = function(){};
 	//计算整个团收入、毛利、人均毛利
 	Count.tripIncome = function($obj){
 		var tripIncome = $obj.find('.tripIncome');
@@ -2188,8 +2231,7 @@ define(function(require, exports){
 		
 		if(!!selfArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(selfArrangeId,'selfpay');
-				removeItem();
+				Count.delArrangeData(selfArrangeId,'selfpay',removeItem);
 			});
 		}else{
 			var $tr = $obj.closest('tr');
@@ -2288,8 +2330,7 @@ define(function(require, exports){
 			otherInId = $tr.attr('otherInId');
 		if(!!otherInId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(otherInId,'otherIncome');
-				removeItem()
+				Count.delArrangeData(otherInId,'otherIncome',removeItem);
 			});
 		}else{
 			removeItem();
@@ -2395,8 +2436,7 @@ define(function(require, exports){
 			busCompanyArrangeId = $tr.attr('busCompanyArrangeId');
 		if(!!busCompanyArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(busCompanyArrangeId,'busCompany');
-				removeItems();
+				Count.delArrangeData(busCompanyArrangeId,'busCompany',removeItems);
 			});
 		}else{
 			removeItems();
@@ -2506,8 +2546,7 @@ define(function(require, exports){
 		var restArrId = $tr.attr('restaurantArrangeId');
 		if(!!restArrId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(restArrId,'restaurant');
-				removeItem();
+				Count.delArrangeData(restArrId,'restaurant',removeItem);
 			});
 		}else{
 			removeItem();
@@ -2605,8 +2644,7 @@ define(function(require, exports){
 		var hotelArrangeId = $tr.attr('hotelArrangeId');
 		if(!!hotelArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(hotelArrangeId,'hotel');
-				removeItem();
+				Count.delArrangeData(hotelArrangeId,'hotel',removeItem);
 			});
 		}else{
 			removeItem();
@@ -2706,8 +2744,7 @@ define(function(require, exports){
 		var scenicArrangeId = $tr.attr('scenicArrangeId');
 		if(!!scenicArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(scenicArrangeId,'scenic');
-				removeItem();
+				Count.delArrangeData(scenicArrangeId,'scenic',removeItem);
 			});
 		}else{
 			removeItem();
@@ -2834,8 +2871,7 @@ define(function(require, exports){
 		var ticketArrangeId = $tr.attr('ticketArrangeId');
 		if(!!ticketArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(ticketArrangeId,'ticket');
-				removeItem();
+				Count.delArrangeData(ticketArrangeId,'ticket',removeItem);
 			});
 		}else{
 			removeItem();
@@ -2928,8 +2964,7 @@ define(function(require, exports){
 		var otherArrangeId = $tr.attr('otherArrangeId');
 		if(!!otherArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(otherArrangeId,'other');
-				removeItem();
+				Count.delArrangeData(otherArrangeId,'other',removeItem);
 			});
 		}else{
 			removeItem();
@@ -4964,7 +4999,7 @@ define(function(require, exports){
 		return submitStatus;
 	};
 	//删除安排
-	Count.delArrangeData = function(id,nameFlag){
+	Count.delArrangeData = function(id,nameFlag,fn){
 		$.ajax({
 			url: KingServices.build_url("financialTripPlan","deleteArrange"),
             type: "post",
@@ -4972,6 +5007,8 @@ define(function(require, exports){
             success: function(data) {
 				if(showDialog(data)){
 					showMessageDialog($( "#confirm-dialog-message" ),"删除成功!");
+					fn();
+					
 				}
             }
         });
