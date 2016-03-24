@@ -8,10 +8,9 @@ define(function(require, exports){
 		
 		qualityTempLate = require("./view/quality"),
 		billImageTempLate = require("./view/billImage"),
-		viewLogTemplate = require("./view/viewLog"),
 		outDetailTempLate = require("./view/outDetail"),
 		tripDetailTempLate = require("./view/tripDetail"),
-		billImageTempLate = require("./view/billImage"),
+		
 		viewLogTemplate = require("./view/viewLog"),
 		shopArrangeTemplate = require('./view/shopArrange'),
 		selfArrangeTemplate = require('./view/selfPayArrange'),
@@ -25,6 +24,7 @@ define(function(require, exports){
 		otherOutTemplate = require('./view/otherOutArrange'),
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
+		viewCostRemarkTemplate = require('./view/viewCostRemark'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -734,10 +734,31 @@ define(function(require, exports){
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
+					//查看团款明细说明
+					$updateTabId.find('.T-viewCostDetail').on('click',function(){
+						Count.viewCostDetail(tmp.touristGroups);
+					});
 					//加载列表
 					Count.installList($updateTabId,tmp);
 				}
 			}
+		});
+	};
+	//查看团款明细说明 viewCostRemarkTemplate
+	Count.viewCostDetail = function(data){
+		console.log(data);
+		var tmp = {
+			touristGroupFeeList:data[0].touristGroupFeeList
+		};
+		console.log(tmp);
+		var html = viewCostRemarkTemplate(tmp);
+		layer.open({
+		    type: 1,
+		    title:"费用详情",
+		    skin: 'layui-layer-rim', //加上边框
+		    area: ['1000px', '500px'], //宽高
+		    zIndex:1028,
+		    content: html
 		});
 	};
 	//单团审核页面事件
@@ -751,6 +772,7 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+		//团款明细的说明
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
 		$guideAccount.off('click').on('click',function(){
