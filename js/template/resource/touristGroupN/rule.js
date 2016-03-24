@@ -82,8 +82,24 @@ define(function(require, exports) {
                 }]
 			},
 			{
+				//送离时间
+				$ele: $obj.find('[name="leaveTime"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '送离时间不能为空'
+                }]
+			},
+			{
 				//班次
 				$ele: $obj.find('[name="arriveShift"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '班次不能为空'
+                }]
+			},
+			{
+				//班次
+				$ele: $obj.find('[name="leaveShift"]'),
 				rules : [{
                     type: 'null',
                     errMsg: '班次不能为空'

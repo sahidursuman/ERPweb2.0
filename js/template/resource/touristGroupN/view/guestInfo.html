@@ -23,7 +23,7 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-addTouristTbody">
+				<tbody class="T-addTouristTbody" data-del-json="{{touristGroupMemberJsonDel}}">
 				{{if !!touristGroupMemberJsonAdd && touristGroupMemberJsonAdd.length > 0}}
 					{{each touristGroupMemberJsonAdd as rs index}}
 					<tr>

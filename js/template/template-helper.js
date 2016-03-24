@@ -405,6 +405,19 @@ template.helper("getNoteItemText", function(status){
     return res;
 });
 
+template.helper("getPartGroupStatusText", function(status){
+    switch (status * 1){
+        case 0:     return '已发团';
+        case 1:     return '未分团';
+        case 2:     return '已分团';
+        case 3:     return '已转客';
+        case 4:     return '已取消';
+        case 5:     return '已拆分';
+        case 6:     return '已内转';
+        default:     return '-';
+    }
+});
+
 template.helper("getBusinessTypeText", function(businessType) {
     switch (businessType) {
         case "guide":
