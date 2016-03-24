@@ -159,7 +159,7 @@
         <td><span class="difference"></span></td>
 
         <td style="text-align: left;">
-            <input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000"/>
+            <input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
         </td>
 
         <td>
