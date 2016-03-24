@@ -1837,6 +1837,12 @@ define(function(require, exports){
 			for(var i = 0;i<$nextTr.length;i++){
 				var $that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
+					//计算总金额
+					$that.find('.T-totalMoney').text(sumMoney);
+					$that.find('.T-totalTravelMoney').text(sumTravelMoney);
+					$that.find('.T-totalGuideMoney').text(sumGuideMoney);
+					var totalRateMoney = sumTravelMoney+sumGuideMoney;
+					$that.find('.T-sumRebeMoney').text(totalRateMoney);
 					break;
 				}else{
 					var	$moneyObj = $that.find('[name=consumeMoney]'),
@@ -1858,12 +1864,7 @@ define(function(require, exports){
 					};
 				}
 			};
-			//计算总金额
-			$that.find('.T-totalMoney').text(sumMoney);
-			$that.find('.T-totalTravelMoney').text(sumTravelMoney);
-			$that.find('.T-totalGuideMoney').text(sumGuideMoney);
-			var totalRateMoney = sumTravelMoney+sumGuideMoney;
-			$that.find('.T-sumRebeMoney').text(totalRateMoney);
+			
 			Count.sumShopMoney($parentObj);
 		};
 	};
