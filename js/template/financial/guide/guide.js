@@ -373,11 +373,10 @@ define(function(require, exports) {
                         guideId: $btn.data('id'), 
                         startDate: $datePicker.eq(0).val(),
                         endDate: $datePicker.eq(1).val(),
-                        accountStatus: $searchArea.find('[name=accountStatus]').val(),
+                        accountStatus: $searchArea.find('input[name=accountStatus]').val(),
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
-                        lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                        accountStatus : $searchArea.find('inpput[name=accountStatus]').data('id')
+                        lineProductId: $searchArea.find('.T-lineProductName').data('id')
 
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
