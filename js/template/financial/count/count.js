@@ -1463,7 +1463,8 @@ define(function(require, exports){
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
 		'<td rowspan="2" class="hidden"><input type="text" name="currInCome" class="w-80"/></td>'+
-		'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" style="margin-left:14px;" class="T-shopArrDelAll">删除</a></td>'+
+		'<td><input type="text" name="billRemark"/></td>'+
+		'<td rowspan="2"><a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
 		'<tr class="noSumRate">'+
@@ -1474,7 +1475,7 @@ define(function(require, exports){
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
 		'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
-		'<td><input type="text" name="billRemark"/><span style="margin-left:14px;color:#bbb;">删除</span></td>'+
+		'<td><input type="text" name="billRemark"/></td>'+
 		'</tr>'+
 		'<tr class="sumMoney">'+
 			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
@@ -1483,7 +1484,8 @@ define(function(require, exports){
 			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
 			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2"></td>'+
+			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
+			'<td style="font-weight: bold;text-align:right;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1519,7 +1521,7 @@ define(function(require, exports){
 			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="guideRate" class="w-50"></td>'+
 			'<td><input type="text" name="guideRateMoney" class="w-80"/></td>'+
-			'<td><input type="text" name="billRemark"/><span style="margin-left:14px;color:#bbb;">删除</span></td>'+
+			'<td><input type="text" name="billRemark"/></td>'+
 			'</tr>';
 			
 			if($next.length>1){
@@ -1790,7 +1792,7 @@ define(function(require, exports){
 				sumGuideMoney = 0;//计算导佣合计
 				$preTr = $thisTr.prevAll(),
 				$nextTr = $thisTr.nextAll();
-				if($obj.hasClass('T-shopArrDelItem')){
+				if($obj.hasClass('T-shopArrDelItem') || $thisTr.hasClass('noSumRate')){
 					sumMoney = 0;//计算总金额
 					sumTravelMoney = 0;//计算社佣合计
 					sumGuideMoney = 0;//计算导佣合计
