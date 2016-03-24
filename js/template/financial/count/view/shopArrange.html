@@ -61,7 +61,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -119,7 +119,7 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
-            {{if index == 1}}class="noSumRate"{{/if}}>
+            {{if index == 1}}class="noSumRate"{{/if }} {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
                 <td>
                 <span class="span_shopPolicy">
                     <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">

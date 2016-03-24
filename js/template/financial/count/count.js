@@ -4402,8 +4402,8 @@ define(function(require, exports){
 		});
 		//购物数据
 		var $shopObj = $obj.find('.T-count-shopping'),
-		$tr = $shopObj.find('tr'),
-		$dataTr = $shopObj.find('.oldData');
+		$tr = $shopObj.find('tr').not('.T-noSubmit'),
+		$dataTr = $shopObj.find('.oldData').not('.T-noSubmit');
 		$dataTr.each(function(i){
 			var shopArrange,shopArrangeItemSet = [],$that = $(this),$thatTd_len = $(this).children('td').length;
 			var id = "",shopId = '',whichDay = 1,td_len = $(this).children('td').length;
