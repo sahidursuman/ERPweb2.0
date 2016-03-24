@@ -576,7 +576,7 @@ define(function(require, exports) {
 					    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
 					    		Replace.$balanceTab.data('isEdited',false);
 					    		args.pageNo = obj.curr -1;
-					    		Replace.getOperationList(args);
+					    		Replace.getOperationList(args,Replace.$balanceTab);
 					    	}
 					    }
 					});	
