@@ -252,6 +252,21 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+		//按钮事件--单团核算表
+		$obj.find('.T-tripAccount').off('click').on('click',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			Count.viewTripAccount(id);
+		});
+		//导游报账事件
+		var $guideAccount = $obj.find('.T-guideAccount');
+		$guideAccount.off('click').on('click',function(){
+			var id = $obj.find('.financial-tripPlanId').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			KingServices.viewFeeDetail(id);
+		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
 		//购物
