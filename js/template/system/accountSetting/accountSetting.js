@@ -388,19 +388,19 @@ define(function(require, exports) {
 		accountSetting.loanApplication = function(){
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
+				var $objApply = $('.fuelux-apply');
 				//表单验证
 				var $form = $(".T-form");
 				var validator=rule.check($form);
 
-				var $obj = $('#T-fuelux-wizard');
-				var $price=$obj.find('[name=applyMoney]');
+				var $price=$objApply.find('[name=applyMoney]');
 					Tools.inputCtrolFloat($price);
-					$obj.find(".T-btn-cancel").click(function(){
+					$objApply.find(".T-btn-cancel").click(function(){
 						Tools.closeTab(sKey);
 						});
-					$obj.find(".T-btn-saveApply").click(function(){
+					$objApply.find(".T-btn-saveApply").click(function(){
 						if (!validator.form()) { return; }
-						accountSetting.saveApplication($obj);
+						accountSetting.saveApplication($objApply);
 					});
 			};
 
