@@ -234,6 +234,17 @@
             </div>
             <!-- 购物 -->
             <div id="financial-count-tripdetail-shop" class="tab-pane fade">
+                <div class="ui-sortable-handle widget-container-col">
+                    <h5 class="title-size">
+                        <span style="color:#000;margin-left:20px;">
+                            购物合计：<span class="T-sumShopMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            社佣合计：<span class="T-sumTravelMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            导佣合计：<span class="T-sumGuideMoney F-float F-money">0</span>
+                        </span>
+                    </h5>
+                </div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -263,7 +274,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -311,7 +322,8 @@
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}"
+            {{if index == 1}}class="noSumRate"{{/if}}>
                 <td><span>
                 <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
                 <input type="hidden" name="shopPolicy" 
