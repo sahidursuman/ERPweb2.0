@@ -354,7 +354,8 @@ define(function(require, exports) {
                         payRemark : $tab.find('input[name=sumPayRemark]').val(),
                         accountTimeStart :startDate,
                         accountTimeEnd : endDate,
-                        tripInfo : $tab.find('select[name=tripInfo]').val()
+                        tripInfo : $tab.find('select[name=tripInfo]').val(),
+                        accountStatus : args.accountStatus
                     },
                     success:function(data){
                         if(showDialog(data)){
@@ -702,6 +703,10 @@ define(function(require, exports) {
                         settlementMoney : 0,
                         unPayedMoney : 0
                     };
+                }
+                if(Self.checkTemp && Self.checkTemp.length > 0){
+                    sumData.settlementMoney = Self.checkTemp.sumSttlementMoney;
+                    sumData.unPayedMoney = Self.checkTemp.sumUnPayedMoney;
                 }
             }
         });

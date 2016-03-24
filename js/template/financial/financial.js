@@ -222,6 +222,9 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
             }
         }
         saveJson = JSON.stringify(saveJson);
+    } else {
+       saveJson.sumSttlementMoney = $tab.find('.T-stMoney').text();
+       saveJson.sumUnPayedMoney = $tab.find('.T-unpayMoney').text();
     }
     return saveJson;
 };
@@ -324,7 +327,13 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
 //付款-自动计算本次付款总额
 FinancialService.updateSumPayMoney = function($tab,rule){
     $tab.find("input[name=sumPayMoney]").data("money",$tab.find("input[name=sumPayMoney]").val());
-    $tab.on("change", 'input[name="payMoney"]', function(){
+    $tab.on('focusin', 'input[name="payMoney"]', function(event) {
+        if(!$(this).data('hasOld')){
+            $(this).data("oldVal",$(this).val());
+            $(this).data('hasOld',true);
+        }
+    })
+    .on("change", 'input[name="payMoney"]', function(){
         var $this = $(this), $tr = $this.closest('tr').data('change', true),
             $sumPayMoney = $tab.find("input[name=sumPayMoney]"),
             validator = rule.check($tr);
@@ -369,7 +378,6 @@ FinancialService.getTempDate = function(resultList,tempJson){
 
 //付款-保存(暂存)数据组装，数组，需转换为json
 FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
-    console.log(clearSaveJson);
     $tr = $tab.find(".T-clearList tr")
     $tr.each(function(){
         var $this = $(this);
@@ -379,28 +387,33 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
 
             clearSaveJson = clearSaveJson || [];
             var id = $this.data("id"),i = 0,
-                len = clearSaveJson.length;
+                len = clearSaveJson.length,
+                payMoney = $this.find("input[name=payMoney]").val();
 
             //已有数据更新
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
-                    clearSaveJson[i].payMoney = $this.find("input[name=payMoney]").val();
-                    clearSaveJson[i].payRemark = $this.find("[name=payRemark]").val();
+                    if(!payMoney){
+                        clearSaveJson.splice(i,1);//删除不需提交的行
+                        i--;
+                    } else {
+                        clearSaveJson[i].payMoney = payMoney;
+                        clearSaveJson[i].payRemark = $this.find("[name=payRemark]").val();
+                    }
                     return;
                 }
             }
             //新数据
-            if(i >= len){
+            if(i >= len && payMoney){
                 var clearTemp = {
                     id : $this.data("id"),
-                    payMoney : $this.find("input[name=payMoney]").val(),
+                    payMoney : payMoney,
                     payRemark : $this.find("[name=payRemark]").val()
                 };
                 clearSaveJson.push(clearTemp);
             }
         }
     });
-
     return clearSaveJson;
 };
 
@@ -886,6 +899,10 @@ FinancialService.saveJson_checking = function($tab,tempJson,rule,isSave){
             }
         }
         saveJson = JSON.stringify(saveJson);
+    } else {
+        saveJson.sumBackMoney = $tab.find('.T-sumBackMoney').text();
+        saveJson.sumSettlementMoney = $tab.find('.T-sumSettlementMoney').text();
+        saveJson.sumUnReceivedMoney = $tab.find('.T-sumUnReceivedMoney').text();
     }
     return saveJson;
 };

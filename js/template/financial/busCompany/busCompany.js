@@ -160,7 +160,11 @@ define(function(require, exports) {
                     data.accountStatus = args.accountStatus;
                     data.financialBusCompanyListData = FinancialService.isGuidePay(fbList); //获取是否显示导付标识
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData); //获取是否显示人数标识
-                    data.financialBusCompanyListData = FinancialService.getCheckTempData(data.financialBusCompanyListData,busCompany.checkTemp);
+                    if(busCompany.checkTemp && busCompany.checkTemp.length > 0){
+                        data.financialBusCompanyListData = FinancialService.getCheckTempData(data.financialBusCompanyListData,busCompany.checkTemp);
+                        data.sumSettlementMoney = busCompany.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = busCompany.checkTemp.sumUnPayedMoney;
+                    }
                     var html = checkBill(data);
 
                     // 初始化页面

@@ -238,6 +238,9 @@ define(function(require, exports) {
                                     return false;
                                 } else {
                                     FinTransIn.checkTemp = temp;
+                                    FinTransIn.checkTemp.backMoney = FinTransIn.$checkTab.find('.T-sumBackMoney').text();
+                                    FinTransIn.checkTemp.settlementMoney = FinTransIn.$checkTab.find('.T-sumSettlementMoney').text();
+                                    FinTransIn.checkTemp.unIncomeMoney = FinTransIn.$checkTab.find('.T-sumUnReceivedMoney').text()
                                     FinTransIn.$checkTab.data('isEdited',false);
                                     FinTransIn.getCheckList(args,null,1);
                                 }
@@ -359,7 +362,7 @@ define(function(require, exports) {
                 if ($(this).hasClass('btn-primary')) {
                     if (new FinRule(2).check($tab).form()) {
                         FinancialService.autoPayConfirm($tab.find('input[name=startDate]').val(),$tab.find('input[name=endDate]').val(), function() {
-                            FinTransIn.autoFillMoney($tab);
+                            FinTransIn.autoFillMoney($tab,args);
                         });
                     }
                 } else {
@@ -371,7 +374,7 @@ define(function(require, exports) {
         }
     };
 
-    FinTransIn.autoFillMoney = function($tab){
+    FinTransIn.autoFillMoney = function($tab,args){
         var payType = $tab.find('select[name=sumPayType]').val(),
             argsData = {
                 lineProductId : $tab.find('input[name=lineProductId]').val(),
@@ -387,6 +390,7 @@ define(function(require, exports) {
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val(),
                 sumRemark : $tab.find('input[name=sumRemark]').val(),
+                accountStatus : args.accountStatus
             };
 
         $.ajax({
@@ -482,6 +486,11 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
+                    if(FinTransIn.checkTemp && FinTransIn.checkTemp.length > 0){
+                        data.backMoney = FinTransIn.checkTemp.backMoney;
+                        data.settlementMoney = FinTransIn.checkTemp.settlementMoney;
+                        data.unIncomeMoney = FinTransIn.checkTemp.unIncomeMoney;
+                    }
 					$tab.find('.T-sumTransCount').text(data.totalCount);
 					$tab.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
 					$tab.find('.T-sumPayedMoney').text(data.getedMoney);
