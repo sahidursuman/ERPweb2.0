@@ -437,8 +437,9 @@ define(function(require, exports){
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
 		$guideObj.find('input[type=text]').off('change').on('change',function(){
-			var $that = $(this);
-			if ($that.is('[name=remark]')) {
+			var $that = $(this),
+				tagName = $that.attr('name');
+			if (tagName! ='remark')) {
 				Count.calculateCost($that);
 				//计算金额
 				Count.autoGuideSum($that,$obj);
@@ -794,7 +795,8 @@ define(function(require, exports){
 		var $guideObj = $listObj.find('.T-count-guide');
 		$guideObj.find('input[type=text]').off('change').on('change',function(){
 			var $that = $(this);
-			if (!$that.is('[name=remark]')) {
+				tagName = $that.attr('name');
+			if (tagName! ='remark')) {
 				Count.calculateCost($that);
 				//计算金额
 				Count.autoGuideSum($that,$obj);
@@ -1562,7 +1564,7 @@ define(function(require, exports){
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
 		var shopArrangeId = $tr.attr('itemsId');
-		
+
 		if(!!shopArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 				Count.delArrangeData(shopArrangeId,'shopItem',removeItem);
@@ -2023,8 +2025,11 @@ define(function(require, exports){
 		//规范数据
 		price = Count.changeTwoDecimal(price);
 		manageFee = Count.changeTwoDecimal(manageFee);
-		var priceSum = $parentObj.find('.tripCost-guideArrangePrice').text(price);
-		var manageFeeSum = $parentObj.find('.tripIncome-guideManageMoney').text(manageFee);
+		if($tr.find('input[name=price]').length){
+			$parentObj.find('.tripCost-guideArrangePrice').text(price);
+			$parentObj.find('.tripIncome-guideManageMoney').text(manageFee);
+		}
+		
 		//计算团收入
 		Count.tripIncome($parentObj);
 		//计算团成本
