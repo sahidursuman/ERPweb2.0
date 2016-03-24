@@ -573,7 +573,6 @@ define(function(require, exports){
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
-			console.log($nameFlag);
 			if($nameFlag != "billRemark"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
