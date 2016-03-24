@@ -230,7 +230,9 @@ define(function(require, exports) {
             }
 
             name = $tab.find('.T-guideName').text();
-            args.isOuter = FinGuide.isOuter;
+        }
+        if(args.borrow){
+            args.isOuter = true;
         }
 
         if(type == 1){
@@ -626,7 +628,8 @@ define(function(require, exports) {
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
-                accountStatus : accountStatus
+                accountStatus : accountStatus,
+                borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false
             };
 
             if (args.lineProductName === '全部') {
