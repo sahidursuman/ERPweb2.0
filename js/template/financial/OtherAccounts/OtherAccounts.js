@@ -152,7 +152,7 @@ define(function(require, exports) {
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
-                            data.financialOtherListData = FinancialService.getCheckTempData(data.financialOtherDetailsList,OtherAccounts.checkTemp);
+                            dataTable.financialOtherListData = FinancialService.getCheckTempData(dataTable.financialOtherDetailsList,OtherAccounts.checkTemp);
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
