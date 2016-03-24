@@ -155,7 +155,11 @@ define(function(require, exports) {
                     var fhList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.isGuidePay(fhList);
                     data.hotelName = args.hotelName;
-                    data.financialHotelListData = FinancialService.getCheckTempData(data.financialHotelListData,hotel.checkTemp);
+                    if(hotel.checkTemp && hotel.checkTemp.length > 0){
+                        data.financialHotelListData = FinancialService.getCheckTempData(data.financialHotelListData,hotel.checkTemp);
+                        data.sumSettlementMoney = hotel.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = hotel.checkTemp.sumUnPayedMoney;
+                    }
                     var html = hotelChecking(data);
                     
                     // 初始化页面

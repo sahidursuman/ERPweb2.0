@@ -170,7 +170,12 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				data.name = args.ticketName;
 				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
-				data.financialTicketList = FinancialService.getCheckTempData(data.financialTicketList,Ticket.checkTemp);
+				if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
+                    data.financialTicketList = FinancialService.getCheckTempData(data.financialTicketList,Ticket.checkTemp);
+                    data.sumSettlementMoney = Ticket.checkTemp.sumSttlementMoney;
+                    data.sumUnPayedMoney = Ticket.checkTemp.sumUnPayedMoney;
+                }
+				
 				if(Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data))){
 					Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
 					if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
