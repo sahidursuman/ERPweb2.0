@@ -687,7 +687,7 @@ define(function(require, exports) {
 
                                 if (tmp.id === id) {
                                     hasData = true;
-                                    $receive.val(tmp.temporaryIncomeMoney);
+                                    $receive.val(tmp.payMoney);
                                     return true;
                                 }
                             }
