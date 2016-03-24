@@ -47,12 +47,12 @@
           <th class="th-border"><span class="necessary">*</span>比例%</th>
           <th class="th-border"> 
                 <span>返佣</span>
-                 <!-- <div style="float:right">
+                <!-- <div style="float:right">
                     <input type="checkbox" class="ace T-guideCheckbox"/>
                     <span class="lbl"></span>清除小数
                     &nbsp;
                     </th>
-                                 </div> -->
+                </div> -->
         </tr></thead>
         <tbody class="T-count-shopping"> 
         {{each dayList as day}}
@@ -164,10 +164,7 @@
                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
-                {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
-                    
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+                <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
 
                 </td></tr>
                 {{/if}}
