@@ -279,20 +279,19 @@
                                 <col style="width:120px">
                                 <col style="width:100px">
                                 <col style="width:100px;">
-                                <col style="width:60px;">
+                                <col style="width:100px;">
                                 <col style="width:100px;">
                                 <col style="width:110px;">
                                 <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col style="width:80px;">
-                                <col style="width:160px;">
                                 <col style="width:80px;">
                                 <col>
                                 <col style="width:50px;">
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="th-border"><span class="necessary">*</span>默认报账导游</th>
+                                    <th class="th-border"><span class="necessary">*</span>指定报账导游</th>
                                     <th class="th-border"><span class="necessary">*</span>开始日期</th>
                                     <th class="th-border"><span class="necessary">*</span>结束日期</th>
                                     <th class="th-border">任务</th>
@@ -301,25 +300,44 @@
                                     <th class="th-border">导服费</th>
                                     <th class="th-border">管理费</th>
                                     <th class="th-border">计划现收</th>
-                                    <th class="th-border">计划导付</th>
+                                    <!-- <th class="th-border">计划导付</th> -->
                                     <th class="th-border">计划预支款</th>
                                     <th class="th-border">备注</th>
                                     <th class="th-border">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{each guideList as guide}} {{if guide != "[]" || guide != null}}
+                                {{each guideList as guide index}} {{if guide != "[]" || guide != null}}
                                 <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}">
                                     <td>
                                         <input type="radio" name='isAccountGuide' {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} checked="checked" {{/if}} {{if basicInfo.status !=0 }} disabled="disabled" {{/if}}>
                                     </td>
                                     <td>
-                                        <input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}">
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="startTime" class="datepicker" value="{{task.sTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
                                     </td>
                                     <td>
-                                        <input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}">
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="endTime" class="datepicker" value="{{task.eTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
                                     </td>
-                                    <td>{{#guide.taskType | getTaskSelect}}</td>
+                                    <td>
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
+                                        {{#task.tType | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white {{if i == 0}}btn-success T-add{{else}}btn-danger T-del{{/if}} T-guideBtn">
+                                                    <i class="ace-icon fa {{if i == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/each}}
+                                    </td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
                                             <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
@@ -340,7 +358,7 @@
                                         <input type="text" name="manageFee" value="{{guide.manageFee}}" class="w-80 F-float F-money" maxlength="9" />
                                     </td>
                                     <td><span class="price F-float F-money">{{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }}{{basicInfo.guideAllNowMoney}}{{/if}}</span></td>
-                                    <td><span class="T-guidePlanPayMoney F-float F-money"></span></td>
+                                    <!-- <td><span class="T-guidePlanPayMoney F-float F-money"></span></td> -->
                                     <td><input type="text" name="guidePlanPreMoney" /></td>
                                     <td>
                                         <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" />
@@ -496,7 +514,6 @@
                                                 <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
                                             </td>
                                             <td class="inline-flex">
-                                                <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                                 {{#busCompany.payType | getPlanPayTypeOption}}
                                                 <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" />
                                             </td>
@@ -622,7 +639,6 @@
                                             <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" />
                                         </td>
                                         <td class="inline-flex">
-                                            <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                             {{#restaurant.payType | getPlanPayTypeOption}}
                                             <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" />
                                         </td>
@@ -747,7 +763,6 @@
                                             <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" />
                                         </td>
                                         <td class="inline-flex">
-                                            <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                             {{#hotel.payType | getPlanPayTypeOption}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" />
                                         </td>
@@ -873,7 +888,6 @@
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" />
                                         </td>
                                         <td class="inline-flex">
-                                            <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                             {{#scenic.payType | getPlanPayTypeOption}}
                                             <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" />
                                         </td>
@@ -1066,7 +1080,6 @@
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" />
                                         </td>
                                         <td class="inline-flex">
-                                            <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                             {{#selfPay.payType | getPlanPayTypeOption}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" />
                                         </td>
@@ -1187,7 +1200,6 @@
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" />
                                         </td>
                                         <td class="inline-flex">
-                                            <input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />
                                             {{#ticket.payType | getPlanPayTypeOption}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" />
                                         </td>

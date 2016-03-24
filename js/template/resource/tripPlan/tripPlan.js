@@ -244,6 +244,11 @@ define(function(require, exports) {
 					data.ticketList = JSON.parse(data.arrangeItems.ticketList);
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
+
+					for (var i = data.guideList.length - 1; i >= 0; i--) {
+						data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
+					}
+					console.log(data.guideList)
 					
 					addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
@@ -431,6 +436,11 @@ define(function(require, exports) {
 						data.tarId = tabId;
 						tripPlan.dayWhich = data.dayWhich;
 
+						for (var i = data.guideList.length - 1; i >= 0; i--) {
+							data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
+						}
+						console.log(data.guideList)
+
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
 							tripPlan.init_event($tab,id,target);
@@ -526,6 +536,15 @@ define(function(require, exports) {
 
 		// 设置人数
 		tripPlan.touristCount = $tab.find('.T-touristCount').data('count') || '';
+
+		$tab.find('#tripPlan_addPlan_guide').on('click', '.T-guideBtn', function () {
+			var $this = $(this)
+			if ($this.hasClass('T-add')) {
+				tripPlan.addGuideTask($this, 'add', validator);
+			}else if ($this.hasClass('T-del')) {
+				tripPlan.addGuideTask($this, 'del');
+			}
+		})
 
 		var $nav = $tab.find('.T-arrange-tabs'), $target;
 		// 绑定安排完成的选择
@@ -813,7 +832,7 @@ define(function(require, exports) {
 		});
 
 		//选择已添加导游
-		$tab.find('.tab-content').on('click.chooseGuide', '.T-chooseGuide', function() {
+		/*$tab.find('.tab-content').on('click.chooseGuide', '.T-chooseGuide', function() {
 			var $this = $(this), $guideList = [], guideList = [],
 				$parent = $this.closest('tr');
 			$tab.find('#tripPlan_addPlan_guide tbody tr').each(function() {
@@ -834,7 +853,7 @@ define(function(require, exports) {
 					guideList.push(guide);
 				}
 			}
-			/*$guideList.each(function(i) {
+			$guideList.each(function(i) {
 				var $that = $guideList.eq(i);
 				var guide = {
 					index: i,
@@ -844,7 +863,7 @@ define(function(require, exports) {
 				if (!!guide.id) {
 					guideList.push(guide);
 				}
-			})*/
+			})
 			console.log(guideList);
 			$this.autocomplete({
 				minLength: 0,
@@ -871,7 +890,7 @@ define(function(require, exports) {
 				    time: 2000
 				});
 			}
-		})
+		})*/
 	}
 
 	/**
@@ -1436,16 +1455,16 @@ define(function(require, exports) {
 	tripPlan.addGuide = function($btn, validator, $tab) {
 		var $tbody = $btn.closest('.ui-sortable-handle').find('tbody'),
 			html = '<tr> <td><input type="radio" name="isAccountGuide"></td>'
-			+'<td class="feild-relative"><input type="text" name="startTime" class="datepicker"></td>'
-			+'<td><input type="text" name="endTime" class="datepicker"></td>'
-			+'<td><select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select></td>'
+			+'<td class="feild-relative"><div class="T-guideAddTask" data-index="0"><input type="text" name="startTime" class="datepicker"></div></td>'
+			+'<td><div class="T-guideAddTask" data-index="0"><input type="text" name="endTime" class="datepicker"></div></td>'
+			+'<td><div class="T-guideAddTask mar-t-5" data-index="0"><select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select>'
+			+'<label style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add T-guideBtn"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'
 			+'<td><div class="col-sm-12 feild-relative"><input type="text" name="guideName" maxlength="32" class="col-sm-12 chooseGuide"><input type="hidden" name="guideId"><span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td> '
 			+'<!-- <td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"/></td> -->'
 			+'<td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"></td>'
 			+'<td><input type="text" name="price" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
 			+'<td><input type="text" name="manageFee" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
             +'<td><span class="price F-float F-money"></span></td>'
-            +'<td><span class="T-guidePlanPayMoney F-float F-money"></span></td>'
             +'<td><input type="text" name="guidePlanPreMoney" /></td>'
 			+'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"></td>'
 			+'<td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除"> 删除 </a> </td> </tr>  ',
@@ -1504,7 +1523,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
-					+ '<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
+					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -1535,7 +1554,7 @@ define(function(require, exports) {
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input name="prePayMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
@@ -1563,7 +1582,7 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="orderStatus"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
@@ -1595,7 +1614,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1644,7 +1663,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1675,7 +1694,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1704,7 +1723,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
 		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex"><input type="text" class="T-chooseGuide" name="arrangeGuide" style="width:70px;margin-right: 5px;" />'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
@@ -2060,6 +2079,7 @@ define(function(require, exports) {
 			}
 		}).off('click.getlist.api').on('click.getlist.api', function(){
 			var obj = this;
+			var guideIds = $(obj).closest('tbody').find('[name=guideId]');
 			$.ajax({
 				url: KingServices.build_url('guide', 'findAll'),
 				dataType: "json",
@@ -2072,7 +2092,17 @@ define(function(require, exports) {
 							for(var i=0;i<guideList.length;i++){
 								guideList[i].value = guideList[i].realname;
 							}
+
+							for (var i = guideList.length - 1; i >= 0; i--) {
+								var id = guideList[i].id
+								guideIds.each(function(index) {
+									if (guideIds.eq(index).val() == id) {
+										guideList.splice(i,1)
+									}
+								})
+							}
 						}
+
 						$(obj).autocomplete('option','source', guideList);
 						$(obj).autocomplete('search', '');
 					}
@@ -3495,7 +3525,39 @@ define(function(require, exports) {
 				}
 			}
 		}
-	
+		//导游安排数据
+		var guide = $tab.find('#tripPlan_addPlan_guide').find('tbody tr'), guideArrangeList = [];
+		if (guide.length > 0) {
+			for (var i = 0,len = guide.length; i < len; i++) {
+				var $this = guide.eq(i),isAccountGuide = 0;
+				if ($this.find('[name=isAccountGuide]').is(':checked')) {
+					isAccountGuide = 1;
+				}
+				var guideJson = {
+					id: $this.data('entity-arrangeid'),
+					guideId: $this.find('[name=guideId]').val(),
+					price: $this.find('[name=price]').val(),
+					manageFee: $this.find('[name=manageFee]').val(),
+					guidePlanPreMoney: $this.find('[name=guidePlanPreMoney]').val(),
+					isAccountGuide: isAccountGuide,
+					remark: $this.find('[name=remark]').val(),
+					taskJson: []
+				}
+				var divLen = $this.find('[name=taskType]').length;
+				for (var j = 0; j < divLen; j++) {
+					var $thisDiv = $this.find('.T-guideAddTask').filter(function(index) {
+						return $(this).data('index') == j;
+					});
+					var json = {
+						sTime: $thisDiv.find('[name=startTime]').val(),
+						eTime: $thisDiv.find('[name=endTime]').val(),
+						tType: $thisDiv.find('[name=taskType]').val()
+					}
+					guideJson.taskJson.push(json);
+				}
+				guideArrangeList.push(guideJson);
+			}
+		}
 		
 		//获取tripPlan
 		var $addTripTab = $tab.find('.baseinfo'),
@@ -3505,7 +3567,7 @@ define(function(require, exports) {
 			guidePlanAllPreMoney : $addTripTab.find('input[name=guidePlanAllPreMoney]').val(),
 		},
 		tripPlanJson = {  // 安排数据
-			guideList : Tools.getTableVal($tab.find('#tripPlan_addPlan_guide').find('tbody'), 'entity-arrangeid'),
+			guideList : guideArrangeList,
 			//busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
 			busCompanyList: busCompanyArrange,
 			hotelList : Tools.getTableVal($tab.find('#tripPlan_addPlan_hotel').find('tbody'), 'entity-arrangeid'),
@@ -3698,13 +3760,37 @@ define(function(require, exports) {
 		}
 	}
 
-	/**
-	 * 计算计划导付
-	 * @param  {[type]} $tab [容器]
-	 * @return {[type]}      [description]
-	 */
-	tripPlan.clacPlanGuidePay = function($tab) {
-		var $guideListTr = $tab.find('#tripPlan_addPlan_guide tbody tr');
+	tripPlan.addGuideTask = function ($this, operation, validator) {
+		if (operation == 'add') {
+			var $parent = $this.closest('tr'),
+				index = $parent.find('[name=taskType]').length,
+				startTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="startTime" class="datepicker" value=""></div>',
+				endTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="endTime" class="datepicker" value=""></div>',
+				task = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"> <select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select> <label style="float:right; padding-top:0px;"> <button class="btn btn-danger btn-sm btn-white T-del T-guideBtn"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i> </button> </label> </div>';
+			$parent.find('td:eq(1)').append(startTime);
+			$parent.find('td:eq(2)').append(endTime);
+			$parent.find('td:eq(3)').append(task);
+			Tools.setDatePicker($parent.find('.T-guideAddTask').filter(function() {
+				return $(this).data('index') == index;
+			}).find('.datepicker'), true);
+			validator = rule.update(validator);
+		}else if (operation == 'del'){
+			var divIndex = $this.closest('div.T-guideAddTask').data('index'),
+				$parent = $this.closest('tr');
+			$parent.find('.T-guideAddTask').filter(function() {
+				return $(this).data('index') == divIndex;
+			}).remove();
+			function sort(array) {
+				if (array.length > 0) {
+					array.each(function(index) {
+						array.eq(index).attr('data-index',index);
+					});
+				}
+			}
+			for (var i = 1; i < 4; i++) {
+				sort($parent.find('td:eq(' + i + ')').find('.T-guideAddTask'))
+			}
+		}
 	}
 
 	exports.init = tripPlan.initModule;
