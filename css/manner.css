@@ -476,6 +476,9 @@ table tr td {
     margin-right: 20px!important;
 }
 
+.mar-b-0 {
+    margin-bottom: 0px;
+}
 .mar-b-10 {
     margin-bottom: 10px;
 }
