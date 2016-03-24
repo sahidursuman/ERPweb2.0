@@ -14,22 +14,22 @@
 		</thead>
 		<tbody class="T-accObjList">
 		{{each result as result}}
-			<tr> 
-				<td>{{result.approvedNumber}}</td>
-				<td>{{result.applyNumber}}</td>
-				<td>{{result.applyMoney}}</td>
-				<td>{{result.approvedMoney}}</td>
-				<td>{{result.appropriationMoney}}</td>
-				<td>{{result.appropriationDate}}</td>
-				<td>
-					{{ if result.appropriationStatus==0 }}
-						待拨款
-					{{else if result.appropriationStatus==1 }}
-						已拨款
-					{{/if}}
-				</td>
-			</tr>
-			{{/each}}
+		<tr> 
+		<td>{{result.approvedNumber}}</td>
+		<td>{{result.applyNumber}}</td>
+		<td>{{result.applyMoney}}</td>
+		<td>{{result.approvedMoney}}</td>
+		<td>{{result.appropriationMoney}}</td>
+		<td>{{result.appropriationDate}}</td>
+		<td>
+			{{ if result.appropriationStatus==0 }}
+			待拨款
+			{{else if result.appropriationStatus==1 }}
+			已拨款
+			{{/if}}
+		</td>
+		</tr>
+		{{/each}}
 		</tbody>
 	</table>
 

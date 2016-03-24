@@ -20,38 +20,36 @@ define(function(require, exports) {
 	};
 	accountSetting.accountSeList = function(pageNo) {
 		// 修正页码
-        pageNo = pageNo || 0;
+		pageNo = pageNo || 0;
 		$.ajax({
 			url:KingServices.build_url("accountSetting/applyLoan","findApplys"),
-            type: "GET",
-            data: {
-                pageNo: pageNo,
-                sortType: 'auto'
-        	},
+			type: "GET",
+			data: {
+				pageNo: pageNo,
+				sortType: 'auto'
+			},
 			success: function(data) {
 			var result = showDialog(data);
 			if(result){
 				var html = listTemplate(data);
 				Tools.addTab(menuKey, "账户设置", html);
-				var $tad = $('#tab-'+menuKey+'-content');
+				var $tab = $('#tab-'+menuKey+'-content');
 				accountSetting.initList();
 
 				// 绑定翻页组件
 				laypage({
-				    cont: $tad.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-				    pages: data.searchParam.totalPage, //总页数
-				    curr: (data.searchParam.pageNo + 1),
-				    jump: function(obj, first) {
-				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		accountSetting.accountSeList(obj.curr -1);
+					cont: $tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					pages: data.searchParam.totalPage, //总页数
+					curr: (data.searchParam.pageNo + 1),
+					jump: function(obj, first) {
+							if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							accountSetting.accountSeList(obj.curr -1);
 						}
-				    }
+					}
 				});
 			}
-	        }
-
+			}
 		})
-	
 	};
 
 		// 借款拨款记录
@@ -62,11 +60,11 @@ define(function(require, exports) {
 		accountSetting.BorrowingRecord = function(pageNo) {
 		$.ajax({
 			url:KingServices.build_url("accountSetting/applyLoan","findApprovedRecord"),
-            type: "GET",
-            data: {
-	                pageNo: pageNo,
-	                sortType: 'auto'
-            	},
+			type: "GET",
+			data: {
+				pageNo: pageNo,
+				sortType: 'auto'
+			},
 				success: function(data) {
 				var result = showDialog(data);
 					if(result){
@@ -76,17 +74,17 @@ define(function(require, exports) {
 
 						// 绑定翻页组件
 						laypage({
-						    cont: $('#' + tabId).find('.T-borrowing-bank').children('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.searchParam.totalPage, //总页数
-						    curr: (data.searchParam.pageNo + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		accountSetting.BorrowingRecord(obj.curr -1);
+							cont: $('#' + tabId).find('.T-borrowing-bank').children('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							pages: data.searchParam.totalPage, //总页数
+							curr: (data.searchParam.pageNo + 1),
+							jump: function(obj, first) {
+								if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+									accountSetting.BorrowingRecord(obj.curr -1);
 								}
-						    }
+							}
 						});	
 					}
-		    	}
+				}
 
 			})
 		};
@@ -95,10 +93,7 @@ define(function(require, exports) {
 				var searchParam = {
 					pageNo:0,
 					mobile:'mobile',
-					verifyCode:'verifyCode'
-				};
-				var searchParam = {
-					pageNo:0,
+					verifyCode:'verifyCode',
 					name:'name',
 					mobileNumber:'mobileNumber',
 					maritalStatu:'maritalStatu',
@@ -117,27 +112,27 @@ define(function(require, exports) {
 			//绑定新号码
 			accountSetting.$tab.find(".T-btn-accountSet").click(function(){
 				var mobile = accountSetting.$tab.find('.phoneNumber').text();
-				accountSetting.newPhone(mobile);
+				accountSetting.updateBindPhoneNum(mobile);
 			});
 			//添加绑定的新号码
 			accountSetting.$tab.find(".T-btn-addPhone").click(function(){
 				accountSetting.addPhone();
 			});
 			//借款申请
-			var $obj = $('.T-accountSetList');
-				$obj.find(".T-btn-apply").click(function(){
+			var $objAccount = $('.T-accountSetList');
+				$objAccount.find(".T-btn-apply").click(function(){
 				accountSetting.loanApplication(0);
 			});
 			//编辑借款申请
-			var $obj = $('.T-mainSetList');
-				$obj.find(".T-update").click(function(){
+			var $objMainSet = $('.T-mainSetList');
+				$objMainSet.find(".T-update").click(function(){
 				var id = $(this).closest('tr').attr('data-applyId');
 				accountSetting.updatelication(id);
 			});
 
 			//借款拨款申请list数据
 			var $obj = $('#tab-accountSetting-content');
-			$obj.find(".T-account-bankAccount").click(function(){
+				$obj.find(".T-account-bankAccount").click(function(){
 				accountSetting.BorrowingRecord(0);
 			});
 			
@@ -145,66 +140,66 @@ define(function(require, exports) {
 
 		//绑定手机号
 		/**
-		 * [newPhone 绑定手机号]
+		 * [updateBindPhoneNum 绑定手机号]
 		 * @param  {[type]} mobile     [号码]
 		 * @param  {[type]} verifyCode [验证码]
 		 * @return {[type]}            [description]
 		 */
-		accountSetting.newPhone = function(mobile,verifyCode){
+		accountSetting.updateBindPhoneNum = function(mobile,verifyCode){
 			var data = {};
 				data.oldMobile = mobile;
 			var html = applicationplate(data);
 			var newPhoneLayer = layer.open({
-			    type: 1,
-			    title:"更换绑定手机",
-			    skin: 'layui-layer-rim',
-			    area: '450px', 
-			    zIndex:1028,
-			    content: html,
-			    scrollbar: false,
-			    success:function(){
+				type: 1,
+				title:"更换绑定手机",
+				skin: 'layui-layer-rim',
+				area: '450px', 
+				zIndex:1028,
+				content: html,
+				scrollbar: false,
+				success:function(){
 					//更换新手机
-					var $obj = $('.applicationMain');
+					var $objApplic = $('#T-applicationMain');
 						//收不到验证的解决方法
-						$obj.find('.T-solution').click(function() {
+						$objApplic.find('.T-solution').click(function() {
 							var html = solutionlate();
 							var solutionLayer = layer.open({
-							    type: 1,
-							    title:"收不到验证码",
-							    skin: 'layui-layer-rim',
-							    area: '350px', 
-							    zIndex:1028,
-							    content: html,
-							    scrollbar: false,
-							    success:function(){
-							    	var $obj = $(".account-solutionMain");
-							    		$obj.find('.T-closeSolution').click(function() {
-							    		layer.close(solutionLayer);
-							    	});
-							    }
+								type: 1,
+								title:"收不到验证码",
+								skin: 'layui-layer-rim',
+								area: '350px', 
+								zIndex:1028,
+								content: html,
+								scrollbar: false,
+								success:function(){
+									var $objSolution = $("#T-account-solutionMain");
+										$objSolution.find('.T-closeSolution').click(function() {
+										layer.close(solutionLayer);
+									});
+								}
 							});
 						});
-
-						$obj.find('#send').click(function() {
-						var searchData = {};
-							searchData.mobile = $obj.find("[name=mobile]").val();
+						$objApplic.find('#send').click(function() {
+							var searchData = {};
+							searchData.mobile = $objApplic.find("[name=mobile]").val();
 						$.ajax({
 							url:KingServices.build_url("accountSetting/applyLoan","sendMessage"),
-				            type: "GET",
-				            data: {
-				            	searchParam:JSON.stringify(searchData)
-			            	},
+							type: "GET",
+							showLoading:false,
+							data: {
+								searchParam:JSON.stringify(searchData)
+							},
 							success:function(){
-								$obj.find('.T-newPhone').click(function() {
+								$objApplic.find('.T-newPhone').off('click').on('click',function(){
 								var searchData = {};
-								searchData.mobile = $obj.find("[name=mobile]").val();
-								searchData.verifyCode = $obj.find("[name=verifyCode]").val();
+								searchData.mobile = $objApplic.find("[name=mobile]").val();
+								searchData.verifyCode = $objApplic.find("[name=verifyCode]").val();
 								$.ajax({
 									url:KingServices.build_url("accountSetting/applyLoan","checkMobile"),
-						            type: "GET",
-						            data: {
-						            	searchParam:JSON.stringify(searchData)
-					            	},
+									type: "GET",
+									data: {
+										searchParam:JSON.stringify(searchData)
+									},
 									success:function(data){
 										var result = showDialog(data);
 											if (result) {
@@ -218,21 +213,21 @@ define(function(require, exports) {
 							});	
 							}
 						});
-					      	times=60,
-					      	timer=null;
-						     // 计时开始
-						    var that = this;
-						    this.disabled=true;
-						    timer = setInterval(function(){
-						    times --;
-						    that.value = times + "秒后重试";
-						    if(times <= 0){
-					        that.disabled =false;
-					        that.value = "发送验证码";
-					        clearInterval(timer);
-					        times = 60;
-				        		}
-					      },1000);  
+						var times=60;
+						var timer=null;
+						// 计时开始
+						var that = this;
+						this.disabled=true;
+						timer = setInterval(function(){
+						times --;
+						that.value = times + "秒后重试";
+						if(times <= 0){
+						that.disabled =false;
+						that.value = "发送验证码";
+						clearInterval(timer);
+						times = 60;
+							}
+						},1000);  
 					});
 				}
 			});	
@@ -249,35 +244,36 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				var addPhoneLayer = layer.open({
-			    	type: 1,
-				    title:"绑定新手机",
-				    skin: 'layui-layer-rim',
-				    area: '450px', 
-				    zIndex:1028,
-				    content: addPhonelate(data),
-				    scrollbar: false
+					type: 1,
+					title:"绑定新手机",
+					skin: 'layui-layer-rim',
+					area: '450px', 
+					zIndex:1028,
+					content: addPhonelate(data),
+					scrollbar: false
 					});
 				var $obj = $(".applicationMain-other");
 					$obj.find('#sended').click(function() {
-				    	var searchData = {};
+						var searchData = {};
 							searchData.mobile = $obj.find("[name=mobile]").val();
 							$.ajax({
 								url:KingServices.build_url("accountSetting/applyLoan","sendMessage"),
-					            type: "GET",
-					            data: {
-					            	searchParam:JSON.stringify(searchData)
-				            	},
-				            	success:function(){
-				            		$obj.find('.T-newChangePhone').click(function() {
+								type: "GET",
+								showLoading:false,
+								data: {
+								searchParam:JSON.stringify(searchData)
+								},
+								success:function(){
+									$obj.find('.T-newChangePhone').off('click').on('click',function(){
 									var searchData = {};
 									searchData.mobile = $obj.find("[name=mobile]").val();
 									searchData.verifyCode = $obj.find("[name=verifyCode]").val();
 									$.ajax({
 										url:KingServices.build_url("accountSetting/applyLoan","saveMobile"),
-							            type: "GET",
-							            data: {
-							            	searchParam:JSON.stringify(searchData)
-						            	},
+										type: "GET",
+										data: {
+											searchParam:JSON.stringify(searchData)
+										},
 										success:function(data){
 											var result = showDialog(data);
 											if (result) {
@@ -289,23 +285,23 @@ define(function(require, exports) {
 										}
 									})
 								});
-				            	}
+								}
 							});
-					      	times=60,
-					      	timer=null;
-						     // 计时开始
-						    var that = this;
-						    this.disabled=true;
-						    timer = setInterval(function(){
-						    times --;
-						    that.value = times + "秒后重试";
-						    if(times <= 0){
-					        that.disabled =false;
-					        that.value = "发送验证码";
-					        clearInterval(timer);
-					        times = 60;
-        					}
-	     			},1000);  
+							var times=60;
+							var timer=null;
+							// 计时开始
+							var that = this;
+							this.disabled=true;
+							timer = setInterval(function(){
+							times --;
+							that.value = times + "秒后重试";
+							if(times <= 0){
+							that.disabled =false;
+							that.value = "发送验证码";
+							clearInterval(timer);
+							times = 60;
+							}
+					},1000);  
 				});
 			})
 		}
@@ -316,40 +312,41 @@ define(function(require, exports) {
 		 * @return {[type]}[description]
 		 */
 		accountSetting.newPhoneChange = function(){
-    		var html = newPhonelate();
+			var html = newPhonelate();
 			var changePhoneLayer = layer.open({
-			    type: 1,
-			    title:"更换绑定手机",
-			    skin: 'layui-layer-rim',
-			    area: '450px', 
-			    zIndex:1028,
-			    content: html,
-			    scrollbar: false,
-			    success:function(){
-			    	var $obj = $('.applicationMain-other');
+				type: 1,
+				title:"更换绑定手机",
+				skin: 'layui-layer-rim',
+				area: '450px', 
+				zIndex:1028,
+				content: html,
+				scrollbar: false,
+				success:function(){
+					var $obj = $('.applicationMain-other');
 					var searchData = {};
 						searchData.mobile = $obj.find("[name=mobile]").val();
 						searchData.verifyCode = $obj.find("[name=verifyCode]").val()
-			    	$obj.find('#sended').click(function() {
-				    	var searchData = {};
+					$obj.find('#sended').click(function() {
+						var searchData = {};
 							searchData.mobile = $obj.find("[name=mobile]").val();
 							$.ajax({
-								url:KingServices.build_url("accountSetting/applyLoan","sendMessage"),
-					            type: "GET",
-					            data: {
-					            	searchParam:JSON.stringify(searchData)
-				            	},
-				            	success:function(){
-				            		$obj.find('.T-newChangePhone').click(function() {
+							url:KingServices.build_url("accountSetting/applyLoan","sendMessage"),
+							type: "GET",
+							showLoading:false,
+							data: {
+								searchParam:JSON.stringify(searchData)
+							},
+							success:function(){
+								$obj.find('.T-newChangePhone').click(function() {
 									var searchData = {};
 									searchData.mobile = $obj.find("[name=mobile]").val();
 									searchData.verifyCode = $obj.find("[name=verifyCode]").val();
 									$.ajax({
 										url:KingServices.build_url("accountSetting/applyLoan","saveMobile"),
-							            type: "GET",
-							            data: {
-							            	searchParam:JSON.stringify(searchData)
-						            	},
+										type: "GET",
+										data: {
+											searchParam:JSON.stringify(searchData)
+										},
 										success:function(data){
 											var result = showDialog(data);
 											if (result) {
@@ -361,25 +358,25 @@ define(function(require, exports) {
 										}
 									})
 								});
-				            	}
+								}
 							});
-					      	times=60,
-					      	timer=null;
-						     // 计时开始
-						    var that = this;
-						    this.disabled=true;
-						    timer = setInterval(function(){
-						    times --;
-						    that.value = times + "秒后重试";
-						    if(times <= 0){
-					        that.disabled =false;
-					        that.value = "发送验证码";
-					        clearInterval(timer);
-					        times = 60;
-        					}
-	     			},1000);  
+							var times=60;
+							var timer=null;
+							// 计时开始
+							var that = this;
+							this.disabled=true;
+							timer = setInterval(function(){
+							times --;
+							that.value = times + "秒后重试";
+							if(times <= 0){
+							that.disabled =false;
+							that.value = "发送验证码";
+							clearInterval(timer);
+							times = 60;
+							}
+					},1000);  
 				});	
-		    	}
+				}
 			});
 		};
 
@@ -391,19 +388,20 @@ define(function(require, exports) {
 		accountSetting.loanApplication = function(){
 			var html = applylate();
 				Tools.addTab(sKey, "申请借款", html);
+				var $objApply = $('.fuelux-apply');
 				//表单验证
 				var $form = $(".T-form");
-				var validator=rule.check($form);			
-				var $obj = $('.fuelux-apply');
-				var $price=$obj.find('[name=applyMoney]');
-				Tools.inputCtrolFloat($price);
-				$obj.find(".T-btn-cancel").click(function(){
-				 	 Tools.closeTab(sKey);
+				var validator=rule.check($form);
+
+				var $price=$objApply.find('[name=applyMoney]');
+					Tools.inputCtrolFloat($price);
+					$objApply.find(".T-btn-cancel").click(function(){
+						Tools.closeTab(sKey);
+						});
+					$objApply.find(".T-btn-saveApply").click(function(){
+						if (!validator.form()) { return; }
+						accountSetting.saveApplication($objApply);
 					});
-				$obj.find(".T-btn-saveApply").click(function(){
-					if (!validator.form()) { return; }
-					accountSetting.saveApplication($obj);
-				});
 			};
 
 		/**
@@ -414,10 +412,10 @@ define(function(require, exports) {
 		accountSetting.updatelication = function(id){
 				$.ajax({
 					url:KingServices.build_url("accountSetting/applyLoan","edit"),
-		            type: "POST",
-		            data: {
-		            	id:id
-	            	},
+					type: "POST",
+					data: {
+						id:id
+					},
 					success:function(data){
 						var result = showDialog(data);
 						if(result){
@@ -445,9 +443,9 @@ define(function(require, exports) {
 		 * @param  {[type]} $obj [父容器对象]
 		 * @return {[type]}      [description]
 		 */
-	    accountSetting.saveApplication=function($obj){
-	    	var searchData = {};
-	    	searchData.id = $obj.find("[name=id]").val();
+		accountSetting.saveApplication=function($obj){
+			var searchData = {};
+			searchData.id = $obj.find("[name=id]").val();
 			searchData.name = $obj.find("[name=name]").val();
 			searchData.mobileNumber = $obj.find("[name=mobileNumber]").val();
 			searchData.maritalStatus = $obj.find("[name=maritalStatus]").val();
@@ -462,10 +460,10 @@ define(function(require, exports) {
 			searchData.applyMoney = $obj.find("[name=applyMoney]").val();
 			$.ajax({
 				url:KingServices.build_url("accountSetting/applyLoan","saveApplys"),
-			          type: "GET",
-			          data: {
-			          	searchParam:JSON.stringify(searchData)
-		          	},
+				type: "GET",
+				data: {
+					searchParam:JSON.stringify(searchData)
+				},
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -476,6 +474,6 @@ define(function(require, exports) {
 					}
 				}
 			})
-	    };
+		};
 	exports.init = accountSetting.initModule;
 }); 
