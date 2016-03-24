@@ -70,9 +70,6 @@ define(function(require, exports) {
 						},{
 							type: 'positive-float',
 							errMsg: '请输入大于0的数字'
-						},{
-							type: 'float',
-							errMsg: '格式不正确'
 						}
 					]
 				}

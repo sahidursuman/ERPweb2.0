@@ -4169,15 +4169,11 @@ define(function(require, exports){
 		};*/
 		var addBusList = saveJsonStr.addBusArrangeList;
 		for(var i = 0;i<addBusList.length;i++){
-			if(addBusList[i].busCompanyId == "" || addBusList[i].busId == ""){
+			if(addBusList[i].busCompanyId == ""){
 				var message="";
 				if(addBusList[i].busCompanyId == ""){
 					message = "请选择车队"
-				}else{
-					if(addBusList[i].busId == ""){
-						message="请选择车牌号"
-					}
-				};
+				}
 				showMessageDialog($("#confirm-dialog-message"),message);
 				return;
 			}

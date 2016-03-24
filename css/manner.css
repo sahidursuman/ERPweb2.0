@@ -436,7 +436,9 @@ table tr td {
 .mar-t-10 {
     margin-top: 10px;
 }
-
+.mar-t-15 {
+    margin-top: 15px;
+}
 .mar-l-5 {
     margin-left: 5px;
 }
@@ -453,9 +455,14 @@ table tr td {
 .mar-l-23{
     margin-left: 23px;
 }
-
+.mar-l-f5{
+    margin-left: -5px;
+}
 .mar-l-15 {
     margin-left: 15px;
+}
+.mar-l-90 {
+    margin-left: 90px;
 }
 .mar-1-135{
     margin-left: 135px;
@@ -491,7 +498,12 @@ table tr td {
 .pad-l-5 {
     padding-left: 5px;
 }
-
+.pad-b-30{
+    padding-bottom: 30px;
+}
+.pad-b-20{
+    padding-bottom: 20px;
+}
 .line-h-2 {
     line-height: 1.9em;    
 }
@@ -1885,6 +1897,58 @@ p#back-top a span {
     background-color: gray;
     border: 2px solid gray !important;
 }
+.accountApply-status{
+   height: 30px !important;
+   width: 250px !important;
+   margin-top: 5px;
+}
+.apply-qualification{
+   margin-top: 25px;
+   width: 90%;margin-left: 10px;
+}
+.apply-details{
+   margin-left: -32px;height: 30px !important;
+}
+.apply-baseInfo{
+    margin-left: -20px;
+    height: 30px !important;
+}
+.apply-remark{
+    margin-left: -5px;
+    height: 30px !important;
+}
+.addPhone-prompt{
+    margin-left: 40px;
+    font-family: '宋体';
+    color: #666666;
+    margin-top: 10px;
+}
+.applicationBtn{
+    width: 120px;
+    height: 40px !important;
+    margin-left: 6px !important;
+}
+.newPhoneStyle{
+    width: 370px;height: 40px !important;
+}
+.Verification-code{
+    width: 240px;height: 40px !important;
+}
+.application-style{
+    margin-left: 40px;
+    font-family: '宋体';
+    font-weight: bold;
+}
+.fixedPhone{
+    margin-left: 46px;
+    margin-top: 11px;
+    position: absolute;
+    font-size: 12px;
+}
+.application-newPhone{
+    width: 370px;height: 40px !important;
+    padding-left:60px !important;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -1920,6 +1984,14 @@ p#back-top a span {
         border-bottom: 1px solid #ddd;
         border-left: 2px solid #ddd;
         border-right: 2px solid #ddd;
+    }
+    /*账户设置样式*/
+    .apply-details{
+        margin-left: -4px;height: 30px !important;
+    }
+    .apply-baseInfo{
+        margin-left: 8px;
+        height: 30px !important;
     }
 }
 
@@ -2211,7 +2283,7 @@ p#back-top a span {
         margin-left: 60px;
         margin-top: -20px;
     }
-
+    
 }
 
 @media screen and (max-width:1440px) {
@@ -2346,7 +2418,7 @@ p#back-top a span {
     }
     .mar-ort-10{
         margin-top: 10px;
-    }
+    } 
 }
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
