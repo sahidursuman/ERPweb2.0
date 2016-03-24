@@ -211,8 +211,6 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     FinGuide.initOperationModule = function(args, type, $tab) {
-        console.log(args);
-        
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
             args.guideId = $tab.find('.T-saveClear').data('id');
@@ -230,6 +228,7 @@ define(function(require, exports) {
             }
 
             name = $tab.find('.T-guideName').text();
+            args.isOuter = FinGuide.isOuter;
         }
         if(args.borrow){
             args.isOuter = true;
@@ -495,7 +494,7 @@ define(function(require, exports) {
      * @return {[type]}         [description]
      */
     FinGuide.savePayingData = function($tab,Dsave,argsData,tabArgs) {
-        var validator = new FinRule(FinGuide.isOuter ? 3 : 1),
+        var validator = new FinRule((FinGuide.isOuter || $tab.find('.T-saveClear').data('borrow') == "borrow") ? 3 : 1),
             argsLen = arguments.length;
         if(!FinancialService.isClearSave($tab,validator)){
             return false;
@@ -629,7 +628,8 @@ define(function(require, exports) {
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
                 accountStatus : accountStatus,
-                borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false
+                borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false,
+                isOuter : FinGuide.isOuter
             };
 
             if (args.lineProductName === '全部') {
