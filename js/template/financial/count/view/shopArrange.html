@@ -61,7 +61,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}class="T-noSubmit"{{/if}}>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -73,7 +73,7 @@
                 </td>
 
                 <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}}/></td>
                 <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                     {{else}}
@@ -81,22 +81,22 @@
                     {{/if}}
                 </td>
                 
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
+                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old = "{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old = "{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
                 
-                <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
+                <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td rowspan="{{arrange.shopArrangeItemSet.length}}" class="hidden">
                     <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
-                    {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                 </td>
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
 
                 </td>
@@ -120,7 +120,7 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
-            {{if index == 1}}class="noSumRate"{{/if }} {{if arrange.isConfirmAccount == 1}}class="T-noSubmit"{{/if}}>
+            {{if index == 1}}class="noSumRate"{{/if }} {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}class="T-noSubmit"{{/if}}>
                 <td>
                 <span class="span_shopPolicy">
                     <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
@@ -147,7 +147,7 @@
                 </td>
 
                 <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}}/></td>
                  <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                     {{else}}
@@ -155,18 +155,18 @@
                     {{/if}}
                 </td>
                 
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}} class="w-50" /></td>
+                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" /></td>
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
                 
-                <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
+                <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
                 
                 <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old="{{itemSet.guideRebateMoney}}"
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
 
                 <td >
                 {{if editStatus == 1}}
-                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/> 
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
                     
                 {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
 
