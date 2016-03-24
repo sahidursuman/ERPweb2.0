@@ -238,7 +238,11 @@ define(function(require, exports) {
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
-                    data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
+                    if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
+                        data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
+                        data.totalList.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
+                    };
+                    
                     data.name = args.shopName;
                     template = shopCheckingTemplate;
                     title = '购物对账';
@@ -259,6 +263,8 @@ define(function(require, exports) {
                         if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
                         };
+                        //取消对账权限过滤
+                        checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
                         FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
                     FinShop.initOperationEvent($theTab,args,type);
@@ -564,6 +570,7 @@ define(function(require, exports) {
             args.shopId = args.id;
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
             args.tripMessage = $tab.find('.T-search-trip').val();
+            args.accountStatus = $tab.find('input[name=accountStatus]').val();
             delete args.id;
             delete args.sumCurrentPayMoney;
 
@@ -618,7 +625,9 @@ define(function(require, exports) {
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val(),
-                accountStatus : $tab.find('input[name=accountStatus]').val()
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                sortType : "accountTime",
+                order : "asc"
             };
 
             $.ajax({

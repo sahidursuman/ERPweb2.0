@@ -228,13 +228,19 @@ define(function(require, exports) {
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
-				data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
+				if(Replace.checkTemp && Replace.checkTemp.length > 0){
+                    data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
+                    data.totalList.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
+                    data.totalList.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                }
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
 					if(Replace.checkTemp && Replace.checkTemp.length > 0){
                         Replace.$checkingTab.data('isEdited',true);
                     }
+                    //取消对账权限过滤
+                    checkDisabled(data.bookinAccountList,Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
 					Replace.CM_event(Replace.$checkingTab,args,true);
 				} else {
 					Replace.$checkingTab.data('next', args)
@@ -457,7 +463,8 @@ define(function(require, exports) {
                 ticketOrderStatus : ticket,
                 sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val(),
                 startDate : $tab.find('.T-search-start-date').val(),
-                endDate : $tab.find('.T-search-end-date').val()
+                endDate : $tab.find('.T-search-end-date').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             }
 			var $datepicker = $tab.find('.T-search-area .datepicker');
             FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){

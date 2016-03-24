@@ -195,6 +195,7 @@
                             <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
                             <td>
                                 {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
+                                <a href="#" class="T-viewCostDetail">
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
@@ -206,6 +207,7 @@
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
+                                </a>
                                 {{/if}}<a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                             </td>
                         </tr>

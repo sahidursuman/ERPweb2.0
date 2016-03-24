@@ -166,8 +166,13 @@ define(function(require, exports) {
                         resultList[i].rowLen = ((resultList[i].outFeeList.length > 0) ? 1 : 0) + ((resultList[i].otherFeeList.length > 0) ? 1 : 0);
                         resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                     }
-                    resultList = Transfer.getCheckTemp(resultList);
                     data.financialTransferList = resultList;
+                    if(Transfer.checkTemp && Transfer.checkTemp.length > 0){
+                        data.financialTransferList = Transfer.getCheckTemp(data.financialTransferList);
+                        data.sumPunishMoney = Transfer.checkTemp.sumPunishMoney;
+                        data.sumSettlementMoney = Transfer.checkTemp.sumSettlementMoney;
+                        data.sumUnPayedMoney = Transfer.checkTemp.sumUnPayedMoney;
+                    }                    
 
                     var html = transferChecking(data);
                     
@@ -879,6 +884,10 @@ define(function(require, exports) {
                 }
             }
             saveJson = JSON.stringify(saveJson);
+        } else {
+           saveJson.sumPunishMoney = $tab.find('.T-sumBackMoney').text();
+           saveJson.sumSettlementMoney = $tab.find('.T-sumSettlementMoney').text();
+           saveJson.sumUnPayedMoney = $tab.find('.T-sumUnReceivedMoney').text();
         }
         return saveJson;
     };
