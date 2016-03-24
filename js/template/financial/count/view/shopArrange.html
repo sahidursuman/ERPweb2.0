@@ -47,12 +47,12 @@
           <th class="th-border"><span class="necessary">*</span>比例%</th>
           <th class="th-border"> 
                 <span>返佣</span>
-                <!-- <div style="float:right">
+                 <!-- <div style="float:right">
                     <input type="checkbox" class="ace T-guideCheckbox"/>
                     <span class="lbl"></span>清除小数
                     &nbsp;
                     </th>
-                </div> -->
+                                 </div> -->
         </tr></thead>
         <tbody class="T-count-shopping"> 
         {{each dayList as day}}
@@ -61,7 +61,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}class="T-noSubmit"{{/if}}>
+        <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" >
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -119,7 +119,7 @@
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
-            {{if index == 1}}class="noSumRate"{{/if }} {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}class="T-noSubmit"{{/if}}>
+            {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}>
                 <td>
                 <span class="span_shopPolicy">
                     <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
@@ -182,7 +182,10 @@
             <td style="font-weight: bold;text-align:right;">导佣小计：</td>
             <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney"></span></td>
             <td style="font-weight: bold;text-align:right;">佣金小计：</td>
-            <td style="font-weight: bold;text-align:left;" colspan="2">&nbsp;&nbsp;<span class="F-float F-money T-sumRebeMoney "></span></td>
+            <td style="font-weight: bold;text-align:left;" colspan="2">
+                &nbsp;&nbsp;
+                <span class="F-float F-money T-sumRebeMoney "></span>
+            </td>
         </tr>
         {{/each}}  
         {{/each}}
