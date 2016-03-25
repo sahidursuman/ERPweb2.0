@@ -152,7 +152,7 @@ define(function(require, exports) {
         arrangeGroupTransfer.choosenAdultAndChildCount($tab);
         arrangeGroupTransfer.checkedPager();
         //查看小组信息
-        $tab.find('.T-list-view').on('click', '.T-action', function(event) {
+        $tab.find('.T-list-view').on('click',function(event) {
             event.preventDefault();
             /* Act on the event */
             var $that = $(this),id = $that.closest('tr').data('value');
