@@ -426,6 +426,18 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule,isSave){
         } else if(clearSaveJson.length == 0){
             showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
             return false;
+        } else {
+            var $saveBtn = $tab.find('.T-saveClear'),
+                saveZero = $saveBtn.data('save-zero');
+            if (!saveZero && parseFloat($tab.find('input[name=sumPayMoney]').val()) == 0) {
+                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                    $saveBtn.data('save-zero', true).trigger('click');
+                })
+
+                return false;
+            } else {
+                $saveBtn.data('save-zero', false);
+            }
         }
         clearSaveJson = JSON.stringify(clearSaveJson);
     }
@@ -456,19 +468,6 @@ FinancialService.isClearSave = function($tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };
-
-    var $saveBtn = $tab.find('.T-saveClear'),
-        saveZero = $saveBtn.data('save-zero');
-    if (!saveZero && sumPayMoney == 0) {
-        showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-            $saveBtn.data('save-zero', true).trigger('click');
-        })
-
-        return false;
-    } else {
-        $saveBtn.data('save-zero', false);
-    }
-    
     return true;
 };
 

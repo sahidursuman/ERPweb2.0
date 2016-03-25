@@ -266,10 +266,6 @@ define(function(require, exports) {
                         data.bankId = Self.clearTempSumDate.bankId;
                         data.voucher = Self.clearTempSumDate.voucher;
                         data.billTime = Self.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
@@ -526,6 +522,7 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo);
                         }else{
                             args.isAutoPay = Self.showBtnFlag ? 2: 0;
+                            args.autoPay = 0;
                             Self.GetClear(args);
                         }
                     });

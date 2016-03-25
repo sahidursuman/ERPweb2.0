@@ -289,10 +289,6 @@ define(function(require, exports) {
                         data.bankId = Insure.clearTempSumDate.bankId;
                         data.voucher = Insure.clearTempSumDate.voucher;
                         data.billTime = Insure.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
@@ -538,6 +534,7 @@ define(function(require, exports) {
                         }else{
                             Insure.saveFlag = false; 
                             args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;
+                            args.autoPay = 0;
                             Insure.getClearing(args);
                         }
                     });  

@@ -280,10 +280,6 @@ define(function(require, exports) {
                         data.billTime = restaurant.clearTempSumDate.billTime;
 
                         data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialRestaurantList = FinancialService.isGuidePay(resultList);
 
@@ -538,6 +534,7 @@ define(function(require, exports) {
                             if(args.isAutoPay == 1){
                                 args.isAutoPay = 0;
                             }
+                            args.autoPay = 0;
                             restaurant.restaurantClear(args,$tab);
                         }
                     });

@@ -283,10 +283,6 @@ define(function(require, exports) {
                         data.billTime = busCompany.clearTempSumDate.billTime;
 
                         data.financialBusCompanyListData = FinancialService.getTempDate(resultList, busCompany.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
@@ -460,6 +456,7 @@ define(function(require, exports) {
                             if (args.isAutoPay == 1) {
                                 args.isAutoPay = 0;
                             }
+                            args.autoPay = 0;
                             busCompany.busCompanyClear(args,$tab);
                         }
                     });

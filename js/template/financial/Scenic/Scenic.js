@@ -293,9 +293,6 @@ define(function(require, exports) {
                         data.bankId = scenic.clearTempSumDate.bankId;
                         data.voucher = scenic.clearTempSumDate.voucher;
                         data.billTime = scenic.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
                     }
                     data.isOuter = scenic.isOuter = !!args.isOuter || scenic.isOuter;
                     data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
@@ -542,6 +539,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
                             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                            args.autoPay = 0;
                             scenic.scenicClear(args);
                         }
                     }); 
