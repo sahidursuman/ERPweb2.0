@@ -64,7 +64,7 @@
             </thead>
             <tbody class="T-checkList" data-right="1300005">
                 {{each financialTransferList as rs}}
-                <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.outFeeList.length> 0}}data-trans="trans"{{/if}}>
+                <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}change="true"{{/if}} {{if rs.outFeeList.length> 0}}data-trans="true"{{/if}}>
                     <td rowspan="{{rs.rowLen}}"><a class="T-option T-orderNumber" data-id="{{rs.arrangeId}}">{{rs.orderNumber}}</a></td>
                     <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
@@ -115,7 +115,7 @@
                     <td rowspan="{{rs.rowLen}}">{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                     <td rowspan="{{rs.rowLen}}">
                         <label class="pos-rel">
-                            <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount==1 }}checked="checked" {{/if}} />
+                            <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked" {{/if}} />
                             <span class="lbl">对账</span>
                         </label>
                         <label>|</label>
@@ -124,7 +124,7 @@
                 </tr>
                 {{if rs.outFeeList.length > 0 && rs.otherFeeList.length > 0}}
                 <!-- 若有中转结算价 -->
-                <tr>
+                <tr {{if rs.change}}class="success"{{/if}}>
                     <td>{{each rs.otherFeeList as of}} {{of.describe}}：
                         <span class="F-float F-money">{{of.price}}</span> x
                         <span class="F-float F-count">{{of.count}}</span> =

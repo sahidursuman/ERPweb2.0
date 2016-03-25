@@ -238,6 +238,11 @@ define(function(require, exports) {
                     data.source = FinShop.isBalanceSource;
                     data.shopAccountList = FinancialService.getTempDate(data.shopAccountList,FinShop.payingJson);
                 } else {
+                    if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
+                        data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
+                        data.totalList.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
+                    };
+                    
                     data.name = args.shopName;
                     template = shopCheckingTemplate;
                     title = '购物对账';
@@ -251,9 +256,16 @@ define(function(require, exports) {
                         if(FinShop.payingJson){
                             FinShop.$settlementTab.data('isEdited',true);
                         }
+                        FinShop.sumShopMoney(FinShop.$settlementTab);
                     } else {
                         $theTab = $tab || $('#tab-' + key + '-content');
                         FinShop.$checkingTab = $theTab;
+                        if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
+                            FinShop.$checkingTab.data('isEdited',true);
+                        };
+                        //取消对账权限过滤
+                        checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
+                        FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
                     FinShop.initOperationEvent($theTab,args,type);
                     $theTab.data('id', args.shopId);
@@ -275,8 +287,16 @@ define(function(require, exports) {
                                 FinShop.$settlementTab.data("isEdited",false);
                                 FinShop.getOperationList(obj.curr - 1,FinShop.$settlementTab);
                             } else {
-                                FinShop.$checkingTab.data('isEdited',false);
-                                FinShop.initOperationList({ page: obj.curr - 1 }, type,FinShop.$checkingTab);
+                                var temp = FinancialService.checkSaveJson(FinShop.$checkingTab,FinShop.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    console.log("cndsfrvbhgsehrbg");
+                                    return false;
+                                } else {
+                                    FinShop.checkTemp = temp;
+                                    FinShop.$checkingTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    FinShop.initOperationList(args, type);
+                                }
                             }
                         }
                     }
@@ -318,6 +338,8 @@ define(function(require, exports) {
             event.preventDefault();
             if(type){
                 FinShop.payingJson = false;
+            } else {
+                FinShop.checkTemp = false;
             }
             FinShop.initOperationList($tab.data("next"), type,false);
         })
@@ -335,6 +357,8 @@ define(function(require, exports) {
             event.preventDefault();
             if(type){
                 FinShop.payingJson = false;
+            } else {
+                FinShop.checkTemp = false;
             }
         });
 
@@ -512,28 +536,25 @@ define(function(require, exports) {
         console.log("saveChecking");
         // 表单校验
         var argLen = arguments.length,
-            json = FinancialService.checkSaveJson($tab, new FinRule(0));
-        if (JSON.parse(json).length > 0) {
-            $.ajax({
-                url: KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
-                type: "POST",
-                data: { checkAccountList: json }
-            }).done(function(data) {
-                if (showDialog(data)) {
+            json = FinancialService.checkSaveJson($tab,FinShop.checkTemp,new FinRule(0),true);
+        $.ajax({
+            url: KingServices.build_url('financial/shopAccount', 'checkShopAccount'),
+            type: "POST",
+            data: { checkAccountList: json }
+        }).done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    FinShop.checkTemp = false;
                     $tab.data('isEdited', false);
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (argLen === 1) {
-                            Tools.closeTab(checkMenuKey);
-                            FinShop.getList(FinShop.listPageNo);
-                        } else {
-                            FinShop.initOperationList(args, false, false);
-                        }
-                    });
-                }
-            });
-        }else {
-            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据');
-        }
+                    if (argLen === 1) {
+                        Tools.closeTab(checkMenuKey);
+                        FinShop.getList(FinShop.listPageNo);
+                    } else {
+                        FinShop.initOperationList(args, false, false);
+                    }
+                });
+            }
+        });
     };
 
     /**
@@ -549,31 +570,32 @@ define(function(require, exports) {
             args.shopId = args.id;
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
             args.tripMessage = $tab.find('.T-search-trip').val();
+            args.accountStatus = $tab.find('input[name=accountStatus]').val();
             delete args.id;
             delete args.sumCurrentPayMoney;
 
             $.ajax({
-                    url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
-                    type: 'post',
-                    data: args,
-                    showLoading: false
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        var payType = $tab.find('select[name=sumPayType]').val(),
-                            bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
-                        var voucher = $tab.find('input[name=credentials-number]').val();
-                        var billTime = $tab.find('input[name=tally-date]').val();
-                        var bankNumber = (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
-                        FinShop.payingJson = data.autoAccountList;
-                        FinShop.payingJson.bankId = bankId;
-                        FinShop.payingJson.voucher = voucher;
-                        FinShop.payingJson.billTime = billTime;
-                        FinShop.payingJson.bankNumber = bankNumber;
-                        $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
-                        FinShop.setAutoFillEdit($tab, true);
-                    }
-                });
+                url: KingServices.build_url('financial/shopAccount', 'autoShopAccount'),
+                type: 'post',
+                data: args,
+                showLoading: false
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var payType = $tab.find('select[name=sumPayType]').val(),
+                        bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
+                    var voucher = $tab.find('input[name=credentials-number]').val();
+                    var billTime = $tab.find('input[name=tally-date]').val();
+                    var bankNumber = (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val();
+                    FinShop.payingJson = data.autoAccountList;
+                    FinShop.payingJson.bankId = bankId;
+                    FinShop.payingJson.voucher = voucher;
+                    FinShop.payingJson.billTime = billTime;
+                    FinShop.payingJson.bankNumber = bankNumber;
+                    $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
+                    FinShop.setAutoFillEdit($tab, true);
+                }
+            });
         }
     };
 
@@ -602,7 +624,10 @@ define(function(require, exports) {
                 shopName : $tab.find('input[name=shopName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
-                tripMessage: $tab.find('.T-search-trip').val()
+                tripMessage: $tab.find('.T-search-trip').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                sortType : "accountTime",
+                order : "asc"
             };
 
             $.ajax({
@@ -615,6 +640,7 @@ define(function(require, exports) {
                         data.shopAccountList = FinancialService.getTempDate(data.shopAccountList, FinShop.payingJson);
                         var html = payingTableTemplate(data);
                         FinShop.$settlementTab.find('.T-checkList').html(html);
+
                         if(FinShop.payingJson){
                             FinShop.$settlementTab.data("isEdited",true);
                         }
@@ -710,7 +736,37 @@ define(function(require, exports) {
             $obj.autocomplete('search','');
         });
     };
-
+    //购物账务金额合计
+    FinShop.sumShopMoney = function($listObj){
+        var $trArr = $listObj.find('.T-hideTr');
+        for(var i = 0;i<$trArr.length;i++){
+            var $shopItemList = $trArr.eq(i).find('.T-shopItemList');
+            var $itemTr = $shopItemList.find('tr');
+            var sumShopMoney = 0,
+                sumTravelMoney = 0,
+                sumGuideMoney = 0;
+            for(var j = 2;j<$itemTr.length;j++){
+                var $thisTr = $itemTr.eq(j);
+                sumShopMoney += formatVal($thisTr.find('.T-consumeMoney').text());
+                sumTravelMoney += formatVal($thisTr.find('.T-travelAgencyRebateMoney').text());
+                sumGuideMoney += formatVal($thisTr.find('.T-guideRebateMoney').text());
+                if($thisTr.hasClass('T-sumMoney')){
+                    $thisTr.find('.T-shopMoney').text(sumShopMoney);
+                    $thisTr.find('.T-travelMoney').text(sumTravelMoney);
+                    $thisTr.find('.T-guideMoney').text(sumGuideMoney);
+                    break;
+                }
+            }
+        }
+        function formatVal (val){
+            var newVal = parseFloat(val);
+            if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                return 0;
+            }
+            var newVal = Math.round(val*100)/100;
+            return newVal;
+            }
+    };
     // 暴露方法
     exports.init = FinShop.initModule;
     exports.initIncome = FinShop.initPay;

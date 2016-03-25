@@ -17,7 +17,7 @@
         </div>
         <div class="form-group mar-r-10">
             <label>项目：</label>
-            <input type="text" class="form-control T-search-project" value="{{if searchParam.busCompanyOrderStatus == 1}}车队, {{/if}}{{if searchParam.hotelOrderStatus == 1}}酒店, {{/if}}{{if searchParam.scenicOrderStatus == 1}}景区, {{/if}}{{if searchParam.ticketOrderStatus == 1}}票务, {{/if}}">
+            <input type="text" class="form-control T-search-project" value="{{searchParam.projects}}">
         </div>
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
@@ -85,9 +85,9 @@
                 <th>对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList" data-right="1290005">
         {{each bookinAccountList as rs index}}
-            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
@@ -95,7 +95,7 @@
                 <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
                 <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
-                <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
+                <td name="unPayedMoney"><span class="F-float F-money">{{if rs.unPayedMoney}}{{rs.unPayedMoney}}{{else}}{{rs.unReceiveMoney}}{{/if}}</span></td>
                 <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
                     <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
                     {{/if}}
@@ -104,7 +104,7 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
+                        <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} /> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"> <a> |</a></label>

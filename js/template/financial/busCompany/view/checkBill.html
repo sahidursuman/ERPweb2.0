@@ -61,7 +61,8 @@
         </thead>
         <tbody class="T-checkList" data-right="230005">
             {{each financialBusCompanyListData as rs index}}
-		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
+		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
+            {{if rs.change}}data-change="true"{{/if}}>
 				<td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
                         {{if rs.lineProductName || rs.guideName}}，{{/if}}
                     {{/if}}
@@ -103,7 +104,7 @@
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td style="padding-left:10px;">
 				    <label class="pos-rel">
-				   		<input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
+				   		<input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>对账
 				    </label>
                     <a class="cursor"> |</a>

@@ -25,7 +25,7 @@ define(function(require, exports) {
 
 	Insure.initModule = function() {
 		var dateJson = FinancialService.getInitDate();
-        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate);
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2);
    	};
   	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus){
   		if (Insure.$searchArea && arguments.length === 1) {
@@ -158,7 +158,14 @@ define(function(require, exports) {
 			data:{ searchParam : JSON.stringify(args) },
 			success : function(data){
 				if(showDialog(data)){
+
 					var fiList = data.financialInsuranceList;
+                    data.financialInsuranceList = FinancialService.isGuidePay(fiList);
+                    if(Insure.checkTemp && Insure.checkTemp.length > 0){
+                        data.financialInsuranceList = FinancialService.getCheckTempData(data.financialInsuranceList,Insure.checkTemp);
+                        data.sumSettlementMoney = Insure.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = Insure.checkTemp.sumUnPayedMoney;
+                    }
                     data.insuranceName = args.insuranceName;
                     data.insuranceId = args.insuranceId;
 					var html = insuranceChecking(data);
@@ -167,6 +174,9 @@ define(function(require, exports) {
                     if (Tools.addTab(checkTabId,"保险对账",html)) {
                         Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
                         Insure.$checkTab.data('account-status',args.accountStatus);
+                        if(Insure.checkTemp && Insure.checkTemp.length > 0){
+                           Insure.$checkTab.data('isEdited',true); 
+                        }
                         Insure.initCheck(args,Insure.$checkTab); 
                         var validator = new FinRule(0).check(Insure.$checkTab.find(".T-checkList"));                     
                         //取消对账权限过滤
@@ -183,9 +193,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Insure.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                Insure.GetChecking(args);
+                                var temp = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                }else{
+                                    Insure.$checkTab.data('isEdited',false);
+                                    Insure.checkTemp = temp;
+                                    args.pageNo = obj.curr-1;
+                                    Insure.GetChecking(args);
+                                }
+                                
                             }
                         }
                     });
@@ -370,6 +387,9 @@ define(function(require, exports) {
         });
 
         $tab.find(".T-cancel-auto").off().on("click",function(){
+            Insure.clearTempData = false;
+            Insure.clearTempSumDate = false;
+            $tab.data('isEdited',false);
             args.isAutoPay = 0;
             Insure.getClearing(args);
         });        
@@ -455,7 +475,7 @@ define(function(require, exports) {
     //对账数据保存
     Insure.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -465,6 +485,7 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        Insure.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
@@ -534,6 +555,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
     		event.preventDefault();
             if(option == "check"){
+                Insure.checkTemp = false;
                 Insure.GetChecking($tab.data('next'),$tab);
             } else if(option == "clear"){
                 Insure.clearTempData = false;
@@ -565,6 +587,8 @@ define(function(require, exports) {
             if(option == "clear"){
                 Insure.clearTempData = false;
                 Insure.clearTempSumDate = false;
+            }else if(option == "check"){
+                Insure.checkTemp = false;
             }
         });
 
