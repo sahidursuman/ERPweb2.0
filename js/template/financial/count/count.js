@@ -481,10 +481,8 @@ define(function(require, exports){
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
 		});
-		$listObj.off('click').on('click','.T-travelCheckbox',function(){
+		$listObj.find('.T-math-round').off('click').on('click', function(){
 			//清除小数点
-			Count.delValDecimal($(this),$shopObj,$obj);
-		}).on('click','.T-guideCheckbox',function(){
 			Count.delValDecimal($(this),$shopObj,$obj);
 		});
 		//新增购物安排
@@ -1495,13 +1493,13 @@ define(function(require, exports){
 		'</tr>'+
 		'<tr class="sumMoney">'+
 			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1664,57 +1662,28 @@ define(function(require, exports){
 		travelAgencyRateMoney = Count.changeTwoDecimal(travelAgencyRateMoney);
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
-		var travelDelFlag = $parentObj.find('.T-travelCheckbox').is(':checked');
-		var guideDelFlag = $parentObj.find('.T-guideCheckbox').is(':checked');
 		if(!!shopId){
 			switch(editFeildTagName) {
 				case 'travelAgencyRate':
-					if(travelDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}else{
-						$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-					}
-					
+					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 					break;
 				case 'guideRate':
-					if(guideDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}else{
-						$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-					}
-					
+					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 					break;
 				case 'consumeMoney':
-					if(guideDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}else{
-						$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-					};
-					if(travelDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}else{
-						$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-					};
-					break;
-				case 'travelAgencyRateMoney' :
-					if(travelDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}
-					break;
-				case 'guideRateMoney' :
-					if(guideDelFlag){
-						Count.addItemFormatVal($obj,$parentObj);
-					}
+					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 					break;
 				default: break;
 			}
-			
 		}else{
-			if(editFeildTagName != "travelAgencyRateMoney" && editFeildTagName != "guideRateMoney"){
+			if(editFeildTagName != 'travelAgencyRateMoney' && editFeildTagName != 'guideRateMoney'){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			}
-		};
+		}
+			
+			
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
@@ -5098,105 +5067,21 @@ define(function(require, exports){
 	};
 	//清除小数点
 	Count.delValDecimal = function($obj,$listObj,$parentObj){
-		var travelArr = $listObj.find('[name=travelAgencyRateMoney]');
-		var guideArr = $listObj.find('[name=guideRateMoney]');
-		if($obj.hasClass('T-travelCheckbox')){
-			for(var i = 0;i<travelArr.length;i++){
-				var $that = travelArr.eq(i);
-				var inpVal = $that.val();
-				
-				var newVal = Math.round(Count.changeTwoDecimal(inpVal));
-				if($obj.is(':checked')){
-					$that.attr('oldVal',inpVal);
-					$that.val(newVal);
-					Count.totalRebeatMoney($that,$parentObj);
-				}else{
-					var oldVal = $that.attr('oldVal');
-					$that.val(oldVal);
-					Count.totalRebeatMoney($that,$parentObj);
-					
-				}
+		var needSum = false;
+
+		var $target = $listObj.find('[name='+ $obj.data('target')+']').each(function() {
+			var $that = $(this), value = $that.val();
+
+			if (!!value) {
+				$that.val(Math.round(Count.changeTwoDecimal(value)))
+				Count.totalRebeatMoney($that,$parentObj);
+				needSum = true;
 			}
-		};
-		if($obj.hasClass('T-guideCheckbox')){
-			for(var i = 0;i<guideArr.length;i++){
-				var $that = guideArr.eq(i);
-				var inpVal = $that.val();
-				
-				var newVal = Math.round(Count.changeTwoDecimal(inpVal));
-				if($obj.is(':checked')){
-					$that.attr('oldVal',inpVal);
-					$that.val(newVal);
-					Count.totalRebeatMoney($that,$parentObj);
-				}else{
-					var oldVal = $that.attr('oldVal')
-					$that.val(oldVal);
-					Count.totalRebeatMoney($that,$parentObj);
-				}
-			}
-		};
-	};
-	//新增处理
-	Count.addItemFormatVal = function($obj,$parentObj){
-		var travelFlag = $parentObj.find('.T-travelCheckbox').is(':checked');
-		var guideFlag = $parentObj.find('.T-guideCheckbox').is(':checked');
-		var tagName = $obj.attr('name');
-		var $tr = $obj.closest('tr');
-		if(travelFlag){
-			switch(tagName){
-				case 'travelAgencyRateMoney' :
-					var inpVal = $obj.val();
-					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
-					$obj.attr('oldVal',newVal);
-					$obj.val(newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-				case 'travelAgencyRate' :
-					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
-					var inpVal = Count.changeTwoDecimal($obj.val());
-					var newVal = Math.round((money*inpVal)/100);
-					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
-					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-				case 'consumeMoney' :
-					var travelAgencyRate = Count.changeTwoDecimal($tr.find('[name=travelAgencyRate]').val());
-					var money = Count.changeTwoDecimal($obj.val());
-					var newVal = Math.round((money*travelAgencyRate)/100);
-					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
-					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-			}
-			
-		};
-		if(guideFlag){
-			switch(tagName){
-				case 'guideRateMoney' :
-					var inpVal = $obj.val();
-					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
-					$obj.val(newVal);
-					$obj.attr('oldVal',newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-				case 'guideRate' :
-					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
-					var inpVal = Count.changeTwoDecimal($obj.val());
-					var newVal = Math.round((money*inpVal)/100);
-					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
-					$tr.find('[name=guideRateMoney]').val(newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-				case 'consumeMoney' :
-					var guideRate = Count.changeTwoDecimal($tr.find('[name=guideRate]').val());
-					var money = Count.changeTwoDecimal($obj.val());
-					var newVal = Math.round((money*guideRate)/100);
-					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
-					$tr.find('[name=guideRateMoney]').val(newVal);
-					Count.totalRebeatMoney($obj,$parentObj);
-					break;
-			}
-		};
+		});
+
+		if (needSum) {
+			Count.autoShopSumCost($target.eq(0), $parentObj);
+		}
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
