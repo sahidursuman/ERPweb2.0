@@ -127,10 +127,8 @@
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unPayedMoney}}</td>
-                <td>
-                    <input name="payMoney" type="text" value="{{rs.payMoney}}" data-le="{{rs.unPayedMoney}}" {{if !isOuter && rs.unPayedMoney <=0 }} disabled {{/if}} class="money" maxlength="9">
-                </td>
-                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if !isOuter && rs.unPayedMoney <=0 }} disabled {{/if}}></textarea></td>
+                <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9" /></td>
+                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td >

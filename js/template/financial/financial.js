@@ -356,12 +356,13 @@ FinancialService.updateSumPayMoney = function($tab,rule){
 
         if(!validator.form()){ return false; }
         $this.data("oldVal",$this.val());
+    }).on("change","[name=payRemark]",function(){
+        $(this).closest('tr').data("change",true);
     });
 };
 
 //付款-翻页暂存数据读取
 FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide标识是否为导游付款
-    console.log(tempJson);
     if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
