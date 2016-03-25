@@ -369,10 +369,10 @@ define(function(require, exports) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
                     if (autoValidator.form()) {
-                        var args = FinancialService.autoPayJson(FinShop.settlementId, $tab, new FinRule(2), 1);
-                        if (!args) return;
+                        var argsData = FinancialService.autoPayJson(args.shopId, $tab, new FinRule(2), 1);
+                        if (!argsData) return;
                         FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(), function() {
-                            FinShop.autoFillMoney($tab);
+                            FinShop.autoFillMoney($tab,argsData);
                         });
                     }
                 } else {
@@ -548,7 +548,7 @@ define(function(require, exports) {
      * @param  {[type]} $tab [description]
      * @return {[type]}      [description]
      */
-    FinShop.autoFillMoney = function($tab) {
+    FinShop.autoFillMoney = function($tab,args) {
         if (!!$tab && $tab.length) {
             args = JSON.parse(args);
             args.shopId = args.id;
