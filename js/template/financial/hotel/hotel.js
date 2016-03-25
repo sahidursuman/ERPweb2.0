@@ -377,6 +377,7 @@ define(function(require, exports) {
             hotel.clearTempData = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             hotel.hotelClear(args,$tab);
         });
 

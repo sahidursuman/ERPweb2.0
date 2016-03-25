@@ -410,7 +410,7 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     //暂存数据读取
-                    if(OtherAccounts.saveJson){
+                    if(!$.isEmptyObject(OtherAccounts.saveJson)) {
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
                         data.sumPayRemark = OtherAccounts.saveJson.sumPayRemark;
@@ -456,7 +456,7 @@ define(function(require, exports) {
                                             OtherAccounts.saveJson.autoPayList = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
                                             console.log("OtherAccounts.saveJson.autoPayList");
                                             console.log(OtherAccounts.saveJson.autoPayList);
-                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()),
+                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()) || '',
                                                 sumPayType = parseFloat(OtherAccounts.$clearTab.find('select[name=sumPayType]').val()),
                                                 sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumPayRemark]').val();
                                             OtherAccounts.saveJson.sumPayMoney = sumPayMoney;

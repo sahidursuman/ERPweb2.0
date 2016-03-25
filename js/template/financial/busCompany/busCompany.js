@@ -386,6 +386,7 @@ define(function(require, exports) {
             busCompany.clearTempData = false;
             $tab.data('isEdited', false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             busCompany.busCompanyClear(args,$tab);
         });
         FinancialService.updateSumPayMoney($tab,saveRule);

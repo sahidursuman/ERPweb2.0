@@ -392,6 +392,7 @@ define(function(require, exports) {
             scenic.clearTempData = false;
             scenic.$clearTab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             scenic.scenicClear(args);
         });
 
