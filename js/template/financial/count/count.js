@@ -5144,18 +5144,21 @@ define(function(require, exports){
 				case 'travelAgencyRateMoney' :
 					var inpVal = $obj.val();
 					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
+					$obj.attr('oldVal',newVal);
 					$obj.val(newVal);
 					break;
 				case 'travelAgencyRate' :
 					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
 					var inpVal = Count.changeTwoDecimal($obj.val());
 					var newVal = Math.round((money*inpVal)/100);
+					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
 					break;
 				case 'consumeMoney' :
 					var travelAgencyRate = Count.changeTwoDecimal($tr.find('[name=travelAgencyRate]').val());
 					var money = Count.changeTwoDecimal($obj.val());
 					var newVal = Math.round((money*travelAgencyRate)/100);
+					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
 					break;
 			}
@@ -5167,17 +5170,20 @@ define(function(require, exports){
 					var inpVal = $obj.val();
 					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
 					$obj.val(newVal);
+					$obj.attr('oldVal',newVal);
 					break;
 				case 'guideRate' :
 					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
 					var inpVal = Count.changeTwoDecimal($obj.val());
 					var newVal = Math.round((money*inpVal)/100);
+					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=guideRateMoney]').val(newVal);
 					break;
 				case 'consumeMoney' :
 					var guideRate = Count.changeTwoDecimal($tr.find('[name=guideRate]').val());
 					var money = Count.changeTwoDecimal($obj.val());
 					var newVal = Math.round((money*guideRate)/100);
+					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=guideRateMoney]').val(newVal);
 					break;
 			}
