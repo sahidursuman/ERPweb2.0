@@ -485,7 +485,6 @@ define(function(require, exports) {
 	                    Replace.payingJson.voucher = voucher;
 	                    Replace.payingJson.billTime = billTime;
 	                    Replace.payingJson.bankNumber = bankNumber;
-						$tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
 	                    Replace.setAutoFillEdit($tab, true);
 	                    $tab.data('isEdited', true);
 	                }
