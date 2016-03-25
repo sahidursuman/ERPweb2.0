@@ -183,14 +183,19 @@ define(function(require, exports) {
 	Replace.clearComma = function(str){
 		return str.replace(/(\uff0c){2,}/g, '，').replace(/(\uff0c)$/g, '');
 	};
-	Replace.checkingList = function(args){
-		if(!!Replace.$checkingTab){
+	Replace.checkingList = function(args,$tab){
+		if(!!$tab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-				args.pageNo = (args.pageNo || 0);
-				args.orderNumber = order == '全部' ? '' : order;
-				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
-				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+			args = {
+				pageNo : args.pageNo || 0,
+				partnerAgencyId : Replace.$checkingTab.find('input[name=partnerAgencyId]').val(),
+				name : Replace.$checkingTab.find('input[name=partnerAgencyName]').val(),
+				orderNumber : order == '全部' ? '' : order,
+				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
+				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
+				projects : Replace.$checkingTab.find(".T-search-project").val()
+			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -223,9 +228,19 @@ define(function(require, exports) {
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
+				if(Replace.checkTemp && Replace.checkTemp.length > 0){
+                    data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
+                    data.totalList.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
+                    data.totalList.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                }
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
+					if(Replace.checkTemp && Replace.checkTemp.length > 0){
+                        Replace.$checkingTab.data('isEdited',true);
+                    }
+                    //取消对账权限过滤
+                    checkDisabled(data.bookinAccountList,Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
 					Replace.CM_event(Replace.$checkingTab,args,true);
 				} else {
 					Replace.$checkingTab.data('next', args)
@@ -238,9 +253,15 @@ define(function(require, exports) {
 				    curr: (data.searchParam.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Replace.$checkingTab.data('isEdited',false);
-				    		args.pageNo = obj.curr -1;
-				    		Replace.checkingList(args);
+				    		var temp = FinancialService.checkSaveJson(Replace.$checkingTab,Replace.checkTemp,new FinRule(0));
+                            if(!temp){
+                                return false;
+                            } else {
+                                Replace.checkTemp = temp;
+                                Replace.$checkingTab.data('isEdited',false);
+					    		args.pageNo = obj.curr -1;
+					    		Replace.checkingList(args);
+                            }
 				    	}
 				    }
 				});	
@@ -270,9 +291,10 @@ define(function(require, exports) {
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
             if (!isCheck) {
-            	Replace.payingJson = [];
+            	Replace.payingJson = false;
 				Replace.balanceList($tab.data('next'));
             }else{
+            	Replace.checkTemp = false;
             	Replace.checkingList($tab.data('next'));
             }
         })
@@ -288,7 +310,9 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
             if(!isCheck){
-                Replace.payingJson = [];
+                Replace.payingJson = false;
+            } else {
+            	Replace.checkTemp = false;
             }
         });
 		//搜索
@@ -337,7 +361,7 @@ define(function(require, exports) {
 	            var argsData = {
 	                    orderNumber: $tab.find('.T-search-order').val(),
 	                    partnerAgencyId: $tab.find('input[name=partnerAgencyId]').val(),
-	                    travelAgencyName: $tab.find('input[name=name]').val(),
+	                    travelAgencyName: $tab.find('input[name=partnerAgencyName]').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val(),
 	                    accountStatus : args.accountStatus
@@ -414,7 +438,7 @@ define(function(require, exports) {
 		if(!!$tab && $tab.length){
 			var args = FinancialService.autoPayJson(Replace.balanceId, $tab, new FinRule(2), 1);
 			if(!args)return;
-			var project = $tab.find(".T-search-project").val(),
+			var project = $tab.find(".T-search-project").val().split(', '),
 				bus, hotel, scenic, ticket;
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -439,7 +463,8 @@ define(function(require, exports) {
                 ticketOrderStatus : ticket,
                 sumTemporaryIncomeMoney : $tab.find('.T-sumReciveMoney').val(),
                 startDate : $tab.find('.T-search-start-date').val(),
-                endDate : $tab.find('.T-search-end-date').val()
+                endDate : $tab.find('.T-search-end-date').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             }
 			var $datepicker = $tab.find('.T-search-area .datepicker');
             FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(),function(){
@@ -496,7 +521,8 @@ define(function(require, exports) {
 				partnerAgencyId : Replace.balanceId,
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val()
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
+				accountStatus : Replace.$balanceTab.find("input[name=accountStatus]").val() 
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -550,7 +576,7 @@ define(function(require, exports) {
 					    		Replace.payingJson = FinancialService.clearSaveJson(Replace.$balanceTab,Replace.payingJson,new FinRule(Replace.isBalanceSource ? 3 : 1));
 					    		Replace.$balanceTab.data('isEdited',false);
 					    		args.pageNo = obj.curr -1;
-					    		Replace.getOperationList(args);
+					    		Replace.getOperationList(args,Replace.$balanceTab);
 					    	}
 					    }
 					});	
@@ -568,15 +594,12 @@ define(function(require, exports) {
 		        }
 		    },
 		    select: function(event, ui) {
-		    	var terms = this.value.split( /,\s*/ );
-		    	//移除当前输入
-          		terms.pop();
-          		if($(this).val().indexOf(ui.item.value) == -1){
-	          		//添加被选项
-			        terms.push( ui.item.value );
-			        //添加占位符，在结尾添加逗号+空格
-			        terms.push( "" );
-			        this.value = terms.join( ", " );
+          		var val = $(this).val();
+          		if(val.indexOf(ui.item.value) == -1){
+          			if(val){ val += ", "; }
+	          		val += ui.item.value;
+			         
+			        this.value = val;
           		}
 		        return false;
 		    },
@@ -667,7 +690,7 @@ define(function(require, exports) {
 	Replace.saveCheckingData = function($tab,args,tabArgs){
 		var argLen = arguments.length,
 			validator = new FinRule(0);
-		var json = FinancialService.checkSaveJson($tab, validator);
+		var json = FinancialService.checkSaveJson($tab,Replace.checkTemp,validator,true);
 		if (json) { // 有值
 			$.ajax({
                 url: KingServices.build_url('financial/bookingAccount', 'checkBookingAccount'),
@@ -678,9 +701,9 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    $tab.data('isEdited', false);
-
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    	$tab.data('isEdited', false);
+                    	Replace.checkTemp = false;
                         if (argLen === 1) {
                         	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);
@@ -715,15 +738,19 @@ define(function(require, exports) {
 	};
 
 
-	Replace.balanceList = function(args){
-		console.log(Replace.$balanceTab);
-		if(!!Replace.$balanceTab){
-			var project = Replace.$balanceTab.find(".T-search-project").val().split(', ');
-			var order = Replace.$balanceTab.find(".T-search-order").val();
-			args.pageNo = (args.pageNo || 0);
-			args.orderNumber = order == '全部' ? '' : order;
-			args.endDate = Replace.$balanceTab.find(".T-search-end-date").val();
-			args.startDate = Replace.$balanceTab.find(".T-search-start-date").val();
+	Replace.balanceList = function(args,$tab){
+		if(!!$tab){
+			var project = Replace.$balanceTab.find(".T-search-project").val().split(', '),
+				order = Replace.$balanceTab.find(".T-search-order").val();
+			args = {
+				pageNo : args.pageNo || 0,
+				partnerAgencyId : Replace.$balanceTab.find("input[name=partnerAgencyId]").val(),
+				name : Replace.$balanceTab.find("input[name=partnerAgencyName]").val(),
+				orderNumber : order == '全部' ? '' : order,
+				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
+				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
+				projects : Replace.$balanceTab.find(".T-search-project").val()
+			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -813,7 +840,7 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
-                    Replace.payingJson = [];
+                    Replace.payingJson = false;
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         if (argLen === 1) {
                         	Tools.closeTab(blanceMenuKey);
@@ -849,9 +876,9 @@ define(function(require, exports) {
 					accountStatus : $tab.find('input[name=accountStatus]').val(),
                 };
                 if(isCheck){
-                	Replace.checkingList(args);
+                	Replace.checking(args);
                 } else {
-                	Replace.balanceList(args);
+                	Replace.balance(args);
                 }
             }
         }).on("click",function(){

@@ -170,8 +170,17 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				data.name = args.ticketName;
 				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
+				if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
+                    data.financialTicketList = FinancialService.getCheckTempData(data.financialTicketList,Ticket.checkTemp);
+                    data.sumSettlementMoney = Ticket.checkTemp.sumSttlementMoney;
+                    data.sumUnPayedMoney = Ticket.checkTemp.sumUnPayedMoney;
+                }
+				
 				if(Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data))){
 					Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
+					if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
+                        Ticket.$checkingTab.data('isEdited',true);
+                    }
 					Ticket.check_event(args,Ticket.$checkingTab);
 				} else {
 					Ticket.$checkingTab.data('next',args);
@@ -184,9 +193,16 @@ define(function(require, exports) {
 				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.$checkingTab.data('isEdited',false);
-				    		args.pageNo = obj.curr -1;
-				    		Ticket.checkingList(args);
+				    		var temp = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0));
+                            if(!temp){
+                                return false;
+                            } else {
+                                Ticket.checkTemp = temp;
+                                Ticket.$checkingTab.data('isEdited',false);
+			    				args.pageNo = obj.curr -1;
+			    				Ticket.checkingList(args);
+                            }
+				    		
 				    	}
 				    }
 				});
@@ -208,6 +224,7 @@ define(function(require, exports) {
             Ticket.saveCheckData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
+        	Ticket.checkTemp = false;
             Ticket.checkingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -216,6 +233,10 @@ define(function(require, exports) {
                 return;
             }
             Ticket.saveCheckData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Ticket.checkTemp = false;
         });
 
 		Tools.setDatePicker($tab.find('.datepicker'), true);
@@ -352,7 +373,7 @@ define(function(require, exports) {
 
 	Ticket.saveCheckData = function($tab,args,tabArgs){
 		var argLen = arguments.length,
-			json = FinancialService.checkSaveJson($tab, new FinRule(0));
+			json = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0),true);
 		if(json.length > 0){
 			$.ajax({
 				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
@@ -360,8 +381,10 @@ define(function(require, exports) {
 				data : {ticketJson : json}
 			}).done(function(data){
 				if(showDialog(data)){
-					$tab.data('isEdited', false);
+					
 	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+	                	Ticket.checkTemp = false;
+	                	$tab.data('isEdited', false);
 	                    if (argLen === 1) {
 	                        Tools.closeTab(checkMenuKey);
 	                        Ticket.getList(Ticket.listPageNo);
@@ -484,6 +507,7 @@ define(function(require, exports) {
 		$tab.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			args.pageNo = 0;
+			args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
 			Ticket.clearingList(args,$tab);
 		});
 		$tab.find('.T-records').on('click', function(event){

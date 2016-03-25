@@ -159,11 +159,7 @@
         <td><span class="difference"></span></td>
 
         <td style="text-align: left;">
-            {{if editStatus == 1}}
-                <input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-            {{else}}
-                {{arrange.billRemark}}
-            {{/if}}
+            <input name="billRemark" class="w-150" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
         </td>
 
         <td>
@@ -172,12 +168,12 @@
             {{else}}
                 已对账
             {{/if}}
-            <!-- &nbsp;&nbsp;
-            {{if arrange.payedMoney+arrange.realGuidePayMoney == 0}}
+            &nbsp;&nbsp;
+            {{if arrange.payedMoney == 0 &&　arrange.isConfirmAccount == 0}}
                 <a href="javascript:void(0)" class="T-restArrDel">删除</a>
             {{else}}
                 <span style="color:#bbb;">删除</span>
-            {{/if}} -->
+            {{/if}}
         </td>
     </tr>
     {{/if}}
