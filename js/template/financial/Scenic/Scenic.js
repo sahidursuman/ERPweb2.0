@@ -265,6 +265,9 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
             args.sumCurrentPayMoney = scenic.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -295,6 +298,7 @@ define(function(require, exports) {
                         data.sumPayType = 0;
                     }
                     data.isOuter = scenic.isOuter = !!args.isOuter || scenic.isOuter;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(resultList);
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
@@ -334,6 +338,8 @@ define(function(require, exports) {
                                 }
                                 scenic.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 scenic.scenicClear(args);
                             }
                         }

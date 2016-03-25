@@ -296,6 +296,9 @@ define(function(require, exports) {
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -327,7 +330,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
@@ -341,7 +344,6 @@ define(function(require, exports) {
                     }
                     data.financialTransferList = resultList;
 
-                    data.isAutoPay = args.isAutoPay;
                     var html = transferClearing(data);
                     var validator;
                     // 初始化页面
@@ -381,6 +383,8 @@ define(function(require, exports) {
                                 }
                                 Transfer.$clearTab.data("isEdited",false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Transfer.transferClear(args,Transfer.$clearTab);
                             }
                         }

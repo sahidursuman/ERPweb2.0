@@ -254,6 +254,9 @@ define(function(require, exports) {
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
         args.sortType = "startTime";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if (args.isAutoPay == 1) {
             args.sumCurrentPayMoney = busCompany.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -287,7 +290,7 @@ define(function(require, exports) {
                     }
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var html = Clearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
@@ -324,6 +327,8 @@ define(function(require, exports) {
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 busCompany.busCompanyClear(args);
                             }
                         }

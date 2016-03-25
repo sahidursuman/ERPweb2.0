@@ -261,6 +261,9 @@ define(function(require, exports) {
         }
         args.page = args.page || 0;
         args.sortType = "auto";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -296,7 +299,7 @@ define(function(require, exports) {
                     // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag;
                     Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
 					var html = insureClearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
@@ -336,6 +339,8 @@ define(function(require, exports) {
                                 }
                                 Insure.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Insure.getClearing(args);
                             }
                         }

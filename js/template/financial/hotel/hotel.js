@@ -245,6 +245,9 @@ define(function(require, exports) {
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
         args.sortType = "accountTime";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = hotel.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -279,7 +282,7 @@ define(function(require, exports) {
                         data.sumPayRemark = "";
                     }
                     data.financialHotelListData = FinancialService.isGuidePay(resultList);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var html = hotelClearing(data);
                     
                     // 初始化页面
@@ -317,6 +320,8 @@ define(function(require, exports) {
                                 }
                                 hotel.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 hotel.hotelClear(args);
                             }
                         }
