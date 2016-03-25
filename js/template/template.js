@@ -359,5 +359,31 @@
           default:
             return "-";
         }
+    }), template.helper("getLogTypeText", function(type) {
+        switch (1 * type) {
+          case 1:
+            return "保存";
+
+          case 2:
+            return "财务";
+
+          case 3:
+            return "计调";
+
+          case 4:
+            return "退回计调";
+
+          case 5:
+            return "退回导游";
+
+          case 6:
+            return "Web报账";
+
+          case 7:
+            return "导游提交报账";
+
+          default:
+            return console.info("Other Type:type"), "其他类型";
+        }
     });
 }();

@@ -143,6 +143,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this), $tr = $that.closest('tr'),
                 args = {
+                    pageNo : 0,
                     guideId: $tr.data('id'),
                     guideName: $tr.children('td').first().text(),
                     startDate: $datepicker.eq(0).val(),
@@ -210,17 +211,14 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     FinGuide.initOperationModule = function(args, type, $tab) {
-        
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
-            args = {
-                guideId: $tab.find('.T-saveClear').data('id'),
-                startDate: $tab.find('.T-search-start-date').val(),
-                endDate: $tab.find('.T-search-end-date').val(),
-                tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
-                lineProductId: $line.data('id'),
-                lineProductName: $line.val()
-            };
+            args.guideId = $tab.find('.T-saveClear').data('id');
+            args.startDate = $tab.find('.T-search-start-date').val();
+            args.endDate = $tab.find('.T-search-end-date').val();
+            args.tripPlanNumber = $tab.find('.T-tripPlanNumber').val();
+            args.lineProductId = $line.data('id');
+            args.lineProductName = $line.val();
 
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
@@ -231,6 +229,9 @@ define(function(require, exports) {
 
             name = $tab.find('.T-guideName').text();
             args.isOuter = FinGuide.isOuter;
+        }
+        if(args.borrow){
+            args.isOuter = true;
         }
 
         if(type == 1){
@@ -273,7 +274,12 @@ define(function(require, exports) {
                         html = guideCheckingTemplate(data);
                     }
                     if (Tools.addTab(key, title, html)) {
-                        FinGuide.initOperationEvent($('#tab-' + key + '-content'), type);
+                        var $tab = $('#tab-' + key + '-content');
+                        FinGuide.initOperationEvent($tab,args,type);
+                        $tab.data('current',args);
+                    } else {
+                        var $tab = $('#tab-' + key + '-content');
+                        $tab.data('next',args);
                     }
                 }
             });
@@ -284,7 +290,7 @@ define(function(require, exports) {
      * 对账页面事件初始化及列表初始化
      * @return {[type]} [description]
      */
-    FinGuide.initOperationEvent = function($tab, type) {
+    FinGuide.initOperationEvent = function($tab,args,type) {
         // 绑定搜索
         var $searchArea = $tab.find('.T-search-area');
 
@@ -302,8 +308,7 @@ define(function(require, exports) {
                 guideName:$btn.data('name'),
                 startDate: $datePicker.eq(0).val(),
                 endDate: $datePicker.eq(1).val(),
-                accountStatus : $tab.find('[name=accountStatus]').val()
-
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             };
             if(type){
                 args.isOuter = FinGuide.isOuter;
@@ -318,28 +323,41 @@ define(function(require, exports) {
             autoValidatorCheck = autoValidator.check($tab.find('.T-auto-fill-area'));
         // 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-            .on('change', '.T-checkList', function() {
+            .on('change', '.T-checkList input', function() {
+                $(this).closest('tr').data('change', 'true');
                 $tab.data('isEdited', true);
             })
             .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
                 event.preventDefault();
                 if (!validatorCheck.form())return;
                 if(type){
-                    FinGuide.savePayingData($tab, [tab_id, title, html]);
+                    FinGuide.savePayingData($tab,false,$tab.data('next'),[tab_id, title, html]);
                 } else {
-                    FinGuide.saveCheckingData($tab, [tab_id, title, html]);
+                    FinGuide.saveCheckingData($tab,$tab.data('next'),[tab_id, title, html]);
                 }
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
-                FinGuide.initOperationEvent($tab, type);
+                if(!type){
+                    FinGuide.checkTemp = false;
+                } else {
+                    FinGuide.payingJson = false;
+                }
+                FinGuide.initOperationModule($tab.data('next'),type,$tab);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
                 if (!validatorCheck.form())return;
                 if(type){
-                    FinGuide.savePayingData($tab);
+                    FinGuide.savePayingData($tab,false);
                 } else {
                     FinGuide.saveCheckingData($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                if(!type){
+                    FinGuide.checkTemp = false;
+                } else {
+                    FinGuide.payingJson = false;
                 }
             });
 
@@ -356,11 +374,10 @@ define(function(require, exports) {
                         guideId: $btn.data('id'), 
                         startDate: $datePicker.eq(0).val(),
                         endDate: $datePicker.eq(1).val(),
-                        accountStatus: $searchArea.find('[name=accountStatus]').val(),
+                        accountStatus: $searchArea.find('input[name=accountStatus]').val(),
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
-                        lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                        accountStatus : args.accountStatus
+                        lineProductId: $searchArea.find('.T-lineProductName').data('id')
 
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
@@ -402,18 +419,16 @@ define(function(require, exports) {
                 });
             }
             if (type) {
-                FinGuide.savePayingData($tab);
+                FinGuide.savePayingData($tab,false,$tab.data('next'));
             } else {
                 FinancialService.changeUncheck($tab.find('.T-checkTr'), function(){
-                    FinGuide.saveCheckingData($tab);
+                    FinGuide.saveCheckingData($tab,$tab.data('next'));
                 });
             }
         });
 
         //关闭页面事件
-        $tab.find(".T-btn-close").click(function() {
-            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-        });
+        FinancialService.closeTab(Tools.getTabKey($tab.prop('id')));
 
         // 付款时，自动下账
         if (type) {
@@ -434,7 +449,7 @@ define(function(require, exports) {
         }
 
         // 后续业务
-        FinGuide.getOperationList(0, $tab);
+        FinGuide.getOperationList(args.pageNo, $tab);
     }
 
     /**
@@ -443,9 +458,10 @@ define(function(require, exports) {
      * @param  {array} tabArgs 翻页提示所需的切换参数
      * @return {[type]}         [description]
      */
-    FinGuide.saveCheckingData = function($tab, tabArgs) {
-        var validator = new FinRule(3);
-        var json = FinancialService.checkSaveJson($tab, validator);
+    FinGuide.saveCheckingData = function($tab,args,tabArgs) {
+        var validator = new FinRule(3),
+            argsLen = arguments.length;
+        var json = FinancialService.checkSaveJson($tab,FinGuide.checkTemp,validator,true);
 
         if (json) { // 有值
             $.ajax({
@@ -457,15 +473,13 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        $tab.data('isEdited', false);
-
                         showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                            if (!!tabArgs) {
-                                Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                                FinGuide.initOperationEvent($tab, 0);
+                            $tab.data('isEdited', false);
+                            FinGuide.checkTemp = false;
+                            if (argsLen === 1) {
+                                FinGuide.getList(FinGuide.listPageNo);
                             } else {
-                                $tab.find('.T-btn-search').trigger('click');
-                                // FinGuide.getList(FinGuide.listPageNo);
+                                FinGuide.initOperationModule(args,0);
                             }
                         })
                     }
@@ -479,8 +493,9 @@ define(function(require, exports) {
      * @param  {array} tabArgs 翻页提示所需的切换参数
      * @return {[type]}         [description]
      */
-    FinGuide.savePayingData = function($tab, tabArgs,Dsave) {
-        var validator = new FinRule(FinGuide.isOuter ? 3 : 1);
+    FinGuide.savePayingData = function($tab,Dsave,argsData,tabArgs) {
+        var validator = new FinRule((FinGuide.isOuter || $tab.find('.T-saveClear').data('borrow') == "borrow") ? 3 : 1),
+            argsLen = arguments.length;
         if(!FinancialService.isClearSave($tab,validator)){
             return false;
         }
@@ -523,14 +538,12 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     $tab.data('isEdited', false);
-                    FinGuide.payingJson = [];
+                    FinGuide.payingJson = false;
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (!!tabArgs && tabArgs) {
-                            Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-                            FinGuide.initOperationEvent($tab, 1);
+                        if (argsLen === 2) {
+                            FinGuide.getList(FinGuide.listPageNo);
                         } else {
-                            $tab.find('.T-btn-search').trigger('click');
-                            // FinGuide.getList(FinGuide.listPageNo);
+                            FinGuide.initOperationModule(argsData,1);
                         }
                     })
                 });
@@ -559,7 +572,8 @@ define(function(require, exports) {
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
-                payType: $tab.find('select[name=sumPayType]').val()
+                payType: $tab.find('select[name=sumPayType]').val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val()
             };
 
             if (args.lineProductName === '全部') {
@@ -613,7 +627,9 @@ define(function(require, exports) {
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
                 lineProductId: $line.data('id'),
                 lineProductName: $line.val(),
-                accountStatus : accountStatus
+                accountStatus : accountStatus,
+                borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false,
+                isOuter : FinGuide.isOuter
             };
 
             if (args.lineProductName === '全部') {
@@ -631,9 +647,9 @@ define(function(require, exports) {
                         var html,
                             type = $tab.find('.T-saveClear').data('type');
                         if (!!type) {
-                            data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson);
+                            data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson,true);
                             data.isOuter = FinGuide.isOuter;
-                            if($tab.find('.T-saveClear').data('borrow') == "borrow" || FinGuide.payingJson.length > 0){
+                            if($tab.find('.T-saveClear').data('borrow') == "borrow"){
                                 data.isPayMoney = true;
                                 var sumPayMoney = 0;
                                 for(var i = 0; i < data.list.length; i++){
@@ -644,10 +660,20 @@ define(function(require, exports) {
                                 $tab.find('.T-sumPayMoney').val(sumPayMoney);
                             }
                             html = filterUnAuth(payingTableTemplate(data));
+                            if(FinGuide.payingJson && FinGuide.payingJson.length > 0){
+                                $tab.data('isEdited',true);
+                            }
                         } else {
+                            data.list = FinancialService.getCheckTempData(data.list,FinGuide.checkTemp);
                             html = filterUnAuth(checkingTableTemplate(data));
+                            if(FinGuide.checkTemp && FinGuide.checkTemp.length > 0){
+                                $tab.find('.T-stMoney').text(FinGuide.checkTemp.sumSttlementMoney);
+                                $tab.find('.T-unpayMoney').text(FinGuide.checkTemp.sumUnPayedMoney);
+                                $tab.data('isEdited',true);
+                            }
                         }
                         var $tbody = $tab.find('.T-checkList').html(html);
+                        $tab.data("next",args);
 
                         if (!type) {
                             //给全选按钮绑定事件: 未去重
@@ -665,7 +691,19 @@ define(function(require, exports) {
                             curr: (data.pageNo + 1),
                             jump: function(obj, first) {
                                 if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                    FinGuide.getOperationList(obj.curr - 1, $tab);
+                                    $tab.data('isEdited',false);
+                                    if(!type){
+                                        var temp = FinancialService.checkSaveJson($tab,FinGuide.checkTemp,new FinRule(6));
+                                        if(!temp){
+                                            return false;
+                                        } else {
+                                            FinGuide.checkTemp = temp;
+                                            FinGuide.getOperationList(obj.curr - 1, $tab);
+                                        }
+                                    } else {
+                                        FinGuide.payingJson = FinancialService.clearSaveJson($tab,FinGuide.payingJson,validator);
+                                        FinGuide.getOperationList(obj.curr - 1, $tab);
+                                    }
                                 }
                             }
                         });
@@ -887,7 +925,7 @@ define(function(require, exports) {
                             var orderId = $container.data("orderId");
                             layer.close(payTypeLayer);
                             if(type == 0 && !orderId){
-                                FinGuide.savePayingData($("#tab-financial_guide-paying-content"),false,true);
+                                FinGuide.savePayingData($("#tab-financial_guide-paying-content"),true);
                             } else{
                                 if(orderId){
                                     args.orderId = orderId;
@@ -1088,7 +1126,9 @@ define(function(require, exports) {
                     endDate : $tab.find('.T-search-end-date').val(),
                     accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
-                args.isOuter = FinGuide.isOuter = true;
+                if($tab.find('.T-btn-autofill').length == 0){
+                    args.isOuter = FinGuide.isOuter = true;
+                }
                 FinGuide.initOperationModule(args,type);
             }
         }).on("click",function(){

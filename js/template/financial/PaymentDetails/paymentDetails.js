@@ -129,9 +129,6 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			if(args.type == 0){
-				data.searchParam.payType = 0;
-			}
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 
@@ -142,8 +139,9 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				var $obj = (args.type == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				var $obj = (args.accountType == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
 				$obj.val(bankNo);
+				$obj.next().val(args.bankId);
 				$obj.closest('div').removeClass('hidden');
 			}
 		});

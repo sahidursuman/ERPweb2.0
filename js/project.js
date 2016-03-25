@@ -725,6 +725,7 @@ var modalScripts = {
     'system_department': "js/template/system/department/business.js",
 	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
 	'system_companyInformation':"js/template/system/companyInfo/company.js",//公司资料
+	'accountSetting':"js/template/system/accountSetting/accountSetting.js",//账户设置
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",

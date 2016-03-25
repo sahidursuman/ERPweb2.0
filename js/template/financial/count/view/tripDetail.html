@@ -89,12 +89,21 @@
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="row" style="margin-bottom:15px;">
-        <div class="col-md-1">
+        <input name="financialTripPlanId" value="{{financialTripPlanId}}" type="hidden">
+        <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="btn-financialLog">操作记录</a>
         </div>
-        <div class="col-md-1">
+        <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-tripPlanArrange">安排预算表</a>
         </div>
+        {{if tripPlan.billStatus > -1}}
+            <div style="float:left;width:90px;text-align:center;">
+                <a href="javascript:void(0);" class="T-guideAccount">导游报账表</a>
+            </div>
+            <div style="float:left;width:90px;text-align:center;">
+                <a href="javascript:void(0);" class="T-tripAccount">单团核算表</a>
+            </div>
+        {{/if}}
     </div>
     <div class="tabbable">
         <ul class="nav nav-tabs">
@@ -193,6 +202,7 @@
                             <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
                             <td>
                                 {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
+                                <a href="#" class="T-viewCostDetail">
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
@@ -204,6 +214,7 @@
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
+                                </a>
                                 {{/if}}
                             </td>
                         </tr>
@@ -223,6 +234,17 @@
             </div>
             <!-- 购物 -->
             <div id="financial-count-tripdetail-shop" class="tab-pane fade">
+                <div class="ui-sortable-handle widget-container-col">
+                    <h5 class="title-size">
+                        <span style="color:#000;margin-left:20px;">
+                            购物合计：<span class="T-sumShopMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            社佣合计：<span class="T-sumTravelMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            导佣合计：<span class="T-sumGuideMoney F-float F-money">0</span>
+                        </span>
+                    </h5>
+                </div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -252,7 +274,7 @@
         {{each arrangeList.shopArrangeList as arrange i}}
 
         {{if arrange != null}}
-        <tr class="oldData" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+        <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
             {{if arrange.shopArrangeItemSet != null}}
@@ -300,7 +322,8 @@
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}"
+            {{if index == 1}}class="noSumRate"{{/if}}>
                 <td><span>
                 <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
                 <input type="hidden" name="shopPolicy" 
@@ -362,7 +385,11 @@
             <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>
             <td style="font-weight: bold;text-align:right;">导佣合计：</td>
             <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>
-            <td style="font-weight: bold;text-align:right;" colspan="2"></td>
+            <td style="font-weight: bold;text-align:right;">佣金小计：</td>
+            <td style="font-weight: bold;text-align:left;" colspan="2">
+                &nbsp;&nbsp;
+                <span class="F-float F-money T-sumRebeMoney "></span>
+            </td>
         </tr>
         {{/each}}  
         {{/each}}
