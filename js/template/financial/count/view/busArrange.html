@@ -34,7 +34,8 @@
         <tbody class="T-count-bus">
         {{each busCompanyArrange as busCompany}}
         {{if busCompany != null}}
-        <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}">
+        <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}"
+        isConfirmAccount="{{busCompany.isConfirmAccount}}">
             <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 
             <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
@@ -66,7 +67,18 @@
 
             <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"{{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}</td>
 
-            <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney F-float F-money">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney F-float F-money"></span>{{/if}}
+            <td>
+            {{if busCompany.badStatus == 1}}
+                <span class="BusneedPayMoney F-float F-money">
+                    {{busCompany.payedMoney+busCompany.realGuidePayMoney}}
+                </span>
+            {{else}}
+                {{if busCompany.isConfirmAccount == 1}}
+                    <span class="BusneedPayMoney F-float F-money">{{busCompany.tempSettlementMoney}}</span>
+                {{else}}
+                    <span class="BusneedPayMoney F-float F-money"></span>
+                {{/if}}
+            {{/if}}
             <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
 
             <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>

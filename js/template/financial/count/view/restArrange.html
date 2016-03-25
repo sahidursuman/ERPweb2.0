@@ -34,7 +34,8 @@
     {{each day.restaurantArrange as arrangeList}}
     {{each arrangeList.restaurantArrangeList as arrange index}}
     {{if arrange != null}}
-    <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
+    <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}"
+    isConfirmAccount="{{arrange.isConfirmAccount}}">
         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
 
         {{if index == 0}}
@@ -119,7 +120,17 @@
         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
 
-        <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}
+        <td>
+        {{if arrange.badStatus == 1}}
+            <span class="restneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+        {{else}}
+            {{if arrange.isConfirmAccount == 1}}
+                <span class="restneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+            {{else}}
+                <span class="restneedPayMoney"></span>
+            {{/if}}
+
+        {{/if}}
         <input type="hidden" value="{{arrange.payedMoney}}" name="needPayMoney"></td>
 
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
