@@ -63,7 +63,7 @@
 }
 
 .search-btn:hover {
-    background: #359fb2!important;
+    background: #359fb2;
 }
 
 
@@ -440,7 +440,9 @@ table tr td {
 .mar-t-10 {
     margin-top: 10px;
 }
-
+.mar-t-15 {
+    margin-top: 15px;
+}
 .mar-l-5 {
     margin-left: 5px;
 }
@@ -457,9 +459,14 @@ table tr td {
 .mar-l-23{
     margin-left: 23px;
 }
-
+.mar-l-f5{
+    margin-left: -5px;
+}
 .mar-l-15 {
     margin-left: 15px;
+}
+.mar-l-90 {
+    margin-left: 90px;
 }
 .mar-1-135{
     margin-left: 135px;
@@ -498,7 +505,12 @@ table tr td {
 .pad-l-5 {
     padding-left: 5px;
 }
-
+.pad-b-30{
+    padding-bottom: 30px;
+}
+.pad-b-20{
+    padding-bottom: 20px;
+}
 .line-h-2 {
     line-height: 1.9em;    
 }
@@ -1794,7 +1806,6 @@ p#back-top a span {
     cursor: pointer;
 }
 
-
 .h-touristGroupInfo p{
     text-align: left;
     margin: 0px;
@@ -1805,6 +1816,145 @@ p#back-top a span {
 }
 .h-touristGroupInfo p span{
     margin-right: 10px;
+}
+/*账户设置样式*/
+.application input{
+    margin-left: 40px;
+}
+.wizard-steps{
+    list-style: none;
+    display: table;
+    width: 98%;
+    padding: 0;
+    margin: auto;
+    position: relative;
+}
+.wizard-steps li {
+    display: table-cell;
+    /*text-align: center;*/
+    width: 1%;
+}
+.wizard-steps li:before {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 1px;
+    font-size: 0;
+    overflow: hidden;
+    border-top: 4px solid #CED1D6;
+    position: relative;
+    top: 21px;
+    z-index: 1;
+}
+.wizard-steps li.active .step, .wizard-steps li.complete .step {
+    border-color: #5293c4;
+}
+.wizard-steps li .step {
+    border: 5px solid #ced1d6;
+    color: #546474;
+    font-size: 15px;
+    border-radius: 100%;
+    background-color: #FFF;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    text-align: center;
+}
+.wizard-steps li .title {
+    display: block;
+    margin-top: 4px;
+    max-width: 100%;
+    color: #949ea7;
+    font-size: 14px;
+    z-index: 104;
+    /*text-align: center;*/
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.apply-information label{
+    font-size: 14px !important;
+    color: #333;
+}
+.apply-information input{
+    height: 30px !important;
+    width: 250px !important;
+}
+.account-solutionMain{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+.account-solutionMain p{
+    color: #999999;
+    font-size: 14px;
+    font-family: '宋体';
+    text-align: left;
+}
+#shopFormCol-x12 .col-sm-12{
+    float: none;
+}
+.graySearch-btn{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
+.graySearch-btn:hover{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
+.accountApply-status{
+   height: 30px !important;
+   width: 250px !important;
+   margin-top: 5px;
+}
+.apply-qualification{
+   margin-top: 25px;
+   width: 90%;margin-left: 10px;
+}
+.apply-details{
+   margin-left: -32px;height: 30px !important;
+}
+.apply-baseInfo{
+    margin-left: -20px;
+    height: 30px !important;
+}
+.apply-remark{
+    margin-left: -5px;
+    height: 30px !important;
+}
+.addPhone-prompt{
+    margin-left: 40px;
+    font-family: '宋体';
+    color: #666666;
+    margin-top: 10px;
+}
+.applicationBtn{
+    width: 120px;
+    height: 40px !important;
+    margin-left: 6px !important;
+}
+.newPhoneStyle{
+    width: 370px;height: 40px !important;
+}
+.Verification-code{
+    width: 240px;height: 40px !important;
+}
+.application-style{
+    margin-left: 40px;
+    font-family: '宋体';
+    font-weight: bold;
+}
+.fixedPhone{
+    margin-left: 46px;
+    margin-top: 11px;
+    position: absolute;
+    font-size: 12px;
+}
+.application-newPhone{
+    width: 370px;height: 40px !important;
+    padding-left:60px !important;
 }
 /*媒体查询-不同分辨率*/
 
@@ -1841,6 +1991,14 @@ p#back-top a span {
         border-bottom: 1px solid #ddd;
         border-left: 2px solid #ddd;
         border-right: 2px solid #ddd;
+    }
+    /*账户设置样式*/
+    .apply-details{
+        margin-left: -4px;height: 30px !important;
+    }
+    .apply-baseInfo{
+        margin-left: 8px;
+        height: 30px !important;
     }
 }
 
@@ -2132,7 +2290,7 @@ p#back-top a span {
         margin-left: 60px;
         margin-top: -20px;
     }
-
+    
 }
 
 @media screen and (max-width:1440px) {
@@ -2267,7 +2425,7 @@ p#back-top a span {
     }
     .mar-ort-10{
         margin-top: 10px;
-    }
+    } 
 }
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {

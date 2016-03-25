@@ -3,7 +3,7 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
                 <label class="mar-l-10">自费商家 </label>
-                <input type="text" class="T-chooseSelfPay mar-r-10" name="selfPayName" value="{{if searchParam.selfPayName == " "}}全部{{else}}{{searchParam.selfPayName}}{{/if}}" />
+                <input type="text" class="T-chooseSelfPay mar-r-10" name="selfPayName" value="{{searchParam.selfPayName}}" placeholder="所有自费商家"/>
                 <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}" />
                 <label >账期 </label>
                 <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />

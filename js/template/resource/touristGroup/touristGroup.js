@@ -1470,8 +1470,8 @@ define(function(require, exports) {
         touristGroup.memberNumber($tbody);        
     };
     //游客列表序号自动升序
-    touristGroup.memberNumber = function($obj) {
-       $obj.find('tr').each(function(i) {
+    touristGroup.memberNumber = function($tab) {
+        $tab.find('tr').each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
             }
