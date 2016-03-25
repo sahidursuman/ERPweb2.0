@@ -672,6 +672,7 @@ define(function(require, exports) {
                 if (argLen === 1) {
                 	Ticket.getList(Ticket.listPageNo);
                 } else {
+                	args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                     Ticket.clearingList(args,$tab);
                 } 
             })
