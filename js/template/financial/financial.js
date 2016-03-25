@@ -487,7 +487,7 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
 
     var startDate = $tab.find("input[name=startDate]").val(),
         endDate = $tab.find("input[name=endDate]").val(),
-        sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()) || 0,
         sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
         $accountInfo = $tab.find('input[name="accountInfo"]'),
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),

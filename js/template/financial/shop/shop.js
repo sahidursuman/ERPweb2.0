@@ -369,6 +369,8 @@ define(function(require, exports) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
                     if (autoValidator.form()) {
+                        var args = FinancialService.autoPayJson(FinShop.settlementId, $tab, new FinRule(2), 1);
+                        if (!args) return;
                         FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(), function() {
                             FinShop.autoFillMoney($tab);
                         });
@@ -548,8 +550,6 @@ define(function(require, exports) {
      */
     FinShop.autoFillMoney = function($tab) {
         if (!!$tab && $tab.length) {
-            var args = FinancialService.autoPayJson(FinShop.settlementId, $tab, new FinRule(2), 1);
-            if (!args) return;
             args = JSON.parse(args);
             args.shopId = args.id;
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
