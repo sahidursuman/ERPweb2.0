@@ -499,11 +499,9 @@ define(function(require, exports) {
     };
 
     restaurant.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab,args ? args.saveRule : $tab.data('saveRule'))){
-            return false;
-        }
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args ? args.saveRule : $tab.data('saveRule'));
+            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args ? args.saveRule : $tab.data('saveRule'),true);
+        if(!clearSaveJson){ return false; }
         var payType = restaurant.$clearTab.find('select[name=sumPayType]').val(),
             searchParam = {
                 restaurantId : args ? args.restaurantId : $tab.data('restaurantId'),
@@ -519,7 +517,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                restaurantJson : JSON.stringify(clearSaveJson),
+                restaurantJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){

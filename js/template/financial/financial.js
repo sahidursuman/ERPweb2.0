@@ -383,7 +383,7 @@ FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide�
 };
 
 //付款-保存(暂存)数据组装，数组，需转换为json
-FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
+FinancialService.clearSaveJson = function($tab,clearSaveJson,rule,isSave){
     $tr = $tab.find(".T-clearList tr")
     $tr.each(function(){
         var $this = $(this);
@@ -399,7 +399,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             //已有数据更新
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
-                    if(!payMoney){
+                    if(!payMoney || payMoney == 0){
                         clearSaveJson.splice(i,1);//删除不需提交的行
                         i--;
                     } else {
@@ -410,7 +410,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 }
             }
             //新数据
-            if(i >= len && payMoney){
+            if(i >= len && payMoney && payMoney != 0){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : payMoney,
@@ -420,6 +420,15 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             }
         }
     });
+    if(isSave){
+        if(!FinancialService.isClearSave($tab,rule)){
+            return false;
+        } else if(clearSaveJson.length == 0){
+            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            return false;
+        }
+        clearSaveJson = JSON.stringify(clearSaveJson);
+    }
     return clearSaveJson;
 };
 

@@ -787,15 +787,9 @@ define(function(require, exports) {
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
             voucher = $tab.find('input[name=credentials-number]').val(),
             billTime = $tab.find('input[name=tally-date]').val();
-        if(!FinancialService.isClearSave($tab,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1))){
-            return false;
-        }
-        var JsonStr = FinancialService.clearSaveJson($tab,Client.clearDataArray,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1)); 
-        if(JsonStr.length==0){
-            showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
-            return;
-        };
-        JsonStr = JSON.stringify(JsonStr);
+        var JsonStr = FinancialService.clearSaveJson($tab,Client.clearDataArray,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1),true); 
+        if(!JsonStr){ return false; }
+
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
             type:"POST",

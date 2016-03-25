@@ -642,11 +642,8 @@ define(function(require, exports) {
 	    		return;
 	        }
         };
-        if(!FinancialService.isClearSave($tab)){
-            return false;
-        }
 		var argLen = arguments.length,
-			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
+			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1),true);
 		if (!json) { return false; }
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			argsData = {
@@ -663,7 +660,7 @@ define(function(require, exports) {
             type: 'post',
             data: {
             	searchParam : JSON.stringify(argsData),
-            	ticketJson : JSON.stringify(json)
+            	ticketJson : json
             },
         })
         .done(function(data) {

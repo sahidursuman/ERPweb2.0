@@ -494,18 +494,15 @@ define(function(require, exports) {
     };
 
     Self.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab,new FinRule(Self.showBtnFlag ? 3 : 1))){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1)),
+            clearSaveJson = FinancialService.clearSaveJson($tab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1),true),
             payType = $tab.find('select[name=sumPayType]').val();
+        if(!clearSaveJson){ return false; }
         $.ajax({
             url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
             type:"POST",
             data:{
-                selfPayPaymentJson : JSON.stringify(clearSaveJson),
+                selfPayPaymentJson : clearSaveJson,
                 selfPayId : args ? args.selfPayId : $tab.data('selfPayId'),
                 payType : payType,
                 payRemark : $tab.find('input[name=sumPayRemark]').val(),

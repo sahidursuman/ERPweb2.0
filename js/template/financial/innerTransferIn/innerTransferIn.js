@@ -635,11 +635,8 @@ define(function(require, exports) {
     };
 
     FinTransIn.saveClear = function($tab,args,tabArgs) {
-        if(!FinancialService.isClearSave($tab,new FinRule(FinTransIn.isOut ? 3 : 4))){
-            return false;
-        };
         var argLen = arguments.length,
-            json = FinancialService.clearSaveJson($tab,FinTransIn.clearTempData,new FinRule(FinTransIn.isOut ? 3 : 4));
+            json = FinancialService.clearSaveJson($tab,FinTransIn.clearTempData,new FinRule(FinTransIn.isOut ? 3 : 4),true);
         if(!json){ return false; }
         
         var payType = $tab.find('select[name=sumPayType]').val();
@@ -647,7 +644,7 @@ define(function(require, exports) {
             url: KingServices.build_url('account/innerTransferIn','saveReceivables'),
             type: "POST",
             data: { 
-                receivables:JSON.stringify(json),
+                receivables:json,
                 payType:payType,
                 bankId:(payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
                 voucher:$tab.find('input[name=credentials-number]').val(),

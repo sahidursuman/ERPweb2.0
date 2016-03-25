@@ -506,12 +506,8 @@ define(function(require, exports) {
     };
 
     scenic.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab, new FinRule(scenic.isOuter ? 3 : 1))){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1),true),
             payType = $tab.find('select[name=sumPayType]').val();
             searchParam = {
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -521,12 +517,12 @@ define(function(require, exports) {
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val()
             };
-
+        if(!clearSaveJson){ return false; }
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
-                scenicJson : JSON.stringify(clearSaveJson),
+                scenicJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){

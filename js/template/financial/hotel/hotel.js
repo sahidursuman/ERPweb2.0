@@ -494,11 +494,9 @@ define(function(require, exports) {
     };
 
     hotel.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3:1))){
-            return false;
-        }
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,hotel.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2?3: 1));
+            clearSaveJson = FinancialService.clearSaveJson($tab,hotel.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2?3: 1),true);
+        if(!clearSaveJson){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 hotelId : args ? args.hotelId : $tab.data('hotelId'),
@@ -514,7 +512,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/financialHotel","saveAccountSettlement"),
             type:"POST",
             data:{
-                hotelJson : JSON.stringify(clearSaveJson),
+                hotelJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){

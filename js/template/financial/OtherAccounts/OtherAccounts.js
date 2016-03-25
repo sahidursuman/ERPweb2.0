@@ -615,10 +615,7 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function($tab,args,tabArgs) {
-        if(!FinancialService.isClearSave($tab)){
-            return false;
-        }
-        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3),true);
         if(!json){ return false; }
         var arguementLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
@@ -634,7 +631,7 @@ define(function(require, exports) {
             url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
             type: "POST",
             data: {
-                payment: JSON.stringify(json),
+                payment: json,
                 searchParam : JSON.stringify(searchParam)
             },
         }).done(function(data) {

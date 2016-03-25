@@ -501,12 +501,9 @@ define(function(require, exports) {
 
     Insure.saveClear = function($tab,args,tabArgs){
         var saveRule = Insure.saveFlag == true ? new FinRule(3):new FinRule(1);
-        if(!FinancialService.isClearSave($tab,saveRule)){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Insure.clearTempData,saveRule);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Insure.clearTempData,saveRule,true);
+        if(!clearSaveJson){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 insuranceId : args ? args.insuranceId : $tab.data('insuranceId'),
@@ -521,7 +518,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/insuranceFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                insuranceJson : JSON.stringify(clearSaveJson),
+                insuranceJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){

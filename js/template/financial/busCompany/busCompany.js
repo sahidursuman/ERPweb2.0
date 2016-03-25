@@ -421,11 +421,9 @@ define(function(require, exports) {
     };
 
     busCompany.saveClear = function($tab,args,tabArgs) {
-        if (!FinancialService.isClearSave($tab, new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1))) {
-            return false;
-        }
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab, busCompany.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1));
+            clearSaveJson = FinancialService.clearSaveJson($tab, busCompany.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1),true);
+        if(!clearSaveJson){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 busCompanyId: args ? args.busCompanyId : $tab.data('busCompanyId'),
@@ -441,7 +439,7 @@ define(function(require, exports) {
             url: KingServices.build_url("account/financialBusCompany", "saveAccountSettlement"),
             type: "POST",
             data: {
-                busCompanyJson: JSON.stringify(clearSaveJson),
+                busCompanyJson: clearSaveJson,
                 searchParam: JSON.stringify(searchParam)
             },
             success: function(data) {

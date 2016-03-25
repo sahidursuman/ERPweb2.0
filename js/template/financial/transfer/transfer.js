@@ -542,12 +542,9 @@ define(function(require, exports) {
     Transfer.saveClear = function($tab,args,tabArgs){
         var isAutoPay = (arguments.length > 1) ? args.isAutoPay : $tab.data("isAutoPay"),
             settleValidator = new FinRule(isAutoPay == 2 ? 3 : 1);
-        if(!FinancialService.isClearSave($tab,settleValidator)){
-            return false;
-        };
-
         var argLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator,true);
+        if(!clearSaveJson){ return false;}
         var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
         searchParam = {
             partnerAgencyId : (arguments.length > 1) ? args.partnerAgencyId : $tab.data("id"),
@@ -559,7 +556,6 @@ define(function(require, exports) {
             billTime : $tab.find('input[name=tally-date]').val()
         };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","saveAccountSettlement"),
