@@ -837,12 +837,11 @@ define(function(require, exports){
 				Count.formatDays($that,$obj);
 			}
 		});
-		$listObj.off('click').on('click','.T-travelCheckbox',function(){
+		$listObj.find('.T-math-round').off('click').on('click' ,function(){
 			//清除小数点
 			Count.delValDecimal($(this),$shopObj,$obj);
-		}).on('click','.T-guideCheckbox',function(){
-			Count.delValDecimal($(this),$shopObj,$obj);
 		});
+		
 		//新增购物安排sumRateMoney
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
