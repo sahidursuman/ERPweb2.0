@@ -2418,7 +2418,7 @@ define(function(require, exports){
 		'<td><input type="text" name="price" class="w-80"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
-		'<td><input type="text" name="payedMoney" class="w-80"/></td>'+
+		'<td>0</td>'+
 		'<td>'+
 		'<div class="inline-flex">'+
 		'<select name="payType">'+
