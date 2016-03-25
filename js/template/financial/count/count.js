@@ -5105,11 +5105,8 @@ define(function(require, exports){
 					$that.attr('oldVal',inpVal);
 					$that.val(newVal);
 				}else{
-					var $tr = $that.closest('tr');
-					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
-						var oldVal = $that.attr('oldVal');
-						$that.val(oldVal);
-					};
+					var oldVal = $that.attr('oldVal');
+					$that.val(oldVal);
 					
 				}
 			}
@@ -5124,10 +5121,8 @@ define(function(require, exports){
 					$that.attr('oldVal',inpVal);
 					$that.val(newVal);
 				}else{
-					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
-						var oldVal = $that.attr('oldVal')
-						$that.val(oldVal);
-					};
+					var oldVal = $that.attr('oldVal')
+					$that.val(oldVal);
 					
 				}
 			}
