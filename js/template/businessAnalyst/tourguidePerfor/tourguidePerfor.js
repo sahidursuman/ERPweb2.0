@@ -231,6 +231,14 @@ define(function(require, exports) {
 			/* Act on the event */
 			tourguidPerObj.guidePlayList(0);
 		});
+
+		//总打单详情页
+		$tab.find('.T-allMoney').off('click').on('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this),tripPlanId=$that.attr('data-tripPlanId'),shopArrangeId=$that.attr('data-arrangeId');
+			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId);
+		});;
 	};
 
 	//时间控件初始化
