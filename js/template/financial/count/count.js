@@ -2132,6 +2132,7 @@ define(function(require, exports){
 			var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
+			var isConfirmAccount = $parent.attr('isConfirmAccount');
 			var incomeCount = $parent.find('input[name=needCount]').val();
 			var realGetMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
@@ -2179,7 +2180,7 @@ define(function(require, exports){
 			needReduce = Count.changeTwoDecimal(needReduce);
 			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
-            if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
+            if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){needPayMoney.text(needSum);}
             //计算自费费用
             $parent.find('.selfMoney').val(needSum);
 			
@@ -2400,7 +2401,7 @@ define(function(require, exports){
 		var $busFee = parseFloat($tr.find('input[name=price]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $planNeedpay = $tr.find('input[name=needPayMoney]').val();
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$busFee = Count.changeTwoDecimal($busFee);
 		$realReduceMoney = Count.changeTwoDecimal($realReduceMoney);
@@ -2409,7 +2410,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($busFee-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.BusneedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){$tr.find('.BusneedPayMoney').text(needPay);}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$planNeedpay);
@@ -2508,7 +2509,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val() || 0);
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val() || 0);
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val() || 0);
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2518,7 +2519,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0  || badStatus == undefined){	
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){	
 			$tr.find('.restneedPayMoney').text(needPay);
 		};
 		//计算差额
@@ -2623,7 +2624,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2633,7 +2634,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
 			$tr.find('.hotelneedPayMoney').text(needPay);
 		}
 		//计算差额
@@ -2721,7 +2722,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2731,7 +2732,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
 			$tr.find('.scenicneedPayMoney').text(needPay);
 		}
 		
@@ -2821,7 +2822,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2831,7 +2832,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.ticketneedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+				$tr.find('.ticketneedPayMoney').text(needPay);
+		}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
@@ -2948,7 +2951,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2958,7 +2961,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.otherOutNeedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+			$tr.find('.otherOutNeedPayMoney').text(needPay);
+		}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
