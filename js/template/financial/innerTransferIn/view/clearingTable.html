@@ -25,9 +25,8 @@
     <td><span class="F-float F-money">{{checking.backMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.unIncomeMoney}}</span></td>
-    <td><input type="text" maxlength="9"  class="money F-float F-money" value="{{checking.payMoney}}" data-le="{{checking.unIncomeMoney}}" name="payMoney" value="{{checking.payMoney}}" style="text-align:center" 
-    {{if !btnShowStatus && checking.unIncomeMoney <= 0}} disabled {{/if}}></td>
-    <td><textarea class="col-sm-12 hct-textarea T-remark" maxlength="1000" name="payRemark" {{if !btnShowStatus && checking.unIncomeMoney <= 0}} disabled {{/if}}>{{checking.incomeRemark}}</textarea></td>
+    <td><input type="text" maxlength="9"  class="money F-float F-money" value="{{checking.payMoney}}" name="payMoney" value="{{checking.payMoney}}" style="text-align:center"/></td>
+    <td><textarea class="col-sm-12 hct-textarea T-remark" maxlength="1000" name="payRemark">{{checking.payRemark}}</textarea></td>
     <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
     <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>
     <td><label class="pos-rel">
