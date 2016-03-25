@@ -533,6 +533,7 @@ define(function(require, exports) {
                             if(args.isAutoPay == 1){
                                 args.isAutoPay = 0;
                             }
+                            args.autoPay = 0;
                             hotel.hotelClear(args,$tab);
                         }
                     }); 

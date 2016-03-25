@@ -538,6 +538,7 @@ define(function(require, exports) {
                         }else{
                             Insure.saveFlag = false; 
                             args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;
+                            args.autoPay = 0;
                             Insure.getClearing(args);
                         }
                     });  

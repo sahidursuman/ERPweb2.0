@@ -580,6 +580,7 @@ define(function(require, exports) {
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
                         } else {
                             args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
+                            args.autoPay = 0;
                             Transfer.transferClear(args,$tab);
                         }
                     }); 

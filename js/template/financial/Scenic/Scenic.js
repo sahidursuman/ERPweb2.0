@@ -542,6 +542,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
                             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                            args.autoPay = 0;
                             scenic.scenicClear(args);
                         }
                     }); 

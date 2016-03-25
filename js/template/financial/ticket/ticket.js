@@ -620,10 +620,7 @@ define(function(require, exports) {
 						    curr: (data.searchParam.pageNo + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		console.log(Ticket.payingJson);
 						    		Ticket.payingJson = FinancialService.clearSaveJson($tab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));
-						    		console.log("Ticket.payingJson");
-						    		console.log(Ticket.payingJson);
 						    		$tab.data('isEdited',false);
 						    		args.pageNo = obj.curr -1;
 						    		args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;

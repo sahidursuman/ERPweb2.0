@@ -526,6 +526,7 @@ define(function(require, exports) {
                             Self.listSelf(Self.searchData.pageNo);
                         }else{
                             args.isAutoPay = Self.showBtnFlag ? 2: 0;
+                            args.autoPay = 0;
                             Self.GetClear(args);
                         }
                     });
