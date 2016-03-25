@@ -573,7 +573,7 @@ define(function(require, exports) {
                 }
                 var searchParam = {
                     name: args.name,
-                    autoPayMoney: parseInt($tab.find('input[name=sumPayMoney]').val()),
+                    autoPayMoney: parseFloat($tab.find('input[name=sumPayMoney]').val()),
                     startAccountTime: startAccountTime,
                     endAccountTime: endAccountTime,
                     info: $tab.find('input[name=creator]').val(),
