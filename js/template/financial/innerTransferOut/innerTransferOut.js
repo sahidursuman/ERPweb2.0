@@ -149,6 +149,7 @@ define(function(require,exports) {
 			args.operateUserId= $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
+			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
@@ -539,6 +540,7 @@ define(function(require,exports) {
 			args.operateUserId = $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
+			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
