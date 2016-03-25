@@ -280,10 +280,6 @@ define(function(require, exports) {
                         data.billTime = restaurant.clearTempSumDate.billTime;
 
                         data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialRestaurantList = FinancialService.isGuidePay(resultList);
 

@@ -276,10 +276,6 @@ define(function(require, exports) {
                         data.billTime = hotel.clearTempSumDate.billTime;
 
                         data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialHotelListData = FinancialService.isGuidePay(resultList);
                     data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;

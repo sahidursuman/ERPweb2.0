@@ -323,10 +323,6 @@ define(function(require, exports) {
                         data.bankId = Transfer.clearTempSumDate.bankId;
                         data.voucher = Transfer.clearTempSumDate.voucher;
                         data.billTime = Transfer.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);

@@ -266,10 +266,6 @@ define(function(require, exports) {
                         data.bankId = Self.clearTempSumDate.bankId;
                         data.voucher = Self.clearTempSumDate.voucher;
                         data.billTime = Self.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);

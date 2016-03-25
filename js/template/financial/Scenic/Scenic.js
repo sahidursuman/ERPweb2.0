@@ -293,9 +293,6 @@ define(function(require, exports) {
                         data.bankId = scenic.clearTempSumDate.bankId;
                         data.voucher = scenic.clearTempSumDate.voucher;
                         data.billTime = scenic.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
                     }
                     data.isOuter = scenic.isOuter = !!args.isOuter || scenic.isOuter;
                     data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
