@@ -4,8 +4,7 @@
  * by 廖佳玲
  */
 define(function(require, exports) {
-    var rule = require("./rule"),
-    	menuKey = "financial_restaurant",
+    var menuKey = "financial_restaurant",
     	listTemplate = require("./view/list"),
         restaurantChecking = require("./view/restaurantChecking"),
         restaurantClearing = require("./view/restaurantClearing"),
