@@ -25,7 +25,8 @@
                     </p>
                     <p class="h-agencyName">{{if !!subList.partnerAgency}}{{subList.partnerAgency.travelAgencyName}}{{/if}}</p>
                 </td>
-                <td>{{if subList.lineProduct}}{{subList.lineProduct.name}}{{/if}}{{if subList.subTouristGroupDetails != null}}
+                <td>{{if !!subList.lineProduct}}{{subList.lineProduct.name}}{{/if}} 
+                   {{if subList.subTouristGroupDetails != null}}
                     <label class="lineProductArea" style="float: right;">
                         <button class="btn btn-success btn-sm btn-white show" index="{{indexA}}">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -36,7 +37,7 @@
                 </td>
                 <td>{{if subList.customerType == 0}}散客{{else}}团体{{/if}}</td>
                 <td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td><span class="F-float F-count">{{if subList.lineProduct}}{{subList.lineProduct.days}}{{/if}}</span></td>
+                <td><span class="F-float F-count">{{if !!subList.lineProduct}}{{subList.lineProduct.days}}{{/if}}</span></td>
                 <td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
                 <td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
 

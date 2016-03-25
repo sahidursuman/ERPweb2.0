@@ -131,8 +131,17 @@ define(function(require, exports) {
 	};
 	
 	Ticket.getTicketNameList = function($obj){
+		var ticketNameList = Ticket.ticketNameList;
+		for(var i=0; i<ticketNameList.length; i++){
+			ticketNameList[i].id = ticketNameList[i].ticketId;
+			ticketNameList[i].value = ticketNameList[i].ticketName;
+		}
+		var all = {id:'', value: '全部'};
+		Ticket.ticketNameList = ticketNameList.slice(all);
+		ticketNameList.unshift(all);
 		$obj.autocomplete({
 			minLength: 0,
+			source : ticketNameList,
 			change : function(){
 				if (!ui.item)  {
 		            $(this).data('id', '');
@@ -142,18 +151,7 @@ define(function(require, exports) {
 		        $(this).blur().data('id', ui.item.id);
 		    }
 		}).on('click', function(event){
-			if (!$obj.data('ajax')) {  // 避免重复请求
-				for(var i=0; i<Ticket.ticketNameList.length; i++){
-					Ticket.ticketNameList[i].id = Ticket.ticketNameList[i].ticketId;
-					Ticket.ticketNameList[i].value = Ticket.ticketNameList[i].ticketName;
-				}
-				Ticket.ticketNameList.unshift({id:'', value: '全部'});
-			    $obj.autocomplete('option', 'source', Ticket.ticketNameList);
-			    $obj.autocomplete('search', '');
-			    $obj.data('ajax', true);
-			}else{
-			    $obj.autocomplete('search', '');
-			}
+			$obj.autocomplete('search', '');
 		});
 	};
 
@@ -172,8 +170,17 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				data.name = args.ticketName;
 				data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
+				if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
+                    data.financialTicketList = FinancialService.getCheckTempData(data.financialTicketList,Ticket.checkTemp);
+                    data.sumSettlementMoney = Ticket.checkTemp.sumSttlementMoney;
+                    data.sumUnPayedMoney = Ticket.checkTemp.sumUnPayedMoney;
+                }
+				
 				if(Tools.addTab(checkMenuKey, "票务对账", ticketChecking(data))){
 					Ticket.$checkingTab = $("#tab-" + checkMenuKey + "-content");
+					if(Ticket.checkTemp && Ticket.checkTemp.length > 0){
+                        Ticket.$checkingTab.data('isEdited',true);
+                    }
 					Ticket.check_event(args,Ticket.$checkingTab);
 				} else {
 					Ticket.$checkingTab.data('next',args);
@@ -186,9 +193,16 @@ define(function(require, exports) {
 				    curr: (args.pageNo + 1),
 				    jump: function(obj, first) {
 				    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-				    		Ticket.$checkingTab.data('isEdited',false);
-				    		args.pageNo = obj.curr -1;
-				    		Ticket.checkingList(args);
+				    		var temp = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0));
+                            if(!temp){
+                                return false;
+                            } else {
+                                Ticket.checkTemp = temp;
+                                Ticket.$checkingTab.data('isEdited',false);
+			    				args.pageNo = obj.curr -1;
+			    				Ticket.checkingList(args);
+                            }
+				    		
 				    	}
 				    }
 				});
@@ -198,6 +212,7 @@ define(function(require, exports) {
 
 	Ticket.check_event = function(args,$tab){
 		var validator = (new FinRule(0)).check($tab);
+		Ticket.getTicketList($tab,false);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList input', function() {
@@ -209,6 +224,7 @@ define(function(require, exports) {
             Ticket.saveCheckData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
+        	Ticket.checkTemp = false;
             Ticket.checkingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -217,6 +233,10 @@ define(function(require, exports) {
                 return;
             }
             Ticket.saveCheckData($tab);
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Ticket.checkTemp = false;
         });
 
 		Tools.setDatePicker($tab.find('.datepicker'), true);
@@ -248,11 +268,13 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsData = { 
+            	accountStatus:$tab.find('input[name=accountStatus]').val(),
                 ticketId: $tab.find('input[name=ticketId]').val(),
                 ticketName: $tab.find('input[name=ticketName]').val(),
                 startDate: $tab.find('.T-search-start-date').val(),
                 accountInfo: $tab.find('.T-search-type').val(),
-                endDate: $tab.find('.T-search-end-date').val()
+                endDate: $tab.find('.T-search-end-date').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeTicketFinancial");
         });
@@ -351,7 +373,7 @@ define(function(require, exports) {
 
 	Ticket.saveCheckData = function($tab,args,tabArgs){
 		var argLen = arguments.length,
-			json = FinancialService.checkSaveJson($tab, new FinRule(0));
+			json = FinancialService.checkSaveJson(Ticket.$checkingTab,Ticket.checkTemp,new FinRule(0),true);
 		if(json.length > 0){
 			$.ajax({
 				url : KingServices.build_url('account/arrangeTicketFinancial', 'saveAccountChecking'),
@@ -359,16 +381,15 @@ define(function(require, exports) {
 				data : {ticketJson : json}
 			}).done(function(data){
 				if(showDialog(data)){
-					$tab.data('isEdited', false);
+					
 	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+	                	Ticket.checkTemp = false;
+	                	$tab.data('isEdited', false);
 	                    if (argLen === 1) {
 	                        Tools.closeTab(checkMenuKey);
 	                        Ticket.getList(Ticket.listPageNo);
-	                    } else if (argLen === 2){
+	                    } else {
 	                        Ticket.checkingList(args,$tab);
-	                    } else if (argLen === 3){
-	                    	Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
-	                        Ticket.check_event(args,$tab);
 	                    }
 	                });
 	            }
@@ -386,10 +407,24 @@ define(function(require, exports) {
 			ticketName : options.name,
 			startDate : options.startDate,
 			endDate : options.endDate,
-			accountStatus : options.accountStatus,
-			type : 1
+			accountStatus : options.accountStatus
 		}
-		Ticket.clearingList(args);
+		$.ajax({
+			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
+			type : 'POST',
+            data : {searchParam : JSON.stringify(args)}
+		}).done(function(data){
+			if(showDialog(data)){
+				var ticketNameList = data.ticketNameList;
+				for(var i=0; i<ticketNameList.length; i++){
+					ticketNameList[i].id = ticketNameList[i].ticketId;
+					ticketNameList[i].value = ticketNameList[i].ticketName;
+				}
+				Ticket.ticketNameList = ticketNameList;
+				args.type = 1;
+				Ticket.clearingList(args);
+			}
+		});
 	};
 	Ticket.clearingList = function(args,$tab){
 		if(!!$tab){
@@ -426,8 +461,6 @@ define(function(require, exports) {
 				    jump: function(obj, first) {
 				    	if (!first) { 
 				    		Ticket.payingJson = FinancialService.clearSaveJson(Ticket.$clearingTab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));	
-				    		console.log("clearingList");
-				    		console.log(Ticket.payingJson);
 				    		Ticket.$clearingTab.data('isEdited',false);
 				    		args.pageNo = obj.curr -1;
 				    		Ticket.getOperationList(args,Ticket.$clearingTab);
@@ -441,6 +474,7 @@ define(function(require, exports) {
 	Ticket.clear_init = function(args,$tab){
 		var validator = (new FinRule(Ticket.isBalanceSource ? 3 : 1)).check($tab);
 		var reciveValidtor = (new FinRule(2)).check($tab);
+		Ticket.getTicketList($tab,true);
 		// 处理关闭与切换tab
         $tab.off('change').off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
         .on('change', '.T-checkList input', function() {
@@ -452,7 +486,7 @@ define(function(require, exports) {
             Ticket.savePayingData($tab,$tab.data('next'),[tab_id, title, html]);
         })
         .on(SWITCH_TAB_BIND_EVENT, function() {
-        	Ticket.payingJson = [];
+        	Ticket.payingJson = false;
             Ticket.clearingList($tab.data('next'),$tab);
         })
         .on(CLOSE_TAB_SAVE, function(event) {
@@ -464,7 +498,7 @@ define(function(require, exports) {
         })
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
-            Ticket.payingJson = [];
+            Ticket.payingJson = false;
         });
 
         FinancialService.initPayEvent($tab);
@@ -473,6 +507,7 @@ define(function(require, exports) {
 		$tab.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			args.pageNo = 0;
+			args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
 			Ticket.clearingList(args,$tab);
 		});
 		$tab.find('.T-records').on('click', function(event){
@@ -516,7 +551,7 @@ define(function(require, exports) {
                 	});
                 }
             } else {
-                Ticket.payingJson = [];
+                Ticket.payingJson = false;
                 Ticket.setAutoFillEdit($tab,args,false);
             }
 		})
@@ -573,7 +608,7 @@ define(function(require, exports) {
 
 						// 设置记录条数及页面
                         $tab.find('.T-sumItem').text('共计' + data.recordSize + '条记录');
-                        if(Ticket.payingJson.length > 0){
+                        if(Ticket.payingJson){
                         	$tab.data('isEdited',true);
                         }
                         $tab.find('.T-saveClear').data('pageNo', args.pageNo);
@@ -585,8 +620,6 @@ define(function(require, exports) {
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
 						    		Ticket.payingJson = FinancialService.clearSaveJson($tab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));
-						    		console.log("getOperationList");
-						    		console.log(Ticket.payingJson);
 						    		$tab.data('isEdited',false);
 						    		args.pageNo = obj.curr -1;
 						    		Ticket.getOperationList(args,$tab);
@@ -636,17 +669,47 @@ define(function(require, exports) {
         .done(function(data) {
             showMessageDialog($('#confirm-dialog-message'), data.message, function() {
             	$tab.data('isEdited', false);
-            	Ticket.payingJson = [];
+            	Ticket.payingJson = false;
                 if (argLen === 1) {
                 	Ticket.getList(Ticket.listPageNo);
-                } else if(argLen === 2){
+                } else {
                     Ticket.clearingList(args,$tab);
-                } else if(argLen === 3){
-                	Ticket.clearingList(args,$tab);
-                }
+                } 
             })
         });
 	};
+
+	Ticket.getTicketList = function($tab,type){
+        var $obj = $tab.find('input[name=ticketName]'),
+        	name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : Ticket.ticketNameList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                	$obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    ticketId : ui.item.id,
+                    ticketName : ui.item.value,
+                    startDate : $tab.find('.T-search-start-date').val(),
+                    endDate : $tab.find('.T-search-end-date').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                	args.type = $tab.find('.T-btn-autofill').length ? 0 : 1;
+                    Ticket.clearingList(args)
+                } else {
+                    Ticket.checkingList(args)
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
 	//暴露方法
 	exports.init = Ticket.initModule;
 	exports.initPay = Ticket.initPay;

@@ -503,8 +503,7 @@ define(function(require, exports) {
 
 			if (!$datepicker.data('datepicker')) {
 				var $datepickerTr = $datepicker.closest('tr');
-
-				if ($datepickerTr.length) {
+				if ($datepickerTr.find('[name=days]').length) {
 					var $datepickers = $datepickerTr.find('.datepicker'),
 						options = {
 							moreDay : 1
@@ -515,7 +514,17 @@ define(function(require, exports) {
 						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
 						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
 					});
-				} else {
+				} else if ($datepickerTr.find('[name=days]').length==0) {
+					var $datepickers = $datepickerTr.find('.datepicker'),
+						options = {
+							moreDay : 0
+						};
+					Tools.setDatePicker($datepickers, true,options).on('changeDate.diff.api', function(event) {
+						event.preventDefault();
+						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
+					});
+				} else{
 					Tools.setDatePicker($datepicker);
 				}
 			}
