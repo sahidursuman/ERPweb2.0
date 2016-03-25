@@ -361,10 +361,8 @@ define(function(require, exports) {
             $tab.find('.T-btn-autofill').off().on('click',function(){
                 if ($(this).hasClass('btn-primary')) {
                     if (new FinRule(2).check($tab).form()) {
-                        if($tab.find('input[name=sumPayMoney]').val() <= 0){
-                            showMessageDialog($("#confirm-dialog-message"),"收款金额需大于0！");
-                            return false;
-                        }
+                        var isAutoPay = FinancialService.autoPayJson("",$tab,new FinRule(2));
+                        if(!isAutoPay){return false;}
                         FinancialService.autoPayConfirm($tab.find('input[name=startDate]').val(),$tab.find('input[name=endDate]').val(), function() {
                             FinTransIn.autoFillMoney($tab,args);
                         });
