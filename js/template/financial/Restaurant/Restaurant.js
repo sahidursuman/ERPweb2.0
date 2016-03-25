@@ -4,8 +4,7 @@
  * by 廖佳玲
  */
 define(function(require, exports) {
-    var rule = require("./rule"),
-    	menuKey = "financial_restaurant",
+    var menuKey = "financial_restaurant",
     	listTemplate = require("./view/list"),
         restaurantChecking = require("./view/restaurantChecking"),
         restaurantClearing = require("./view/restaurantClearing"),
@@ -143,7 +142,6 @@ define(function(require, exports) {
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
-            args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
 
         $.ajax({
@@ -156,14 +154,24 @@ define(function(require, exports) {
                     var frList = data.financialRestaurantList;
                     data.financialRestaurantList = FinancialService.isGuidePay(frList);
                     data.restaurantName = args.restaurantName;
+                    if(restaurant.checkTemp && restaurant.checkTemp.length > 0){
+                        data.financialRestaurantList = FinancialService.getCheckTempData(data.financialRestaurantList,restaurant.checkTemp);
+                        data.sumSettlementMoney = restaurant.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = restaurant.checkTemp.sumUnPayedMoney;
+                    }
                     var html = restaurantChecking(data);
                     
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "餐厅对账", html)) {
                         restaurant.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(restaurant.checkTemp && restaurant.checkTemp.length > 0){
+                            restaurant.$checkTab.data('isEdited',true);
+                        }
                         restaurant.initCheck(args,restaurant.$checkTab); 
                         //取消对账权限过滤
                         checkDisabled(frList,restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
+                    } else {
+                        restaurant.$checkTab.data('next', args);
                     }
 
                     //绑定翻页组件
@@ -173,9 +181,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                restaurant.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                restaurant.restaurantCheck(args);
+                                var temp = FinancialService.checkSaveJson(restaurant.$checkTab,restaurant.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    restaurant.checkTemp = temp;
+                                    restaurant.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    restaurant.restaurantCheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -191,6 +206,7 @@ define(function(require, exports) {
         restaurant.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateUnpayMoney($tab,ruleCheck);
+        restaurant.getRestaurantList($tab,false);
 
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
@@ -202,10 +218,12 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsDate = {
-                restaurantId: id, 
+                restaurantId: args.restaurantId, 
+                accountStatus :$tab.find('input[name=accountStatus]').val(),
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });
@@ -229,6 +247,9 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+        }
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
         }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = restaurant.$clearTab.find('input[name=sumPayMoney]').val();
@@ -259,14 +280,10 @@ define(function(require, exports) {
                         data.billTime = restaurant.clearTempSumDate.billTime;
 
                         data.financialRestaurantList = FinancialService.getTempDate(resultList,restaurant.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialRestaurantList = FinancialService.isGuidePay(resultList);
 
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var html = restaurantClearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "餐厅付款", html)) {
@@ -289,7 +306,7 @@ define(function(require, exports) {
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, new FinRule(args.isAutoPay== 2?3: 1));
                                 restaurant.clearTempData = tempJson;
                                 var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=payType]').val()),
+                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
                                     sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
                                 restaurant.clearTempSumDate = {
                                     id : args.restaurantId,
@@ -303,6 +320,8 @@ define(function(require, exports) {
                                 }
                                 restaurant.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 restaurant.restaurantClear(args);
                             }
                         }
@@ -316,6 +335,7 @@ define(function(require, exports) {
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        restaurant.getRestaurantList($tab,true);
 
         //搜索事件
         $tab.find(".T-search").off().click(function(){
@@ -338,7 +358,7 @@ define(function(require, exports) {
             var startDate = $tab.find("input[name=startDate]").val(),
                 endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
-                var payType = $tab.find('select[name=payType]').val();
+                var payType = $tab.find('select[name=sumPayType]').val();
                 restaurant.clearTempSumDate = {
                     id : args.restaurantId,
                     sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -359,6 +379,7 @@ define(function(require, exports) {
             restaurant.clearTempData = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             restaurant.restaurantClear(args);
         });
 
@@ -451,7 +472,7 @@ define(function(require, exports) {
     //对账数据保存
     restaurant.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(restaurant.$checkTab,restaurant.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -464,15 +485,13 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        restaurant.checkTemp = false;
                         restaurant.$checkTab.data('isEdited',false);
                         if(argumentsLen == 1){
                             Tools.closeTab(menuKey + "-checking");
                             restaurant.listRestaurant(restaurant.listPage);
-                        } else if(argumentsLen == 2){
+                        } else {
                             restaurant.restaurantCheck(args,$tab);
-                        } else if(argumentsLen == 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            restaurant.initCheck(args,$tab);
                         }
                     });
                 }
@@ -481,12 +500,10 @@ define(function(require, exports) {
     };
 
     restaurant.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab,args ? args.saveRule : $tab.data('saveRule'))){
-            return false;
-        }
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args ? args.saveRule : $tab.data('saveRule'));
-        var payType = restaurant.$clearTab.find('select[name=payType]').val(),
+            clearSaveJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData,args ? args.saveRule : $tab.data('saveRule'),true);
+        if(!clearSaveJson){ return false; }
+        var payType = restaurant.$clearTab.find('select[name=sumPayType]').val(),
             searchParam = {
                 restaurantId : args ? args.restaurantId : $tab.data('restaurantId'),
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -501,7 +518,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/arrangeRestaurantFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                restaurantJson : JSON.stringify(clearSaveJson),
+                restaurantJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
@@ -518,6 +535,7 @@ define(function(require, exports) {
                             if(args.isAutoPay == 1){
                                 args.isAutoPay = 0;
                             }
+                            args.autoPay = 0;
                             restaurant.restaurantClear(args,$tab);
                         }
                     });
@@ -538,7 +556,8 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    restaurant.initCheck(args,$tab);
+                    restaurant.checkTemp = false;
+                    restaurant.restaurantCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     restaurant.clearTempSumDate = false;
                     restaurant.clearTempData = false;
@@ -553,7 +572,7 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    restaurant.saveChecking($tab,args,[tab_id, title, html]);
+                    restaurant.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if(option == "clear"){
                     restaurant.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }
@@ -574,6 +593,8 @@ define(function(require, exports) {
                 if(option == "clear"){
                     restaurant.clearTempSumDate = false;
                     restaurant.clearTempData = false;
+                }else if(option == "check"){
+                    restaurant.checkTemp = false;
                 }
             });
 
@@ -597,6 +618,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        restaurant.restaurantList = restaurantList.slice(all);
         restaurantList.unshift(all);
 
         //餐厅
@@ -637,6 +659,39 @@ define(function(require, exports) {
         });
     };
 
+    restaurant.getRestaurantList = function($tab,type){
+        var $obj = $tab.find('input[name=restaurantName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : restaurant.restaurantList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    restaurantId : ui.item.id,
+                    restaurantName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val(),
+                    sortType : "accountTime"
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    restaurant.restaurantClear(args);
+                } else {
+                    restaurant.restaurantCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     restaurant.initPay = function(options){
         var args = {
             pageNo : 0,
@@ -646,8 +701,28 @@ define(function(require, exports) {
             endDate : options.endDate,
             accountStatus : options.accountStatus,
             isAutoPay : 2
-        }
-        restaurant.restaurantClear(args); 
+        };
+         $.ajax({
+            url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               layer.close(globalLoadingLayer);
+               var result = showDialog(data);
+                if(result){
+                    var restaurantList = data.restaurantNameList;
+                    if(restaurantList != null && restaurantList.length > 0){
+                        for(var i=0;i<restaurantList.length;i++){
+                            restaurantList[i].id = restaurantList[i].restaurantId;
+                            restaurantList[i].value = restaurantList[i].restaurantName;
+                        }
+                    }
+                    restaurant.restaurantList = restaurantList;
+                    args.isAutoPay = 2;
+                    restaurant.restaurantClear(args);
+                }
+            }
+        });
     };
 
     exports.init = restaurant.initModule;
