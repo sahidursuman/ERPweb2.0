@@ -245,6 +245,9 @@ define(function(require, exports) {
         }
         args.pageNo = args.pageNo || 0;
         args.sortType = "auto";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "listSelfPayFinancialAccount"),
             type: "POST",
@@ -270,7 +273,7 @@ define(function(require, exports) {
                     }
                     var resultList = data.list;
                     data.list = FinancialService.getTempDate(resultList,Self.clearTempData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     data.searchParam.accountStatus = args.accountStatus;
                     var html = SelfClearing(data);
                     // 初始化页面
@@ -307,6 +310,8 @@ define(function(require, exports) {
                                 }
                                 Self.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Self.GetClear(args);
                             }
                         }
@@ -494,18 +499,15 @@ define(function(require, exports) {
     };
 
     Self.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab,new FinRule(Self.showBtnFlag ? 3 : 1))){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1)),
+            clearSaveJson = FinancialService.clearSaveJson($tab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1),true),
             payType = $tab.find('select[name=sumPayType]').val();
+        if(!clearSaveJson){ return false; }
         $.ajax({
             url:KingServices.build_url("account/selfPayFinancial","confirmSelfPayPayment"),
             type:"POST",
             data:{
-                selfPayPaymentJson : JSON.stringify(clearSaveJson),
+                selfPayPaymentJson : clearSaveJson,
                 selfPayId : args ? args.selfPayId : $tab.data('selfPayId'),
                 payType : payType,
                 payRemark : $tab.find('input[name=sumPayRemark]').val(),
