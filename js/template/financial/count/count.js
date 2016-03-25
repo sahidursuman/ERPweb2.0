@@ -464,7 +464,8 @@ define(function(require, exports){
 		}).on('change','input',function(){
 			var $that = $(this),
 				tagName = $that.attr('name');
-
+				
+				
 			if (shopNoneAutoFeilds.indexOf(tagName) < 0) {
 				Count.calculateCost($that);
 				//计算金额
@@ -480,8 +481,10 @@ define(function(require, exports){
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
 		});
-		$listObj.on('click','.T-travelCheckbox',function(){
+		$listObj.off('click').on('click','.T-travelCheckbox',function(){
 			//清除小数点
+			Count.delValDecimal($(this),$shopObj,$obj);
+		}).on('click','.T-guideCheckbox',function(){
 			Count.delValDecimal($(this),$shopObj,$obj);
 		});
 		//新增购物安排
@@ -836,7 +839,12 @@ define(function(require, exports){
 				Count.formatDays($that,$obj);
 			}
 		});
-
+		$listObj.off('click').on('click','.T-travelCheckbox',function(){
+			//清除小数点
+			Count.delValDecimal($(this),$shopObj,$obj);
+		}).on('click','.T-guideCheckbox',function(){
+			Count.delValDecimal($(this),$shopObj,$obj);
+		});
 		//新增购物安排sumRateMoney
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
@@ -1656,23 +1664,47 @@ define(function(require, exports){
 		travelAgencyRateMoney = Count.changeTwoDecimal(travelAgencyRateMoney);
 		guideRateMoney = consumeMoney*guideRate/100;
 		guideRateMoney = Count.changeTwoDecimal(guideRateMoney);
+		var travelDelFlag = $parentObj.find('.T-travelCheckbox').is(':checked');
+		var guideDelFlag = $parentObj.find('.T-guideCheckbox').is(':checked');
 		if(!!shopId){
 			switch(editFeildTagName) {
 				case 'travelAgencyRate':
-					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+					if(travelDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}else{
+						$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+					}
+					
 					break;
 				case 'guideRate':
-					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					if(guideDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}else{
+						$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					}
+					
 					break;
-				// case 'consumeMoney':
-				// 	if ($parent.find('.span_shopPolicy').length === 0) {
-				// 		$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-				// 		$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-				// 	}
-				// 	break;
 				case 'consumeMoney':
-					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					if(guideDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}else{
+						$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					};
+					if(travelDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}else{
+						$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+					};
+					break;
+				case 'travelAgencyRateMoney' :
+					if(travelDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}
+					break;
+				case 'guideRateMoney' :
+					if(guideDelFlag){
+						Count.addItemFormatVal($obj,$parentObj);
+					}
 					break;
 				default: break;
 			}
@@ -3998,19 +4030,21 @@ define(function(require, exports){
 	//规范输入的数字数据
 	Count.changeTwoDecimal = function($val){
 		var newVal = parseFloat($val);
+
 		if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
 			return 0;
 		}
 		var newVal = Math.round($val*100)/100;
 		return newVal;
 	};
-	Count.changeForInstall = function($val){
+	Count.changeForInstall = function($val,$listObj){
 		var newVal = parseFloat($val);
 		if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY)
 		{
 			return 0;
 		}
 		var newVal = Math.round($val*100)/100;
+		
 		return newVal;
 	};
 	Count.changeToString = function($val){
@@ -5059,35 +5093,101 @@ define(function(require, exports){
 	};
 	//清除小数点
 	Count.delValDecimal = function($obj,$listObj,$parentObj){
-		var oldTravelDataArr = [];//用于缓存旧数据
-		var oldGuideDataArr = [];//用于缓存旧数据
-		var newTravelDataArr = [];//用于设置新数据
-		var newGuideDataArr = [];//用于设置新数据
 		var travelArr = $listObj.find('[name=travelAgencyRateMoney]');
 		var guideArr = $listObj.find('[name=guideRateMoney]');
 		if($obj.hasClass('T-travelCheckbox')){
 			for(var i = 0;i<travelArr.length;i++){
-				var oldVal = travelArr.eq(i).attr('old');
-				var newVal = Math.round(Count.changeTwoDecimal(travelArr.eq(i).val()));
-				//oldTravelDataArr.push(oldVal);
-				//newTravelDataArr.push(newVal);
+				var $that = travelArr.eq(i);
+				var inpVal = $that.val();
+				
+				var newVal = Math.round(Count.changeTwoDecimal(inpVal));
 				if($obj.is(':checked')){
-					travelArr.eq(i).val(newVal);
+					$that.attr('oldVal',inpVal);
+					$that.val(newVal);
 				}else{
-					travelArr.eq(i).val(oldVal);
+					var $tr = $that.closest('tr');
+					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
+						var oldVal = $that.attr('oldVal');
+						$that.val(oldVal);
+					};
+					
 				}
 			}
 		};
 		if($obj.hasClass('T-guideCheckbox')){
 			for(var i = 0;i<guideArr.length;i++){
-				var oldVal = guideArr.eq(i).attr('old');
-				var newVal = Math.round(Count.changeTwoDecimal(guideArr.eq(i).val()));
-				oldGuideDataArr.push(oldVal);
-				newGuideDataArr.push(newVal);
+				var $that = guideArr.eq(i);
+				var inpVal = $that.val();
+				
+				var newVal = Math.round(Count.changeTwoDecimal(inpVal));
+				if($obj.is(':checked')){
+					$that.attr('oldVal',inpVal);
+					$that.val(newVal);
+				}else{
+					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
+						var oldVal = $that.attr('oldVal')
+						$that.val(oldVal);
+					};
+					
+				}
 			}
 		};
-		console.log($obj.is(':checked'));
-		console.log(oldTravelDataArr);
+	};
+	//新增处理
+	Count.addItemFormatVal = function($obj,$listObj){
+		var travelFlag = $listObj.find('.T-travelCheckbox').is(':checked');
+		var guideFlag = $listObj.find('.T-guideCheckbox').is(':checked');
+		var tagName = $obj.attr('name');
+		var $tr = $obj.closest('tr');
+		if(travelFlag){
+			switch(tagName){
+				case 'travelAgencyRateMoney' :
+					var inpVal = $obj.val();
+					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
+					$obj.attr('oldVal',newVal);
+					$obj.val(newVal);
+					break;
+				case 'travelAgencyRate' :
+					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
+					var inpVal = Count.changeTwoDecimal($obj.val());
+					var newVal = Math.round((money*inpVal)/100);
+					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
+					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
+					break;
+				case 'consumeMoney' :
+					var travelAgencyRate = Count.changeTwoDecimal($tr.find('[name=travelAgencyRate]').val());
+					var money = Count.changeTwoDecimal($obj.val());
+					var newVal = Math.round((money*travelAgencyRate)/100);
+					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
+					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
+					break;
+			}
+			
+		};
+		if(guideFlag){
+			switch(tagName){
+				case 'guideRateMoney' :
+					var inpVal = $obj.val();
+					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
+					$obj.val(newVal);
+					$obj.attr('oldVal',newVal);
+					break;
+				case 'guideRate' :
+					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
+					var inpVal = Count.changeTwoDecimal($obj.val());
+					var newVal = Math.round((money*inpVal)/100);
+					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
+					$tr.find('[name=guideRateMoney]').val(newVal);
+					break;
+				case 'consumeMoney' :
+					var guideRate = Count.changeTwoDecimal($tr.find('[name=guideRate]').val());
+					var money = Count.changeTwoDecimal($obj.val());
+					var newVal = Math.round((money*guideRate)/100);
+					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
+					$tr.find('[name=guideRateMoney]').val(newVal);
+					break;
+			}
+		};
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
