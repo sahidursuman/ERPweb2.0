@@ -32,8 +32,9 @@
     {{if day.otherArrange != null}}
     {{each day.otherArrange as arrange index}}
     {{if arrange != null}}
-    <tr otherArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}" whichDay="{{arrange.whichDay}}">
-        <td><span class="whichDay"></span></td>
+    <tr otherArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}" whichDay="{{arrange.whichDay}}" 
+    isConfirmAccount="{{arrange.isConfirmAccount}}">
+        <td ><span class="whichDay"></span></td>
 
         <td>{{arrange.name}}</td>
 
@@ -62,8 +63,18 @@
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
 
-        <td>{{if arrange.badStatus == 1}}<span class="otherOutNeedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="otherOutNeedPayMoney F-float F-money"></span>{{/if}}
-        <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
+        <td>
+            {{if arrange.badStatus == 1}}
+                <span class="otherOutNeedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+            {{else}}
+                {{if arrange.isConfirmAccount == 1}}
+                    <span class="otherOutNeedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                {{else}}
+                    <span class="otherOutNeedPayMoney F-float F-money"></span>
+                {{/if}}
+            {{/if}}
+            <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}">
+        </td>
 
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 
@@ -80,14 +91,14 @@
         &nbsp;
         <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>
         <span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}
-        <select name="payType">
+        <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
             <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
             <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
             <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
         </select>
         &nbsp;
         <input  type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
-            {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} {{/if}}/>{{/if}}
+            {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11"  {{/if}} {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></div></td>
 
@@ -99,9 +110,21 @@
         </td>
         <td><span class="difference"></span></td>
 
-        <td>{{if editStatus == 1}}<input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{arrange.billRemark}}{{/if}}</td>
+        <td><input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{ if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
-        <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+        <td>
+            {{if arrange.isConfirmAccount == 0}}
+                未对账
+            {{else}}
+                已对账
+            {{/if}}
+            &nbsp;&nbsp;
+            {{if arrange.payedMoney == 0 &&　arrange.isConfirmAccount == 0}}
+                <a href="javascript:void(0)" class="T-otherOutArrDel">删除</a>
+            {{else}}
+                <span style="color:#bbb;">删除</span>
+            {{/if}}
+        </td>
     </tr>
     {{/if}}
     {{/each}}

@@ -2,7 +2,7 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label class="control-label">客户：</label>
-            <label class="control-label T-partnerAgencyName">{{partnerAgencyName}}</label>
+            <input type="text" class="control-label T-partnerAgencyName" value="{{partnerAgencyName}}" />
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
@@ -72,7 +72,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">本次收款金额合计：</label>
             <label class="control-label">
-                <input type="text" name="sumPayMoney" class="F-float F-money T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
+                <input type="text" name="sumPayMoney" class="F-float F-money T-sumReciveMoney money" value="{{sumPayMoney}}" {{if type}}disabled {{/if}}>
             </label>
         </div>
 
@@ -85,22 +85,22 @@
         <div class="form-group mar-r-10">
             <label class="control-label">收款方式：</label>
             <select class="form-control T-sumPayType" name="sumPayType">
-                {{getPayTypeOptions}}
+                {{#sumPayType | getPayTypeOptions}}
             </select>
         </div>
 
         <div class="form-group mar-r-10">
             <label class="control-label">现金账号：</label>
             <label class="control-label">
-                <input type="text" name="cash-number" class="money" style="width:300px;">
-                <input type="hidden" name="cash-id">
+                <input type="text" name="cash-number" class="money" {{if sumPayType == 0}}value="{{bankNumber}}"{{/if}} style="width:300px;">
+                <input type="hidden" name="cash-id" {{if sumPayType == 0}}value="{{bankId}}"{{/if}}>
             </label>
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">银行账号：</label>
             <label class="control-label">
-                <input type="text" name="card-number" class="money" style="width:300px;">
-                <input type="hidden" name="card-id">
+                <input type="text" name="card-number" class="money" {{if sumPayType != 0}}value="{{bankNumber}}"{{/if}} style="width:300px;">
+                <input type="hidden" name="card-id" {{if sumPayType != 0}}value="{{bankId}}"{{/if}}>
             </label>
         </div>
         <div class="form-group mar-r-10">
@@ -150,7 +150,7 @@
                 <th style="min-width: 100px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list">
+        <tbody class="T-clearList">
             {{if customerAccountList != null}} 
             {{each customerAccountList as rs index}}
             <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
@@ -234,10 +234,10 @@
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
                 <td rowspan="{{rs.rowLen}}">
-                    <input type="text" name="payMoney" data-le="{{rs.unReceivedMoney}}" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}} class="col-sm-12 T-reciveMoney money F-float F-money">
+                    <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money F-float F-money" value="{{rs.payMoney}}">
                 </td>
                 <td rowspan="{{rs.rowLen}}">
-                    <textarea class="col-sm-12 T-remark hct-textarea" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}}></textarea>
+                    <textarea class="col-sm-12 T-remark hct-textarea" name="payRemark">{{rs.payRemark}}</textarea>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkTime}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkUserName}}</td>

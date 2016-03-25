@@ -223,6 +223,7 @@ define(function(require, exports) {
 
     //报表事件
     touristGroup.listEvents = function($listObj) {
+        //报表事件
         $listObj.find(".T-touristGroupList").on('click', '.T-action', function() {
             var $that = $(this),
                 $tr = $that.closest('tr'),
@@ -537,7 +538,7 @@ define(function(require, exports) {
                     //接送安排
                     touristGroup.innerTransferDispose($innerTransferForm, 2);
                     //游客的序号
-                    touristGroup.memberNumber($groupMemberForm);
+                    touristGroup.memberNumber($groupMemberForm.find('.T-addTouristTbody'));
 
                     if (!!isTransferIn) {
                         $('#inner-TransferIn').find('.T-T-transferIn-search').trigger('click');
@@ -884,7 +885,7 @@ define(function(require, exports) {
             } else {
                 $tr.fadeOut(function() {
                     $tr.remove();
-                    touristGroup.memberNumber($obj);
+                    touristGroup.memberNumber($obj.find('.T-addTouristTbody'));
                 });
             };          
         });
@@ -1466,12 +1467,11 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
         $tbody.append(html);
-        touristGroup.memberNumber($obj);        
+        touristGroup.memberNumber($tbody);        
     };
     //游客列表序号自动升序
-    touristGroup.memberNumber = function($obj) {
-        var $tbody = $obj.find('tbody.T-addTouristTbody').children('tr');
-        $tbody.each(function(i) {
+    touristGroup.memberNumber = function($tab) {
+        $tab.find('tr').each(function(i) {
             if (i >= 0) {
                 $(this).children().eq(0).text(i + 1);
             }
@@ -1685,11 +1685,15 @@ define(function(require, exports) {
                     }
                     //讲字符串改为对象
                     data.touristGroupList = touristGroupList;
+                    data.adultCount = 0;
+                    data.childCount = 0;
+
                     var html = listTemplate(data);
                     //权限过滤
                     html = filterUnAuth(html);
                     $listObj.html(html);
                     touristGroup.listEvents($listObj);
+                   
                     //绑定分页插件
                     laypage({
                         cont: $mainList.find('.T-pagenation'),
@@ -1706,6 +1710,9 @@ define(function(require, exports) {
             }
         });
     };
+
+
+  
 
     //刷新数据合计
     touristGroup.freshHeader = function($args) {

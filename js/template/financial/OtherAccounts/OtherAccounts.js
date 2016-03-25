@@ -152,9 +152,21 @@ define(function(require, exports) {
                         success: function(data) {
                             dataTable.statistics = data.statistics;
                             dataTable.financialOtherDetailsList = FinancialService.isGuidePay(dataTable.financialOtherDetailsList);
+
+                            if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
+                                dataTable.financialOtherListData = FinancialService.getCheckTempData(dataTable.financialOtherDetailsList,OtherAccounts.checkTemp);
+                                dataTable.statistics.sumSettlementMoney = OtherAccounts.checkTemp.sumSttlementMoney;
+                                dataTable.statistics.sumUnPayedMoney = OtherAccounts.checkTemp.sumUnPayedMoney;
+                            }
+                            
                             if (showDialog(data)) {
                                 if (Tools.addTab(menuKey + "-checking", "其它对账", AccountsCheckingTemplate(dataTable))) {
                                     OtherAccounts.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                                    if(OtherAccounts.checkTemp && OtherAccounts.checkTemp.length > 0){
+                                        OtherAccounts.$checkTab.data('isEdited',true);
+                                    }
+                                    //取消对账权限过滤
+                                    checkDisabled(dataTable.financialOtherDetailsList,OtherAccounts.$checkTab.find(".T-checkTr"),OtherAccounts.$checkTab.find(".T-checkList").data("right"));
                                     OtherAccounts.initCheckEvent(args,OtherAccounts.$checkTab);
                                 } else{
                                     OtherAccounts.$checkTab.data('next',args);
@@ -167,9 +179,16 @@ define(function(require, exports) {
                                     curr: (args.pageNo + 1),
                                     jump: function(obj, first) {
                                         if (!first) {
-                                            OtherAccounts.$checkTab.data('isEdited',false);
-                                            args.pageNo = obj.curr - 1;
-                                            OtherAccounts.AccountsChecking(args);
+                                            var temp = FinancialService.checkSaveJson(OtherAccounts.$checkTab,OtherAccounts.checkTemp,new FinRule(0));
+                                            if(!temp){
+                                                return false
+                                            } else{
+                                                OtherAccounts.checkTemp = temp;
+                                                OtherAccounts.$checkTab.data('isEdited',false);
+                                                args.pageNo = obj.curr - 1;
+                                                OtherAccounts.AccountsChecking(args);
+                                            }
+                                            
                                         }
                                     }
                                 });
@@ -190,6 +209,8 @@ define(function(require, exports) {
         var checkRule = new FinRule(0);
         FinancialService.updateUnpayMoney($tab, checkRule);
 
+        //绑定项目
+        OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
         // 表格内操作
         $tab.find('.T-checkListNum').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -226,12 +247,17 @@ define(function(require, exports) {
                 OtherAccounts.CheckConfirm($tab,$tab.data('next'),[tab_id, title, html]);
             })
             .on(SWITCH_TAB_BIND_EVENT, function() {
+                OtherAccounts.checkTemp = false;
                 OtherAccounts.AccountsChecking($tab.data('next'),$tab);
             })
             .on(CLOSE_TAB_SAVE, function(event) {
                 event.preventDefault();
                 OtherAccounts.CheckConfirm($tab);
-            });
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                OtherAccounts.checkTemp = false;
+            });;
 
         //对账保存
         $tab.find(".T-confirm").click(function(event) {
@@ -251,7 +277,8 @@ define(function(require, exports) {
                     name: args.name,
                     info: $tab.find('.T-creatorUserChoose').val(),
                     startAccountTime: $tab.find('.T-startTime').val(),
-                    endAccountTime: $tab.find('.T-endTime').val()
+                    endAccountTime: $tab.find('.T-endTime').val(),
+                    accountStatus : args.accountStatus
                 };
             FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });
@@ -264,15 +291,54 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     OtherAccounts.getTravelAgencyList = function($obj) {
-        $obj.autocomplete({
+        var isMainList = $obj.closest('#tab-financial_Other_accounts-content').length === 1,
+            name = $obj.val();
+        if (!!OtherAccounts.projList) {
+            if (OtherAccounts.projList.length) {
+                var isAll = OtherAccounts.projList[0].value == '全部';
+                if (isMainList && !isAll) {
+                    OtherAccounts.projList.unshift({
+                                value: '全部'
+                            });
+                } else if (!isMainList && isAll) {
+                    OtherAccounts.projList.shift({
+                                value: '全部'
+                            });
+                }
+                $obj.autocomplete({
+                    minLength: 0,
+                    change: function(event, ui) {
+                        if(!isMainList){
+                            $obj.val(name);
+                        } else {
+                            if (!ui.item) {
+                                $(this).data('id', '');
+                            }
+                        }
+                    },
+                    select: function(event, ui) {
+                        $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
+                    },
+                    source: OtherAccounts.projList,
+                }).off('click').on('click', function() {
+                    $obj.autocomplete('search', '');
+                })
+            }
+            return $obj;
+        }
+        return $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
-                if (!ui.item) {
-                    $(this).data('id', '');
+                if(!isMainList){
+                    $obj.val(name);
+                } else {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
                 }
             },
             select: function(event, ui) {
-                $(this).blur().data('id', ui.item.id);
+                $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
             }
         }).off("click").on("click", function() {
             var obj = $(this);
@@ -283,14 +349,17 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        var $nameList = data.nameList
-                        for (var i = 0; i < $nameList.length; i++) {
-                            $nameList[i].value = $nameList[i].name;
+                        var projList = data.nameList
+                        for (var i = 0; i < projList.length; i++) {
+                            projList[i].value = projList[i].name;
                         };
-                        $nameList.unshift({
-                            value: '全部'
-                        });
-                        obj.autocomplete('option', 'source', $nameList);
+                        if (isMainList) {
+                            projList.unshift({
+                                value: '全部'
+                            });
+                        }
+                        OtherAccounts.projList = projList;
+                        obj.autocomplete('option', 'source', projList);
                         obj.autocomplete('search', '');
                     };
                 }
@@ -302,7 +371,7 @@ define(function(require, exports) {
     // 保存对账 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.CheckConfirm = function($tab,args,tabArgs) {
         var argumentLen = arguments.length
-        var json = FinancialService.checkSaveJson($tab, new FinRule(0));
+        var json = FinancialService.checkSaveJson(OtherAccounts.$checkTab,OtherAccounts.checkTemp,new FinRule(0),true);
         if(!json){ return false; }
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "saveReconciliation"),
@@ -310,8 +379,10 @@ define(function(require, exports) {
             data: { reconciliation: json },
         }).done(function(data) {
             if (showDialog(data)) {
-                $tab.data('isEdited', false);
+                
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    OtherAccounts.checkTemp = false;
+                    $tab.data('isEdited', false);
                     if (argumentLen === 1) {
                         Tools.closeTab(menuKey + "-checking");
                         OtherAccounts.listFinancialOtherAccounts(OtherAccounts.listPageNo);
@@ -325,6 +396,7 @@ define(function(require, exports) {
     //付款
     OtherAccounts.AccountsPayment = function(args,$tab) {
         if (!!$tab) {
+            args.name = $tab.find("input[name=itemName]").val();
             args.startAccountTime = $tab.find(".T-startTime").val();
             args.endAccountTime = $tab.find(".T-endTime").val();
             args.info = $tab.find('.T-creatorUserChoose').val();
@@ -338,7 +410,7 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     //暂存数据读取
-                    if(OtherAccounts.saveJson){
+                    if(!$.isEmptyObject(OtherAccounts.saveJson)) {
                         data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
                         data.sumPayRemark = OtherAccounts.saveJson.sumPayRemark;
@@ -381,20 +453,19 @@ define(function(require, exports) {
                                     curr: (args.pageNo + 1),
                                     jump: function(obj, first) {
                                         if (!first) {
-                                            var tempJson = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
-                                            OtherAccounts.saveJson.autoPayList = tempJson;
-                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()),
+                                            OtherAccounts.saveJson.autoPayList = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
+                                            console.log("OtherAccounts.saveJson.autoPayList");
+                                            console.log(OtherAccounts.saveJson.autoPayList);
+                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()) || '',
                                                 sumPayType = parseFloat(OtherAccounts.$clearTab.find('select[name=sumPayType]').val()),
-                                                sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumRemark]').val();
-                                            OtherAccounts.saveJson = {
-                                                sumPayMoney: sumPayMoney,
-                                                sumPayType: sumPayType,
-                                                sumPayRemark: sumPayRemark,
-                                                bankNo : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-number]').val() : OtherAccounts.$clearTab.find('input[name=card-number]').val(),
-                                                bankId : (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-id]').val() : OtherAccounts.$clearTab.find('input[name=card-id]').val(),
-                                                voucher : OtherAccounts.$clearTab.find('input[name=credentials-number]').val(),
-                                                billTime : OtherAccounts.$clearTab.find('input[name=tally-date]').val()
-                                            }
+                                                sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumPayRemark]').val();
+                                            OtherAccounts.saveJson.sumPayMoney = sumPayMoney;
+                                            OtherAccounts.saveJson.sumPayType = sumPayType;
+                                            OtherAccounts.saveJson.sumPayRemark = sumPayRemark;
+                                            OtherAccounts.saveJson.bankNo = (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-number]').val() : OtherAccounts.$clearTab.find('input[name=card-number]').val();
+                                            OtherAccounts.saveJson.bankId = (sumPayType == 0) ? OtherAccounts.$clearTab.find('input[name=cash-id]').val() : OtherAccounts.$clearTab.find('input[name=card-id]').val();
+                                            OtherAccounts.saveJson.voucher = OtherAccounts.$clearTab.find('input[name=credentials-number]').val();
+                                            OtherAccounts.saveJson.billTime = OtherAccounts.$clearTab.find('input[name=tally-date]').val();
                                             OtherAccounts.$clearTab.data('isEdited',false);
                                             args.pageNo = obj.curr - 1;
                                             OtherAccounts.AccountsPayment(args);
@@ -418,8 +489,12 @@ define(function(require, exports) {
         var autoValidator = new FinRule(2).check($tab.find('.T-count'));
         var settleValidator = OtherAccounts.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
         var payValidator = settleValidator.check($tab);
+        //绑定项目
+        OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
+
         if (OtherAccounts.saveJson.btnShowStatus) {
-            $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
+            // 当翻页时，需要使用实际的合计，而非下账的合计
+            // $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
             OtherAccounts.setAutoFillEdit($tab, true);
         }
 
@@ -473,7 +548,7 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find('.datepicker'), true);
         
         //付款搜索
-        $tab.find('.T-paymentSearch').click(function(event) {
+        $tab.find('.T-search').click(function(event) {
             args.pageNo = 0;
             OtherAccounts.AccountsPayment(args,$tab);
         });
@@ -499,11 +574,12 @@ define(function(require, exports) {
                 }
                 var searchParam = {
                     name: args.name,
-                    autoPayMoney: parseInt($tab.find('input[name=sumPayMoney]').val()),
+                    autoPayMoney: parseFloat($tab.find('input[name=sumPayMoney]').val()),
                     startAccountTime: startAccountTime,
                     endAccountTime: endAccountTime,
                     info: $tab.find('input[name=creator]').val(),
                     payType: $tab.find('select[name=sumPayType]').val(),
+                    accountStatus : args.accountStatus
                 };
                 FinancialService.autoPayConfirm(startAccountTime,endAccountTime,function() {
                     $.ajax({
@@ -531,6 +607,8 @@ define(function(require, exports) {
                     });
                 });
             } else {
+                $tab.data('isEdited', false);
+                OtherAccounts.saveJson = {};
                 OtherAccounts.AccountsPayment(args,$tab);
             }
         });
@@ -538,10 +616,7 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function($tab,args,tabArgs) {
-        if(!FinancialService.isClearSave($tab)){
-            return false;
-        }
-        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3),true);
         if(!json){ return false; }
         var arguementLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
@@ -557,7 +632,7 @@ define(function(require, exports) {
             url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
             type: "POST",
             data: {
-                payment: JSON.stringify(json),
+                payment: json,
                 searchParam : JSON.stringify(searchParam)
             },
         }).done(function(data) {

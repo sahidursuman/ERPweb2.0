@@ -83,7 +83,7 @@ define(function(require, exports) {
                     }
                 ]
             },
-            { 
+            /*{ 
                 //客户联系人
                 $ele: $obj.find('input[name="contactRealname"]'),
                 $valObj: $obj.find('input[name="fromPartnerAgencyContactId"]'),
@@ -93,7 +93,7 @@ define(function(require, exports) {
                         errMsg: '客户联系人不能为空'
                     }
                 ]
-            },
+            },*/
             { 
                 //全陪电话
                 $ele: $obj.find('input[name="accompanyGuideMobile"]'),

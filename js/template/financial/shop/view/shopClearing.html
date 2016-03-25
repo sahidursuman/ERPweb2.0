@@ -2,7 +2,7 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group">
             <label>购物店：</label>
-            <label>{{name}}</label>
+            <input type="text" value="{{name}}" name="shopName" data-id="{{id}}">
         </div>
         <div class="form-group marginLeft-30">
             <label>账期：</label>
@@ -57,7 +57,7 @@
             <label class="F-float F-money">{{totalList.sumUnReceiveMoney}}</label>
         </div>
         <div class="form-group marginLeft-30">
-            <label>未付金额合计(已对账)：</label>
+            <label>未收金额合计(已对账)：</label>
             <label class="T-unpayMoney F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
@@ -154,11 +154,11 @@
                 <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billimage="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
                 <td><a class="cursor T-action T-payDetails">
-                &nbsp;&nbsp;社收:<span class="F-float F-money">{{rs.receiveMoney}}</span>&nbsp;&nbsp;导游现收:<span class="F-float F-money">{{rs.rebateCurrentIncomeMoney}}</span></a>
+                &nbsp;&nbsp;社收:<span class="F-float F-money">{{rs.receiveMoney}}</span>&nbsp;&nbsp;导游现收:<span class="F-float F-money">{{rs.rebateCurrentIncomeMoney}}</span></a></td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
-                <td><input type="text" class="col-sm-12 T-reciveMoney F-float F-money" name="payMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-                <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}}>{{rs.IncomeRemark}}</textarea></td>
+                <td><input type="text" class="col-sm-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
+                <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkName}}</td>
                 <td>
@@ -170,7 +170,7 @@
                 </td>
             </tr>
             {{if rs.shopItem.length > 0}}
-            <tr class="hide">
+            <tr class="hide T-hideTr">
                 <td colspan="19">
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
@@ -182,16 +182,22 @@
                                 <th class="th-border" style="min-width: 45px;">导佣</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="T-shopItemList">
                             {{each rs.shopItem as list i}}
                             <tr>
                                 <td>{{i + 1}}</td>
                                 <td>{{list.itemName}}</td>
-                                <td><span class="F-float F-money">{{list.consumeMoney}}</span></td>
-                                <td><span class="F-float F-money">{{list.travelAgencyRebateMoney}}</span></td>
-                                <td><span class="F-float F-money">{{list.guideRebateMoney}}</span></td>
+                                <td><span class="F-float F-money T-consumeMoney">{{list.consumeMoney}}</span></td>
+                                <td><span class="F-float F-money T-travelAgencyRebateMoney">{{list.travelAgencyRebateMoney}}</span></td>
+                                <td><span class="F-float F-money T-guideRebateMoney">{{list.guideRebateMoney}}</span></td>
                             </tr>
                             {{/each}}
+                            <tr class="T-sumMoney">
+                                <td colspan="2" style="font-weight: bold;text-align:right;">佣金合计：</td>
+                                <td><span class="F-float F-money T-shopMoney" style="font-weight: bold;"></span></td>
+                                <td><span class="F-float F-money T-travelMoney" style="font-weight: bold;"></span></td>
+                                <td><span class="F-float F-money T-guideMoney" style="font-weight: bold;"></span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </td>

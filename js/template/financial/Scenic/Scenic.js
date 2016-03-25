@@ -134,6 +134,8 @@ define(function(require, exports) {
     //对账
     scenic.scenicCheck = function(args,$tab){
         if (!!$tab) {
+            args.scenicName = $tab.find("input[name=scenicName]").val();
+            args.scenicId = $tab.find("input[name=scenicId]").val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
@@ -151,12 +153,20 @@ define(function(require, exports) {
                     var fhList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(fhList);
                     data.scenicName = args.scenicName;
+                    if(scenic.checkTemp && scenic.checkTemp.length > 0){
+                        data.financialScenicListData = FinancialService.getCheckTempData(data.financialScenicListData,scenic.checkTemp);
+                        data.sumSettlementMoney = scenic.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = scenic.checkTemp.sumUnPayedMoney;
+                    }
                     var html = scenicChecking(data);
                     
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "景区对账", html)) {
                         scenic.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(scenic.checkTemp && scenic.checkTemp.length > 0){
+                            scenic.$checkTab.data('isEdited',true);
+                        }
                         scenic.initCheck(args,scenic.$checkTab); 
                         validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
 
@@ -172,9 +182,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                scenic.$checkTab.data('isEdited',false);
-                                args.pageNo = obj.curr-1;
-                                scenic.scenicCheck(args);
+                                var temp = FinancialService.checkSaveJson(scenic.$checkTab,scenic.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    scenic.checkTemp = temp;
+                                    scenic.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    scenic.scenicCheck(args);
+                                }
+                                
                             }
                         }
                     });
@@ -198,9 +215,11 @@ define(function(require, exports) {
         $tab.find(".T-btn-export").click(function(){
             var argsData = {
                 scenicId: args.scenicId, 
+                accountStatus: $tab.find('input[name=accountStatus]').val(),
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
-                endDate: $tab.find('input[name=endDate]').val()
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus
             };
             FinancialService.exportReport(argsData,"exportArrangeScenicFinancial");
         });
@@ -239,10 +258,15 @@ define(function(require, exports) {
     //结算
     scenic.scenicClear = function(args,$tab){
         if (!!$tab) {
+            args.scenicName = $tab.find("input[name=scenicName]").val();
+            args.scenicId = $tab.find("input[name=scenicId]").val();
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+        }
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
         }
         if(args.isAutoPay == 1){
             args.sumCurrentPayMoney = scenic.$clearTab.find('input[name=sumPayMoney]').val();
@@ -269,11 +293,9 @@ define(function(require, exports) {
                         data.bankId = scenic.clearTempSumDate.bankId;
                         data.voucher = scenic.clearTempSumDate.voucher;
                         data.billTime = scenic.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
                     }
                     data.isOuter = scenic.isOuter = !!args.isOuter || scenic.isOuter;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(resultList);
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
@@ -313,6 +335,8 @@ define(function(require, exports) {
                                 }
                                 scenic.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 scenic.scenicClear(args);
                             }
                         }
@@ -368,6 +392,7 @@ define(function(require, exports) {
             scenic.clearTempData = false;
             scenic.$clearTab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             scenic.scenicClear(args);
         });
 
@@ -460,7 +485,7 @@ define(function(require, exports) {
     //对账数据保存
     scenic.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson($tab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(scenic.$checkTab,scenic.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -470,15 +495,13 @@ define(function(require, exports) {
             success:function(data){
                 if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                        scenic.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             scenic.listScenic(scenic.searchData.pageNo);
-                        } else if(argumentsLen === 2){
-                            scenic.scenicCheck(args,$tab);
-                        } else if(argumentsLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            scenic.initCheck(args,$tab);
+                        } else {
+                            scenic.scenicCheck(args);
                         }
                     });
                 }
@@ -487,12 +510,8 @@ define(function(require, exports) {
     };
 
     scenic.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab, new FinRule(scenic.isOuter ? 3 : 1))){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1),true),
             payType = $tab.find('select[name=sumPayType]').val();
             searchParam = {
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -502,12 +521,12 @@ define(function(require, exports) {
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val()
             };
-
+        if(!clearSaveJson){ return false; }
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
-                scenicJson : JSON.stringify(clearSaveJson),
+                scenicJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
@@ -521,7 +540,8 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
                             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
-                            scenic.scenicClear(args,$tab);
+                            args.autoPay = 0;
+                            scenic.scenicClear(args);
                         }
                     }); 
                 }
@@ -543,7 +563,8 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    scenic.initCheck(args,$tab);
+                    scenic.checkTemp = false;
+                    scenic.scenicCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                     scenic.clearTempData = false;
@@ -574,9 +595,12 @@ define(function(require, exports) {
                 if(option == "clear"){
                     scenic.clearTempData = false;
                     scenic.clearTempSumDate = false;
+                }else if(option == "check"){
+                    scenic.checkTemp = false;
                 }
             });
 
+            scenic.getScenicList($tab.find("input[name=scenicName]"));
             //报表内的操作
             scenic.listOption($tab);
 
@@ -585,35 +609,87 @@ define(function(require, exports) {
         }
     };
 
-    scenic.getQueryList = function(){
-        var $scenic = scenic.$tab.find(".T-chooseScenic"),
-            scenicList = scenic.scenicList;
-        if(scenicList != null && scenicList.length > 0){
-            for(var i=0;i<scenicList.length;i++){
-                scenicList[i].id = scenicList[i].scenicId;
-                scenicList[i].value = scenicList[i].scenicName;
-            }
+    /**
+     * 绑定景区事件
+     * @param  {object} $obj 绑定对象
+     * @return {[type]}      [description]
+     */
+    scenic.getScenicList = function($obj) {
+        if (!!scenic.scenicList) {
+            scenic.getQueryList($obj);
+        } else {
+            $.ajax({
+               url:KingServices.build_url("financial/financialScenic","listSumFinancialScenic"),
+                type:"POST",
+                data:{ searchParam : JSON.stringify({
+                    scenicId: '-1'
+                }) },
+                showLoading: false,
+                success: function(data){
+                    if (showDialog(data)) {
+                        scenic.scenicList = data.scenicNameList;
+                        scenic.getQueryList($obj);
+                    }
+                }
+            });
         }
+    };
+
+    scenic.getQueryList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = scenic.$tab.find(".T-chooseScenic");
+        }
+
+        var list = scenic.scenicList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+
+        for(var i=0;i<list.length;i++){
+            list[i].id = list[i].scenicId;
+            list[i].value = list[i].scenicName;
+        }
+
         var all = {
             id : "",
             value : "全部"
-        };
-        scenicList.unshift(all);
-
-        //景区
-        $scenic.autocomplete({
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }        
+        var name = $obj.val();
+        //景区 
+        $obj.autocomplete({
             minLength: 0,
-            source : scenicList,
+            source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $(this).nextAll('input[name="scenicId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="scenicId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {
-                $(this).blur().nextAll('input[name="scenicId"]').val(ui.item.id);
+                $obj.blur().nextAll('input[name="scenicId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="accountInfo"]').val('');
+                    $tab.find('.T-insuranceId').val(ui.item.id);
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
         }).on("click",function(){
-            $scenic.autocomplete('search','');
+            $obj.autocomplete('search','');
         });      
     };
 

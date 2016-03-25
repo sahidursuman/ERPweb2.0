@@ -2,7 +2,7 @@
     <div class="form-horizontal T-search-area">
         <div class="form-group">
             <label class="mar-l-10">酒店 </label>
-            <input type="text" class="T-chooseHotel mar-r-10" name="hotelName" value="{{if searchParam.hotelName == " "}}全部{{else}}{{searchParam.hotelName}}{{/if}}" />
+            <input type="text" class="T-chooseHotel mar-r-10" name="hotelName" value="{{searchParam.hotelName}}" placeholder="所有酒店"/>
             <input type="hidden" name="hotelId" value="{{searchParam.hotelId}}" />
             <label>账期 </label>
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
