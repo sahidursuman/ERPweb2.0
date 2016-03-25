@@ -486,6 +486,7 @@ define(function(require, exports) {
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
             args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
+            args.isAutoPay = $tab.find('.T-btn-autofill').hasClass('btn-primary') ? false : true; 
         } else {
             partnerAgencyName = args.name;
             type =args.type;
@@ -528,6 +529,9 @@ define(function(require, exports) {
                     if(Client.clearDataArray){
                         $tab.data('isEdited',true);
                     }
+                    if(args.isAutoPay){
+                        Client.setAutoFillEdit($tab,true);
+                    }
                     Client.initClear($tab,args);  
                 } else {
                     Client.$clearTab.data('next', args);
@@ -565,6 +569,7 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
+            Client.clearDataArray = false;
             Client.ClientClear(Client.$clearTab.data("next").pageNo,Client.$clearTab.data("next"));
         })
         // 监听保存，并切换tab
@@ -672,7 +677,6 @@ define(function(require, exports) {
                         Client.clearDataArray.bankNumber = bankNumber;
                         Client.clearDataArray.sumPayMoney = $tab.find('input[name=sumPayMoney]');
                         Client.clearDataArray.sumPayType = $tab.find('select[name=sumPayType]');
-                        $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
                         $tab.find('.T-sumReciveMoney').data('money',args.sumTemporaryIncomeMoney);
@@ -788,15 +792,9 @@ define(function(require, exports) {
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
             voucher = $tab.find('input[name=credentials-number]').val(),
             billTime = $tab.find('input[name=tally-date]').val();
-        if(!FinancialService.isClearSave($tab,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1))){
-            return false;
-        }
-        var JsonStr = FinancialService.clearSaveJson($tab,Client.clearDataArray,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1)); 
-        if(JsonStr.length==0){
-            showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
-            return;
-        };
-        JsonStr = JSON.stringify(JsonStr);
+        var JsonStr = FinancialService.clearSaveJson($tab,Client.clearDataArray,new FinRule($tab.find('.T-saveClear').data('type') ? 3 : 1),true); 
+        if(!JsonStr){ return false; }
+
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
             type:"POST",

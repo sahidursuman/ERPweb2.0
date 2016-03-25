@@ -30,7 +30,7 @@
         </thead>
         <tbody class="T-count-scenic">
             {{each dayList as day}} {{if day.scenicArrange != null}} {{each day.scenicArrange as arrangeList}} {{each arrangeList.scenicArrangeList as arrange index}} {{if arrange != null}}
-            <tr badStatus="{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}" whichDay="{{arrange.whichDay}}">
+            <tr badStatus="{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
                 {{if index == 0}}
                 <td rowspan="{{arrangeList.scenicArrangeList.length}}"><span class="whichDay"></span></td>{{/if}} {{if index == 0}}
 
@@ -68,7 +68,16 @@
                     <input type="text" class="F-float F-money w-80" name="realReduceMoney" value="{{arrange.realReduceMoney}}"  {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
                 </td>
 
-                <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney F-float F-money"></span>{{/if}}
+                <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="scenicneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                    {{else}}
+                        {{if arrange.isConfirmAccount == 1}}
+                            <span class="scenicneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                        {{else}}
+                            <span class="scenicneedPayMoney F-float F-money"></span>
+                        {{/if}}
+                    {{/if}}
                     <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}">
                 </td>
 

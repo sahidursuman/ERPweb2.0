@@ -261,6 +261,9 @@ define(function(require, exports) {
         }
         args.page = args.page || 0;
         args.sortType = "auto";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -286,17 +289,13 @@ define(function(require, exports) {
                         data.bankId = Insure.clearTempSumDate.bankId;
                         data.voucher = Insure.clearTempSumDate.voucher;
                         data.billTime = Insure.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
                     // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag;
                     Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
 					var html = insureClearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
@@ -336,6 +335,8 @@ define(function(require, exports) {
                                 }
                                 Insure.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Insure.getClearing(args);
                             }
                         }
@@ -391,6 +392,7 @@ define(function(require, exports) {
             Insure.clearTempSumDate = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             Insure.getClearing(args);
         });        
     };
@@ -501,12 +503,9 @@ define(function(require, exports) {
 
     Insure.saveClear = function($tab,args,tabArgs){
         var saveRule = Insure.saveFlag == true ? new FinRule(3):new FinRule(1);
-        if(!FinancialService.isClearSave($tab,saveRule)){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Insure.clearTempData,saveRule);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Insure.clearTempData,saveRule,true);
+        if(!clearSaveJson){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 insuranceId : args ? args.insuranceId : $tab.data('insuranceId'),
@@ -521,7 +520,7 @@ define(function(require, exports) {
             url:KingServices.build_url("account/insuranceFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
-                insuranceJson : JSON.stringify(clearSaveJson),
+                insuranceJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
@@ -536,6 +535,7 @@ define(function(require, exports) {
                         }else{
                             Insure.saveFlag = false; 
                             args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;
+                            args.autoPay = 0;
                             Insure.getClearing(args);
                         }
                     });  

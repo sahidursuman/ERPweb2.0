@@ -254,6 +254,9 @@ define(function(require, exports) {
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
         args.sortType = "startTime";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if (args.isAutoPay == 1) {
             args.sumCurrentPayMoney = busCompany.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -280,14 +283,10 @@ define(function(require, exports) {
                         data.billTime = busCompany.clearTempSumDate.billTime;
 
                         data.financialBusCompanyListData = FinancialService.getTempDate(resultList, busCompany.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var html = Clearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
@@ -324,6 +323,8 @@ define(function(require, exports) {
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 busCompany.busCompanyClear(args);
                             }
                         }
@@ -385,6 +386,7 @@ define(function(require, exports) {
             busCompany.clearTempData = false;
             $tab.data('isEdited', false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             busCompany.busCompanyClear(args,$tab);
         });
         FinancialService.updateSumPayMoney($tab,saveRule);
@@ -421,11 +423,9 @@ define(function(require, exports) {
     };
 
     busCompany.saveClear = function($tab,args,tabArgs) {
-        if (!FinancialService.isClearSave($tab, new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1))) {
-            return false;
-        }
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab, busCompany.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1));
+            clearSaveJson = FinancialService.clearSaveJson($tab, busCompany.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2 ? 3 : 1),true);
+        if(!clearSaveJson){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
                 busCompanyId: args ? args.busCompanyId : $tab.data('busCompanyId'),
@@ -441,7 +441,7 @@ define(function(require, exports) {
             url: KingServices.build_url("account/financialBusCompany", "saveAccountSettlement"),
             type: "POST",
             data: {
-                busCompanyJson: JSON.stringify(clearSaveJson),
+                busCompanyJson: clearSaveJson,
                 searchParam: JSON.stringify(searchParam)
             },
             success: function(data) {
@@ -457,6 +457,7 @@ define(function(require, exports) {
                             if (args.isAutoPay == 1) {
                                 args.isAutoPay = 0;
                             }
+                            args.autoPay = 0;
                             busCompany.busCompanyClear(args,$tab);
                         }
                     });
