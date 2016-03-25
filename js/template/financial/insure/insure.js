@@ -392,6 +392,7 @@ define(function(require, exports) {
             Insure.clearTempSumDate = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             Insure.getClearing(args);
         });        
     };

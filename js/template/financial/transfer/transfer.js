@@ -450,7 +450,8 @@ define(function(require, exports) {
             Transfer.clearTempData = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
-            args.pageNo = 0;
+            args.autoPay = 0;
+            // args.pageNo = 0;
             Transfer.transferClear(args);
         });
 
