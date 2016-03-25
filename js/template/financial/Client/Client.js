@@ -486,6 +486,7 @@ define(function(require, exports) {
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
             args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
+            args.isAutoPay = $tab.find('.T-btn-autofill').hasClass('btn-primary') ? false : true; 
         } else {
             partnerAgencyName = args.name;
             type =args.type;
@@ -528,6 +529,9 @@ define(function(require, exports) {
                     if(Client.clearDataArray){
                         $tab.data('isEdited',true);
                     }
+                    if(args.isAutoPay){
+                        Client.setAutoFillEdit($tab,true);
+                    }
                     Client.initClear($tab,args);  
                 } else {
                     Client.$clearTab.data('next', args);
@@ -565,6 +569,7 @@ define(function(require, exports) {
 
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
+            Client.clearDataArray = false;
             Client.ClientClear(Client.$clearTab.data("next").pageNo,Client.$clearTab.data("next"));
         })
         // 监听保存，并切换tab
