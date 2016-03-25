@@ -5104,12 +5104,11 @@ define(function(require, exports){
 				if($obj.is(':checked')){
 					$that.attr('oldVal',inpVal);
 					$that.val(newVal);
+					Count.totalRebeatMoney($that,$parentObj);
 				}else{
-					var $tr = $that.closest('tr');
-					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
-						var oldVal = $that.attr('oldVal');
-						$that.val(oldVal);
-					};
+					var oldVal = $that.attr('oldVal');
+					$that.val(oldVal);
+					Count.totalRebeatMoney($that,$parentObj);
 					
 				}
 			}
@@ -5123,20 +5122,19 @@ define(function(require, exports){
 				if($obj.is(':checked')){
 					$that.attr('oldVal',inpVal);
 					$that.val(newVal);
+					Count.totalRebeatMoney($that,$parentObj);
 				}else{
-					if(!!$tr.attr('itemsId') || $tr.hasClass('oldData')){
-						var oldVal = $that.attr('oldVal')
-						$that.val(oldVal);
-					};
-					
+					var oldVal = $that.attr('oldVal')
+					$that.val(oldVal);
+					Count.totalRebeatMoney($that,$parentObj);
 				}
 			}
 		};
 	};
 	//新增处理
-	Count.addItemFormatVal = function($obj,$listObj){
-		var travelFlag = $listObj.find('.T-travelCheckbox').is(':checked');
-		var guideFlag = $listObj.find('.T-guideCheckbox').is(':checked');
+	Count.addItemFormatVal = function($obj,$parentObj){
+		var travelFlag = $parentObj.find('.T-travelCheckbox').is(':checked');
+		var guideFlag = $parentObj.find('.T-guideCheckbox').is(':checked');
 		var tagName = $obj.attr('name');
 		var $tr = $obj.closest('tr');
 		if(travelFlag){
@@ -5146,6 +5144,7 @@ define(function(require, exports){
 					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
 					$obj.attr('oldVal',newVal);
 					$obj.val(newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 				case 'travelAgencyRate' :
 					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
@@ -5153,6 +5152,7 @@ define(function(require, exports){
 					var newVal = Math.round((money*inpVal)/100);
 					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 				case 'consumeMoney' :
 					var travelAgencyRate = Count.changeTwoDecimal($tr.find('[name=travelAgencyRate]').val());
@@ -5160,6 +5160,7 @@ define(function(require, exports){
 					var newVal = Math.round((money*travelAgencyRate)/100);
 					$tr.find('[name=travelAgencyRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=travelAgencyRateMoney]').val(newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 			}
 			
@@ -5171,6 +5172,7 @@ define(function(require, exports){
 					var newVal =  Math.round(Count.changeTwoDecimal(inpVal));
 					$obj.val(newVal);
 					$obj.attr('oldVal',newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 				case 'guideRate' :
 					var money = Count.changeTwoDecimal($tr.find('[name=consumeMoney]').val());
@@ -5178,6 +5180,7 @@ define(function(require, exports){
 					var newVal = Math.round((money*inpVal)/100);
 					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=guideRateMoney]').val(newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 				case 'consumeMoney' :
 					var guideRate = Count.changeTwoDecimal($tr.find('[name=guideRate]').val());
@@ -5185,6 +5188,7 @@ define(function(require, exports){
 					var newVal = Math.round((money*guideRate)/100);
 					$tr.find('[name=guideRateMoney]').attr('oldVal',newVal);
 					$tr.find('[name=guideRateMoney]').val(newVal);
+					Count.totalRebeatMoney($obj,$parentObj);
 					break;
 			}
 		};
