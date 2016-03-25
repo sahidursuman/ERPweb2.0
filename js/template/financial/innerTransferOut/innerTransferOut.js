@@ -355,24 +355,20 @@ define(function(require,exports) {
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
         		var unPayMoney = $tab.find('.sumUnPayedMoney').text();
-				var payMoney = $tab.find('input[name=sumPayMoney]').val();
+				var payMoney = $tab.find('input[name=sumPayMoney]').val() || 0;
 				var startDate = $tab.find('input[name=startDate]').val();
 				var endDate = $tab.find('input[name=endDate]').val();
-				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
-					var message;
-					if(startDate>endDate){
-						message = "开始时间不能大于结束时间，请重新选择！";
-					};
-					if(payMoney<0 || payMoney == ""){
-						message = "付款金额需大于0！";
-					};
-					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
-					};
-					
+				var message = false;
+				if(payMoney<=0 || payMoney == ""){
+					message = "付款金额需大于0！";
+				}else if(parseFloat(payMoney)>parseFloat(unPayMoney)){
+					message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
+				}
+				
+				if(message){
 					showMessageDialog($("#confirm-dialog-message"),message);
-					return;
-				};
+					return false;
+				}
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
 	        		//自动下账函数
 	        		args.autoPayMoney = payMoney;

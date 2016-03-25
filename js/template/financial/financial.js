@@ -496,7 +496,7 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
         showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;
     }
-    if(sumPayMoney < 0 || sumPayMoney == ""){
+    if(sumPayMoney <= 0 || sumPayMoney == ""){
         showMessageDialog($("#confirm-dialog-message"),key + "款金额需大于0！");
         return false;
     }
