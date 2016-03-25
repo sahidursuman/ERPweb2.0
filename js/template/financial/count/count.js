@@ -475,8 +475,8 @@ define(function(require, exports){
 					Count.autoShopSum($that,$obj);
 					Count.totalRebeatMoney($(this),$obj);
 				}
-				Count.formatDays($that,$obj);
 			}
+			Count.formatDays($that,$obj);
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
 		});
@@ -495,13 +495,13 @@ define(function(require, exports){
 		};
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
-		$selfObj.off('change').on('change','input[type=text]',function(){
+		$selfObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName" && $nameFlag !="selfPayItem"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算自费金额
-				Count.formatDays($(this),$obj);
+				
 				//计算金额
 				if (Count.loading) {
 					Count.autoSelfSum($(this),$obj);
@@ -509,6 +509,7 @@ define(function(require, exports){
 					Count.sumRateMoney($(this),$obj);
 				}
 			}
+			Count.formatDays($(this),$obj);
 		});
 		//删除只安排了自费点没有安排自费项目的数据
 		$selfObj.on('click','.T-selfArrDel',function(){
@@ -528,15 +529,15 @@ define(function(require, exports){
 		});
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
-		$otherIn.off('change').on('change','input[type=text]',function(){
+		$otherIn.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "title" && $nameFlag != "billRemark"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoOtherInSum($(this),$obj);
-				Count.formatDays($(this),$obj);
 			}
+			Count.formatDays($(this),$obj);
 		});
 
 		$otherIn.off('click').on('click','.T-otherInArrDel',function(){
@@ -549,7 +550,7 @@ define(function(require, exports){
 		});
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input[type=text]').off('change').on('change',function(){
+		$busObj.find('input').off('change').on('change',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "title" && $nameFlag != "billRemark"){
 				//校验输入的数据是否合法
@@ -570,16 +571,15 @@ define(function(require, exports){
 		
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
-		$restObj.off('change').on('change','input[type="text"]',function(){
+		$restObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark"){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
 				//计算金额
 				Count.autoRestaurantSum($(this),$obj);
-				Count.formatDays($(this),$obj);
 			}
-			
+			Count.formatDays($(this),$obj);
 		});
 		$restObj.off('click').on('click','.T-restArrDel',function(){
 			//删除安排
@@ -591,7 +591,7 @@ define(function(require, exports){
 		});
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
-		$hotelObj.off('change').on('change','input[type=text]',function(){
+		$hotelObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
@@ -610,7 +610,7 @@ define(function(require, exports){
 		});
 		//景区处理--计算、新增
 		var $scenicObj = $listObj.find('.T-count-scenic');
-		$scenicObj.off('change').on('change','input[type=text]',function(){
+		$scenicObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "scenicName"  && $nameFlag != "billRemark" && $nameFlag !='scenicItem'){
 				Count.calculateCost($(this));
@@ -629,7 +629,7 @@ define(function(require, exports){
 		});
 		//票务处理--计算、新增
 		var $ticketObj = $listObj.find('.T-count-ticket');
-		$ticketObj.off('change').on('change','input[type=text]',function(){
+		$ticketObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "seatLevel" && $nameFlag != "startArea" && $nameFlag != "shift" && $nameFlag != "ticketType" && $nameFlag != "billRemark" && $nameFlag != "startTime" && $nameFlag != "endArea"){
 				Count.calculateCost($(this));
@@ -648,7 +648,7 @@ define(function(require, exports){
 		});
 		//其他支出
 		var $otherOutObj = $listObj.find('.T-count-otherOut');
-		$otherOutObj.off('change').on('change','input[type=text]',function(){
+		$otherOutObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "addOtherOutName" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
@@ -669,7 +669,7 @@ define(function(require, exports){
 		//计算团收入
 		Count.tripIncome($obj);
 		//触发页面的change事件
-		$obj.find('input[type=text]').change();
+		$obj.find('input').change();
 		//按钮事件--保存信息
 		$obj.find('.T-saveCount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
@@ -819,7 +819,7 @@ define(function(require, exports){
 			var id = $(this).closest('tr').attr('shopArrangeId');
 			//删除新增的购物安排
 			Count.delShopArrange($(this),$obj);
-		}).on('change','input[type=text]',function(){
+		}).on('change','input',function(){
 			var $that = $(this),
 				tagName = $that.attr('name');
 				
@@ -848,7 +848,7 @@ define(function(require, exports){
 		};
 		//自费处理--计算、新增
 		var $selfObj = $listObj.find('.T-count-selfPay');
-		$selfObj.off('change').on('change','input[type=text]',function(){
+		$selfObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "billRemark" && $nameFlag !="selfPayItemName"){
 				//校验输入的数据是否合法
@@ -879,7 +879,7 @@ define(function(require, exports){
 		};
 		//其他收入--计算、新增
 		var $otherIn = $listObj.find('.T-count-otherIn');
-		$otherIn.off('change').on('change','input[type=text]',function(){
+		$otherIn.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "title" && $nameFlag != "billRemark"){
 				//校验输入的数据是否合法
@@ -899,7 +899,7 @@ define(function(require, exports){
 		});
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.off('change').on('change','input[type=text]',function(){
+		$busObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag !="startTime" && $nameFlag !="endTime" && $nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark" ){
 				Count.autoBusSum($(this),$obj);
@@ -916,7 +916,7 @@ define(function(require, exports){
 		});
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
-		$restObj.off('change').on('change','input[type="text"]',function(){
+		$restObj.off('change').on('change','input',function(){
 			Count.autoRestaurantSum($(this),$obj);
 			Count.formatDays($(this),$obj);
 		});
@@ -930,7 +930,7 @@ define(function(require, exports){
 		});
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
-		$hotelObj.off('change').on('change','input[type=text]',function(){
+		$hotelObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
@@ -949,7 +949,7 @@ define(function(require, exports){
 		});
 		//景区处理--计算、新增
 		var $scenicObj = $listObj.find('.T-count-scenic');
-		$scenicObj.off('change').on('change','input[type=text]',function(){
+		$scenicObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "scenicName"  && $nameFlag != "billRemark" && $nameFlag !='scenicItem'){
 				Count.calculateCost($(this));
@@ -969,7 +969,7 @@ define(function(require, exports){
 		});
 		//票务处理--计算、新增
 		var $ticketObj = $listObj.find('.T-count-ticket');
-		$ticketObj.off('change').on('change','input[type=text]',function(){
+		$ticketObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "seatLevel" && $nameFlag != "startArea" && $nameFlag != "shift" && $nameFlag != "ticketType" && $nameFlag != "billRemark" && $nameFlag != "startTime" && $nameFlag != "endArea"){
 				Count.calculateCost($(this));
@@ -988,7 +988,7 @@ define(function(require, exports){
 		});
 		//其他支出
 		var $otherOutObj = $listObj.find('.T-count-otherOut');
-		$otherOutObj.off('change').on('change','input[type=text]',function(){
+		$otherOutObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
 			if($nameFlag != "addOtherOutName" && $nameFlag != "billRemark"){
 				Count.calculateCost($(this));
@@ -1006,7 +1006,7 @@ define(function(require, exports){
 			Count.addOtherOut($otherOutObj,$obj);
 		});
 		//触发页面的change事件
-		$obj.find('input[type=text]').trigger('change');
+		$obj.find('input').trigger('change');
 		//计算中转成本
 		Count.tripTransferCost($obj);
 		//计算团收入
@@ -4823,7 +4823,7 @@ define(function(require, exports){
 					id:$(this).attr('arrangeid'),
 					price:$(this).find('input[name=price]').val(),
 					manageFee:$(this).find('input[name=manageFee]').val(),
-					remark: $(this).find('input[name=remark]').val()
+					remark:$(this).find('input[name=remark]').val()
 				};
 				saveJson.guideArrangeList.push(guideJson);
 			}

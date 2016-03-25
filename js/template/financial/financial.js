@@ -356,12 +356,13 @@ FinancialService.updateSumPayMoney = function($tab,rule){
 
         if(!validator.form()){ return false; }
         $this.data("oldVal",$this.val());
+    }).on("change","[name=payRemark]",function(){
+        $(this).closest('tr').data("change",true);
     });
 };
 
 //付款-翻页暂存数据读取
 FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide标识是否为导游付款
-    console.log(tempJson);
     if(!!tempJson && tempJson.length){
         for(var i = 0; i < tempJson.length; i++){
             var tempId = tempJson[i].id;
@@ -656,37 +657,10 @@ FinRule.prototype.check = function($obj) {
                         }
                     ]
                 }]);
-        case 1: // 付款
-            return $obj.formValidate([
-                {   
-                    $ele: $obj.find('input[name=payMoney]'),
-                    rules: [
-                        {
-                            type: 'positive-float',
-                            errMsg: '请输入正数'
-                        },
-                        {
-                            type: 'le',
-                            errMsg: '本次付款金额不能超过未付金额'
-                        }
-                    ]
-                }]);
-        case 2: // 自动下账
-            return $obj.formValidate([
-                {   
-                    $ele: $obj.find('input[name=sumPayMoney]'),
-                    rules: [
-                        {
-                            type: 'positive-float',
-                            errMsg: '请输入正数'
-                        },
-                        {
-                            type : 'null',
-                            errMsg : '下账金额不能为空'
-                        }
-                    ]
-                }]);
-        case 3: // 财务收付款
+        case 1: 
+        case 2: 
+        case 3: 
+        case 4: // 财务收付款
             return $obj.formValidate([
                 {   
                     $ele: $obj.find('input[name=payMoney]'),
@@ -694,21 +668,6 @@ FinRule.prototype.check = function($obj) {
                         {
                             type: 'float',
                             errMsg: '请输入数字'
-                        }
-                    ]
-                }]);
-        case 4: // 收款
-            return $obj.formValidate([
-                {   
-                    $ele: $obj.find('input[name=payMoney]'),
-                    rules: [
-                        {
-                            type: 'positive-float',
-                            errMsg: '请输入正数'
-                        },
-                        {
-                            type: 'le',
-                            errMsg: '本次收款金额不能超过未收金额'
                         }
                     ]
                 }]);

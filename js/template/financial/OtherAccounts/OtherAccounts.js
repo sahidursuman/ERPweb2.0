@@ -420,7 +420,6 @@ define(function(require, exports) {
                         data.billTime = OtherAccounts.saveJson.billTime;
 
                         data.financialOtherDetailsList = FinancialService.getTempDate(data.financialOtherDetailsList,OtherAccounts.saveJson.autoPayList);
-                        console.log(data.financialOtherDetailsList);
                     }
                     data.financialOtherDetailsList = FinancialService.isGuidePay(data.financialOtherDetailsList);
                     //财务入口调用

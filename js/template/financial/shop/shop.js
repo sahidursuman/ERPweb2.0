@@ -592,7 +592,6 @@ define(function(require, exports) {
                     FinShop.payingJson.voucher = voucher;
                     FinShop.payingJson.billTime = billTime;
                     FinShop.payingJson.bankNumber = bankNumber;
-                    $tab.find('input[name="sumPayMoney"]').val(data.realAutoPayMoney);
                     FinShop.setAutoFillEdit($tab, true);
                 }
             });
