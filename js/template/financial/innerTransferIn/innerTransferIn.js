@@ -382,6 +382,7 @@ define(function(require, exports) {
                 lineProductId : $tab.find('input[name=lineProductId]').val(),
                 lineProductName : $tab.find('input[name=lineProductName]').val(),
                 businessGroupId : $tab.find('input[name=businessGroupId]').val(),
+                businessGroupName : args.businessGroupName,
                 startAccountTime : $tab.find('input[name=startDate]').val(),
                 endAccountTime : $tab.find('input[name=endDate]').val(),
                 autoPayMoney : $tab.find('input[name=sumPayMoney]').val(),
