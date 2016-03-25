@@ -1,0 +1,220 @@
+<div class="container-fluid T-container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title pull-left">小组信息</h3>
+			<div class="pull-right" style="margin-top: -6px;">
+				<label class="pull-left control-label text-right mar-r-10">收客单号</label>
+				<input type="text" class="pull-left w-150" disabled value="{{baseInfo.orderNumber}}">
+			</div>
+			<div class="pull-right mar-r-10" style="margin-top: -6px;">
+				<label class="pull-left control-label text-right mar-r-10">是否买保险</label>
+				<input type="checkbox" class="ace pull-left" disabled {{if !!baseInfo.buyInsurance}}checked{{/if}}>
+				<span class="lbl"></span>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th>客户</th>
+						<th>行程</th>
+						<th width="100">接团日期</th>
+						<th width="100">送团日期</th>
+						<th>应收</th>
+						<th>客人信息</th>
+						<th>联系电话</th>
+						<th>外联销售</th>
+						<th style="width: 170px;">团散界定</th>
+					</tr>
+				</thead>
+				<tbody class="T-team-info">
+					<tr>
+						<td>{{baseInfo.fromPartnerAgency}}</td>
+						<td>{{baseInfo.lineProductName}}</td>
+						<td>{{baseInfo.startTime}}</td>
+						<td>{{baseInfo.endTime}}</td>
+						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a></td>
+						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
+						<td>{{baseInfo.mobileNumber}}</td>
+						<td>{{baseInfo.outOPUserName}}</td>
+						<td>{{if baseInfo.customerType == 0}}散客拼团{{else}}独立成团{{/if}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{if baseInfo.customerType == 0}}
+	<div class="row T-join-group">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point">接团</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th width="135">抵达时间</th>
+						<th>班次</th>
+						<th>车</th>
+						<th>房</th>
+						<th>它</th>
+						<th>接团小计</th>
+					</tr>
+				</thead>
+				<tbody class="T-join-group-list">
+				{{each receiveTrip as rs}}
+					<tr>
+						<td>{{rs.arriveTime}}</td>
+	                    <td>{{rs.arriveShift}}</td>
+	                    <td><a class="hct-cursor T-action T-bus F-float F-money" data-json="{{rs.receiveBus}}">{{rs.busNeedPayAllMoney}}</a></td>
+	                    <td><a class="hct-cursor T-action T-hotel F-float F-money" data-json="{{rs.receiveHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
+	                    <td><a class="hct-cursor T-action T-other F-float F-money" data-json="{{rs.receiveOther}}">{{rs.otherNeedPayAllMoney}}</a></td>
+	                    <td><span class="F-float F-money">{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}</span></td>
+                    </tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+	<div class="row T-offered">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point">{{if baseInfo.customerType == 0}}参团{{else}}转团{{/if}}</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th>线路产品</th>
+						<th width="100">出团日期</th>
+						<th width="100">完团日期</th>
+						<th>线路应付</th>
+						{{if baseInfo.customerType == 0}}
+						<th class="T-is-hidden">返程住宿</th>
+						<th class="T-is-hidden">参团小计</th>
+						<th class="T-is-hidden" width="95">本段现收团款</th>
+						{{/if}}
+						<th>状态</th>
+						<th>查看</th>
+					</tr>
+				</thead>
+				<tbody class="T-part-group-list">
+				{{each joinTrip as rs}}
+					<tr data-id="{{rs.id}}">
+						<td>
+							<span data-json="{{rs.lineJson}}">{{rs.lineProductName}}</span>
+						</td>
+						<td>{{rs.tripStartTime}}</td>
+						<td>{{rs.tripEndTime}}</td>
+						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
+						{{if baseInfo.customerType == 0}}
+						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelNeedPayAllMoney}}</a></td>
+						<td>{{rs.hotelNeedPayAllMoney + rs.lineNeedPayAllMoney}}</td>
+						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
+						{{/if}}
+						<td>{{rs.status | getPartGroupStatusText}}</td>
+						<td>
+							<a class="cursor T-inner-turn{{if rs.outTransferInfo != "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.innerTransferInfo}}">内转</a> | 
+							<a class="cursor T-outer-turn{{if rs.innerTransferInfo != "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.outTransferInfo}}">外转</a>
+						</td>
+					</tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{if baseInfo.customerType == 0}}
+	<div class="row T-send-group">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point">送团</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th width="135">送离时间</th>
+						<th>班次</th>
+						<th>车</th>
+						<th>房</th>
+						<th>它</th>
+						<th>送团小计</th>
+					</tr>
+				</thead>
+				<tbody class="T-send-group-list">
+				{{each sendTrip as rs}}
+					<tr data-id="{{rs.id}}">
+						<td>{{rs.leaveTime}}</td>
+	                    <td>{{rs.leaveShift}}</td>
+	                    <td><a class="hct-cursor T-action T-bus" data-json="{{rs.sendBus}}">{{rs.busNeedPayAllMoney}}</a></td>
+	                    <td><a class="hct-cursor T-action T-hotel" data-json="{{rs.sendHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
+	                    <td><a class="hct-cursor T-action T-other" data-json="{{rs.sendOther}}">{{rs.otherNeedPayAllMoney}}</a></td>
+	                    <td><span class="F-float F-money">{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}</span></td>
+                    </tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+	<div class="row">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-shrink-box">其它信息
+				<a class="hct-shrink-btn T-other-info-btn">
+					<i class="ace-icon fa fa-angle-double-down bigger-160"></i>
+				</a>
+			</h3>
+		</div>
+	</div>
+	<div class="row hidden T-other-info-cont">
+		<div class="col-xs-12 mar-t-10">
+			<div class="col-xs-3 hct-group-input ">
+				<label>全陪</label>
+				<div class="col-xs-12 control-label">
+					{{otherInfo.accompanyGuideName}}
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>全陪电话</label>
+				<div class="col-xs-12 control-label">
+					{{otherInfo.accompanyGuideMobile}}
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>组团单号</label>
+				<div class="col-xs-12 control-label">
+					{{otherInfo.otaOrderNumber}}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 mar-t-10">
+			<div class="col-xs-3 hct-group-input">
+				<label>客源类型</label>
+				<div class="col-xs-12 control-label">
+					{{if otherInfo.memberType == 1}}外宾{{else}}内宾{{/if}}
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>接站牌</label>
+				<div class="col-xs-12 control-label">
+					{{otherInfo.welcomeBoard}}
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>送客地点</label>
+				<div class="col-xs-12 control-label">
+					{{otherInfo.sendPosition}}
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 mar-t-10 hct-group-input">
+			<label>备注</label>
+			<div class="col-xs-12 control-label">
+				{{otherInfo.remark}}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+			<button class="btn btn-xs btn-default T-btn-close btn-primary w100"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+		</div>
+	</div>
+</div>
