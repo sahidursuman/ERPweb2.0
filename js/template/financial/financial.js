@@ -383,7 +383,7 @@ FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide�
 };
 
 //付款-保存(暂存)数据组装，数组，需转换为json
-FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
+FinancialService.clearSaveJson = function($tab,clearSaveJson,rule,isSave){
     $tr = $tab.find(".T-clearList tr")
     $tr.each(function(){
         var $this = $(this);
@@ -399,7 +399,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             //已有数据更新
             for(i = 0; i < len; i++){
                 if(clearSaveJson[i].id == id){
-                    if(!payMoney){
+                    if(!payMoney || payMoney == 0){
                         clearSaveJson.splice(i,1);//删除不需提交的行
                         i--;
                     } else {
@@ -410,7 +410,7 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
                 }
             }
             //新数据
-            if(i >= len && payMoney){
+            if(i >= len && payMoney && payMoney != 0){
                 var clearTemp = {
                     id : $this.data("id"),
                     payMoney : payMoney,
@@ -420,6 +420,27 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule){
             }
         }
     });
+    if(isSave){
+        if(!FinancialService.isClearSave($tab,rule)){
+            return false;
+        } else if(clearSaveJson.length == 0){
+            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            return false;
+        } else {
+            var $saveBtn = $tab.find('.T-saveClear'),
+                saveZero = $saveBtn.data('save-zero');
+            if (!saveZero && parseFloat($tab.find('input[name=sumPayMoney]').val()) == 0) {
+                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                    $saveBtn.data('save-zero', true).trigger('click');
+                })
+
+                return false;
+            } else {
+                $saveBtn.data('save-zero', false);
+            }
+        }
+        clearSaveJson = JSON.stringify(clearSaveJson);
+    }
     return clearSaveJson;
 };
 
@@ -447,19 +468,6 @@ FinancialService.isClearSave = function($tab,rule){
         showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };
-
-    var $saveBtn = $tab.find('.T-saveClear'),
-        saveZero = $saveBtn.data('save-zero');
-    if (!saveZero && sumPayMoney == 0) {
-        showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-            $saveBtn.data('save-zero', true).trigger('click');
-        })
-
-        return false;
-    } else {
-        $saveBtn.data('save-zero', false);
-    }
-    
     return true;
 };
 
@@ -478,7 +486,7 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
 
     var startDate = $tab.find("input[name=startDate]").val(),
         endDate = $tab.find("input[name=endDate]").val(),
-        sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
+        sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()) || 0,
         sumPayType = parseFloat($tab.find('select[name=sumPayType]').val()),
         $accountInfo = $tab.find('input[name="accountInfo"]'),
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
@@ -487,7 +495,7 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
         showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
         return false;
     }
-    if(sumPayMoney < 0 || sumPayMoney == ""){
+    if(sumPayMoney <= 0 || sumPayMoney == ""){
         showMessageDialog($("#confirm-dialog-message"),key + "款金额需大于0！");
         return false;
     }

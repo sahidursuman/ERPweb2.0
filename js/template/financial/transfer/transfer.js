@@ -296,6 +296,9 @@ define(function(require, exports) {
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -320,14 +323,10 @@ define(function(require, exports) {
                         data.bankId = Transfer.clearTempSumDate.bankId;
                         data.voucher = Transfer.clearTempSumDate.voucher;
                         data.billTime = Transfer.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
@@ -341,7 +340,6 @@ define(function(require, exports) {
                     }
                     data.financialTransferList = resultList;
 
-                    data.isAutoPay = args.isAutoPay;
                     var html = transferClearing(data);
                     var validator;
                     // 初始化页面
@@ -381,6 +379,8 @@ define(function(require, exports) {
                                 }
                                 Transfer.$clearTab.data("isEdited",false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Transfer.transferClear(args,Transfer.$clearTab);
                             }
                         }
@@ -542,12 +542,9 @@ define(function(require, exports) {
     Transfer.saveClear = function($tab,args,tabArgs){
         var isAutoPay = (arguments.length > 1) ? args.isAutoPay : $tab.data("isAutoPay"),
             settleValidator = new FinRule(isAutoPay == 2 ? 3 : 1);
-        if(!FinancialService.isClearSave($tab,settleValidator)){
-            return false;
-        };
-
         var argLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator,true);
+        if(!clearSaveJson){ return false;}
         var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
         searchParam = {
             partnerAgencyId : (arguments.length > 1) ? args.partnerAgencyId : $tab.data("id"),
@@ -559,7 +556,6 @@ define(function(require, exports) {
             billTime : $tab.find('input[name=tally-date]').val()
         };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","saveAccountSettlement"),
@@ -580,6 +576,7 @@ define(function(require, exports) {
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
                         } else {
                             args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
+                            args.autoPay = 0;
                             Transfer.transferClear(args,$tab);
                         }
                     }); 

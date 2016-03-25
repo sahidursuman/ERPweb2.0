@@ -234,7 +234,7 @@
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
                 <td rowspan="{{rs.rowLen}}">
-                    <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money F-float F-money">
+                    <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money F-float F-money" value="{{rs.payMoney}}">
                 </td>
                 <td rowspan="{{rs.rowLen}}">
                     <textarea class="col-sm-12 T-remark hct-textarea" name="payRemark">{{rs.payRemark}}</textarea>
