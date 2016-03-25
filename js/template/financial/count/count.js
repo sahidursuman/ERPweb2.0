@@ -1495,13 +1495,13 @@ define(function(require, exports){
 		'</tr>'+
 		'<tr class="sumMoney">'+
 			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1708,13 +1708,22 @@ define(function(require, exports){
 					break;
 				default: break;
 			}
-			
 		}else{
-			if(editFeildTagName != "travelAgencyRateMoney" && editFeildTagName != "guideRateMoney"){
-				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+			if(editFeildTagName != 'travelAgencyRateMoney' || editFeildTagName != 'guideRateMoney'){
+				if(travelDelFlag){
+					Count.addItemFormatVal($obj,$parentObj);
+				}else{
+					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
+				}
+				if(guideDelFlag){
+					Count.addItemFormatVal($obj,$parentObj);
+				}else{
+					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+				}
 			}
-		};
+		}
+			
+			
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
