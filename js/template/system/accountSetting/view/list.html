@@ -1,0 +1,90 @@
+<div class="T-accountSetList">
+	<label class="col-xs-1" style="width: 180px;">账号名:{{travelAgency.name}}</label>
+	<label class="pull-left col-xs-1" style="width: 160px;">手机号: <span class="phoneNumber">{{travelAgency.contactNumber}}</span>	</label>
+	
+	<button class=" btn-sm T-btn-addPhone search-btn {{if !!travelAgency.contactNumber}}hide{{/if}}"> 绑定新号码 </button>
+	<button class=" btn-sm T-btn-accountSet search-btn {{if !travelAgency.contactNumber}}hide{{/if}}"> 更换新号码 </button>
+	<label class="pull-left col-xs-1" style="width: 160px;">账户余额：￥{{travelAgency.balance}}</label>
+
+	<button class=" btn-sm {{if !!travelAgency.contactNumber}}T-btn-apply{{else}}graySearch-btn{{/if}} search-btn" {{if !travelAgency.contactNumber}}title="请先绑定手机号码后才能申请借款"{{/if}}>申请借款 </button>
+</div>
+<div class="tabbable T-mainSetList" style="margin-top: 15px;">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a data-toggle="tab" href="#basicSet-accountObj" class="T-basicSet-accountObj" aria-expanded="false" data-value="1">
+				<i class="fa fa-paper-plane fa-2"></i> 借款申请记录
+			</a>
+		</li>
+		<li>
+			<a data-toggle="tab" href="#account-bankAccount" class="T-account-bankAccount" aria-expanded="true" data-value="2">
+				<i class="fa fa-hourglass"></i> 借款拨款记录
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content T-LoanApplication" style="top:-2px;">
+		<!--会计科目start-->
+		<div class="tab-pane fade active in" id="basicSet-accountObj">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr class="bg-blur">
+						<th>申请单号</th>
+						<th>借款人</th>
+						<th>联系电话</th>
+						<th>申请借款金额</th>
+						<th>批准金额</th>
+						<th>申请时间</th>
+						<th>审核时间</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-accObjList">
+				{{each result as result}}
+					<tr data-applyId="{{result.applyId}}" data-applyStatus="{{result.applyStatus}}"> 
+					<td>{{result.applyNumber}}</td>
+					<td>{{result.name}}</td>
+					<td>{{result.mobileNumber}}</td>
+					<td>{{result.applyMoney}}</td>
+					<td>{{result.approvedMoney}}</td>
+					<td>{{result.createTime}}</td>
+					<td>{{result.examineDate}}</td>
+					<td>
+						{{ if result.applyStatus==0 }}
+						待审核
+						{{else if result.applyStatus==1 }}
+						已通过
+						{{else if result.applyStatus==2 }}
+						未通过
+					{{/if}}
+					</td>
+					<td>
+						<div class="hidden-sm hidden-xs btn-group">
+							<a class="cursor T-option T-update" title="编辑">
+								编辑
+							</a>
+						</div>
+					</td>
+					</tr>
+				{{/each}}
+				</tbody>
+			</table>
+
+			<div class="row pageMode">
+				<div class="col-xs-6">
+					<small>共计 {{searchParam.totalCount}} 条记录</small>
+				</div>
+				<div class="col-xs-6">
+					<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!--会计科目end-->
+		<div id="account-bankAccount" class="account-bankAccount tab-pane fade" >
+			<div class="T-bankAccount-content">
+				
+			</div>
+		</div>
+	</div>
+</div>

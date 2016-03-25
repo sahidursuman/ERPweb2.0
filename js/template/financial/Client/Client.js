@@ -203,11 +203,7 @@ define(function(require, exports) {
                     var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
-                    if(resultList[i].status == 5){
-                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
-                    } else {
-                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
-                    }
+                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
                 data.customerAccountList = resultList; 
@@ -219,10 +215,18 @@ define(function(require, exports) {
                 }else {
                     data.view = '';
                     tab_id = 'financial_Client_checking';
+                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                        data.customerAccountList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
+                        data.totalList.sumBackMoney = Client.checkTemp.sumBackMoney;
+                        data.totalList.sumSettlementMoney = Client.checkTemp.sumSettlementMoney;
+                        data.totalList.sumUnReceivedMoney = Client.checkTemp.sumUnReceivedMoney;
+                    }
                 }
                 if (Tools.addTab(tab_id, title, ClientCheckingTemplate(data))) {
                     $tab = $('#tab-'+ tab_id + '-content').data('id', args.fromPartnerAgencyId);
-
+                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                        $tab.data('isEdited',true);
+                    }
                     Client.initCheck($tab,args);
                 } else {
                     Client.$checkTab.data("next",args);
@@ -235,8 +239,19 @@ define(function(require, exports) {
                     curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                            Client.$checkTab.data('isEdited',false);
-                            Client.ClientCheck(obj.curr - 1, false, $tab);
+                            if(!isView){
+                                var temp = FinancialService.saveJson_checking(Client.$checkTab,Client.checkTemp,new FinRule(6));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    Client.checkTemp = temp;
+                                    Client.$checkTab.data('isEdited',false);
+                                Client.ClientCheck(obj.curr - 1, false, $tab);
+                                }
+                            } else {
+                                Client.$checkTab.data('isEdited',false);
+                                Client.ClientCheck(obj.curr - 1, false, $tab);
+                            }
                         }
                     }
                 });
@@ -256,6 +271,7 @@ define(function(require, exports) {
         });
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
+            Client.checkTemp = false;
             Client.ClientCheck(Client.$checkTab.data("next").pageNo,Client.$checkTab.data("next"));
         })
         // 监听保存，并切换tab
@@ -269,6 +285,10 @@ define(function(require, exports) {
             event.preventDefault();
             if (!validator.form()) { return; }
             Client.saveCheckingData($tab)
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Client.checkTemp = false;
         });
 
         // 初始化jQuery 对象 
@@ -305,9 +325,11 @@ define(function(require, exports) {
                     lineProductId: Client.$checkSearchArea.find('.T-search-line').data('id'),
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
-                    otaOrderNumber : Client.$checkSearchArea.find('.T-search-number').val(),
+                    orderNumber : $tab.find('.T-search-orderNumber').val(),
+                    otaOrderNumber : $tab.find('.T-search-number').val(),
                     accountStatus : args.accountStatus
                 };
+            console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
             FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
@@ -462,6 +484,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
 
             partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
+            args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
         } else {
             partnerAgencyName = args.name;
@@ -652,7 +675,8 @@ define(function(require, exports) {
                         $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
-                        $tab.find('.T-list').children('tr').each(function() {
+                        $tab.find('.T-sumReciveMoney').data('money',args.sumTemporaryIncomeMoney);
+                        $tab.find('.T-clearList').children('tr').each(function() {
                             var $tr = $(this),
                                 id = $tr.data('id'),
                                 $receive = $tr.find('.T-reciveMoney'),
@@ -663,7 +687,7 @@ define(function(require, exports) {
 
                                 if (tmp.id === id) {
                                     hasData = true;
-                                    $receive.val(tmp.temporaryIncomeMoney);
+                                    $receive.val(tmp.payMoney);
                                     return true;
                                 }
                             }
@@ -727,20 +751,20 @@ define(function(require, exports) {
 
     Client.saveCheckingData = function($tab,args,tabArgs){
         var argLen = arguments.length,
-            JsonStr = FinancialService.saveJson_checking($tab);
+            JsonStr = FinancialService.saveJson_checking($tab,Client.checkTemp,new FinRule(6),true);
         if(!JsonStr){return false;}
 
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","checkCustomerAccount"),
             type:"POST",
             data:{
-                checkAccountList : JSON.stringify(JsonStr)
+                checkAccountList : JsonStr
             },
             success:function(data){
                 if(showDialog(data)){
-                    $tab.data('isEdited', false);
-
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        $tab.data('isEdited', false);
+                        Client.checkTemp = false;
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
                             Client.listClient(Client.listPage);
@@ -772,7 +796,6 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"),'请选择需要收款的记录');
             return;
         };
-
         JsonStr = JSON.stringify(JsonStr);
         $.ajax({
             url:KingServices.build_url("financial/customerAccount","receiveCustomerAccount"),
@@ -1054,10 +1077,12 @@ define(function(require, exports) {
                     name: ui.item.value,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : $tab.find('input[name=accountStatus]').val(),
-                    type: 1
+                    accountStatus : $tab.find('input[name=accountStatus]').val() 
                 };
                 if(type){
+                    if($tab.find('.T-btn-autofill').length == 0){
+                        args.type = 1;
+                    }
                     Client.ClientClear(0,args);
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));

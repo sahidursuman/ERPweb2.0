@@ -24,6 +24,7 @@
 
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
+                <label class="control-label mar-r-20">房间数合计：<span class="F-float F-count">{{sumRealCount}}</span></label>
                 <label class="control-label mar-r-20">账面应付合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
                 <label class="control-label mar-r-20">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span></label>
                 <label class="control-label mar-r-20">结算金额合计：<span class="T-stMoney F-float F-money">{{sumSettlementMoney}}</span></label>
@@ -56,7 +57,7 @@
         </thead>
         <tbody class="T-checkList" data-right="1220005">
             {{each financialHotelListData as rs}}
-		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
+		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}data-change="true"{{/if}}>
 				<td class="h-touristGroupInfo">
                 <p>
                     {{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
@@ -84,7 +85,7 @@
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td style="padding-left:10px;">
 				    <label class="pos-rel">
-				   	    <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
+				   	    <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} />
 				   		  <span class="lbl"></span>对账
 				    </label>
                     <a class="cursor"> |</a>

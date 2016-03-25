@@ -919,6 +919,9 @@ input.datepicker:not([class^="col-"]) {
 	width: 150px;
 }
 
+.w-300 {
+	width: 300px;
+}
 .min-w-200 {	
 	min-width: 200px;
 }

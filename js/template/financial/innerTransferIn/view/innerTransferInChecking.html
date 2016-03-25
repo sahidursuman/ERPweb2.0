@@ -77,7 +77,7 @@
             </thead>   
             <tbody class="T-checkList" data-right="1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
-            <tr class="T-checkTr" data-id="{{checking.id}}" data-confirm ="{{checking.isConfirmAccount}}">
+            <tr class="T-checkTr {{if checking.change}}success{{/if}}" data-id="{{checking.id}}" data-confirm ="{{checking.isConfirmAccount}}" {{if checking.change}}data-change="true"{{/if}}>
                 <td>{{checking.orderNumber}}</td>
                 <td>{{checking.lineProductName}}</td>
                 <td name="startTime">{{checking.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
@@ -103,7 +103,7 @@
                 <td><a href="javascript:void(0)" class="T-action T-payedDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
-                <td><span class="T-unReceivedMoney F-float F-money">{{checking.unIncomeMoney}}</span></td>
+                <td class="T-unReceivedMoney F-float F-money" name="unPayedMoney">{{if checking.unPayedMoney}}{{checking.unPayedMoney}}{{else}}{{checking.unIncomeMoney}}{{/if}}</td>
                 <td><textarea class="col-sm-12 hct-textarea T-remark" maxlength="1000" name="checkRemark" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}>{{checking.checkRemark}}</textarea>
                 </td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
@@ -111,7 +111,7 @@
                 <td>
                     <label class="pos-rel">
                         <input type="checkbox" data-entity-checkStatus="{{checking.isConfirmAccount}}" class="ace T-checkbox" 
-                        {{if checking.isConfirmAccount == 1}}checked="checked"{{/if}}/>
+                        {{if (checking.change && checking.isChecked == 1) || (!checking.change && checking.isConfirmAccount == 1)}}checked="checked"{{/if}}/>
                         <span class="lbl">对账</span>
                     </label>
                     <label>|</label>
