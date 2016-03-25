@@ -1,9 +1,10 @@
 /**
- * 财务管理--导游账务
+ * 计调操作--游客管理
  * 
  * by David Bear 2016-03-12
  */
 define(function(require, exports) {
+
     //key
     var K = {
             menu : "resource_touristGroup",
@@ -13,24 +14,24 @@ define(function(require, exports) {
         },
         //模板文件
         T = {
-            list : require('./view/list'),//列表页
-            listTable : require('./view/listTable'),//列表页表格
-            add : require('./view/add'),//新增页面
-            update : require('./view/update'),//编辑页面
-            view : require('./view/view'),//查看页面
-            chooseClient : require('./view/chooseClient'),//选择客户
-            chooseClientList : require('./view/chooseClientList'),//选择客户列表
-            chooseLineProduct : require('./view/chooseLineProduct'),//选择线路产品
-            chooseLineProductList : require('./view/chooseLineProductList'),//选择线路产品列表
-			guestInfo : require('./view/guestInfo'),//客人信息
-			updateMoney : require('./view/updateMoney'),//编辑金额
-			updateBus : require('./view/updateBus'),//编辑车
-			updateHotel : require('./view/updateHotel'),//编辑房
-			updateOther : require('./view/updateOther'),//编辑其它
-            updateInnerTurn : require('./view/updateInnerTurn'),//编辑内转
-            updateOuterTurn : require('./view/updateOuterTurn'),//编辑外转
-            chooseHotel : require('./view/chooseHotel'),//自选酒店
-            chooseHotelList : require('./view/chooseHotelList'),//自选酒店列表
+            list : require('./view/tourists/list'),//列表页
+            listTable : require('./view/tourists/listTable'),//列表页表格
+            add : require('./view/tourists/add'),//新增页面
+            update : require('./view/tourists/update/update'),//编辑页面
+            view : require('./view/tourists/view/view'),//查看页面
+            chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
+            chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
+            chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
+            chooseLineProductList : require('./view/tourists/choose/chooseLineProductList'),//选择线路产品列表
+			guestInfo : require('./view/tourists/update/guestInfo'),//客人信息
+			updateMoney : require('./view/tourists/update/updateMoney'),//编辑金额
+			updateBus : require('./view/tourists/update/updateBus'),//编辑车
+			updateHotel : require('./view/tourists/update/updateHotel'),//编辑房
+			updateOther : require('./view/tourists/update/updateOther'),//编辑其它
+            updateInnerTurn : require('./view/tourists/update/updateInnerTurn'),//编辑内转
+            updateOuterTurn : require('./view/tourists/update/updateOuterTurn'),//编辑外转
+            chooseHotel : require('./view/tourists/choose/chooseHotel'),//自选酒店
+            chooseHotelList : require('./view/tourists/choose/chooseHotelList'),//自选酒店列表
         },
         rule = require('./rule'),
         touristGroup = {};
@@ -273,6 +274,11 @@ define(function(require, exports) {
                         joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         joinTrip[i].outTransferInfo = JSON.stringify(joinTrip[i].outTransferInfo || {});
                         joinTrip[i].innerTransferInfo = JSON.stringify(joinTrip[i].innerTransferInfo || {});
+                        joinTrip[i].lineJson = {
+                            lineProductName : joinTrip[i].lineProductName,
+                            days : joinTrip[i].lineDays
+                        }
+                        joinTrip[i].lineJson = JSON.stringify(joinTrip[i].lineJson);
                     }
                     var sendTrip = data.sendTrip;
                     for(var i=0; i<sendTrip.length; i++){
@@ -337,6 +343,11 @@ define(function(require, exports) {
                         joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         joinTrip[i].outTransferInfo = JSON.stringify(joinTrip[i].outTransferInfo || {});
                         joinTrip[i].innerTransferInfo = JSON.stringify(joinTrip[i].innerTransferInfo || {});
+                        joinTrip[i].lineJson = {
+                            lineProductName : joinTrip[i].lineProductName,
+                            days : joinTrip[i].lineDays
+                        }
+                        joinTrip[i].lineJson = JSON.stringify(joinTrip[i].lineJson);
                     }
                     var sendTrip = data.sendTrip;
                     for(var i=0; i<sendTrip.length; i++){
@@ -727,7 +738,9 @@ define(function(require, exports) {
                     }
                     if(!!type){
                         moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
+                        moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
+                        delete moneyData.touristGroupFeeJsonDel;
                     }
                     $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                     layer.close(index);
@@ -778,7 +791,9 @@ define(function(require, exports) {
                         baseInfo.isTransfer = 0;
                     }
                     moneyData.busFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.busFeeDel = moneyData.touristGroupFeeJsonDel;
                     delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
@@ -792,15 +807,15 @@ define(function(require, exports) {
     //更新接/参/送团房
     touristGroup.updateJionGroupHotel = function(type, $that){
     	var title = "接团住宿", data = $that.data('json');
+        if(typeof data !== "object"){
+            data = JSON.parse(data || "{}");
+        }
     	if(type === 1){
     		title = "返程住宿";
     	}else if(type === 2){
             title = "送团住宿";
         }
         data.type = type;
-        if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
-        }
     	layer.open({
 			type: 1,
 		    title: title,
@@ -841,8 +856,14 @@ define(function(require, exports) {
                     }else{
                         baseInfo.isTransfer = 0;
                     }
+                    var id = $layer.find('.container-fluid').data('id');
+                    if(!!id){
+                        baseInfo.id = id;
+                    }
                     moneyData.hotelFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.hotelFeeDel = moneyData.touristGroupFeeJsonDel;
                     delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
@@ -937,7 +958,9 @@ define(function(require, exports) {
                         }
                     }
                     moneyData.otherFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.otherFeeDel = moneyData.touristGroupFeeJsonDel;
                     delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
@@ -1079,7 +1102,9 @@ define(function(require, exports) {
                         moneyData = F.assemblyMoneyData($layer);
 
                     moneyData.innerTransferFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.innerTransferFeeDel = moneyData.touristGroupFeeJsonDel;
                     delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
@@ -1136,7 +1161,9 @@ define(function(require, exports) {
                         moneyData = F.assemblyMoneyData($layer);
 
                     moneyData.outTransferFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.outTransferFeeDel = moneyData.touristGroupFeeJsonDel;
                     delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     $that.val(moneyData.needPayAllMoney);
                     $that.data('json', JSON.stringify(baseInfo));
@@ -1441,6 +1468,94 @@ define(function(require, exports) {
     };
 
     /**
+     * 绑定责任部门的选择
+     * @param  {object} $target 绑定选择的Jquery对象
+     */
+    touristGroup.getBusinessGroup = function($target) {
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.val('').data('id', '');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data('id', item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url('innerTransferOperation', 'getBusinessGroupList'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var businessGroupList = JSON.parse(data.businessGroupList || false);
+                    if (!!businessGroupList) {
+                        for (var i = 0, len = businessGroupList.length;i < len; i++) {
+                            businessGroupList[i].value = businessGroupList[i].name;
+                        }
+
+                        $target.autocomplete('option', 'source', businessGroupList).data('ajax', true);;
+                    }
+                }
+            });
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        })
+    };
+
+    /**
+     * 绑定责任部门的选择
+     * @param  {object} $target 绑定选择的Jquery对象
+     */
+    touristGroup.getBusinessGroup = function($target) {
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.val('').data('id', '');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data('id', item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url('innerTransferOperation', 'getBusinessGroupList'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var businessGroupList = JSON.parse(data.businessGroupList || false);
+                    if (!!businessGroupList) {
+                        for (var i = 0, len = businessGroupList.length;i < len; i++) {
+                            businessGroupList[i].value = businessGroupList[i].name;
+                        }
+
+                        $target.autocomplete('option', 'source', businessGroupList).data('ajax', true);;
+                    }
+                }
+            });
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
+        })
+    };
+
+    /**
      * 保存新增/编辑数据
      * @param  {[type]} $tab [description]
      * @return {[type]}      [description]
@@ -1480,25 +1595,26 @@ define(function(require, exports) {
             buyInsurance : $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0,
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
+        if(data.baseInfo.customerType === 0){
+            //接团
+            data.receiveTrip = [];
+            $joinGroup.find('tr').each(function(index){
+                var $that = $(this),
+                    receiveHotel = $that.find('[name="receiveHotel"]').data('json');
+                receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
+                receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
+                var receiveBus = $that.find('[name="receiveBus"]').data('json'),
+                    receiveOther = $that.find('[name="receiveOther"]').data('json');
 
-        //接团
-        data.receiveTrip = [];
-        $joinGroup.find('tr').each(function(index){
-            var $that = $(this),
-                receiveHotel = $that.find('[name="receiveHotel"]').data('json');
-            receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
-            receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
-            var receiveBus = $that.find('[name="receiveBus"]').data('json'),
-                receiveOther = $that.find('[name="receiveOther"]').data('json');
-
-            data.receiveTrip.push({
-                arriveTime : $that.find('[name="arriveTime"]').val() +":00",
-                arriveShift : $that.find('[name="arriveShift"]').val(),
-                receiveBus : typeof receiveBus !== "object" ? JSON.parse(receiveBus || "{}") : receiveBus,
-                receiveHotel : receiveHotel,
-                receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
+                data.receiveTrip.push({
+                    arriveTime : $that.find('[name="arriveTime"]').val() +":00",
+                    arriveShift : $that.find('[name="arriveShift"]').val(),
+                    receiveBus : typeof receiveBus !== "object" ? JSON.parse(receiveBus || "{}") : receiveBus,
+                    receiveHotel : receiveHotel,
+                    receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
+                });
             });
-        });
+        }
 
         //参团
         data.joinTrip = [];
@@ -1512,12 +1628,14 @@ define(function(require, exports) {
                 lineProductId : $that.find('[name="lineProductName"]').data('id'),
                 tripStartTime : $that.find('[name="tripStartTime"]').val(),
                 tripEndTime : $that.find('[name="tripEndTime"]').val(),
-                lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo,
-                hotelInfo : hotelNeedPayMoney,
-                operateCurrentNeedPayMoney : $that.find('[name="operateCurrentNeedPayMoney"]').val()
+                lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo
             },
             $innerTurn = $that.find('.T-inner-turn'),
             $outerTurn = $that.find('.T-outer-turn');
+            if(data.baseInfo.customerType === 0){
+                joinTripData.hotelInfo = hotelNeedPayMoney;
+                joinTripData.operateCurrentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+            }
             if(typeof joinTripData.lineInfo !== "object"){
                 joinTripData.lineInfo = JSON.parse(joinTripData.lineInfo || "{}");
             }
@@ -1529,24 +1647,30 @@ define(function(require, exports) {
             }
             data.joinTrip.push(joinTripData);
         });
+        if(data.joinTrip.length === 0){
+            showMessageDialog($("#confirm-dialog-message"), '至少填写一条参团信息！');
+            return false;
+        }
 
-        //送团
-        data.sendTrip = [];
-        $sendGroup.find('tr').each(function(index){
-            var $that = $(this),
-                receiveHotel = $that.find('[name="receiveHotel"]').data('json');
-            receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
-            receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
-            var sendBus = $that.find('[name="receiveBus"]').data('json'),
-                sendOther = $that.find('[name="receiveOther"]').data('json');
-            data.sendTrip.push({
-                leaveTime : $that.find('[name="leaveTime"]').val() +":00",
-                leaveShift : $that.find('[name="leaveShift"]').val(),
-                sendBus : typeof sendBus !== "object" ? JSON.parse(sendBus || "{}") : sendBus,
-                sendHotel : receiveHotel,
-                sendOther : typeof sendOther !== "object" ? JSON.parse(sendOther || "{}") : sendOther
+        if(data.baseInfo.customerType === 0){
+            //送团
+            data.sendTrip = [];
+            $sendGroup.find('tr').each(function(index){
+                var $that = $(this),
+                    receiveHotel = $that.find('[name="receiveHotel"]').data('json');
+                receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
+                receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
+                var sendBus = $that.find('[name="receiveBus"]').data('json'),
+                    sendOther = $that.find('[name="receiveOther"]').data('json');
+                data.sendTrip.push({
+                    leaveTime : $that.find('[name="leaveTime"]').val() +":00",
+                    leaveShift : $that.find('[name="leaveShift"]').val(),
+                    sendBus : typeof sendBus !== "object" ? JSON.parse(sendBus || "{}") : sendBus,
+                    sendHotel : receiveHotel,
+                    sendOther : typeof sendOther !== "object" ? JSON.parse(sendOther || "{}") : sendOther
+                });
             });
-        });
+        }
 
         //其它信息
         data.otherInfo = {
@@ -1651,7 +1775,7 @@ define(function(require, exports) {
             
             moneyData.touristGroupFeeJsonDel = $tab.find('.T-addTouristTbody').data('del-json');
             if(typeof moneyData.touristGroupFeeJsonDel !== "object"){
-                moneyData.touristGroupFeeJsonDel = JSON.parse(infoData.touristGroupFeeJsonDel || "[]");
+                moneyData.touristGroupFeeJsonDel = JSON.parse(moneyData.touristGroupFeeJsonDel || "[]");
             }
             return moneyData;
         },
