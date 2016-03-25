@@ -493,7 +493,8 @@ define(function(require, exports) {
         OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
 
         if (OtherAccounts.saveJson.btnShowStatus) {
-            $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
+            // 当翻页时，需要使用实际的合计，而非下账的合计
+            // $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
             OtherAccounts.setAutoFillEdit($tab, true);
         }
 
