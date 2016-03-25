@@ -123,12 +123,8 @@
                 <td class="F-float F-money">
                     {{Checking.unPayedMoney}}
                 </td>
-                <td>{{if !showBtnFlag && Checking.unPayedMoney
-                    <=0 }}<span class="F-float F-money">{{Checking.payMoney || 0.00}}</span>
-                        {{else}}
-                        <input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" data-le="{{Checking.unPayedMoney}}"> {{/if}}
-                </td>
-                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if !showBtnFlag && Checking.unPayedMoney <=0 }} disabled {{/if}}>{{Checking.payRemark}}</textarea></td>
+                <td><input type="text" name="payMoney" class="F-float F-money" value="{{Checking.payMoney}}" /></td>
+                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{Checking.payRemark}}</textarea></td>
                 <td>{{Checking.checkTime}}</td>
                 <td>{{Checking.checkUser }}</td>
                 <td>

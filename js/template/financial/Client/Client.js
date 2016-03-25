@@ -672,7 +672,6 @@ define(function(require, exports) {
                         Client.clearDataArray.bankNumber = bankNumber;
                         Client.clearDataArray.sumPayMoney = $tab.find('input[name=sumPayMoney]');
                         Client.clearDataArray.sumPayType = $tab.find('select[name=sumPayType]');
-                        $tab.find('.T-sumReciveMoney').val(data.realAutoPayMoney || 0);
                         var len = Client.clearDataArray.length;
 
                         $tab.find('.T-sumReciveMoney').data('money',args.sumTemporaryIncomeMoney);
