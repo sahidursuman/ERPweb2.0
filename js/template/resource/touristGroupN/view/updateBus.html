@@ -49,10 +49,10 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list">
+				<tbody class="T-fee-list" data-del-json="{{touristGroupFeeJsonDel}}">
 				{{if busFee && busFee.length > 0}}
 					{{each busFee as rs}}
-					<tr>
+					<tr data-id="{{rs.id}}">
 						<td>
 							<select class="col-xs-12" name="type">
 								{{#rs.type | getFeeItemType:true}}

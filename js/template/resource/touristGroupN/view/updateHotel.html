@@ -73,10 +73,10 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-type="{{type}}">
+				<tbody class="T-fee-list" data-type="{{type}}" data-del-json="{{touristGroupFeeJsonDel}}">
 				{{if hotelFee && hotelFee.length > 0}}
 					{{each hotelFee as rs}}
-					<tr>
+					<tr data-id="{{rs.id}}">
 						<td>
 							{{if type === 1}}
 							<select class="col-xs-12" name="type">
