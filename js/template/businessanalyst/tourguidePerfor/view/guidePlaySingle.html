@@ -1,4 +1,4 @@
-<div class="search-guideSingle">
+<div class="search-guideSingle"> 
     <div class="clearfix T-search-area mar-b-10">
         <label class="pull-left text-right control-label no-padding-right mar-l-10">导游 </label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!guide}}{{guide.guideName}}{{/if}} </label>
@@ -56,11 +56,11 @@
             <tbody>
               {{each result as resultList}}
                 <tr>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.travelAgencyName}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripNumber}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.adult}}大{{resultList.child}}小</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.lineProductName}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripDate}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.travelAgencyName}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.tripNumber}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.adult}}大{{resultList.child}}小</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.lineProductName}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.tripDate}}</td>
                     {{if resultList.shopList.length==0}}
                         <td>-</td>
                         <td>-</td>
@@ -70,35 +70,20 @@
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
-                    {{else if resultList.shopList.length>0}}
-                        {{each resultList.shopList as shopL index}}
-                        {{if index == 0}}
+                    {{/if}}
+                </tr>
+                <tr>
+                    {{each resultList.shopList as shopL}}
                         <td>{{shopL.accountTime}}</td>
                         <td>{{shopL.shopName}}</td>
-                        <td class="T-allMoney cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}">{{shopL.allMoney}}</td>
+                        <td class="T-allMoney cursor" style="color:#337ab7">{{shopL.allMoney}}</td>
                         <td>{{shopL.avgAllMoney}}</td>
                         <td>{{shopL.agencyMoney}}</td>
                         <td>{{shopL.guideMoney}}</td>
                         <td>{{shopL.totalMoney}}</td>
                         <td>{{shopL.avgMoney}}</td>
-                        {{/if}}
-                        {{/each}}
-                    {{/if}}
+                    {{/each}}
                 </tr>
-                {{each resultList.shopList as shopL index}}
-                {{if index > 0}}
-                <tr >
-                    <td>{{shopL.accountTime}}</td>
-                    <td>{{shopL.shopName}}</td>
-                    <td class="T-allMoney cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}">{{shopL.allMoney}}</td>
-                    <td>{{shopL.avgAllMoney}}</td>
-                    <td>{{shopL.agencyMoney}}</td>
-                    <td>{{shopL.guideMoney}}</td>
-                    <td>{{shopL.totalMoney}}</td>
-                    <td>{{shopL.avgMoney}}</td>
-                </tr>
-                {{/if}}
-                {{/each}}
                {{/each}}
             </tbody>
         </table>
