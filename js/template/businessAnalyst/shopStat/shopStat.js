@@ -61,8 +61,10 @@ define(function(require, exports) {
 	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyId'),
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
-	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
-	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber')
+	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber'),
+	   			startShopTime: shopStat.getValue(shopStat.$searchArea,'startShopTime'),
+	   			endShopTime: shopStat.getValue(shopStat.$searchArea,'endShopTime'),
+	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
 	   		}
 		};
 		if(searchData.startTime > searchData.endTime){
@@ -71,6 +73,10 @@ define(function(require, exports) {
 	    }
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
+	   	//select修改查询
+	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').on('change', function() {
+	   		shopStat.listShopStat(0);
+	   	})
 	   	//购物统计列表请求Ajax
 	 	$.ajax({
 	 		url : KingServices.build_url("financial/shopAccount","shopStatistics"),

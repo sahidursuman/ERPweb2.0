@@ -4,20 +4,22 @@
         <col style="width:15%;"></col>
         <col style="width:15%;"></col>
         <col style="width:10%;"></col>
+        <col style="width:15%;"></col>
         <col style="width:10%;"></col>
-        <col style="width:8%;"></col>
-        <col style="width:8%;"></col>
-        <col style="width:8%;"></col>
-        <col style="width:8%;"></col>
-        <col style="width:10%;"></col>
-        <col style="width:10%;"></col>
-        <col style="width:10%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
+        <col style="width:6%;"></col>
     </colgroup>
     <thead>
         <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
             <th class="P-trFontSize">客户</th>
             <th class="P-trFontSize">团号</th>
             <th class="P-trFontSize">人数</th>
+            <th class="P-trFontSize">团期</th>
             <th class="P-trFontSize">进店日期</th>
             <th class="P-trFontSize">购物店</th>
             <th class="P-trFontSize">总打单</th>
@@ -43,10 +45,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
         <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
+            <td class="P-tdFontSize">{{shop.startTime |dateFormat: 'yyyy-MM-dd'}} - {{shop.endTime |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.shopName}}</td>
             <td class="P-tdFontSize"><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
@@ -61,6 +65,7 @@
         <tr style="background: #e0effd;">
             <td colspan="2" class="T-fontSize">合计</td>
             <td class="P-tdFontSize">{{totalShop.touristAdultCount}}大{{totalShop.touristChildCount}}小</td>
+            <td class="P-tdFontSize">-</td>
             <td class="P-tdFontSize">-</td>
             <td class="P-tdFontSize">-</td>
             <td class="P-tdFontSize">{{totalShop.consumeMoney}}</td>
