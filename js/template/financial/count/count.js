@@ -390,22 +390,22 @@ define(function(require, exports){
 				if(result){
 					var tmp = {
 						"editStatus":1,
-	                    "busCompanyArrange":JSON.parse(data.busCompanyArrange),
-	                    "tripPlan":JSON.parse(data.tripPlan),
+	                    "busCompanyArrange":data.busCompanyArrange,
+	                    "tripPlan":data.tripPlan,
 	                    "dayList":JSON.parse(data.dayList),
 	                    "guideArrange":data.guideArranges,
-	                    "guideArranges":JSON.parse(data.guideArranges.guideArranges),
-	                    "insuranceArrangeList":JSON.parse(data.insuranceArrangeList),
-	                    "ticketArrangeList":JSON.parse(data.ticketArrangeList),
+	                    "guideArranges":data.guideArranges.guideArranges,
+	                    "insuranceArrangeList":data.insuranceArrangeList,
+	                    "ticketArrangeList":data.ticketArrangeList,
 	                    "WEB_IMG_URL_BIG":data.WEB_IMG_URL_BIG,
 	                    "WEB_IMG_URL_SMALL":data.WEB_IMG_URL_SMALL,
 	                    "touristGroup":data.touristGroup,
 	                    "tripCost":data.touristGroup,
-	                    "touristGroups":JSON.parse(data.touristGroup.touristGroups),
+	                    "touristGroups":data.touristGroup.touristGroups,
 	                    "financialTripPlanId":data.financialTripPlanId,
 	                    "insurancePrice":data.insurancePrice,
-	                    "arrangeIncomePaymentList":JSON.parse(data.arrangeIncomePaymentList),
-	                    "remarkArrangeList": JSON.parse(data.remarkArrangeList),
+	                    "arrangeIncomePaymentList":data.arrangeIncomePaymentList,
+	                    "remarkArrangeList": data.remarkArrangeList,
 	                    "id": $id
 	                };
 	                var html = Reimbursement(tmp);

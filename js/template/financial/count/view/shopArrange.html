@@ -16,83 +16,141 @@
                 导佣合计：<span class="T-sumGuideMoney F-float F-money">0</span>
             </span>
         </h5>
-
     </div>
     <table class="table overflow-table table-striped table-bordered table-hover">
         <thead>
-        <tr>
-            <th class="th-border" colspan="5">打单</th>
-            <th class="th-border" colspan="2">社佣</th>
-            <th class="th-border" colspan="2">导佣</th>
-            <th class="th-border hidden" rowspan="2">现收</th>
-            <th class="th-border" rowspan="2">导游报账备注</th>
-            <th class="th-border" rowspan="2">操作</th>
-            <th class="th-border" rowspan="2">是否对账</th>
-        </tr>
-        <tr>
-          <th class="th-border"><span class="necessary">*</span>时间</th>
-          <th class="th-border"><span class="necessary">*</span>购物店</th>
-          <th class="th-border"><span class="necessary">*</span>商品</th>
-          <th class="th-border"><span class="necessary">*</span>金额</th>
-          <th class="th-border">单据</th>
-          <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border"> 
-                <span>返佣</span>
-                <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="travelAgencyRateMoney">四舍五入</button>
-            </th>
-          <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border"> 
-                <span>返佣</span>
-                <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="guideRateMoney">四舍五入</button>
-            </th>
-        </tr></thead>
+            <tr>
+                <th class="th-border" rowspan="2"><span class="necessary">*</span>时间</th>
+                <th class="th-border" rowspan="2"><span class="necessary">*</span>购物店</th>
+                <th class="th-border" colspan="2">现收</th>
+                <th class="th-border" colspan="5">打单</th>
+                <th class="th-border" colspan="2">社佣</th>
+                <th class="th-border" colspan="2">导佣</th>
+                <th class="th-border" rowspan="2">导游报账备注</th>
+                
+                <th class="th-border" rowspan="2">操作</th>
+                <th class="th-border" rowspan="2">是否对账</th>
+            </tr>
+            <tr>
+                <th class="th-border"><span class="necessary">*</span>商品</th>
+                <th class="th-border"><span class="necessary">*</span>导游</th>
+                <th class="th-border"><span class="necessary">*</span>金额</th>
+                <th class="th-border">单据</th>
+                <th class="th-border">金额小计</th>
+                <th class="th-border"><span class="necessary">*</span>比例%</th>
+                <th class="th-border"> 
+                    <span>返佣</span>
+                    <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="travelAgencyRateMoney">四舍五入</button>
+                </th>
+                <th class="th-border"><span class="necessary">*</span>比例%</th>
+                <th class="th-border"> 
+                    <span>返佣</span>
+                    <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="guideRateMoney">四舍五入</button>
+                </th>
+            </tr>
+        </thead>
         <tbody class="T-count-shopping"> 
         {{each dayList as day}}
         {{if day.shopArrange != null}}
         {{each day.shopArrange as arrangeList}}
         {{each arrangeList.shopArrangeList as arrange i}}
-
         {{if arrange != null}}
         <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" >
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
+
+            <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td><!-- 日期 -->
+
+            <td rowspan="{{arrange.shopArrangeItemSet.length}}">
+                {{arrange.shop.name}}
+                <input type="hidden" name="shopId" value="{{arrange.shopId}}">
+            </td><!-- 购物店 -->
+
+            <td>
+                <div></div>
+                <div></div>
+            </td><!-- 现收_导游 -->
+
+            <td>
+                <div></div>
+                <div></div>
+            </td><!-- 现收_金额 -->
+
             {{if arrange.shopArrangeItemSet != null}}
-            {{each arrange.shopArrangeItemSet as itemSet index}}
-            {{if index == 0}}
+                {{each arrange.shopArrangeItemSet as itemSet index}}
+                    {{if index == 0}}
 
-                <td><span class="span_shopPolicy"><input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
-                {{else}}{{itemSet.name}}<input type="hidden" name="shopPolicy" value="{{itemSet.name}}"></span>{{/if}}
-                </td>
+                        <td>
+                            <span class="span_shopPolicy">
+                                <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
+                                {{if itemSet.shopPolicy != null }}
+                                    {{itemSet.shopPolicy.name}}
+                                {{else}}
+                                    {{itemSet.name}}
+                                    <input type="hidden" name="shopPolicy" value="{{itemSet.name}}">
+                                {{/if}}
+                            </span>
+                        </td><!-- 商品 -->
 
-                <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}}/></td>
-                <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
-                        <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
-                    {{else}}
-                        <span style="color:#bbb;">查看</span>
+                        <td>
+                            <div></div>
+                            <div></div>
+                        </td><!-- 导游 -->
+
+                        <td>
+                            -                            
+                        </td>
+                        <td>
+                            <div></div>
+                            <div></div>
+                            <!-- <input class="F-float F-money w-80" 
+                            policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" 
+                            name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
+                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                readOnly="readOnly" 
+                            {{/if}}
+                            /> -->
+                        </td><!-- 金额 -->
+
+                        <td>
+                            <!-- {{if itemSet.billImage != null && itemSet.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}} -->
+                            <div></div>
+                            <div></div>
+                        </td><!-- 单据 -->
+                
+                        <td>
+                        <!-- <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
+                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/> -->
+                        </td><!-- 金额小计 -->
+
+                        <td>
+                        <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
+                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/>
+                        </td><!-- 社佣比例 -->
+                
+                        <td>
+                        <input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old = "{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
+                        </td><!-- 社佣金额 -->
+                
+                        <td>
+                            <div></div>
+                            <div></div>
+                        <!-- <input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /> -->
+                        </td><!-- 导佣比例 -->
+                
+                        <td>
+                            <div></div>
+                            <div></div>
+                        <!-- <input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /> -->
+                        </td><!-- 导佣金额 -->
+
+                        <td >
+                        <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                        </td><!-- 导游报账备注 -->
                     {{/if}}
-                </td>
-                
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/></td>
-                
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old = "{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
-                
-                <td><input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
-                
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
-
-                <td rowspan="{{arrange.shopArrangeItemSet.length}}" class="hidden">
-                    <input name="currInCome" value="{{arrange.rebateCurrentIncomeMoney}}" type="text" class="w-80" 
-                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                </td>
-
-                <td >
-                
-                <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-
-                </td>
-                {{/if}}
-            {{/each}}
+                {{/each}}
             {{/if}}
             
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">
@@ -101,67 +159,103 @@
                 {{else}}
                    <span style="color:#bbb;">删除</span>
                 {{/if}}
-            </td>
+            </td><!-- 操作列 -->
 
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}
-            
-            </td>
+            </td><!-- 对账状态列 -->
         </tr>
         {{if arrange.shopArrangeItemSet != null}}
             {{each arrange.shopArrangeItemSet as itemSet index}}
             {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" oldMoney="{{itemSet.travelAgencyRebateMoney}}" itemsId = "{{itemSet.id}}"
-            {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}>
+            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" 
+                oldMoney="{{itemSet.travelAgencyRebateMoney}}" 
+                itemsId = "{{itemSet.id}}"
+                {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}>
                 <td>
-                <span class="span_shopPolicy">
-                    <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
-                    <input type="hidden" name="shopPolicy" 
-                    value="{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}{{else}}{{itemSet.name}}{{/if}}">
-                    <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}
-                    {{itemSet.shopPolicy.id}}
-                    {{/if}}">
-                    {{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
-
-                    {{else}}{{itemSet.name}}
-                    
-                    {{if index==1 && arrange.isConfirmAccount == 0}}
-                        <button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
-                    {{/if}}
+                    <span class="span_shopPolicy">
+                        <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
+                        <input type="hidden" name="shopPolicy" 
+                        value="{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}{{else}}{{itemSet.name}}{{/if}}">
+                        <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.id}}{{/if}}">
+                        {{if itemSet.shopPolicy != null }}
+                            {{itemSet.shopPolicy.name}}
+                        {{else}}
+                            {{itemSet.name}}
+                            {{if index==1 && arrange.isConfirmAccount == 0}}
+                                <button class="btn btn-success btn-sm pull-right btn-white T-addShop"> 
+                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                </button>
+                            {{/if}}
+                        {{/if}}
                     </span>
-                    {{/if}}
                     &nbsp;&nbsp;
                     {{if index > 1}}
                         {{if arrange.incomeStatus == 0 && arrange.isConfirmAccount == 0}}
-                           &nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-shopArrDelItem"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>
+                           &nbsp;&nbsp;
+                           <button class="btn btn-danger btn-sm btn-white T-shopArrDelItem pull-right"> 
+                                <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                           </button>
                         {{/if}}
                     {{/if}}
-                </td>
+                </td><!-- 商品 -->
 
-                <td><input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}}/></td>
-                 <td>{{if itemSet.billImage != null && itemSet.billImage != ""}}
+                <td>
+                    {{if index == 1}}
+                        -
+                    {{else}}
+                        <div></div>
+                        <div></div>
+                    {{/if}}
+                </td><!-- 导游 -->
+                
+                <td>
+                    <div></div>
+                </td><!-- 金额 -->
+
+                <td>
+                    <!-- {{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                     {{else}}
                         <span style="color:#bbb;">查看</span>
-                    {{/if}}
-                </td>
+                    {{/if}} -->
+                    <div></div>
+                </td><!-- 单据 -->
+
+                <td>
+                    <input class="F-float F-money w-80" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" type="text" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
+                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}}/>
+                </td><!-- 金额小计 -->
+
+                <td>
+                    <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
+                </td><!-- 社佣比例 -->
                 
-                <td><input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" /></td>
+                <td>
+                    <input type="text" class="travelAgencyRateMoney
+                     w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
+                </td><!-- 社佣金额 -->
                 
-                <td><input type="text" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" old="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td>
+                    <div></div>
+                    <div></div>
+                    <!-- <input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" 
+                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /> -->
+                </td><!-- 导佣比例 -->
                 
-                <td><input name="guideRate" type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /></td>
-                
-                <td><input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old="{{itemSet.guideRebateMoney}}"
-                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /></td>
+                <td>
+                    <div></div>
+                    <div></div>
+                    <!-- <input type="text" class="guideRateMoney w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}"
+                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /> -->
+                </td><!-- 导佣金额 -->
 
                 <td >
-                <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
-
-                </td></tr>
-                {{/if}}
-            {{/each}}
+                    <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
+                </td><!-- 报账备注 -->
+            </tr>
             {{/if}}
+            {{/each}}
+        {{/if}}
         {{/if}}
         <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
             <td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>
