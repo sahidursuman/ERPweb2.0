@@ -624,6 +624,7 @@ define(function(require, exports) {
         var arguementLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
             searchParam = {
+                name : $tab.find('input[name=itemName]').val(),
                 payMoney : $tab.find('input[name=sumPayMoney]').val(),
                 payType : payType,
                 payRemark : $tab.find('input[name=sumPayRemark]').val(),

@@ -32,7 +32,7 @@ define(function(require, exports) {
 		    	'删除</a></td></tr>';
 
 	policyHtml.push('<tr ><td><input name=\"name\" class="col-sm-12" type=\"text\" maxlength=\"100\" /></td>');
-	policyHtml.push('<td><select name="customerType" class="col-sm-12"><option value="0" selected="selected">散客</option><option value="1">团体</option></select></td>');
+	policyHtml.push('<td class="hidden"><select name="customerType" class="col-sm-12"><option value="0" selected="selected">散客</option><option value="1">团体</option></select></td>');
 	policyHtml.push("<td><button data-entity-id=\"\" class=\"btn btn-xs btn-success T-action T-shop-rate-add\"><i class=\"ace-icon fa fa-recorder bigger-240\"></i>添加政策</button><input hidden-index='$index' type=\"hidden\" name=\"policyInput\"></td>");
 	policyHtml.push('<td><input name="remark" class="col-sm-12" type="text" maxlength=\"1000\" /></td>'); 
 	policyHtml.push('<td style="width:70px"><a data-entity-id="" class="T-action T-shop-standard-delete">删除</a></td>');
