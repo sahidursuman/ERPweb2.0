@@ -67,6 +67,7 @@ define(function(require, exports) {
 	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
 	   		}
 		};
+
 		if(searchData.startTime > searchData.endTime){
 	        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
 	        return false;
@@ -74,7 +75,7 @@ define(function(require, exports) {
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
 	   	//select修改查询
-	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').on('change', function() {
+	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').off('change').on('change', function() {
 	   		shopStat.listShopStat(0);
 	   	})
 	   	//购物统计列表请求Ajax
