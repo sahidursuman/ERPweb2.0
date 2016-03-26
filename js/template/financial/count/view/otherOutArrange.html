@@ -63,8 +63,18 @@
         <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
         </td>
 
-        <td>{{if arrange.badStatus == 1}}<span class="otherOutNeedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="otherOutNeedPayMoney F-float F-money"></span>{{/if}}
-        <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
+        <td>
+            {{if arrange.badStatus == 1}}
+                <span class="otherOutNeedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+            {{else}}
+                {{if arrange.isConfirmAccount == 1}}
+                    <span class="otherOutNeedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                {{else}}
+                    <span class="otherOutNeedPayMoney F-float F-money"></span>
+                {{/if}}
+            {{/if}}
+            <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}">
+        </td>
 
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 

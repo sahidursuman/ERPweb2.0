@@ -149,6 +149,7 @@ define(function(require,exports) {
 			args.operateUserId= $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
+			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
@@ -355,24 +356,20 @@ define(function(require,exports) {
         	var $that = $(this);
         	if($that.hasClass('btn-primary')){
         		var unPayMoney = $tab.find('.sumUnPayedMoney').text();
-				var payMoney = $tab.find('input[name=sumPayMoney]').val();
+				var payMoney = $tab.find('input[name=sumPayMoney]').val() || 0;
 				var startDate = $tab.find('input[name=startDate]').val();
 				var endDate = $tab.find('input[name=endDate]').val();
-				if(parseFloat(payMoney)>parseFloat(unPayMoney) || payMoney < 0 || payMoney == "" || startDate>endDate){
-					var message;
-					if(startDate>endDate){
-						message = "开始时间不能大于结束时间，请重新选择！";
-					};
-					if(payMoney<0 || payMoney == ""){
-						message = "付款金额需大于0！";
-					};
-					if(parseFloat(payMoney)>parseFloat(unPayMoney)){
-						message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
-					};
-					
+				var message = false;
+				if(payMoney<=0 || payMoney == ""){
+					message = "付款金额需大于0！";
+				}else if(parseFloat(payMoney)>parseFloat(unPayMoney)){
+					message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
+				}
+				
+				if(message){
 					showMessageDialog($("#confirm-dialog-message"),message);
-					return;
-				};
+					return false;
+				}
         		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
 	        		//自动下账函数
 	        		args.autoPayMoney = payMoney;
@@ -387,29 +384,8 @@ define(function(require,exports) {
         });
 		var payingCheck = new FinRule(2).check($tab);
         //确认付款事件
-        $tab.find('.T-payMoney').off('click').on('click',function(){
-        	if(!$tab.data('isEdited')){
-                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-                return false;
-            }
-        	if(!InnerTransferOut.$settlermentValidator.form()){return;}
-	        	var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-		        sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
-		    var sumMoney = $tab.find('input[name=sumPayMoney]').data("money");
-		    if(!Tools.Math.isFloatEqual(sumPayMoney,sumMoney)){
-		        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-		        return false;
-		    }
-
-        	var allMoney = $tab.find('input[name=sumPayMoney]').val();
-        	if(allMoney == 0){
-        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-		            InnerTransferOut.saveBlanceData($tab,args);
-		        })
-        	}else{
-        		InnerTransferOut.saveBlanceData($tab,args);
-        	}
-        	
+        $tab.find('.T-saveClear').off('click').on('click',function(){
+        	InnerTransferOut.saveBlanceData($tab,args);
         });
 	};
 
@@ -564,6 +540,7 @@ define(function(require,exports) {
 			args.operateUserId = $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
+			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
@@ -606,13 +583,10 @@ define(function(require,exports) {
 		var showBtnFlag = (arguments.length > 1) ? args.showBtnFlag : $tab.data('showBtnFlag'),
 			settlermentValidator =  new FinRule((showBtnFlag == true) ? 3 : 1),
 			argumentsLen = arguments.length;
-		if(!FinancialService.isClearSave($tab,settlermentValidator)){
-			return false;
-		}
-		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator);
+		var JsonStr = FinancialService.clearSaveJson(InnerTransferOut.$settlementTab,InnerTransferOut.saveJson.autoPayList,settlermentValidator,true);
+		if(!JsonStr){ return false; }
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			sumRemark = $tab.find('input[name=sumRemark]').val();
-		JsonStr = JSON.stringify(JsonStr);
   		$.ajax({
   			url:KingServices.build_url('account/innerTransferOutFinancial','operatePayAccount'),
             type:"POST",

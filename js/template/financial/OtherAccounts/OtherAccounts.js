@@ -410,8 +410,8 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     //暂存数据读取
-                    if(OtherAccounts.saveJson){
-                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney || 0;
+                    if(!$.isEmptyObject(OtherAccounts.saveJson)) {
+                        data.sumPayMoney = OtherAccounts.saveJson.sumPayMoney;
                         data.sumPayType = OtherAccounts.saveJson.sumPayType;
                         data.sumPayRemark = OtherAccounts.saveJson.sumPayRemark;
                         data.bankNo = OtherAccounts.saveJson.bankNo;
@@ -456,7 +456,7 @@ define(function(require, exports) {
                                             OtherAccounts.saveJson.autoPayList = FinancialService.clearSaveJson(OtherAccounts.$clearTab, OtherAccounts.saveJson.autoPayList, new FinRule(1));
                                             console.log("OtherAccounts.saveJson.autoPayList");
                                             console.log(OtherAccounts.saveJson.autoPayList);
-                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()),
+                                            var sumPayMoney = parseFloat(OtherAccounts.$clearTab.find('input[name=sumPayMoney]').val()) || '',
                                                 sumPayType = parseFloat(OtherAccounts.$clearTab.find('select[name=sumPayType]').val()),
                                                 sumPayRemark = OtherAccounts.$clearTab.find('input[name=sumPayRemark]').val();
                                             OtherAccounts.saveJson.sumPayMoney = sumPayMoney;
@@ -493,7 +493,8 @@ define(function(require, exports) {
         OtherAccounts.getTravelAgencyList($tab.find('.T-item-name'));
 
         if (OtherAccounts.saveJson.btnShowStatus) {
-            $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
+            // 当翻页时，需要使用实际的合计，而非下账的合计
+            // $tab.find('input[name=sumPayMoney]').val(OtherAccounts.saveJson.autoPayMoney);
             OtherAccounts.setAutoFillEdit($tab, true);
         }
 
@@ -573,7 +574,7 @@ define(function(require, exports) {
                 }
                 var searchParam = {
                     name: args.name,
-                    autoPayMoney: parseInt($tab.find('input[name=sumPayMoney]').val()),
+                    autoPayMoney: parseFloat($tab.find('input[name=sumPayMoney]').val()),
                     startAccountTime: startAccountTime,
                     endAccountTime: endAccountTime,
                     info: $tab.find('input[name=creator]').val(),
@@ -615,10 +616,7 @@ define(function(require, exports) {
 
     // 保存付款 主键 结算金额  对账备注 对账状态[0(未对账)、1(已对账)]
     OtherAccounts.paysave = function($tab,args,tabArgs) {
-        if(!FinancialService.isClearSave($tab)){
-            return false;
-        }
-        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3));
+        var json = FinancialService.clearSaveJson($tab,OtherAccounts.saveJson.autoPayList, new FinRule(3),true);
         if(!json){ return false; }
         var arguementLen = arguments.length,
             payType = $tab.find('select[name=sumPayType]').val(),
@@ -634,7 +632,7 @@ define(function(require, exports) {
             url: KingServices.build_url("account/arrangeOtherFinancial", "savePayment"),
             type: "POST",
             data: {
-                payment: JSON.stringify(json),
+                payment: json,
                 searchParam : JSON.stringify(searchParam)
             },
         }).done(function(data) {

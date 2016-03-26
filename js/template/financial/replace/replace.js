@@ -394,26 +394,7 @@ define(function(require, exports) {
 					Replace.saveCheckingData($tab,args);
 	            });
 			}else{
-				if(!$tab.data('isEdited')){
-	                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-	                return false;
-	            }
-	        	var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
-				var sumMoney = $tab.find('input[name=sumPayMoney]').data("money");
-				if (sumMoney === undefined) {  // 未修改付款的时候，直接读取
-		            sumMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
-		        };
-			    if(!Tools.Math.isFloatEqual(sumMoney,sumPayMoney)){
-			        showMessageDialog($("#confirm-dialog-message"),"本次收款金额合计与单条记录本次收款金额的累计值不相等，请检查！");
-			        return false;
-			    };
-	        	if(sumPayMoney == 0){
-	        		showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-			            Replace.savePayingData($tab,args);
-			        })
-	        	}else{
-	        		Replace.savePayingData($tab,args);
-	        	}
+	        	Replace.savePayingData($tab,args);
 			}
 		});
 
@@ -814,44 +795,38 @@ define(function(require, exports) {
     	if(!check.form()){ return false; }
 		
 		var validator = new FinRule(Replace.isBalanceSource ? 3 : 1);
-		if(!FinancialService.isClearSave(Replace.$balanceTab,validator)){
-            return false;
-        };
 		var argLen = arguments.length,
-			json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator);
+			json = FinancialService.clearSaveJson($tab, Replace.payingJson, validator,true);
+		if(!json){ return false;}
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
 		var voucher = $tab.find('input[name=credentials-number]').val();
-		var billTime = $tab.find('input[name=tally-date]').val();		
-		if (json.length) {
-            $.ajax({
-                    url: KingServices.build_url('financial/bookingAccount', 'receiveBookingAccount'),
-                    type: 'post',
-                    data: {
-                        reciveAccountList: JSON.stringify(json),
-                        partnerAgencyId: Replace.balanceId,
-                        payType: payType,
-                        bankId:bankId,
-                        voucher:voucher,
-                        billTime:billTime,
-                        remark: $tab.find('.T-sumRemark').val()
-                    },
-                })
-                .done(function(data) {
-                    $tab.data('isEdited', false);
-                    Replace.payingJson = false;
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        if (argLen === 1) {
-                        	Tools.closeTab(blanceMenuKey);
-                            Replace.getList(Replace.listPageNo);                            
-                        } else {
-                            Replace.balanceList(args);
-                        }
-                    })
-                });
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
-        }
+		var billTime = $tab.find('input[name=tally-date]').val();
+        $.ajax({
+            url: KingServices.build_url('financial/bookingAccount', 'receiveBookingAccount'),
+            type: 'post',
+            data: {
+                reciveAccountList: json,
+                partnerAgencyId: Replace.balanceId,
+                payType: payType,
+                bankId:bankId,
+                voucher:voucher,
+                billTime:billTime,
+                remark: $tab.find('.T-sumRemark').val()
+            },
+        })
+        .done(function(data) {
+            $tab.data('isEdited', false);
+            Replace.payingJson = false;
+            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                if (argLen === 1) {
+                	Tools.closeTab(blanceMenuKey);
+                    Replace.getList(Replace.listPageNo);                            
+                } else {
+                    Replace.balanceList(args);
+                }
+            })
+        });
 	};
 
 	Replace.getCustomerList = function($tab,isCheck){
