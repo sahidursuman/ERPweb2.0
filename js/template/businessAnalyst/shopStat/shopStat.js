@@ -164,6 +164,14 @@ define(function(require, exports) {
 			type:'POST',
 			showLoading:false,
 			success:function(data){
+				var sumPlayList = data.sumPlayList;
+				//删除停车返佣和人数返佣的数据
+				for(var i = 0;i<sumPlayList.length;i++){
+					if(sumPlayList[i].name == '停车返佣' || sumPlayList[i].name == '人数返佣'){
+						sumPlayList.splice(i);
+					}
+				};
+				data.sumPlayList = sumPlayList;
 				var html = viewConsumeMoneyTemplate(data);
 				layer.open({
                     type : 1,
