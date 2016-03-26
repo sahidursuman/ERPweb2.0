@@ -149,8 +149,12 @@ define(function(require, exports) {
     	$orderByList.each(function(index) {
     		if ($orderByList.eq(index).attr("data-sortType")==searchParam.sortType && searchParam.order=='asc') {
     			$orderByList.eq(index).attr('data-orderBy', 'desc');
+    			$orderByList.eq(index).children().eq(0).removeClass('hide');
+    			$orderByList.eq(index).children().eq(1).addClass('hide');
     		}else if ($orderByList.eq(index).attr("data-sortType")==searchParam.sortType && searchParam.order=='desc') {
     			$orderByList.eq(index).attr('data-orderBy', 'asc');
+    			$orderByList.eq(index).children().eq(0).addClass('hide');
+    			$orderByList.eq(index).children().eq(1).removeClass('hide');
     		}
     	})
     };
