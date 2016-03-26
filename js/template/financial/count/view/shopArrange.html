@@ -68,13 +68,11 @@
             
 
             <td>
-                <div></div>
-                <div></div>
+                -
             </td><!-- 现收_导游 -->
 
             <td>
-                <div></div>
-                <div></div>
+                -
             </td><!-- 现收_金额 -->
             
            
@@ -96,13 +94,11 @@
                         </td><!-- 商品 -->
 
                         <td>
-                            <div></div>
-                            <div></div>
+                            -
                         </td><!-- 导游 -->
-                        
+
                         <td>
-                            <div></div>
-                            <div></div>
+                            -
                             <!-- <input class="F-float F-money w-80" 
                             policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" 
                             name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
@@ -113,18 +109,16 @@
                         </td><!-- 金额 -->
 
                         <td>
-                            <!-- {{if itemSet.billImage != null && itemSet.billImage != ""}}
+                            {{if itemSet.billImage != null && itemSet.billImage != ""}}
                                 <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                             {{else}}
                                 <span style="color:#bbb;">查看</span>
-                            {{/if}} -->
-                            <div></div>
-                            <div></div>
+                            {{/if}}
                         </td><!-- 单据 -->
                 
                         <td>
-                        <!-- <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
-                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/> -->
+                        <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
+                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/>
                         </td><!-- 金额小计 -->
 
                         <td>
@@ -185,7 +179,12 @@
                 </td><!-- 导游 -->
                 
                 <td>
-                    <div></div>
+                    {{if index == 1}}
+                        -
+                    {{else}}
+                        <div></div>
+                        <div></div>
+                    {{/if}}
                 </td><!-- 金额 -->
 
                 <td>
@@ -226,15 +225,20 @@
                 </td><!-- 导游 -->
                 
                 <td>
-                    <div></div>
+                    {{if index == 1}}
+                        -
+                    {{else}}
+                        <div></div>
+                        <div></div>
+                    {{/if}}
                 </td><!-- 金额 -->
 
                 <td>
-                    <!-- {{if itemSet.billImage != null && itemSet.billImage != ""}}
+                    {{if itemSet.billImage != null && itemSet.billImage != ""}}
                         <a href="javascript:void(0);" url="{{itemSet.billImage}}" class="btn-view">查看</a>
                     {{else}}
                         <span style="color:#bbb;">查看</span>
-                    {{/if}} -->
+                    {{/if}}
                     <div></div>
                 </td><!-- 单据 -->
 
@@ -275,9 +279,9 @@
         {{/if}}
         {{/if}}
         <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
-            <td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>
+            <td style="font-weight: bold;text-align:right;" colspan="8">购物小计：</td>
             <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalMoney"></span></td>
-            <td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>
+            <td style="font-weight: bold;text-align:right;">社佣小计：</td>
             <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalTravelMoney"></span></td>
             <td style="font-weight: bold;text-align:right;">导佣小计：</td>
             <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney"></span></td>
