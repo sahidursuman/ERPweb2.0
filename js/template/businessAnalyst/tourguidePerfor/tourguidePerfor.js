@@ -31,7 +31,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	tourguidPerObj.initModule=function(){
-		tourguidPerObj.listtourguidPer(0,"all","asc");
+		tourguidPerObj.listtourguidPer(0,"person","desc");
 	};
 
 	//导游业绩页面list
