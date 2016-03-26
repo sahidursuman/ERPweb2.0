@@ -51,7 +51,6 @@
 						<th>单价</th>
 						<th>金额</th>
 						<th>说明</th>
-						<th>操作</th>
 					</tr>
 				</thead>
 				<tbody class="T-fee-list" data-type="{{type}}" data-del-json="{{hotelFeeDel}}">
@@ -59,17 +58,12 @@
 					{{each hotelFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
-							{{if type === 1}}
-								{{if rs.type == 3}}中转结算价{{else}}酒店费用{{/if}}
-							{{else}}
-								{{rs.type | getFeeItemText}}
-							{{/if}}
+							{{rs.type | getFeeItemText}}
 						</td>
-						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
-						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
-						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
-						<td><a class="cursor T-action T-delete">删除</a></td>
+						<td>{{rs.count}}</td>
+						<td>{{rs.price}}</td>
+						<td>{{rs.price*rs.count}}</td>
+						<td>{{rs.remark}}</td>
 					</tr>
 					{{/each}}
 				{{/if}}

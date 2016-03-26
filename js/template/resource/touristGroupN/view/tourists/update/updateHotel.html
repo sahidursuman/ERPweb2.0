@@ -31,25 +31,27 @@
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
-			<div class="col-xs-1 text-right no-padding-right control-label">责任部门</div>
-			<div class="col-xs-3">
-				<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
+			<div class="col-xs-2 col-xs-offset-1">
+				<select class="col-xs-12 T-abversion">
+					<option value="0">内部操作</option>
+					<option value="1" {{if isTransfer == 1}}selected{{/if}}>外转操作</option>
+				</select> 
 			</div>
-			<div class="col-xs-1 text-right no-padding-right control-label">责任计调</div>
-			<div class="col-xs-3">
-				<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
+			<div class="col-xs-8{{if isTransfer == 1}} hidden{{/if}} T-internal">
+				<div class="col-xs-2 text-right no-padding-right control-label no-padding-left">责任部门</div>
+				<div class="col-xs-4">
+					<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
+				</div>
+				<div class="col-xs-2 text-right no-padding-right control-label">责任计调</div>
+				<div class="col-xs-4">
+					<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
+				</div>
 			</div>
-		</div>
-		<div class="col-xs-12 mar-t-10">
-			<div class="col-xs-1 col-xs-offset-1" style="padding-left: 7px;">
-				<label class="control-label">
-					<input type="checkbox" class="ace T-abversion"{{if isTransfer == 1}} checked{{/if}}>
-					<span class="lbl"> 外转</span>
-				</label>
-			</div>
-			<div class="col-xs-4{{if isTransfer != 1}} hidden{{/if}} T-peer">
-				<label class="pull-left control-label" style="width: 35px">同行</label>
-				<input type="text" class="pull-left" name="transferPartnerAgency" value="{{transferPartnerAgency}}">
+			<div class="col-xs-8{{if isTransfer != 1}} hidden{{/if}} T-peer">
+				<div class="col-xs-2 text-right no-padding-right control-label">同行</div>
+				<div class="col-xs-4">
+					<input type="text" class="col-xs-12" name="transferPartnerAgency" value="{{transferPartnerAgency}}" data-id="{{transferPartnerAgencyId}}">
+				</div>
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -78,20 +80,16 @@
 					<tr data-id="{{rs.id}}">
 						<td>
 							{{if type === 1}}
-							<select class="col-xs-12" name="type">
-								<option value="3">中转结算价</option>
-								<option value="8" {{if rs.type == 8}}selected{{/if}}>酒店费用</option>
-							</select>
+								{{if rs.type == 3}}中转结算价{{else}}酒店费用{{/if}}
 							{{else}}
-							<select class="col-xs-12" name="type">
-								{{#rs.type | getFeeItemType:true}}
-							</select>
+								{{rs.type | getFeeItemText}}
 							{{/if}}
 						</td>
-						<td>{{rs.count}}</td>
-						<td>{{rs.price}}</td>
-						<td>{{rs.price*rs.count}}</td>
-						<td>{{rs.remark}}</td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
 				{{/if}}

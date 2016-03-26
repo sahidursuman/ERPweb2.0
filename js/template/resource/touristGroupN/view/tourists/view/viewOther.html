@@ -43,7 +43,7 @@
 				{{if otherFee && otherFee.length > 0}}
 					{{each otherFee as rs}}
 					<tr data-id="{{rs.id}}">
-						<td>{{rs.type | getFeeItemType:true}}</td>
+						<td>{{rs.type | getFeeItemText}}</td>
 						<td>{{rs.count}}</td>
 						<td>{{rs.price}}</td>
 						<td>{{rs.price*rs.count}}</td>
