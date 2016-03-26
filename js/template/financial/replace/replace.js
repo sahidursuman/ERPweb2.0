@@ -518,7 +518,7 @@ define(function(require, exports) {
 			var order = Replace.$balanceTab.find(".T-search-order").val();
 			args = {
 				pageNo : (args.pageNo || 0),
-				partnerAgencyId : Replace.balanceId,
+				partnerAgencyId : Replace.$balanceTab.find('input[name="partnerAgencyId"]').val(),
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
 				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
