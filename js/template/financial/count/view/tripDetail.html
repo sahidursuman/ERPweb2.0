@@ -199,15 +199,15 @@
                             </td>
                             <td>
                                 {{if touristGroup.isConfirmAccount == 1}}
-                                    <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
-                                {{else}}
                                     <span class="F-float F-money">{{touristGroup.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
                                 {{/if}}
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
                             <td>
-                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
+                                {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
                                 <a href="#" class="T-viewCostDetail">
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
