@@ -38,9 +38,9 @@
 						<th>说明</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{outTransferFeeDel}}">
-				{{if outFee && outFee.length > 0}}
-					{{each outFee as rs}}
+				<tbody class="T-fee-list">
+				{{if innerTransferFee && innerTransferFee.length > 0}}
+					{{each innerTransferFee as rs}}
 					<tr>
 						<td>{{rs.type | getFeeItemText}}</td>
 						<td>{{rs.count}}</td>

@@ -53,8 +53,8 @@
 					</tr>
 				</thead>
 				<tbody class="T-fee-list" data-del-json="{{outTransferFeeDel}}">
-				{{if outFee && outFee.length > 0}}
-					{{each outFee as rs}}
+				{{if outTransferFee && outTransferFee.length > 0}}
+					{{each outTransferFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select class="col-xs-12" name="type">

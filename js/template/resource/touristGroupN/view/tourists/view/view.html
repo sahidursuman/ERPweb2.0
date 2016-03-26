@@ -101,7 +101,7 @@
 				{{each joinTrip as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
-							<span data-json="{{rs.lineJson}}">{{rs.lineProductName}}</span>
+							<span name="lineProductName" data-json="{{rs.lineJson}}">{{rs.lineProductName}}</span>
 						</td>
 						<td>{{rs.tripStartTime}}</td>
 						<td>{{rs.tripEndTime}}</td>
