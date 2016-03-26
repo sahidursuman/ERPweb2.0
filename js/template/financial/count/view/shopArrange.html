@@ -32,6 +32,8 @@
                 <th class="th-border" rowspan="2">是否对账</th>
             </tr>
             <tr>
+                <th class="th-border"><span class="necessary">*</span>导游</th>
+                <th class="th-border"><span class="necessary">*</span>金额</th>
                 <th class="th-border"><span class="necessary">*</span>商品</th>
                 <th class="th-border"><span class="necessary">*</span>导游</th>
                 <th class="th-border"><span class="necessary">*</span>金额</th>
@@ -58,11 +60,12 @@
         <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}" >
 
             <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td><!-- 日期 -->
-
+            
             <td rowspan="{{arrange.shopArrangeItemSet.length}}">
                 {{arrange.shop.name}}
                 <input type="hidden" name="shopId" value="{{arrange.shopId}}">
             </td><!-- 购物店 -->
+            
 
             <td>
                 <div></div>
@@ -73,6 +76,8 @@
                 <div></div>
                 <div></div>
             </td><!-- 现收_金额 -->
+            
+           
 
             {{if arrange.shopArrangeItemSet != null}}
                 {{each arrange.shopArrangeItemSet as itemSet index}}
@@ -94,10 +99,7 @@
                             <div></div>
                             <div></div>
                         </td><!-- 导游 -->
-
-                        <td>
-                            -                            
-                        </td>
+                        
                         <td>
                             <div></div>
                             <div></div>
@@ -171,6 +173,21 @@
                 oldMoney="{{itemSet.travelAgencyRebateMoney}}" 
                 itemsId = "{{itemSet.id}}"
                 {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}>
+                
+
+                <td>
+                    {{if index == 1}}
+                        -
+                    {{else}}
+                        <div></div>
+                        <div></div>
+                    {{/if}}
+                </td><!-- 导游 -->
+                
+                <td>
+                    <div></div>
+                </td><!-- 金额 -->
+
                 <td>
                     <span class="span_shopPolicy">
                         <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
@@ -199,7 +216,7 @@
                     {{/if}}
                 </td><!-- 商品 -->
 
-                <td>
+                 <td>
                     {{if index == 1}}
                         -
                     {{else}}
