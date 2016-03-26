@@ -31,13 +31,13 @@
         </tr>
     </thead>
     <tbody class="T-tourguidPer-list">
-        {{each shopListdata as rs}}
+        {{each shopListdata as rs index}}
         <tr>
             <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.partnerAgencyName}}</td>
             <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.tripNumber}}</td>
             <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.startTime |dateFormat: 'yyyy-MM-dd'}} - {{rs.endTime |dateFormat: 'yyyy-MM-dd'}}</td>
             {{if rs.shopList.length == 0}}
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -50,7 +50,6 @@
         </tr>
         {{each rs.shopList as shop index}}
         <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
-            <td class="P-tdFontSize">{{shop.startTime |dateFormat: 'yyyy-MM-dd'}} - {{shop.endTime |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.shopName}}</td>
             <td class="P-tdFontSize"><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
