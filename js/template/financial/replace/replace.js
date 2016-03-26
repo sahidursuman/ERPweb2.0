@@ -518,7 +518,7 @@ define(function(require, exports) {
 			var order = Replace.$balanceTab.find(".T-search-order").val();
 			args = {
 				pageNo : (args.pageNo || 0),
-				partnerAgencyId : Replace.balanceId,
+				partnerAgencyId : $tab.find('input[name="partnerAgencyId"]').val(),
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
 				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
@@ -740,16 +740,16 @@ define(function(require, exports) {
 
 	Replace.balanceList = function(args,$tab){
 		if(!!$tab){
-			var project = Replace.$balanceTab.find(".T-search-project").val().split(', '),
-				order = Replace.$balanceTab.find(".T-search-order").val();
+			var project = $tab.find(".T-search-project").val().split(', '),
+				order = $tab.find(".T-search-order").val();
 			args = {
 				pageNo : args.pageNo || 0,
-				partnerAgencyId : Replace.$balanceTab.find("input[name=partnerAgencyId]").val(),
-				name : Replace.$balanceTab.find("input[name=partnerAgencyName]").val(),
+				partnerAgencyId : $tab.find("input[name=partnerAgencyId]").val(),
+				name : $tab.find("input[name=partnerAgencyName]").val(),
 				orderNumber : order == '全部' ? '' : order,
-				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
-				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
-				projects : Replace.$balanceTab.find(".T-search-project").val()
+				startDate : $tab.find(".T-search-start-date").val(),
+				endDate : $tab.find(".T-search-end-date").val(),
+				projects : $tab.find(".T-search-project").val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
