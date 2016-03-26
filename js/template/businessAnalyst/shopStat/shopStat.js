@@ -67,6 +67,7 @@ define(function(require, exports) {
 	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
 	   		}
 		};
+
 		if(searchData.startTime > searchData.endTime){
 	        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
 	        return false;
@@ -74,7 +75,7 @@ define(function(require, exports) {
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
 	   	//select修改查询
-	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').on('change', function() {
+	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').off('change').on('change', function() {
 	   		shopStat.listShopStat(0);
 	   	})
 	   	//购物统计列表请求Ajax
@@ -163,6 +164,14 @@ define(function(require, exports) {
 			type:'POST',
 			showLoading:false,
 			success:function(data){
+				var sumPlayList = data.sumPlayList;
+				//删除停车返佣和人数返佣的数据
+				for(var i = 0;i<sumPlayList.length;i++){
+					if(sumPlayList[i].name == '停车返佣' || sumPlayList[i].name == '人数返佣'){
+						sumPlayList.splice(i);
+					}
+				};
+				data.sumPlayList = sumPlayList;
 				var html = viewConsumeMoneyTemplate(data);
 				layer.open({
                     type : 1,
