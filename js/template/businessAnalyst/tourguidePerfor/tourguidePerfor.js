@@ -112,7 +112,7 @@ define(function(require, exports) {
     		event.preventDefault();
     		/* Act on the event */
     		//导游业绩列表查询
-    		tourguidPerObj.listtourguidPer(0,"all","asc");
+    		tourguidPerObj.listtourguidPer(0,"person","desc");
     	});
     	//导游打单
     	tourguidPerObj.$tab.find('.T-tourCount').on('click', function(event) {
