@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":645,"md5":"58a44ea0b227ec1b412288afde68760c"}*/
+/*TMODJS:{"debug":true,"version":647,"md5":"58a44ea0b227ec1b412288afde68760c"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/tourguidePerfor/view/guidePlaySingle", function($data, $filename) {
         try {
