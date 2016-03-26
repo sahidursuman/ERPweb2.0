@@ -28,18 +28,18 @@
         </form>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count" style="padding-bottom: 0">
-                <label>人数合计：<span class="F-float F-count">{{sumPerson}}</span></label>
-                <label class="mar-r2-0">外转金额合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
-                <label class="mar-r2-0">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span></label>
-                <label class="mar-r2-0">返款金额合计：<span class="F-float F-money">{{sumPunishMoney}}</span></label>
-                <label class="mar-r2-0">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
-                <label class="mar-r2-0">未付金额合计：<span class="F-float F-money">{{sumUnPayedMoney}}</span></label>
+                <label class="mar-r-10">人数合计：<span class="F-float F-count">{{sumPerson}}</span></label>
+                <label class="mar-r-10">外转金额合计：<span class="F-float F-money">{{sumNeedPayMoney}}</span></label>
+                <label class="mar-r-10">已付金额合计：<span class="F-float F-money">{{sumPayedMoney}}</span></label>
+                <label class="mar-r-10">返款金额合计：<span class="F-float F-money">{{sumPunishMoney}}</span></label>
+                <label class="mar-r-10">结算金额合计：<span class="F-float F-money">{{sumSettlementMoney}}</span></label>
+                <label class="mar-r-10">未付金额合计：<span class="F-float F-money">{{sumUnPayedMoney}}</span></label>
                 <label >未付金额合计(已对账)：<span class="T-unpayMoney F-float F-money">{{checkedUnPayedMoney}}</span></label>
             </div>
         </form>
         <div class="form-inline row globalAdd T-summary">
             <div class="form-group mar-r-10">
-                <label class="control-label">本次付款金额{{isAutoPay}}：</label>
+                <label class="control-label">本次付款金额：</label>
                 <label class="control-label">
                     <input name="sumPayMoney" type="text" value="{{sumPayMoney}}" class="T-sumReciveMoney money F-float F-money"  {{if type || isAutoPay != 0}}disabled {{/if}}>
                 </label>
@@ -171,9 +171,8 @@
                     <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
-                <td rowspan="{{rs.rowLen}}"><input name="payMoney" class="money F-float F-money" type="text" value="{{rs.payMoney}}" maxlength="9"
-                 data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
-                <td rowspan="{{rs.rowLen}}"><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}>{{rs.payRemark}}</textarea></td>
+                <td rowspan="{{rs.rowLen}}"><input name="payMoney" class="money F-float F-money" type="text" value="{{rs.payMoney}}" maxlength="9"/></td>
+                <td rowspan="{{rs.rowLen}}"><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
                 <td rowspan="{{rs.rowLen}}">{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">
