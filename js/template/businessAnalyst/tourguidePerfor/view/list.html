@@ -33,27 +33,30 @@
                 <col style="width:10%;"></col>
                 <col style="width:10%;"></col>
             </colgroup>
-            <thead>
+            <thead class="T-thead">
                 <tr class="bg-blur">
                     <th class="col-sm-1">导游</th>
                     <th class="col-sm-2">手机号码</th>
                     <th class="col-sm-1">带团数量</th>
                     <th class="col-sm-1">带团人数</th>
-                    <th class="col-sm-1">购物总额</th>
+                    <th class="col-sm-1  cursor T-orderBy T-all" data-sortType='all' data-orderBy='{{searchParam.order}}'>
+                    <i class="fa fa-long-arrow-down"></i>购物总额</th>
                     <th class="col-sm-1">单团最高购物</th>
-                    <th class="col-sm-1">团均购物</th>
-                    <th class="col-sm-2">人均购物</th>
-                    <th class="col-sm-1">自费总额</th>
+                    <th class="col-sm-1 cursor T-orderBy T-trip" data-sortType='trip' data-orderBy='{{searchParam.order}}'>
+                    <i class="fa fa-long-arrow-down"></i>团均购物</th>
+                    <th class="col-sm-2 cursor T-orderBy T-person" data-sortType='person' data-orderBy='{{searchParam.order}}'>
+                    <i class="fa fa-long-arrow-down"></i>人均购物</th>
+                    <th class="col-sm-1" >自费总额</th>
                     <th class="col-sm-1">团均自费</th>
                     <th class="col-sm-2">人均自费</th>
                 </tr>
             </thead>
             <tbody class="T-tourguidPer-list">
                 {{each sumListPerformance as sumL}}
-                <tr>
+                <tr data-guideId="{{sumL.id}}" data-guideName="{{sumL.guideName}}" data-mobileNumber="{{sumL.mobileNumber}}">
                     <td>{{sumL.guideName}}</td>
                     <td>{{sumL.mobileNumber}}</td>
-                    <td>{{sumL.tourCount}}</td>
+                    <td class="T-tourCount cursor" style="color:#337ab7">{{sumL.adultCount}}大{{sumL.childCount}}小</td>
                     <td>{{sumL.tourNumber}}</td>
                     <td>{{sumL.sumShopMoney}}</td>
                     <td>{{sumL.maxShopMoney}}</td>

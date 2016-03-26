@@ -369,8 +369,10 @@ define(function(require, exports) {
                 event.preventDefault();
                 if ($(this).hasClass('btn-primary')) {
                     if (autoValidator.form()) {
+                        var argsData = FinancialService.autoPayJson(args.shopId, $tab, new FinRule(2), 1);
+                        if (!argsData) return;
                         FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(), function() {
-                            FinShop.autoFillMoney($tab);
+                            FinShop.autoFillMoney($tab,argsData);
                         });
                     }
                 } else {
@@ -429,23 +431,7 @@ define(function(require, exports) {
                     saveData($tab,args);
                 });
             } else {
-                if (!$tab.data('isEdited')) {
-                    showMessageDialog($("#confirm-dialog-message"), "您未进行任何操作！");
-                    return false;
-                }
-                var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
-                    sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').data("money"));
-                if (!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)) {
-                    showMessageDialog($("#confirm-dialog-message"), "本次收款金额合计与单条记录本收付款金额的累计值不相等，请检查！");
-                    return false;
-                }
-                if (sumPayMoney == 0) {
-                    showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
-                        saveData($tab,args);
-                    })
-                } else {
-                    saveData($tab,args);
-                }
+                saveData($tab,args);
             }
         });
         //绑定取消事件
@@ -562,10 +548,8 @@ define(function(require, exports) {
      * @param  {[type]} $tab [description]
      * @return {[type]}      [description]
      */
-    FinShop.autoFillMoney = function($tab) {
+    FinShop.autoFillMoney = function($tab,args) {
         if (!!$tab && $tab.length) {
-            var args = FinancialService.autoPayJson(FinShop.settlementId, $tab, new FinRule(2), 1);
-            if (!args) return;
             args = JSON.parse(args);
             args.shopId = args.id;
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
@@ -676,37 +660,34 @@ define(function(require, exports) {
             bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
         var billTime = $tab.find('input[name=tally-date]').val();
-        var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1));
-        if (json.length) {
-            var saveArgs = {
-                shopId: FinShop.settlementId,
-                payType: payType,
-                bankId: bankId,
-                voucher: voucher,
-                billTime: billTime,
-                remark: $tab.find('.T-sumRemark').val(),
-                reciveAccountList: JSON.stringify(json)
-            }
-            $.ajax({
-                    url: KingServices.build_url('financial/shopAccount', 'receiveShopAccount'),
-                    type: 'post',
-                    data: saveArgs,
-                })
-                .done(function(data) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        $tab.data('isEdited', false);
-                        FinShop.payingJson = false;
-                        if (argLen === 1) {
-                            Tools.closeTab(settMenuKey);
-                            FinShop.getList(FinShop.listPageNo);
-                        } else {
-                            FinShop.initOperationList(args, true,false);
-                        }
-                    })
-                });
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
+        var json = FinancialService.clearSaveJson($tab, FinShop.payingJson, new FinRule(FinShop.isBalanceSource ? 3 : 1),true);
+        if (!json) { return false; }
+        var saveArgs = {
+            shopId: FinShop.settlementId,
+            payType: payType,
+            bankId: bankId,
+            voucher: voucher,
+            billTime: billTime,
+            remark: $tab.find('.T-sumRemark').val(),
+            reciveAccountList: json
         }
+        $.ajax({
+            url: KingServices.build_url('financial/shopAccount', 'receiveShopAccount'),
+            type: 'post',
+            data: saveArgs,
+        })
+        .done(function(data) {
+            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                $tab.data('isEdited', false);
+                FinShop.payingJson = false;
+                if (argLen === 1) {
+                    Tools.closeTab(settMenuKey);
+                    FinShop.getList(FinShop.listPageNo);
+                } else {
+                    FinShop.initOperationList(args, true,false);
+                }
+            })
+        });
     };
 
     FinShop.getShopList = function($tab,type){
