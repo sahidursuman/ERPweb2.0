@@ -313,20 +313,33 @@
                                         <input type="radio" name='isAccountGuide' {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} checked="checked" {{/if}} {{if basicInfo.status !=0 }} disabled="disabled" {{/if}}>
                                     </td>
                                     <td>
+                                        {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
                                         <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
                                             <input type="text" name="startTime" class="datepicker" value="{{task.sTime | dateFormat:'yyyy-MM-dd'}}">
                                         </div>
                                         {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="startTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
+                                        {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
                                         <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
                                             <input type="text" name="endTime" class="datepicker" value="{{task.eTime | dateFormat:'yyyy-MM-dd'}}">
                                         </div>
                                         {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="endTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
+                                        {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
                                         <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
                                         {{#task.tType | getTaskSelect}}
@@ -337,6 +350,16 @@
                                             </label>
                                         </div>
                                         {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask mar-t-5" data-index="0">
+                                        {{#0 | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white btn-success T-add T-guideBtn">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
@@ -359,7 +382,7 @@
                                     </td>
                                     <td><span class="price F-float F-money">{{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }}{{basicInfo.guideAllNowMoney}}{{/if}}</span></td>
                                     <!-- <td><span class="T-guidePlanPayMoney F-float F-money"></span></td> -->
-                                    <td><input type="text" name="guidePlanPreMoney" /></td>
+                                    <td><input class="F-float F-money" type="text" name="guidePlanPreMoney" value="{{guide.guidePlanPreMoney}}" /></td>
                                     <td>
                                         <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" />
                                     </td>
