@@ -307,7 +307,7 @@ define(function(require, exports) {
                                 break;
                             }
                         }
-
+                        data.baseInfo.name = data.baseInfo.name + " " + (data.baseInfo.touristGroupMemberInfo.adultCount || 0) +"大" + (data.baseInfo.touristGroupMemberInfo.childCount || 0) + "小";
                         data.baseInfo.touristGroupMemberInfo = JSON.stringify(data.baseInfo.touristGroupMemberInfo || {});
                     }
                     data.baseInfo.needPayAllMoney = data.baseInfo.touristGroupFee.needPayAllMoney
@@ -376,7 +376,7 @@ define(function(require, exports) {
                                 break;
                             }
                         }
-
+                        data.baseInfo.name = data.baseInfo.name + " " + (data.baseInfo.touristGroupMemberInfo.adultCount || 0) +"大" + (data.baseInfo.touristGroupMemberInfo.childCount || 0) + "小";
                         data.baseInfo.touristGroupMemberInfo = JSON.stringify(data.baseInfo.touristGroupMemberInfo || {});
                     }
                     data.baseInfo.needPayAllMoney = data.baseInfo.touristGroupFee.needPayAllMoney
