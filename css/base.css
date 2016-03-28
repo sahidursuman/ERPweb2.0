@@ -132,6 +132,11 @@ input.datepicker:not([class^="col-"]) {
 	margin-bottom: 0;
 	overflow: hidden;
 }
+.hct-search-box{
+	width: 1080px;
+	margin-bottom: 0;
+	overflow: hidden;
+}
 .hct-search-area .form-group,
 .hct-search-area.form-inline .form-group{
 	display: block;

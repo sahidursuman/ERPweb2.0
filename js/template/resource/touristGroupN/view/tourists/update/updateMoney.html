@@ -46,7 +46,7 @@
 					<tr>
 						<td>
 							<select name="type" class="col-xs-12">
-								{{#rs.type | getFeeItemType}}
+								{{#rs.type | getFeeItemType:true}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
