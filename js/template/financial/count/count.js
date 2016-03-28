@@ -1468,9 +1468,13 @@ define(function(require, exports){
 		var html = '<tr class="oldData noSumRate">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
+		'<td>-</td>'+
+		'<td>-</td>'+
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
-		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
+		'<td>-</td>'+
+		'<td>-</td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
+		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
@@ -1481,9 +1485,17 @@ define(function(require, exports){
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
 		'<tr class="noSumRate">'+
-		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy"><button class="btn btn-success btn-sm btn-white T-addShop"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></td>'+
-		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
+		'<td>-</td>'+
+		'<td>-</td>'+
+		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy">'+
+		'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+
+		'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
+		'</button>'+
+		'</td>'+
+		'<td>-</td>'+
+		'<td>-</td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
+		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
 		'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="guideRate" class="w-50" value="0"/></td>'+
@@ -1491,14 +1503,14 @@ define(function(require, exports){
 		'<td><input type="text" name="billRemark"/></td>'+
 		'</tr>'+
 		'<tr class="sumMoney">'+
-			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
-			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalMoney"></span></td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:right;" colspan="8">购物小计：</td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalMoney">0</span></td>'+
+			'<td style="font-weight: bold;text-align:right;">社佣小计：</td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalTravelMoney">0</span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalGuideMoney">0</span></td>'+
 			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
-			'<td style="font-weight: bold;text-align:left;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;" colspan="2"><span class="F-float F-money T-sumRebeMoney">0</span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
