@@ -23,7 +23,11 @@ define(function(require, exports) {
         hotelMainTemplate = require("./view/hotelMain"),
         itsMainTemplate = require("./view/itsMian"),
         noticeTemplate = require("./view/busnotice"),
+        listbusCompleted = require("./view/listbusCompleted"),
+        busviewalready = require("./view/busviewalready"),
         hotelnoticeTemplate = require("./view/hotelnotice"),
+        buslreadyplanTemplate = require("./view/buslreadyplan"),
+        busviewalreadyId = "tab-" + menuKey + "-busviewwalreadyId",
         hotelplanId = "tab-" + menuKey + "-hotelplan",
         listHotel = "tab-" + menuKey + "-listHotel",
         listHeader = "tab-" + menuKey + "-listHeader",
@@ -42,9 +46,10 @@ define(function(require, exports) {
         $searchAreabus : false,
         $searchAreahotel : false,
         $searchAreaits : false,
-        $searchAreabusview : false
+        $searchAreabusview : false,
+        transitIds :[]
     }
-    //初始化中转模块
+    //初始化中未安排转模块
     transitPlan.initModule = function(event) {
         var args = {
             pageNo:0,
@@ -61,9 +66,25 @@ define(function(require, exports) {
             sortType:'auto'
         }
         transitPlan.listTransitBusPlan(args);
+        var html = listTemplate();
+        Tools.addTab(menuKey, "中转安排", html);
+        transitPlan.$tab = $("#" + tabId);
+        // 搜索域的html
+        var listHeader = listHeaderTemplate();
+        
+        transitPlan.$tab.find('.T-search').html(listHeader);
+        // 判断是已安排还是未安排
+         transitPlan.$tab.find("select[name=status]").on('change',function(){
+            var status = $(this).val();
+            transitPlan.listTransitBusPlan(args, status);
+         })   
+        
+        transitPlan.$searchAreabus = transitPlan.$tab.find('.T-searchMian');
+        transitPlan.init_eventMain(transitPlan.$tab);
     };
-    // 默认展示车队
-    transitPlan.listTransitBusPlan = function(args) {
+
+    // 默认展示车队未安排
+    transitPlan.listTransitBusPlan = function(args, tempStatus) {
         args = args || {};
         if (!!transitPlan.$searchAreabus) {
             args.tgOrderNumber = transitPlan.$searchAreabus.find('input[name=tgOrderNumber]').val();
@@ -83,18 +104,15 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    var html = listTemplate(data);
-                    Tools.addTab(menuKey, "中转安排", html);
-                    transitPlan.$tab = $("#" + tabId);
-                    // 搜索域的html
-                    var listHeader = listHeaderTemplate();
-                    transitPlan.$tab.find('.T-search').html(listHeader);
-                    // 车队列表
-                    var listToutel = listBusTemplate(data);
-                    transitPlan.$searchAreabus = transitPlan.$tab.find('.T-searchMian');
+                    var listToutel = "";
+                    if(tempStatus == 1){
+                        listToutel = listbusCompleted(data);
+                       
+                    }else{
+                        listToutel = listBusTemplate(data);
+                    }
                     transitPlan.$tab.find('.T-busLists').html(listToutel);
-                    transitPlan.init_eventMain(transitPlan.$tab,args);
-                    transitPlan.busevent(transitPlan.$tab);
+                    transitPlan.busevent(transitPlan.$tab,args);
                     //翻页
                     laypage({
                         cont: transitPlan.$tab.find('.T-pagenation'),
@@ -108,13 +126,167 @@ define(function(require, exports) {
                             }
                         }
                     });
-                    
-                    
-                   
+                     transitPlan.listbusCompletednform(transitPlan.$tab);
                 }
             }
         })
     };
+    //车 已安排事件
+    transitPlan.listbusCompletednform = function($tab){
+        // 表格内操作
+       $tab.find('.T-busCompleted-list').on('click','.T-action',function(){
+        var $that = $(this);
+            $tr = $that.closest('tr'),
+            unifyId = $tr.data('id');
+            if($that.hasClass('T-message')){
+                var status = {
+                    receiveBusStatus: $tab.find('.receiveBusStatus').data('status'),
+                    receiveHotelStatus: $tab.find('.receiveHotelStatus').data('status'),
+                    receiveRestaurantStatus: $tab.find('.receiveRestaurantStatus').data('status'),
+                    receiveTicketStatus: $tab.find('.receiveTicketStatus').data('status'),
+                    receiveOtherStatus: $tab.find('.receiveOtherStatus').data('status'),
+                    sendBusStatus: $tab.find('.sendBusStatus').data('status'),
+                    sendHotelStatus: $tab.find('.sendHotelStatus').data('status'),
+                    sendRestaurantStatus: $tab.find('.sendRestaurantStatus').data('status'),
+                    sendTicketStatus: $tab.find('.sendTicketStatus').data('status'),
+                    sendOtherStatus: $tab.find('.sendOtherStatus').data('status')
+                }
+                transitPlan.bussendTransit(id, status,$tr);
+            }else if($that.hasClass('T-check-bus')){
+                transitPlan.Already(unifyId,$tab);
+            }else if($that.hasClass('T-plan-busyet')){
+                //已安排 车安排
+                transitPlan.alreadyplan(unifyId,$tr);
+            }
+
+       })
+    }
+    //安排车已安排
+    transitPlan.alreadyplan = function(unifyId,$tr){
+        // var shuttleType = $tr.find('input[name=shuttleType]').val();
+        var planbusData = {
+            unifyId : unifyId,
+            // shuttleType : shuttleType
+        }
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            type: "POST",
+            data:planbusData,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var html = buslreadyplanTemplate(data);
+                    addTab(busplan, '车安排', html);
+                    transitPlan.$tab = $("#tab-" + busplan + "-content");
+                    var $tab = transitPlan.$tab;
+                    transitPlan.addResource($tab);
+                    transitPlan.busplanclick($tab,unifyId);
+                    $tab.find('.T-cancel').on('click',function(){
+                        Tools.closeTab(busplan)
+                    })
+                }
+            }
+        })
+    }
+    //车安排绑定事件
+    transitPlan.busplanclick = function($tab,outRemarkId,shuttleType){
+        //绑定删除事件
+        $tab.on('click','.T-contact-delete',function(event){
+            transitPlan.delBusArrange($(this));
+        });
+        // 新增车安排
+        $tab.find('.T-add-bus').on('click', function(event) {
+            transitPlan.addbus($tab)
+        })
+        //时间控件
+        Tools.setDatePicker($tab.find('.datepicker'), true);
+        //保存车事件
+        $tab.find('.T-bus-save').on('click',function(){
+            // transitPlan.submitUpdatebus($tab,id,shuttleType);
+            transitPlan.submitbusAlready($tab,shuttleType);
+        });
+        // 保存车事件已安排
+        $tab.find('.T-busAlready-save').on('click',function(){
+            transitPlan.submitbusAlready($tab,shuttleType);
+        });
+        // 车安排下拉列表
+        transitPlan.bindBusCompanyChoose($tab);
+         // 车表格内操作
+        $tab.find('.T-bus-plan').on('click', '.T-contact-delete', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                $tr = $that.closest('tr');
+            transitPlan.deleteArrange($tr);   
+        });
+    }
+    //安排保存 公共事件
+    transitPlan.submitbusAlready = function($tab,shuttleType){
+        var outBusList = [],//车安排列表
+            // status = transitPlan.getValue($tab,'status'),
+            outRemarkList = [],//中转列表 Id
+            $tr = $tab.find('.T-bus-plan tr'),
+            outRemarkId = $tab.find('input[name=outRemarkId]').val();
+        for (var i = 0; i < $tr.length; i++) {
+            var $trline = $tr.eq(i);
+            var outBusJson = {
+                busId : transitPlan.getValue($trline,'busId'),//车id
+                busCompanyId : transitPlan.getValue($trline,'busCompanyId'), //车队id
+                driverId : transitPlan.getValue($trline,'driverId'), //司机id
+                serviceType :  transitPlan.getValue($trline,'serviceType'), //接送类型
+                fee : transitPlan.getValue($trline,'fee'),
+                seatCount : transitPlan.getValue($trline,'seatCount'),
+                brand : transitPlan.getValue($trline,'brand'), 
+                useTime : transitPlan.getValue($trline,'useTime'),
+                boardLocation : transitPlan.getValue($trline,'boardLocation'),
+                destination : transitPlan.getValue($trline,'destination'),
+                reduceMoney : transitPlan.getValue($trline,'reduceMoney'), 
+                needPayMoney : transitPlan.getValue($trline,'needPayMoney'), 
+                prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
+                remark : transitPlan.getValue($trline,'remark')
+            };
+            outBusList.push(outBusJson);
+        }
+        for(var j = 0; j < outRemarkId.length;j++){
+            var outRemarkJson = {
+                outRemarkId : outRemarkId,
+                shuttleType : 1
+            }
+            outRemarkList.push(outRemarkJson);
+        }
+        $.ajax({
+            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
+            type : "POST",
+            data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList),
+        }).done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    Tools.closeTab(busplan);
+                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+                });
+            }
+        })
+    };
+    //查看车已安排
+    transitPlan.Already = function(unifyId,$tab){
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            type: "POST",
+            data:'unifyId='+unifyId,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var html = busviewalready(data);
+                    addTab(busviewalreadyId,'车安排查看',html);
+
+                  
+                }
+            }
+        })
+
+
+    }
+
+    
     // 房
     transitPlan.listTransitHoutelPlan = function($tab,hotelsData){
         $tab = $tab || transitPlan.$tab;
@@ -210,19 +382,19 @@ define(function(require, exports) {
         })
     }
     // 车事件
-    transitPlan.busevent = function($tab){
+    transitPlan.busevent = function($tab,args){
         // 表格内操作
         $tab.find('.T-bus-list').on('click', '.T-action', function(event) {
             event.preventDefault();
             var $that = $(this),
                 $tr = $that.closest('tr'),
-                id = $tr.data('id');
+                outRemarkId = $tr.data('id');
             if ($that.hasClass('T-plan-bus')) {
                 // 车安排
-                transitPlan.busplan(id,$tr);
+                transitPlan.busplan(outRemarkId,$tr);
             }else if($that.hasClass('T-view-bus')){
                 //车查看
-                transitPlan.buslook(id,$tr);
+                transitPlan.buslook(outRemarkId,$tr);
             }else if($that.hasClass('T-inform')){
                 //通知
                 var status = {
@@ -237,7 +409,7 @@ define(function(require, exports) {
                     sendTicketStatus: $tab.find('.sendTicketStatus').data('status'),
                     sendOtherStatus: $tab.find('.sendOtherStatus').data('status')
                 }
-                transitPlan.bussendTransit(id, status,$tr);
+                transitPlan.bussendTransit(outRemarkId, status,$tr);
             }
         });
         // 小查看车
@@ -248,88 +420,124 @@ define(function(require, exports) {
         $tab.find('.T-searchbus').on('click',function(event){
             transitPlan.listTransitBusPlan();
         })
-        //统一付款
-        $tab.find('.T-start-merge').on('click',function(){
-              transitPlan.busunify();
-        })
-    };
 
-
-    // 统一安排
-    transitPlan.busunify = function(){
-        for (var i = 0; i < Things.length; i++) {
-            Things[i]
-        }
-        var outRemarkList = {
-            id : id
-        }
-        $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outBusUnifyArrange"),
-            type: "POST",
-            data:outRemarkList,
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var html = busviewTemplate(data);
-                    addTab(busviewId,'车安排',html);
-                    transitPlan.$busviewId = $("#tab-" + busviewId + "-content");
+        $tab.find('.T-cheked').on('click',function(){
+            var shuttleType=$tab.find("[name=status]").val();
+            // 统一安排事件绑定
+            var $that=$(this),outRemarkId=$that.closest('tr').data('id');
+            if($that.is(':checked')){
+                var transitJson = {
+                    outRemarkId : outRemarkId,
+                    shuttleType : shuttleType
+                };
+                transitPlan.transitIds.push(transitJson);
+            }else{
+                for (var i = 0; i < transitPlan.transitIds.length; i++) {
+                    if (transitPlan.transitIds[i].id==id) {
+                        transitPlan.transitIds.splice(i,1);
+                        break;
+                   } 
                 }
             }
         })
-    }
-    //提交车信息
-    transitPlan.submitUpdatebus = function($tab,outRemarkId,shuttleType){
-        var status = getValue($tab,'status'),
-           outBusList = [],
-           $tr = $tab.find('.T-bus-plan tr')
-        console.log($tr);
-        for (var i = 0; i < $tr.length; i++) {
-            var id = $tr.eq(i).data("entity-id"),
-                $trline = $tr.eq(i);
-            var outBusJson = {
-                busId : getValue($trline,'busId'),//车id
-                busCompanyId : getValue($trline,'busCompanyId'), //车队id
-                driverId : getValue($trline,'driverId'), //司机id
-                serviceType :  getValue($trline,'serviceType'), //接送类型
-                fee : getValue($trline,'fee'),
-                seatCount : getValue($trline,'seatCount'),
-                brand : getValue($trline,'brand'), 
-                useTime : getValue($trline,'useTime'),
-                boardLocation : getValue($trline,'boardLocation'),
-                destination : getValue($trline,'destination'),
-                reduceMoney : getValue($trline,'reduceMoney'), 
-                needPayMoney : getValue($trline,'needPayMoney'), 
-                prePayMoney : getValue($trline,'prePayMoney'), 
-                remark : getValue($trline,'remark')
-            };
-            if(!!id){
-                outBusJson.id = id;
-            }
-            outBusList.push(outBusJson);
-
-       } 
-        $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusArrange"),
-            type: "POST",
-            data:'outRemarkId='+outRemarkId+"&status="+status+"&shuttleType="+shuttleType+"&outBusList="+JSON.stringify(outBusList),
-        }).done(function(data) {
-            if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                    Tools.closeTab(busplan);
-                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
-                });
-            }
+        //统一安排事件
+        $tab.find('.T-start-merge').on('click',function(){
+             transitPlan.busunify($tab);
         })
-        function getValue($obj,name){
-            var $this = $obj.find('[name='+name+']'), res;
-            if ($this.attr('type') == 'checkbox') {
-                res =  $this.is(':checked') ? 3 : 1;
-            }else if ($this.is('input')) {
-                res = $this.val();
-            }
-            return res;
+        //分页勾选效果
+        for (var i = 0; i < transitPlan.transitIds.length; i++) {
+              var transitId = transitPlan.transitIds[i].id,$trList=$tab.find('.T-bus-list').find('tr');
+              $trList.each(function(index) {
+                  var outRemarkId = $trList.eq(index).data('id');
+                  if (!!outRemarkId && !!transitId && id == transitId) {
+                      $trList.eq(index).find('.T-cheked').prop('checked', true);
+                  };
+              });
         }
     };
+
+    // 统一安排
+    transitPlan.busunify = function($tab){
+        if (!!transitPlan.transitIds && transitPlan.transitIds.length>0) {
+            var outRemarkList=transitPlan.transitIds;
+            var outRemarkList = JSON.stringify(outRemarkList);
+            $.ajax({
+                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outBusUnifyArrange"),
+                type: "POST",
+                data:{outRemarkList:outRemarkList},
+                success: function(data) {
+                    var result  = showDialog(data);
+                    if (result) {
+                        var html = busplanTemplate(data);
+                        addTab(busviewId,'车安排',html);
+                        transitPlan.$busviewId = $("#tab-" + busviewId + "-content");
+                        $tab = transitPlan.$busviewId
+                        transitPlan.$checkJson = transitPlan.$busviewId;
+                        transitPlan.addResource($tab);
+                        transitPlan.bindBusCompanyChoose($tab);
+                        transitPlan.busplanclick($tab,outRemarkList.outRemarkId,outRemarkList.shuttleType);
+                        $tab.find('.T-cancel').on('click',function(){
+                            Tools.closeTab(busviewId);
+                        })
+                    }
+                }
+            })
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
+        }
+    }
+    //提交车信息
+    //transitPlan.submitUpdatebus = function($tab,outRemarkId,shuttleType){
+       //  var status = transitPlan.getValue($tab,'status'),
+       //     outBusList = [],
+       //     $tr = $tab.find('.T-bus-plan tr')
+       //  console.log($tr);
+       //  for (var i = 0; i < $tr.length; i++) {
+       //      var id = $tr.eq(i).data("entity-id"),
+       //          $trline = $tr.eq(i);
+       //      var outBusJson = {
+       //          busId : transitPlan.getValue($trline,'busId'),//车id
+       //          busCompanyId : transitPlan.getValue($trline,'busCompanyId'), //车队id
+       //          driverId : transitPlan.getValue($trline,'driverId'), //司机id
+       //          serviceType :  transitPlan.getValue($trline,'serviceType'), //接送类型
+       //          fee : transitPlan.getValue($trline,'fee'),
+       //          seatCount : transitPlan.getValue($trline,'seatCount'),
+       //          brand : transitPlan.getValue($trline,'brand'), 
+       //          useTime : transitPlan.getValue($trline,'useTime'),
+       //          boardLocation : transitPlan.getValue($trline,'boardLocation'),
+       //          destination : transitPlan.getValue($trline,'destination'),
+       //          reduceMoney : transitPlan.getValue($trline,'reduceMoney'), 
+       //          needPayMoney : transitPlan.getValue($trline,'needPayMoney'), 
+       //          prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
+       //          remark : transitPlan.getValue($trline,'remark')
+       //      };
+       //      if(!!id){
+       //          outBusJson.id = id;
+       //      }
+       //      outBusList.push(outBusJson);
+       // } 
+       //  $.ajax({
+       //      url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
+       //      type: "POST",
+       //      data:'outRemarkId='+outRemarkId+"&status="+status+"&shuttleType="+shuttleType+"&outBusList="+JSON.stringify(outBusList),
+       //  }).done(function(data) {
+       //      if (showDialog(data)) {
+       //          showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+       //              Tools.closeTab(busplan);
+       //              transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+       //          });
+       //      }
+       //  })
+       //  function transitPlan.getValue($obj,name){
+       //      var $this = $obj.find('[name='+name+']'), res;
+       //      if ($this.attr('type') == 'checkbox') {
+       //          res =  $this.is(':checked') ? 3 : 1;
+       //      }else if ($this.is('input')) {
+       //          res = $this.val();
+       //      }
+       //      return res;
+       //  }
+    //};
      /**
      * 车队autocomplete
      * @param  {[type]} $tab [容器]
@@ -902,23 +1110,23 @@ define(function(require, exports) {
     };
       //提交房信息
     transitPlan.submitUpdatehotel = function($tab,outRemarkId,shuttleType){
-        var status = getValue($tab,'status'),
+        var status = transitPlan.getValue($tab,'status'),
            outHotelList = [],
            $tr = $tab.find('.T-hotel-plan tr')
         for (var i = 0; i < $tr.length; i++) {
             var id = $tr.eq(i).data("entity-id"),
                 $trline = $tr.eq(i);
             var outhotelJson = {
-                hotelId : getValue($trline,'hotelId'),//房ID
-                hotelRoomId : getValue($trline,'hotelRoomTypeId'),//房型Id
-                checkInTime : getValue($trline,'checkInTime'),
-                checkOutTime : getValue($trline,'checkOutTime'),
-                price : getValue($trline,'price'),
-                memberCount : getValue($trline,'memberCount'),
-                reduceMoney : getValue($trline,'reduceMoney'),
-                needPayMoney : getValue($trline,'needPayMoney'),
-                prePayMoney : getValue($trline,'prePayMoney'),
-                remark : getValue($trline,'remark')
+                hotelId : transitPlan.getValue($trline,'hotelId'),//房ID
+                hotelRoomId : transitPlan.getValue($trline,'hotelRoomTypeId'),//房型Id
+                checkInTime : transitPlan.getValue($trline,'checkInTime'),
+                checkOutTime : transitPlan.getValue($trline,'checkOutTime'),
+                price : transitPlan.getValue($trline,'price'),
+                memberCount : transitPlan.getValue($trline,'memberCount'),
+                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
+                needPayMoney : transitPlan.getValue($trline,'needPayMoney'),
+                prePayMoney : transitPlan.getValue($trline,'prePayMoney'),
+                remark : transitPlan.getValue($trline,'remark')
             };
             if(!!id){
                 outhotelJson.id = id;
@@ -938,15 +1146,7 @@ define(function(require, exports) {
                 });
             }
         })
-        function getValue($obj,name){
-            var $this = $obj.find('[name='+name+']'), res;
-            if ($this.attr('type') == 'checkbox') {
-                res =  $this.is(':checked') ? 3 : 1;
-            }else if ($this.is('input')) {
-                res = $this.val();
-            }
-            return res;
-        }
+   
     };
     /**
      * 中转安排删除房物理删除安排
@@ -1008,6 +1208,15 @@ define(function(require, exports) {
         });
 
     }
+    transitPlan.getValue = function($obj,name){
+            var $this = $obj.find('[name='+name+']'), res;
+            if ($this.attr('type') == 'checkbox') {
+                res =  $this.is(':checked') ? 3 : 1;
+            }else if ($this.is('input')) {
+                res = $this.val();
+            }
+            return res;
+        }
     // 公共事件绑定
     transitPlan.init_eventMain = function($tab) {
         transitPlan.$tab.find('.T-listTabs').on('click', '.T-tab', function(event) {
@@ -1057,18 +1266,15 @@ define(function(require, exports) {
         $search.find('.T-shrink').on('click', function(event) {
             $tab.find('.T-hide').toggle();
         });
-        
-            
-            
-        
         //时间控件
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
     };
+   
     //车安排
-    transitPlan.busplan = function(id,$tr) {
+    transitPlan.busplan = function(outRemarkId,$tr) {
         var shuttleType = $tr.find('input[name=shuttleType]').val();
         var planbusData = {
-            id : id,
+            outRemarkId : outRemarkId,
             shuttleType : shuttleType
         }
         $.ajax({
@@ -1083,31 +1289,7 @@ define(function(require, exports) {
                     transitPlan.$tab = $("#tab-" + busplan + "-content");
                     var $tab = transitPlan.$tab;
                     transitPlan.addResource($tab);
-                    //绑定删除事件
-                    transitPlan.$tab.on('click','.T-contact-delete',function(event){
-                        transitPlan.delBusArrange($(this));
-                    });
-                    // 新增车安排
-                    transitPlan.$tab.find('.T-add-bus').on('click', function(event) {
-                        transitPlan.addbus(transitPlan.$tab)
-                    })
-                    //时间控件
-                    Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-                    //保存车事件
-                    transitPlan.$tab.find('.T-bus-save').on('click',function(){
-                        transitPlan.submitUpdatebus($tab,id,shuttleType);
-                    });
-                    // 车安排下拉列表
-                    transitPlan.bindBusCompanyChoose(transitPlan.$tab);
-                     // 车表格内操作
-                    transitPlan.$tab.find('.T-bus-plan').on('click', '.T-contact-delete', function(event) {
-                        event.preventDefault();
-                        var $that = $(this),
-                            $tr = $that.closest('tr');
-                        transitPlan.deleteArrange($tr);   
-                    });
-                    
-
+                    transitPlan.busplanclick($tab,outRemarkId,shuttleType);
                 }
             }
         })
@@ -1151,7 +1333,7 @@ define(function(require, exports) {
      * @param  {[type]} id [安排ID]
      * @return {[type]}    [description]
      */
-    transitPlan.bussendTransit = function(id, status,$tr) {
+    transitPlan.bussendTransit = function(unifyId, status,$tr) {
         var shuttleType = $tr.find('input[name=shuttleType]').val();
         var noticeLayer = layer.open({
             type: 1,
@@ -1164,7 +1346,6 @@ define(function(require, exports) {
                 var $container = $('.T-transitNotice'),
                     $checkbox = $container.find('.T-checked'),
                     $touristDiv = $container.find(".T-touristCheckedShow");
-                // transitPlan.dateTimePicker($container);
                 var $timeCheck = $touristDiv.find('.T-checked')
                 $timeCheck.click(function() {
                     var $this = $(this);
@@ -1182,16 +1363,16 @@ define(function(require, exports) {
                     layer.close(noticeLayer);
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
-                    var noticeItems = {
-                        shuttleType : shuttleType,
-                        id : id,
-                        bus: getValue('bus')
+                    var notice = {
+                        isNoticeDriver : isNoticeDriver,
+                        unifyId : id,
+                        isNoticeTourist: transitPlan.getValue('bus')
                     }
                     $.ajax({
-                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
+                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeOutBusUnifyArrange"),     
                         type: 'POST',
                         data: {
-                            noticeItems: JSON.stringify(noticeItems)
+                            noticeItems: JSON.stringify(notice)
                         },
                         success: function(data) {
                             if (showDialog(data)) {
@@ -1202,14 +1383,6 @@ define(function(require, exports) {
                         }
                     })
                 })
-                function getValue(name){
-                    var $this = $container.find('[name='+name+']');
-                    if ($this.attr('type') == 'checkbox') {
-                        return $this.is(':checked') ? 1 : 0;
-                    }else if ($this.attr('type') == 'text') {
-                        return $this.val();
-                    }
-                }
             }
         })
     };
@@ -1252,7 +1425,7 @@ define(function(require, exports) {
                     var noticeItems = {
                         shuttleType : shuttleType,
                         id : id,
-                        bus: getValue('hotel')
+                        bus: transitPlan.getValue('hotel')
                     }
                     $.ajax({
                         url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
@@ -1269,14 +1442,6 @@ define(function(require, exports) {
                         }
                     })
                 })
-                function getValue(name){
-                    var $this = $container.find('[name='+name+']');
-                    if ($this.attr('type') == 'checkbox') {
-                        return $this.is(':checked') ? 1 : 0;
-                    }else if ($this.attr('type') == 'text') {
-                        return $this.val();
-                    }
-                }
             }
         })
     };
@@ -1364,7 +1529,7 @@ define(function(require, exports) {
         '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>'+
-        '<td><input class="col-sm-12 T-dateTimePicker  datepicker" name="useTime" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12 datepicker" name="useTime" type="text" value="" /></td>'+
         '<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
         '<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>'+
         '<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
@@ -1380,6 +1545,14 @@ define(function(require, exports) {
         transitPlan.deleteArrange($tbody);
         transitPlan.bindBusCompanyChoose($tbody);
         transitPlan.init_eventMain($tbody);
+        transitPlan.dateTimePicker = function($tbody){
+        $(".T-dateTimePicker").datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'L',
+            language: 'zh-CN'
+        });
+    };
     };
     //公共方法删除安排
     transitPlan.delBusArrange = function($obj){
@@ -1478,10 +1651,10 @@ define(function(require, exports) {
         $tbody.append(html);
     };
     // 查看车安排
-    transitPlan.buslook = function(id,$tr){
+    transitPlan.buslook = function(outRemarkId,$tr){
         var shuttleType = $tr.find('input[name=shuttleType]').val();
         var viewbusData = {
-            id : id,
+            outRemarkId : outRemarkId,
             shuttleType : shuttleType
         }
         $.ajax({

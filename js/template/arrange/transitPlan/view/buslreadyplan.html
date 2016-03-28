@@ -8,6 +8,7 @@
         <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
         <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
      </div>
+
      <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
 {{/each}}
     <div class="form-group form-inline">
@@ -35,9 +36,9 @@
             </tr>
         </thead> 
         <tbody class="T-bus-plan">
-        {{each outRemarkList as outBus}}
+        {{each outBusList as outBus}}
             {{if outBus.id != null}}
-            <tr data-id="{{outBus.outRemarkId}}">
+            <tr data-entity-id="{{outBus.unifyId}}">
                 <td>
                     <div class="col-sm-12">
                         <input type="hidden" name="serviceType" value="{{if outBus.serviceType == 0}}0{{else}}1{{/if}}" />
@@ -46,7 +47,7 @@
                         <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                         </span>
-                        <input type="hidden" name="outRemarkId" value="{{outBusList.id}}" />
+                        <!-- <input type="hidden" name="unifyId" value="{{outBus.unifyId}}" /> -->
                     </div>
                 </td>
                 <td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="{{outBus.seatCount}}" /></td>
@@ -70,7 +71,7 @@
                     </div>
                 </td>
                 <td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="{{outBus.driverMobileNumber}}" /></td>
-                <td><input class="col-sm-12 T-dateTimePicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
+                <td><input class="col-sm-12 T-dateTimePicker datepicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
                 <td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
                 <td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" /></td>
                 <td><input class="col-sm-12 T-number price F-float F-money" name="fee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
@@ -88,7 +89,7 @@
     </table>
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
-        <button class="btn btn-sm btn-primary mar-r-20 T-bus-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+        <button class="btn btn-sm btn-primary mar-r-20 T-busAlready-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <!-- <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
                 <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
