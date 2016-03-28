@@ -35,7 +35,9 @@ define(function(require, exports) {
 		Tools.addTab(menuKey, '购物统计', listMainTemplate());
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
-		shopStat.datepicker(shopStat.$searchArea)
+		//shopStat.datepicker(shopStat.$searchArea)
+		Tools.setDatePicker(shopStat.$searchArea.find('.T-tripTime .datepicker'), true)
+		Tools.setDatePicker(shopStat.$searchArea.find('.T-shopTime .datepicker'), true)
 		shopStat.listShopStat(0);
 		//获取客户、团号和购物店列表
    		shopStat.autocompleteDate(shopStat.$tab);
