@@ -2204,7 +2204,7 @@ define(function(require, exports){
 		'<td><input name="marketPrice" class="w-50" type="text"></td>'+
 		'<td><input name="needCount" class="w-50" type="text"></td>'+
 		'<td><span class="needInReduceMoney">0</span></td>'+
-		'<td><span class="needIncome"></span>0</td>'+
+		'<td><span class="needIncome">0</span></td>'+
 		'<td><input name="realGetMoney" class="w-80" type="text"></td>'+
 		'<td><input name="price" class="w-50" type="text"></td>'+
 		'<td><input name="realCount" class="w-50" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
