@@ -552,13 +552,11 @@ define(function(require, exports){
 			Count.addOtherIn($otherIn,$obj);
 		});
 		//车费--计算、新增
+		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input').off('change').on('change',function(){
+		$busObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "title" && $nameFlag != "billRemark"){
-				//校验输入的数据是否合法
-				Count.calculateCost($(this));
-				//计算金额
+			if($nameFlag !="startTime" && $nameFlag !="endTime" && $nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark" ){
 				Count.autoBusSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
@@ -2737,7 +2735,7 @@ define(function(require, exports){
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="billRemark"/></td>'+
-		'<td>未对账<a href="javascript:void(0)" class="T-del" style="margin-left:12px;">删除</a></td>'+
+		'<td>未对账<a href="javascript:void(0)" class="T-secnicArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
 		//获取景区数据
