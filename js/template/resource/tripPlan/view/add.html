@@ -338,7 +338,7 @@
                                     </td>
                                     <td>
                                         {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
-                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除">
+                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="删除">
                                                 删除
                                             </a> {{/if}}
                                     </td>
