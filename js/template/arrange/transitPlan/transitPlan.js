@@ -422,7 +422,9 @@ define(function(require, exports) {
         })
 
         $tab.find('.T-cheked').on('click',function(){
-            var shuttleType=$tab.find("[name=status]").val();
+            var $that = $(this),$tr = $that.closest('tr'),
+                shuttleType= $tr.find("input[name=shuttleType]").val();
+            console.log(shuttleType);
             // 统一安排事件绑定
             var $that=$(this),outRemarkId=$that.closest('tr').data('id');
             if($that.is(':checked')){
