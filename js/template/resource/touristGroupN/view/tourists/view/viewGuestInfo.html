@@ -1,0 +1,40 @@
+<div class="container-fluid mar-t-20">
+	<div class="row">
+		<div class="col-xs-12 mar-t-20">
+			<div class="pull-left">
+				人数：大人 {{adultCount}} 小孩 {{childCount}}
+			</div>
+		</div>
+		<div class="col-xs-12 mar-t-10">
+			<table class="table table-striped table-new table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>姓名</th>
+						<th>手机号码</th>
+						<th>证件类型</th>
+						<th>证件号</th>
+						<th>设为联系人</th>
+					</tr>
+				</thead>
+				<tbody class="T-addTouristTbody" data-del-json="{{touristGroupMemberJsonDel}}">
+				{{if !!touristGroupMemberJsonAdd && touristGroupMemberJsonAdd.length > 0}}
+					{{each touristGroupMemberJsonAdd as rs index}}
+					<tr>
+						<td>{{index+1}}</td>
+						<td>{{rs.name}}</td>
+						<td>{{rs.mobileNumber}}</td>
+						<td>{{rs.idCardType | getCardText}}</td>
+						<td>{{rs.idCardNumber}}</td>
+						<td>{{if rs.isContactUser == 1}}是{{/if}}</td>
+					</tr>
+					{{/each}}
+				{{/if}}
+				</tbody>
+			</table>
+		</div>
+		<div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+			<button class="btn btn-xs btn-default T-btn-close btn-primary w100"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+		</div>
+	</div>
+</div>

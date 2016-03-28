@@ -105,6 +105,23 @@ template.helper("getFeeItemType", function(type,isTransfer) {
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
+template.helper("getFeeItemText", function(type) {
+    switch(type * 1){
+        case 1: return "大人结算价";
+        case 2: return "小孩结算价";
+        case 3: return "中转结算价";
+        case 4: return "车辆费用";
+        case 5: return "餐厅费用";
+        case 6: return "保险费用";
+        case 7: return "导服费";
+        case 8: return "酒店费用";
+        case 9: return "景区费用";
+        case 10: return "自费费用";
+        case 11: return "票务费用";
+        case 12: return "其他费用";
+        default: return "大人结算价";
+    }
+});
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
     status = status || 1;
@@ -403,6 +420,19 @@ template.helper("getNoteItemText", function(status){
         res = "线路简介";
     }
     return res;
+});
+
+template.helper("getPartGroupStatusText", function(status){
+    switch (status * 1){
+        case 0:     return '已发团';
+        case 1:     return '未分团';
+        case 2:     return '已分团';
+        case 3:     return '已转客';
+        case 4:     return '已取消';
+        case 5:     return '已拆分';
+        case 6:     return '已内转';
+        default:     return '-';
+    }
 });
 
 template.helper("getBusinessTypeText", function(businessType) {
