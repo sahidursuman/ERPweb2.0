@@ -238,7 +238,7 @@ define(function(require, exports){
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
 	                //查看团款明细说明
 					$detailId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 	                //绑定自动计算事件
 	                Count.detailEvents($detailId);
@@ -414,7 +414,7 @@ define(function(require, exports){
 					Count.$ReimbursementTab = $ReimbursementId;
 					//查看团款明细说明
 					$ReimbursementId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
@@ -749,7 +749,7 @@ define(function(require, exports){
 					Count.$updateTab = $updateTabId;
 					//查看团款明细说明
 					$updateTabId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 					//加载列表
 					Count.installList($updateTabId,tmp);
@@ -758,10 +758,21 @@ define(function(require, exports){
 		});
 	};
 	//查看团款明细说明 viewCostRemarkTemplate
-	Count.viewCostDetail = function(data){
-		var tmp = {
-			touristGroupFeeList:data[0].touristGroupFeeList
-		};
+	Count.viewCostDetail = function($obj,data){
+		var tr = $obj.closest('tr'),id = tr.attr('id');
+		var tmp = {};
+		if(data.length>1){
+			for(var i = 0;i<data.length;i++){
+				if(id == data[i].id){
+					tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					break;
+				}
+				
+			}
+		}else{
+			tmp.touristGroupFeeList = data[0].touristGroupFeeList
+		}
+		
 		var html = viewCostRemarkTemplate(tmp);
 		layer.open({
 		    type: 1,

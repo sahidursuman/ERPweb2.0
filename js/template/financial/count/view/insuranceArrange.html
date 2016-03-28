@@ -17,7 +17,11 @@
     <td>{{if insuranceArrange.type == null}}{{if insuranceArrange.insuranceItem != null}}{{insuranceArrange.insuranceItem.name}}{{/if}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
     <td><span class="F-float F-money">{{insuranceArrange.price}}</span></td>
     <td><span class="F-float F-count">{{insuranceArrange.memberCount}}</span></td>
-    <td><span class="F-float F-money">{{insuranceArrange.needPayMoney}}</span></td>
+    <td>{{if insuranceArrange.isConfirmAccount == 1}}
+            <span class="F-float F-money" >{{insuranceArrange.tempSettlementMoney}}</span>
+        {{else}}
+            <span class="F-float F-money">{{insuranceArrange.needPayMoney}}</span>
+        {{/if}}</td>
     <td><span class="F-float F-money">{{insuranceArrange.payedMoney}}</span></td>
     <td></td>
     </tr>
