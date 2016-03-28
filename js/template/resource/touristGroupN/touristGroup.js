@@ -254,7 +254,10 @@ define(function(require, exports) {
                     type : type,
                     lineProductName: $searchArea.find('[name="lineProductName"]').val(),
                     lineProductId: $searchArea.find('[name="lineProductId"]').val(),
+                    guestDetails : $searchArea.find('[name="guestDetails"]').val(),
                     customerType : $searchArea.find('[name="customerType"]').val(),
+                    startTime : $searchArea.find('[name="startTime"]').val(),
+                    endTime : $searchArea.find('[name="endTime"]').val(),
                     realName: $searchArea.find('[name=realName]').val(),
                     statusSearch : $searchArea.find('.T-select-status').val()
                 };
