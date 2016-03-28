@@ -1469,10 +1469,10 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
 		'<td>-</td>'+
-		'<td>-</td>'+
+		'<td><input name="guideMoney" class="w-80" type="text" /></td>'+
 		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td>-</td>'+
-		'<td>-</td>'+
+		'<td><input name="guideMoney" class="w-80" type="text" /></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
@@ -1484,16 +1484,15 @@ define(function(require, exports){
 		'<td rowspan="2"><a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
 		'<td rowspan="2">未对账</td>'+
 		'</tr>'+
-		'<tr class="noSumRate">'+
 		'<td>-</td>'+
-		'<td>-</td>'+
+		'<td><input name="guideMoney" class="w-80" type="text" /></td>'+
 		'<td>停车返佣&nbsp;&nbsp;<input type="hidden" value="停车返佣" name="shopPolicy">'+
 		'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+
 		'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
 		'</button>'+
 		'</td>'+
 		'<td>-</td>'+
-		'<td>-</td>'+
+		'<td><input name="guideMoney" class="w-80" type="text" /></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
@@ -1539,9 +1538,43 @@ define(function(require, exports){
 			$next =  $tr.nextAll();
 
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
-			'<td><input type="text" name="shopPolicy" style="width:90px;"/><input type="hidden" name="shopPolicyId" />&nbsp;&nbsp;<button class="btn btn-danger btn-sm btn-white T-shopArrDelItem"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></td>'+
+			'<td>'+
+				'<div>'+
+					'<input name="guideName" class="w-80" type="text" />'+
+					'<input name="guideId" class="w-80" type="hidden" />'+
+					'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+
+					'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
+					'</button>'+
+				'</div>'+
+			'</td>'+
+			'<td>'+
+				'<div>'+
+					'<input name="guideMoney" class="w-80" type="text" />'+
+				'</div>'+
+			'</td>'+
+			'<td>'+
+				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
+				'<input type="hidden" name="shopPolicyId" />'+
+				'<button class="btn btn-danger btn-sm btn-white pull-right T-shopArrDelItem">'+
+				'<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
+				'</button>'+
+			'</td>'+
+			'<td>'+
+				'<div>'+
+					'<input name="guideName" class="w-80" type="text" />'+
+					'<input name="guideId" class="w-80" type="hidden" />'+
+					'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+
+					'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
+					'</button>'+
+				'</div>'+
+			'</td>'+
 			'<td><input type="text" name="consumeMoney" class="w-80"></td>'+
 			'<td><span style="color:#bbb;">查看</span></td>'+
+			'<td>'+
+				'<div>'+
+					'<input name="guideMoney" class="w-80" type="text" />'+
+				'</div>'+
+			'</td>'+
 			'<td><input type="text" name="travelAgencyRate" class="w-50""></td>'+
 			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
 			'<td><input type="text" name="guideRate" class="w-50"></td>'+
