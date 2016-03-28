@@ -2205,13 +2205,13 @@ define(function(require, exports){
 		'<td><input name="selfPayItem" class="w-80" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" class="w-50" type="text"></td>'+
 		'<td><input name="needCount" class="w-50" type="text"></td>'+
-		'<td><span class="needInReduceMoney"></span></td>'+
-		'<td><span class="needIncome"></span></td>'+
+		'<td><span class="needInReduceMoney">0</span></td>'+
+		'<td><span class="needIncome"></span>0</td>'+
 		'<td><input name="realGetMoney" class="w-80" type="text"></td>'+
 		'<td><input name="price" class="w-50" type="text"></td>'+
 		'<td><input name="realCount" class="w-50" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
 		'<td><input name="realReduceMoney" class="w-80" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
-		'<td><span class="needPayMoney"></span></td>'+
+		'<td><span class="needPayMoney">0</span></td>'+
 		'<td>0</td>'+
 		'<td>'+
 		'<div class="inline-flex">'+
