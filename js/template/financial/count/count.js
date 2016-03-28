@@ -552,13 +552,11 @@ define(function(require, exports){
 			Count.addOtherIn($otherIn,$obj);
 		});
 		//车费--计算、新增
+		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input').off('change').on('change',function(){
+		$busObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "title" && $nameFlag != "billRemark"){
-				//校验输入的数据是否合法
-				Count.calculateCost($(this));
-				//计算金额
+			if($nameFlag !="startTime" && $nameFlag !="endTime" && $nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark" ){
 				Count.autoBusSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
