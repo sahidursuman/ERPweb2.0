@@ -199,7 +199,7 @@
                                 {{/if}}
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
+                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                             <td>
                                 {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
                                 <a href="#" class="T-viewCostDetail">
