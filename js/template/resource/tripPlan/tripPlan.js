@@ -1354,7 +1354,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 	};
@@ -1385,7 +1385,7 @@ define(function(require, exports) {
 		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
@@ -1445,7 +1445,7 @@ define(function(require, exports) {
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
 		tripPlan.addBusResource($tab);
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
@@ -1472,7 +1472,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_restaurant");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1503,7 +1503,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_hotel");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1532,7 +1532,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_scenic");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1581,7 +1581,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_selfPay");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1613,7 +1613,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_ticket");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
@@ -1642,7 +1642,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_other");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);    
 	};
