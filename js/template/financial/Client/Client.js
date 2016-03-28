@@ -813,6 +813,7 @@ define(function(require, exports) {
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         $tab.data('isEdited', false);
                         Client.clearDataArray = false;
+                        args.isAutoPay = false;
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
                             Client.listClient(Client.listPage);
