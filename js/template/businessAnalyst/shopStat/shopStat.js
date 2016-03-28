@@ -69,11 +69,6 @@ define(function(require, exports) {
 	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
 	   		}
 		};
-
-		if(searchData.startTime > searchData.endTime){
-	        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-	        return false;
-	    }
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
 	   	//select修改查询
