@@ -486,58 +486,6 @@ define(function(require, exports) {
             showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
         }
     }
-    //提交车信息
-    //transitPlan.submitUpdatebus = function($tab,outRemarkId,shuttleType){
-       //  var status = transitPlan.getValue($tab,'status'),
-       //     outBusList = [],
-       //     $tr = $tab.find('.T-bus-plan tr')
-       //  console.log($tr);
-       //  for (var i = 0; i < $tr.length; i++) {
-       //      var id = $tr.eq(i).data("entity-id"),
-       //          $trline = $tr.eq(i);
-       //      var outBusJson = {
-       //          busId : transitPlan.getValue($trline,'busId'),//车id
-       //          busCompanyId : transitPlan.getValue($trline,'busCompanyId'), //车队id
-       //          driverId : transitPlan.getValue($trline,'driverId'), //司机id
-       //          serviceType :  transitPlan.getValue($trline,'serviceType'), //接送类型
-       //          fee : transitPlan.getValue($trline,'fee'),
-       //          seatCount : transitPlan.getValue($trline,'seatCount'),
-       //          brand : transitPlan.getValue($trline,'brand'), 
-       //          useTime : transitPlan.getValue($trline,'useTime'),
-       //          boardLocation : transitPlan.getValue($trline,'boardLocation'),
-       //          destination : transitPlan.getValue($trline,'destination'),
-       //          reduceMoney : transitPlan.getValue($trline,'reduceMoney'), 
-       //          needPayMoney : transitPlan.getValue($trline,'needPayMoney'), 
-       //          prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
-       //          remark : transitPlan.getValue($trline,'remark')
-       //      };
-       //      if(!!id){
-       //          outBusJson.id = id;
-       //      }
-       //      outBusList.push(outBusJson);
-       // } 
-       //  $.ajax({
-       //      url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
-       //      type: "POST",
-       //      data:'outRemarkId='+outRemarkId+"&status="+status+"&shuttleType="+shuttleType+"&outBusList="+JSON.stringify(outBusList),
-       //  }).done(function(data) {
-       //      if (showDialog(data)) {
-       //          showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-       //              Tools.closeTab(busplan);
-       //              transitPlan.listTransitBusPlan(transitPlan.listPageNo);
-       //          });
-       //      }
-       //  })
-       //  function transitPlan.getValue($obj,name){
-       //      var $this = $obj.find('[name='+name+']'), res;
-       //      if ($this.attr('type') == 'checkbox') {
-       //          res =  $this.is(':checked') ? 3 : 1;
-       //      }else if ($this.is('input')) {
-       //          res = $this.val();
-       //      }
-       //      return res;
-       //  }
-    //};
      /**
      * 车队autocomplete
      * @param  {[type]} $tab [容器]
