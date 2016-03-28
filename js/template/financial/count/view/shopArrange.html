@@ -72,7 +72,10 @@
             </td><!-- 现收_导游 -->
 
             <td>
-                -
+                <input name="currGuideMoney" class="w-80" type="text" value="" 
+                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                    readOnly="readOnly" 
+                {{/if}}/>
             </td><!-- 现收_金额 -->
             
            
@@ -98,14 +101,11 @@
                         </td><!-- 导游 -->
 
                         <td>
-                            -
-                            <!-- <input class="F-float F-money w-80" 
+                            <input class="F-float F-money w-80" 
                             policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" 
-                            name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
-                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                readOnly="readOnly" 
-                            {{/if}}
-                            /> -->
+                            name="guideMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
+                            
+                            />
                         </td><!-- 金额 -->
 
                         <td>
@@ -117,8 +117,14 @@
                         </td><!-- 单据 -->
                 
                         <td>
-                        <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
-                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/>
+
+                            <input class="F-float F-money w-80" 
+                            policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" 
+                            name="consumeMoney"  type="text" value="{{itemSet.consumeMoney}}" maxlength="11" 
+                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                readOnly="readOnly" 
+                            {{/if}}
+                            />
                         </td><!-- 金额小计 -->
 
                         <td>
@@ -131,15 +137,13 @@
                         </td><!-- 社佣金额 -->
                 
                         <td>
-                            <div></div>
-                            <div></div>
-                        <!-- <input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /> -->
-                        </td><!-- 导佣比例 -->
+                            
+                        <input name="guideRate"  type="text" value="{{itemSet.guideRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} class="w-50" /> -->
+                        </td><!-- 导佣比例-->
                 
                         <td>
-                            <div></div>
-                            <div></div>
-                        <!-- <input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} /> -->
+                          
+                        <input type="text" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}} w-80" name="guideRateMoney" value="{{itemSet.guideRebateMoney}}" old = "{{itemSet.guideRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
                         </td><!-- 导佣金额 -->
 
                         <td >
