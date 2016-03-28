@@ -5,9 +5,9 @@
 			<span class="control-label pull-left">{{needPayAllMoney}}</span>
 			{{if type != 1}}
 			<label class="control-label pull-left" style="width: 70px; padding-left: 24px;">预收款</label>
-			<span class="control-label pull-left">{{preIncomeMoney}}"</span>
+			<span class="control-label pull-left">{{preIncomeMoney}}</span>
 			<label class="control-label pull-left" style="width: 70px; padding-left: 12px;">计划现收</label>
-			<span class="control-label pull-left">{{currentNeedPayMoney}}"</span>
+			<span class="control-label pull-left">{{currentNeedPayMoney}}</span>
 			{{/if}}
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -35,7 +35,7 @@
 				{{else if lineFee && lineFee.length > 0}}
 					{{each lineFee as rs}}
 					<tr>
-						<td>{{rs.type | getFeeItemType}}</td>
+						<td>{{rs.type | getFeeItemText}}</td>
 						<td>{{rs.count}}</td>
 						<td>{{rs.price}}</td>
 						<td>{{rs.price*rs.count}}</td>

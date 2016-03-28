@@ -72,18 +72,18 @@
 						<th>单价</th>
 						<th>金额</th>
 						<th>说明</th>
+						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-type="{{type}}" data-del-json="{{hotelFeeDel}}">
+				<tbody class="T-fee-list" data-type="2" data-del-json="{{hotelFeeDel}}">
 				{{if hotelFee && hotelFee.length > 0}}
 					{{each hotelFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
-							{{if type === 1}}
-								{{if rs.type == 3}}中转结算价{{else}}酒店费用{{/if}}
-							{{else}}
-								{{rs.type | getFeeItemText}}
-							{{/if}}
+							<select class="col-xs-12" name="type">
+								<option value="3">中转结算价</option>
+								<option value="8" {{if type == "8"}}selected{{/if}}>酒店费用</option>
+							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>

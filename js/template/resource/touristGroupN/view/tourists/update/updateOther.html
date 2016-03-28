@@ -72,13 +72,16 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{otherFeeDel}}">
+				<tbody class="T-fee-list" data-type="3" data-del-json="{{otherFeeDel}}">
 				{{if otherFee && otherFee.length > 0}}
 					{{each otherFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select class="col-xs-12" name="type">
-								{{#rs.type | getFeeItemType:true}}
+								<option value="3">中转结算价</option>
+								<option value="5" {{if type == "5"}}selected{{/if}}>餐厅费用</option>
+								<option value="11" {{if type == "11"}}selected{{/if}}>票务费用</option>
+								<option value="12" {{if type == "12"}}selected{{/if}}>其他费用</option>
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
