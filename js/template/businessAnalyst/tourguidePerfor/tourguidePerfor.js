@@ -71,7 +71,7 @@ define(function(require, exports) {
 				       tourguidPerObj.$tab=$("#" + tabId);//最大区域模块
 				       tourguidPerObj.$searchArea=tourguidPerObj.$tab.find('.T-search-area');//搜索模块区域
 				       //初始化页面控件
-				       tourguidPerObj.datepicker(tourguidPerObj.$tab);
+				       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
 				       //初始化页面绑定事件
 				       tourguidPerObj.init_event();
 				       //autocomplete数据
@@ -193,6 +193,8 @@ define(function(require, exports) {
     //导游打单事件
 	tourguidPerObj.initGuidePlay_event=function($tab){
 		Tools.setDatePicker($tab.find('.datepicker'), true);
+		//tip
+		Tools.descToolTip($tab.find('.T-ctrl-tip'),1);
 		$tab.find('.T-guideSingle-search').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
@@ -206,16 +208,6 @@ define(function(require, exports) {
 			var $that=$(this),tripPlanId=$that.attr('data-tripPlanId'),shopArrangeId=$that.attr('data-arrangeId');
 			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId);
 		});;
-	};
-
-	//时间控件初始化
-	tourguidPerObj.datepicker = function($obj){
-		$obj.find(".datepicker").datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
-		})
 	};
 	//获取控件中的值
 	tourguidPerObj.getValue = function($obj,name){
