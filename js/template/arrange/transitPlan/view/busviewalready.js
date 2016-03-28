@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":121,"md5":"75fbd55bcd13c9d9333fa4cf7d82b575"}*/
+/*TMODJS:{"debug":true,"version":25,"md5":"75fbd55bcd13c9d9333fa4cf7d82b575"}*/
 define(function(require) {
-    return require("../../../template")("arrange/transitPlan/view/busview", function($data, $filename) {
+    return require("../../../template")("arrange/transitPlan/view/busviewalready", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, outRemarkList = $data.outRemarkList, $escape = ($data.viewlist, 
             $data.$index, $utils.$escape), outBusList = $data.outBusList, $out = ($data.view, 

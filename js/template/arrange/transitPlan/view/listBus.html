@@ -8,17 +8,15 @@
             <th>抵达时间</th>
             <th>班次</th>
             <th>要求</th>
-            <th>安排结果</th>
-            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody class="T-bus-list">
     {{each outRemarkArrangeList as bus}}
-    <tr data-id="{{bus.id}}" >
+    <tr data-id="{{bus.outRemarkId}}" >
         <td >
             <label class="pos-rel">
-                <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span>
+                <input type="checkbox" class="ace T-cheked"> <span class="lbl"></span>
             </label>
         </td>
         <td class="h-touristGroupInfo">
@@ -38,27 +36,8 @@
         <td>{{bus.arriveTime}}</td>
         <td>{{bus.shift}}</td>
         <td>{{bus.require}}</td>
-        <td >
-            <p>{{if bus.arrangeResultList.length == 0 }}{{else}}
-            {{bus.arrangeResultList.busCompanyName}}{{/if}}</p>
-            <a class="T-view"> 
-            <p>司机：{{if bus.arrangeResultList.length == 0 }}{{else}}
-            {{bus.arrangeResultList.driverName}}{{/if}}</p>
-            <p>{{if bus.arrangeResultList.length == 0 }}{{else}}
-            {{bus.arrangeResultList.driverMobile}}
-            {{/if}}</p></a>
-        </td>
         <td>
-            {{if bus.status == 1}}
-                <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
-            {{else if bus.status == 0}}
-                <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
-            {{/if}}
-        </td>
-        <td>
-            <a class="cursor T-inform T-action">通知</a>
-            <a class="cursor T-plan-bus T-action">
-                <label class="padding-right20">|</label> 安排</a>
+            <a class="cursor T-plan-bus T-action">安排</a>
             <a class="cursor T-view-bus T-action">
                 <label class="padding-right20">|</label>查看
         </td>
