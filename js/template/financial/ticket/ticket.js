@@ -446,6 +446,7 @@ define(function(require, exports) {
 				if(Tools.addTab(clearMenuKey, "票务付款", ticketClearing(data))){
 					Ticket.$clearingTab = $("#tab-" + clearMenuKey + "-content");
 					data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
+					data.financialTicketList = FinancialService.getTempDate(data.financialTicketList,Ticket.payingJson);
 					var html = payingTableTemplate(data);
 					Ticket.$clearingTab.find('.T-checkList').html(html);
 					Ticket.clear_init(args,Ticket.$clearingTab);
@@ -622,6 +623,7 @@ define(function(require, exports) {
 						    		Ticket.payingJson = FinancialService.clearSaveJson($tab,Ticket.payingJson,new FinRule(Ticket.isBalanceSource ? 3 : 1));
 						    		$tab.data('isEdited',false);
 						    		args.pageNo = obj.curr -1;
+						    		args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;
 						    		Ticket.getOperationList(args,$tab);
 						    	}
 						    }
@@ -642,11 +644,8 @@ define(function(require, exports) {
 	    		return;
 	        }
         };
-        if(!FinancialService.isClearSave($tab)){
-            return false;
-        }
 		var argLen = arguments.length,
-			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1));
+			json = FinancialService.clearSaveJson($tab, Ticket.payingJson, new FinRule(Ticket.isBalanceSource ? 3 : 1),true);
 		if (!json) { return false; }
 		var payType = $tab.find('select[name=sumPayType]').val(),
 			argsData = {
@@ -663,7 +662,7 @@ define(function(require, exports) {
             type: 'post',
             data: {
             	searchParam : JSON.stringify(argsData),
-            	ticketJson : JSON.stringify(json)
+            	ticketJson : json
             },
         })
         .done(function(data) {
@@ -673,6 +672,7 @@ define(function(require, exports) {
                 if (argLen === 1) {
                 	Ticket.getList(Ticket.listPageNo);
                 } else {
+                	args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                     Ticket.clearingList(args,$tab);
                 } 
             })

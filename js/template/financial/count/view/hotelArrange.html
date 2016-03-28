@@ -34,7 +34,7 @@
             {{each day.hotelArrange as arrangeList}}
             {{each arrangeList.hotelArrangeList as arrange index}}
             {{if arrange != null}}
-                <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}" whichDay = "{{arrange.whichDay}}">
+                <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}" whichDay = "{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
                     {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
 
                     {{if index == 0}}
@@ -73,7 +73,17 @@
                     <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" class="F-float F-money w-80" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
                     </td>
 
-                    <td>{{if arrange.badStatus == 1}}<span class="hotelneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="hotelneedPayMoney"></span><input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}">{{/if}}
+                    <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="hotelneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                    {{else}}
+                        {{if arrange.isConfirmAccount == 1}}
+                            <span class="hotelneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                        {{else}}
+                            <span class="hotelneedPayMoney"></span>
+                            <input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}">
+                        {{/if}}
+                    {{/if}}
                     </td>
 
                     <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>

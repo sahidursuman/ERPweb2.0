@@ -464,7 +464,8 @@ define(function(require, exports){
 		}).on('change','input',function(){
 			var $that = $(this),
 				tagName = $that.attr('name');
-
+				
+				
 			if (shopNoneAutoFeilds.indexOf(tagName) < 0) {
 				Count.calculateCost($that);
 				//计算金额
@@ -480,7 +481,7 @@ define(function(require, exports){
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
 		});
-		$listObj.on('click','.T-travelCheckbox',function(){
+		$listObj.find('.T-math-round').off('click').on('click', function(){
 			//清除小数点
 			Count.delValDecimal($(this),$shopObj,$obj);
 		});
@@ -836,7 +837,11 @@ define(function(require, exports){
 				Count.formatDays($that,$obj);
 			}
 		});
-
+		$listObj.find('.T-math-round').off('click').on('click' ,function(){
+			//清除小数点
+			Count.delValDecimal($(this),$shopObj,$obj);
+		});
+		
 		//新增购物安排sumRateMoney
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
@@ -1487,13 +1492,13 @@ define(function(require, exports){
 		'</tr>'+
 		'<tr class="sumMoney">'+
 			'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;" colspan="2">社佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalTravelMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">导佣小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;"><span class="F-float F-money T-totalGuideMoney"></span></td>'+
 			'<td style="font-weight: bold;text-align:right;">佣金小计：</td>'+
-			'<td style="font-weight: bold;text-align:right;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
+			'<td style="font-weight: bold;text-align:left;" colspan="2"><span class="F-float F-money T-sumRebeMoney"></span></td>'+
 		'</tr>';
 		
 		$bodyObj.append(html);
@@ -1664,25 +1669,20 @@ define(function(require, exports){
 				case 'guideRate':
 					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 					break;
-				// case 'consumeMoney':
-				// 	if ($parent.find('.span_shopPolicy').length === 0) {
-				// 		$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
-				// 		$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
-				// 	}
-				// 	break;
 				case 'consumeMoney':
-					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 					$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
+					$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 					break;
 				default: break;
 			}
-			
 		}else{
-			if(editFeildTagName != "travelAgencyRateMoney" && editFeildTagName != "guideRateMoney"){
+			if(editFeildTagName != 'travelAgencyRateMoney' && editFeildTagName != 'guideRateMoney'){
 				$parent.find('input[name=travelAgencyRateMoney]').val(travelAgencyRateMoney);
 				$parent.find('input[name=guideRateMoney]').val(guideRateMoney);
 			}
-		};
+		}
+			
+			
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
@@ -2100,6 +2100,7 @@ define(function(require, exports){
 			var travelAgencyRate = $parent.find('input[name=travelAgencyRate]').val();
 			var guideRate = $parent.find('input[name=guideRate]').val();
 			var badStatus = $parent.attr('badStatus');
+			var isConfirmAccount = $parent.attr('isConfirmAccount');
 			var incomeCount = $parent.find('input[name=needCount]').val();
 			var realGetMoney = $parent.find('input[name=realGetMoney]').val();
             //计算应付
@@ -2147,7 +2148,7 @@ define(function(require, exports){
 			needReduce = Count.changeTwoDecimal(needReduce);
 			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
-            if(badStatus == 0 || badStatus == undefined){needPayMoney.text(needSum);}
+            if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){needPayMoney.text(needSum);}
             //计算自费费用
             $parent.find('.selfMoney').val(needSum);
 			
@@ -2368,7 +2369,7 @@ define(function(require, exports){
 		var $busFee = parseFloat($tr.find('input[name=price]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $planNeedpay = $tr.find('input[name=needPayMoney]').val();
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$busFee = Count.changeTwoDecimal($busFee);
 		$realReduceMoney = Count.changeTwoDecimal($realReduceMoney);
@@ -2377,7 +2378,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($busFee-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.BusneedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){$tr.find('.BusneedPayMoney').text(needPay);}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$planNeedpay);
@@ -2418,7 +2419,7 @@ define(function(require, exports){
 		'<td><input type="text" name="price" class="w-80"/></td>'+
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="BusneedPayMoney">0</span></td>'+
-		'<td><input type="text" name="payedMoney" class="w-80"/></td>'+
+		'<td>0</td>'+
 		'<td>'+
 		'<div class="inline-flex">'+
 		'<select name="payType">'+
@@ -2476,7 +2477,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val() || 0);
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val() || 0);
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val() || 0);
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2486,7 +2487,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0  || badStatus == undefined){	
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){	
 			$tr.find('.restneedPayMoney').text(needPay);
 		};
 		//计算差额
@@ -2591,7 +2592,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2601,7 +2602,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
 			$tr.find('.hotelneedPayMoney').text(needPay);
 		}
 		//计算差额
@@ -2689,7 +2690,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2699,7 +2700,7 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
 			$tr.find('.scenicneedPayMoney').text(needPay);
 		}
 		
@@ -2789,7 +2790,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2799,7 +2800,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.ticketneedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+				$tr.find('.ticketneedPayMoney').text(needPay);
+		}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
@@ -2916,7 +2919,7 @@ define(function(require, exports){
 		var $realCount = parseFloat($tr.find('input[name=realCount]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $needPayMoney = parseFloat($tr.find('input[name=needPayMoney]').val());
-		var badStatus = $tr.attr('badStatus');
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$price = Count.changeTwoDecimal($price);
 		$realCount = Count.changeTwoDecimal($realCount);
@@ -2926,7 +2929,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if(badStatus == 0 || badStatus == undefined){$tr.find('.otherOutNeedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+			$tr.find('.otherOutNeedPayMoney').text(needPay);
+		}
 		//计算差额
 		var difference = 0 ;
 		difference = parseFloat(needPay-$needPayMoney);
@@ -3998,19 +4003,21 @@ define(function(require, exports){
 	//规范输入的数字数据
 	Count.changeTwoDecimal = function($val){
 		var newVal = parseFloat($val);
+
 		if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
 			return 0;
 		}
 		var newVal = Math.round($val*100)/100;
 		return newVal;
 	};
-	Count.changeForInstall = function($val){
+	Count.changeForInstall = function($val,$listObj){
 		var newVal = parseFloat($val);
 		if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY)
 		{
 			return 0;
 		}
 		var newVal = Math.round($val*100)/100;
+		
 		return newVal;
 	};
 	Count.changeToString = function($val){
@@ -5059,35 +5066,21 @@ define(function(require, exports){
 	};
 	//清除小数点
 	Count.delValDecimal = function($obj,$listObj,$parentObj){
-		var oldTravelDataArr = [];//用于缓存旧数据
-		var oldGuideDataArr = [];//用于缓存旧数据
-		var newTravelDataArr = [];//用于设置新数据
-		var newGuideDataArr = [];//用于设置新数据
-		var travelArr = $listObj.find('[name=travelAgencyRateMoney]');
-		var guideArr = $listObj.find('[name=guideRateMoney]');
-		if($obj.hasClass('T-travelCheckbox')){
-			for(var i = 0;i<travelArr.length;i++){
-				var oldVal = travelArr.eq(i).attr('old');
-				var newVal = Math.round(Count.changeTwoDecimal(travelArr.eq(i).val()));
-				//oldTravelDataArr.push(oldVal);
-				//newTravelDataArr.push(newVal);
-				if($obj.is(':checked')){
-					travelArr.eq(i).val(newVal);
-				}else{
-					travelArr.eq(i).val(oldVal);
-				}
+		var needSum = false;
+
+		var $target = $listObj.find('[name='+ $obj.data('target')+']').each(function() {
+			var $that = $(this), value = $that.val();
+
+			if (!!value) {
+				$that.val(Math.round(Count.changeTwoDecimal(value)))
+				Count.totalRebeatMoney($that,$parentObj);
+				needSum = true;
 			}
-		};
-		if($obj.hasClass('T-guideCheckbox')){
-			for(var i = 0;i<guideArr.length;i++){
-				var oldVal = guideArr.eq(i).attr('old');
-				var newVal = Math.round(Count.changeTwoDecimal(guideArr.eq(i).val()));
-				oldGuideDataArr.push(oldVal);
-				newGuideDataArr.push(newVal);
-			}
-		};
-		console.log($obj.is(':checked'));
-		console.log(oldTravelDataArr);
+		});
+
+		if (needSum) {
+			Count.autoShopSumCost($target.eq(0), $parentObj);
+		}
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;

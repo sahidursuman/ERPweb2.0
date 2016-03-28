@@ -265,6 +265,9 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
         }
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
             args.sumCurrentPayMoney = scenic.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -290,11 +293,9 @@ define(function(require, exports) {
                         data.bankId = scenic.clearTempSumDate.bankId;
                         data.voucher = scenic.clearTempSumDate.voucher;
                         data.billTime = scenic.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
                     }
                     data.isOuter = scenic.isOuter = !!args.isOuter || scenic.isOuter;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var resultList = data.financialScenicListData;
                     data.financialScenicListData = FinancialService.isGuidePay(resultList);
                     data.financialScenicListData = FinancialService.getTempDate(data.financialScenicListData,scenic.clearTempData);
@@ -334,6 +335,8 @@ define(function(require, exports) {
                                 }
                                 scenic.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 scenic.scenicClear(args);
                             }
                         }
@@ -389,6 +392,7 @@ define(function(require, exports) {
             scenic.clearTempData = false;
             scenic.$clearTab.data('isEdited',false);
             args.isAutoPay = 0;
+            args.autoPay = 0;
             scenic.scenicClear(args);
         });
 
@@ -506,12 +510,8 @@ define(function(require, exports) {
     };
 
     scenic.saveClear = function($tab,args,tabArgs){
-        if(!FinancialService.isClearSave($tab, new FinRule(scenic.isOuter ? 3 : 1))){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1)),
+            clearSaveJson = FinancialService.clearSaveJson($tab,scenic.clearTempData, new FinRule(scenic.isOuter ? 3 : 1),true),
             payType = $tab.find('select[name=sumPayType]').val();
             searchParam = {
                 sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
@@ -521,12 +521,12 @@ define(function(require, exports) {
                 voucher : $tab.find('input[name=credentials-number]').val(),
                 billTime : $tab.find('input[name=tally-date]').val()
             };
-
+        if(!clearSaveJson){ return false; }
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","saveAccountSettlement"),
             type:"POST",
             data:{
-                scenicJson : JSON.stringify(clearSaveJson),
+                scenicJson : clearSaveJson,
                 searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
@@ -540,6 +540,7 @@ define(function(require, exports) {
                             scenic.listScenic(scenic.searchData.pageNo);
                         }else{
                             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                            args.autoPay = 0;
                             scenic.scenicClear(args);
                         }
                     }); 

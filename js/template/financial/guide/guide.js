@@ -496,10 +496,8 @@ define(function(require, exports) {
     FinGuide.savePayingData = function($tab,Dsave,argsData,tabArgs) {
         var validator = new FinRule((FinGuide.isOuter || $tab.find('.T-saveClear').data('borrow') == "borrow") ? 3 : 1),
             argsLen = arguments.length;
-        if(!FinancialService.isClearSave($tab,validator)){
-            return false;
-        }
-        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator);
+        var json = FinancialService.clearSaveJson($tab, FinGuide.payingJson, validator,true);
+        if(!json){ return false; }
         var payType = $tab.find('select[name=sumPayType]').val();
 		var bankId = (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val();
         var voucher = $tab.find('input[name=credentials-number]').val();
@@ -507,7 +505,7 @@ define(function(require, exports) {
             borrow = $tab.find('.T-saveClear').data('borrow'),
             method = borrow == "borrow" ? "operateGuidePreAccount" : "operatePayAccount";
         var args = {
-            payJson: JSON.stringify(json),
+            payJson: json,
             guideId: $tab.find('.T-saveClear').data('id'),
             payType: payType,
             remark: $tab.find('.T-remark').val(),
