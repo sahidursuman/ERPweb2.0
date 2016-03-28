@@ -351,6 +351,8 @@ define(function(require, exports){
 		Count.tripTransferCost($obj);
 		//计算团收入
 		Count.tripIncome($obj);
+		//计算成本
+		Count.tripCost($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
 			var id = $obj.find('.financial-tripPlanId').val();
