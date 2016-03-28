@@ -77,19 +77,26 @@
 
         <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
 
-        <td><div class="inline-flex">{{if arrange.badStatus == 1}}
-        <span>
-            {{if arrange.realPayType == 0}}
-                现金
+        <td><div class="inline-flex">
+        {{if arrange.badStatus == 1}}
+            <span>
+                {{if arrange.realPayType == 0}}
+                    现金
                 {{else if arrange.realPayType == 1}}
-                刷卡
+                    刷卡
                 {{else if arrange.realPayType == 2}}
-                签单
+                    签单
+                {{/if}}
+            </span>
+        &nbsp;
+        <span class="F-float F-money">
+            {{if arrange.realPayType == 2}}
+                {{arrange.realSignMoney}}
+            {{else}}
+                {{arrange.realGuidePayMoney}}
             {{/if}}
         </span>
-        &nbsp;
-        <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>
-        <span class="F-float F-money">{{arrange.realGuidePayMoney}}</span>{{else}}
+        {{else}}
         <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
             <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
             <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
