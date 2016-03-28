@@ -192,7 +192,7 @@ define(function(require, exports) {
 
     //导游打单事件
 	tourguidPerObj.initGuidePlay_event=function($tab){
-		tourguidPerObj.datepicker($tab);
+		Tools.setDatePicker($tab.find('.datepicker'), true);
 		$tab.find('.T-guideSingle-search').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
