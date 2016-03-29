@@ -15,11 +15,11 @@
         </tr>
     </thead>
     <tbody class="T-hotel-list">
-    {{each outHotelList as hotel}}
-    <tr data-id="{{hotel.id}}">
+    {{each outHotelRemarkList as hotel}}
+    <tr data-id="{{hotel.outRemarkId}}">
         <td>
             <label class="pos-rel">
-                <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span>
+                <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-hotelcheked"> <span class="lbl"></span>
             </label>
         </td>
         <td class="h-touristGroupInfo">
@@ -66,7 +66,7 @@
         {{/each}}
     </tbody>
 </table>
-<button class="btn btn-sm btn-success T-start-touristGroup-merge R-right" style="margin-left:50%" data-right="1130004">
+<button class="btn btn-sm btn-success T-hotel-merge R-right" style="margin-left:50%" data-right="1130004">
     <i class="ace-icon fa fa-user-plus"></i> 统一安排
 </button>
 <div class="row pageMode">
