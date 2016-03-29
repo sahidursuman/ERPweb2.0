@@ -304,6 +304,14 @@ define(function(require, exports) {
 
         Tools.setDatePicker(Client.$checkSearchArea.find(".date-picker"), true);
 
+        //搜索下拉事件
+        Client.$checkSearchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            Client.ClientCheck(0, false, $tab, $(this).closest('.T-search-area').data('isview'));
+        });
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
@@ -595,6 +603,14 @@ define(function(require, exports) {
         Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件
         Client.$clearSearchArea.find(".T-btn-search").click(function(){
+            Client.ClientClear(0, false, $tab);
+        });
+        //搜索下拉事件
+        Client.$clearSearchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
             Client.ClientClear(0, false, $tab);
         });
 
@@ -1041,7 +1057,8 @@ define(function(require, exports) {
             accountStatus : $tab.find('[name=accountStatus]').val(),
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             partnerAgencyName : $tab.find(".T-partnerAgencyName").val(),
-            contactRealname : $tab.find('.T-search-contact').val()
+            contactRealname : $tab.find('.T-search-contact').val(),
+            isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
         }
         if (args.lineProductName === '全部') {
             args.lineProductName = '';

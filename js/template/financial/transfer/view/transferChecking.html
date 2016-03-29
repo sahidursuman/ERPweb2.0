@@ -20,6 +20,26 @@
                     <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
                     <label>收客单号：</label>
                     <input name="orderNumber" class="mar-r-10" type="text" value="{{searchParam.orderNumber}}" style="width:100px;" />
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if searchParam.isConfirmAccount == 0}}
+                                    未对账
+                                {{else if searchParam.isConfirmAccount == 1}}
+                                    已对账
+                                {{else}}
+                                    全部
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
                     <button class=" btn-sm search-btn T-search mar-r-10">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
