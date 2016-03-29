@@ -1151,6 +1151,14 @@ input.datepicker:not([class^="col-"]) {
 .radio-inline{
 	padding-left: 0;
 }
+
+.inline-block {
+	display: block;
+}
+
+.item-line {
+	border-top: 1px solid #ddd;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;

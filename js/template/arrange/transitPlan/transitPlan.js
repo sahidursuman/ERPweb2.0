@@ -359,11 +359,27 @@ define(function(require, exports) {
                     // 搜索域的html
                     var itsMain = itsMainTemplate();
                     transitPlan.$tab.find('.T-search').html(itsMain);
+
+                    if (data.recordSize) {
+                        for (var i = 0, tmp, len = data.outOtherList.length;i < len; i ++) {
+                            tmp = data.outOtherList[i];
+
+                            // n = 0;
+                            // for (var j = 0, len_j = tmp.arrangeItems.length, tmpJ; j < len_j; j ++) {
+                            //     tmpJ = tmp.arrangeItems[j];
+                            //     tmpJ.size = tmp.arrangeItems[j].arrangeResultList.length || 1;
+
+                            //     n += tmpJ.size;
+                            // }
+
+                            tmp.size = len_j = tmp.arrangeItems.length || 1;
+                        }
+                    }
                     // 它列表
                     var listIts = listItsTemplate(data);
                     transitPlan.$tab.find('.T-itsList').html(listIts);
                     transitPlan.$searchAreaits = transitPlan.$tab.find('.T-itsMian-search');
-                    transitPlan.init_eventMain(transitPlan.$tab);
+                    transitPlan.init_other_event(transitPlan.$tab);
                     //翻页
                     laypage({
                         cont: transitPlan.$tab.find('.T-pagenation'),
@@ -381,6 +397,30 @@ define(function(require, exports) {
             }
         })
     }
+
+    /**
+     * 中转安排：其他安排的事件初始化
+     * @param  {object} $tab 顶层父元素
+     * @return {[type]}      [description]
+     */
+    transitPlan.init_other_event = function($tab) {
+        $tab.find('.T-its-list').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+
+            if ($that.hasClass('T-inform')) {  // 通知
+                transitPlan._inform_work({
+                    restaurant: 1,
+                    shuttleType: $that.closest('tr').data('shuttleType'),
+                    id: id
+                })
+            } else if ($that.hasClass('T-plan-its'))  {  // 安排
+            } else if ($that.hasClass('T-view-plan'))   {  // 查看
+            }
+        });
+    };
+
     // 车事件
     transitPlan.busevent = function($tab,args){
         // 表格内操作
@@ -1197,12 +1237,12 @@ define(function(require, exports) {
                     pageNo:0,
                     // customerType : 0,
                     arrangeItem : "other",
-                    tgOrderNumber : '',
-                    touristName : '',
-                    lineProductName : '',
-                    consumeTime : '',
-                    arrangeUserName : '',
-                    status : '',
+                    // tgOrderNumber : '',
+                    // touristName : '',
+                    // lineProductName : '',
+                    // consumeTime : '',
+                    // arrangeUserName : '',
+                    // status : '',
                     sortType:'auto'
                 }
                 transitPlan.listTransitItsPlan(transitPlan.$tab,itsData);
@@ -1311,25 +1351,11 @@ define(function(require, exports) {
                     layer.close(noticeLayer);
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
-                    var notice = {
-                        isNoticeDriver : isNoticeDriver,
+                    transitPlan._inform_work({
+                        bus : 1,
                         unifyId : id,
                         isNoticeTourist: transitPlan.getValue('bus')
-                    }
-                    $.ajax({
-                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeOutBusUnifyArrange"),     
-                        type: 'POST',
-                        data: {
-                            noticeItems: JSON.stringify(notice)
-                        },
-                        success: function(data) {
-                            if (showDialog(data)) {
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
-                                    layer.close(noticeLayer);
-                                })
-                            }
-                        }
-                    })
+                    });                 
                 })
             }
         })
@@ -1370,29 +1396,37 @@ define(function(require, exports) {
                     layer.close(noticeLayer);
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
-                    var noticeItems = {
+                    transitPlan._inform_work({
                         shuttleType : shuttleType,
                         id : id,
-                        bus: transitPlan.getValue('hotel')
-                    }
-                    $.ajax({
-                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
-                        type: 'POST',
-                        data: {
-                            noticeItems: JSON.stringify(noticeItems)
-                        },
-                        success: function(data) {
-                            if (showDialog(data)) {
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
-                                    layer.close(noticeLayer);
-                                })
-                            }
-                        }
-                    })
+                        hotel: 1,
+                    });
                 })
             }
         })
     };
+
+    /**
+     * 通知请求
+     * @param  {object} args 通知请求的参数  主体，通知范围
+     * @return {[type]}      [description]
+     */
+    transitPlan._inform_work = function(args) {
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
+            type: 'POST',
+            data: {
+                noticeItems: JSON.stringify(args)
+            },
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                        layer.close(noticeLayer);
+                    })
+                }
+            }
+        })
+    }
     // 车事件弹窗
     transitPlan.addResource = function($tab){
         $tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
