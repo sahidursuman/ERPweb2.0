@@ -178,30 +178,30 @@
                                 <br/>
                             </td>
                              <td>
-                                {{if tripCost.includeSelfPay == null}}
+                                {{if touristGroup.includeSelfPay == null}}
                                     -
                                 {{else}}
-                                    {{tripCost.includeSelfPay}}
+                                    {{touristGroup.includeSelfPay}}
                                 {{/if}}
                             </td>
                             <td>
-                                {{if tripCost.remark == null || tripCost.remark == ""}}
+                                {{if touristGroup.remark == null || touristGroup.remark == ""}}
                                     -
                                 {{else}}
-                                    {{tripCost.remark}}
+                                    {{touristGroup.remark}}
                                 {{/if}}
                             </td>
                             <td>
-                                {{if touristGroup.isInnerTransferConfirm == 1}}
-                                    <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
-                                {{else}}
+                                {{if touristGroup.isConfirmAccount == 1}}
                                     <span class="F-float F-money">{{touristGroup.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
                                 {{/if}}
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
+                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                             <td>
-                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
+                                {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
                                 <a href="#" class="T-viewCostDetail">
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
@@ -215,10 +215,13 @@
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
                                 </a>
-                                {{/if}}<a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
+                                {{/if}}
+                                {{if touristGroup.isConfirmAccount == 0}}
+                                    <a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
+                                {{/if}}
                             </td>
                             <td>
-                                {{if touristGroup.isInnerTransferConfirm == 0}}
+                                {{if touristGroup.isConfirmAccount == 0}}
                                     未对账
                                 {{else}}
                                     已对账

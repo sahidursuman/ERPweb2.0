@@ -2141,6 +2141,18 @@ KingServices.getMainList = function(key, onlyStyle) {
 }
 
 /**
+ * 购物统计总打单详情
+ * @param  {[type]} tripPlanId    团ID
+ * @param  {[type]} shopArrangeId 购物安排ID
+ * @return {[type]}               [description]
+ */
+KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId)  {
+	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
+		module.viewConsumeMoney(tripPlanId, shopArrangeId);
+	});
+}
+
+/**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
