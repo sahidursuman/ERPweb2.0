@@ -138,7 +138,7 @@ define(function(require, exports) {
                     headerAgencyName : agencyName === '全部' ? '' : agencyName,
                     fromPartnerAgencyName : $tr.children('td').eq(1).text(),
                     fromPartnerAgencyId: $tr.data('id'),
-                    name: $tr.children('td').eq(1).text(),
+                    partnerAgencyName: $tr.children('td').eq(1).text(),
                     accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
                     endDate : Client.$tab.find('.T-search-end-date').val()
@@ -179,10 +179,8 @@ define(function(require, exports) {
         if(!!$tab){
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data("id");
-            partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
-        } else {
-            partnerAgencyName = args.name;
         }
+        partnerAgencyName = args.partnerAgencyName;
 
         Client.checkPageNo = args.pageNo = pageNo || 0;
 
@@ -468,7 +466,7 @@ define(function(require, exports) {
         Client.ClientClear(0, {
             pageNo:0,
             fromPartnerAgencyId: options.id,
-            name: options.name,
+            partnerAgencyName: options.name,
             startDate: options.startDate,
             endDate: options.endDate,
             accountStatus : options.accountStatus,
@@ -482,15 +480,12 @@ define(function(require, exports) {
         if (!!$tab) {
             args = getBaseArgs($tab);
             args.fromPartnerAgencyId = $tab.data('id');
-
-            partnerAgencyName = $tab.find('.T-partnerAgencyName').val();
-            args.name = partnerAgencyName;
             type = $tab.find('.T-saveClear').data('type');
             args.isAutoPay = $tab.find('.T-btn-autofill').hasClass('btn-primary') ? false : true; 
         } else {
-            partnerAgencyName = args.name;
             type =args.type;
         }
+        partnerAgencyName = args.partnerAgencyName;
 
         args.pageNo = pageNo || 0;
         args.sortType = 'startTime';
@@ -1044,6 +1039,7 @@ define(function(require, exports) {
             endDate : $tab.find('.T-search-end-date').val(),
             accountStatus : $tab.find('[name=accountStatus]').val(),
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
+            partnerAgencyName : $tab.find(".T-partnerAgencyName").val(),
             contactRealname : $tab.find('.T-search-contact').val()
         }
         if (args.lineProductName === '全部') {
@@ -1072,7 +1068,7 @@ define(function(require, exports) {
                 var args = {
                     pageNo:0,
                     fromPartnerAgencyId: ui.item.id,
-                    name: ui.item.value,
+                    partnerAgencyName : ui.item.value,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
                     accountStatus : $tab.find('input[name=accountStatus]').val() 

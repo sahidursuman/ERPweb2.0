@@ -238,7 +238,7 @@ define(function(require, exports){
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
 	                //查看团款明细说明
 					$detailId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 	                //绑定自动计算事件
 	                Count.detailEvents($detailId);
@@ -351,6 +351,8 @@ define(function(require, exports){
 		Count.tripTransferCost($obj);
 		//计算团收入
 		Count.tripIncome($obj);
+		//计算成本
+		Count.tripCost($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
 			var id = $obj.find('.financial-tripPlanId').val();
@@ -414,7 +416,7 @@ define(function(require, exports){
 					Count.$ReimbursementTab = $ReimbursementId;
 					//查看团款明细说明
 					$ReimbursementId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
@@ -550,13 +552,11 @@ define(function(require, exports){
 			Count.addOtherIn($otherIn,$obj);
 		});
 		//车费--计算、新增
+		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input').off('change').on('change',function(){
+		$busObj.off('change').on('change','input',function(){
 			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "title" && $nameFlag != "billRemark"){
-				//校验输入的数据是否合法
-				Count.calculateCost($(this));
-				//计算金额
+			if($nameFlag !="startTime" && $nameFlag !="endTime" && $nameFlag != "companyName" && $nameFlag != "licenseNumber" && $nameFlag != "seatCount" && $nameFlag != "billRemark" ){
 				Count.autoBusSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
@@ -749,7 +749,7 @@ define(function(require, exports){
 					Count.$updateTab = $updateTabId;
 					//查看团款明细说明
 					$updateTabId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 					//加载列表
 					Count.installList($updateTabId,tmp);
@@ -758,10 +758,21 @@ define(function(require, exports){
 		});
 	};
 	//查看团款明细说明 viewCostRemarkTemplate
-	Count.viewCostDetail = function(data){
-		var tmp = {
-			touristGroupFeeList:data[0].touristGroupFeeList
-		};
+	Count.viewCostDetail = function($obj,data){
+		var tr = $obj.closest('tr'),id = tr.attr('id');
+		var tmp = {};
+		if(data.length>1){
+			for(var i = 0;i<data.length;i++){
+				if(id == data[i].id){
+					tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					break;
+				}
+				
+			}
+		}else{
+			tmp.touristGroupFeeList = data[0].touristGroupFeeList
+		}
+		
 		var html = viewCostRemarkTemplate(tmp);
 		layer.open({
 		    type: 1,
@@ -2148,7 +2159,8 @@ define(function(require, exports){
 			needReduce = Count.changeTwoDecimal(needReduce);
 			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
-            if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){needPayMoney.text(needSum);}
+            if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined))
+            	{needPayMoney.text(needSum);}
             //计算自费费用
             $parent.find('.selfMoney').val(needSum);
 			
@@ -2191,13 +2203,13 @@ define(function(require, exports){
 		'<td><input name="selfPayItem" class="w-80" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 		'<td><input name="marketPrice" class="w-50" type="text"></td>'+
 		'<td><input name="needCount" class="w-50" type="text"></td>'+
-		'<td><span class="needInReduceMoney"></span></td>'+
-		'<td><span class="needIncome"></span></td>'+
+		'<td><span class="needInReduceMoney">0</span></td>'+
+		'<td><span class="needIncome">0</span></td>'+
 		'<td><input name="realGetMoney" class="w-80" type="text"></td>'+
 		'<td><input name="price" class="w-50" type="text"></td>'+
 		'<td><input name="realCount" class="w-50" type="text"><input name="memberCount" value="0" style="width:60px;" type="hidden"></td>'+
 		'<td><input name="realReduceMoney" class="w-80" type="text"><input name="selfMoney" class="selfMoney" style="width:60px;" type="hidden"></td>'+
-		'<td><span class="needPayMoney"></span></td>'+
+		'<td><span class="needPayMoney">0</span></td>'+
 		'<td>0</td>'+
 		'<td>'+
 		'<div class="inline-flex">'+
@@ -2378,12 +2390,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($busFee-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){$tr.find('.BusneedPayMoney').text(needPay);}
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined)){$tr.find('.BusneedPayMoney').text(needPay);}
 		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$planNeedpay);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
+		
 		//计算团成本--车费
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2431,7 +2440,6 @@ define(function(require, exports){
 		'</div>'+
 		'</td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/></td>'+
 		'<td>未对账<a href="javascript:void(0)" class="T-busArrDel" style="margin-left:13px;">删除</a></td>'+
 		'</tr>';
@@ -2487,14 +2495,10 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){	
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined)){	
 			$tr.find('.restneedPayMoney').text(needPay);
 		};
-		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$needPayMoney);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
+		
 		//计算团成本
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2535,7 +2539,6 @@ define(function(require, exports){
 		'</select>&nbsp;'+
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td style="text-align:left"><input type="text" name="billRemark" class="w-150"/></td>'+
 		'<td>未对账<a href="javascript:void(0)" class="T-restArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
@@ -2602,14 +2605,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined)){
 			$tr.find('.hotelneedPayMoney').text(needPay);
 		}
-		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$needPayMoney);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
 		//计算团成本
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2644,7 +2642,6 @@ define(function(require, exports){
 		'</select>&nbsp;'+
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/></td>'+
 		'<td>未对账<a href="javascript:void(0)" class="T-hotelArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
@@ -2700,15 +2697,9 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined)){
 			$tr.find('.scenicneedPayMoney').text(needPay);
 		}
-		
-		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$needPayMoney);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
 		//计算团成本
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2743,9 +2734,8 @@ define(function(require, exports){
 		'</select>&nbsp;'+
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/></td>'+
-		'<td>未对账<a href="javascript:void(0)" class="T-del" style="margin-left:12px;">删除</a></td>'+
+		'<td>未对账<a href="javascript:void(0)" class="T-secnicArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
 		//获取景区数据
@@ -2800,14 +2790,10 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined)){
 				$tr.find('.ticketneedPayMoney').text(needPay);
 		}
-		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$needPayMoney);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
+		
 		//计算团成本
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2853,7 +2839,6 @@ define(function(require, exports){
 		'</select>&nbsp;'+
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark"/></td>'+
 		'<td>未对账<a href="javascript:void(0)" class="T-ticketArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
@@ -2929,14 +2914,10 @@ define(function(require, exports){
 		var needPay = 0;
 		needPay = parseFloat($price*$realCount-$realReduceMoney);
 		needPay = Count.changeTwoDecimal(needPay);
-		if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){
+		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
 			$tr.find('.otherOutNeedPayMoney').text(needPay);
 		}
-		//计算差额
-		var difference = 0 ;
-		difference = parseFloat(needPay-$needPayMoney);
-		//difference = Count.changeTwoDecimal(difference);
-		$tr.find('.difference').text(difference);
+		
 		//计算团成本
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;
@@ -2970,7 +2951,6 @@ define(function(require, exports){
 		'</select>&nbsp;'+
 		'<input type="text" name="guidePayMoney" class="w-80"/></div></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
-		'<td><span class="difference"></span></td>'+
 		'<td><input type="text" name="billRemark" style="width:230px;"/></td>'+
 		'<td>未对账<a href="javascript:void(0)" class="T-otherOutArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';

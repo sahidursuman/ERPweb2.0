@@ -27,7 +27,6 @@
         <th class="th-border">已付</th>
         <th class="th-border">导付</th>
         <th class="th-border">单据</th>
-        <th class="th-border">差额</th>
         <th class="th-border">导游报账备注</th>
         <th class="th-border" rowspan="2">是否对账</th>
     </tr>
@@ -123,7 +122,6 @@
             {{/if}}
         </td>
 
-        <td><span class="difference"></span></td>
 
         <td><input value="{{arrange.billRemark}}" name="billRemark" type="text"{{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
 
@@ -149,7 +147,7 @@
     <div style="width:60%;">
         <div> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.ticketRemark.length>0}}{{remarkArrangeList.ticketRemark[0].opCheckRemark}}{{/if}}" />
+            <input name="accountFinancialCheckComment" {{if !isFinance}}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.ticketRemark.length>0}}{{remarkArrangeList.ticketRemark[0].opCheckRemark}}{{/if}}" />
         
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
             <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.ticketRemark.length>0}}{{remarkArrangeList.ticketRemark[0].financeCheckRemark}}{{/if}}" />

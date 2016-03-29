@@ -222,6 +222,10 @@ define(function(require, exports) {
         if (!type) {
             method = 'listCheckShopAcccount';
         }
+        
+        if (args.shopId) {
+            FinShop.settlementId = args.shopId;
+        }
 
         $.ajax({
             url: KingServices.build_url('financial/shopAccount', method),
