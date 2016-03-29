@@ -26,7 +26,7 @@
 				<tbody class="T-addTouristTbody" data-del-json="{{touristGroupMemberJsonDel}}">
 				{{if !!touristGroupMemberJsonAdd && touristGroupMemberJsonAdd.length > 0}}
 					{{each touristGroupMemberJsonAdd as rs index}}
-					<tr>
+					<tr data-id="{{rs.id}}">
 						<td>{{index+1}}</td>
 						<td><input type="text" class="col-xs-12" name="name" value="{{rs.name}}"></td>
 						<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{rs.mobileNumber}}"></td>

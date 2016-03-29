@@ -32,7 +32,7 @@
 						<td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}" data-id="{{baseInfo.fromPartnerAgencyId}}"></td>
 						<td>
 							<div class="hct-input-group col-xs-12">
-								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}">
+								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}">
 								<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>
 							</div>
 						</td>
@@ -40,7 +40,7 @@
 						<td><input type="text" class="col-xs-12 datepicker" name="endTime" value="{{baseInfo.endTime}}"></td>
 						<td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float" readonly name="needPayAllMoney" value="{{baseInfo.needPayAllMoney}}" data-json="{{baseInfo.touristGroupFee}}"></td>
 						<td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" value="{{baseInfo.name}}" data-json="{{baseInfo.touristGroupMemberInfo}}"></td>
-						<td><input type="text" class="col-xs-12" name="mobileNumber" value="{{baseInfo.mobileNumber}}"></td>
+						<td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{baseInfo.mobileNumber}}"></td>
 						<td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName" value="{{baseInfo.outOPUserName}}" data-id="{{baseInfo.outOPUserId}}"></td>
 						<td>
 							<label class="radio-inline">
