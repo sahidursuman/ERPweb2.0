@@ -116,6 +116,7 @@ define(function(require, exports) {
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
             arrangeItem = transit.$searchArea.find("[name=arrangeItem]").val(),
             arrangeItemStatus = transit.$searchArea.find("[name=arrangeItemStatus]").val(),
+            contactInfo = transit.$searchArea.find("[name=contactInfo]").val(),
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
 
@@ -137,6 +138,7 @@ define(function(require, exports) {
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo: contactInfo,
 				shift: shift
 			}
         	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
@@ -170,6 +172,7 @@ define(function(require, exports) {
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo:contactInfo,
 				shift: shift
 			},
 			success:function(data){
