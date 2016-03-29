@@ -679,6 +679,7 @@ var modalScripts = {
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
+    'arrange_guide': 'js/template/arrange/guide/guide.js',  // 导游安排
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
