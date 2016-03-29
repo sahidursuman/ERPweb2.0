@@ -1,12 +1,15 @@
 <div class="T-planbus globalAdd ">
+{{each outRemarkList as hotelmain}}
     <div class="form-group"> 
-        <label class="control-label mar-r-20">中转单号：{{outRemark.orderNumber}}</label>  
-        <label class="control-label mar-r-20">线路产品：{{outRemark.lineProductName}}</label> 
-        <label class="control-label mar-r-20">用车时间：{{outRemark.arriveTime}}</label> 
-        <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{outRemark.adultCount}}</span>大<span class="F-float F-count">{{outRemark.childCount}}</span></label>
-        <label class="control-label ">外联销售：<span class="F-float F-money">{{outRemark.outOPUserName}}</span></label>
+        <input type="hidden" name="outRemarkIds" value="{{hotelmain.outRemarkId}}" />
+        <label class="control-label mar-r-20">中转单号：{{hotelmain.orderNumber}}</label>  
+        <label class="control-label mar-r-20">线路产品：{{hotelmain.lineProductName}}</label> 
+        <label class="control-label mar-r-20">用车时间：{{hotelmain.arriveTime}}</label> 
+        <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{hotelmain.adultCount}}</span>大<span class="F-float F-count">{{hotelmain.childCount}}</span></label>
+        <label class="control-label ">外联销售：<span class="F-float F-money">{{hotelmain.outOPUserName}}</span></label>
      </div>
-     <div class="bg-gray form-group">现酒店计划要求：{{outRemark.require}}</div>
+     <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
+{{/each}}
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">房</span>
         <button class="btn btn-sm btn-success T-add-hotel"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
@@ -30,8 +33,9 @@
                 <th class="th-border" style="width: 100px">操作</th>
             </tr>
         </thead>
-        <tbody class="T-hotel-plan">{{each outHotelList as outHotel}}
-            <tr data-entity-id="{{outHotel.id}}">
+        <tbody class="T-hotel-plan">
+        {{each outHotelList as outHotel}}
+            <tr data-entity-id="{{outHotel.outHotelId}}">
                 <td>
                     <input type="hidden" name="serviceType" value="1" />
                     <input class="col-sm-12 T-datePicker datepicker" name="checkInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" />
@@ -90,17 +94,12 @@
                         删除
                     </a>
                 </td>
-            </tr>{{/each}}
+            </tr>
+            {{/each}}
         </tbody>
     </table>
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
         <button class="btn btn-sm btn-primary mar-r-20 T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
-        <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
-            <label>
-                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
-                <span class="lbl font-w"> 接团车辆安排完成</span>
-            </label>
-        </span>
     </div>
 </div>
