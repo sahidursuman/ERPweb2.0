@@ -5,17 +5,21 @@
 		<span class="title">申请流程</span>
 		</li>
 
-		<li data-target="#step2"class="{{if applyStatus==1}}{{else}}active{{/if}}">
+		<li data-target="#step2"class="{{if applyStatus !=1 && applyStatus !=2}}active{{/if}}">
 		<span class="step">1</span>
 		<span class="title">免费在线申请</span>
 		</li>
-
+		
 		<li data-target="#step3">
 		<span class="step">2</span>
 		<span class="title">资料审核</span>
 		</li>
-
-		<li data-target="#step4">
+		
+		<li data-target="#step4" class="{{if applyStatus==2}}active{{else}}hidden{{/if}} ">
+			<span class="step">3</span>
+			<span class="title">审核未通过</span>
+		</li>
+		<li data-target="#step4"  class="{{if applyStatus==2}}hidden{{/if}}">
 		<span class="step">3</span>
 		<span class="title">线下签订协议</span>
 		</li>
