@@ -812,6 +812,7 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "_clearing");
                             Client.listClient(Client.listPage);
                         } else {
+                            args.isAutoPay = false;
                             Client.ClientClear(args.pageNo, args);
                         }
                     });
