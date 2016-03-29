@@ -15,7 +15,7 @@
     <tbody class="T-its-list">
     <!-- 它 -->
     {{each outOtherList as item}}
-        <tr>
+        <tr data-id="{{item.outRemarkId}}" data-shuttleType="{{item.shuttleType}}">
             <td class="h-touristGroupInfo" rowspan="{{item.size}}">
                 <p>中转单号：{{item.orderNumber}}</p>
                 <p><span>&lt;{{item.lineProductName}}&gt;</span></p>
