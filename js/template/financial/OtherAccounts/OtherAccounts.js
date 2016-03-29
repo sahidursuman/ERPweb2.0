@@ -134,6 +134,7 @@ define(function(require, exports) {
             args.endAccountTime = $tab.find(".T-endTime").val();
             args.name = $tab.find("input[name=itemName]").val();
             args.info = $tab.find('.T-creatorUserChoose').val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.pageNo = args.pageNo || 0;
         args.sortType = "auto";
@@ -265,6 +266,15 @@ define(function(require, exports) {
                 OtherAccounts.CheckConfirm($tab,args);
             });
         });
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            OtherAccounts.AccountsChecking(args,$tab);
+        });
         //对账搜索
         $tab.find('.T-search').click(function(event) {
             args.pageNo = 0;
@@ -274,12 +284,12 @@ define(function(require, exports) {
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
             var argsData = { 
-                    name: args.name,
-                    info: $tab.find('.T-creatorUserChoose').val(),
-                    startAccountTime: $tab.find('.T-startTime').val(),
-                    endAccountTime: $tab.find('.T-endTime').val(),
-                    accountStatus : args.accountStatus
-                };
+                name: args.name,
+                info: $tab.find('.T-creatorUserChoose').val(),
+                startAccountTime: $tab.find('.T-startTime').val(),
+                endAccountTime: $tab.find('.T-endTime').val(),
+                accountStatus : args.accountStatus
+            };
             FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });
         //给全选按钮绑定事件
@@ -400,6 +410,7 @@ define(function(require, exports) {
             args.startAccountTime = $tab.find(".T-startTime").val();
             args.endAccountTime = $tab.find(".T-endTime").val();
             args.info = $tab.find('.T-creatorUserChoose').val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.pageNo = args.pageNo || 0;
         args.sortType = "auto";
@@ -546,7 +557,15 @@ define(function(require, exports) {
         
         //时间控件
         Tools.setDatePicker($tab.find('.datepicker'), true);
-        
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            OtherAccounts.AccountsPayment(args,$tab);
+        });
         //付款搜索
         $tab.find('.T-search').click(function(event) {
             args.pageNo = 0;

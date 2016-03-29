@@ -142,6 +142,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
@@ -232,6 +233,15 @@ define(function(require, exports) {
         var validator = new FinRule(0);
         var validatorCheck = validator.check($tab);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -292,6 +302,7 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
@@ -402,6 +413,15 @@ define(function(require, exports) {
         autoValidatorCheck = autoValidator.check($tab.find('.T-count'));
             
         FinancialService.initPayEvent($tab);
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             args.pageNo = 0;

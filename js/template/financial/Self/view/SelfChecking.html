@@ -4,20 +4,40 @@
             <div class="search-area T-search-area">
                 <div class="form-group"> 
                     <label>自费商家：</label>
-                    <input type="text" name="selfPayName" class="T-selfPayName" value="{{selfPayName}}" >
+                    <input type="text" name="selfPayName" class="T-selfPayName mar-r-10" value="{{selfPayName}}" >
                     <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}">
-	                <label class="marginLeft-30">账期：</label>
+	                <label>账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
-                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+                    <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
 
-                    <label class="marginLeft-30">团信息：</label>
-                    <input name="tripInfo" placeholder="团信息" type="text" value="{{searchParam.tripInfo}}" style="width:200px;" />
-
-                    <button class="marginLeft-30 btn-sm search-btn T-search">
+                    <label>团信息：</label>
+                    <input name="tripInfo" class="mar-r-10" placeholder="团信息" type="text" value="{{searchParam.tripInfo}}" style="width:200px;" />
+                    
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if searchParam.isConfirmAccount == 0}}
+                                    未对账
+                                {{else if searchParam.isConfirmAccount == 1}}
+                                    已对账
+                                {{else}}
+                                    全部
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn-sm search-btn T-search mar-r-10">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
-                    <button class="btn-sm search-btn T-btn-export marginLeft-30">导出报表</button>						
+                    <button class="btn-sm search-btn T-btn-export">导出报表</button>						
                 </div>
                 <input name="accountStatus" value="{{searchParam.accountStatus}}" type="hidden">
             </div>

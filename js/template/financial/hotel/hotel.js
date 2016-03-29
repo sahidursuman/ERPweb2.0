@@ -144,6 +144,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "accountTime";
         $.ajax({
@@ -206,6 +207,15 @@ define(function(require, exports) {
         FinancialService.updateUnpayMoney($tab,ruleCheck);
         hotel.getHotelList($tab,false);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            hotel.hotelCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -243,6 +253,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "accountTime";
         if(args.autoPay == 1){
@@ -336,11 +347,24 @@ define(function(require, exports) {
 
         FinancialService.initPayEvent($tab);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            if(args.isAutoPay == 1){
+                args.isAutoPay = 0;
+            }
+            args.pageNo = 0;
+            hotel.hotelClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             if(args.isAutoPay == 1){
                 args.isAutoPay = 0;
             }
+            args.pageNo = 0;
             hotel.hotelClear(args,$tab);
         });
         //保存结算事件

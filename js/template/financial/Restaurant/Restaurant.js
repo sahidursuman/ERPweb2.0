@@ -142,6 +142,7 @@ define(function(require, exports) {
             args.accountInfo = $tab.find("input[name=accountInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
 
         $.ajax({
@@ -208,6 +209,15 @@ define(function(require, exports) {
         FinancialService.updateUnpayMoney($tab,ruleCheck);
         restaurant.getRestaurantList($tab,false);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0 ;
+            restaurant.restaurantCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -247,6 +257,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         if(args.autoPay == 1){
             args.isAutoPay = 0;
@@ -337,6 +348,18 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find(".date-picker"),true);
         restaurant.getRestaurantList($tab,true);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            if(args.isAutoPay == 1){
+                args.isAutoPay = 0;
+            }
+            args.pageNo = 0;
+            restaurant.restaurantClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").off().click(function(){
             if(args.isAutoPay == 1){

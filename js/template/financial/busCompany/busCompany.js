@@ -147,6 +147,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "startTime";
         $.ajax({
@@ -213,6 +214,15 @@ define(function(require, exports) {
         FinancialService.updateUnpayMoney($tab, ruleCheck);
         busCompany.getBusCompanyList($tab,false);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            busCompany.busCompanyCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
@@ -252,6 +262,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "startTime";
         if(args.autoPay == 1){
@@ -342,8 +353,20 @@ define(function(require, exports) {
         busCompany.init_event(args,$tab, "clear");
         FinancialService.initPayEvent($tab);
         busCompany.getBusCompanyList($tab,true);
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            if (args.isAutoPay == 1) {
+                args.isAutoPay = 0;
+            }
+            args.pageNo = 0;
+            busCompany.busCompanyClear(args,$tab);
+        });
         //搜索事件
-       $tab.find(".T-search").click(function() {
+        $tab.find(".T-search").click(function() {
             if (args.isAutoPay == 1) {
                 args.isAutoPay = 0;
             }
