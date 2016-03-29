@@ -16,6 +16,7 @@ define(function(require, exports) {
         T = {
             list : require('./view/tourists/list'),//列表页
             listTable : require('./view/tourists/listTable'),//列表页表格
+            listCount : require('./view/tourists/listCount'),//列表页合计
             add : require('./view/tourists/add'),//新增页面
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
@@ -64,22 +65,26 @@ define(function(require, exports) {
     	args = args || {};
     	args.pageNo = page || 0;
     	args.type = args.type || 0;
-    	$.ajax({
-    		url : KingServices.build_url('touristGroup','getTouristStatisticData'),
-    		data : args,
+        if(Tools.addTab(K.menu, '游客管理', T.list())){
+            $tab = $tab || $("#tab-" + K.menu + "-content");
+            //业务事件
+            touristGroup.init_events($tab);
+            touristGroup.getList(args, $tab);
+        }
+    };
+
+    touristGroup.getTouristStatisticData = function(args, $tab){
+        $.ajax({
+            url : KingServices.build_url('touristGroup','getTouristStatisticData'),
+            data : args,
             type: "POST",
             success: function(data) {
-            	if(showDialog(data)){
-            		if(Tools.addTab(K.menu, '游客管理', T.list(data))){
-            			$tab = $tab || $("#tab-" + K.menu + "-content");
-            			//业务事件
-                    	touristGroup.init_events($tab);
-                    	touristGroup.getList(args, $tab);
-            		}
-            	}
+                if(showDialog(data)){
+                    $tab.find('.T-countData').html(T.listCount(data));
+                }
             }
-    	});
-    };
+        });
+    }
 
     /**
      * 获取游客管理列表
@@ -88,6 +93,7 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     touristGroup.getList = function(args, $tab){
+        touristGroup.getTouristStatisticData(args, $tab);
     	$.ajax({
             url: KingServices.build_url('touristGroup','listTouristGroup'),
             data: args,
@@ -195,14 +201,14 @@ define(function(require, exports) {
         $searchArea.find('.T-touristGroupList-search').on('click', function(){
             touristGroup.getList(getArgs($searchArea), $tab);
         });
-        //收起/展开
+        //高级搜索
         $searchArea.find('.T-more-btn').on('click', function(){
             var $that = $(this);
             if($that.hasClass('packUp')){
-                $that.html('<i class="ace-icon fa fa-caret-down"></i> 展开').addClass('unfold').removeClass('packUp');
+                $that.addClass('unfold').removeClass('packUp');
                 $searchArea.find('.T-more-info').addClass('hidden');
             }else{
-                $that.html('<i class="ace-icon fa fa-caret-up"></i> 收起').addClass('packUp').removeClass('unfold');
+                $that.addClass('packUp').removeClass('unfold');
                 $searchArea.find('.T-more-info').removeClass('hidden');
             }
         });
@@ -256,8 +262,8 @@ define(function(require, exports) {
                     lineProductId: $searchArea.find('[name="lineProductId"]').val(),
                     guestDetails : $searchArea.find('[name="guestDetails"]').val(),
                     customerType : $searchArea.find('[name="customerType"]').val(),
-                    startTime : $searchArea.find('[name="startTime"]').val(),
-                    endTime : $searchArea.find('[name="endTime"]').val(),
+                    dateType : $searchArea.find('[name="dateType"]').val(),
+                    tripTime : $searchArea.find('[name="tripTime"]').val(),
                     realName: $searchArea.find('[name=realName]').val(),
                     statusSearch : $searchArea.find('.T-select-status').val()
                 };
@@ -349,7 +355,7 @@ define(function(require, exports) {
                         sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
                     }
                     if (Tools.addTab(K.update , '编辑小组', T.update(data))) {
-                        touristGroup.commonEvents($("#tab-" + K.update + "-content"));
+                        touristGroup.commonEvents($("#tab-" + K.update + "-content"), 0, id);
                     }
     			}
     		}
@@ -430,7 +436,7 @@ define(function(require, exports) {
      * @param  {number} id 游客ID
      * @return {object}    this
      */
-    touristGroup.touristGroupDelete = function(id){
+    touristGroup.touristGroupDelete = function(id, $tab){
         $.ajax({
             url : KingServices.build_url('customerOrder', 'deleteCustomerOrder'),
             data : {id : id},
@@ -451,7 +457,7 @@ define(function(require, exports) {
      * @param  {number} type 1为查看；
      * @return {[type]}      [description]
      */
-    touristGroup.commonEvents = function($tab, type){
+    touristGroup.commonEvents = function($tab, type, touristId){
         var validate = null;
         if(!type){
             validate = rule.checktTourist($tab);
@@ -489,15 +495,15 @@ define(function(require, exports) {
         if(!type){
     	   //添加接团
         	$tab.find('.T-add-join-group').on('click', function(){
-        		touristGroup.addJoinGroup($tab);
+        		touristGroup.addJoinGroup($tab, validate);
         	});
         	//添加参团
         	$tab.find('.T-add-part-group').on('click', function(){
-        		touristGroup.addPartGroup($tab);
+        		touristGroup.addPartGroup($tab, validate);
         	});
         	//添加送团
         	$tab.find('.T-add-send-group').on('click', function(){
-        		touristGroup.addSendGroup($tab);
+        		touristGroup.addSendGroup($tab, validate);
         	});
             //绑定日期事件
             Tools.setDatePicker($tab.find('.datepicker'));
@@ -508,6 +514,11 @@ define(function(require, exports) {
             $tab.find('.T-btn-save').on('click', function(){
                 if(!validate.form())return;
                 touristGroup.saveData($tab);
+            });
+            $tab.find('.T-refresh').on('click', function(){
+                showConfirmDialog($("#confirm-dialog-message"), "确定重新加载当前小组信息?", function() {
+                    touristGroup.touristGroupUpdate(touristId);
+                });
             });
         }else{
             //关闭信息
@@ -521,7 +532,7 @@ define(function(require, exports) {
     	//接团表内操作
     	$tab.find('.T-join-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
-    		var $that = $(this);
+    		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
     		if($that.hasClass('T-bus')){
     			touristGroup.updateJionGroupBus(0, $that, type);
     		}else if($that.hasClass('T-hotel')){
@@ -529,13 +540,13 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-other')){
     			touristGroup.updateJionGroupOther(0, $that, type);
     		}else if($that.hasClass('T-delete')){
-                $that.closest('tr').remove();
+                deleteList($tr, id);
             }
     	});
     	//参团表内操作
     	$tab.find('.T-part-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
-    		var $that = $(this);
+    		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
             if($that.hasClass('T-search-line')){
                 touristGroup.chooseLineProduct($that);
             }else if($that.hasClass('T-hotel')){
@@ -547,13 +558,16 @@ define(function(require, exports) {
             }else if($that.hasClass('T-outer-turn')){
                 touristGroup.updateOuterTurn($that, type);
             }else if($that.hasClass('T-delete')){
-                $that.closest('tr').remove();
+                deleteList($tr, id);
+            }else if($that.hasClass('datepicker')){
+                var start = $tab.find('.T-team-info [name="startTime"]').val();
+                $(this).datepicker('setStartDate', start);
             }
     	});
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
-    		var $that = $(this);
+    		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
     		if($that.hasClass('T-bus')){
     			touristGroup.updateJionGroupBus(2, $that, type);
     		}else if($that.hasClass('T-hotel')){
@@ -561,7 +575,7 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-other')){
     			touristGroup.updateJionGroupOther(2, $that, type);
     		}else if($that.hasClass('T-delete')){
-                $that.closest('tr').remove();
+                deleteList($tr, id);
             }
     	});
     	//其它信息收缩事件
@@ -575,6 +589,22 @@ define(function(require, exports) {
 				$tab.find('.T-other-info-cont').addClass('hidden');
     		}
     	});
+        return this;
+        function deleteList($tr, id) {
+            if(!!id){
+                var delJson = $tr.closest('tbody').data('del-json');
+                if(typeof delJson !== "object"){
+                    delJson = JSON.parse(delJson || "[]");
+                };
+                delJson.push({
+                    id : id
+                });
+                $tr.closest('tbody').data('del-json', delJson);
+                $tr.remove();
+            }else{
+                $tr.remove();
+            }
+        }
     };
 
     //选择客户
@@ -666,55 +696,58 @@ define(function(require, exports) {
      * 添加接团
      * @param {object} $tab tab的jQuery对象
      */
-    touristGroup.addJoinGroup = function($tab){
+    touristGroup.addJoinGroup = function($tab, validate){
     	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime"></td>'+
                     '<td><input type="text" class="col-xs-12" name="arriveShift"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" placeholder="点击填写车"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" placeholder="点击填写它"></td>'+
                     '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-join-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
+        rule.update(validate);
     };
 
     /**
      * 添加参团
      * @param {object} $tab tab的jQuery对象
      */
-    touristGroup.addPartGroup = function($tab){
+    touristGroup.addPartGroup = function($tab, validate){
         var isHidden = $tab.find('.T-container').data('type') || "single";
     	var html =  '<tr><td>'+
                         '<div class="hct-input-group col-xs-12 T-action T-search-line">'+
-                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName">'+
+                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品">'+
                                 '<span class="hct-group-add cursor">[搜索]</span>'+
                             '</div></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime"></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime"></td>'+
-                        '<td><input type="text" class="w-100 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney"></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney"></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
+                        '<td><input type="text" class="w-110 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100" name="operateCurrentNeedPayMoney"></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-inner-turn">内转</a> | <a class="cursor T-action T-outer-turn">外转</a> | <a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
+        rule.update(validate);
     };
 
     /**
      * 添加送团
      * @param {object} $tab tab的jQuery对象
      */
-    touristGroup.addSendGroup = function($tab){
+    touristGroup.addSendGroup = function($tab, validate){
     	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime"></td>'+
                     '<td><input type="text" class="col-xs-12" name="leaveShift"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus" readonly name="receiveBus"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus" readonly name="receiveBus" placeholder="点击填写车"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther" placeholder="点击填写它"></td>'+
                     '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-send-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
+        rule.update(validate);
     };
 
     /**
@@ -1206,13 +1239,14 @@ define(function(require, exports) {
 
     //参团内转操作
     touristGroup.updateInnerTurn = function($that, optionType){
-        var data = $that.data('json'),
+        var data = {},
+            innerJson = $that.data('json'),
             $tr = $that.closest('tr'),
             $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
             receivable = $tab.find('.T-team-info .T-receivable').data('json'),
             html = "";
-        if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+        if(typeof innerJson !== "object"){
+            innerJson = JSON.parse(innerJson || "{}");
         }
         if(typeof receivable !== "object"){
             receivable = JSON.parse(receivable || "{}");
@@ -1229,8 +1263,9 @@ define(function(require, exports) {
             lineData = JSON.parse(lineData || "{}");
         }
         data.lineData = lineData;
-        data.lineData.startTime = $tr.find('[name="startTime"]').val();
+        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
+        $.extend(data, innerJson);
         if(optionType === 1){
             html = T.viewInnerTurn(data);
         }else{
@@ -1275,13 +1310,14 @@ define(function(require, exports) {
 
     //参团外转操作
     touristGroup.updateOuterTurn = function($that, optionType){
-        var data = $that.data('json'),
+        var data = {},
+            outerJson = $that.data('json'),
             $tr = $that.closest('tr'),
             $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
             receivable = $tab.find('.T-team-info .T-receivable').data('json'),
             html = "";
-        if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+        if(typeof outerJson !== "object"){
+            outerJson = JSON.parse(outerJson || "{}");
         }
         if(typeof receivable !== "object"){
             receivable = JSON.parse(receivable || "{}");
@@ -1300,6 +1336,7 @@ define(function(require, exports) {
         data.lineData = lineData;
         data.lineData.startTime = $tr.find('[name="startTime"]').val();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
+        $.extend(data, outerJson);
 
         if(optionType === 1){
             html = T.viewOuterTurn(data);
@@ -1321,6 +1358,7 @@ define(function(require, exports) {
                     if(!validate.form())return;
                     var baseInfo = {
                             transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
+                            transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
                             remark : $layer.find('[name="remark"]').val(),
                             isCurrent : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
                         },
@@ -1962,6 +2000,10 @@ define(function(require, exports) {
                 }
                 data.receiveTrip.push(receiveTripData);
             });
+            data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
+            if(typeof data.receiveTripDe === "object"){
+                data.receiveTripDe = JSON.stringify(data.receiveTripDe || "[]");
+            }
         }
 
         //参团
@@ -1982,15 +2024,17 @@ define(function(require, exports) {
             $outerTurn = $that.find('.T-outer-turn');
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.operateCurrentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             }
             if(typeof joinTripData.lineInfo !== "object"){
                 joinTripData.lineInfo = JSON.parse(joinTripData.lineInfo || "{}");
             }
-            
-            if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json'))){
+            var status = $that.find('.T-status').data('status');
+            status = status == undefined ? 1 : status;
+            console.log($innerTurn.data('json'))
+            if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
                 joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
-            }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json'))){
+            }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
                 joinTripData.outTransferInfo = JSON.parse($outerTurn.data('json'));
             }
 
@@ -1999,8 +2043,13 @@ define(function(require, exports) {
             }
             data.joinTrip.push(joinTripData);
         });
+        data.joinTripDel = $tab.find('.T-part-group-list').data('del-json');
+        if(typeof data.joinTripDel === "object"){
+            data.joinTripDel = JSON.stringify(data.joinTripDel || "[]");
+        }
         if(data.joinTrip.length === 0){
-            showMessageDialog($("#confirm-dialog-message"), '至少填写一条参团信息！');
+            var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
+            showMessageDialog($("#confirm-dialog-message"), tripMsg);
             return false;
         }
 
@@ -2027,6 +2076,10 @@ define(function(require, exports) {
                 }
                 data.sendTrip.push(sendTripData);
             });
+            data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
+            if(typeof data.sendTripDel === "object"){
+                data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
+            }
         }
 
         //其它信息

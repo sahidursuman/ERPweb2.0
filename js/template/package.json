@@ -13,7 +13,7 @@
         "compress": true,
         "type": "cmd",
         "runtime": "template.js",
-        "alias": null,
+        "alias": "/js/template/template",
         "minify": true,
         "cache": false
     }

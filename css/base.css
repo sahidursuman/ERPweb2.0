@@ -906,12 +906,14 @@ input.datepicker:not([class^="col-"]) {
 .w-80 {
 	width: 80px;
 }
-
+/*金额input的宽度*/
+.w-110 {	
+	width: 110px;
+}
 /*时间input的宽度*/
 .w-100 {
 	width: 100px;
 }
-
 /*线路产品*/
 .w-150 {	
 	width: 150px;
@@ -1122,6 +1124,15 @@ input.datepicker:not([class^="col-"]) {
 .hct-bg-1FADE0{
 	background: #1FADE0!important;
 }
+.hct-bg-1FADE0.btn:hover{
+	background: #2e6da4!important;
+}
+.hct-bg-BBB{
+	background: #BBB!important;
+}
+.hct-bg-BBB:hover{
+	background: #BBB!important;
+}
 .hct-color-BBB{
 	color: #bbb!important;
 }
@@ -1141,6 +1152,9 @@ input.datepicker:not([class^="col-"]) {
 }
 .hct-group-input > .col-xs-12{
 	padding-left: 48px;
+}
+.hct-group-input > .control-label{
+	min-height: 22px;
 }
 .col-xs-12.hct-group-input > label{
 	left: 12px;

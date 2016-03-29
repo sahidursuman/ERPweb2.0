@@ -45,6 +45,25 @@
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
+				{{else}}
+					<tr>
+						<td>1</td>
+						<td><input type="text" class="col-xs-12" name="name"></td>
+						<td><input type="text" class="col-xs-12" name="mobileNumber"></td>
+						<td>
+							<select class="col-xs-12" name="idCardType">
+								{{#0 | getCardOption}}
+							</select>
+						</td>
+						<td><input type="text" class="col-xs-12" name="idCardNumber"></td>
+						<td>
+							<label>
+								<input type="checkbox" name="isContactUser" class="ace">
+								<span class="lbl"></span>
+							</label>
+						</td>
+						<td><a class="cursor T-action T-delete">删除</a></td>
+					</tr>
 				{{/if}}
 				</tbody>
 			</table>
