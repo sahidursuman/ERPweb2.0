@@ -374,7 +374,9 @@ define(function(require,exports) {
 				var startDate = $tab.find('input[name=startDate]').val();
 				var endDate = $tab.find('input[name=endDate]').val();
 				var message = false;
-				if(payMoney<=0 || payMoney == ""){
+				if(parseFloat(unPayMoney) < 0){
+					message = "已对账未付总额为负，不能进行自动下账！";
+				}else if(payMoney<=0 || payMoney == ""){
 					message = "付款金额需大于0！";
 				}else if(parseFloat(payMoney)>parseFloat(unPayMoney)){
 					message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
