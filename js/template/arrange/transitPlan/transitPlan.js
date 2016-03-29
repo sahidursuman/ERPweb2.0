@@ -27,6 +27,7 @@ define(function(require, exports) {
         busviewalready = require("./view/busviewalready"),
         hotelnoticeTemplate = require("./view/hotelnotice"),
         buslreadyplanTemplate = require("./view/buslreadyplan"),
+        hotelalreadyTemplate = require("./view/hotelalready"),
         busviewalreadyId = "tab-" + menuKey + "-busviewwalreadyId",
         hotelplanId = "tab-" + menuKey + "-hotelplan",
         listHotel = "tab-" + menuKey + "-listHotel",
@@ -285,8 +286,6 @@ define(function(require, exports) {
 
 
     }
-
-    
     // 房
     transitPlan.listTransitHoutelPlan = function($tab,hotelsData){
         $tab = $tab || transitPlan.$tab;
@@ -312,13 +311,25 @@ define(function(require, exports) {
                     // // 搜索域的html
                     var hotelsearch = hotelMainTemplate()
                     transitPlan.$tab.find('.T-search').html(hotelsearch);
-                    // 房列表
-                    var listHotel = listHotelTemplate(data);
-                    transitPlan.$tab.find('.T-HotelList').html(listHotel);
+                    
                     transitPlan.$searchAreahotel = transitPlan.$tab.find('.T-hotelMian-search');
                     transitPlan.init_eventMain(transitPlan.$tab);
                     transitPlan.hotelevent(transitPlan.$tab);
                     transitPlan.bindHotelChoose(transitPlan.$tab);
+                     // 判断是已安排还是未安排
+                     $tab.find("select[name=status]").on('change',function(){
+                        var status = $(this).val();
+                        if(status == 0){
+                            var listHotel = listHotelTemplate(data);
+                            transitPlan.$tab.find('.T-HotelList').html(listHotel);
+                            transitPlan.listTransitHoutelPlan($tab,status)
+                        }else{
+                            var listalreadyhotel = hotelalreadyTemplate(data);
+                            transitPlan.$tab.find('.T-HotelList').html(listalreadyhotel);
+                            transitPlan.listTransitHoutelPlan($tab,status);
+                        }
+                        
+                     }) 
                     //翻页
                     laypage({
                         cont: transitPlan.$tab.find('.T-pagenation-hotel'),
@@ -656,7 +667,6 @@ define(function(require, exports) {
         $tab.find('.T-cheked').on('click',function(){
             var $that = $(this),$tr = $that.closest('tr'),
                 shuttleType= $tr.find("input[name=shuttleType]").val();
-            console.log(shuttleType);
             // 统一安排事件绑定
             var $that=$(this),outRemarkId=$that.closest('tr').data('id');
             if($that.is(':checked')){
@@ -667,7 +677,7 @@ define(function(require, exports) {
                 transitPlan.transitIds.push(transitJson);
             }else{
                 for (var i = 0; i < transitPlan.transitIds.length; i++) {
-                    if (transitPlan.transitIds[i].id==id) {
+                    if (transitPlan.transitIds[i].outRemarkId==outRemarkId) {
                         transitPlan.transitIds.splice(i,1);
                         break;
                    } 
@@ -1349,6 +1359,7 @@ define(function(require, exports) {
     }
     //房事件
     transitPlan.hotelevent = function($tab){
+
         // 表格内操作
         $tab.find('.T-hotel-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -1424,7 +1435,6 @@ define(function(require, exports) {
                     shuttleType : shuttleType
                 };
                 transitPlan.transitIds.push(transitJson);
-                console.log(transitPlan.transitIds[i]);
             }else{
                 for (var i = 0; i < transitPlan.transitIds.length; i++) {
                     if (transitPlan.transitIds[i].outRemarkId==outRemarkId) {
@@ -1441,13 +1451,13 @@ define(function(require, exports) {
         })
         //分页勾选效果
         for (var i = 0; i < transitPlan.transitIds.length; i++) {
-              var transitId = transitPlan.transitIds[i].id,$trList=$tab.find('.T-bus-list').find('tr');
+              var transitId = transitPlan.transitIds[i].outRemarkId,$trList=$tab.find('.T-hotel-list').find('tr');
               $trList.each(function(index) {
                   var outRemarkId = $trList.eq(index).data('id');
-                  if (!!outRemarkId && !!transitId && id == transitId) {
+                  if (!!outRemarkId && !!transitId && outRemarkId == transitId) {
                       $trList.eq(index).find('.T-cheked').prop('checked', true);
                   };
-              });
+            });
         }
         
         //时间控件
@@ -1679,7 +1689,11 @@ define(function(require, exports) {
                     status : '',
                     sortType:'auto'
                 }
-                transitPlan.listTransitHoutelPlan(transitPlan.$tab,hotelsData);
+                transitPlan.listTransitHoutelPlan(transitPlan.$tab,hotelsData);   
+                // 房列表
+                var listHotel = listHotelTemplate(data);
+                transitPlan.$tab.find('.T-HotelList').html(listHotel);
+                
             }else if($that.hasClass('T-itsTab')){
                 // 它 
                 var itsData = {
