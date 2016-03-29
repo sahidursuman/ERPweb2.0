@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":139,"md5":"8693b7961b5d515f8ce370cbbe2c08ae"}*/
+/*TMODJS:{"debug":true,"version":142,"md5":"8693b7961b5d515f8ce370cbbe2c08ae"}*/
 define(function(require) {
     return require("../../../template")("arrange/transitPlan/view/listHotel", function($data, $filename) {
         try {
