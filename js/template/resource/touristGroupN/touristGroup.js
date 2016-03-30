@@ -216,7 +216,6 @@ define(function(require, exports) {
         Tools.setDatePicker($searchArea.find('.datepicker'));
 
         touristGroup.getOPUserList($searchArea.find('[name=realName]'), true);
-        touristGroup.getLineProduct($searchArea.find('.T-chooseLineProduct'));
         touristGroup.getListPartnerAgencyList($searchArea.find('.T-choosePartnerAgency'));
         touristGroup.getBussinessList($searchArea.find('.T-chooseBussinessGroup'));
         //添加游客小组事件
@@ -1773,36 +1772,6 @@ define(function(require, exports) {
                     time: 2000
                 });
             } 
-        });
-    };
-
-    /**
-     * 绑定线路产品的选择
-     * @param  {[type]} $target [description]
-     * @return {[type]}         [description]
-     */
-    touristGroup.getLineProduct = function($target){
-        return $target.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    $target.nextAll("[name=lineProductId]").val("");
-                }
-            },
-            select: function(event, ui) {
-                $(this).blur();
-                $target.find("[name=lineProductId]").val(ui.item.id).trigger('change');
-            }
-        }).off('click').on('click', function() {
-            var obj = this;
-            var lineParObj = touristGroup.autocompleteDate.lineProductList;
-            if (lineParObj != null && lineParObj.length > 0) {
-                for (var i = 0; i < lineParObj.length; i++) {
-                    lineParObj[i].value = lineParObj[i].name;
-                }
-            }
-            $(obj).autocomplete('option', 'source', lineParObj);
-            $(obj).autocomplete('search', '');
         });
     };
 

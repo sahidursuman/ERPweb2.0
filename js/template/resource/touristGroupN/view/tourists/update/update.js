@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":144,"md5":"537680b5a3262b523c9dc72299c0c1d6"}*/
+/*TMODJS:{"debug":true,"version":145,"md5":"537680b5a3262b523c9dc72299c0c1d6"}*/
 define(function(require) {
     return require("/js/template/template")("resource/touristGroupN/view/tourists/update/update", function($data, $filename) {
         try {
