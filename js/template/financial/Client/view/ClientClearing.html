@@ -17,7 +17,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">组团单号：</label>
             <input type="text" class="form-control T-search-number" placeholder="组团单号" value="{{searchParam.otaOrderNumber}}">
-        </div>
+        </div><br />
         <div class="form-group mar-r-10">
             <label class="control-label">线路名称：</label>
             <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
@@ -29,6 +29,26 @@
         <div class="form-group mar-r-10">
             <label class="control-label">客户联系人：</label>
             <input type="text" class="form-control T-search-contact" placeholder="客户联系人" data-id="{{searchParam.fromPartnerAgencyContactId}}" value="{{searchParam.contactRealname}}">
+        </div>
+        <label class="form-group">对账状态：</label>
+        <div class="form-group btn-group T-check-status mar-r-10">
+            <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                        全部
+                    {{else if searchParam.isConfirmAccount == 1}}
+                        已对账
+                    {{else}}
+                        未对账
+                    {{/if}}
+                </span>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+            </ul>
         </div>
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
