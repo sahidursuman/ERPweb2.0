@@ -45,6 +45,7 @@
        <div class="form-group input-daterange mar-r-10">
             <label>会计科目</label>
             <select name="subjectName" class="w100">
+                <option {{if searchParam.subjectName==""}}selected{{/if}} value="">全部</option>
                 <option {{if searchParam.subjectName==='预收账款'}}selected{{/if}} value="预收账款">预收账款</option>
                 <option {{if searchParam.subjectName==='预付账款'}}selected{{/if}} value="预付账款">预付账款</option>
             </select>
@@ -104,7 +105,7 @@
                     <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
                     <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>
                     <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>
-                    <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{else if rs.payType == 5}}网付{{/if}}</td>
+                    <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{else if rs.payType == 5}}网付{{else if rs.payType == 6}}冲抵{{/if}}</td>
                     {{if rs.moneyType == 0}}
                     <td><a {{if rs.subjectName == '主营业务收入' || rs.subjectName == '主营业务支出'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>
                     <td>-</td>
