@@ -168,6 +168,8 @@ template.helper("getPayTypeText", function(payType) {
             return '支票';
         case 4:
             return '其他';
+        case 6:
+            return '冲抵';
         default:
             return '网付';
     }
@@ -190,7 +192,7 @@ template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
             return '';
     }
 });
-template.helper("getPayTypeOptions", function(payType) {
+template.helper("getPayTypeOptions", function(payType,isBalance) {
     var options = '', start = 0;
 
     options += '<option value="0" '+ (start++ == payType?'selected':'') +'>现金</option>';
@@ -199,7 +201,9 @@ template.helper("getPayTypeOptions", function(payType) {
     // options += '<option value="1" '+ (start++ == payType?'selected':'') +'>网上支付</option>';
     options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
-   
+    if (isBalance==1) {
+        options += '<option value="6" '+ (start++ == payType?'selected':'') +'>冲抵</option>';
+    }
     return options;
 });
 

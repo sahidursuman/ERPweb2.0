@@ -718,6 +718,7 @@ var modalScripts = {
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
 	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
+	'financial_offsetByDetail':"js/template/financial/offsetByDetail/offsetByDetail.js",//冲抵明细
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",

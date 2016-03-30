@@ -545,10 +545,10 @@ define(function(require, exports) {
                     };
                 }
                 var $viewAccount = $("#tab-resource_touristGroup-view-content");
-                    $viewAccount.find('.T-statementsBtn').click(function(event) {
+                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
                     var pluginKey = 'plugin_print';
-                    Tools.loadPluginScript(pluginKey);
-                    touristGroup.viewAccountList(id);
+                        Tools.loadPluginScript(pluginKey);
+                        touristGroup.viewAccountList(id);
                 });
             }
         });
@@ -559,36 +559,32 @@ define(function(require, exports) {
      */
     touristGroup.viewAccountList = function(id){ 
         $.ajax({
-                url: touristGroup.url("viewTouristGroupDetails", "viewAccounts"),
-                data: "id=" + id,
+                url: touristGroup.url("viewPartnerSettlement", "viewAccounts"),
+                data: "id=" + id+"&action=viewAccounts",
                 type: 'POST',
+                showLoading:false,
                 success:function(data){
+                    layer.close(globalLoadingLayer);
                     var result = showDialog(data);
-                    if(result){
-                        var touristGroupInfo = JSON.parse(data.touristGroupDetail);
-                            data.touristGroupDetail = touristGroupInfo; 
-                            var html = viewAccountsTemplate(data);
-                            var viewAccountsLayer = layer.open({
-                                type: 1,
-                                title:"打印结算单",
-                                skin: 'layui-layer-rim',
-                                area: '750px', 
-                                zIndex:1028,
-                                content: html,
-                                scrollbar: false,
-                                
-                            });
+                        if(result){
+                                var html = viewAccountsTemplate(data);
+                                var viewAccountsLayer = layer.open({
+                                    type: 1,
+                                    title:"打印结算单",
+                                    skin: 'layui-layer-rim',
+                                    area: '750px', 
+                                    zIndex:1028,
+                                    content: html,
+                                    scrollbar: false
+                                });
                         //打印单团核算页面
                         var $outAccountsTab = $("#T-touristGroupViewAccount");
                             $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
                             touristGroup.exportsOutAccounts($outAccountsTab);
                         });
-                    }
-                    
+                    }   
                 }
-        });          
-        
-           
+        });       
     };
 
     //打印页面
