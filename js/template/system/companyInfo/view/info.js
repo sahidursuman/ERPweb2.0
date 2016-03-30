@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":429,"md5":"194fa06b722da6551f5c714fe39515b3"}*/
+/*TMODJS:{"debug":true,"version":432,"md5":"6772dcfb9f6a751d2cd10b3eb2c380a8"}*/
 define(function(require) {
-    return require("../../../template")("system/companyInfo/view/info", function($data, $filename) {
+    return require("/js/template/template")("system/companyInfo/view/info", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, name = $data.name, type = $data.type, contacts = $data.contacts, contactNumber = $data.contactNumber, telephoneNumber = $data.telephoneNumber, faxNumber = $data.faxNumber, businessDetail = $data.businessDetail, lineDetail = $data.lineDetail, companyLogo = $data.companyLogo, companySeal = $data.companySeal, financialSeal = $data.financialSeal, $out = "";
             return $out += '<div class="row col-sm-12"> <form class="form-horizontal T-form" role="form" style="margin-top:10px" onsubmit="return false"> <div class="form-group"> <div class="col-sm-6"> <div class="form-group"> <label class="col-sm-3 control-label no-padding-right">旅行社名称：</label> <label class="col-sm-6" style="padding-top:2px;">', 
