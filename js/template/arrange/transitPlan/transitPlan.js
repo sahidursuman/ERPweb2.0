@@ -12,7 +12,10 @@ define(function(require, exports) {
         viewhotelTemplate = require("./view/viewhotel"),
         busplanTemplate = require("./view/busplan"),
         hotelplanTemplate = require("./view/hotelplan"),
+        // 其他安排
         itsplanTemplate = require("./view/itsplan"),
+        itsViewTemplate = require("./view/itsView"),
+
         mealplanTemplate = require("./view/mealplan"),
         ticketplanTemplate = require("./view/ticketplan"),
         busviewTemplate = require("./view/busview"),
@@ -38,7 +41,8 @@ define(function(require, exports) {
         ticketplan = "tab-" + menuKey + "-ticketplan",
         tabId = "tab-" + menuKey + '-content',
         viewbus =  "tab-" + menuKey + "-bus",
-        busviewId = "tab-" + menuKey + '-busview';
+        busviewId = "tab-" + menuKey + '-busview',
+        otherViewId = menuKey + '-otherview';
     /**
      * 自定义中转对象
      * @type {Object}
@@ -662,21 +666,29 @@ define(function(require, exports) {
             language: 'zh-CN',
             maxView: 3
         });
-    }
+    };
+
     transitPlan.otherView = function(id) {
         if (!id) {
             console.info('其他安排为空，无法查看具体信息');
         }
 
         $.ajax({
-            url: KingServices.build_url('', ''),
+            url: KingServices.build_url(service_name, 'getOutOtherArrange'),
             type: 'get',
             dataType: 'json',
             data: {id: id},
         })
         .done(function(res) {
             if (showDialog(res)) {
+                if (Tools.addTab(otherViewId, '查看其他安排', itsViewTemplate(res))) {
+                    var tabId = '#tab-' + otherViewId + '-content';
+                    $(tabId).find('.T-close').on('click', function(event) {
+                        event.preventDefault();
 
+                        Tools.closeTab(tabId);
+                    });
+                }
             }
         });        
     };
