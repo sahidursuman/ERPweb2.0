@@ -5,17 +5,21 @@
 		<span class="title">申请流程</span>
 		</li>
 
-		<li data-target="#step2"class="{{if applyStatus==1}}{{else}}active{{/if}}">
+		<li data-target="#step2"class="{{if applyStatus !=1 && applyStatus !=2}}active{{/if}}">
 		<span class="step">1</span>
 		<span class="title">免费在线申请</span>
 		</li>
-
+		
 		<li data-target="#step3">
 		<span class="step">2</span>
 		<span class="title">资料审核</span>
 		</li>
-
-		<li data-target="#step4">
+		
+		<li data-target="#step4" class="{{if applyStatus==2}}active{{else}}hidden{{/if}} ">
+			<span class="step">3</span>
+			<span class="title">审核未通过</span>
+		</li>
+		<li data-target="#step4"  class="{{if applyStatus==2}}hidden{{/if}}">
 		<span class="step">3</span>
 		<span class="title">线下签订协议</span>
 		</li>
@@ -36,43 +40,43 @@
 	<form class="T-form" role="form" onsubmit="return false">
 		<div class="apply-information mar-t-15"> 
 			<label><span class="necessary">*</span>借款人姓名：</label> 
-			<input type="text" name="name"  {{if applyStatus==1}}readonly{{/if}}  value="{{baseInfo.name}}" class="">
+			<input type="text" name="name"  {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} value="{{baseInfo.name}}" class="">
 			<input type="hidden" name="id" value="{{baseInfo.applyId}}">
-			<label class="mar-l-90"><span class="necessary">*</span>联系电话：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}  value="{{baseInfo.mobileNumber}}" name="mobileNumber" class="r">
+			<label class="mar-l-90"><span class="necessary">*</span>联系电话：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} value="{{baseInfo.mobileNumber}}" name="mobileNumber" class="r">
 		</div>
 		<div class="apply-information" style="margin-top:12px;"> 
 		<label style="margin-left: 20px;"><span class="necessary">*</span>婚姻状况:</label>
-			<select name="maritalStatus" id=""  {{if applyStatus==1}}disabled="disabled"{{/if}}  style="height: 30px !important;width: 250px !important;margin-top: 5px;">
+			<select name="maritalStatus" id=""  {{if applyStatus==1 || applyStatus==2}}disabled="disabled"{{/if}}style="height: 30px !important;width: 250px !important;margin-top: 5px;">
 				<option value="0" {{if baseInfo.maritalStatus==0}}selected{{/if}}>未婚</option>
 				<option value="1" {{if baseInfo.maritalStatus==1}}selected{{/if}}>已婚</option>
 				<option value="2" {{if baseInfo.maritalStatus==2}}selected{{/if}}>离异</option>
 				<option value="3" {{if baseInfo.maritalStatus==3}}selected{{/if}}>丧偶</option>
 				
 			</select>
-			<label class="mar-l-90"><span class="necessary">*</span>身份证号：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}  value="{{baseInfo.idCard}}" name="idCard" class="">
+			<label class="mar-l-90"><span class="necessary">*</span>身份证号：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} value="{{baseInfo.idCard}}" name="idCard" class="">
 		</div>
 		<div class="apply-information mar-t-15"> 
-			<label class="mar-l-10"><span class="necessary">*</span>营业执照：</label> <input type="text"  {{if applyStatus==1}}readonly{{/if}} name="businessNumber" value="{{baseInfo.businessNumber}}" class="">
-			<label class="mar-l-90"><span class="necessary">*</span>机构代码：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}  name="code" value="{{baseInfo.code}}" class="">
+			<label class="mar-l-10"><span class="necessary">*</span>营业执照：</label> <input type="text"  {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} name="businessNumber" value="{{baseInfo.businessNumber}}" class="">
+			<label class="mar-l-90"><span class="necessary">*</span>机构代码：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} name="code" value="{{baseInfo.code}}" class="">
 		</div>
 	
 		<div class="col-xs-12 mar-t-20"> 
-			<label class="col-sm-1 control-label no-padding-right mar-l-f5">收入来源：</label> <input  {{if applyStatus==1}}readonly{{/if}} type="text" value="{{baseInfo.incomeStream}}" name="incomeStream" class="col-xs-10 apply-details">
+			<label class="col-sm-1 control-label no-padding-right mar-l-f5">收入来源：</label> <input  {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} type="text" value="{{baseInfo.incomeStream}}" name="incomeStream" class="col-xs-10 apply-details">
 		</div>
 		<div class="col-xs-12 mar-t-20"> 
-			<label class="col-sm-1 control-label no-padding-right mar-l-f5">借款用途：</label> <input  {{if applyStatus==1}}readonly{{/if}} type="text"  value="{{baseInfo.purpose}}" name="purpose" class="col-xs-10 apply-details">
+			<label class="col-sm-1 control-label no-padding-right mar-l-f5">借款用途：</label> <input  {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} type="text"  value="{{baseInfo.purpose}}" name="purpose" class="col-xs-10 apply-details">
 		</div>
 		<div class="col-xs-12 mar-t-20"> 
-			<label class="col-sm-1 control-label no-padding-right mar-l-f5">还款来源：</label> <input  {{if applyStatus==1}}readonly{{/if}} type="text"  value="{{baseInfo.paymentStream}}" name="paymentStream" class="col-xs-10 apply-details">
+			<label class="col-sm-1 control-label no-padding-right mar-l-f5">还款来源：</label> <input  {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} type="text"  value="{{baseInfo.paymentStream}}" name="paymentStream" class="col-xs-10 apply-details">
 		</div>
 		<div class="col-xs-12 mar-t-20"> 
-			<label style="margin-left: -18px;" class="col-sm-1 control-label no-padding-right">抵押物情况：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}   value="{{baseInfo.collateral}}" name="collateral" class="col-xs-10 apply-baseInfo">
+			<label style="margin-left: -18px;" class="col-sm-1 control-label no-padding-right">抵押物情况：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}}  value="{{baseInfo.collateral}}" name="collateral" class="col-xs-10 apply-baseInfo">
 		</div>
 		<div class="col-xs-12 mar-t-20"> 
-			<label style="margin-left: 15px;width: 60px;" class="col-sm-1 control-label no-padding-right">备注：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}  value="{{baseInfo.remark}}"name="remark" class="col-xs-10 apply-remark">
+			<label style="margin-left: 15px;width: 60px;" class="col-sm-1 control-label no-padding-right">备注：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} value="{{baseInfo.remark}}"name="remark" class="col-xs-10 apply-remark">
 		</div>
 		<div class="col-xs-12" style="margin-top: 20px;margin-left: -15px;"> 
-		<label><span class="necessary">*</span>申请借款金额：</label> <input type="text" {{if applyStatus==1}}readonly{{/if}}  name="applyMoney" value="{{baseInfo.applyMoney}}" style="width: 120px !important;"><span style="margin-left: 5px;">元</span>
+		<label><span class="necessary">*</span>申请借款金额：</label> <input type="text" {{if applyStatus==1 || applyStatus==2}}readonly{{/if}} name="applyMoney" value="{{baseInfo.applyMoney}}" style="width: 120px !important;"><span style="margin-left: 5px;">元</span>
 		</div>
 
 		</form>

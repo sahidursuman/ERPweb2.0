@@ -3480,6 +3480,11 @@ define(function(require, exports){
 							restaurantList[i].value = restaurantList[i].name;
 						}
 					}
+					var newItem = {
+						id:"",
+						value:"导游自选"
+					};
+					restaurantList.unshift(newItem)
 					$restObj.autocomplete({
 						minLength:0,
 						change:function(event,ui){
