@@ -6,6 +6,7 @@
 define(function(require, exports) {
 	//模板加载
 	var menuKey = "financial_offsetByDetail",
+        rule = require("./rule"),
         listTemplate = require("./view/list"),
         addTemplate = require("./view/add");
 
@@ -32,6 +33,7 @@ define(function(require, exports) {
                 resourceType:offsetByDetail.getVal($tab,"resourceType"),
                 resourceName:offsetByDetail.getVal($tab,"resourceName"),
                 receivableType:offsetByDetail.getVal($tab,"receivableType"),
+                receivableTypeId:offsetByDetail.getVal($tab,"receivableTypeId"),
                 subjectName:offsetByDetail.getVal($tab,"subjectName"),
                 voucher:offsetByDetail.getVal($tab,"voucher"),
                 payType:offsetByDetail.getVal($tab,"payType")
@@ -84,6 +86,10 @@ define(function(require, exports) {
     		/* Act on the event */
             offsetByDetail.addOffsetList();
     	});
+
+        //主营业务收付类别
+        offsetByDetail.getReceivableTypeList($tab.find('[name=receivableType]'));
+
     };
     
     //统计收付款合计
@@ -128,6 +134,8 @@ define(function(require, exports) {
      * @param {[type]} $addOffsetList [新增冲抵明细容器]
      */
     offsetByDetail.addOffset_event=function($addOffsetList){
+        //表单验证
+        validator = rule.check($addOffsetList);
         FinancialService.datetimepicker($addOffsetList);
         //关闭
         $addOffsetList.find('.T-close').off('click').on('click', function(event) {
@@ -138,6 +146,7 @@ define(function(require, exports) {
         $addOffsetList.find('.T-save').off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
+            if (!validator.form()) { return; }
             offsetByDetail.saveAddOff($addOffsetList);
         });
         $addOffsetList.find('.T-moneyType').off('change').on('change',function(event) {
@@ -251,6 +260,48 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     var list = data.units;
+                    if (list != null && list.length > 0) {
+                        for (var i = 0; i < list.length; i++) {
+                            list[i].value = list[i].name;
+                            list[i].id = list[i].id;
+                        };
+                    } else {
+                        layer.tips('没有内容', $obj, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $obj.autocomplete('option', 'source', list);
+                    $obj.autocomplete('search', '');
+                }
+            });
+        })
+    };
+    /**
+     * [getReceivableTypeList 获取主营业务收付类别]
+     * @param  {[type]} $obj [父对象]
+     * @return {[type]}      [description]
+     */
+    offsetByDetail.getReceivableTypeList = function($obj) {
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item) {
+                   $(this).nextAll().find('[name=resourceId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.name).nextAll('[name=receivableTypeId]').val(ui.item.id).trigger('change');
+            }
+        }).off('click').on('click', function() {
+             $.ajax({
+               url:KingServices.build_url("cash","findSelectValue"),
+               type: 'POST',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var all={ id:'',name:'全部'};
+                    var list = data.receivableTypes;list.unshift(all);
                     if (list != null && list.length > 0) {
                         for (var i = 0; i < list.length; i++) {
                             list[i].value = list[i].name;
