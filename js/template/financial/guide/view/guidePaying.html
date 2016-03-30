@@ -25,12 +25,12 @@
                 <div class="form-group btn-group T-check-status mar-r-10">
                     <button data-value="{{isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
                         <span>
-                            {{if isConfirmAccount == 0}}
-                                未对账
+                            {{if !isConfirmAccount || isConfirmAccount === ""}}
+                                全部
                             {{else if isConfirmAccount == 1}}
                                 已对账
                             {{else}}
-                                全部
+                                未对账
                             {{/if}}
                         </span>
                         <i class="ace-icon fa fa-angle-down icon-on-right"></i>

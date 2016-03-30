@@ -145,6 +145,7 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     var dataTable = data;
+                    dataTable.searchParam = args;
                     // 对账 
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
@@ -439,6 +440,7 @@ define(function(require, exports) {
                         data.btnShowStatus = OtherAccounts.saveJson.btnShowStatus;
                     }
                     var dataTable = data;
+                    dataTable.searchParam = args;
                     // 付款头部的接口
                     $.ajax({
                         url: KingServices.build_url("account/arrangeOtherFinancial", "getStatistics"),
