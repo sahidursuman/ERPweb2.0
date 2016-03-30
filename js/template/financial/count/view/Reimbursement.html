@@ -152,7 +152,7 @@
                         <tr>
                             <th class="th-border">序号</th>
                             <th class="th-border">客户</th>
-                            <th class="th-border">收客单号</th>
+                            <th class="th-border">收客信息</th>
                             <th class="th-border">游客信息</th>
                             <th class="th-border">包含自费</th>
                             <th class="th-border">备注</th>
@@ -168,7 +168,7 @@
                         <tr id="{{touristGroup.id}}">
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-                            <td>{{touristGroup.orderNumber}}</td>
+                            <td style="text-align: left;"> <p>收客单号：{{touristGroup.orderNumber}}</p> <p>{{tripPlan.lineProduct.name}}</p></td>
                             <td>
                                 <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
                                 <br/>
