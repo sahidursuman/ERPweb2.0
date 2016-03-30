@@ -669,6 +669,7 @@ define(function(require, exports) {
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson,true);
                             data.isOuter = FinGuide.isOuter;
+                            data.isConfirmAccount = args.isConfirmAccount;
                             if($tab.find('.T-saveClear').data('borrow') == "borrow"){
                                 data.isPayMoney = true;
                                 var sumPayMoney = 0;
