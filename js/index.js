@@ -140,7 +140,7 @@
 			event.preventDefault();
 			var $that = $(this), $prev = $tabList.find('.active');
 			if ($that.index() != $prev.index()) {  // 通过序号，避免双击将自己设置为前有一个
-				$that.data('prev-tab', $prev);
+				Tools.processTabHistory($that, true);
 			}
 			Tools.justifyTab();
 		})

@@ -54,14 +54,14 @@
 		</tr>
 	</table>
 </form>
-<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+<form class="form-horizontal" id="shopFormCol-x12" role="form" style="margin-top:10px" onsubmit="return false">
 	<table class="whereQ whereTwo">
 		<tr>
 			<td colspan="8" class="HeadManage" style="text-align: left">商品列表</td>
 		</tr>
 		<tr>
 			<td class="style-myself">商品名称</td>
-			<td width="100">针对客源</td>
+			<td width="100" class="hidden">针对客源</td>
 			<td width="200">时间范围</td>
 			<td width="200">价格区间</td>
 			<td class="style-myself">导佣比例(%)</td>
@@ -73,7 +73,7 @@
 			<td>
 				{{shopPolicy.name}}
 			</td>
-			<td width="100">
+			<td width="100" class="hidden">
 				{{if shopPolicy.customerType == 0}}
 				散客
 				{{else}}
@@ -91,7 +91,7 @@
 			</td>
 			<td class="no-padding" width="200">
 				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}}" style="padding-bottom: 7px;">
+					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}} T-priceArea" style="padding-bottom: 7px;">
 						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
 							<label class="col-sm-12 control-label center">
 								{{shopCostRebate.costMoneyStart}} 至 {{shopCostRebate.costMoneyEnd}}<br>

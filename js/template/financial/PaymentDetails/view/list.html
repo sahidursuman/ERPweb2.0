@@ -52,29 +52,29 @@
     
         <div class="form-group mar-r-10">
             <label>支付方式</label>
-            <select class="form-control T-search-payment" style="width: 100px;">
+            <select class="form-control T-search-payment" name="sumPayType" style="width: 100px;">
                 <option value="">全部</option>
-                <option value="0" {{if searchParam.payType == 0}}selected="selected"{{/if}}>现金</option>
-                <option value="1" {{if searchParam.payType == 1}}selected="selected"{{/if}}>银行转账</option>
-                <option value="3" {{if searchParam.payType == 3}}selected="selected"{{/if}}>支票</option>
-                <option value="4" {{if searchParam.payType == 4}}selected="selected"{{/if}}>其他</option>
-                <option value="5" {{if searchParam.payType == 5}}selected="selected"{{/if}}>网付</option>
+                <option value="0">现金</option>
+                <option value="1">银行转账</option>
+                <option value="3">支票</option>
+                <option value="4">其他</option>
+                <option value="5">网付</option>
             </select>
         </div>
-        <div class="form-group mar-r-10 T-cash-area hidden">
+        <div class="form-group mar-r-10 T-cash-area">
             <label class="control-label">现金账号</label>
             <label class="control-label">
-                <input type="text" name="cash-number" {{if searchParam.payType == 0}}value="{{searchParam.resourceName}}"{{/if}} class="money" style="width:300px;">
-                <input type="hidden" name="cash-id" {{if searchParam.payType == 0}}value="{{searchParam.bankId}}"{{/if}}/>
+                <input type="text" name="cash-number" {{if searchParam.payType == 0 || searchParam.accountType==0}}value="{{searchParam.resourceName}}"{{/if}} class="form-control T-cash-number" style="width:300px;">
+                <input type="hidden" name="cash-id" {{if searchParam.payType == 0 || searchParam.accountType==0}}value="{{searchParam.bankId}}"{{/if}}/>
             </label>
         </div>
-        <div class="form-group mar-r-10 hidden">
+        <div class="form-group mar-r-10 T-card-area">
             <label>银行账号</label>
-            <input type="text" class="form-control T-card-number" name="card-number" {{if searchParam.payType != 0}}value="{{searchParam.resourceName}}"{{/if}} style="width: 300px;">
-            <input type="hidden" name="card-id" class="T-bankId" {{if searchParam.payType != 0}}value="{{searchParam.bankId}}"{{/if}}>
-            <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{searchParam.beginningBalance}}">
+            <input type="text" class="form-control T-card-number" name="card-number" {{if searchParam.payType != 0 || searchParam.accountType==1}}value="{{searchParam.resourceName}}"{{/if}} style="width: 300px;">
+            <input type="hidden" name="card-id" class="T-bankId" {{if searchParam.payType != 0 || searchParam.accountType == 1}}value="{{searchParam.bankId}}"{{/if}}>
             <input type="hidden" name="tally-date" class="datepicker" value="{{searchParam.bankId}}">
         </div>
+        <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{searchParam.beginningBalance}}">
         <div class="form-group mar-r-10">
             <label>收款合计：</label>
             <label class="T-incomeMoney F-float F-money">{{total.incomeMoney}}</label>

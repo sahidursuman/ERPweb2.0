@@ -19,7 +19,6 @@
                         <th class="th-border">金额</th>
                         <th class="th-border">单据</th>
                         <th class="th-border">导游报账备注</th>
-                        {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr>
                     </thead>
                     <tbody class="T-count-otherIn">
@@ -27,22 +26,36 @@
                     {{if otherInCome != null}}
                     <tr otherInId="{{otherInCome.id}}" otherIn="{{otherInCome.id}}" whichDay="{{otherInCome.whichDay}}">
                         <td whichDay="{{otherInCome.whichDay}}"><span class="whichDay"></span></td>
+
                         <td><span>{{otherInCome.title}}</span><input style="width:90px;" type="hidden" name="title" reset="true" value="{{otherInCome.title}}" old="{{otherInCome.title}}" maxlength="100" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                        <td><span>{{otherInCome.price}}</span><input style="width:90px;" type="hidden" class="F-float F-money" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}" maxlength="11"
-                        {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}
-                        /></td>
-                        <td><input style="width:90px;" type="text" class="F-float F-count" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
+
+                        <td>
+                        {{if tripPlan.billStatus == -1}}
+                            <span>{{otherInCome.price}}</span>
+                            <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.price}}" old="{{otherInCome.price}}"/>
+                        {{else}}
+                            <input  type="text" class="F-float F-money w-80" 
+                            name="price" value="{{otherInCome.price}}"  maxlength="11"
+                            {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                        {{/if}}
+                        </td>
+
+                        <td><input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.count}}" old="{{otherInCome.count}}" maxlength="11"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+
                         <td><span class="needPayMoney F-float F-money">{{otherInCome.needPayMoney}}</span><input type="hidden" name="needPayMoney" value="{{otherInCome.needPayMoney}}" 
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></span></td>
+
                         <td>{{if otherInCome.billImage != null && otherInCome.billImage != ""}}
                                 <a href="javascript:void(0);" url="{{otherInCome.billImage}}" class="btn-view">查看</a>
                             {{else}}
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td>{{if editStatus == 1}}<input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000" {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{else}}{{otherInCome.billRemark}}{{/if}}</td>
-                        {{if tripPlan.billStatus == 2}}<td>{{if otherInCome.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
+
+                        <td><input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
+                        &nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>
+                        </td>
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -52,7 +65,7 @@
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;"><div> 
                     <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherInRemark.length>0}}{{remarkArrangeList.otherInRemark[0].opCheckRemark}}{{/if}}" />
+                    <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherInRemark.length>0}}{{remarkArrangeList.otherInRemark[0].opCheckRemark}}{{/if}}" />
                 
                     <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
                     <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.otherInRemark.length>0}}{{remarkArrangeList.otherInRemark[0].financeCheckRemark}}{{/if}}" />
