@@ -1664,31 +1664,32 @@ define(function(require, exports) {
         for (var i = 0; i < $tr.length; i++) {
             var $trline = $tr.eq(i);
             var outhotelJson = {
+                hotelId : transitPlan.getValue($trline,'hotelId'),//酒店Id
+                hotelRoomId :  transitPlan.getValue($trline,'hotelRoomTypeId'), //房型Id
+                memberCount : transitPlan.getValue($trline,'memberCount'),
                 checkInTime : transitPlan.getValue($trline,'checkInTime'),
                 checkOutTime : transitPlan.getValue($trline,'checkOutTime'), 
-                hotelId : transitPlan.getValue($trline,'hotelId'),
-                hotelRoomId :  transitPlan.getValue($trline,'hotelRoomId'), //接送类型
+                price : transitPlan.getValue($trline,'price'),
+                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
                 needPayMoney : transitPlan.getValue($trline,'needPayMoney'),
                 outHotelId : transitPlan.getValue($trline,'outHotelId'),
                 prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
-                price : transitPlan.getValue($trline,'price'),
-                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
                 remark : transitPlan.getValue($trline,'remark')
             };
             outHotelList.push(outhotelJson);
         }
-        if($(this).val().trim()){
+        // if($(this).val().trim()){
             outRemarkId.each(function(){
                  var outRemarkJson = {
                      outRemarkId : $(this).val()
                  }
                  outRemarkList.push(outRemarkJson);
             })
-        }
+        // }    
         $.ajax({
             url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutHotelUnifyArrange"),
             type : "POST",
-            data : 'unifyId='+JSON.stringify(unifyId)+"&outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outHotelList),
+            data : 'unifyId='+JSON.stringify(unifyId)+"&outRemarkList="+JSON.stringify(outRemarkList)+"&outHotelList="+JSON.stringify(outHotelList),
         }).done(function(data) {
             if (showDialog(data)) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
@@ -1730,39 +1731,41 @@ define(function(require, exports) {
         for (var i = 0; i < $tr.length; i++) {
             var $trline = $tr.eq(i);
             var outhotelJson = {
+                hotelId : transitPlan.getValue($trline,'hotelId'),//酒店Id
+                hotelRoomId :  transitPlan.getValue($trline,'hotelRoomTypeId'), //房型Id
+                memberCount : transitPlan.getValue($trline,'memberCount'),
                 checkInTime : transitPlan.getValue($trline,'checkInTime'),
                 checkOutTime : transitPlan.getValue($trline,'checkOutTime'), 
-                hotelId : transitPlan.getValue($trline,'hotelId'),
-                hotelRoomId :  transitPlan.getValue($trline,'hotelRoomId'), //接送类型
+                price : transitPlan.getValue($trline,'price'),
+                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
                 needPayMoney : transitPlan.getValue($trline,'needPayMoney'),
                 outHotelId : transitPlan.getValue($trline,'outHotelId'),
                 prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
-                price : transitPlan.getValue($trline,'price'),
-                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
                 remark : transitPlan.getValue($trline,'remark')
             };
             outHotelList.push(outhotelJson);
         }
-        if($(this).val().trim()){
+        // if($(this).val().trim()){
         outRemarkId.each(function(){
              var outRemarkJson = {
                  outRemarkId : $(this).val()
              }
              outRemarkList.push(outRemarkJson);
         })
-        }
+        // }
         $.ajax({
             url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutHotelUnifyArrange"),
             type : "POST",
-            data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outHotelList),
-        }).done(function(data) {
-            if (showDialog(data)) {
+            data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outHotelList="+JSON.stringify(outHotelList),
+            success: function(data){
+                if (showDialog(data)) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                     Tools.closeTab(busplan);
                     transitPlan.listTransitBusPlan(transitPlan.listPageNo);
                 });
             }
-        })
+            }
+    })
     }
     /**
      * 中转安排删除房物理删除安排
@@ -2130,26 +2133,26 @@ define(function(require, exports) {
     //添加房安排
     transitPlan.addhotel = function($obj) {
        var html ='<tr>'+
-            '<td><input type="text" name="serviceType" value="" class="datepicker"/>'+
-            '<td><input type="hidden" name="serviceType" value="" class="datepicker"/>'+
+            '<td>'+
             '<input class="col-sm-12 T-datePicker datepicker" name="checkInTime" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-datePicker datepicker" name="checkOutTime" value="" type="text" /></td>'+
             '<td><select class="tripPlanHotelStar" name="hotelLevel">'+
             '<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
             '<option value="2">三星</option><option value="3">准四星</option>'+
             '<option value="4">四星</option><option value="5">准五星</option>'+
             '<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
-            '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" />'+
+            '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" value=""/>'+
             '<span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
             '<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
             '<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
-            '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" /></td>'+
+            '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" value=""/></td>'+
             '<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
             '<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
-            '<td><input class="col-sm-12 T-needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
-            '<td><a class="cursor T-contact-delete" data-catename="hotel" title="删除">删除</a></td>'+
+            '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
             '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
