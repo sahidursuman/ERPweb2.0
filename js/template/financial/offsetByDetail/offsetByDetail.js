@@ -6,6 +6,7 @@
 define(function(require, exports) {
 	//模板加载
 	var menuKey = "financial_offsetByDetail",
+        rule = require("./rule"),
         listTemplate = require("./view/list"),
         addTemplate = require("./view/add");
 
@@ -133,6 +134,8 @@ define(function(require, exports) {
      * @param {[type]} $addOffsetList [新增冲抵明细容器]
      */
     offsetByDetail.addOffset_event=function($addOffsetList){
+        //表单验证
+        validator = rule.check($addOffsetList);
         FinancialService.datetimepicker($addOffsetList);
         //关闭
         $addOffsetList.find('.T-close').off('click').on('click', function(event) {
@@ -143,6 +146,7 @@ define(function(require, exports) {
         $addOffsetList.find('.T-save').off('click').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
+            if (!validator.form()) { return; }
             offsetByDetail.saveAddOff($addOffsetList);
         });
         $addOffsetList.find('.T-moneyType').off('change').on('change',function(event) {
