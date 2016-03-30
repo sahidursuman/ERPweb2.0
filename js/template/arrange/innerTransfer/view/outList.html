@@ -28,7 +28,7 @@
 			{{else if list.status == 4}}<span style="color: red;">已退回</span>
 			{{/if}}</td>
 			<td>
-				<div class="hidden-sm hidden-xs btn-group">
+				<div class="btn-group">
 					<a class="cursor {{if list.status != 1  && list.status != 4 && list.status!=2}}T-TransferOut-edit{{/if}} R-right T-action" data-right="1340002" {{if list.status == 1 || list.status == 2 || list.status == 4}}style="color:#bbb"{{/if}}>
 						编辑
 						<label style="padding-left:10px;">|</label>

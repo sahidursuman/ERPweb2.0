@@ -254,7 +254,15 @@ define(function(require, exports) {
 					$(this).find("p").html("分享链接:&nbsp;"+ url);
 				}
 			});
-			new ZeroClipboard($('.T-copy-clip-btn-share'));
+			// new ZeroClipboard($('.T-copy-clip-btn-share'));
+			var clipboard = new Clipboard('.T-copy-clip-btn-share');
+		        clipboard.on('success', function(e) {
+		            e.clearSelection();
+		        });
+		        clipboard.on('error', function(e) {
+		            console.error('Action:', e.action);
+		            console.error('Trigger:', e.trigger);
+       			}); 
 		}
 	};
 	//新增报价

@@ -62,7 +62,7 @@ define(function(require, exports) {
 	 */
 	transit.init_eventMain = function($tab) {
 		//搜索栏状态button下拉事件
-		transit.$searchArea.find('.T-transitState').on('change', function() {
+		transit.$searchArea.find('.T-transitState, #order_by').on('change', function() {
 			transit.listTransit(0);
 		});
 
@@ -109,11 +109,13 @@ define(function(require, exports) {
             arrangeStartTime = transit.$searchArea.find("input[name=arrangeStartTime]").val(),
             arrangeEndTime = transit.$searchArea.find("input[name=arrangeEndTime]").val(),
             status = transit.$searchArea.find(".T-transitState").val(),
-            tgOrderNumber = transit.$searchArea.find(".T-orderNumber").val(),
+            tgOrderNumber = transit.$searchArea.find(".T-tgOrderNumber").val(),
+            orderNumber = transit.$searchArea.find(".T-orderNumber").val(),
             shuttleType = transit.$searchArea.find("[name=shuttleType]").val(),
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
             arrangeItem = transit.$searchArea.find("[name=arrangeItem]").val(),
             arrangeItemStatus = transit.$searchArea.find("[name=arrangeItemStatus]").val(),
+            contactInfo = transit.$searchArea.find("[name=contactInfo]").val(),
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
 
@@ -130,10 +132,12 @@ define(function(require, exports) {
 				arrangeEndTime: arrangeEndTime,
 				status: status,
 				tgOrderNumber: tgOrderNumber,
+				orderNumber: orderNumber,
 				shuttleType: shuttleType,
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo: contactInfo,
 				shift: shift
 			}
         	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
@@ -149,7 +153,8 @@ define(function(require, exports) {
 			type:"POST",
 			data: {
 				pageNo: page,
-				sortType: 'auto',
+				sortType: 'touristGroup.startTime',
+				order: transit.$searchArea.find("#order_by").val(),
 				fromPartnerAgencyName: fromPartnerAgencyName,
 				fromPartnerAgencyId: fromPartnerAgencyId,
 				lineProductName: lineProductName,
@@ -161,10 +166,12 @@ define(function(require, exports) {
 				arrangeEndTime: arrangeEndTime,
 				status: status,
 				tgOrderNumber: tgOrderNumber,
+				orderNumber: orderNumber,
 				shuttleType: shuttleType,
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo:contactInfo,
 				shift: shift
 			},
 			success:function(data){

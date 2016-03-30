@@ -216,7 +216,6 @@ define(function(require, exports) {
         Tools.setDatePicker($searchArea.find('.datepicker'));
 
         touristGroup.getOPUserList($searchArea.find('[name=realName]'), true);
-        touristGroup.getLineProduct($searchArea.find('.T-chooseLineProduct'));
         touristGroup.getListPartnerAgencyList($searchArea.find('.T-choosePartnerAgency'));
         touristGroup.getBussinessList($searchArea.find('.T-chooseBussinessGroup'));
         //添加游客小组事件
@@ -258,8 +257,7 @@ define(function(require, exports) {
                     pageNo : 0,
                     orderNumber : $searchArea.find('[name="orderNumber"]').val(),
                     type : type,
-                    lineProductName: $searchArea.find('[name="lineProductName"]').val(),
-                    lineProductId: $searchArea.find('[name="lineProductId"]').val(),
+                    lineTripName : $searchArea.find('[name="lineTripName"]').val(),
                     guestDetails : $searchArea.find('[name="guestDetails"]').val(),
                     customerType : $searchArea.find('[name="customerType"]').val(),
                     dateType : $searchArea.find('[name="dateType"]').val(),
@@ -892,6 +890,9 @@ define(function(require, exports) {
                     }
                     $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                     layer.close(index);
+                    if(!!type){
+                        F.subtotal($that.closest('tr'), 1);
+                    }
                 });
 		    }
 		});
@@ -1774,36 +1775,6 @@ define(function(require, exports) {
     };
 
     /**
-     * 绑定线路产品的选择
-     * @param  {[type]} $target [description]
-     * @return {[type]}         [description]
-     */
-    touristGroup.getLineProduct = function($target){
-        return $target.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    $target.nextAll("[name=lineProductId]").val("");
-                }
-            },
-            select: function(event, ui) {
-                $(this).blur();
-                $target.find("[name=lineProductId]").val(ui.item.id).trigger('change');
-            }
-        }).off('click').on('click', function() {
-            var obj = this;
-            var lineParObj = touristGroup.autocompleteDate.lineProductList;
-            if (lineParObj != null && lineParObj.length > 0) {
-                for (var i = 0; i < lineParObj.length; i++) {
-                    lineParObj[i].value = lineParObj[i].name;
-                }
-            }
-            $(obj).autocomplete('option', 'source', lineParObj);
-            $(obj).autocomplete('search', '');
-        });
-    };
-
-    /**
      * 绑定组团社的选择
      * @param  {[type]} $target [description]
      * @return {[type]}         [description]
@@ -2271,6 +2242,7 @@ define(function(require, exports) {
                 receiveHotel = $tr.find('[name="receiveHotel"]').val() || 0,
                 receiveOther = $tr.find('[name="receiveOther"]').val() || 0,
                 sumNum = 0;
+                console.log(type)
             if(type === 1){
                 sumNum = lineNeedPayMoney * 1 + hotelNeedPayMoney * 1;
             }else{

@@ -1,2 +1,27 @@
-/*TMODJS:{"version":12,"md5":"5cb52afb055d53abaa537e0eeefed02f"}*/
-define(function(require){return require("/js/template/template")("resource/touristGroupN/view/tourists/choose/chooseClientList",function(a){"use strict";var b=this,c=b.$helpers,d=b.$each,e=a.travelAgencyList,f=(a.rs,a.$index,b.$escape),g="";return d(e,function(a){g+=' <tr class="cursor" data-id="',g+=f(a.travelAgencyId),g+='" data-contact-id="',g+=f(a.fromPartnerAgencyContactId),g+='"> <td name="travelAgencyName">',g+=f(a.travelAgencyName),g+="</td> <td>",g+=f(c.getTravelAgencyType(a.type)),g+="</td> <td>",g+=f(c.getTravelAgencyLevel(a.level)),g+="</td> <td>",g+=f(a.contactRealname),g+="</td> <td>",g+=f(a.contactMobileNumber),g+='</td> <td> <input type="radio" name="chooseClient" class="ace"> <label class="lbl"></label> </td> </tr> '}),new String(g)})});
+/*TMODJS:{"debug":true,"version":13,"md5":"5cb52afb055d53abaa537e0eeefed02f"}*/
+define(function(require) {
+    return require("/js/template/template")("resource/touristGroupN/view/tourists/choose/chooseClientList", function($data, $filename) {
+        try {
+            var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, travelAgencyList = $data.travelAgencyList, $escape = ($data.rs, 
+            $data.$index, $utils.$escape), $out = "";
+            return $line = 1, $each(travelAgencyList, function(rs) {
+                $out += ' <tr class="cursor" data-id="', $line = 2, $out += $escape(rs.travelAgencyId), 
+                $out += '" data-contact-id="', $line = 2, $out += $escape(rs.fromPartnerAgencyContactId), 
+                $out += '"> <td name="travelAgencyName">', $line = 3, $out += $escape(rs.travelAgencyName), 
+                $out += "</td> <td>", $line = 4, $out += $escape($helpers.getTravelAgencyType(rs.type)), 
+                $out += "</td> <td>", $line = 5, $out += $escape($helpers.getTravelAgencyLevel(rs.level)), 
+                $out += "</td> <td>", $line = 6, $out += $escape(rs.contactRealname), $out += "</td> <td>", 
+                $line = 7, $out += $escape(rs.contactMobileNumber), $out += '</td> <td> <input type="radio" name="chooseClient" class="ace"> <label class="lbl"></label> </td> </tr> ', 
+                $line = 13;
+            }), new String($out);
+        } catch (e) {
+            throw {
+                filename: $filename,
+                name: "Render Error",
+                message: e.message,
+                line: $line,
+                source: '{{each travelAgencyList as rs}}\r\n<tr class="cursor" data-id="{{rs.travelAgencyId}}" data-contact-id="{{rs.fromPartnerAgencyContactId}}">\r\n	<td name="travelAgencyName">{{rs.travelAgencyName}}</td>\r\n	<td>{{rs.type | getTravelAgencyType}}</td>\r\n	<td>{{rs.level | getTravelAgencyLevel}}</td>\r\n	<td>{{rs.contactRealname}}</td>\r\n	<td>{{rs.contactMobileNumber}}</td>\r\n	<td>\r\n		<input type="radio" name="chooseClient" class="ace">\r\n		<label class="lbl"></label>\r\n	</td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+            };
+        }
+    });
+});

@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -459,6 +459,32 @@
 
           default:
             return "-";
+        }
+    }), template.helper("getLogTypeText", function(type) {
+        switch (1 * type) {
+          case 1:
+            return "保存";
+
+          case 2:
+            return "财务";
+
+          case 3:
+            return "计调";
+
+          case 4:
+            return "退回计调";
+
+          case 5:
+            return "退回导游";
+
+          case 6:
+            return "Web报账";
+
+          case 7:
+            return "导游提交报账";
+
+          default:
+            return console.info("Other Type:type"), "其他类型";
         }
     });
 }();

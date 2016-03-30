@@ -7,21 +7,21 @@
     <div class="col-xs-12 border">
         <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
         <tbody>
-            <tr style="">
-                <td><label  style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
-                <td><label  style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
-                <td><label  style="font-weight: bold;">针对客源：{{if tripPlan.lineProduct.customerType == 1}}团体{{else if tripPlan.lineProduct.customerType == 0}}散客{{/if}}</label></td>
+            <tr>
+                <td style="text-align:left"><label  style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
                 <td><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
             </tr>
             <tr>
-                <td><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
-                <td><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
-                <td><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
-                <td><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
             </tr>
             <tr>
-                <td> <label  style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label></td>
-                <td><label  style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
+                <td style="text-align:left"> <label  style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
                 <td></td>
                 <td></td>
             </tr>
@@ -29,6 +29,8 @@
     </table>
     <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
+    <input type="hidden" name='maxDay' value="{{tripPlan.minDay}}">
+    <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
     </div>
     <div style="clear: both"></div>
     <table class="table table-striped table-bordered table-hover all T-main-table" style="margin-top: 30px;">
@@ -53,33 +55,33 @@
         </tr>
 
         <tr >
-            <td><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.needPayAllMoney}}</span></label></td>
-            <td><label>自费收入：<span class="F-float F-money tripIncome-selfPayTravelAgencyRebateMoney">0</span></label></td>
-            <td><label>导服费：<span class="tripCost-guideArrangePrice F-float F-money">{{guideArrange.price}}</span></label></td>
-            <td><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
-            <td><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
-            <td><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
-            <td><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{touristGroup.outBusMoney}}</span></label></td>
-            <td><label>餐费：<span class="F-float F-money tripTransitCost-outRestaurantMoney">{{touristGroup.outRestaurantMoney}}</span></label></td>
+            <td style="text-align:left"><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.needPayAllMoney}}</span></label></td>
+            <td style="text-align:left"><label>自费收入：<span class="F-float F-money tripIncome-selfPayTravelAgencyRebateMoney">0</span></label></td>
+            <td style="text-align:left"><label>导服费：<span class="tripCost-guideArrangePrice F-float F-money">{{guideArrange.price}}</span></label></td>
+            <td style="text-align:left"><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
+            <td style="text-align:left"><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
+            <td style="text-align:left"><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{touristGroup.outBusMoney}}</span></label></td>
+            <td style="text-align:left"><label>餐费：<span class="F-float F-money tripTransitCost-outRestaurantMoney">{{touristGroup.outRestaurantMoney}}</span></label></td>
         </tr>
         <tr> 
-            <td><label>购物返佣：<span class="F-float F-money tripIncome-shopTravelAgencyRateMoney">0</span></label></td>
-            <td><label>其它收入：<span class="F-float F-money tripIncome-otherInCome">0</span></label></td>
-            <td><label>餐费：<span class="F-float F-money tripCost-restaurantArrangeNeedPayMoney">0</span></label></td>
-            <td><label>房费：<span class="F-float F-money tripCost-hotelArrangeNeedPayMoney">0</span></label></td>
-            <td><label>景区费用：<span class="F-float F-money tripCost-scenicArrangeNeedPayMoney">0</span></label></td>
-            <td><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney">0</span></label></td>
-            <td><label>房费：<span class="F-float F-money tripTransitCost-hotelArrangeNeedPayMoney">{{touristGroup.outHotelMoney}}</span></label></td>
-            <td><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{touristGroup.outOtherMoney}}</span></label></td>
+            <td style="text-align:left"><label>购物返佣：<span class="F-float F-money tripIncome-shopTravelAgencyRateMoney">0</span></label></td>
+            <td style="text-align:left"><label>其它收入：<span class="F-float F-money tripIncome-otherInCome">0</span></label></td>
+            <td style="text-align:left"><label>餐费：<span class="F-float F-money tripCost-restaurantArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>房费：<span class="F-float F-money tripCost-hotelArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>景区费用：<span class="F-float F-money tripCost-scenicArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney">0</span></label></td>
+            <td style="text-align:left"><label>房费：<span class="F-float F-money tripTransitCost-hotelArrangeNeedPayMoney">{{touristGroup.outHotelMoney}}</span></label></td>
+            <td style="text-align:left"><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{touristGroup.outOtherMoney}}</span></label></td>
         </tr>
         <tr>
-            <td><label>导游管理费：<span class="tripIncome-guideManageMoney F-float F-money">{{guideArrange.manageFee}}</span></label></td>
-            <td></td>
-            <td><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
-            <td><label>其它费用：<span class="F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
-            <td><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
-            <td><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
-            <td><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{touristGroup.outTicketMoney}}</span></label></td>
+            <td style="text-align:left"><label>导游管理费：<span class="tripIncome-guideManageMoney F-float F-money">{{guideArrange.manageFee}}</span></label></td>
+            <td style="text-align:left"></td>
+            <td style="text-align:left"><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>其它费用：<span class="F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
+            <td style="text-align:left"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
+            <td style="text-align:left"><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{touristGroup.outTicketMoney}}</span></label></td>
             <td></td>
         </tr>
         </tbody>
@@ -87,12 +89,21 @@
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
     <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="row" style="margin-bottom:15px;">
-        <div class="col-md-1">
+        <input name="financialTripPlanId" value="{{financialTripPlanId}}" type="hidden">
+        <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="btn-financialLog">操作记录</a>
         </div>
-        <div class="col-md-1">
+        <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-tripPlanArrange">安排预算表</a>
         </div>
+        {{if tripPlan.billStatus > -1}}
+            <div style="float:left;width:90px;text-align:center;">
+                <a href="javascript:void(0);" class="T-guideAccount">导游报账表</a>
+            </div>
+            <div style="float:left;width:90px;text-align:center;">
+                <a href="javascript:void(0);" class="T-tripAccount">单团核算表</a>
+            </div>
+        {{/if}}
     </div>
     <div class="tabbable">
         <ul class="nav nav-tabs">
@@ -143,31 +154,61 @@
             <!-- 团款 -->
             <div id="financial-count-tripdetail-money" class="tab-pane fade active in T-tripCost">
                 <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="th-border">序号</th>
+                            <th class="th-border">客户</th>
+                            <th class="th-border">收客信息</th>
+                            <th class="th-border">游客信息</th>
+                            <th class="th-border">包含自费</th>
+                            <th class="th-border">备注</th>
+                            <th class="th-border">应收</th>
+                            <th class="th-border">社收</th>
+                            <th class="th-border">现收</th>
+                            <th class="th-border">明细</th>
+                        </tr>
+                    </thead>
                     <tbody class="T-tripDetail">
                     <tr>
-                        <td>序号</td>
-                        <td>客户</td>
-                        <th>收客单号</th>
-                        <td>小组联系人</td>
-                        <td>联系电话</td>
-                        <td>人数</td>
-                        <td>应收</td>
-                        <td>社收</td>
-                        <td>现收</td>
-                        <td>明细</td>
                    {{each touristGroups as touristGroup index}}
-                        <tr>
+                        <tr id="{{touristGroup.id}}">
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-                            <td>{{touristGroup.orderNumber}}</td>
-                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</td>
-                            <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</td>
-                            <td><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</td>
-                            <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
+                            <td style="text-align: left;padding-left: 15px;"><p>收客单号：{{touristGroup.orderNumber}}</p> <p>{{tripPlan.lineProduct.name}}</p></td>
+                            <td>
+                                <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
+                                <br/>
+                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</span>
+                                <br/>
+                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</span>
+                                <br/>
+                            </td>
+                            <td>
+                                {{if touristGroup.includeSelfPay == null}}
+                                    -
+                                {{else}}
+                                    {{touristGroup.includeSelfPay}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if touristGroup.remark == null || touristGroup.remark == ""}}
+                                    -
+                                {{else}}
+                                    {{touristGroup.remark}}
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if touristGroup.isConfirmAccount == 1}}
+                                    <span class="F-float F-money">{{touristGroup.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
+                                {{/if}}
+                            </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                             <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
                             <td>
-                                {{if touristGroup.subStatus == 0}}
+                                {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
+                                <a href="#" class="T-viewCostDetail">
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
@@ -179,8 +220,8 @@
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
+                                </a>
                                 {{/if}}
-                            </td>
                             </td>
                         </tr>
                     {{/each}}
@@ -199,128 +240,168 @@
             </div>
             <!-- 购物 -->
             <div id="financial-count-tripdetail-shop" class="tab-pane fade">
+                <div class="ui-sortable-handle widget-container-col">
+                    <h5 class="title-size">
+                        <span style="color:#000;margin-left:20px;">
+                            购物合计：<span class="T-sumShopMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            社佣合计：<span class="T-sumTravelMoney F-float F-money">0</span>
+                            &nbsp;&nbsp;
+                            导佣合计：<span class="T-sumGuideMoney F-float F-money">0</span>
+                        </span>
+                    </h5>
+                </div>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="th-border" colspan="5">打单</th>
                             <th class="th-border" colspan="2">社佣</th>
                             <th class="th-border" colspan="2">导佣</th>
+                            <th class="th-border hidden" rowspan="2">现收</th>
                             <th class="th-border" rowspan="2">导游报账备注</th>
                             <th class="th-border" rowspan="2">是否对账</th>
                         </tr>
                         <tr>
-                          <th class="th-border"><span class="necessary">*</span>时间</th>
-                          <th class="th-border"><span class="necessary">*</span>购物店</th>
-                          <th class="th-border"><span class="necessary">*</span>商品</th>
-                          <th class="th-border"><span class="necessary">*</span>金额</th>
+                          <th class="th-border">时间</th>
+                          <th class="th-border">购物店</th>
+                          <th class="th-border">商品</th>
+                          <th class="th-border">金额</th>
                           <th class="th-border">单据</th>
-                          <th class="th-border"><span class="necessary">*</span>比例%</th>
+                          <th class="th-border">比例%</th>
                           <th class="th-border">返佣</th>
-                          <th class="th-border"><span class="necessary">*</span>比例%</th>
+                          <th class="th-border">%</th>
                           <th class="th-border">返佣</th>
                         </tr>
                     </thead>
                     <tbody class="T-count-shopping"> 
-        {{each dayList as day}}
-        {{if day.shopArrange != null}}
-        {{each day.shopArrange as arrangeList}}
-        {{each arrangeList.shopArrangeList as arrange i}}
+                {{each dayList as day}}
+                {{if day.shopArrange != null}}
+                {{each day.shopArrange as arrangeList}}
+                {{each arrangeList.shopArrangeList as arrange i}}
 
-        {{if arrange != null}}
-        <tr class="oldData" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
-            {{if arrange.shopArrangeItemSet != null}}
-            {{each arrange.shopArrangeItemSet as itemSet index}}
-            {{if index == 0}}
+                {{if arrange != null}}
+                <tr class="oldData noSumRate" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
+                    <td rowspan="{{arrange.shopArrangeItemSet.length}}"><span class="whichDay"></span> </td>
+                    <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{arrange.shop.name}}<input type="hidden" name="shopId" value="{{arrange.shopId}}"></td>
+                    {{if arrange.shopArrangeItemSet != null}}
+                    {{each arrange.shopArrangeItemSet as itemSet index}}
+                    {{if index == 0}}
 
-                <td><span><input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
-                {{else}}{{itemSet.name}}<input type="hidden" name="shopPolicy" value="{{itemSet.name}}"></span>{{/if}}
-                </td>
+                        <td><span><input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">{{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
+                        {{else}}{{itemSet.name}}<input type="hidden" name="shopPolicy" value="{{itemSet.name}}"></span>{{/if}}
+                        </td>
 
-                <td>{{itemSet.consumeMoney}}<input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-                
-                <td>{{if arrange.billImage != null && arrange.billImage != ""}}
-                        <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                    {{else}}
-                        <span style="color:#bbb;">查看</span>
+                        <td>{{itemSet.consumeMoney}}<input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
+                        {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                        
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
+                        
+                        <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                        
+                        <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span>
+                        </td>
+                        
+                        <td><span class="F-float F-count">{{itemSet.guideRate*100}}</span></td>
+                        
+                        <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span>
+                        </td>
+
+                        <td class="hidden" rowspan="{{arrange.shopArrangeItemSet.length}}">
+                            <span class="T-float T-money">{{arrange.rebateCurrentIncomeMoney}}</span>
+                        </td>
+
+                        <td >
+                        {{if editStatus == 1}}
+                            {{itemSet.billRemark}}
+                        {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
+                        </td>
+                        {{/if}}
+                    {{/each}}
                     {{/if}}
-                </td>
-                
-                <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-                
-                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                
-                <td><span class="F-float F-count">{{itemSet.guideRate*100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                    <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+                </tr>
+                {{if arrange.shopArrangeItemSet != null}}
+                    {{each arrange.shopArrangeItemSet as itemSet index}}
+                    {{if index > 0}}
+                    <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}"
+                    {{if index == 1}}class="noSumRate"{{/if}}>
+                        <td><span>
+                        <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
+                        <input type="hidden" name="shopPolicy" 
+                        value="{{if itemSet.shopPolicy != null }}
+                            {{itemSet.shopPolicy.name}}{{else}}
+                        {{itemSet.name}}
+                        {{/if}}">
+                        <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}
+                        {{itemSet.shopPolicy.id}}
+                        {{/if}}">
+                        {{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
 
-                <td >
-                {{if editStatus == 1}}
-                    {{itemSet.billRemark}}
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                </td>
-                {{/if}}
-            {{/each}}
-            {{/if}}
-            <td rowspan="{{arrange.shopArrangeItemSet.length}}">{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
-        </tr>
-        {{if arrange.shopArrangeItemSet != null}}
-            {{each arrange.shopArrangeItemSet as itemSet index}}
-            {{if index > 0}}
-            <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" rowspan = "{{arrange.shopArrangeItemSet.length}}">
-                <td><span>
-                <input type="hidden" name="shopPolicyArrId" value="{{itemSet.id}}">
-                <input type="hidden" name="shopPolicy" 
-                value="{{if itemSet.shopPolicy != null }}
-                    {{itemSet.shopPolicy.name}}{{else}}
-                {{itemSet.name}}
-                {{/if}}">
-                <input type="hidden" name="shopPolicyId" value="{{if itemSet.shopPolicy != null }}
-                {{itemSet.shopPolicy.id}}
-                {{/if}}">
-                {{if itemSet.shopPolicy != null }}{{itemSet.shopPolicy.name}}
+                        {{else}}{{itemSet.name}}
+                        
+                        {{/if}}
 
-                {{else}}{{itemSet.name}}
-                
-                {{/if}}
+                        </td>
 
-                </td>
+                        <td>{{itemSet.consumeMoney}}<input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
+                        {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                        <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                                <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                            {{else}}
+                                <span style="color:#bbb;">查看</span>
+                            {{/if}}
+                        </td>
+                        
+                        <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
+                        
+                        <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRebateMoney}}</span>
+                        </td>
+                        
+                        <td><span class="F-float F-count">{{itemSet.guideRate * 100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                        
+                        <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRebateMoney}}</span>
+                        </td>
 
-                <td>{{itemSet.consumeMoney}}<input class="F-float F-money" policyId="{{if itemSet.shopPolicy != null}}{{itemSet.shopPolicy.id}}{{/if}}" name="consumeMoney" style="width:90px;" type="hidden" value="{{itemSet.consumeMoney}}" old="{{itemSet.consumeMoney}}" maxlength="11" 
-                {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-                <td>{{if arrange.billImage != null && arrange.billImage != ""}}
-                        <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
-                    {{else}}
-                        <span style="color:#bbb;">查看</span>
+                        <td >
+                        {{if editStatus == 1}}
+                            {{itemSet.billRemark}}
+                        {{else}}
+                            {{if arrange.shopPolicy != null}}
+                                {{arrange.shopPolicy.remark}}
+                            {{else}}
+                                {{itemSet.billRemark}}
+                            {{/if}}
+                        {{/if}}
+                        </td>
+                    </tr>
+                        {{/if}}
+
+                    {{/each}}
                     {{/if}}
-                </td>
-                
-                <td><span class="F-float F-count">{{itemSet.travelAgencyRate*100}}</span><input name="travelAgencyRate" style="width:90px;" type="hidden" value="{{itemSet.travelAgencyRate*100}}" old="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/></td>
-                
-                <td><span class="travelAgencyRateMoney F-float F-money">{{itemSet.travelAgencyRateMoney}}</span><input type="hidden" class="travelAgencyRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRateMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                
-                <td><span class="F-float F-count">{{itemSet.guideRate * 100}}</span><input name="guideRate" style="width:90px;" type="hidden" value="{{itemSet.guideRate*100}}" old="{{itemSet.guideRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-                
-                <td><span class="guideRateMoney F-float F-money">{{itemSet.guideRkateMoney}}</span><input type="hidden" class="guideRateMoney{{arrange.whichDay}}_{{arrange.shopId}}" name="guideRateMoney" value="{{itemSet.guideRateMoney}}" 
-                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-
-                <td >
-                {{if editStatus == 1}}
-                    {{itemSet.billRemark}}
-                {{else}}{{if arrange.shopPolicy != null}}{{arrange.shopPolicy.remark}}{{else}}{{itemSet.billRemark}}{{/if}}{{/if}}
-                </td></tr>
                 {{/if}}
-            {{/each}}
-            {{/if}}
-        {{/if}}
-        {{/each}}  
-        {{/each}}
-        {{/if}}
-        {{/each}}
-        </tbody>
+                <tr class="sumMoney" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}">
+                    <td style="font-weight: bold;text-align:right;" colspan="3">合计：</td>
+                    <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalMoney"></span></td>
+                    <td style="font-weight: bold;text-align:right;" colspan="2">社佣合计：</td>
+                    <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalTravelMoney"></span></td>
+                    <td style="font-weight: bold;text-align:right;">导佣合计：</td>
+                    <td style="font-weight: bold;text-align:right;"><span class="F-float F-money T-totalGuideMoney"></span></td>
+                    <td style="font-weight: bold;text-align:right;">佣金小计：</td>
+                    <td style="font-weight: bold;text-align:left;" colspan="2">
+                        &nbsp;&nbsp;
+                        <span class="F-float F-money T-sumRebeMoney "></span>
+                    </td>
+                </tr>
+                {{/each}}  
+                {{/each}}
+                {{/if}}
+                {{/each}}
+                </tbody>
                 </table>
                 {{if tripPlan.billStatus > -1}}
                 <div style="width:60%;"><div> 
@@ -372,12 +453,12 @@
                     {{each day.selfPayArrange as arrangeList}}
                     {{each arrangeList.selfPayArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr badStatus = "{{arrange.badStatus}}" selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}">
-                            {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
+                    <tr badStatus = "{{arrange.badStatus}}" selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" whichDay = "{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
+                            {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}"><span class="whichDay"></span></td></td>{{/if}}
                             {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}">{{arrange.selfPay.name}}</td>{{/if}}
                             <td>{{if arrange.selfPayItem != null }}{{arrange.selfPayItem.name}}{{/if}}</td>
-                            <td>{{if arrange.badStatus == 1}}<span>{{arrange.marketPrice}}</span>{{else}}{{arrange.marketPrice}}{{/if}}
-                            <input type="hidden" name="marketPrice" value="{{arrange.marketPrice}}"/></td>
+                            <td>{{if arrange.badStatus == 1}}<span>{{arrange.realMarketPrice}}</span>{{else}}{{arrange.realMarketPrice}}{{/if}}
+                            <input type="hidden" name="marketPrice" value="{{arrange.realMarketPrice}}"/></td>
                             
                             <td><span class="needIncomeCount">{{arrange.needIncomeCount}}</span></td>
                             
@@ -390,8 +471,8 @@
                             <span class="realGetMoney">{{arrange.realGetMoney}}</span>{{/if}}
                             </td>
 
-                            <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}{{arrange.price}}{{/if}}
-                            <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                            <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}{{arrange.realPrice}}{{/if}}
+                            <input type="hidden" name="price" value="{{arrange.realPrice}}" /></td>
 
                             <td>
                             {{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
@@ -399,22 +480,51 @@
                             <td>
                             {{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}
                             <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" style="width:60px;"/></td>
-                            <td><span class="needPayMoney" >{{arrange.needPayMoney}}</span><input type="hidden" class="selfMoney"></td>
+                            <td>
+                                {{if arrange.isConfirmAccount == 1}}
+                                    <span class="needPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="needPayMoney F-float F-money" >{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                                {{/if}}
+                                <input type="hidden" class="selfMoney">
+                            </td>
                             <td>{{arrange.payedMoney}}</td>
                             <td>
                             <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                             </span>
                             &nbsp;&nbsp;
-                            {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
-                            
-                            <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            {{if arrange.badStatus == 1}}
+                                <span>
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                </span>
+                            {{else}}
+                                <span>
+                                    {{if arrange.billUpdateTime != null}}
+                                        {{if arrange.realPayType == 2}}
+                                            {{arrange.realSignMoney}}
+                                        {{else}}
+                                            {{arrange.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{else}}
+                                        {{if arrange.realPayType == 2}}
+                                            {{arrange.realSignMoney}}
+                                        {{else}}
+                                            {{arrange.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{/if}}
+                                </span>
+                            {{/if}}
                             </td>
                            
                             <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -532,7 +642,6 @@
                         <th class="th-border">已付</th>
                         <th class="th-border">导付</th>
                         <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
                         <th class="th-border">导游报账备注</th>
                         {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
 
@@ -541,7 +650,8 @@
                     <tbody class="T-count-bus">
                     {{each busCompanyArrange as busCompany}}
                     {{if busCompany != null}}
-                    <tr badStatus = "{{busCompany.badStatus}}" busCompanyArrangeId="{{busCompany.id}}" >
+                    <tr badStatus = "{{busCompany.badStatus}}" busCompanyArrangeId="{{busCompany.id}}" 
+                    isConfirmAccount="{{busCompany.isConfirmAccount}}">
                         <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                         <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                         <td>{{if busCompany.busCompany != null}}
@@ -562,35 +672,69 @@
                         <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
                         <td>{{if busCompany.bus != null}}{{busCompany.bus.seatCount}}{{/if}}</td>
-                        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.price}}</span>{{else}}<span>{{busCompany.price}}</span>{{/if}}
-                        <input type="hidden" name="price" value="{{busCompany.price}}" /></td>
+                        <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realPrice}}</span>{{else}}<span>{{busCompany.realPrice}}</span>{{/if}}
+                        <input type="hidden" name="price" value="{{busCompany.realPrice}}" /></td>
                         <td>{{if busCompany.badStatus == 1}}<span>{{busCompany.realReduceMoney}}</span>{{else}}<span>{{busCompany.realReduceMoney}}</span>{{/if}}
                         <input type="hidden" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"/></td>
-                        <td>{{if busCompany.badStatus == 1}}<span class="BusneedPayMoney">{{busCompany.payedMoney+busCompany.realGuidePayMoney}}</span>{{else}}<span class="BusneedPayMoney"></span>{{/if}}</td>
+                        <td>
+                        {{if busCompany.badStatus == 1}}
+                            <span class="BusneedPayMoney F-float F-money">
+                                {{busCompany.payedMoney+busCompany.realGuidePayMoney}}
+                            </span>
+                        {{else}}
+                            {{if busCompany.isConfirmAccount == 1}}
+                                <span class="BusneedPayMoney F-float F-money">{{busCompany.tempSettlementMoney}}</span>
+                            {{else}}
+                                <span class="BusneedPayMoney F-float F-money"></span>
+                            {{/if}}
+                        {{/if}}
+                        <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
                         <td>{{busCompany.payedMoney}}</td>
                         <td>
-                        <span>
-                            {{if busCompany.payType == 0}}
-                                现金
-                                {{else if busCompany.payType == 1}}
-                                刷卡
-                                {{else if busCompany.payType == 2}}
-                                签单
-                            {{/if}}
-                        </span>
-                        &nbsp;&nbsp;
-                        {{if busCompany.badStatus == 1}}<span>{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}</span>{{else}}
-                        <span>
-                        {{if busCompany.billUpdateTime != null}}{{busCompany.realGuidePayMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span>{{/if}}  
-                            <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                            <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></td>
+                            <span>
+                                {{if busCompany.realPayType == 0}}
+                                    现金
+                                    {{else if busCompany.realPayType == 1}}
+                                    刷卡
+                                    {{else if busCompany.realPayType == 2}}
+                                    签单
+                                {{/if}}
+                            </span>
+                            &nbsp;&nbsp;
+                            {{if busCompany.badStatus == 1}}
+                                <span>
+                                    {{if busCompany.realPayType == 2}}
+                                        {{busCompany.realSignMoney}}
+                                    {{else}}
+                                        {{busCompany.realGuidePayMoney}}
+                                    {{/if}}
+                                </span>
+                            {{else}}
+                                <span>
+                                    {{if busCompany.billUpdateTime != null}}
+                                        {{if busCompany.realPayType == 2}}
+                                            {{busCompany.realSignMoney}}
+                                        {{else}}
+                                            {{busCompany.realGuidePayMoney}}
+                                        {{/if}}
+                                    {{else}}
+                                        {{if busCompany.realPayType == 2}}
+                                            {{busCompany.realSignMoney}}
+                                        {{else}}
+                                            {{busCompany.guidePayMoney}}
+                                        {{/if}}
+                                    {{/if}}
+                                </span>
+                            {{/if}}  
+                                <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                <input type="hidden" name="guidePayMoney" value="{{busCompany.realGuidePayMoney}}" />
+                        </td>
                          <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
                                 <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
                             {{else}}
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td>{{busCompany.billRemark}}</td>
                         {{if tripPlan.billStatus == 2}}<td>{{if busCompany.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -626,7 +770,6 @@
                             <th class="th-border">已付</th>
                             <th class="th-border">导付</th>
                             <th class="th-border">单据</th>
-                            <th class="th-border">差额</th>
                             <th class="th-border">导游报账备注</th>
                             {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                         </tr>
@@ -637,7 +780,8 @@
                     {{each day.restaurantArrange as arrangeList}}
                     {{each arrangeList.restaurantArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr badStatus = "{{arrange.badStatus}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
+                    <tr badStatus = "{{arrange.badStatus}}" restaurantArrangeId="{{arrange.id}}" restaurantId="{{if arrange.restaurant != null}}{{arrange.restaurant.id}}{{/if}}" restaurantStandardId="{{if arrange.restaurantStandard != null}}{{arrange.restaurantStandard.id}}{{/if}}" whichDay="{{arrange.whichDay}}" 
+                    isConfirmAccount="{{arrange.isConfirmAccount}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.restaurantArrangeList.length}}">
                         {{if arrange.billUpdateTime != null}}
@@ -659,27 +803,61 @@
                         {{/if}}
                         </td>{{/if}}
                         <td>{{arrange.type}}</td> 
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span class="price">{{arrange.price}}</span>{{/if}}<input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}<span class="price">{{arrange.realPrice}}</span>{{/if}}<input type="hidden" name="price" value="{{arrange.realPrice}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}<input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}" 
                         {{else}}value="{{arrange.memberCount}}"{{/if}} old="{{arrange.realCount}}" maxlength="5"
                         {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}<input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/></td>
-                        <td>{{if arrange.badStatus == 1}}<span class="restneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="restneedPayMoney"></span>{{/if}}<input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
+                        <td>
+                        {{if arrange.badStatus == 1}}
+                            <span class="restneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                        {{else}}
+                            {{if arrange.isConfirmAccount == 1}}
+                                <span class="restneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                            {{else}}
+                                <span class="restneedPayMoney"></span>
+                            {{/if}}
+
+                        {{/if}}
+                        <input type="hidden" value="{{arrange.payedMoney}}" name="needPayMoney"></td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
                         <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -689,7 +867,6 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td><span class="billRemark">{{arrange.billRemark}}</span></td>
                         {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -727,7 +904,6 @@
                         <th class="th-border">已付</th>
                         <th class="th-border">导付</th>
                         <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
                         <th class="th-border">导游报账备注</th>
                         {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr> 
@@ -738,33 +914,66 @@
                     {{each day.hotelArrange as arrangeList}}
                     {{each arrangeList.hotelArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}" whichDay="{{arrange.whichDay}}">
+                    <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}" hotelId="{{if arrange.hotel != null}}{{arrange.hotel.id}}{{/if}}" restaurantStandardId="{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.id}}{{/if}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.hotelArrangeList.length}}">{{if arrange.hotel != null}}{{arrange.hotel.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.hotelRoom != null}}{{arrange.hotelRoom.type}}{{/if}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
-                        <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}<span>{{arrange.realPrice}}</span>{{/if}}
+                        <input type="hidden" name="price" value="{{arrange.realPrice}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
                         <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}
                         <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/></td>
-                        <td>{{if arrange.badStatus == 1}}<span class="hotelneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="hotelneedPayMoney"></span>{{/if}}
-                        <input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}"></td>
+                        <td>
+                        {{if arrange.badStatus == 1}}
+                            <span class="hotelneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                        {{else}}
+                            {{if arrange.isConfirmAccount == 1}}
+                                <span class="hotelneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                            {{else}}
+                                <span class="hotelneedPayMoney"></span>
+                                <input name="needPayMoney" type="hidden" value="{{arrange.needPayMoney}}">
+                            {{/if}}
+                        {{/if}}
+                        </td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
                         <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
 
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -774,7 +983,6 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
                           {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -812,7 +1020,6 @@
                         <th class="th-border">已付</th> 
                         <th class="th-border">导付</th>
                         <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
                         <th class="th-border">导游报账备注</th>
                         {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr>
@@ -823,33 +1030,66 @@
                     {{each day.scenicArrange as arrangeList}}
                     {{each arrangeList.scenicArrangeList as arrange index}}
                     {{if arrange != null}}
-                    <tr badStatus = "{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}" whichDay="{{arrange.whichDay}}">
+                    <tr badStatus = "{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" scenicId="{{arrange.scenicId}}" scenicItemId="{{arrange.hotelRoomId}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
                         {{if index == 0}}<td rowspan="{{arrangeList.scenicArrangeList.length}}">{{if arrange.scenic != null}}{{arrange.scenic.name}}{{/if}}</td>{{/if}}
                         <td>{{if arrange.scenicItem != null}}{{arrange.scenicItem.name}}{{/if}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span> {{arrange.price}}</span>{{/if}}
-                       <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}<span> {{arrange.realPrice}}</span>{{/if}}
+                       <input type="hidden" name="price" value="{{arrange.realPrice}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
                         <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}
                         <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/></td>
-                        <td>{{if arrange.badStatus == 1}}<span class="scenicneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="scenicneedPayMoney"></span>{{/if}}
-                        <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
+                        <td>
+                            {{if arrange.badStatus == 1}}
+                                <span class="scenicneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                            {{else}}
+                                {{if arrange.isConfirmAccount == 1}}
+                                    <span class="scenicneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="scenicneedPayMoney F-float F-money"></span>
+                                {{/if}}
+                            {{/if}}
+                            <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}">
+                        </td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
                         <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}<span>
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        {{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -859,7 +1099,6 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
                         {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -899,7 +1138,6 @@
                         <th class="th-border">已付</th>
                         <th class="th-border">导付</th>
                         <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
                         <th class="th-border">导游报账备注</th>
                         {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr>
@@ -907,7 +1145,7 @@
                     <tbody class="T-count-ticket">
                     {{each ticketArrangeList as ticketArrange}}
                     {{each ticketArrange.ticketArrangeList as arrange index}}
-                    <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}" ticketId="{{arrange.ticket.id}}" itemId="{{arrange.id}}">
+                    <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}" ticketId="{{arrange.ticket.id}}" itemId="{{arrange.id}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.ticket != null}}{{arrange.ticket.name}}{{/if}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{if arrange.type == 1}}机票{{else if arrange.type== 2}}汽车票{{else if arrange.type == 3}}火车票{{else if arrange.type == 4}}轮船票{{/if}}</td>{{/if}}
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.startTime}}</td>{{/if}}
@@ -915,29 +1153,62 @@
                     {{if index == 0}}<td rowspan="{{ticketArrange.ticketArrangeList.length}}">{{arrange.arriveCity}}</td>{{/if}}
                     <td>{{arrange.shift}}</td>
                     <td>{{arrange.seatLevel}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span>{{arrange.price}}</span>{{/if}}
-                        <input type="hidden" name="price" value="{{arrange.price}}" /></td>
+                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}<span>{{arrange.realPrice}}</span>{{/if}}
+                        <input type="hidden" name="price" value="{{arrange.realPrice}}" /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
                         <input style="width:90px;" name="realCount" type="hidden" {{if arrange.billUpdateTime !=null}}value="{{arrange.realCount}}" {{else}}value="{{arrange.memberCount}}"{{/if}} /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}
                         <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" old="{{arrange.realReduceMoney}}"/></td>
-                        <td>{{if arrange.badStatus == 1}}<span class="ticketneedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="ticketneedPayMoney"></span>{{/if}}
-                        <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney"></td>
+                        <td>
+                            {{if arrange.badStatus == 1}}
+                                <span class="ticketneedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                            {{else}}
+                                {{if arrange.isConfirmAccount == 1}}
+                                    <span class="ticketneedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="ticketneedPayMoney F-float F-money"></span>
+                                {{/if}}
+                            {{/if}}
+                            <input type="hidden" value="{{arrange.needPayMoney}}" name="needPayMoney">
+                        </td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
                         <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
                         <td>{{if arrange.billImage != null && arrange.billImage != ""}}
@@ -946,7 +1217,6 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
                           {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -980,7 +1250,6 @@
                         <th class="th-border">已付</th>
                         <th class="th-border">导付</th>
                         <th class="th-border">单据</th>
-                        <th class="th-border">差额</th>
                         <th class="th-border">导游报账备注</th> 
                         {{if tripPlan.billStatus == 2 }}<th class="th-border" rowspan="2">是否对账</th>{{/if}}
                     </tr>
@@ -990,32 +1259,66 @@
                     {{if day.otherArrange != null}}
                     {{each day.otherArrange as arrange index}}
                     {{if arrange != null}}
-                    <tr badStatus = "{{arrange.badStatus}}" otherArrangeId="{{arrange.id}}" whichDay="{{arrange.whichDay}}">
+                    <tr badStatus = "{{arrange.badStatus}}" otherArrangeId="{{arrange.id}}" whichDay="{{arrange.whichDay}}"
+                    isConfirmAccount="{{arrange.isConfirmAccount}}">
                         <td><span class="whichDay"></span></td>
                         <td>{{arrange.name}}</td>
-                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.price}}</span>{{else}}<span class="price">{{arrange.price}}</span>{{/if}}
-                        <input type="hidden" name="price" value="{{arrange.price}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                        <td>{{if arrange.badStatus == 1}}<span>{{arrange.realPrice}}</span>{{else}}<span class="price">{{arrange.realPrice}}</span>{{/if}}
+                        <input type="hidden" name="price" value="{{arrange.realPrice}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.memberCount}}</span>{{else}}<span>{{if arrange.billUpdateTime != null}}{{arrange.realCount}}{{else}}{{arrange.memberCount}}{{/if}}</span>{{/if}}
                         <input style="width:90px;" type="hidden" name="realCount" {{if arrange.billUpdateTime}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} /></td>
                         <td>{{if arrange.badStatus == 1}}<span>{{arrange.realReduceMoney}}</span>{{else}}<span>{{arrange.realReduceMoney}}</span>{{/if}}
                         <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}"/></td>
-                        <td>{{if arrange.badStatus == 1}}<span class="otherOutNeedPayMoney">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>{{else}}<span class="otherOutNeedPayMoney"></span>{{/if}}
-                        <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}"></td>
+                        <td>
+                            {{if arrange.badStatus == 1}}
+                                <span class="otherOutNeedPayMoney F-float F-money">{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                            {{else}}
+                                {{if arrange.isConfirmAccount == 1}}
+                                    <span class="otherOutNeedPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                                {{else}}
+                                    <span class="otherOutNeedPayMoney F-float F-money"></span>
+                                {{/if}}
+                            {{/if}}
+                            <input type="hidden" name="needPayMoney" value="{{arrange.needPayMoney}}">
+                        </td>
                         <td>{{arrange.payedMoney}}</td>
                         <td>
                         <span>
-                            {{if arrange.payType == 0}}
+                            {{if arrange.realPayType == 0}}
                                 现金
-                                {{else if arrange.payType == 1}}
+                                {{else if arrange.realPayType == 1}}
                                 刷卡
-                                {{else if arrange.payType == 2}}
+                                {{else if arrange.realPayType == 2}}
                                 签单
                             {{/if}}
                         </span>
                         &nbsp;&nbsp;
-                        {{if arrange.badStatus == 1}}<span>{{if arrange.payType == 2}}{{arrange.signMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                        {{if arrange.badStatus == 1}}
+                            <span>
+                                {{if arrange.realPayType == 2}}
+                                    {{arrange.realSignMoney}}
+                                {{else}}
+                                    {{arrange.realGuidePayMoney}}
+                                {{/if}}
+                            </span>
+                        {{else}}
                         
-                        <span>{{if arrange.billUpdateTime != null}}{{arrange.realGuidePayMoney}}{{else}}{{arrange.guidePayMoney}}{{/if}}</span>{{/if}}
+                            <span>
+                                {{if arrange.billUpdateTime != null}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{else}}
+                                    {{if arrange.realPayType == 2}}
+                                        {{arrange.realSignMoney}}
+                                    {{else}}
+                                        {{arrange.realGuidePayMoney}}
+                                    {{/if}}
+                                {{/if}}
+                            </span>
+                        {{/if}}
                             
                             <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" />
                             <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" /></td>
@@ -1025,7 +1328,6 @@
                                 <span style="color:#bbb;">查看</span>
                             {{/if}}
                         </td>
-                        <td><span class="difference"></span></td>
                         <td>{{arrange.billRemark}}</td>
                           {{if tripPlan.billStatus == 2}}<td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>{{/if}}
                     </tr>
@@ -1139,15 +1441,16 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th class="th-border"><span class="necessary">*</span>指定导游报账</th>
-                        <th class="th-border"><span class="necessary">*</span>开始日期</th>
-                        <th class="th-border"><span class="necessary">*</span>结束日期</th>
+                        <th class="th-border">指定导游报账</th>
+                        <th class="th-border">开始日期</th>
+                        <th class="th-border">结束日期</th>
                         <th class="th-border">任务</th>
                         <th class="th-border">导游</th>
                         <th class="th-border">导服费</th>
-                        <th class="th-border"><span class="necessary">*</span>管理费</th>
-                        <th class="th-border"><span class="necessary">*</span>导游预支金额</th>
-                        <th class="th-border"><span class="necessary">*</span>备注</th>
+                        <th class="th-border">管理费</th>
+                        <th class="th-border">导游预支金额</th>
+                        <th class="th-border">备注</th>
+                        <th class="th-border">对账状态</th>
                     </tr>
                     </thead>
                     <tbody class="T-count-guide">
@@ -1176,6 +1479,13 @@
                             <td>{{rs.manageFee}}<input value="{{rs.manageFee}}" name="manageFee" type="hidden"></td>
                             <td>{{rs.guideAllPreMoney}}</td>
                             <td>{{rs.remark}}</td>
+                            <td>
+                                {{if rs.isConfirmAccount == 0}}
+                                    未对账
+                                {{else}}
+                                    已对账
+                                {{/if}}
+                            </td>
                         </tr>
                     {{/each}}
                     </tbody>

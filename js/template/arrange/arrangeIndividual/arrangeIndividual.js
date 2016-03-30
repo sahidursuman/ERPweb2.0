@@ -55,10 +55,11 @@ define(function(require, exports) {
     arrangeIndividual.init_event = function() {
         arrangeIndividual.$tab = $("#"+tabId);
         var $visitorObj = arrangeIndividual.$tab.find('.T-search-area');
+        var $searchArgumentsForm = $visitorObj.find('form'),customerType = 0;
         //散拼
         $visitorObj.find('.T-visitorTourist-search').off().on('click', function(event) {
             /* Act on the event */
-            var $searchArgumentsForm = $visitorObj.find('form'),customerType = 0;
+            
             //选择组团社与业务部
             var $selectObj = $visitorObj.find(".T-choosePart-chooseFromB");
             $selectObj.on('change', function() {
@@ -67,6 +68,11 @@ define(function(require, exports) {
             });
             arrangeIndividual.touristGroupId = [];
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList = [];
+            arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
+        });
+
+        $visitorObj.find('#order_by').off().on('change', function(event) {
+            event.preventDefault();
             arrangeIndividual.listArrangeTourist(0, $searchArgumentsForm, customerType);
         });
 
@@ -176,8 +182,12 @@ define(function(require, exports) {
         Tools.descToolTip($visitorObj.find(".T-ctrl-tip"), 1);
 
         //散拼checkbox绑定事件
-        $visitorObj.find(".T-touristGroupMergeCheckBox").off().click(arrangeIndividual.addTouristGroupMerge);
-
+        $visitorObj.find('.T-cheked').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this);
+            arrangeIndividual.addTouristGroupMerge($that);
+        });
 
         $visitorObj.find('.T-start-touristGroup-merge').off().on('click', function(event) {
             event.preventDefault();
@@ -189,6 +199,26 @@ define(function(require, exports) {
                 showMessageDialog($("#confirm-dialog-message"), "你还没有勾选任何并团小组");
             };
 
+        });
+
+
+        //全选功能
+        $visitorObj.find('.T-checkedAll').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this),$trList=arrangeIndividual.$tab.find('tbody').children('tr');
+            if ($that.is(':checked')) {
+                // statement
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", true); 
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            } else {
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", false);
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            }
         });
 
     };
@@ -431,10 +461,10 @@ define(function(require, exports) {
     /**
      * addTouristGroupMerge 散拼信息
      */
-    arrangeIndividual.addTouristGroupMerge = function() {
+    arrangeIndividual.addTouristGroupMerge = function($that) {
         var $visitorObj = arrangeIndividual.$tab.find('.T-touristVisitor-list'),
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
-            $that = $(this),
+            //$that = $(this),
             $parents = $that.closest('tr'),
             memberCount = $parents.attr("data-entity-memberCount");
         //计算已选人数
@@ -467,6 +497,7 @@ define(function(require, exports) {
             arrangeIndividual.touristGroupId.push(touristGroupIds);
 
         } else {
+            console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
             //若取消选中状态---用于生成计划查询数组
             arrangeIndividual.removeTouristGroupMergeData(lineProductId, startTime);
             //移除取消分页选中效果

@@ -3,21 +3,42 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="T-search-area">
                 <div class="form-group"> 
-                    <label>车队：{{busCompanyName}}</label>
-                    <label class="mar-l-15">账期：</label>
+                    <label>车队：</label>
+                    <input type="text" class="mar-r-10" name="busCompanyName" value="{{busCompanyName}}" />
+                    <label>账期：</label>
                     <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
-                    <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
+                    <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
-                    <label class="mar-l-15">账务类别：</label>
-                    <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
-                    <label class="mar-l-15">车牌号：</label>
-                    <input name="licenseNumber" placeholder="车牌号" type="text" value="{{searchParam.licenseNumber}}" style="width:200px;" />
-
-                    <button class=" btn-sm T-search search-btn mar-l-15">
+                    <label>账务类别：</label>
+                    <input name="accountInfo" class="mar-r-10" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
+                    <label>车牌号：</label>
+                    <input name="licenseNumber" class="mar-r-10" placeholder="车牌号" type="text" value="{{searchParam.licenseNumber}}" style="width:200px;" />
+                    
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                    全部
+                                {{else if searchParam.isConfirmAccount == 1}}
+                                    已对账
+                                {{else}}
+                                    未对账
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
+                    <button class=" btn-sm T-search search-btn mar-r-10">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
-                    <button class="btn-sm search-btn T-btn-export mar-l-15">导出报表</button>
+                    <button class="btn-sm search-btn T-btn-export">导出报表</button>
                 </div>
             </div>
         </form>
@@ -33,6 +54,7 @@
     </div>
     <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
 	<input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
+    <input type="hidden" value="{{accountStatus}}" name="accountStatus" />
 <div class="overflow-x min-w-1050" style="margin-top: 30px">
     <table class="table overflow-table table-striped table-bordered table-hover all hct_align_middle w-1500">
         <thead>
@@ -59,7 +81,8 @@
         </thead>
         <tbody class="T-checkList" data-right="230005">
             {{each financialBusCompanyListData as rs index}}
-		    <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}">
+		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
+            {{if rs.change}}data-change="true"{{/if}}>
 				<td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
                         {{if rs.lineProductName || rs.guideName}}，{{/if}}
                     {{/if}}
@@ -101,7 +124,7 @@
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td style="padding-left:10px;">
 				    <label class="pos-rel">
-				   		<input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount == 1}}checked="checked"{{/if}} />
+				   		<input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} />
 				   		<span class="lbl"></span>对账
 				    </label>
                     <a class="cursor"> |</a>
@@ -127,7 +150,7 @@
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group" style="text-align: center;">
-            <button class="btn btn-xs btn-primary T-close-check">
+            <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
             <button class="btn btn-xs btn-primary T-saveCheck">
