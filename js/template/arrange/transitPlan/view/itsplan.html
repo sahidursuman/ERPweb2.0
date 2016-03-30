@@ -27,6 +27,7 @@
             {{/if}}
         </ul>
         <div class="tab-content" style="position: relative;top: -2px">
+            {{if restaurantStatus != 0}}            
             <div id="transit_other_restaurant" class="T-tab-pane tab-pane fade">
                 <div class=" ui-sortable-handle">
                     <h5 class="title-size">
@@ -60,7 +61,7 @@
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>{{each outRestaurantList as outRestaurant}}
+                                <tbody id="restaurant_body">{{each outRestaurantList as outRestaurant}}
                                     {{if !!outRestaurant.id}}
                                     <tr data-entity-id="{{outRestaurant.id}}">
                                         <td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
@@ -104,6 +105,8 @@
                     </div>
                 </div>
             </div>
+            {{/if}}
+            {{if ticketStatus != 0}}
             <div id="transit_other_ticket" class="T-tab-pane tab-pane fade">
                 <div class=" ui-sortable-handle">
                     <h5 class="title-size">
@@ -143,7 +146,7 @@
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="ticket_body">
                                 {{if outTicketList != null && outTicketList.length > 0}}
                                 {{each outTicketList as outTicket}}
                                     {{if outTicket.id != null && outTicket.ticket != null}}
@@ -152,29 +155,29 @@
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="serviceType" value="0" />
                                                 <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" />
-                                                <input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" />
+                                                <input type="hidden" name="ticketId" value="{{outTicket.ticket.id}}" />
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                 </span>
                                                             </div>
                                         </td>
                                         <td>
-                                            <select class="" name="ticketType">
+                                            <select class="" name="type">
                                                 <option value="1" {{if outTicket.type == 1}}selected="selected"{{/if}}>机票</option>
                                                 <option value="2" {{if outTicket.type == 2}}selected="selected"{{/if}}>汽车票</option>
                                                 <option value="3" {{if outTicket.type == 3}}selected="selected"{{/if}}>火车票</option>
                                                 <option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
                                             </select>
                                         </td>
-                                        <td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
-                                        <td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
-                                        <td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
-                                        <td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
-                                        <td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
+                                        <td><input class="col-sm-12" name="startCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="arriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
+                                        <td><input class="col-sm-12" name="shift" value="{{outTicket.shift}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="seatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9" value="{{outTicket.price}}" type="text" /></td>
+                                        <td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" /></td>
+                                        <td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" /></td>
+                                        <td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
                                         <td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
                                         <td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" /></td>
                                         <td>
@@ -187,30 +190,30 @@
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="serviceType" value="0" />
-                                                <input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
-                                                <input type="hidden" name="tickeId" value="" />
+                                                <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="" type="text" />
+                                                <input type="hidden" name="ticketId" value="" />
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                 </span>
                                             </div>
                                         </td>
                                         <td>
-                                            <select class="" name="ticketType">
+                                            <select class="" name="type">
                                                 <option value="1">机票</option>
                                                 <option value="2">汽车票</option>
                                                 <option value="3">火车票</option>
                                                 <option value="4">轮船票</option>
                                             </select>
                                         </td>
-                                        <td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
-                                        <td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
-                                        <td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
-                                        <td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
-                                        <td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="" type="text" /></td>
-                                        <td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>
+                                        <td><input class="col-sm-12" name="startCity" value="" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="arriveCity" value="" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}" type="text" /></td>
+                                        <td><input class="col-sm-12" name="shift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="seatLevel" value="" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9" value="" type="text" /></td>
+                                        <td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" value="" type="text" /></td>
+                                        <td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="" type="text" /></td>
+                                        <td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>
                                         <td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="" type="text" /></td>
                                         <td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
                                         <td>
@@ -225,6 +228,8 @@
                     </div>
                 </div>
             </div>
+            {{/if}}
+            {{if otherStatus != 0}}
             <div id="transit_other_other" class="T-tab-pane tab-pane fade">
                 <div class=" ui-sortable-handle">
                     <h5 class="title-size">
@@ -257,7 +262,7 @@
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>{{each outOtherList as outOther}}
+                                <tbody id="other_body">{{each outOtherList as outOther}}
                                 {{if outOther != null && outOther.name != null}}
                                     <tr data-entity-id="{{outOther.id}}">
                                         <td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
@@ -285,6 +290,7 @@
                     </div>
                 </div>
             </div>
+            {{/if}}
         </div>
     </div>
      <div class="col-md-12 text-center mar-t-20">
@@ -292,13 +298,13 @@
             <i class="ace-icon fa fa-times-circle"></i> 取消
         </button>
         
-        <button class="btn btn-sm btn-primary T-arrange-update">
+        <button class="btn btn-sm btn-primary T-submit">
             <i class="ace-icon fa fa-check-circle"></i> 提交信息
         </button>
         {{if restaurantStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_other_restaurant">
             <label>
-                <input name="receiveBusStatus" type="checkbox" class="ace T-finishedArrange" {{if restaurantStatus == 3}}checked{{/if}}>
+                <input name="restaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if restaurantStatus == 3}}checked{{/if}}>
                 <span class="lbl font-w"> 餐厅安排完成</span>
             </label>
         </div>
@@ -306,7 +312,7 @@
         {{if ticketStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_other_ticket">
             <label>
-                <input name="receiveHotelStatus" type="checkbox" class="ace T-finishedArrange"  {{if ticketStatus == 3}}checked{{/if}} >
+                <input name="ticketStatus" type="checkbox" class="ace T-finishedArrange"  {{if ticketStatus == 3}}checked{{/if}} >
                 <span class="lbl font-w"> 票务安排完成</span>
             </label>
         </div>
@@ -314,7 +320,7 @@
         {{if otherStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_other_other">
             <label>
-                <input name="receiveRestaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if otherStatus == 3}}checked{{/if}}>
+                <input name="otherStatus" type="checkbox" class="ace T-finishedArrange" {{if otherStatus == 3}}checked{{/if}}>
                 <span class="lbl font-w"> 其他安排完成</span>
             </label>
         </div>

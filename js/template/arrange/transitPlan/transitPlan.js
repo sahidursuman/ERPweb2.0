@@ -217,9 +217,7 @@ define(function(require, exports) {
          // 车表格内操作
         $tab.find('.T-bus-plan').on('click', '.T-contact-delete', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                $tr = $that.closest('tr');
-            transitPlan.deleteArrange($tr);   
+            transitPlan.deleteArrange($(this));   
         });
     }
     //安排保存 公共事件
@@ -520,6 +518,8 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this);
 
+            if ($that.hasClass('ui-autocomplete-input')) return;
+
             if ($that.hasClass('T-chooseRestaurant')) {
                 // 餐厅选项
                 transitPlan.setRestaurantList($that);
@@ -527,6 +527,18 @@ define(function(require, exports) {
                 // 票务选项
                 transitPlan.setTicketChoose($that);
             }
+
+            $that.trigger('click');
+        })
+        .on('click', '.T-arrange-delete', function(event) {
+            event.preventDefault();
+            // 删除
+            transitPlan.deleteArrange($(this));
+        })
+        .on('change', '[name="price"], [name="memberCount"], [name="reduceMoney"], [name="reduceMoney"]', function(event) {
+            event.preventDefault();
+            
+            transitPlan.calculation($(this).closest('tr'));
         });
 
         $tab.find('.T-submit').on('click', function(event) {
@@ -558,19 +570,19 @@ define(function(require, exports) {
     };
     transitPlan.addTicket = function($tbody) {
         var html ='<tr>'+
-            '<td><div class="col-sm-12"><input class="col-sm-12 T-autocomplete-input T-chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="tickeId" />'+
+            '<td><div class="col-sm-12"><input class="col-sm-12 T-autocomplete-input T-chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="ticketId" />'+
             '<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
-            '<td><select class="" name="ticketType"><option value="1">机票</option>'+
+            '<td><select class="" name="type"><option value="1">机票</option>'+
             '<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
-            '<td><input class="col-sm-12" name="ticketStartCity" value="" maxlength="20"  type="text" /></td>'+
-            '<td><input class="col-sm-12" name="ticketArriveCity" value="" maxlength="20"  type="text" /></td>'+
-            '<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="" type="text" /></td>'+
-            '<td><input class="col-sm-12" name="ticketShift" value=""  maxlength="20"  type="text" /></td>'+
-            '<td><input class="col-sm-12" name="ticketSeatLevel"  maxlength="20"  value="" type="text" />'+
-            '<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9"  value="" type="text" /></td>'+
-            '<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6"  value="" type="text" /></td>'+
-            '<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" value=""  maxlength="9"  type="text" /></td>'+
-            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12" name="startCity" value="" maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12" name="arriveCity" value="" maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12" name="shift" value=""  maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12" name="seatLevel"  maxlength="20"  value="" type="text" />'+
+            '<td><input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9"  value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6"  value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" value=""  maxlength="9"  type="text" /></td>'+
+            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>'+
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
@@ -603,17 +615,17 @@ define(function(require, exports) {
     transitPlan.otherSubmit = function($tab) {
         var args = {}, data;
 
-        data = Tools.getTableVal($('#restaurant_body'));
+        data = Tools.getTableVal($('#restaurant_body'), 'entity-id');
         if (!!data) {
-            args.outRestaurantList = data;
+            args.outRestaurantList = JSON.stringify(data);
         }
-        data = Tools.getTableVal($('#ticket_body'));
+        data = Tools.getTableVal($('#ticket_body'), 'entity-id');
         if (!!data) {
-            args.outTicketList = data;
+            args.outTicketList = JSON.stringify(data);
         }
-        data = Tools.getTableVal($('#other_body'));
+        data = Tools.getTableVal($('#other_body'), 'entity-id');
         if (!!data) {
-            args.outOtherList = data;
+            args.outOtherList = JSON.stringify(data);
         }
 
         $tab.find('.T-finishedArrange').each(function(index, el) {
@@ -621,15 +633,20 @@ define(function(require, exports) {
             args[$that.prop('name')] = $that.prop('checked')?3: 1;
         });
 
+        args.outRemarkId = $tab.find('input[name="outRemarkId"]').val();
+
         $.ajax({
             url: KingServices.build_url(service_name, 'saveOutOtherArrange'),
             type: 'post',
             dataType: 'json',
-            data: {param1: 'value1'},
+            data: args,
         })
         .done(function(res) {
             if (showDialog(res)) {
                 // 刷新其他的安排列表
+                showMessageDialog($( "#confirm-dialog-message" ),res.message,function(){
+                    Tools.closeTab(Tools.getTabKey($tab));
+                });
             }
         });
         
@@ -1238,7 +1255,7 @@ define(function(require, exports) {
             standardType.off("change").on("change", function(){
                 var parents = $(this).closest('tr');
                 parents.find("input[name=restaurantStandardId]").val("");
-                // transit.calculation($(this));
+                // transitPlan.calculation($(this));
             });
             //餐厅选择
             $feild.autocomplete({
@@ -1257,7 +1274,7 @@ define(function(require, exports) {
                                 parents.find("input[name=manager]").val(restaurant.managerName);
                                 parents.find("input[name=price]").val(0);
                                 parents.find("input[name=restaurantStandardId]").val(0);
-                                // transit.calculation($(_this));
+                                // transitPlan.calculation($(_this));
                             }
                         }
                     });
@@ -1310,7 +1327,7 @@ define(function(require, exports) {
                         var objParent = $(this).closest('tr');
                         objParent.find("input[name=price]").val("");
                     };
-                    transit.calculation($(this));
+                    transitPlan.calculation($(this));
                 }
             }).off("click").on("click", function(){
                 var obj = this, parents = $(obj).closest('tr');
@@ -1360,15 +1377,15 @@ define(function(require, exports) {
             select:function(event, ui) {
                 var _this = this;
                 var thisParent = $(_this).closest('tr');
-                thisParent.find("input[name=tickeId]").val(ui.item.id).trigger('change');
-                var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
-                rule.update(validator);
+                thisParent.find("input[name=ticketId]").val(ui.item.id).trigger('change');
+                // var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+                // rule.update(validator);
             },
             change : function(event, ui) {
                 if(ui.item == null) {
                     $(this).val("");
                     var thisParent = $(this).closest('tr');
-                    thisParent.find("input[name=tickeId]").val("").trigger('change');
+                    thisParent.find("input[name=ticketId]").val("").trigger('change');
                 }
             }
         }).off("click").on("click", function(){
@@ -1784,22 +1801,24 @@ define(function(require, exports) {
             }
         })
     };
+    
     /**
-     * 中转安排删除车安排
-     * @param  {[type]} $obj      [删除对象]
-     * @param  {[type]} $id       [删除对象ID]
-     * @param  {[type]} $cateName [识别字段]
-     * @return {[type]}           [description]
+     * 删除安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
      */
-    transitPlan.deleteArrange = function($tr) {
-        var $bus = "bus",
-            $id = $tr.data('entity-id');
-        if (!!$id) {
+    transitPlan.deleteArrange = function($obj) {
+        var id = $obj.closest('tr').data('entity-id');
+
+        if (!!id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
                 $.ajax({
                     url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
-                    data: "cateName="+$bus+"&id="+$id+"",
+                    data: {
+                        cateName: $obj.prop('name'),
+                        id: id
+                    },
                     success: function(data){
                         if(showDialog(data)){
                             showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
@@ -1933,7 +1952,7 @@ define(function(require, exports) {
     transitPlan.addResource = function($tab){
         $tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
         $tab.find(".T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , type : "tr" , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
-        $tab.find(".T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "tickeId"}, KingServices.addResourceFunction);
+        $tab.find(".T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "ticketId"}, KingServices.addResourceFunction);
         $tab.find(".T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , type : "tr" , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
         
         $tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
