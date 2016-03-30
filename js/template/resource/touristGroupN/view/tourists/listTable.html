@@ -4,7 +4,7 @@
         <td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
         <td>{{if touristGroup.lineProduct != null}} {{touristGroup.lineProduct.name}} {{/if}}</td>
         <td>{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-        <td>{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+        <td>{{touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
         <td>
             <label class="h-peopleCount">
@@ -19,7 +19,8 @@
         </td>
         <td>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</span></td>
         <td>{{if touristGroup.outOPUser != null}}{{touristGroup.outOPUser.realName}}{{/if}}</td>
-        <td>散客拼团</td>
+        <td>{{if !!touristGroup.customerType == 1}}独立成团{{else}}散客拼团{{/if}}</td>
+        <td>{{touristGroup.status | getPartGroupStatusText}}</td>
         <td>
             <div class="btn-group" style="width:120px;">
                 <a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">

@@ -427,7 +427,7 @@ template.helper("getPartGroupStatusText", function(status){
         case 0:     return '已发团';
         case 1:     return '未分团';
         case 2:     return '已分团';
-        case 3:     return '已转客';
+        case 3:     return '已外转';
         case 4:     return '已取消';
         case 5:     return '已拆分';
         case 6:     return '已内转';

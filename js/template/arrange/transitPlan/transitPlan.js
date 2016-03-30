@@ -49,7 +49,9 @@ define(function(require, exports) {
         $searchAreaits : false,
         $searchAreabusview : false,
         transitIds :[]
-    }
+    },
+    service_name = "v2/singleItemArrange/touristGroupTransferArrange";
+
     //初始化中未安排转模块
     transitPlan.initModule = function(event) {
         var args = {
@@ -99,7 +101,7 @@ define(function(require, exports) {
         }
         args.pageNo = args.pageNo || 0;
          $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrangeList"),
+            url: KingServices.build_url(service_name, "getOutBusArrangeList"),
             type: "POST",
             data:args,
             success: function(data) {
@@ -171,7 +173,7 @@ define(function(require, exports) {
             // shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -222,9 +224,7 @@ define(function(require, exports) {
          // 车表格内操作
         $tab.find('.T-bus-plan').on('click', '.T-contact-delete', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                $tr = $that.closest('tr');
-            transitPlan.deleteArrange($tr);   
+            transitPlan.deleteArrange($(this));   
         });
 
     }
@@ -265,7 +265,7 @@ define(function(require, exports) {
              }
         })
         $.ajax({
-            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
+            url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type : "POST",
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList),
             success: function(data) {
@@ -283,7 +283,7 @@ define(function(require, exports) {
     //查看车已安排
     transitPlan.Already = function(unifyId,$tab){
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:'unifyId='+unifyId,
             success: function(data) {
@@ -315,7 +315,7 @@ define(function(require, exports) {
         }
         hotelsData.pageNo = hotelsData.pageNo || 0;
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrangeList"),
+            url: KingServices.build_url(service_name, "getOutHotelArrangeList"),
             type: "POST",
             data:hotelsData,
             success: function(data) {
@@ -405,17 +405,22 @@ define(function(require, exports) {
     transitPlan.listTransitItsPlan = function($tab,itsData){
         $tab = $tab || transitPlan.$tab;
         itsData = itsData || {};
-        if (!!transitPlan.$searchAreaits) {
-            itsData.tgOrderNumber = transitPlan.$searchAreaits.find('input[name=tgOrderNumber]').val();
-            itsData.touristName = transitPlan.$searchAreaits.find('input[name=touristName]').val();
-            itsData.lineProductName = transitPlan.$searchAreaits.find('input[name=lineProductName]').val();
-            itsData.consumeTime = transitPlan.$searchAreaits.find('input[name=consumeTime]').val();
-            itsData.arrangeUserName = transitPlan.$searchAreaits.find('input[name=arrangeUserName]').val();
-            itsData.status = transitPlan.$searchAreaits.find('select[name=status]').val();
-        }
+        // if (!!transitPlan.$searchAreaits) {
+        //     itsData.tgOrderNumber = transitPlan.$searchAreaits.find('input[name=tgOrderNumber]').val();
+        //     itsData.touristName = transitPlan.$searchAreaits.find('input[name=touristName]').val();
+        //     itsData.lineProductName = transitPlan.$searchAreaits.find('input[name=lineProductName]').val();
+        //     itsData.consumeTime = transitPlan.$searchAreaits.find('input[name=consumeTime]').val();
+        //     itsData.arrangeUserName = transitPlan.$searchAreaits.find('input[name=arrangeUserName]').val();
+        //     itsData.status = transitPlan.$searchAreaits.find('select[name=status]').val();
+        // }
         itsData.pageNo = itsData.pageNo || 0;
+        if ($tab) {
+            var args = $tab.find('.T-itsMian-search').find('form').serializeJson();
+            args.pageNo = itsData.pageNo;
+            itsData = args;
+        }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutOtherArrangeList"),
+            url: KingServices.build_url(service_name, "getOutOtherArrangeList"),
             type: "POST",
             data:itsData,
             success: function(data) {
@@ -424,11 +429,27 @@ define(function(require, exports) {
                     // 搜索域的html
                     var itsMain = itsMainTemplate();
                     transitPlan.$tab.find('.T-search').html(itsMain);
+
+                    if (data.recordSize) {
+                        for (var i = 0, tmp, len = data.outOtherList.length;i < len; i ++) {
+                            tmp = data.outOtherList[i];
+
+                            // n = 0;
+                            // for (var j = 0, len_j = tmp.arrangeItems.length, tmpJ; j < len_j; j ++) {
+                            //     tmpJ = tmp.arrangeItems[j];
+                            //     tmpJ.size = tmp.arrangeItems[j].arrangeResultList.length || 1;
+
+                            //     n += tmpJ.size;
+                            // }
+
+                            tmp.size = len_j = tmp.arrangeItems.length || 1;
+                        }
+                    }
                     // 它列表
                     var listIts = listItsTemplate(data);
                     transitPlan.$tab.find('.T-itsList').html(listIts);
                     transitPlan.$searchAreaits = transitPlan.$tab.find('.T-itsMian-search');
-                    transitPlan.init_eventMain(transitPlan.$tab);
+                    transitPlan.init_other_event(transitPlan.$tab);
                     //翻页
                     laypage({
                         cont: transitPlan.$tab.find('.T-pagenation'),
@@ -446,6 +467,273 @@ define(function(require, exports) {
             }
         })
     }
+
+    /**
+     * 中转安排：其他安排的事件初始化
+     * @param  {object} $tab 顶层父元素
+     * @return {[type]}      [description]
+     */
+    transitPlan.init_other_event = function($tab) {
+        $tab.find('.T-its-list').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                id = $that.closest('tr').data('id');
+
+            if ($that.hasClass('T-inform')) {  // 通知
+                transitPlan._inform_work({
+                    restaurant: 1,
+                    shuttleType: $that.closest('tr').data('shuttleType'),
+                    id: id
+                })
+            } else if ($that.hasClass('T-plan-its'))  {  // 安排
+                transitPlan.otherArrange(id);
+            } else if ($that.hasClass('T-view-plan'))   {  // 查看
+                transitPlan.otherView(id);
+            }
+        });
+
+        $tab.find('.T-itsMian-search').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this);
+
+            if ($that.hasClass('T-searchits')) {
+                // 搜索
+                transitPlan.listTransitItsPlan($tab);
+            } else if ($that.hasClass('T-more')) {
+                // 高级搜索
+                $that.closest('form').next().toggleClass('hidden');
+            // } else if ($that.hasClass('T-less'))  {
+            //     // 收起
+            //     $that.closest('form').next().addClass('hidden');
+            } else if ($that.hasClass('T-transit-export')) {
+
+            }
+        });
+    };
+
+    /**
+     * 打开其他安排的安排页面
+     * @param  {int} id 安排的ID
+     * @return {[type]}    [description]
+     */
+    transitPlan.otherArrange = function(id) {
+        if (!id) {
+            console.info('其他安排为空，无法进行安排');
+        }
+
+        $.ajax({
+            url: KingServices.build_url(service_name, 'getOutOtherArrange'),
+            type: 'get',
+            dataType: 'json',
+            data: {id: id},
+        })
+        .done(function(res) {
+            if (showDialog(res)) {
+                var tab_key = menuKey + '_other_arrange';
+                if (Tools.addTab(tab_key, '其他安排', itsplanTemplate(res))) {
+                    transitPlan.init_other_arrange($('#tab-'+ tab_key + '-content'));
+                }
+            }
+        });        
+    };
+
+    /**
+     * 其他安排的操作界面
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    transitPlan.init_other_arrange = function($tab) {
+        transitPlan.setDate($tab);
+
+        // 绑定安排完成的选择
+        $tab.find('#myTab_transitArrange').on('click', 'a', function(event) {
+            event.preventDefault();
+            $tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
+        }).find('a').eq(0).trigger('click');
+
+        // 添加安排
+        $tab.find('.tab-content').on('click', '.T-add', function(event) {
+            event.preventDefault();
+            
+            var $that = $(this), $tbody = $that.closest('.T-tab-pane').find('tbody');
+
+            if ($that.hasClass('T-restaurant')) {
+                // 添加酒店
+                transitPlan.addRestaurant($tbody);
+            } else if ($that.hasClass('T-ticket')) {
+                // 添加票务
+                transitPlan.addTicket($tbody);
+            } else if ($that.hasClass('T-other')) {
+                // 添加其他
+                transitPlan.addOther($tbody);
+            }
+        })
+        .on('click', '.T-autocomplete-input', function(event) {
+            event.preventDefault();
+            var $that = $(this);
+
+            if ($that.hasClass('ui-autocomplete-input')) return;
+
+            if ($that.hasClass('T-chooseRestaurant')) {
+                // 餐厅选项
+                transitPlan.setRestaurantList($that);
+            } else if ($that.hasClass('T-chooseTicket'))  {
+                // 票务选项
+                transitPlan.setTicketChoose($that);
+            }
+
+            $that.trigger('click');
+        })
+        .on('click', '.T-arrange-delete', function(event) {
+            event.preventDefault();
+            // 删除
+            transitPlan.deleteArrange($(this));
+        })
+        .on('change', '[name="price"], [name="memberCount"], [name="reduceMoney"], [name="reduceMoney"]', function(event) {
+            event.preventDefault();
+            
+            transitPlan.calculation($(this).closest('tr'));
+        });
+
+        $tab.find('.T-submit').on('click', function(event) {
+            event.preventDefault();
+            transitPlan.otherSubmit($tab);
+        });
+    };
+
+    transitPlan.addRestaurant = function($tbody) {
+        var html = '<tr data-entity-id="">'+
+            '<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
+            '<td><div class="col-sm-12"><input class="col-sm-12 bind-change T-autocomplete-input T-chooseRestaurant" name="restaurant" type="text" value="" />'+
+            '<input type="hidden" name="restaurantId" value="" />'+
+            '<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+            '<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>'+
+            '<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>'+
+            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />'+
+            '</td><td><input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9"  type="text" value="" /></td>'+
+            '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+            '<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>'+
+            '</tr>',
+        $line = filterUnAuth(html);
+        $tbody.append($line);
+        transitPlan.setDate($line);
+    };
+    transitPlan.addTicket = function($tbody) {
+        var html ='<tr>'+
+            '<td><div class="col-sm-12"><input class="col-sm-12 T-autocomplete-input T-chooseTicket" name="ticketName" value="" type="text" /><input type="hidden" name="ticketId" />'+
+            '<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+            '<td><select class="" name="type"><option value="1">机票</option>'+
+            '<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>'+
+            '<td><input class="col-sm-12" name="startCity" value="" maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12" name="arriveCity" value="" maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12" name="shift" value=""  maxlength="20"  type="text" /></td>'+
+            '<td><input class="col-sm-12" name="seatLevel"  maxlength="20"  value="" type="text" />'+
+            '<td><input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9"  value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6"  value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" value=""  maxlength="9"  type="text" /></td>'+
+            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>'+
+            '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+            '<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>'+
+            '</tr>';
+
+        $line = filterUnAuth(html);
+        $tbody.append($line);
+        transitPlan.setDate($line);
+    };
+    transitPlan.addOther = function($tbody) {
+        var html = '<tr data-entity-id="">'+
+            '<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /></td>'+
+            '<td><input class="col-sm-12" name="managerName" type="text" value="" maxlength="20" /></td>'+
+            '<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>'+
+            '<td><input class="col-sm-12 price F-float F-money" name="price" type="text" maxlength="9" value="" /></td>'+
+            '<td><input class="col-sm-12 count F-float F-count" name="memberCount" type="text" maxlength="9" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" type="text" maxlength="9" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>'+
+            '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="" /></td>'+
+            '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>'+
+            '<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>'+
+            '</tr>';
+        
+        $line = filterUnAuth(html);
+        $tbody.append($line);
+        transitPlan.setDate($line);
+    };
+
+    transitPlan.otherSubmit = function($tab) {
+        var args = {}, data;
+
+        data = Tools.getTableVal($('#restaurant_body'), 'entity-id');
+        if (!!data) {
+            args.outRestaurantList = JSON.stringify(data);
+        }
+        data = Tools.getTableVal($('#ticket_body'), 'entity-id');
+        if (!!data) {
+            args.outTicketList = JSON.stringify(data);
+        }
+        data = Tools.getTableVal($('#other_body'), 'entity-id');
+        if (!!data) {
+            args.outOtherList = JSON.stringify(data);
+        }
+
+        $tab.find('.T-finishedArrange').each(function(index, el) {
+            var $that = $(this);
+            args[$that.prop('name')] = $that.prop('checked')?3: 1;
+        });
+
+        args.outRemarkId = $tab.find('input[name="outRemarkId"]').val();
+
+        $.ajax({
+            url: KingServices.build_url(service_name, 'saveOutOtherArrange'),
+            type: 'post',
+            dataType: 'json',
+            data: args,
+        })
+        .done(function(res) {
+            if (showDialog(res)) {
+                // 刷新其他的安排列表
+                showMessageDialog($( "#confirm-dialog-message" ),res.message,function(){
+                    Tools.closeTab(Tools.getTabKey($tab));
+                });
+            }
+        });
+        
+    };
+    transitPlan.setDate = function($container) {
+        // 绑定日期
+        Tools.setDatePicker($container.find('.T-datePicker'));
+
+        $container.find('.T-dateTimePicker').datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'L',
+            language: 'zh-CN',
+            maxView: 3
+        });
+    }
+    transitPlan.otherView = function(id) {
+        if (!id) {
+            console.info('其他安排为空，无法查看具体信息');
+        }
+
+        $.ajax({
+            url: KingServices.build_url('', ''),
+            type: 'get',
+            dataType: 'json',
+            data: {id: id},
+        })
+        .done(function(res) {
+            if (showDialog(res)) {
+
+            }
+        });        
+    };
     // 车事件
     transitPlan.busevent = function($tab,args){
         // 表格内操作
@@ -528,7 +816,7 @@ define(function(require, exports) {
             var outRemarkList=transitPlan.transitIds;
             var outRemarkList = JSON.stringify(outRemarkList);
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outBusUnifyArrange"),
+                url: KingServices.build_url(service_name, "outBusUnifyArrange"),
                 type: "POST",
                 data:{outRemarkList:outRemarkList},
                 success: function(data) {
@@ -866,7 +1154,8 @@ define(function(require, exports) {
             })
         });
     };
-        /**
+    
+    /**
      * 酒店autocomplete
      * @param  {[type]} tab       [容器]
      * @param  {[type]} validator [description]
@@ -1006,6 +1295,178 @@ define(function(require, exports) {
             }
         });
     };
+
+    /**
+     * 餐厅选择项
+     * @param {object} $feild 餐厅输入框
+     */
+    transitPlan.setRestaurantList = function($feild) {
+        if ($feild.length)  {
+            var $tr = $feild.closest('tr'),
+                restaurantChoose = $tr.find(".T-chooseRestaurant"),
+                standardChoose = $tr.find(".T-chooseStandard"),
+                standardType = $tr.find("select[name=standardType]");
+            standardType.off("change").on("change", function(){
+                var parents = $(this).closest('tr');
+                parents.find("input[name=restaurantStandardId]").val("");
+                // transitPlan.calculation($(this));
+            });
+            //餐厅选择
+            $feild.autocomplete({
+                minLength:0,
+                select:function(event, ui) {
+                    var _this = this, parents = $(_this).closest('tr');
+                    parents.find("input[name=restaurantId]").val(ui.item.id);
+                    $.ajax({
+                        url: KingServices.build_url('restaurant','findRestaurantById'),
+                        showLoading: false,
+                        data: "id="+ui.item.id,
+                        success: function(data) {
+                            if(showDialog(data)) {
+                                var restaurant = JSON.parse(data.restaurant);
+                                parents.find("input[name=mobileNumber]").val(restaurant.mobileNumber);
+                                parents.find("input[name=manager]").val(restaurant.managerName);
+                                parents.find("input[name=price]").val(0);
+                                parents.find("input[name=restaurantStandardId]").val(0);
+                                // transitPlan.calculation($(_this));
+                            }
+                        }
+                    });
+                    
+                },
+                change : function(event, ui) {
+                    if(ui.item == null) {
+                        $(this).val("");
+                        var parents = $(this).closest('tr');
+                        parents.find("input[name=restaurantId]").val("");
+                        parents.find("input[name=manager]").val("");
+                        parents.find("input[name=mobileNumber]").val("");
+                        parents.find("input[name=restaurantStandardId]").val("");
+                        parents.find("input[name=price]").val("");
+                    }
+                }
+            }).off("click").on("click", function(){
+                var obj = this;
+                $.ajax({
+                    url: KingServices.build_url('restaurant','findAll'),
+                    showLoading: false,
+                    success: function(data) {
+                        if(showDialog(data)) {
+                            var restaurantList = JSON.parse(data.restaurantList);
+                            if(restaurantList && restaurantList.length > 0){
+                                for(var i=0; i < restaurantList.length; i++){
+                                    restaurantList[i].value = restaurantList[i].name;
+                                }
+                            }
+                            $(obj).autocomplete('option','source', restaurantList);
+                            $(obj).autocomplete('search', '');
+                        }
+                    }
+                });
+            });
+            //餐标
+            standardChoose.autocomplete({
+                minLength: 0,
+                select: function(event, ui){
+                    var standardId = ui.item.id;
+                    var _this = $(this);
+
+                    $(this).closest('tr').find("input[name=price]").val(ui.item.price);
+                    $(this).closest('tr').find("input[name=price]").focus();
+                    $(this).closest('tr').find("input[name=price]").blur();
+
+                },
+                change: function(event, ui) {
+                    if(ui.item == null) {
+                        var objParent = $(this).closest('tr');
+                        objParent.find("input[name=price]").val("");
+                    };
+                    transitPlan.calculation($(this));
+                }
+            }).off("click").on("click", function(){
+                var obj = this, parents = $(obj).closest('tr');
+                var id = parents.find("input[name=restaurantId]").val();
+                var type = parents.find('select[name=standardType]').val();
+                if(id && id.length > 0){
+                    $.ajax({
+                        url: KingServices.build_url('restaurant','getRestaurantStandardByType'),
+                        showLoading: false,
+                        data: "restaurantId=" + id + "&type=" + type,
+                        success: function(data) {
+                            if(showDialog(data)) {
+                                var restaurantStandardList = data.restaurantStandardList;
+                                if(restaurantStandardList && restaurantStandardList.length > 0){
+                                    for(var i=0; i < restaurantStandardList.length; i++){
+                                        restaurantStandardList[i].value = restaurantStandardList[i].price;
+                                    }
+                                    $(obj).autocomplete('option','source', restaurantStandardList);
+                                    $(obj).autocomplete('search', '');
+                                }else {
+                                    layer.tips('没有内容。', obj, {
+                                        tips: [1, '#3595CC'],
+                                        time: 2000
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }else{
+                    layer.tips('请选择餐厅', _this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            });
+        }
+    }
+
+    transitPlan.setTicketChoose = function($feild) {
+        if (!$feild.length) {
+            console.info('组织票务选项失败：选择框不存在')
+            return;
+        }
+
+        $feild.autocomplete({
+            minLength:0,
+            select:function(event, ui) {
+                var _this = this;
+                var thisParent = $(_this).closest('tr');
+                thisParent.find("input[name=ticketId]").val(ui.item.id).trigger('change');
+                // var validator = rule.setTranistCheckor($(".arrangeTouristMain"));
+                // rule.update(validator);
+            },
+            change : function(event, ui) {
+                if(ui.item == null) {
+                    $(this).val("");
+                    var thisParent = $(this).closest('tr');
+                    thisParent.find("input[name=ticketId]").val("").trigger('change');
+                }
+            }
+        }).off("click").on("click", function(){
+            var obj = this;
+            $.ajax({
+                url: KingServices.build_url('ticket','findAll'),
+                showLoading: false,
+                success: function(data) {
+                    if(showDialog(data)) {
+                        var ticketList = JSON.parse(data.ticketList);
+                        if(ticketList && ticketList.length > 0){
+                            for(var i=0; i < ticketList.length; i++){
+                                ticketList[i].value = ticketList[i].name;
+                            }
+                            $(obj).autocomplete('option','source', ticketList);
+                            $(obj).autocomplete('search', '');
+                        }else{
+                            layer.tips('没有内容。', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    }
     //房事件
     transitPlan.hotelevent = function($tab){
         // 表格内操作
@@ -1047,7 +1508,7 @@ define(function(require, exports) {
                 shuttleType : shuttleType
             }
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+                url: KingServices.build_url(service_name, "getOutHotelArrange"),
                 type: "POST",
                 data:viewbusData,
                 success: function(data) {
@@ -1115,7 +1576,7 @@ define(function(require, exports) {
             var outRemarkList=transitPlan.transitIds;
             var outRemarkList = JSON.stringify(outRemarkList);
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outHotelUnifyArrange"),
+                url: KingServices.build_url(service_name, "outHotelUnifyArrange"),
                 type: "POST",
                 data:{outRemarkList:outRemarkList},
                 success: function(data) {
@@ -1245,7 +1706,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+            url: KingServices.build_url(service_name, "getOutHotelArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -1316,7 +1777,7 @@ define(function(require, exports) {
         if (!!$id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
                 $.ajax({
-                    url: KingServices.build_url('v2/singleItemArrange/touristGroupTransferArrange','deleteTransferArrange'),
+                    url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
                     data: "cateName="+$bus+"&id="+$id+"",
                     success: function(data){
@@ -1423,7 +1884,6 @@ define(function(require, exports) {
                 transitPlan.listTransitItsPlan(itsData);
             }
         });
-       
         // 收起展开
         var $search = $tab.find('.T-search');
         $search.find('.T-shrink').on('click', function(event) {
@@ -1441,7 +1901,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -1457,22 +1917,24 @@ define(function(require, exports) {
             }
         })
     };
+    
     /**
-     * 中转安排删除车安排
-     * @param  {[type]} $obj      [删除对象]
-     * @param  {[type]} $id       [删除对象ID]
-     * @param  {[type]} $cateName [识别字段]
-     * @return {[type]}           [description]
+     * 删除安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
      */
-    transitPlan.deleteArrange = function($tr) {
-        var $bus = "bus",
-            $id = $tr.data('entity-id');
-        if (!!$id) {
+    transitPlan.deleteArrange = function($obj) {
+        var id = $obj.closest('tr').data('entity-id');
+
+        if (!!id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
                 $.ajax({
-                    url: KingServices.build_url('v2/singleItemArrange/touristGroupTransferArrange','deleteTransferArrange'),
+                    url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
-                    data: "cateName="+$bus+"&id="+$id+"",
+                    data: {
+                        cateName: $obj.prop('name'),
+                        id: id
+                    },
                     success: function(data){
                         if(showDialog(data)){
                             showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
@@ -1526,25 +1988,11 @@ define(function(require, exports) {
                     layer.close(noticeLayer);
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
-                    var notice = {
-                        isNoticeDriver : isNoticeDriver,
+                    transitPlan._inform_work({
+                        bus : 1,
                         unifyId : id,
                         isNoticeTourist: transitPlan.getValue('bus')
-                    }
-                    $.ajax({
-                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeOutBusUnifyArrange"),     
-                        type: 'POST',
-                        data: {
-                            noticeItems: JSON.stringify(notice)
-                        },
-                        success: function(data) {
-                            if (showDialog(data)) {
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
-                                    layer.close(noticeLayer);
-                                })
-                            }
-                        }
-                    })
+                    });                 
                 })
             }
         })
@@ -1585,34 +2033,42 @@ define(function(require, exports) {
                     layer.close(noticeLayer);
                 })
                 $container.find('.T-btn-submit-notice').on('click', function() {
-                    var noticeItems = {
+                    transitPlan._inform_work({
                         shuttleType : shuttleType,
                         id : id,
-                        bus: transitPlan.getValue('hotel')
-                    }
-                    $.ajax({
-                        url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
-                        type: 'POST',
-                        data: {
-                            noticeItems: JSON.stringify(noticeItems)
-                        },
-                        success: function(data) {
-                            if (showDialog(data)) {
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
-                                    layer.close(noticeLayer);
-                                })
-                            }
-                        }
-                    })
+                        hotel: 1,
+                    });
                 })
             }
         })
     };
+
+    /**
+     * 通知请求
+     * @param  {object} args 通知请求的参数  主体，通知范围
+     * @return {[type]}      [description]
+     */
+    transitPlan._inform_work = function(args) {
+        $.ajax({
+            url: KingServices.build_url(service_name,"noticeTransferArrange"),     
+            type: 'POST',
+            data: {
+                noticeItems: JSON.stringify(args)
+            },
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                        layer.close(noticeLayer);
+                    })
+                }
+            }
+        })
+    }
     // 车事件弹窗
     transitPlan.addResource = function($tab){
         $tab.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
         $tab.find(".T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , type : "tr" , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
-        $tab.find(".T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "tickeId"}, KingServices.addResourceFunction);
+        $tab.find(".T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "ticketId"}, KingServices.addResourceFunction);
         $tab.find(".T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , type : "tr" , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
         
         $tab.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
@@ -1630,57 +2086,7 @@ define(function(require, exports) {
         }, KingServices.addBusDriverFunction);
     }
 
-    // 它安排
-    transitPlan.itsplan = function(event) {
-        var html = itsplanTemplate();
-        addTab(itsplan, '它安排', html);
-        transitPlan.$tab = $("#tab-" + itsplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增它安排
-        transitPlan.$tab.find('.T-add-its').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addits(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
-    //餐安排
-    transitPlan.mealplan = function(event) {
-        var html = mealplanTemplate();
-        addTab(mealplan, '餐安排', html);
-        transitPlan.$tab = $("#tab-" + mealplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增餐安排
-        transitPlan.$tab.find('.T-add-meal').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addmeal(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
-    //票安排
-    transitPlan.ticketplan = function(event) {
-        var html = ticketplanTemplate();
-        addTab(ticketplan, '票安排', html);
-        transitPlan.$tab = $("#tab-" + ticketplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增票安排
-        transitPlan.$tab.find('.T-add-ticket').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addticket(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
+    
     //添加车安排
     transitPlan.addbus = function($obj) {
         var html = '<tr data-entity-id="">'+
@@ -1751,67 +2157,7 @@ define(function(require, exports) {
         transitPlan.addResource($tbody);
         transitPlan.init_eventMain($tbody);
     };
-    //添加它安排
-    transitPlan.addits = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-12" type="text" value="" name="contactMobileNumber" maxlength="20"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="departmentName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-10" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
-    //添加餐安排
-    transitPlan.addmeal = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-12" type="text" name="contactMobileNumber" maxlength="20"/></td>' +
-            '<td><input class="col-sm-10" type="text" name="departmentName" maxlength="45"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><select><option value="">机票</option><option value="">机票</option><option value="">机票</option></select></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
-    //添加票安排
-    transitPlan.addticket = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-10" type="text" name="contactMobileNumber" maxlength="20"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
-            '<td><select><option value="">机票</option><option value="">机票</option><option value="">机票</option></select></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" /></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
+    
     // 查看车安排
     transitPlan.buslook = function(outRemarkId,$tr){
         var shuttleType = $tr.find('input[name=shuttleType]').val();
@@ -1820,7 +2166,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:viewbusData,
             success: function(data) {
