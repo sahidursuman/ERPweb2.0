@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":12,"md5":"3a39e4e88d2ce417dbe48c543c1aa108"}*/
+define(function(require) {
+    return require("../../../template")("system/accountSetting/view/newPhone", '<div class="applicationMain-other" id="applicationMainNewP"> <form class="T-main-form" role="form" onsubmit="return false"> <label class="addPhone-prompt">请输入您要绑定的手机号码</label> <div class="application"> <input type="text" placeholder="请输入手机号" name="mobile" class="newPhone newPhoneStyle"></div> <div class="application mar-t-20 pad-b-20"><input type="text" name="verifyCode" placeholder="手机验证码" class="Verification-code"> <input class="applicationBtn" type="button" id="sended" value="发送验证码"></div> <button class="btn btn-block btn-primary T-newChangePhone guideSubmit" style="width:400px;margin-left:20px;"> <i class="ace-icon fa fa-check"></i> 确定 </button> </form> </div>');
+});

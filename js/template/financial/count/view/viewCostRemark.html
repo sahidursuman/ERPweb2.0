@@ -1,0 +1,33 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="th-border">费用项</th>
+            <th class="th-border">数量</th>
+            <th class="th-border">单价</th>
+            <th class="th-border">金额</th>
+            <th class="th-border">说明</th>
+        </tr>
+    </thead>
+    <tbody class="T-tripDetail">
+    <tr>
+        {{if touristGroupFeeList.length>0}}
+            {{each touristGroupFeeList as touristGroupFee index}}
+                <tr>
+                    <td>{{touristGroupFee.name}}</td>
+                    <td>{{touristGroupFee.count}}</td>
+                    <td>{{touristGroupFee.price}}</td>
+                    <td>
+                        {{touristGroupFee.price*touristGroupFee.count}}
+                    </td>
+                    <td>
+                        {{touristGroupFee.remark}}
+                    </td>
+                </tr>
+            {{/each}}
+        {{else}}
+            <tr>
+                <td colspan="5">暂无数据</td>
+            </tr>
+        {{/if}}
+    </tbody>
+</table>

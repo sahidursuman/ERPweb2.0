@@ -18,23 +18,20 @@ define(function(require, exports){
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(bankId,bankNo){
+	Payment.initModule = function(argsData){
 		Payment.$tab = null;
 		var date = new Date(),
-        year = date.getFullYear(),
-        month = Tools.addZero2Two(date.getMonth() + 1),
-        day = Tools.addZero2Two(date.getDate()),
-		args = {
-			pageNo : 0,
-			endTime : year + "-" + month + "-" + day,
-			startTime : year + "-" + month + "-01",
-			bankId : bankId ? bankId : "",
-			payType : ""
-		},
+	        year = date.getFullYear(),
+	        month = Tools.addZero2Two(date.getMonth() + 1),
+	        day = Tools.addZero2Two(date.getDate()),
+	        args = argsData || {};
+		args.pageNo = 0;
+		args.endTime = year + "-" + month + "-" + day;
+		args.startTime = year + "-" + month + "-01";
 		data = {
 			searchParam : args
 		};
-		Payment.initSearch(args,bankNo);
+		Payment.initSearch(args,args.bankNo);
 	};
 	/**
 	 * 获取收/付款合计
@@ -42,7 +39,6 @@ define(function(require, exports){
 	 * @param  {object} $tab $tab
 	 */
 	Payment.getTotal = function(args, $tab){
-		console.trace();
 		var page = typeof(args) !== "number" ? (args || 0) : (args.pageNo || 0);
 		if(!!Payment.$tab){
 			args = Payment.getArgs(page);
@@ -53,18 +49,18 @@ define(function(require, exports){
 			data : {searchParam : JSON.stringify(args)},
 			showLoading: false
 		}).done(function(data){
-			$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
-			$tab.find('.T-payMoney').html(data.total.payMoney);
+			$tab.find('.T-incomeMoney').text(data.total.incomeMoney);
+			$tab.find('.T-payMoney').text(data.total.payMoney);
 			Payment.total = data.total;
-			Payment.allClac($tab);
+			Payment.allClac($tab,args.beginningBalance);
 		});
 	};
 	//计算合计
-	Payment.allClac = function($tab) {
-		var beginningBalance = $tab.find('.T-beginningBalance').val()-0 || '',
+	Payment.allClac = function($tab,beginningBalance) {
+		var beginningBalance = beginningBalance * 1 || $tab.find('.T-beginningBalance').val()-0 || '',
 			incomeMoney = $tab.find('.T-incomeMoney').text()-0,
 			payMoney = $tab.find('.T-payMoney').text()-0;
-		if ($tab.find('.T-search-payment').val() == 1 && beginningBalance != '') {
+		if (($tab.find('.T-search-payment').val() == 1 || $tab.find('.T-search-payment').val() == 0) && beginningBalance != '') {
 			var all = ((beginningBalance + incomeMoney) - payMoney).toFixed(2),
 				html = ''
 				+'<div class="form-group mar-r-10">'
@@ -108,7 +104,10 @@ define(function(require, exports){
 			Payment.viewDetails($(this).closest('tr').data("id"));
 		})
 		.on("click",".T-delete",function(){
-			Payment.deletePayment($(this).closest('tr').data("id"));
+			var id = $(this).closest('tr').data("id");
+			showConfirmMsg($("#confirm-dialog-message"),"是否确认删除该条数据？",function(){
+		        Payment.deletePayment(id);
+		    },function(){},"放弃","删除");
 		});	
 
 		Payment.getSubjectList($tab);
@@ -130,13 +129,9 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			// 关闭事件绑定，若存在
-			var $tab = $('#tab-' + menuKey + '-content').off();
-
 			Tools.addTab(menuKey, "现金日记", listTemplate(data));
 			$tab = $('#tab-' + menuKey + '-content').off();
 
-			$tab.find(".T-cash-area").addClass('hidden');
 			FinancialService.initPayEvent($tab);
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
@@ -144,8 +139,10 @@ define(function(require, exports){
 
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				Payment.$tab.find(".T-card-number").val(bankNo);
-				Payment.$tab.find(".T-card-number").closest('div').removeClass('hidden');
+				var $obj = (args.accountType == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				$obj.val(bankNo);
+				$obj.next().val(args.bankId);
+				$obj.closest('div').removeClass('hidden');
 			}
 		});
 	};
@@ -166,7 +163,6 @@ define(function(require, exports){
 		.done(function(data){
 			if(showDialog(data)){
 				data.result = JSON.parse(data.result);
-				console.log(data);
 				var html = listTableTemplate(data);
 				Payment.$tab.find('.T-list').html(html);
 				// 设置记录条数及页面
@@ -240,7 +236,7 @@ define(function(require, exports){
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,

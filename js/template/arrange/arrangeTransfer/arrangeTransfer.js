@@ -24,7 +24,8 @@ define(function(require, exports) {
 				startTime : "",
 				endTime	: "",
 				lineProductId : "",			
-				lineProductName	: "",						
+				lineProductName	: "",	
+				contactUserName : "",					
 				partnerAgencyId	: "",	//地接社	
 				partnerAgencyName :"",					
 				status	: "",		
@@ -225,7 +226,6 @@ define(function(require, exports) {
 						});
 					}
 			})
-
 		};
 
 		/**
@@ -298,6 +298,7 @@ define(function(require, exports) {
 				lineProductName :getValue("lineProductName"),
 				partnerAgencyId : getValue("partnerAgencyId"),
 				partnerAgencyName : getValue("partnerAgencyName"),
+				contactUserName : getValue("contactUserName"),
 				userName:getValue("userName"),
 				startTime : getValue("startTime"),
 				endTime : getValue("endTime"),

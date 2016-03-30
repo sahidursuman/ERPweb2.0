@@ -25,7 +25,8 @@
                     </p>
                     <p class="h-agencyName">{{if !!subList.partnerAgency}}{{subList.partnerAgency.travelAgencyName}}{{/if}}</p>
                 </td>
-                <td>{{subList.lineProduct.name}} {{if subList.subTouristGroupDetails != null}}
+                <td>{{if !!subList.lineProduct}}{{subList.lineProduct.name}}{{/if}} 
+                   {{if subList.subTouristGroupDetails != null}}
                     <label class="lineProductArea" style="float: right;">
                         <button class="btn btn-success btn-sm btn-white show" index="{{indexA}}">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -36,14 +37,14 @@
                 </td>
                 <td>{{if subList.customerType == 0}}散客{{else}}团体{{/if}}</td>
                 <td>{{subList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td><span class="F-float F-count">{{subList.lineProduct.days}}</span></td>
+                <td><span class="F-float F-count">{{if !!subList.lineProduct}}{{subList.lineProduct.days}}{{/if}}</span></td>
                 <td><span class="F-float F-money">{{subList.currentNeedPayMoney}}</span></td>
                 <td>{{if subList.subOperatorUser != null}}{{subList.subOperatorUser.realName}}{{else}}-{{/if}}</td>
 
                 <td>{{if subList.subOperateTime != null}}{{subList.subOperateTime}}{{else}}-{{/if}}</td>
                 <td>{{if subList.status == 1}}未分团{{else if subList.status == 5}}已分段{{/if}}</td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group">
+                    <div class="btn-group">
                         <a data-entity-id="{{subList.id}}" class="{{if subList.isEdit == 1}}gray{{else}}T-btn-subsection{{/if}} cursor R-right" data-right="1350001" title="{{if subList.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{/if}}">
 							分段
 						</a>

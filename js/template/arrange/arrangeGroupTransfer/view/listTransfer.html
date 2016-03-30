@@ -29,7 +29,7 @@
 	</thead>
 	<tbody class="T-arrageTransfer-list">
 		{{each touristGroupList as group}}
-			<tr data-value={{group.id}} data-entity-adultCount = {{group.adultCount}}  data-entity-childCount = {{group.childCount}}>
+			<tr data-value="{{group.id}}" data-adultCount="{{group.adultCount}}"  data-childCount="{{group.childCount}}">
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-transferCheckBox T-cheked"> <span class="lbl"></span> </label></td>
 			    <td class="h-touristGroupInfo">
 				    <p>
