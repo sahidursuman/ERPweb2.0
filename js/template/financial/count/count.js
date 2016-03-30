@@ -3481,7 +3481,7 @@ define(function(require, exports){
 						}
 					}
 					var newItem = {
-						id:"",
+						id:-1,
 						value:"导游自选"
 					};
 					restaurantList.unshift(newItem)
