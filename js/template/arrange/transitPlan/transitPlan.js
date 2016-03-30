@@ -49,7 +49,9 @@ define(function(require, exports) {
         $searchAreaits : false,
         $searchAreabusview : false,
         transitIds :[]
-    }
+    },
+    service_name = "v2/singleItemArrange/touristGroupTransferArrange";
+
     //初始化中未安排转模块
     transitPlan.initModule = function(event) {
         var args = {
@@ -99,7 +101,7 @@ define(function(require, exports) {
         }
         args.pageNo = args.pageNo || 0;
          $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrangeList"),
+            url: KingServices.build_url(service_name, "getOutBusArrangeList"),
             type: "POST",
             data:args,
             success: function(data) {
@@ -170,7 +172,7 @@ define(function(require, exports) {
             // shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -255,7 +257,7 @@ define(function(require, exports) {
             outRemarkList.push(outRemarkJson);
         }
         $.ajax({
-            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
+            url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type : "POST",
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList),
         }).done(function(data) {
@@ -270,7 +272,7 @@ define(function(require, exports) {
     //查看车已安排
     transitPlan.Already = function(unifyId,$tab){
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:'unifyId='+unifyId,
             success: function(data) {
@@ -302,7 +304,7 @@ define(function(require, exports) {
         }
         hotelsData.pageNo = hotelsData.pageNo || 0;
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrangeList"),
+            url: KingServices.build_url(service_name, "getOutHotelArrangeList"),
             type: "POST",
             data:hotelsData,
             success: function(data) {
@@ -366,7 +368,7 @@ define(function(require, exports) {
             itsData = args;
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutOtherArrangeList"),
+            url: KingServices.build_url(service_name, "getOutOtherArrangeList"),
             type: "POST",
             data:itsData,
             success: function(data) {
@@ -468,7 +470,7 @@ define(function(require, exports) {
         }
 
         $.ajax({
-            url: KingServices.build_url('v2/singleItemArrange/touristGroupTransferArrange', 'getOutOtherArrange'),
+            url: KingServices.build_url(service_name, 'getOutOtherArrange'),
             type: 'get',
             dataType: 'json',
             data: {id: id},
@@ -527,7 +529,10 @@ define(function(require, exports) {
             }
         });
 
-
+        $tab.find('.T-submit').on('click', function(event) {
+            event.preventDefault();
+            transitPlan.otherSubmit($tab);
+        });
     };
 
     transitPlan.addRestaurant = function($tbody) {
@@ -595,6 +600,40 @@ define(function(require, exports) {
         transitPlan.setDate($line);
     };
 
+    transitPlan.otherSubmit = function($tab) {
+        var args = {}, data;
+
+        data = Tools.getTableVal($('#restaurant_body'));
+        if (!!data) {
+            args.outRestaurantList = data;
+        }
+        data = Tools.getTableVal($('#ticket_body'));
+        if (!!data) {
+            args.outTicketList = data;
+        }
+        data = Tools.getTableVal($('#other_body'));
+        if (!!data) {
+            args.outOtherList = data;
+        }
+
+        $tab.find('.T-finishedArrange').each(function(index, el) {
+            var $that = $(this);
+            args[$that.prop('name')] = $that.prop('checked')?3: 1;
+        });
+
+        $.ajax({
+            url: KingServices.build_url(service_name, 'saveOutOtherArrange'),
+            type: 'post',
+            dataType: 'json',
+            data: {param1: 'value1'},
+        })
+        .done(function(res) {
+            if (showDialog(res)) {
+                // 刷新其他的安排列表
+            }
+        });
+        
+    };
     transitPlan.setDate = function($container) {
         // 绑定日期
         Tools.setDatePicker($container.find('.T-datePicker'));
@@ -706,7 +745,7 @@ define(function(require, exports) {
             var outRemarkList=transitPlan.transitIds;
             var outRemarkList = JSON.stringify(outRemarkList);
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outBusUnifyArrange"),
+                url: KingServices.build_url(service_name, "outBusUnifyArrange"),
                 type: "POST",
                 data:{outRemarkList:outRemarkList},
                 success: function(data) {
@@ -1399,7 +1438,7 @@ define(function(require, exports) {
                 shuttleType : shuttleType
             }
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+                url: KingServices.build_url(service_name, "getOutHotelArrange"),
                 type: "POST",
                 data:viewbusData,
                 success: function(data) {
@@ -1469,7 +1508,7 @@ define(function(require, exports) {
             var outRemarkList=transitPlan.transitIds;
             var outRemarkList = JSON.stringify(outRemarkList);
             $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "outHotelUnifyArrange"),
+                url: KingServices.build_url(service_name, "outHotelUnifyArrange"),
                 type: "POST",
                 data:{outRemarkList:outRemarkList},
                 success: function(data) {
@@ -1532,7 +1571,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+            url: KingServices.build_url(service_name, "getOutHotelArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -1577,7 +1616,7 @@ define(function(require, exports) {
             outRemarkIdList.push(outRemarkJson);
         }
         $.ajax({
-            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutBusUnifyArrange"),
+            url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type : "POST",
             data : "outRemarkIdList="+JSON.stringify(outRemarkIdList)+"&outBusList="+JSON.stringify(outHotelList),
         }).done(function(data) {
@@ -1602,7 +1641,7 @@ define(function(require, exports) {
         if (!!$id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
                 $.ajax({
-                    url: KingServices.build_url('v2/singleItemArrange/touristGroupTransferArrange','deleteTransferArrange'),
+                    url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
                     data: "cateName="+$bus+"&id="+$id+"",
                     success: function(data){
@@ -1729,7 +1768,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:planbusData,
             success: function(data) {
@@ -1758,7 +1797,7 @@ define(function(require, exports) {
         if (!!$id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
                 $.ajax({
-                    url: KingServices.build_url('v2/singleItemArrange/touristGroupTransferArrange','deleteTransferArrange'),
+                    url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
                     data: "cateName="+$bus+"&id="+$id+"",
                     success: function(data){
@@ -1876,7 +1915,7 @@ define(function(require, exports) {
      */
     transitPlan._inform_work = function(args) {
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","noticeTransferArrange"),     
+            url: KingServices.build_url(service_name,"noticeTransferArrange"),     
             type: 'POST',
             data: {
                 noticeItems: JSON.stringify(args)
@@ -1912,57 +1951,7 @@ define(function(require, exports) {
         }, KingServices.addBusDriverFunction);
     }
 
-    // 它安排
-    transitPlan.itsplan = function(event) {
-        var html = itsplanTemplate();
-        addTab(itsplan, '它安排', html);
-        transitPlan.$tab = $("#tab-" + itsplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增它安排
-        transitPlan.$tab.find('.T-add-its').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addits(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
-    //餐安排
-    transitPlan.mealplan = function(event) {
-        var html = mealplanTemplate();
-        addTab(mealplan, '餐安排', html);
-        transitPlan.$tab = $("#tab-" + mealplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增餐安排
-        transitPlan.$tab.find('.T-add-meal').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addmeal(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
-    //票安排
-    transitPlan.ticketplan = function(event) {
-        var html = ticketplanTemplate();
-        addTab(ticketplan, '票安排', html);
-        transitPlan.$tab = $("#tab-" + ticketplan + "-content");
-        //绑定删除事件
-        transitPlan.$tab.on('click','.T-contact-delete',function(event){
-            transitPlan.delBusArrange($(this));
-        });
-        // 新增票安排
-        transitPlan.$tab.find('.T-add-ticket').on('click', function(event) {
-            event.preventDefault();
-            transitPlan.addticket(transitPlan.$tab);
-        });
-        //时间控件
-        Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
-    };
+    
     //添加车安排
     transitPlan.addbus = function($obj) {
         var html = '<tr data-entity-id="">'+
@@ -2033,67 +2022,7 @@ define(function(require, exports) {
         transitPlan.addResource($tbody);
         transitPlan.init_eventMain($tbody);
     };
-    //添加它安排
-    transitPlan.addits = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-12" type="text" value="" name="contactMobileNumber" maxlength="20"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="departmentName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-10" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" value="" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
-    //添加餐安排
-    transitPlan.addmeal = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-12" type="text" name="contactMobileNumber" maxlength="20"/></td>' +
-            '<td><input class="col-sm-10" type="text" name="departmentName" maxlength="45"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><select><option value="">机票</option><option value="">机票</option><option value="">机票</option></select></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
-    //添加票安排
-    transitPlan.addticket = function($obj) {
-        var html =
-            '<tr>' +
-            '<td><input class="col-sm-10" type="text" name="contactMobileNumber" maxlength="20"/><span class="T-addPartnerManager" title="添加车队"> <i class="ace-icon fa fa-plus bigger-110 icon-only" style="margin-top:5px"></i> </span></td>' +
-            '<td><select><option value="">机票</option><option value="">机票</option><option value="">机票</option></select></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" readonly="readonly"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45" /></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><input class="col-sm-12" type="text" name="dutyName" maxlength="45"/></td>' +
-            '<td><a class="T-contact-delete">删除</a></td>' +
-            '</tr>';
-        var $tbody = $obj.find('tbody');
-        $tbody.append(html);
-    };
+    
     // 查看车安排
     transitPlan.buslook = function(outRemarkId,$tr){
         var shuttleType = $tr.find('input[name=shuttleType]').val();
@@ -2102,7 +2031,7 @@ define(function(require, exports) {
             shuttleType : shuttleType
         }
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutBusArrange"),
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
             type: "POST",
             data:viewbusData,
             success: function(data) {
