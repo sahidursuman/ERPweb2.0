@@ -303,18 +303,20 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Self.$clearTab,Self.clearTempData,new FinRule(Self.showBtnFlag ? 3 : 1));
-                                Self.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Self.$clearTab.find('input[name=sumPayRemark]').val();
-                                Self.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-number]').val() : Self.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-id]').val() : Self.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Self.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Self.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Self.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Self.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Self.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Self.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-number]').val() : Self.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Self.$clearTab.find('input[name=cash-id]').val() : Self.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Self.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Self.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Self.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;

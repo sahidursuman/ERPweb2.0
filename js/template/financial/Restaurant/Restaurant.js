@@ -283,6 +283,7 @@ define(function(require, exports) {
                     var resultList = data.financialRestaurantList;
                     //暂存数据读取
                     if(restaurant.clearTempSumDate && restaurant.clearTempSumDate.id == args.restaurantId){
+                        console.log("ddddd");
                         data.sumPayMoney = restaurant.clearTempSumDate.sumPayMoney;
                         data.sumPayType = restaurant.clearTempSumDate.sumPayType;
                         data.sumPayRemark = restaurant.clearTempSumDate.sumPayRemark;
@@ -316,19 +317,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, new FinRule(args.isAutoPay== 2?3: 1));
-                                restaurant.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
-                                restaurant.clearTempSumDate = {
-                                    id : args.restaurantId,
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    restaurant.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
+                                    restaurant.clearTempSumDate = {
+                                        id : args.restaurantId,
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 restaurant.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;

@@ -312,19 +312,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(args.isAutoPay== 2?3: 1));
-                                hotel.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
-                                hotel.clearTempSumDate = {
-                                    id : args.hotelId,
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    hotel.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
+                                    hotel.clearTempSumDate = {
+                                        id : args.hotelId,
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 hotel.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;

@@ -376,18 +376,20 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
-                                Transfer.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
-                                Transfer.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Transfer.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Transfer.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Transfer.$clearTab.data("isEdited",false);
                                 args.pageNo = obj.curr-1;

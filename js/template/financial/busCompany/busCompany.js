@@ -319,19 +319,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab, busCompany.clearTempData, new FinRule(args.isAutoPay == 2 ? 3 : 1));
-                                busCompany.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
-                                busCompany.clearTempSumDate = {
-                                    id: args.busCompanyId,
-                                    sumPayMoney: sumPayMoney,
-                                    sumPayType: sumPayType,
-                                    sumPayRemark: sumPayRemark,
-                                    bankNo: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-number]').val() : busCompany.$clearTab.find('input[name=card-number]').val(),
-                                    bankId: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-id]').val() : busCompany.$clearTab.find('input[name=card-id]').val(),
-                                    voucher: busCompany.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime: busCompany.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    busCompany.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
+                                    busCompany.clearTempSumDate = {
+                                        id: args.busCompanyId,
+                                        sumPayMoney: sumPayMoney,
+                                        sumPayType: sumPayType,
+                                        sumPayRemark: sumPayRemark,
+                                        bankNo: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-number]').val() : busCompany.$clearTab.find('input[name=card-number]').val(),
+                                        bankId: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-id]').val() : busCompany.$clearTab.find('input[name=card-id]').val(),
+                                        voucher: busCompany.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime: busCompany.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
