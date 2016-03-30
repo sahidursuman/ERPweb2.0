@@ -446,7 +446,7 @@ table tr td {
     padding-left:25px !important;
 }
 .textaR-paR{
-    text-align: right;
+    text-align: right !important;
     padding-right:15px !important;
 }
 .mar-l-3{
@@ -1959,12 +1959,14 @@ p#back-top a span {
 }
 
 /*游客小组查看结算单样式*/
+.touristGroupViewAccount{
+    font-family: '微软雅黑';
+}
 .viewAccountsMain{
     width: 650px;
     margin: auto;
     /*background-color: red;*/
     font-size: 12px;
-    font-family: '微软雅黑'
 }
 /*媒体查询-不同分辨率*/
 
