@@ -38,7 +38,7 @@
         <tbody class="T-bus-plan">
         {{each outBusList as outBus}}
             {{if outBus.id != null}}
-            <tr data-entity-id="{{outBus.unifyId}}">
+            <tr data-id="{{outBus.unifyId}}">
                 <td>
                     <div class="col-sm-12">
                         <input type="hidden" name="serviceType" value="{{if outBus.serviceType == 0}}0{{else}}1{{/if}}" />
@@ -71,7 +71,7 @@
                     </div>
                 </td>
                 <td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="{{outBus.driverMobileNumber}}" /></td>
-                <td><input class="col-sm-12 T-dateTimePicker datepicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
+                <td><input class="col-sm-12 T-datepicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
                 <td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
                 <td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" /></td>
                 <td><input class="col-sm-12 T-number price F-float F-money" name="fee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>

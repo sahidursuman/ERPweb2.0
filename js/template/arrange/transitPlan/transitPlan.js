@@ -170,6 +170,7 @@ define(function(require, exports) {
     }
     //安排车已安排
     transitPlan.alreadyplan = function(unifyId,$tr){
+        console.log(unifyId)
         // var shuttleType = $tr.find('input[name=shuttleType]').val();
         var planbusData = {
             unifyId : unifyId,
@@ -191,6 +192,13 @@ define(function(require, exports) {
                     $tab.find('.T-cancel').on('click',function(){
                         Tools.closeTab(busplan)
                     })
+                    //给日期格式化
+                    transitPlan.$tab.find('.T-datepicker').datetimepicker({
+                        autoclose: true,
+                        todayHighlight: true,
+                        format: 'L',
+                        language: 'zh-CN'
+                    });
                 }
             }
         })
@@ -209,7 +217,6 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find('.datepicker'), true);
         //保存车事件
         $tab.find('.T-bus-save').on('click',function(){
-            // transitPlan.submitUpdatebus($tab,id,shuttleType);
             transitPlan.submitbusAlready($tab,shuttleType);
         });
         // 保存车事件已安排
@@ -223,6 +230,7 @@ define(function(require, exports) {
             event.preventDefault();
             transitPlan.deleteArrange($(this));   
         });
+
     }
     //安排保存 公共事件
     transitPlan.submitbusAlready = function($tab,shuttleType){
@@ -230,7 +238,7 @@ define(function(require, exports) {
             // status = transitPlan.getValue($tab,'status'),
             outRemarkList = [],//中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
-            outRemarkId = $tab.find('input[name=outRemarkId]').val();
+            outRemarkId = $tab.find('input[name=outRemarkId]');
         for (var i = 0; i < $tr.length; i++) {
             var $trline = $tr.eq(i);
             var outBusJson = {
@@ -251,23 +259,28 @@ define(function(require, exports) {
             };
             outBusList.push(outBusJson);
         }
-        for(var j = 0; j < outRemarkId.length;j++){
-            var outRemarkJson = {
-                outRemarkId : outRemarkId,
-                shuttleType : 1
-            }
-            outRemarkList.push(outRemarkJson);
-        }
+        outRemarkId.each(function(){
+            if($(this).val().trim()){
+             var outRemarkJson = {
+                 outRemarkId : $(this).val(),
+                 shuttleType : shuttleType
+             }
+             outRemarkList.push(outRemarkJson);
+             }
+        })
         $.ajax({
             url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type : "POST",
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList),
-        }).done(function(data) {
-            if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        
+                        transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+                    });
                     Tools.closeTab(busplan);
-                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
-                });
+                 }
+
             }
         })
     };
@@ -291,9 +304,9 @@ define(function(require, exports) {
 
     }
     // 房
-    transitPlan.listTransitHoutelPlan = function($tab,hotelsData){
-        $tab = $tab || transitPlan.$tab;
-        hotelsData = hotelsData || {};
+    transitPlan.listTransitHoutelPlan = function(hotelsData){
+        var $tab = $tab || transitPlan.$tab,
+            hotelsData = hotelsData || {};
         if (!!transitPlan.$searchAreahotel) {
             hotelsData.tgOrderNumber = transitPlan.$searchAreahotel.find('input[name=tgOrderNumber]').val();
             hotelsData.touristName = transitPlan.$searchAreahotel.find('input[name=touristName]').val();
@@ -312,9 +325,17 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    // // 搜索域的html
-                    var hotelsearch = hotelMainTemplate()
-                    transitPlan.$tab.find('.T-search').html(hotelsearch);
+                    
+                    // 房列表
+                    
+                    if(hotelsData.status == 0){
+                        var listHotel = listHotelTemplate(data);
+                        transitPlan.$tab.find('.T-HotelList').html(listHotel);
+                    }else{
+                        var listalreadyhotel = hotelalreadyTemplate(data);
+                        transitPlan.$tab.find('.T-HotelList').html(listalreadyhotel);
+                        transitPlan.hotelalreadys(transitPlan.$tab);
+                    }
                     
                     transitPlan.$searchAreahotel = transitPlan.$tab.find('.T-hotelMian-search');
                     transitPlan.init_eventMain(transitPlan.$tab);
@@ -322,18 +343,8 @@ define(function(require, exports) {
                     transitPlan.bindHotelChoose(transitPlan.$tab);
                      // 判断是已安排还是未安排
                      $tab.find("select[name=status]").on('change',function(){
-                        var status = $(this).val();
-                        if(status == 0){
-                            var listHotel = listHotelTemplate(data);
-                            transitPlan.$tab.find('.T-HotelList').html(listHotel);
-                            transitPlan.listTransitHoutelPlan($tab,status)
-                        }else{
-                            var listalreadyhotel = hotelalreadyTemplate(data);
-                            transitPlan.$tab.find('.T-HotelList').html(listalreadyhotel);
-                            transitPlan.listTransitHoutelPlan($tab,status);
-                        }
-                        
-                     }) 
+                        transitPlan.listTransitHoutelPlan()
+                     });
                     //翻页
                     laypage({
                         cont: transitPlan.$tab.find('.T-pagenation-hotel'),
@@ -347,6 +358,49 @@ define(function(require, exports) {
                             }
                         }
                     });
+                }
+            }
+        })
+    };
+     //查看方已安排安排
+        transitPlan.hotelAlreadyview = function(unifyId,$tr){
+            var shuttleType = $tr.find('input[name=shuttleType]').val();
+            var viewbusData = {
+                unifyId : unifyId,
+                shuttleType : shuttleType
+            }
+            $.ajax({
+                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+                type: "POST",
+                data:viewbusData,
+                success: function(data) {
+                    var result = showDialog(data);
+                    if(result){
+                        var html = busviewTemplate(data);
+                        addTab(busviewId,'查看车安排',html);
+                    }
+                }
+            })
+        }
+    // 房已安排安排
+    transitPlan.arranged = function(unifyId,$tr) {
+        var shuttleType = $tr.find('input[name=shuttleType]').val();
+        var planbusData = {
+            unifyId : unifyId,
+            shuttleType : shuttleType
+        }
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+            type: "POST",
+            data:planbusData,
+            success: function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var html = hotelplanTemplate(data);
+                    addTab(hotelplanId, '房安排', html);
+                    transitPlan.$tab = $("#tab-" + hotelplanId + "-content");
+                    var $tab = transitPlan.$tab;
+                    transitPlan.hotelplanclick($tab,unifyId);
                 }
             }
         })
@@ -1427,7 +1481,6 @@ define(function(require, exports) {
     }
     //房事件
     transitPlan.hotelevent = function($tab){
-
         // 表格内操作
         $tab.find('.T-hotel-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -1478,8 +1531,6 @@ define(function(require, exports) {
                     }
                 }
             })
-            
-
         }
          
         // 查看房
@@ -1582,15 +1633,82 @@ define(function(require, exports) {
          $tab.on('click','.T-contact-delete',function(event){
             transitPlan.delBusArrange($(this));
         });
-        // 提交房安排保存
+        // 提交未安排安排房房安排保存
         $tab.find('.T-hotel-save').on('click',function(){
-            transitPlan.submitUpdatehotel($tab,outRemarkId,shuttleType)
+            transitPlan.submitUpdatehotel($tab,shuttleType)
+        })
+        // 提交已安排房房安排保存
+        $tab.find('.T-hotel-already').on('click',function(){
+            var unifyId = outRemarkId;
+            transitPlan.submialreadyhotel($tab,unifyId,shuttleType)
         })
         //关闭房安排
         $tab.find('.T-cancel').on('click',function(){
             Tools.closeTab(hotelplanId)
         })
         Tools.setDatePicker($tab.find('.datepicker'), true);
+    }
+      // 已安排事件绑定
+    transitPlan.hotelalreadys = function($tab){
+         $tab.find('.T-hotelarranged-list').on('click', '.T-action', function(event) {
+            event.preventDefault();
+            var $that = $(this),
+                $tr = $that.closest('tr'),
+                unifyId = $tr.data('id');
+            if ($that.hasClass('T-plan-hotel')) {
+                //安排
+                transitPlan.arranged(unifyId,$tr);
+            
+            }else if($that.hasClass('T-viewhotel-plan')){
+                //查看房安排
+                transitPlan.hotelAlreadyview(unifyId,$tr);
+
+            }
+        });
+    }
+    // 房已安排保存
+    transitPlan.submialreadyhotel = function($tab,unifyId,shuttleType){
+        console.log(unifyId); 
+        var outHotelList = [],//房安排列表
+            outRemarkList = [],//中转列表 Id
+            $tr = $tab.find('.T-hotel-plan tr'),
+            outRemarkId = $tab.find('input[name=outRemarkIds]');
+        for (var i = 0; i < $tr.length; i++) {
+            var $trline = $tr.eq(i);
+            var outhotelJson = {
+                checkInTime : transitPlan.getValue($trline,'checkInTime'),
+                checkOutTime : transitPlan.getValue($trline,'checkOutTime'), 
+                hotelId : transitPlan.getValue($trline,'hotelId'),
+                hotelRoomId :  transitPlan.getValue($trline,'hotelRoomId'), //接送类型
+                needPayMoney : transitPlan.getValue($trline,'needPayMoney'),
+                outHotelId : transitPlan.getValue($trline,'outHotelId'),
+                prePayMoney : transitPlan.getValue($trline,'prePayMoney'), 
+                price : transitPlan.getValue($trline,'price'),
+                reduceMoney : transitPlan.getValue($trline,'reduceMoney'),
+                remark : transitPlan.getValue($trline,'remark')
+            };
+            outHotelList.push(outhotelJson);
+        }
+        if($(this).val().trim()){
+            outRemarkId.each(function(){
+                 var outRemarkJson = {
+                     outRemarkId : $(this).val()
+                 }
+                 outRemarkList.push(outRemarkJson);
+            })
+        }
+        $.ajax({
+            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutHotelUnifyArrange"),
+            type : "POST",
+            data : 'unifyId='+JSON.stringify(unifyId)+"&outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outHotelList),
+        }).done(function(data) {
+            if (showDialog(data)) {
+                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    Tools.closeTab(busplan);
+                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+                });
+            }
+        })
     }
     //房安排
     transitPlan.hotelplan = function(outRemarkId,$tr) {
@@ -1618,9 +1736,9 @@ define(function(require, exports) {
        // 房保存
     transitPlan.submitUpdatehotel = function($tab,shuttleType){
         var outHotelList = [],//房安排列表
-            outRemarkIdList = [],//中转列表 Id
+            outRemarkList = [],//中转列表 Id
             $tr = $tab.find('.T-hotel-plan tr'),
-            outRemarkId = $tab.find('input[name=outRemarkIds]').val();
+            outRemarkId = $tab.find('input[name=outRemarkIds]');
         for (var i = 0; i < $tr.length; i++) {
             var $trline = $tr.eq(i);
             var outhotelJson = {
@@ -1637,17 +1755,18 @@ define(function(require, exports) {
             };
             outHotelList.push(outhotelJson);
         }
-        for(var j = 0; j < outRemarkId.length;j++){
-            var outRemarkJson = {
-                outRemarkId : outRemarkId,
-                shuttleType : 1
-            }
-            outRemarkIdList.push(outRemarkJson);
+        if($(this).val().trim()){
+        outRemarkId.each(function(){
+             var outRemarkJson = {
+                 outRemarkId : $(this).val()
+             }
+             outRemarkList.push(outRemarkJson);
+        })
         }
         $.ajax({
-            url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
+            url : KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "saveOutHotelUnifyArrange"),
             type : "POST",
-            data : "outRemarkIdList="+JSON.stringify(outRemarkIdList)+"&outBusList="+JSON.stringify(outHotelList),
+            data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outHotelList),
         }).done(function(data) {
             if (showDialog(data)) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
@@ -1754,32 +1873,29 @@ define(function(require, exports) {
                     lineProductName : '',
                     hotelLevel : '',
                     arrangeUserName : '',
-                    status : '',
+                    status : 0,
                     sortType:'auto'
                 }
-                transitPlan.listTransitHoutelPlan(transitPlan.$tab,hotelsData);   
-                // 房列表
-                var listHotel = listHotelTemplate(data);
-                transitPlan.$tab.find('.T-HotelList').html(listHotel);
-                
+                var hotelsearch = hotelMainTemplate();
+                transitPlan.$tab.find('.T-search').html(hotelsearch);
+                transitPlan.listTransitHoutelPlan(hotelsData);
             }else if($that.hasClass('T-itsTab')){
                 // 它 
                 var itsData = {
                     pageNo:0,
                     // customerType : 0,
                     arrangeItem : "other",
-                    // tgOrderNumber : '',
-                    // touristName : '',
-                    // lineProductName : '',
-                    // consumeTime : '',
-                    // arrangeUserName : '',
-                    // status : '',
+                    tgOrderNumber : '',
+                    touristName : '',
+                    lineProductName : '',
+                    consumeTime : '',
+                    arrangeUserName : '',
+                    status : 0,
                     sortType:'auto'
                 }
-                transitPlan.listTransitItsPlan(transitPlan.$tab,itsData);
+                transitPlan.listTransitItsPlan(itsData);
             }
         });
-       
         // 收起展开
         var $search = $tab.find('.T-search');
         $search.find('.T-shrink').on('click', function(event) {
@@ -1789,7 +1905,7 @@ define(function(require, exports) {
         Tools.setDatePicker(transitPlan.$tab.find('.datepicker'), true);
     };
    
-    //车安排
+    //车未安排安排
     transitPlan.busplan = function(outRemarkId,$tr) {
         var shuttleType = $tr.find('input[name=shuttleType]').val();
         var planbusData = {
