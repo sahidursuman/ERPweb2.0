@@ -892,6 +892,9 @@ define(function(require, exports) {
                     }
                     $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                     layer.close(index);
+                    if(!!type){
+                        F.subtotal($that.closest('tr'), 1);
+                    }
                 });
 		    }
 		});
@@ -2271,6 +2274,7 @@ define(function(require, exports) {
                 receiveHotel = $tr.find('[name="receiveHotel"]').val() || 0,
                 receiveOther = $tr.find('[name="receiveOther"]').val() || 0,
                 sumNum = 0;
+                console.log(type)
             if(type === 1){
                 sumNum = lineNeedPayMoney * 1 + hotelNeedPayMoney * 1;
             }else{
