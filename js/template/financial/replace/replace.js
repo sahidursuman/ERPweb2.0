@@ -378,7 +378,8 @@ define(function(require, exports) {
 	                    travelAgencyName: $tab.find('input[name=partnerAgencyName]').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val(),
-	                    accountStatus : args.accountStatus
+	                    accountStatus : args.accountStatus,
+	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
 	                };
 	            argsData.orderNumber = argsData.orderNumber === "全部" ? "" : argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');

@@ -289,7 +289,8 @@ define(function(require, exports) {
                 info: $tab.find('.T-creatorUserChoose').val(),
                 startAccountTime: $tab.find('.T-startTime').val(),
                 endAccountTime: $tab.find('.T-endTime').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });

@@ -398,8 +398,8 @@ define(function(require, exports) {
                         accountStatus: $searchArea.find('input[name=accountStatus]').val(),
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
-                        lineProductId: $searchArea.find('.T-lineProductName').data('id')
-
+                        lineProductId: $searchArea.find('.T-lineProductName').data('id'),
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 FinancialService.exportReport(argsData,"exportArrangeGuideFinancial");

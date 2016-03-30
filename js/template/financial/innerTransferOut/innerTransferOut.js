@@ -332,7 +332,8 @@ define(function(require,exports) {
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
-                    orderNumber : $tab.find('input[name=orderNumber]').val()
+                    orderNumber : $tab.find('input[name=orderNumber]').val(),
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             FinancialService.exportReport(argsData,"exportArrangeInnerTransferOutFinancial");
