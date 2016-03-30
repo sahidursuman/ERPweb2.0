@@ -47,6 +47,7 @@ define(function(require, exports) {
             statusSearch: "",
             customerType: "",
             memberType: "",
+            contactInfo:"",
             sortType: 'auto'
         },
         touristGroupId: "",
@@ -97,7 +98,7 @@ define(function(require, exports) {
                 quoteNumber: touristGroup.$searchArea.find('input[name=quoteNumber]').val(),
                 outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
                 otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
-                welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
+                contactInfo: touristGroup.$searchArea.find('input[name=contactInfo]').val(),
                 startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
                 createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
                 createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
@@ -135,8 +136,6 @@ define(function(require, exports) {
                     var $bussinessGroupObj = touristGroup.$tab.find(".T-chooseBussinessGroup"); //来源--业务部对象
                     var $lineProductObj = touristGroup.$tab.find(".T-chooseLineProduct"); //线路产品对象
                     var $outUserObj = touristGroup.$tab.find(".T-choose-outUserList"); //外联销售
-                    /*     var $otaOrderNumberObj = touristGroup.$tab.find(".T-choose-otaOrderNumber");  //组团单号
-                         var $welcomeBoardObj = touristGroup.$tab.find(".T-choose-welcomeBoard"); //接站牌*/
                     //来源--组团社
                     touristGroup.getListPartnerAgencyList($partnerAgencyObj);
                     //来源--业务部
@@ -209,7 +208,7 @@ define(function(require, exports) {
             realName: touristGroup.$searchArea.find('input[name=realName]').val(),
             outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
             otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
-            welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
+            contactInfo: touristGroup.$searchArea.find('input[name=contactInfo]').val(),
             startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
             createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
             createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
@@ -333,7 +332,6 @@ define(function(require, exports) {
                 }
             }
         });
-
     };
 
     //添加游客小组
@@ -735,7 +733,6 @@ define(function(require, exports) {
         touristGroup.formatTime($obj);
         //搜索线路
         $obj.find(".T-travelLine-search").on('click', function() {
-            // touristGroup.searchLinproduct(true,0,"",typeFlag);
             touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
         });
 

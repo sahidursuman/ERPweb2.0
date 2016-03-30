@@ -140,6 +140,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         // 修正页码
         args.pageNo = args.pageNo || 0;
@@ -204,6 +205,15 @@ define(function(require, exports) {
         scenic.init_event(args,$tab,"check");
         FinancialService.updateUnpayMoney($tab, new FinRule(0));
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            scenic.scenicCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
@@ -264,6 +274,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         if(args.autoPay == 1){
             args.isAutoPay = 0;
@@ -348,6 +359,15 @@ define(function(require, exports) {
 
     scenic.initClear = function(args,$tab){
         scenic.init_event(args,$tab,"clear");
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            scenic.scenicClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").off().click(function(){
             args.pageNo = 0;

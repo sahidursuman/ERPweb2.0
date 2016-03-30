@@ -502,6 +502,10 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
+    if(unpayMoney < 0){
+        showMessageDialog($("#confirm-dialog-message"),"已对账未" + key + "总额为负，不能进行自动下账！");
+        return false;
+    }
     if(sumPayMoney > unpayMoney){
         showMessageDialog($("#confirm-dialog-message"),"本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
         return false;

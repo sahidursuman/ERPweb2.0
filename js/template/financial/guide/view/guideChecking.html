@@ -21,12 +21,32 @@
                     <label>线路产品：</label>
                     <input type="text" class="form-control T-lineProductName" style="width: 200px;" data-id="{{lineProductId}}" value="{{lineProductName}}" maxlength="100">
                 </div>
+                <label class="form-group">对账状态：</label>
+                <div class="form-group btn-group T-check-status mar-r-10">
+                    <button data-value="{{isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                        <span>
+                            {{if !isConfirmAccount || isConfirmAccount === ""}}
+                                全部
+                            {{else if isConfirmAccount == 1}}
+                                已对账
+                            {{else}}
+                                未对账
+                            {{/if}}
+                        </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                        <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                        <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                    </ul>
+                </div>
                 <div class="form-group mar-r-10">
                     <button class="btn-sm search-btn T-btn-search">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
                 </div>
-                <div class="form-group mar-r-10">
+                <div class="form-group">
                     <button class="btn-sm search-btn T-btn-export">导出报表</button>
                 </div>
             </form>
