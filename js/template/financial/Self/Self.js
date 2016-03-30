@@ -228,7 +228,8 @@ define(function(require, exports) {
                     tripInfo: $tab.find('input[name=tripInfo]').val(),
                     startTime: $tab.find('input[name=startDate]').val(),
                     endTime: $tab.find('input[name=endDate]').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             FinancialService.exportReport(argsData,"exportSelfPayFinancial");
         });

@@ -238,7 +238,8 @@ define(function(require, exports) {
                 startTime: $tab.find("input[name=startDate]").val(),
                 endTime: $tab.find("input[name=endDate]").val(),
                 accountStatus : args.accountStatus,
-                licenseNumber : $tab.find("input[name=licenseNumber]").val()
+                licenseNumber : $tab.find("input[name=licenseNumber]").val(),
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });

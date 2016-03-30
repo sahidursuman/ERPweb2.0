@@ -349,7 +349,8 @@ define(function(require, exports) {
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
                         endAccountTime : $tab.find('input[name=endDate]').val(),
-                        accountStatus : args.accountStatus
+                        accountStatus : args.accountStatus,
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 argsData.receiveUserName = argsData.receiveUserName === "全部" ? "" : argsData.receiveUserName;

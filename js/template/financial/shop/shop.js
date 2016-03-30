@@ -410,7 +410,8 @@ define(function(require, exports) {
                     tripMessage: $tab.find('.T-search-trip').val(),
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
                 FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });
