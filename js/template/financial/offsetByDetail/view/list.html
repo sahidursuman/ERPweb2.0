@@ -30,11 +30,8 @@
         </div>
         <div class="form-group mar-r-10">
             <label>主营业务收付类别</label>
-            <select name="receivableType"  class="w100">
-                <option {{if searchParam.receivableType==""}}selected{{/if}} value="">团款收入</option> 
-                <option {{if searchParam.receivableType==0}}selected{{/if}} value="0">酒店支出</option> 
-                <option {{if searchParam.receivableType==1}}selected{{/if}} value="1">购物佣金</option> 
-            </select> 
+            <input type="text" class="form-control w100" name="receivableType" value="{{searchParam.receivableType}}">
+            <input type="hidden" class="form-control w100" name="receivableTypeId" value="{{searchParam.receivableTypeId}}">
         </div>
         <div class="form-group">
             <button class="btn-sm search-btn T-btn-search"><i class="ace-icon fa fa-search"></i> 搜索</button>
