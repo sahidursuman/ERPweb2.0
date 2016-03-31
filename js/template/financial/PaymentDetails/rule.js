@@ -59,6 +59,14 @@ define(function(require, exports) {
     	    	        	errMsg: '转入账户不能为空'
     	    	        }
 	    	        ]
+	    	    },{	//现金账号
+	    	    	$ele: $obj.find('input[name="resourceName"]'),
+	    	    	rules: [
+    	    	        {
+    	    	        	type: 'null',
+    	    	        	errMsg: '对方单位不能为空'
+    	    	        }
+	    	        ]
 	    	    }
             ]);
 			return validator;
