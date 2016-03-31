@@ -50,7 +50,10 @@ define(function(require, exports){
 	};
 	//列表头部
 	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+
+		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
+			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -60,7 +63,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-		};
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+		} 
+		timeStatus = timeStatus || 0
 		//修正页码
 		pageNo = pageNo || 0;
 		$.ajax({
@@ -75,7 +80,8 @@ define(function(require, exports){
                 startTime:startTime,
                 billStatus:status,
                 lineProductName:lineProductName,
-                guideName:guideName
+                guideName:guideName,
+                timeStatus : timeStatus
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -97,12 +103,13 @@ define(function(require, exports){
 		                startTime:startTime,
 		                billStatus:status,
 		                lineProductName:lineProductName,
-		                guideName:guideName
+		                guideName:guideName,
+		                timeStatus : timeStatus
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
                 	//格式化日期
-                	Count.formatDate(Count.$searchArea);
+                	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
                 	//获取搜索区域的列表数据
                 	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
                 	Count.getLineproductData($lineProductObj);
@@ -114,6 +121,7 @@ define(function(require, exports){
 			}
 		});
 	};
+
 	//搜索区域事件
 	Count.initListHeaderEvents = function(){
 		var $searchObj = Count.$searchArea;
@@ -130,6 +138,13 @@ define(function(require, exports){
 			$(this).closest('div').find("span").text($(this).text());
 			Count.listCountHeader(0);
 		});
+        $searchObj.find(".T-time-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Count.listCountHeader(0);
+        });
 	};
 	//获取主体列表数据
 	Count.listCountBody = function($data){
@@ -5066,6 +5081,35 @@ define(function(require, exports){
 		if (needSum) {
 			Count.autoShopSumCost($target.eq(0), $parentObj);
 		}
+	};
+
+	//主页时间控件绑定
+	Count.setDatePicker = function($obj) {
+	    options = $.extend({}, {
+	        autoclose: true,
+	        todayHighlight: true,
+	        format: 'yyyy-mm-dd',
+	        language: 'zh-CN'
+	    });
+	    
+	    $obj.datepicker(options);
+	    var $start = $obj.eq(0),
+	    	$end = $obj.eq(1);
+	    $start.on("change",function(event){
+	     	event.preventDefault();
+	        var startDate = $(this).val(),
+	           	endDate = $end.val();
+	        $end.datepicker('setStartDate', startDate);
+	        if(endDate == ""){
+	        	$end.val("");
+	        } else if($end.val() < startDate){
+	        	$end.val(startDate);
+	        }
+	    });
+	    if (!!$start.val()) {
+	    	$start.trigger('change');
+	    }
+	    return $obj;
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;

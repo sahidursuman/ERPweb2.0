@@ -341,7 +341,8 @@ define(function(require, exports) {
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
                     orderNumber : $tab.find('.T-search-orderNumber').val(),
                     otaOrderNumber : $tab.find('.T-search-number').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
