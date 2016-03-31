@@ -792,7 +792,7 @@ define(function(require, exports) {
             }
         });
         // 车搜索域
-        $tab.find('.T-searchbus').on('click',function(event){
+        transitPlan.$searchAreabus.find('.T-searchbus').off('click.bussearch').on('click.bussearch',function(event){
             transitPlan.listTransitBusPlan();
         })
 
@@ -1555,7 +1555,7 @@ define(function(require, exports) {
             transitPlan.minviewhotel();
         });
         // 房搜索域
-        $tab.find('.T-searchhotel').on('click',function(){
+        $tab.find('.T-searchhotel').off('click.hotelsearch').on('click.hotelsearch',function(){
             transitPlan.listTransitHoutelPlan();
         })
         // 选中复选框
