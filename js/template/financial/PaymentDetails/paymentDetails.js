@@ -244,11 +244,9 @@ define(function(require, exports){
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
-					    			$container.find('.T-resType').addClass('hidden');
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
-					    			$container.find('.T-resType').addClass('hidden');
 					    		}
 					    	});
 
@@ -288,6 +286,7 @@ define(function(require, exports){
 					    		}
 					    		Payment.loadResTypeSelect(subjectName,$container);
 					    	});
+					    	$container.find('.T-subject').trigger('change');
 
 					    	//获取对方单位
 					    	Payment.getResourceList($container.find('[name=resourceName]'),$container);
@@ -398,12 +397,16 @@ define(function(require, exports){
 			}
 			$container.find(".T-subject").html(subjectHtml);
 			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+			Payment.loadResTypeSelect(subList[0].subjectName, $container);
 		} else {
 			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
 				$container.find(".T-subject").html("");
 				$container.find("input[name=subjectName]").val("");
 			});
 		}
+
+
+
 	};
     
     //加载对应的资源类型
