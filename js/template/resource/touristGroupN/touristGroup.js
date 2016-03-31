@@ -634,7 +634,7 @@ define(function(require, exports) {
                         showMessageDialog($("#confirm-dialog-message"), '请选择一个客户！');
                         return false;
                     }
-                    $that.val($tr.find('[name="travelAgencyName"]').text()).data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
+                    $that.val($tr.find('[name="travelAgencyName"]').text()+"（"+$tr.find('[name="travelAgencyContactName"]').text()+"）").data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
                     layer.close(index);
                 });
 
