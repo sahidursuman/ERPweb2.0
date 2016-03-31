@@ -109,7 +109,7 @@ define(function(require, exports){
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
                 	//格式化日期
-                	Count.formatDate(Count.$searchArea);
+                	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
                 	//获取搜索区域的列表数据
                 	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
                 	Count.getLineproductData($lineProductObj);
@@ -121,6 +121,7 @@ define(function(require, exports){
 			}
 		});
 	};
+
 	//搜索区域事件
 	Count.initListHeaderEvents = function(){
 		var $searchObj = Count.$searchArea;
@@ -5080,6 +5081,35 @@ define(function(require, exports){
 		if (needSum) {
 			Count.autoShopSumCost($target.eq(0), $parentObj);
 		}
+	};
+
+	//主页时间控件绑定
+	Count.setDatePicker = function($obj) {
+	    options = $.extend({}, {
+	        autoclose: true,
+	        todayHighlight: true,
+	        format: 'yyyy-mm-dd',
+	        language: 'zh-CN'
+	    }, options);
+	    
+	    $obj.datepicker(options);
+	    var $start = $obj.eq(0),
+	    	$end = $obj.eq(1);
+	    $start . on("changeDate",function(event){
+	     	event.preventDefault();
+	        var startDate = $(this).val(),
+	           	endDate = $end.val();
+	        $end.datepicker('setStartDate', startDate);
+	        if(endDate == ""){
+	        	$end.val("");
+	        } else if($end.val() < startDate){
+	        	$end.val(startDate);
+	        }
+	    });
+	    if (!!$start.val()) {
+	    	$start.trigger('changeDate');
+	    }
+	    return $obj;
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
