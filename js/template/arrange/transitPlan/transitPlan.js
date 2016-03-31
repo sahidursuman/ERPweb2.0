@@ -275,7 +275,7 @@ define(function(require, exports) {
                         
                         transitPlan.listTransitBusPlan(transitPlan.listPageNo);
                     });
-                    
+                    Tools.closeTab(busplan)
                  }
 
             }
@@ -1685,7 +1685,6 @@ define(function(require, exports) {
     }
     // 房已安排保存
     transitPlan.submialreadyhotel = function($tab,unifyId,shuttleType){
-        console.log(unifyId); 
         var outHotelList = [],//房安排列表
             outRemarkList = [],//中转列表 Id
             $tr = $tab.find('.T-hotel-plan tr'),
@@ -1724,6 +1723,7 @@ define(function(require, exports) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                     transitPlan.arranged(transitPlan.listPageNo)
                 });
+                Tools.closeTab(hotelplanId)
             }
         })
     }
@@ -1790,6 +1790,7 @@ define(function(require, exports) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                     transitPlan.listTransitHoutelPlan(transitPlan.listPageNo);
                 });
+                Tools.closeTab(hotelplanId);
             }
             }
     })
@@ -1939,6 +1940,13 @@ define(function(require, exports) {
                     var $tab = transitPlan.$tab;
                     transitPlan.addResource($tab);
                     transitPlan.busplanclick($tab,outRemarkId,shuttleType);
+                     //给日期格式化
+                    $tab.find('.T-datepicker').datetimepicker({
+                        autoclose: true,
+                        todayHighlight: true,
+                        format: 'L',
+                        language: 'zh-CN'
+                    });
                 }
             }
         })
