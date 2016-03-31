@@ -99,6 +99,10 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	width: 60px;
 }
 
+.tab-content {
+	top: -2px;
+}
+
 /***发团计划样式**/
 
 input.datepicker:not([class^="col-"]) {
