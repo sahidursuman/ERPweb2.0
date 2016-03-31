@@ -11,7 +11,12 @@ define(function(require, exports) {
             main: function() {
                 that.init_event();
                 that.init_message();
-                that.bind_message();
+
+                if (KingSettings.pusher) {
+                    Tools.loadPluginScript('plugin_pusher', function() {
+                        index.bind_message();                        
+                    });
+                }
                 index.MessagePrompt({
                     bus: IndexData.userInfo.unReadBusCompanyOffer || 0,
                     hotel: IndexData.userInfo.unReadHotelOffer || 0

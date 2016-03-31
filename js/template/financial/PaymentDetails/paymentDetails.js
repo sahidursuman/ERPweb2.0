@@ -237,21 +237,18 @@ define(function(require, exports){
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
 					    	FinancialService.initPayEvent($container);
-					    	$container.find('.datepicker').datetimepicker({
-					    		autoclose: true,
-						        todayHighlight: true,
-						        format: 'L',
-						        language: 'zh-CN'
-					    	});
+					    	FinancialService.datetimepicker($container);
 
 					    	$container.find(".T-moneyType").off().on("change",function(){
 					    		Payment.loadSubjectHtml($(this).val(),$container);
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
+					    			$container.find('.T-resType').addClass('hidden');
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
+					    			$container.find('.T-resType').removeClass('hidden');
 					    		}
 					    	});
 
@@ -285,6 +282,9 @@ define(function(require, exports){
 					    		var subjectName = $(this).find("option:selected").text();
 					    		$container.find('input[name=subjectName]').val(subjectName);
 					    	});
+
+					    	//获取对方单位
+					    	Payment.getResourceList($container.find('[name=resourceName]'),$container);
 
 				    		$container.find('.T-chooseAccount').autocomplete({
 						        minLength:0,
@@ -438,6 +438,54 @@ define(function(require, exports){
 			$tab.find(".T-search-subject").append(listHtml);
 		});
 	}
+
+	 /**
+     * [getResourceList 获取对方单位]
+     * @param  {[type]} $obj         [对方单位对象]
+     * @param  {[type]} resourceType [资源类型]
+     * @return {[type]}           
+     */
+    Payment.getResourceList = function($obj,$tab) {
+        $obj.autocomplete({
+            minLength: 0,
+            change: function(event, ui) {
+                if (!ui.item) {
+                   $(this).nextAll().find('[name=resourceId]').val('');
+                }
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id).trigger('change');
+            }
+        }).off('click').on('click', function() {
+        	var resourceType=$tab.find('.T-resourceType').val();
+	    	if (!resourceType) { //资源类型不限
+	    		return;
+	    	}
+            $.ajax({
+                url:KingServices.build_url("cash","findUnits"),
+                type: 'POST',
+                data:"resourceType="+resourceType,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var list = data.units;
+                    if (list != null && list.length > 0) {
+                        for (var i = 0; i < list.length; i++) {
+                            list[i].value = list[i].name;
+                            list[i].id = list[i].id;
+                        };
+                    } else {
+                        layer.tips('没有内容', $obj, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $obj.autocomplete('option', 'source', list);
+                    $obj.autocomplete('search', '');
+                }
+            });
+        })
+    };
 
 	// 暴露方法
 	exports.init = Payment.initModule;

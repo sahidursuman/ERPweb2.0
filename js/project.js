@@ -14,6 +14,11 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event',
 	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
+
+var KingSettings = {
+	// 询价服务的开关
+	pusher: false,
+};
 /**
  * 图片地址
  */
@@ -2663,18 +2668,13 @@ Tools.trFixed = function(obj){
 //根据需要加载插件js
 var modulePlugin = {
 	"plugin_print":'components/jquery-plugin/jQuery.print.js',//加载打印插件
-	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js'//加载导出插件
+	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js',//加载导出插件
+	'plugin_pusher': 'components/pusher/pusher.min.js',
 };
 Tools.loadPluginScript = function(pluginKey){
-	
-	switch(pluginKey){
-		case  'plugin_print' :
-			$.getScript(modulePlugin.plugin_print);	
-			break;
-		case  'plugin_export' :
-			$.getScript(modulePlugin.plugin_export);
-		break;	
-	};	
+	if (!!pluginKey && !!modulePlugin[pluginKey])  {
+		$.getScript(modulePlugin[pluginKey]);
+	}
 };
 
 window.onbeforeunload=function(e){
