@@ -148,10 +148,14 @@ template.helper("getPlanPayTypeText", function(payType) {
             return '其他';
     }
 }); 
-template.helper("getPlanPayTypeOption", function(status) {
-    var res = '';
+template.helper("getPlanPayTypeOption", function(status, isDisabled) {
+    var res = '',
+        dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
     status = status || 0;
-    res += '<select name="payType"><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<select name="payType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
     res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
     res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
     return res;
@@ -252,8 +256,12 @@ template.helper("getTaskDesc", function(status) {
         default:     return '全程';
     }
 });
-template.helper("getTaskSelect", function(status, isCar) {
-    var str = ['<select name="taskType">'],
+template.helper("getTaskSelect", function(status, isCar, isDisabled) {
+    var dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
+    var str = ['<select name="taskType" '+dis+'>'],
         desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
     if (isCar) {
         desc.push('小车接客');
