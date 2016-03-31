@@ -5090,12 +5090,12 @@ define(function(require, exports){
 	        todayHighlight: true,
 	        format: 'yyyy-mm-dd',
 	        language: 'zh-CN'
-	    }, options);
+	    });
 	    
 	    $obj.datepicker(options);
 	    var $start = $obj.eq(0),
 	    	$end = $obj.eq(1);
-	    $start . on("changeDate",function(event){
+	    $start.on("change",function(event){
 	     	event.preventDefault();
 	        var startDate = $(this).val(),
 	           	endDate = $end.val();
@@ -5107,7 +5107,7 @@ define(function(require, exports){
 	        }
 	    });
 	    if (!!$start.val()) {
-	    	$start.trigger('changeDate');
+	    	$start.trigger('change');
 	    }
 	    return $obj;
 	};
