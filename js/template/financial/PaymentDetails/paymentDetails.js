@@ -244,9 +244,11 @@ define(function(require, exports){
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
+					    			$container.find('.T-resType').addClass('hidden');
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
+					    			$container.find('.T-resType').removeClass('hidden');
 					    		}
 					    	});
 
