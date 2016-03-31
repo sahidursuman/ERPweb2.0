@@ -1900,15 +1900,10 @@ define(function(require, exports) {
                     pageNo:0,
                     // customerType : 0,
                     arrangeItem : "other",
-                    tgOrderNumber : '',
-                    touristName : '',
-                    lineProductName : '',
-                    consumeTime : '',
-                    arrangeUserName : '',
                     status : 0,
                     sortType:'auto'
                 }
-                transitPlan.listTransitItsPlan(itsData);
+                transitPlan.listTransitItsPlan(false, itsData);
             }
         });
         // 收起展开
