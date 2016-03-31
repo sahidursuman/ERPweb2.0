@@ -564,19 +564,20 @@ define(function(require, exports) {
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
-                    layer.close(globalLoadingLayer);
                     var result = showDialog(data);
+
                         if(result){
-                                var html = viewAccountsTemplate(data);
-                                var viewAccountsLayer = layer.open({
-                                    type: 1,
-                                    title:"打印结算单",
-                                    skin: 'layui-layer-rim',
-                                    area: '750px', 
-                                    zIndex:1028,
-                                    content: html,
-                                    scrollbar: false
-                                });
+                            data.imgUrl = imgUrl;
+                            var html = viewAccountsTemplate(data);
+                            var viewAccountsLayer = layer.open({
+                                type: 1,
+                                title:"打印结算单",
+                                skin: 'layui-layer-rim',
+                                area: '750px', 
+                                zIndex:1028,
+                                content: html,
+                                scrollbar: false
+                            });
                         //打印单团核算页面
                         var $outAccountsTab = $("#T-touristGroupViewAccount");
                             $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
