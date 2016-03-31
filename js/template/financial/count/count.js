@@ -228,7 +228,7 @@ define(function(require, exports){
                     isHide = 1;
                 }
                 for(var i=0; i<$nextTr.length; i++){
-                    if(!!$nextTr.eq(i).data('id')){
+                    if(!!$nextTr.eq(i).attr('id')){
                         break;
                     }else{
                         if(isHide === 1){
