@@ -214,6 +214,31 @@ define(function(require, exports){
 				//单团明细
 				var tripId = $(this).attr('data-entity-id');
 				Count.viewTripDetail(tripId);
+			} else if($that.hasClass('T-showLineInfo')){
+				var $tr = $that.closest('tr');
+                    $nextTr = $tr.nextAll('tr'),
+                    $icon = $that.find('i.fa'),
+                    isHide = 1,
+                    count = 0;
+                if($icon.hasClass('fa-plus')){
+                    $icon.removeClass('fa-plus').addClass('fa-minus');
+                    isHide = 0;
+                }else{
+                    $icon.removeClass('fa-minus').addClass('fa-plus');
+                    isHide = 1;
+                }
+                for(var i=0; i<$nextTr.length; i++){
+                    if(!!$nextTr.eq(i).data('id')){
+                        break;
+                    }else{
+                        if(isHide === 1){
+                            $nextTr.eq(i).addClass('hidden');
+                        }else{
+                            $nextTr.eq(i).removeClass('hidden');
+                        }
+                    }
+                    count++;
+                }
 			}
 
 		});
