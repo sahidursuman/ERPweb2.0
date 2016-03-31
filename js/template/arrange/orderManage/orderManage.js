@@ -339,8 +339,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=orderNumber]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -378,6 +376,8 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
+				var _this = this, parents = $(_this).parent();
+				parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -415,8 +415,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=seatCount]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -454,8 +452,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				//parents.find("input[name=brand]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -591,8 +587,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=level]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -631,8 +625,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=type]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
