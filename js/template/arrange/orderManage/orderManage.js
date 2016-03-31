@@ -378,8 +378,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -457,7 +455,7 @@ define(function(require, exports) {
 			},
 			select :function(event, ui){
 				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=brand]").val(ui.item).trigger('change');
+				//parents.find("input[name=brand]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
