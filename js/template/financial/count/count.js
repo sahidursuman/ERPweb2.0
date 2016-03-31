@@ -1813,12 +1813,9 @@ define(function(require, exports){
 			var $nextTr = $thisTr.nextAll(),
 				sumMoney = 0,//总金额
 				sumTravelMoney = 0,//社佣合计
-				sumGuideMoney = 0,//导佣合计
-				start = 2;
-				if($nextTr.length == 3){
-					start = 1;
-				};			
-			for(var i = start;i<$nextTr.length;i++){
+				sumGuideMoney = 0;//导佣合计
+						
+			for(var i = 1;i<$nextTr.length;i++){
 				var thatTdLen = $nextTr.eq(i).children('td').length,
 					$that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
