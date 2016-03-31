@@ -113,7 +113,10 @@ define(function(require, exports) {
         }, innerTransfer.getListPage);
         //初始化列表
         $innerTrsfOutObj.find(".T-transferOut-search").trigger('click');
-        $innerTrsfInObj.find(".T-transferIn-search").trigger('click');
+        $innerTrsfInObj.find(".T-transferIn-search").trigger('click');  
+        //选项卡切换数据交互
+        innerTransfer.$tab.find('.inner-TransferOut').off('click').on('click',{divId: "inner-TransferOut",btn: "btn-transferOut-search",type: "1"},innerTransfer.getListPage );
+        innerTransfer.$tab.find('.inner-TransferIn').off('click').on('click',{divId: "inner-TransferIn",btn: "btn-transferIn-search",type: "2"},innerTransfer.getListPage);
 
         //线路产品autocomplete
         innerTransfer.chooseLineProduct("inner-TransferIn");

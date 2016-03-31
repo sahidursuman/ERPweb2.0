@@ -1069,3 +1069,8 @@ input.datepicker:not([class^="col-"]) {
 		padding-left: 0;
 	}
 }
+
+/*字体样式*/
+.text-bold {
+	font-weight: bold;
+}
