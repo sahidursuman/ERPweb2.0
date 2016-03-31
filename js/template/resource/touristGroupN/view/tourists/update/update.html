@@ -1,4 +1,4 @@
-<div class="container-fluid T-container" data-id="{{id}}">
+<div class="container-fluid T-container" data-id="{{id}}" data-type="{{if baseInfo.customerType == 1}}group{{else}}single{{/if}}">
 	<div class="row">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title pull-left">小组信息</h3>
@@ -29,7 +29,7 @@
 				</thead>
 				<tbody class="T-team-info">
 					<tr>
-						<td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户"></td>
+						<td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户"></td>
 						<td>
 							<div class="hct-input-group col-xs-12">
 								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}">
@@ -60,7 +60,7 @@
 	<div class="row">
 		<div class="col-xs-12 mar-b-20">
 			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-join-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
-			<button class="btn btn-app btn-xs{{if joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-part-group{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> {{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}} </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-part-group{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> {{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}} </button>
 			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-send-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
 		</div>
 	</div>
@@ -90,7 +90,7 @@
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.receiveBus}}" placeholder="点击填写车"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.receiveHotel}}" placeholder="点击填写房"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.receiveOther}}" placeholder="点击填写它"></td>
-	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}"></td>
+	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
 	                    <td><a class="cursor T-action T-delete">删除</a></td>
                     </tr>
 				{{/each}}
@@ -111,11 +111,9 @@
 						<th width="100">出团日期</th>
 						<th width="100">完团日期</th>
 						<th>线路应付</th>
-						{{if baseInfo.customerType == 0}}
-						<th class="T-is-hidden">返程住宿</th>
-						<th class="T-is-hidden">参团小计</th>
-						<th class="T-is-hidden" width="95">本段现收团款</th>
-						{{/if}}
+						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}">返程住宿</th>
+						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}">参团小计</th>
+						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}" width="95">本段现收团款</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -133,7 +131,7 @@
 						<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime" value="{{rs.tripEndTime}}"{{if rs.status > 1}} disabled{{/if}}></td>
 						<td><input type="text" class="w-110{{if rs.status == 0 || rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" placeholder="点击填写线路应付"></td>
 						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-110{{if rs.status == 0 || rs.status == 1}} T-action T-hotel hct-cursor{{/if}}" readonly name="hotelNeedPayMoney" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.hotelInfo}}" placeholder="点击填写返程住宿"></td>
-						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{rs.hotelNeedPayAllMoney + rs.lineNeedPayAllMoney}}"></td>
+						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.hotelNeedPayAllMoney || 0)*1 + (rs.lineNeedPayAllMoney || 0)*1}}"></td>
 						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" value="{{rs.operateCurrentNeedPayMoney}}"{{if rs.status > 1}} disabled{{/if}}></td>
 						<td class="T-status" data-status="{{rs.status}}">{{rs.status | getPartGroupStatusText}}</td>
 						<td>
@@ -173,7 +171,7 @@
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" placeholder="点击填写车"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.sendHotel}}" placeholder="点击填写房"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.sendOther}}" placeholder="点击填写它"></td>
-	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}"></td>
+	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
 	                    <td><a class="cursor T-action T-delete">删除</a></td>
                     </tr>
 				{{/each}}
