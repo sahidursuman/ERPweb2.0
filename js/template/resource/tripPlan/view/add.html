@@ -954,8 +954,8 @@
                                     <td>
                                         {{if !!shop.shopArrangeItemSet}} {{if shop.shopArrangeItemSet.length > 0}} {{each shop.shopArrangeItemSet as rs index}}
                                         <div data-entity-id="{{rs.id}}" {{if index> 0}}class="mar-t-10"{{/if}}>
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
-                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}} />
+                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}"/>
                                             {{if !shop.isConfirmAccount}}<button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>{{/if}}
                                         </div>
                                         {{/each}} {{else}}
