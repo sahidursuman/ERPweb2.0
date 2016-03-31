@@ -176,7 +176,9 @@ define(function(require, exports) {
                 data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
             })
             .done(function(data) {
-                PerformanceFun.$tab.find('.T-totalCount').text(data.adultCount + "大" + data.childCount + "小");
+                var adultCount = data.adultCount || 0,
+                    childCount = data.childCount || 0;
+                PerformanceFun.$tab.find('.T-totalCount').text(adultCount + "大" + childCount + "小");
             })
     }
 
