@@ -229,7 +229,8 @@ define(function(require, exports) {
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeScenicFinancial");
         });
@@ -331,18 +332,20 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                console.log(scenic.$clearTab);
-                                scenic.clearTempData = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(3));
-                                var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
-                                    sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
-                                scenic.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
-                                    bankNo : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : scenic.$clearTab.find('input[name=tally-date]').val()
+                                var tempJson = FinancialService.clearSaveJson(scenic.$clearTab,scenic.clearTempData, new FinRule(3));
+                                if(tempJson){
+                                    scenic.clearTempData = tempJson;
+                                    var sumPayMoney = parseInt(scenic.$clearTab.find('input[name=sumPayMoney]').val());
+                                        sumPayType = parseInt(scenic.$clearTab.find('select[name=sumPayType]').val());
+                                    scenic.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : scenic.$clearTab.find('input[name=remark]').val(),
+                                        bankNo : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-number]').val() : scenic.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? scenic.$clearTab.find('input[name=cash-id]').val() : scenic.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : scenic.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : scenic.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 scenic.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
