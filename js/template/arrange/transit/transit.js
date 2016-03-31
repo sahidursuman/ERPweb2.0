@@ -987,7 +987,8 @@ define(function(require, exports) {
 				showLoading: false,
 				data:{
 					brand:$tr.find("input[name=busbrand]").val(),
-					busCompanyId:$tr.find("input[name=busCompanyId]").val()
+					busCompanyId:$tr.find("input[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -1035,7 +1036,8 @@ define(function(require, exports) {
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
 					data:{
 						seatCount:$tr.find("[name=seatCount]").val(),
-						busCompanyId:$tr.find("[name=busCompanyId]").val()
+						busCompanyId:$tr.find("[name=busCompanyId]").val(),
+						menuKey:menuKey
 					},
 					showLoading:false,
 					type:"POST",
@@ -1088,7 +1090,8 @@ define(function(require, exports) {
 					data: {
 						seatCount: seatCount,
 						brand: busBrand,
-						busCompanyId: busCompanyId
+						busCompanyId: busCompanyId,
+						menuKey:menuKey
 					},
 					showLoading:false,
 					type:"POST",
@@ -1164,7 +1167,8 @@ define(function(require, exports) {
 				data:  {
 					seatCount: parents.find("[name=seatCount]").val(),
 					brand: parents.find("[name=busbrand]").val(),
-					busId: parents.find('input[name="busLicenseNumberId"]').val()
+					busId: parents.find('input[name="busLicenseNumberId"]').val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -1297,7 +1301,10 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('hotel','findHotelListByLevel'),
 				showLoading:false,
-				data:"level=" + hotelStarValue,
+				data:{
+					menuKey:menuKey,
+					level:hotelStarValue
+				},
 				success: function(data) {
 					if(showDialog(data)){
 						var hotelList = JSON.parse(data.hotelList);
@@ -1406,6 +1413,9 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('ticket','findAll'),
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success: function(data) {
 					if(showDialog(data)) {
@@ -1475,6 +1485,9 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('restaurant','findAll'),
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success: function(data) {
 					if(showDialog(data)) {
