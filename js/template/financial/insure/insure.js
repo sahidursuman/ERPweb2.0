@@ -149,6 +149,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.data('account-status');
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.page = args.page || 0;
         args.sortType = "auto";
@@ -216,6 +217,15 @@ define(function(require, exports) {
         var checkRule = new FinRule(0);
         FinancialService.updateUnpayMoney($tab,new FinRule(0));
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Insure.GetChecking(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
@@ -232,7 +242,8 @@ define(function(require, exports) {
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
         });
@@ -258,6 +269,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.data('account-status');
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.page = args.page || 0;
         args.sortType = "auto";
@@ -320,18 +332,20 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
-                                Insure.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
-                                Insure.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Insure.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Insure.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Insure.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
@@ -349,6 +363,16 @@ define(function(require, exports) {
   	Insure.initClear = function(args,$tab){
         Insure.init_event(args,$tab,"clear");
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+            args.pageNo = 0;
+            Insure.getClearing(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;

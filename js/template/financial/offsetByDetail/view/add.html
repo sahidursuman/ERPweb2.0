@@ -1,0 +1,112 @@
+<div class="col-xs-12 T-addOffsetList-container">
+    <form class="form-horizontal T-form" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>业务类别：</label>
+            <div class="col-sm-3">
+                <select name="moneyType" class="col-sm-12 T-moneyType">
+                    <option value="0">收入</option>
+                    <option value="1">支出</option>
+                </select>
+            </div>
+            <div class="T-Ntransfer">
+                <label class="col-sm-2 control-label no-padding-right">资源类型：</label>
+                <div class="col-sm-3">
+                    <select name="resourceType" class="col-sm-12 T-resourceType">
+                        <option value="20">酒店</option>
+                        <option value="21">购物</option>
+                        <option value="22">客户</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group T-payType-area T-Ntransfer">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>支付方式：</label>
+            <div class="col-sm-3">
+                <select name="payType" class="col-sm-12 T-payType">
+                    <option value="0">现金</option>
+                    <option value="1">银行转账</option>
+                    <option value="3">支票</option>
+                    <option value="4">其他</option>
+                    <option value="5">网付</option>
+                    <option value="6">冲抵</option>
+                </select>
+            </div>
+            <div class="T-payType-number">
+                <label class="col-sm-2 control-label no-padding-right T-payType-number-text"><span class="necessary">*</span>现金账号：</label>
+                <label class="col-sm-3">
+                    <input type="text" name="cash-number" class="T-cash-choose" style="width:100%;">
+                    <input type="hidden" name="cash-id">
+                </label>
+            </div>
+            <div class="hide T-payType-card">
+                <label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>银行账号：</label>
+                <label class="col-sm-3">
+                    <input type="text" name="card-number" class="T-card-choose" style="width:100%">
+                    <input type="hidden" name="card-id">
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
+            <div class="col-sm-3">
+                <select name="subjectId" class="col-sm-12 T-option T-subject0">
+                    {{each subjectdata0 as sub0}}
+                    <option value="{{sub0.id}}">{{sub0.subjectName}}</option>
+                    {{/each}}
+                    <input type="hidden" name="subjectName" value="{{each subjectdata0 as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
+                </select>
+                <select name="subjectId" class="col-sm-12 T-option T-subject1 hide">
+                    {{each subjectdata1 as sub1}}
+                    <option value="{{sub1.id}}">{{sub1.subjectName}}</option>
+                    {{/each}}
+                    <input type="hidden" name="subjectName" value="{{each subjectdata1 as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
+                </select>
+            </div>
+            <label class="col-sm-2 control-label no-padding-right">对方单位：</label>
+            <div class="col-sm-3">
+                <input type="text" name="resourceName" class="col-sm-12 T-resourceName-choose" />
+                <input type="hidden" name="resourceId" class="col-sm-12" />
+            </div>
+            
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账金额：</label>
+            <div class="col-sm-3">
+                <input type="text" name="incomeMoney" class="col-sm-12 F-float F-money" maxlength="9" />
+            </div>
+            <label class="col-sm-2 control-label no-padding-right">所属部门：</label>
+            <div class="col-sm-3">
+                <select name="departmentId" class="col-sm-12">
+                    {{each groupdata as group}}
+                    <option value="{{group.id}}">{{group.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账日期：</label>
+            <div class="col-sm-3">
+                <input type="text" name="billTime" class="col-sm-12 datepicker" style="width: 100%" />
+            </div>
+            <label class="col-sm-2 control-label no-padding-right">凭证编号：</label>
+            <div class="col-sm-3">
+                <input type="text" name="voucher"  style="width: 100%" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right">备注：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>
+            </div>
+        </div>
+        <div class="form-group" style="text-align:center;">
+            <button class="btn btn-xs btn-primary T-close">
+                <i class="ace-icon fa fa-times-circle"></i>关闭
+            </button>
+            <button class="btn btn-xs btn-primary T-save marginLeft-30">
+                <i class="ace-icon fa fa-check-circle"></i>保存
+            </button>
+        </div>
+    </form>
+</div>

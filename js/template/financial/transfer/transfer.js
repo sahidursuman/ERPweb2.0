@@ -142,6 +142,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
@@ -232,6 +233,15 @@ define(function(require, exports) {
         var validator = new FinRule(0);
         var validatorCheck = validator.check($tab);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -254,7 +264,8 @@ define(function(require, exports) {
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
-                    orderNumber : $tab.find("input[name=orderNumber]").val()
+                    orderNumber : $tab.find("input[name=orderNumber]").val(),
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;
@@ -292,6 +303,7 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
@@ -364,18 +376,20 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
-                                Transfer.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
-                                Transfer.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Transfer.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Transfer.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Transfer.$clearTab.data("isEdited",false);
                                 args.pageNo = obj.curr-1;
@@ -402,6 +416,15 @@ define(function(require, exports) {
         autoValidatorCheck = autoValidator.check($tab.find('.T-count'));
             
         FinancialService.initPayEvent($tab);
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             args.pageNo = 0;

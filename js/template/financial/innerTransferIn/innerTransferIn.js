@@ -176,6 +176,7 @@ define(function(require, exports) {
         	args.orderNumber = $tab.find('input[name=orderNumber]').val();
         	args.startAccountTime = $tab.find('input[name=startDate]').val();
         	args.endAccountTime = $tab.find('input[name=endDate]').val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -264,6 +265,7 @@ define(function(require, exports) {
             args.orderNumber = $tab.find('input[name=orderNumber]').val();
             args.startAccountTime = $tab.find('input[name=startDate]').val();
             args.endAccountTime = $tab.find('input[name=endDate]').val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.pageNo = args.pageNo || 0;
         args.receiveUserName = (args.receiveUserName == "全部") ? "" : args.receiveUserName;
@@ -308,6 +310,19 @@ define(function(require, exports) {
         FinTransIn.init_event(args,$tab,type);
         FinTransIn.getGroupList($tab,type);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            if(type == 1){
+                FinTransIn.getCheckList(args,$tab,1);
+            } else {
+                FinTransIn.getClearList(args,$tab);
+            }
+        });
     	//搜索顶部的事件绑定
         $tab.find('.T-btn-search').off().on('click', function(event) {
             event.preventDefault();
@@ -334,7 +349,8 @@ define(function(require, exports) {
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
                         endAccountTime : $tab.find('input[name=endDate]').val(),
-                        accountStatus : args.accountStatus
+                        accountStatus : args.accountStatus,
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 argsData.receiveUserName = argsData.receiveUserName === "全部" ? "" : argsData.receiveUserName;

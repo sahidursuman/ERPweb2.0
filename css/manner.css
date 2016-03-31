@@ -432,7 +432,6 @@ table tr td {
     margin-top: 20px;
 }
 
-
 .mar-t-10 {
     margin-top: 10px;
 }
@@ -442,7 +441,14 @@ table tr td {
 .mar-l-5 {
     margin-left: 5px;
 }
-
+.textaR-paL{
+    text-align: left !important;
+    padding-left:25px !important;
+}
+.textaR-paR{
+    text-align: right !important;
+    padding-right:15px !important;
+}
 .mar-l-3{
     margin-left: 3px;
 }
@@ -661,7 +667,10 @@ table tr td {
     border: 1px solid #ececec;
     padding: 7px 0px 7px 0px;
 }
-
+#T-touristGroupViewAccount .whereQ td {
+    border: 1px solid #E2E2E2;
+    padding: 7px 0px 7px 0px;
+}
 .whereQ .style-myself {
     width: 90px !important;
     /*border: 2px solid #5d5d5d;*/
@@ -1130,14 +1139,13 @@ select {
 
 /*项目代订导出按钮*/
 
-.bookingBtn {
+.export-Btn {
     height: 24px;
     line-height: 9px;
     position: absolute;
     right: 14px;
     top: 0px;
 }
-
 .addManagerRight {
     cursor: pointer;
     left: -38px;
@@ -1948,6 +1956,17 @@ p#back-top a span {
 .application-newPhone{
     width: 370px;height: 40px !important;
     padding-left:60px !important;
+}
+
+/*游客小组查看结算单样式*/
+.touristGroupViewAccount{
+    font-family: '微软雅黑';
+}
+.viewAccountsMain{
+    width: 650px;
+    margin: auto;
+    /*background-color: red;*/
+    font-size: 12px;
 }
 /*媒体查询-不同分辨率*/
 

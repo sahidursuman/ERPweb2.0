@@ -50,7 +50,10 @@ define(function(require, exports){
 	};
 	//列表头部
 	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+
+		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
+			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -60,7 +63,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-		};
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+		} 
+		timeStatus = timeStatus || 0
 		//修正页码
 		pageNo = pageNo || 0;
 		$.ajax({
@@ -75,7 +80,8 @@ define(function(require, exports){
                 startTime:startTime,
                 billStatus:status,
                 lineProductName:lineProductName,
-                guideName:guideName
+                guideName:guideName,
+                timeStatus : timeStatus
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -97,7 +103,8 @@ define(function(require, exports){
 		                startTime:startTime,
 		                billStatus:status,
 		                lineProductName:lineProductName,
-		                guideName:guideName
+		                guideName:guideName,
+		                timeStatus : timeStatus
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
@@ -130,6 +137,13 @@ define(function(require, exports){
 			$(this).closest('div').find("span").text($(this).text());
 			Count.listCountHeader(0);
 		});
+        $searchObj.find(".T-time-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Count.listCountHeader(0);
+        });
 	};
 	//获取主体列表数据
 	Count.listCountBody = function($data){
@@ -3480,6 +3494,11 @@ define(function(require, exports){
 							restaurantList[i].value = restaurantList[i].name;
 						}
 					}
+					var newItem = {
+						id:-1,
+						value:"导游自选"
+					};
+					restaurantList.unshift(newItem)
 					$restObj.autocomplete({
 						minLength:0,
 						change:function(event,ui){
