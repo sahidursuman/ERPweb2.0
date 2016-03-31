@@ -8,14 +8,11 @@
 define(function(require, exports) {
     var menuKey = "arrange_transit",
         listTemplate = require("./view/list"),
-        viewbusTemplate = require("./view/viewbus"),
-        viewhotelTemplate = require("./view/viewhotel"),
         busplanTemplate = require("./view/busplan"),
         hotelplanTemplate = require("./view/hotelplan"),
         // 其他安排
         itsplanTemplate = require("./view/itsplan"),
         itsViewTemplate = require("./view/itsView"),
-
         mealplanTemplate = require("./view/mealplan"),
         ticketplanTemplate = require("./view/ticketplan"),
         busviewTemplate = require("./view/busview"),
@@ -278,7 +275,7 @@ define(function(require, exports) {
                         
                         transitPlan.listTransitBusPlan(transitPlan.listPageNo);
                     });
-                    Tools.closeTab(busplan);
+                    Tools.closeTab(busplan)
                  }
 
             }
@@ -294,16 +291,33 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var html = busviewalready(data);
-                    addTab(busviewalreadyId,'车安排查看',html);
-
-                  
+                    addTab(busviewalreadyId,'查看车安排',html);
                 }
             }
         })
-
-
     }
-    // 房
+    // 查看车安排
+    transitPlan.buslook = function(outRemarkId,$tr){
+        var shuttleType = $tr.find('input[name=shuttleType]').val();
+        var viewbusData = {
+            outRemarkId : outRemarkId,
+            shuttleType : shuttleType
+        }
+        $.ajax({
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
+            type: "POST",
+            data:viewbusData,
+            success: function(data) {
+                var result = showDialog(data);
+                if(result){
+                    var html = busviewTemplate(data);
+                    addTab(busviewId,'查看车安排',html);
+                }
+            }
+        })
+        
+    };
+    // 房未安排
     transitPlan.listTransitHoutelPlan = function(hotelsData){
         var $tab = $tab || transitPlan.$tab,
             hotelsData = hotelsData || {};
@@ -363,25 +377,25 @@ define(function(require, exports) {
         })
     };
      //查看方已安排安排
-        transitPlan.hotelAlreadyview = function(unifyId,$tr){
-            var shuttleType = $tr.find('input[name=shuttleType]').val();
-            var viewbusData = {
-                unifyId : unifyId,
-                shuttleType : shuttleType
-            }
-            $.ajax({
-                url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
-                type: "POST",
-                data:viewbusData,
-                success: function(data) {
-                    var result = showDialog(data);
-                    if(result){
-                        var html = busviewTemplate(data);
-                        addTab(busviewId,'查看车安排',html);
-                    }
-                }
-            })
+    transitPlan.hotelAlreadyview = function(unifyId,$tr){
+        var shuttleType = $tr.find('input[name=shuttleType]').val();
+        var viewbusData = {
+            unifyId : unifyId,
+            shuttleType : shuttleType
         }
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange", "getOutHotelArrange"),
+            type: "POST",
+            data:viewbusData,
+            success: function(data) {
+                var result = showDialog(data);
+                if(result){
+                    var html = busviewTemplate(data);
+                    addTab(busviewId,'查看车安排',html);
+                }
+            }
+        })
+    }
     // 房已安排安排
     transitPlan.arranged = function(unifyId,$tr) {
         var shuttleType = $tr.find('input[name=shuttleType]').val();
@@ -777,12 +791,8 @@ define(function(require, exports) {
                 transitPlan.bussendTransit(outRemarkId, status,$tr);
             }
         });
-        // 小查看车
-        $tab.find('.T-view').on('click', function(event) {
-            transitPlan.viewbus();
-        });
         // 车搜索域
-        $tab.find('.T-searchbus').on('click',function(event){
+        transitPlan.$searchAreabus.find('.T-searchbus').off('click.bussearch').on('click.bussearch',function(event){
             transitPlan.listTransitBusPlan();
         })
 
@@ -845,6 +855,13 @@ define(function(require, exports) {
                         $tab.find('.T-cancel').on('click',function(){
                             Tools.closeTab(busviewId);
                         })
+                        //给日期格式化
+                        $tab.find('.T-datepicker').datetimepicker({
+                            autoclose: true,
+                            todayHighlight: true,
+                            format: 'L',
+                            language: 'zh-CN'
+                        });
                     }
                 }
             })
@@ -1538,7 +1555,7 @@ define(function(require, exports) {
             transitPlan.minviewhotel();
         });
         // 房搜索域
-        $tab.find('.T-searchhotel').on('click',function(){
+        $tab.find('.T-searchhotel').off('click.hotelsearch').on('click.hotelsearch',function(){
             transitPlan.listTransitHoutelPlan();
         })
         // 选中复选框
@@ -1627,7 +1644,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this),
                 $tr = $that.closest('tr');
-            transitPlan.deletehotel($tr,outRemarkId);  
+            transitPlan.deletehotel($tr);  
         });
         //绑定删除事件
          $tab.on('click','.T-contact-delete',function(event){
@@ -1668,7 +1685,6 @@ define(function(require, exports) {
     }
     // 房已安排保存
     transitPlan.submialreadyhotel = function($tab,unifyId,shuttleType){
-        console.log(unifyId); 
         var outHotelList = [],//房安排列表
             outRemarkList = [],//中转列表 Id
             $tr = $tab.find('.T-hotel-plan tr'),
@@ -1705,9 +1721,9 @@ define(function(require, exports) {
         }).done(function(data) {
             if (showDialog(data)) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                    Tools.closeTab(busplan);
-                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+                    transitPlan.arranged(transitPlan.listPageNo)
                 });
+                Tools.closeTab(hotelplanId)
             }
         })
     }
@@ -1772,9 +1788,9 @@ define(function(require, exports) {
             success: function(data){
                 if (showDialog(data)) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                    Tools.closeTab(busplan);
-                    transitPlan.listTransitBusPlan(transitPlan.listPageNo);
+                    transitPlan.listTransitHoutelPlan(transitPlan.listPageNo);
                 });
+                Tools.closeTab(hotelplanId);
             }
             }
     })
@@ -1798,18 +1814,14 @@ define(function(require, exports) {
                     success: function(data){
                         if(showDialog(data)){
                             showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                                $tr.closest('tr').fadeOut(function(){
-                                    $tr.closest('tr').remove();
-                                });
+                                $tr.remove();
                             });
                         }
                     }
                 });
             })
         }else{
-            $tr.closest('tr').fadeOut(function(){
-                $tr.closest('tr').remove();
-            });
+            $tr.remove();
         }
     };
     //它事件
@@ -1923,6 +1935,13 @@ define(function(require, exports) {
                     var $tab = transitPlan.$tab;
                     transitPlan.addResource($tab);
                     transitPlan.busplanclick($tab,outRemarkId,shuttleType);
+                     //给日期格式化
+                    $tab.find('.T-datepicker').datetimepicker({
+                        autoclose: true,
+                        todayHighlight: true,
+                        format: 'L',
+                        language: 'zh-CN'
+                    });
                 }
             }
         })
@@ -1934,7 +1953,10 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     transitPlan.deleteArrange = function($obj) {
-        var id = $obj.closest('tr').data('entity-id');
+        var $tr = $obj.closest('tr');
+        var id = $tr.data('entity-id');
+
+
 
         if (!!id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
@@ -1948,18 +1970,14 @@ define(function(require, exports) {
                     success: function(data){
                         if(showDialog(data)){
                             showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
-                                $tr.closest('tr').fadeOut(function(){
-                                    $tr.closest('tr').remove();
-                                });
+                                    $tr.remove();
                             });
                         }
                     }
                 });
             })
         }else{
-            $tr.closest('tr').fadeOut(function(){
-                $tr.closest('tr').remove();
-            });
+            $tr.remove();
         }
     };
     
@@ -2125,7 +2143,7 @@ define(function(require, exports) {
         transitPlan.bindBusCompanyChoose($tbody);
         transitPlan.init_eventMain($tbody);
         //给日期格式化
-        $tbody.find('.T-datepicker').datetimepicker({
+        $obj.find('.T-datepicker').datetimepicker({
             autoclose: true,
             todayHighlight: true,
             format: 'L',
@@ -2168,60 +2186,7 @@ define(function(require, exports) {
         transitPlan.init_eventMain($tbody);
     };
     
-    // 查看车安排
-    transitPlan.buslook = function(outRemarkId,$tr){
-        var shuttleType = $tr.find('input[name=shuttleType]').val();
-        var viewbusData = {
-            outRemarkId : outRemarkId,
-            shuttleType : shuttleType
-        }
-        $.ajax({
-            url: KingServices.build_url(service_name, "getOutBusArrange"),
-            type: "POST",
-            data:viewbusData,
-            success: function(data) {
-                var result = showDialog(data);
-                if(result){
-                    var html = busviewTemplate(data);
-                    addTab(busviewId,'查看车安排',html);
-                }
-            }
-        })
-        
-    };
-
-    //小查看车
-    transitPlan.viewbus = function(event) {
-        var html = viewbusTemplate();
-        layer.open({
-            type: 1,
-            title: "订房信息",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function(event) {
-
-            }
-        });
-    };
-    //小查看房
-    transitPlan.viewhotelviewhotel = function(event) {
-        var html = viewhotelTemplate();
-        layer.open({
-            type: 1,
-            title: "订车信息",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function(event) {
-
-            }
-        })
-    };
+    
     //计算
     transitPlan.calculation = function($obj){
         var count = $obj.find(".count").val() || 0,
