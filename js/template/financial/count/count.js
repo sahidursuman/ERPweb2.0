@@ -3029,6 +3029,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url("shop","findAll"),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3183,6 +3186,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('selfpay','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3375,7 +3381,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busId: parents.find('input[name="busId"]').val()
+					busId: parents.find('input[name="busId"]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
@@ -3427,7 +3434,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -3474,7 +3482,8 @@ define(function(require, exports){
 			var searchJson = {
 					brand:"",
 					busId:parents.find('input[name=busId]').val(),
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('bookingOrder','getSeatCountList'),
@@ -3511,6 +3520,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('restaurant','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3633,6 +3645,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('hotel','findHotelList'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -3736,6 +3751,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('scenic','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3864,6 +3882,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('ticket','findAll'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
