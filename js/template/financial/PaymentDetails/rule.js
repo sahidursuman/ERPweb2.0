@@ -2,6 +2,15 @@ define(function(require, exports) {
 	var rule = {
 		check:function($obj){
 			var validator = $obj.formValidate([
+				{	//现金账号
+	    	    	$ele: $obj.find('input[name="resourceName"]'),
+	    	    	rules: [
+    	    	        {
+    	    	        	type: 'null',
+    	    	        	errMsg: '对方单位不能为空'
+    	    	        }
+	    	        ]
+	    	    },
 	    	    {	//记账金额
 	    	    	$ele: $obj.find('input[name="incomeMoney"]'),
 	    	    	rules: [
@@ -57,14 +66,6 @@ define(function(require, exports) {
     	    	        {
     	    	        	type: 'null', 
     	    	        	errMsg: '转入账户不能为空'
-    	    	        }
-	    	        ]
-	    	    },{	//现金账号
-	    	    	$ele: $obj.find('input[name="resourceName"]'),
-	    	    	rules: [
-    	    	        {
-    	    	        	type: 'null',
-    	    	        	errMsg: '对方单位不能为空'
     	    	        }
 	    	        ]
 	    	    }
