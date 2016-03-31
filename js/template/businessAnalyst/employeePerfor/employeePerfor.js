@@ -50,30 +50,34 @@ define(function(require, exports) {
 
         $searchArea.find('.T-select-employeerDept').on('change', function(event) {
             event.preventDefault();
-            var i = 0;
+            var index = 2;  // 默认第三个模板
 
             switch ($(this).val()*1) {
                 case 1: // 员工
                     $status.add($childDepartment).addClass('hidden');
                     $personType.removeClass('hidden');
 
+                    index = 0;
                     if ($personType.val() === '0') {
-                    	i = 1;
+                        index = 1;
                     }
                     break;
                 case 2: // 部门
                     $status.add($childDepartment).removeClass('hidden');
                     $personType.addClass('hidden');
                     PerformanceFun.setChildDepartmentList($childDepartment);
-                    i = 2;
+                    break;
+                case 3: // 子部门
+                    $personType.add($childDepartment).addClass('hidden');
+                    $status.removeClass('hidden');
                     break;
                 default:
                     break;
             }
 
-            var $current = $tab.find('.table-area').children().addClass('hidden').eq(i).removeClass('hidden');
+            var $current = $tab.find('.table-area').children().addClass('hidden').eq(index).removeClass('hidden');
 
-            if (i=== 2 || !$current.hasClass('hasData')) {
+            if (index === 2 || !$current.hasClass('hasData')) {
             	PerformanceFun.getList();
             }
         });
@@ -90,7 +94,8 @@ define(function(require, exports) {
 
     PerformanceFun.getList = function(page) {
         var args = PerformanceFun.$form.serializeJson(),
-            url, template, method, index = 0, totalFun;
+            url, template, method, index = 0, totalFun,
+            childGroupSearchMethod = 'findByChildGroup';
 
         switch (args.object * 1) {
             case 1:
@@ -109,12 +114,19 @@ define(function(require, exports) {
                 break;
             case 2:
                 if (!method) {
-                    method = 'findByChildGroup';
+                    method = childGroupSearchMethod;
                     if (!args.businessGroupId) {
                         method = 'findByBusinessGroup';
                     }
                 }
 
+                template = listDeptTemplate;
+                totalFun = PerformanceFun.initFindBusinessGroupTotal;
+                index = 2;
+                break;
+            case 3:
+                method = childGroupSearchMethod;
+                delete args.businessGroupId;
                 template = listDeptTemplate;
                 totalFun = PerformanceFun.initFindBusinessGroupTotal;
                 index = 2;
@@ -136,6 +148,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
+                data.isChildGroup = method === childGroupSearchMethod;
                 var $container = PerformanceFun.$tab.find('.table-area').children().addClass('hidden')
                 .eq(index).html(template(data)).removeClass('hidden').addClass('hasData');
 
