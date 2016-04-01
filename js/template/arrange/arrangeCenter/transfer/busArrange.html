@@ -1,15 +1,35 @@
 <div class="T-planbus globalAdd ">
-    {{each outRemarkList as Busplan}}
-    <div class="form-group">
-        <input type="hidden" name="outRemarkId" value="{{Busplan.outRemarkId}}">
-        <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
-        <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
-        <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
-        <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
-        <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
-    </div>
-    <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
-    {{/each}}
+    <button class="btn btn-sm btn-success mar-b-10 T-add-task"> <i class="ace-icon fa fa-plus"></i> 添加安排 </button>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <th class="th-border">中转信息及计划要求</th>
+            <th class="th-border">操作</th>
+        </thead>
+        <tbody class="T-task-list">
+            {{each outRemarkList as Busplan}}
+            <tr>
+                <td style="text-align: left;">
+                    <input type="hidden" name="outRemarkId" value="{{Busplan.outRemarkId}}">
+                    <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
+                    <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
+                    <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
+                    <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
+                    <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+                </td>
+                <td rowspan="2">
+                    <a class="cursor T-action {{if taskSize > 1}}T-delete-task {{/if}}" {{if taskSize <= 1}} disabled="disabled" {{/if}}title="删除">
+                        删除
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td class="bg-gray form-group"  style="text-align: left;">现车辆计划要求：{{Busplan.require}}</td>
+            </tr>
+            {{/each}}
+        </tbody>        
+    </table>
+    
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">车</span>
