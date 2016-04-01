@@ -437,8 +437,10 @@ define(function(require, exports){
 		resTypeOption+='</select>';
 		if (resTypeText==="预收账款" || resTypeText==="预付账款") {
 			$container.find(".T-resourceType").html(resTypeOption);
+			$container.find('.T-resType').removeClass('hidden');
 		}else{
 			$container.find(".T-resourceType").html("");
+			$container.find('.T-resType').addClass('hidden');
 		}
 		$container.find('input[name=resourceName]').val('').next().val('');
 	};
