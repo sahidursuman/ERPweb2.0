@@ -816,7 +816,7 @@ define(function(require, exports){
 		if(data.length>1){
 			for(var i = 0;i<data.length;i++){
 				if(id == data[i].id){
-					if(subStatus== 1 || isInnerTransferConfirm == 0){
+					if(subStatus== 1){
 						tmp.touristGroupFeeList = data[i].touristGroupSubFeeList
 					}else{
 						tmp.touristGroupFeeList = data[i].touristGroupFeeList
@@ -826,7 +826,7 @@ define(function(require, exports){
 				
 			}
 		}else{
-			if(subStatus== 1 || isInnerTransferConfirm == 0){
+			if(subStatus== 1){
 				tmp.touristGroupFeeList = data[0].touristGroupSubFeeList
 			}else{
 				tmp.touristGroupFeeList = data[0].touristGroupFeeList
