@@ -809,18 +809,28 @@ define(function(require, exports){
 	};
 	//查看团款明细说明 viewCostRemarkTemplate
 	Count.viewCostDetail = function($obj,data){
-		var tr = $obj.closest('tr'),id = tr.attr('id');
+		var tr = $obj.closest('tr'),id = tr.attr('id'),
+			subStatus = tr.attr('subStatus'),
+        	isInnerTransferConfirm =tr.attr('isInnerTransferConfirm');
 		var tmp = {};
 		if(data.length>1){
 			for(var i = 0;i<data.length;i++){
 				if(id == data[i].id){
-					tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					if(subStatus== 1 || isInnerTransferConfirm == 0){
+						tmp.touristGroupFeeList = data[i].touristGroupSubFeeList
+					}else{
+						tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					};
 					break;
 				}
 				
 			}
 		}else{
-			tmp.touristGroupFeeList = data[0].touristGroupFeeList
+			if(subStatus== 1 || isInnerTransferConfirm == 0){
+				tmp.touristGroupFeeList = data[0].touristGroupSubFeeList
+			}else{
+				tmp.touristGroupFeeList = data[0].touristGroupFeeList
+			};
 		}
 		
 		var html = viewCostRemarkTemplate(tmp);
