@@ -31,7 +31,7 @@ define(function(require, exports) {
 		var $tab = $('#tab-'+ tabKey + '-content');
 
 		// 公共事件
-		$tab.on('click', '.T-more', function(event) {  // 高级搜
+		$tab.children().on('click', '.T-more', function(event) {  // 高级搜
 			event.preventDefault();
 			$(this).closest('.form-inline').next().toggleClass('hidden');
 		});		
