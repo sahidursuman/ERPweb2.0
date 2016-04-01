@@ -29,7 +29,10 @@ define(function(require, exports) {
      * @return {[type]}       [description]
      */
     Transfer.getList = function($form) {
-        var target = $form.closest('.tab-pane').data('target');
+        var $tab = $form.closest('.tab-pane'),
+            target = $tab.data('target');
+
+        Transfer.$tab = $tab.parent();
 
         switch(target) {
             // 中转部分
@@ -99,6 +102,38 @@ define(function(require, exports) {
                 break;
 
             default: break;
+        }
+    };
+
+    /**
+     * 刷新安排列表
+     * @param  {string} target 刷新对象
+     * @return {[type]}        [description]
+     */
+    Transfer._refreshList = function(target) {
+        var tabId, getListFun = false;
+        switch(target) {
+            case 'bus':
+                tabId = '#transfer-bus-arrange';
+                getListFun = Transfer._getBusList;
+                break;
+            case 'hotel':
+                tabId = '#transfer-hotel-arrange';
+                getListFun = Transfer._getHotelList;
+                break;
+            case 'other':
+                tabId = '#transfer-other-arrange';
+                getListFun = Transfer._getOtherList;
+                break;
+
+            default: break;
+        }
+
+        if (!!getListFun) {
+            var $curTab = Transfer.$tab.find(tabId),
+                pageNo = ($curTab.find('.laypage_curr').text() || 0) * 1;
+
+            getListFun($curTab.children('form'), pageNo -1);
         }
     };
     /**
@@ -336,6 +371,11 @@ define(function(require, exports) {
         }); 
     };
 
+    /**
+     * 初始化安排事件
+     * @param  {object} $tab 安排tab
+     * @return {[type]}      [description]
+     */
     Transfer._initOtherArrange = function($tab) {
         Transfer.setDate($tab);
 
@@ -460,18 +500,23 @@ define(function(require, exports) {
         Transfer.setDate($line);
     };
 
+    /**
+     * 保存——其他安排
+     * @param  {object} $tab 顶层元素
+     * @return {[type]}      [description]
+     */
     Transfer.otherSubmit = function($tab) {
         var args = {}, data;
 
-        data = Tools.getTableVal($('#restaurant_body'), 'entity-id');
+        data = Tools.getTableVal($tab.find('#restaurant_body'), 'entity-id');
         if (!!data) {
             args.outRestaurantList = JSON.stringify(data);
         }
-        data = Tools.getTableVal($('#ticket_body'), 'entity-id');
+        data = Tools.getTableVal($tab.find('#ticket_body'), 'entity-id');
         if (!!data) {
             args.outTicketList = JSON.stringify(data);
         }
-        data = Tools.getTableVal($('#other_body'), 'entity-id');
+        data = Tools.getTableVal($tab.find('#other_body'), 'entity-id');
         if (!!data) {
             args.outOtherList = JSON.stringify(data);
         }
@@ -494,11 +539,45 @@ define(function(require, exports) {
                 // 刷新其他的安排列表
                 showMessageDialog($( "#confirm-dialog-message" ),res.message,function(){
                     Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                    // Transfer.refreshList();
+                    Transfer._refreshList('other');
                 });
             }
         });
         
+    };
+
+    /**
+     * 删除安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteArrange = function($obj) {
+        var $tr = $obj.closest('tr');
+        var id = $tr.data('entity-id');
+
+
+
+        if (!!id) {
+            showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
+                $.ajax({
+                    url: KingServices.build_url(service_name,'deleteTransferArrange'),
+                    type: "POST",
+                    data: {
+                        cateName: $obj.data('catename'),
+                        id: id
+                    },
+                    success: function(data){
+                        if(showDialog(data)){
+                            showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                                    $tr.remove();
+                            });
+                        }
+                    }
+                });
+            })
+        }else{
+            $tr.remove();
+        }
     };
     Transfer.setDate = function($container) {
         // 绑定日期
