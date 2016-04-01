@@ -17,6 +17,16 @@
         <input type="hidden" class="form-control w100" name="resourceType" value="{{resourceType}}">
         <input  type="hidden"  class="form-control w100" name="payStatus" value="{{payStatus}}">
     </form>
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group mar-r-10">
+            <label>收款合计：</label>
+            <label class="T-incomeMoney F-float F-money">0</label>
+        </div>
+        <div class="form-group mar-r-10">
+            <label>付款合计：</label>
+            <label class="T-sumPayMoney F-float F-money">0</label>
+        </div>
+    </form>
 </div>
 
 <div class="row">
@@ -31,7 +41,6 @@
                 <th>凭证编号</th>
                 <th>支付方式</th>
                 <th>金额</th>
-                <th>银行账号</th>
                 <th>备注</th>
                 <th>操作人</th>
                 <th>操作时间</th>
@@ -51,17 +60,6 @@
                         <a class="cursor  T-view" style="color:#337ab7">
                             {{if rs.incomeMoney==0}}{{rs.payMoney}}{{else}}{{rs.incomeMoney}}{{/if}}
                         </a>
-                    </td>
-                    <td>
-                        {{if rs.bankAccount != null}}
-                            {{if rs.bankAccount.bankAccountNumber == null || rs.bankAccount.bankAccountNumber == ""}}
-                                    -
-                                {{else}}
-                                    {{rs.bankAccount.bankAccountNumber}}
-                            {{/if}}
-                        {{else}}
-                            -
-                        {{/if}}
                     </td>
                     <td>{{rs.remark}}</td>
                     <td>{{if !!rs.user}}{{rs.user.realName}}{{/if}}</td>
