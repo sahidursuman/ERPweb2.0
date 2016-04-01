@@ -140,21 +140,30 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer.view = function($view)  {
-        var target = $view.closest('.tab-pane').data('target'),
-            id = $view.closest('tr').data('id');
+        var $tabPane = $view.closest('.tab-pane'),
+            target = $tabPane.data('target'),
+            id = $view.closest('tr').data('id'),
+            status = $tabPane.find('select[name="status"]').val(),
+            args = {};
 
         if (!id) {
             console.info('ID 为空，查看无效');
             return;
         }
 
+        if (status === '0') {
+            args.outRemarkId = id;
+        } else {
+            args.unifyId = id;
+        }
+
         switch(target) {
             // 中转部分
-            case 'bus':
-                Transfer._viewBus(id);
+            case 'bus':                
+                Transfer._viewBus(args);
                 break;
             case 'hotel':
-                Transfer._viewHotel(id);
+                Transfer._viewHotel(args);
                 break;
             case 'other':
                 Transfer._viewOther(id);
@@ -1107,49 +1116,40 @@ define(function(require, exports) {
 
     /**
      * 车查看
-     * @param  {int} id 安排ID
+     * @param  {object} args 安排ID
      * @return {[type]}    [description]
      */
-    Transfer._viewBus = function(id) {
-        if (!!id)  {
-            $.ajax({
-                url: KingServices.build_url(service_name, "getOutBusArrange"),
-                type: "POST",
-                data:{
-                    outRemarkId: id
-                },
-                success: function(data) {
-                    if (showDialog(data)) {
-                        var html = ViewBusTemplate(data);
-                        addTab(viewBusId, '车查看', html);
-                    }
+    Transfer._viewBus = function(args) {
+        $.ajax({
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
+            type: "POST",
+            data:args,
+            success: function(data) {
+                if (showDialog(data)) {
+                    var html = ViewBusTemplate(data);
+                    addTab(viewBusId, '车查看', html);
                 }
-            });
-        }
-
+            }
+        });
     };
 
     /**
      * 房查看
-     * @param  {int} id 安排ID
+     * @param  {object} args 安排ID
      * @return {[type]}    [description]
      */
-    Transfer._viewHotel = function(id) {
-        if (!!id)  {
-            $.ajax({
-                url: KingServices.build_url(service_name, "getOutHotelArrange"),
-                type: "POST",
-                data:{
-                    outRemarkId: id
-                },
-                success: function(data) {
-                    if (showDialog(data)) {
-                        var html = ViewHotelTemplate(data);
-                        addTab(viewhotelId, '房查看', html);
-                    }
+    Transfer._viewHotel = function(args) {
+        $.ajax({
+            url: KingServices.build_url(service_name, "getOutHotelArrange"),
+            type: "POST",
+            data: args,
+            success: function(data) {
+                if (showDialog(data)) {
+                    var html = ViewHotelTemplate(data);
+                    addTab(viewhotelId, '房查看', html);
                 }
-            });
-        }
+            }
+        });
     };
     /**
      * 其他查看
