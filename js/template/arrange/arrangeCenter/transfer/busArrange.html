@@ -34,7 +34,7 @@
                 <th class="th-border" style="width: 100px">操作</th>
             </tr>
         </thead> 
-        <tbody class="T-bus-plan">
+        <tbody class="T-bus-plan" id="busplan_body">
         {{each outRemarkList as outBus}}
             {{if outBus.id != null}}
             <tr data-id="{{outBus.outRemarkId}}">
@@ -70,7 +70,7 @@
                     </div>
                 </td>
                 <td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="{{outBus.driverMobileNumber}}" /></td>
-                <td><input class="col-sm-12 T-datepicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
+                <td><input class="col-sm-12 T-dateTimePicker" name="useTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" /></td>
                 <td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" /></td>
                 <td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" /></td>
                 <td><input class="col-sm-12 T-number price F-float F-money" name="fee" type="text"  maxlength="9" value="{{outBus.fee}}" /><input type="hidden" class="count" value="1" /></td>
