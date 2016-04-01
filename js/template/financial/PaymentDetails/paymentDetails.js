@@ -243,9 +243,12 @@ define(function(require, exports){
 					    		Payment.loadSubjectHtml($(this).val(),$container);
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
+					    			$container.find(".T-payType-cash").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
+					    			
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
+					    			$container.find(".T-payType-cash").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
 					    		}
 					    	});
@@ -272,6 +275,12 @@ define(function(require, exports){
 					    		if($this.hasClass('T-close-payment')){
 					    			layer.close(addGuideLayer);
 					    		} else if($this.hasClass('T-save-payment')){
+					    			var subjectName=$container.find('.T-subject').find("option:selected").text(),
+					    			    resourceName=$container.find('[name=resourceName]').val();
+					    			if ((subjectName==="预收账款" || subjectName==="预付账款") && !resourceName) {
+					    				showMessageDialog($("#confirm-dialog-message"), "对方单位不能为空");
+            							return;
+					    			}
 					    			if (!validator.form()) { return; }
 					    			Payment.submitPayment();
 					    		}
@@ -389,8 +398,7 @@ define(function(require, exports){
 		var subList = false,subjectHtml = "";
 		if(type == 0) { subList = Payment.subList0; }
 		else if(type == 1) { subList = Payment.subList1; }
-		else if(type == 2) { subList = Payment.subList2; }
-			
+		else if(type == 2) { subList = Payment.subList2; }	
 		if(subList.length > 0){
 			for(var i = 0; i < subList.length; i++){
 				subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
@@ -404,9 +412,6 @@ define(function(require, exports){
 				$container.find("input[name=subjectName]").val("");
 			});
 		}
-
-
-
 	};
     
     //加载对应的资源类型
@@ -423,6 +428,7 @@ define(function(require, exports){
 		   }
 		}
 		$container.find(".T-resourceType").html(resTypeOption);
+		$container.find('input[name=resourceName]').val('').next().val('');
 	};
 
 	Payment.submitPayment = function(){
