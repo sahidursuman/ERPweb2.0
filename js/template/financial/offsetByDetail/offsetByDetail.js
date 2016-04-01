@@ -74,6 +74,8 @@ define(function(require, exports) {
     };
     //初始化事件
     offsetByDetail.init_event=function($tab){
+
+        Tools.setDatePicker($tab.find('.datepicker'), true);
         //搜索
     	$tab.find('.T-btn-search').off('click').on('click',function(event) {
     		event.preventDefault();
