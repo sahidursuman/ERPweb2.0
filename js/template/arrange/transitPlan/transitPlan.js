@@ -98,6 +98,7 @@ define(function(require, exports) {
             args.shift = transitPlan.$searchAreabus.find('input[name=shift]').val();
             args.arrangeUserName = transitPlan.$searchAreabus.find('input[name=arrangeUserName]').val();
             args.status = transitPlan.$searchAreabus.find('select[name=status]').val();
+            args.shuttleType = transitPlan.$searchAreabus.find('select[name=shuttleType]').val();
         }
         args.pageNo = args.pageNo || 0;
          $.ajax({
@@ -387,6 +388,7 @@ define(function(require, exports) {
             hotelsData.hotelLevel = transitPlan.$searchAreahotel.find('input[name=hotelLevel]').val();
             hotelsData.arrangeUserName = transitPlan.$searchAreahotel.find('input[name=arrangeUserName]').val();
             hotelsData.status = transitPlan.$searchAreahotel.find('select[name=status]').val();
+            hotelsData.shuttleType = transitPlan.$searchAreabus.find('select[name=shuttleType]').val();
         }
         hotelsData.pageNo = hotelsData.pageNo || 0;
         $.ajax({
