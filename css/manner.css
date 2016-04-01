@@ -2735,3 +2735,6 @@ a.gray span{
         color: #707070 !important;
     }
 }
+
+/* 财务已收样式 */
+.in-block{display: inline-block;white-space:nowrap;}
