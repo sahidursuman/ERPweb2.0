@@ -30,30 +30,26 @@ define(function(require, exports) {
 	FrameFun.initMainEvent = function() {
 		var $tab = $('#tab-'+ tabKey + '-content');
 
-		$tab.on('click', '.T-more', function(event) {
+		// 公共事件
+		$tab.on('click', '.T-more', function(event) {  // 高级搜
 			event.preventDefault();
 			$(this).closest('.form-inline').next().toggleClass('hidden');
-		})
-		.on('click', '.T-search', function(event) {
+		});		
+
+		// 初始化中转页面的事件
+		FrameFun.initTransferEvent($tab.find('#transfer-arrange'));
+	};
+
+	/**
+	 * 中转安排的事件绑定
+	 * @param  {object} $tab 所在的顶层容器
+	 * @return {[type]}      [description]
+	 */
+	FrameFun.initTransferEvent = function($tab) {		
+		$tab.on('click', '.T-search', function(event) {
 			event.preventDefault();
-			var $form = $(this).closest('form'),
-				target = $form.data('target');
-
-			switch(target) {
-				// 中转部分
-				case 'transfer-bus':
-					TransferFun.getBusList($form);
-					break;
-				case 'transfer-hotel':
-					TransferFun.getHotelList($form);
-					break;
-				case 'transfer-other':
-					TransferFun.getOtherList($form);
-					break;
-
-				default: break;
-			}
-		})
+			TransferFun.getList($(this).closest('form'));
+		})	
 		// table内操作
 		.on('click', '.T-action', function(event) {
 			event.preventDefault();
@@ -61,16 +57,16 @@ define(function(require, exports) {
 
 			if ($that.hasClass('T-inform'))  {
 				// 通知
-				
+				FrameFun.inform($that);
 			} else if ($that.hasClass('T-arrange-item'))  {
 				// 安排
-				
+				TransferFun.arrange($that);
 			} else if ($that.hasClass('T-view'))  {
 				// 查看
-				
+				TransferFun.view($that);
 			}
-		});
-		.find('#transfer-arrange').find('.nav').on('click', 'a', function(event) {
+		})	
+		.find('.nav').on('click', 'a', function(event) {
 			event.preventDefault();
 			
 			var $that = $(this);
@@ -85,5 +81,33 @@ define(function(require, exports) {
 		// 初始化数据
 		$tab.find('.T-search').eq(0).trigger('click');
 	};
+
+	FrameFun.inform = function($inform) {
+		if (!$inform.length) {
+			console.info('通知主体为空，无法查询主体信息');
+			return;
+		}
+		var args = {
+			id: $inform.closest('tr').data('id'),			
+		}
+
+		args[$inform.data('target')] = 1;
+
+		$.ajax({
+		    url: KingServices.build_url(service_name,"noticeTransferArrange"),     
+		    type: 'POST',
+		    data: {
+		        noticeItems: JSON.stringify(args)
+		    },
+		    success: function(data) {
+		        if (showDialog(data)) {
+		            showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+		                layer.close(noticeLayer);
+		            })
+		        }
+		    }
+		})
+	}
+
 	exports.init = FrameFun.initMain;
 });
