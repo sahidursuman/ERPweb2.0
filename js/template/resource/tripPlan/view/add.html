@@ -341,8 +341,8 @@
                                         <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
-                                        {{if (!guide.isConfirmAccount || basicInfo.status != 1 || guide.isAccountGuide != 1)}}
-                                        <a class="cursor {{if guide.isConfirmAccount}}T-btn-deleteTripPlanList{{else}}gray{{/if}}" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="{{if guide.isConfirmAccount}}财务已对账，不可删除{{else}}删除{{/if}}">
+                                        {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
+                                        <a class="cursor {{if !guide.isConfirmAccount}}T-btn-deleteTripPlanList{{else}}gray{{/if}}" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="{{if guide.isConfirmAccount}}财务已对账，不可删除{{else}}删除{{/if}}">
                                                 删除
                                         </a> {{/if}}
                                     </td>
