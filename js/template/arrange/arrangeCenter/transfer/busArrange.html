@@ -37,7 +37,7 @@
         <tbody class="T-bus-plan" id="busplan_body">
         {{each outRemarkList as outBus}}
             {{if outBus.id != null}}
-            <tr data-id="{{outBus.outRemarkId}}">
+            <tr entity-id="{{outBus.outRemarkId}}">
                 <td>
                     <div class="col-sm-12">
                         <input type="hidden" name="serviceType" value="{{if outBus.serviceType == 0}}0{{else}}1{{/if}}" />

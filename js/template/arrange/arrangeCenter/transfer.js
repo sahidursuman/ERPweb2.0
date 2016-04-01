@@ -259,7 +259,6 @@ define(function(require, exports) {
      */
     Transfer._arrangeBus = function($arrange) {
         var id = $arrange.closest('tr').data('id');
-
         if (!!id)  {
             $.ajax({
                 url: KingServices.build_url(service_name, "getOutBusArrange"),
@@ -288,10 +287,9 @@ define(function(require, exports) {
      */
      Transfer.buslistclick = function($container,id){
         $container.find('.T-cheked').on('click',function(){
-            var $that = $(this),$tr = $that.closest('tr'),
+            var $that = $(this),$tr = $that.closest('tr'),outRemarkId=$that.closest('tr').data('id');
                 shuttleType= $tr.find("input[name=shuttleType]").val();
             // 统一安排事件绑定
-            var $that=$(this),outRemarkId=$that.closest('tr').data('id');
             if($that.is(':checked')){
                 var transitJson = {
                     outRemarkId : outRemarkId,
@@ -376,10 +374,9 @@ define(function(require, exports) {
             Transfer.addbus($busplanId);
         });
         //删除车
-        $busplanId.find('.T-contact-delete',function(){
-            var $that = $(this),$tr = $that.closest('tr'),id = $tr.data('id');
-            Transfer.deleteArrange()
-        })
+        $busplanId.find('.T-contact-delete').on('click',function(){
+            Transfer.deleteArrange($(this));
+        });
 
     }
      //安排未安排保存
