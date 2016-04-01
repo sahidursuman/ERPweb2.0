@@ -190,7 +190,8 @@ define(function(require, exports) {
 
         if (!!getListFun) {
             var $curTab = Transfer.$tab.find(tabId),
-                pageNo = ($curTab.find('.laypage_curr').text() || 0) * 1;
+                // 获取查看的页码，系统从0开始
+                pageNo = ($curTab.find('.laypage_curr').text() || 1) * 1;
 
             getListFun($curTab.children('form'), pageNo -1);
         }
@@ -345,14 +346,20 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer._arrangeBus = function($arrange) {
-        var id = $arrange.closest('tr').data('id');
+        var id = $arrange.closest('tr').data('id')
+            args = {};
+
+        if ($arrange.closest('.tab-pane').find('select[name="status"]').val() === '0')  {
+            args.outRemarkId = id;
+        } else {
+            args.unifyId = id;
+        }
+
         if (!!id)  {
             $.ajax({
                 url: KingServices.build_url(service_name, "getOutBusArrange"),
                 type: "POST",
-                data:{
-                    outRemarkId: id
-                },
+                data: args,
                 success: function(data) {
                     if (showDialog(data)) {
                         var html = BusArrangeTemplate(data);
@@ -450,7 +457,7 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         Transfer.busArrangeIdArray = [];
-                        Transfer._refreshList();
+                        Transfer._refreshList('bus');
                         Tools.closeTab(busplanId)
                     });
                  }
@@ -827,15 +834,20 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer._arrangeHotel = function($arrange) {
-        var id = $arrange.closest('tr').data('id');
+        var id = $arrange.closest('tr').data('id'),
+            args = {};
+
+        if ($arrange.closest('.tab-pane').find('select[name="status"]').val() === '0')  {
+            args.outRemarkId = id;
+        } else {
+            args.unifyId = id;
+        }
 
         if (!!id)  {
             $.ajax({
                 url: KingServices.build_url(service_name, "getOutHotelArrange"),
                 type: "POST",
-                data:{
-                    outRemarkId: id
-                },
+                data: args,
                 success: function(data) {
                     if (showDialog(data)) {
                         var html = HotelArrangeTemplate(data);
