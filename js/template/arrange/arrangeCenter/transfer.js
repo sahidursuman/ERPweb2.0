@@ -16,6 +16,8 @@ define(function(require, exports) {
         HotelArrangedListTemplate = require('./transfer/hotelArrangedList'),
         HotelArrangeTemplate = require('./transfer/hotelArrange'),
         ViewHotelTemplate = require('./transfer/viewHotel'),
+        hotelplanId = "tab-" + tabKey + "-hotelplan",
+        viewhotelId = "tab-" + tabKey + "-viewhotel",
 
         OtherListTemplate = require('./transfer/otherList'),
         OtherArrangeTemplate = require('./transfer/otherArrange'),
@@ -767,17 +769,190 @@ define(function(require, exports) {
 
         if (!!id)  {
             $.ajax({
-                url: KingServices.build_url(service_name, "getOutBusArrange"),
+                url: KingServices.build_url(service_name, "getOutHotelArrange"),
                 type: "POST",
                 data:{
-                    unifyId: id
+                    outRemarkId: id
                 },
                 success: function(data) {
                     if (showDialog(data)) {
+                        var html = HotelArrangeTemplate(data);
+                        addTab(hotelplanId, '房安排', html);
+                        Transfer.$hotelplanId = $("#tab-" + hotelplanId + "-content");
+                        $hotelplanId = Transfer.$hotelplanId;
+                        Transfer.hotelplanclick($hotelplanId);
                     }
                 }
             });
         }
+    };
+    /**
+     * 安排房事件
+     * @param  {object} $hotelplanId 安排按钮
+     * @return {[type]}          [description]
+     */
+    Transfer.hotelplanclick = function($hotelplanId){
+        Transfer.addResource($hotelplanId);//房安排弹窗
+        Transfer.bindHotelChoose($hotelplanId); //房安排autocomplete列表
+        Transfer.setDate($hotelplanId);//时间控件
+
+        //关闭安排按钮
+        $hotelplanId.find('.T-cancel').on('click',function(){
+            Tools.closeTab(hotelplanId);
+        })
+        //保存房未安排事件
+        $hotelplanId.find('.T-hotel-save').on('click',function(){
+            Transfer.submitbus($hotelplanId,shuttleType);
+        });
+        //新增房
+        $hotelplanId.find('.T-add-hotel').on('click',function(){
+            Transfer.addhotel($hotelplanId);
+        });
+        //删除房
+        $hotelplanId.find('.T-arrange-delete').on('click',function(){
+            Transfer.deleteArrange($(this));
+        });
+
+    }
+    /**
+     * 酒店autocomplete
+     * @param  {[type]} tab       [容器]
+     * @param  {[type]} validator [description]
+     * @return {[type]}           [description]
+     */
+    Transfer.bindHotelChoose = function($hotelplanId){
+        var hotelChoose = $hotelplanId.find('.T-chooseHotel');
+        var $hotelStar = $hotelplanId.find(".tripPlanHotelStar");
+        $hotelStar.off().on("change", function(){
+            var parentObj = $(this).closest('tr');
+            parentObj.find("input[name=hotelName]").val("");
+            parentObj.find("input[name=hotelId]").val("");
+            parentObj.find("input[name=hotelRoomType]").val("");
+            parentObj.find("input[name=hotelRoomTypeId]").val("");
+            parentObj.find("input[name=hotelMobileNumber]").val("");
+            parentObj.find("input[name=hotelManagerName]").val("");
+            parentObj.find("input[name=hotelPrice]").val("");
+        });
+        //酒店选择
+        hotelChoose.autocomplete({
+            minLength:0,
+            change: function(event,ui){
+                if(ui.item == null){
+                    $(this).val("");
+                    var parents = $(this).closest('tr');
+                    parents.find("input[name=hotelId]").val("");
+                    parents.find("input[name=hotelRoomType]").val("");
+                    parents.find("input[name=hotelRoomTypeId]").val("");
+                    parents.find("input[name=hotelMobileNumber]").val("");
+                    parents.find("input[name=hotelManagerName]").val("");
+                    parents.find("input[name=hotelPrice]").val("");
+                }
+            },
+            select: function(event,ui){
+                var _this = this, parents = $(_this).closest('tr');
+                parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
+                $.ajax({
+                    url: KingServices.build_url("hotel","getHotelById"),
+                    showLoading:false,
+                    data:"id=" + ui.item.id,
+                    success: function(data) {
+                        if(showDialog(data)){
+                            parents.find("input[name=hotelMobileNumber]").val(data.hotel.mobileNumber);
+                            parents.find("input[name=hotelManagerName]").val(data.hotel.managerName);
+                            parents.find("select[name=hotelLevel]").val(data.hotel.level);
+                            parents.find("input[name=hotelRoomType]").val("");
+                            parents.find("input[name=hotelRoomId]").val("");
+                        }
+                    }
+                });
+            }
+        }).off("click").on("click", function(){
+            var hotelStarValue = $hotelStar.val(),
+                hotelStarValue = $(this).closest('tr').find('.tripPlanHotelStar').val();
+            obj = this;
+            $.ajax({
+                url: KingServices.build_url('hotel','findHotelListByLevel'),
+                showLoading:false,
+                data:"level=" + hotelStarValue,
+                success: function(data) {
+                    if(showDialog(data)){
+                        var hotelList = JSON.parse(data.hotelList);
+                        if(hotelList && hotelList.length > 0){
+                            for(var i=0; i < hotelList.length; i++){
+                                hotelList[i].value = hotelList[i].name;
+                            }
+                            $(obj).autocomplete('option','source', hotelList);
+                            $(obj).autocomplete('search', '');
+                        }else{
+                            layer.tips('没有酒店可供选择', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        //房型选择
+        $hotelplanId.find("[name=hotelRoomType]").autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $(this).val("");
+                    var objParent = $(this).closest('tr');
+                    objParent.find("input[name=hotelRoomTypeId]").val("");
+                    objParent.find("input[name=hotelPrice]").val("");
+                }
+            },
+            select:function(event,ui){
+                var $thisRoom =$(this).closest('tr');
+                $thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
+                var startTime=$thisRoom.find("input[name=checkInTime]").val();
+                $.ajax({
+                    url: KingServices.build_url('hotel','findRoomDetailById'),
+                    showLoading:false,
+                    data:"id=" + ui.item.id+"&startTime="+startTime,
+                    success: function(data) {
+                        if(showDialog(data)){
+                            var hotelRoom = JSON.parse(data.hotelRoom);
+                            $thisRoom.find("input[name=hotelPrice]").val(hotelRoom.normalInnerPrice).trigger('change');
+                        }
+                    }
+                })
+            }
+        }).off("click").on("click", function(){
+            var _this = $(this), $parents = _this.closest('tr'),
+            id = $parents.find('input[name=hotelId]').val();
+            if (!!id) {
+                $.ajax({
+                    url: KingServices.build_url('hotel','findTypeByHotelId'),
+                    showLoading: false,
+                    data: "id=" + id,
+                    success: function(data) {
+                        if(showDialog(data)) {
+                            var hotelRommList = JSON.parse(data.hotelRommList);
+                            if(hotelRommList && hotelRommList.length > 0){
+                                for(var i=0; i < hotelRommList.length; i++){
+                                    hotelRommList[i].value = hotelRommList[i].type;
+                                }
+                                $(_this).autocomplete('option','source', hotelRommList);
+                                $(_this).autocomplete('search', '');
+                            }else{
+                                layer.tips('没有房型可供选择', _this, {
+                                    tips: [1, '#3595CC'],
+                                    time: 2000
+                                });
+                            }
+                        }
+                    }
+                });
+            }else{
+                layer.tips('请选择酒店', _this, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            }
+        });
     };
 
     /**
@@ -837,9 +1012,22 @@ define(function(require, exports) {
      * @return {[type]}    [description]
      */
     Transfer._viewHotel = function(id) {
-
+        if (!!id)  {
+            $.ajax({
+                url: KingServices.build_url(service_name, "getOutHotelArrange"),
+                type: "POST",
+                data:{
+                    outRemarkId: id
+                },
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var html = ViewHotelTemplate(data);
+                        addTab(viewhotelId, '房查看', html);
+                    }
+                }
+            });
+        }
     };
-
     /**
      * 其他查看
      * @param  {int} id 安排ID
@@ -960,6 +1148,44 @@ define(function(require, exports) {
         Transfer.addResource($busplanId);//车安排弹窗
         Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
         Transfer.setDate($busplanId);//时间控件
+        //删除房
+        $obj.find('.T-arrange-delete').on('click',function(){
+            Transfer.deleteArrange($(this));
+        });
+    };
+      //添加房安排
+    Transfer.addhotel = function($obj) {
+       var html ='<tr>'+
+            '<td>'+
+            '<input class="col-sm-12 T-datePicker datepicker" name="checkInTime" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-datePicker datepicker" name="checkOutTime" value="" type="text" /></td>'+
+            '<td><select class="tripPlanHotelStar" name="hotelLevel">'+
+            '<option  selected="selected" value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option><option value="1">三星以下</option>'+
+            '<option value="2">三星</option><option value="3">准四星</option>'+
+            '<option value="4">四星</option><option value="5">准五星</option>'+
+            '<option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+            '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseHotel" name="hotelName" value="" type="text" /><input type="hidden" name="hotelId" value=""/>'+
+            '<span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+            '<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
+            '<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
+            '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" value=""/></td>'+
+            '<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
+            '<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
+            '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+            '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
+            '</tr>';
+        var $tbody = $obj.find('tbody');
+        $tbody.append(html);
+        Transfer.addResource($obj);//房安排弹窗
+        Transfer.bindHotelChoose($obj); //房安排autocomplete列表
+        Transfer.setDate($obj);//时间控件
+        //删除房
+        $obj.find('.T-arrange-delete').on('click',function(){
+            Transfer.deleteArrange($(this));
+        });
     };
 
     Transfer.addRestaurant = function($tbody) {
