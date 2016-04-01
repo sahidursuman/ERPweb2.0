@@ -558,12 +558,14 @@ define(function(require, exports) {
 				data: 'outTransferId='+ id,
 			})
 			.done(function(data) {
-				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-					var divId="Transfer-Out",
-						type="1";
-						transfer.getSearchParam(divId,type);
-						transfer.findPager(divId,type,0);	
-				})
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), '退回成功', function() {
+						var divId="Transfer-Out",
+							type="1";
+							transfer.getSearchParam(divId,type);
+							transfer.findPager(divId,type,0);	
+					})
+				}
 			})
 		};
 

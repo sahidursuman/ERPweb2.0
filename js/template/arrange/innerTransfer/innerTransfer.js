@@ -651,10 +651,12 @@ define(function(require, exports) {
                     success: function(data) {
                         var result = showDialog(data);
                         if (result) {
-                            var divId = "inner-TransferOut",
-                                type = "1";
-                            innerTransfer.getSearchParam(divId, type);
-                            innerTransfer.innerList(divId, type, 0);
+                            showMessageDialog($( "#confirm-dialog-message" ), '退回成功', function() {
+                                var divId = "inner-TransferOut",
+                                    type = "1";
+                                innerTransfer.getSearchParam(divId, type);
+                                innerTransfer.innerList(divId, type, 0);
+                            })
                         }
                     }
                 });
