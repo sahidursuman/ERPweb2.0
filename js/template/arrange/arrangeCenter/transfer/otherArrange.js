@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":3,"md5":"7f5b7a5586f567bef88c31aa6e5e6df6"}*/
+/*TMODJS:{"debug":true,"version":4,"md5":"7f5b7a5586f567bef88c31aa6e5e6df6"}*/
 define(function(require) {
     return require("/js/template/template")("arrange/arrangeCenter/transfer/otherArrange", function($data, $filename) {
         try {

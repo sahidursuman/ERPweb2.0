@@ -375,6 +375,11 @@ define(function(require, exports) {
         $busplanId.find('.T-add-bus').on('click',function(){
             Transfer.addbus($busplanId);
         });
+        //删除车
+        $busplanId.find('.T-contact-delete',function(){
+            var $that = $(this),$tr = $that.closest('tr'),id = $tr.data('id');
+            Transfer.deleteArrange()
+        })
 
     }
      //安排未安排保存
@@ -1079,8 +1084,6 @@ define(function(require, exports) {
     Transfer.deleteArrange = function($obj) {
         var $tr = $obj.closest('tr');
         var id = $tr.data('entity-id');
-
-
 
         if (!!id) {
             showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
