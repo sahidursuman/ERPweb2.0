@@ -22,7 +22,7 @@
         <td class="h-touristGroupInfo">
             <p>中转单号：{{bus.orderNumber}}</p>
             <p><span>&lt;{{bus.lineProductName}}&gt;</span></p>
-            <p><span>{{bus.startTime}}</span><span>{{bus.partnerAgencyName}}</span><span>外链销售：{{bus.outOPUserName}}</span></p>
+            <p><span>{{bus.startTime}}</span><span>{{bus.partnerAgencyName}}</span><span>外联销售：{{bus.outOPUserName}}</span></p>
             <p>收客单号：{{bus.tgOrderNumber}}</p>
         </td>
         <td>
@@ -45,9 +45,11 @@
         {{/each}}
     </tbody>
 </table>
-<button class="btn btn-sm btn-success T-start-merge R-right" style="margin-left:50%" data-right="1130004">
-    <i class="ace-icon fa fa-user-plus"></i> 统一安排
-</button>
+<div class="text-center">
+    <button class="btn btn-sm btn-success w-150 R-right T-merge-arrange" {{if !canMergeArrange}} disabled="disabled" {{/if}} data-right="1130004">
+        <i class="ace-icon fa fa-user-plus"></i> 统一安排
+    </button>
+</div>
 <div class="style='clear: both;'"></div>
 <div class="row pageMode">
     <div class="col-xs-6">
