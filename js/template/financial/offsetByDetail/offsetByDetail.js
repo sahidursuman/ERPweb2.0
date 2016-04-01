@@ -77,6 +77,13 @@ define(function(require, exports) {
             offsetByDetail.getList(0);
     	});
 
+        //资源类型切换后清空对方单位
+        $tab.find('.T-resourceType').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $tab.find('[name=resourceName]').val('');
+        });
+
         //余额、查看
         $tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -84,14 +91,16 @@ define(function(require, exports) {
             //余额 payStatus=4  明细 payStatus=3
             var $that=$(this),
                  resourceId=$that.closest('tr').attr('data-resourceId'),
-                 resourceType=$that.closest('tr').attr('data-resourceType');
+                 resourceType=$that.closest('tr').attr('data-resourceType'),
+                 startDate=offsetByDetail.getVal($tab,"startDate"),
+                 endDate=offsetByDetail.getVal($tab,"endDate");
             if ($that.hasClass('T-income')) {
                 // 余额
-                offsetByDetail.offsetBlanceDetail(0,resourceId,resourceType,4);
+                offsetByDetail.offsetBlanceDetail(0,resourceId,resourceType,4,startDate,endDate);
                 
             } else if($that.hasClass('T-viewDetails')){
                 // 查看
-                offsetByDetail.offsetViewDetail(0,resourceId,resourceType,3);
+                offsetByDetail.offsetViewDetail(0,resourceId,resourceType,3,startDate,endDate);
             }
         });
         //主营业务收付类别
@@ -105,10 +114,7 @@ define(function(require, exports) {
      * @param  {[type]} payStatus    [余额明细标识]
      * @return {[type]}              [description]
      */
-    offsetByDetail.offsetBlanceDetail=function(pageNo,resourceId,resourceType,payStatus){
-        var args = FinancialService.getInitMothDate();
-            startDate=args.startDate;
-            endDate=args.endDate;
+    offsetByDetail.offsetBlanceDetail=function(pageNo,resourceId,resourceType,payStatus,startDate,endDate){
         if (!!offsetByDetail.$blanceTab && arguments.length==1) {
             var voucher=offsetByDetail.getVal(offsetByDetail.$blanceTab,"voucher"),
                 startDate=offsetByDetail.getVal(offsetByDetail.$blanceTab,"startDate"),
@@ -163,10 +169,7 @@ define(function(require, exports) {
     };
    
     //支出
-    offsetByDetail.offsetViewDetail=function(pageNo,resourceId,resourceType,payStatus){
-         args = FinancialService.getInitMothDate();
-         startDate=args.startDate;
-         endDate=args.endDate;
+    offsetByDetail.offsetViewDetail=function(pageNo,resourceId,resourceType,payStatus,startDate,endDate){
          if (!!offsetByDetail.$detailTab && arguments.length==1) {
             var voucher=offsetByDetail.getVal(offsetByDetail.$detailTab,"voucher"),
                 startDate=offsetByDetail.getVal(offsetByDetail.$detailTab,"startDate"),
@@ -236,8 +239,7 @@ define(function(require, exports) {
             showLoading: false
         })
         .done(function(data) {
-             offsetByDetail.$detailTab.find('.T-incomeMoney').text(data.total.incomeMoney);
-             offsetByDetail.$detailTab.find('.T-sumPayMoney').text(data.total.payMoney);
+             offsetByDetail.$detailTab.find('.T-total').text(data.total.incomeMoney*1+data.total.payMoney*1);
         })
     };
 

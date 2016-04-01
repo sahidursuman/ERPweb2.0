@@ -491,19 +491,12 @@ define(function(require, exports){
      * @return {[type]}           
      */
     Payment.getResourceList = function($obj,$tab) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item) {
-                   $(this).val('').nextAll('[name=resourceId]').val('');
-                }
-            },
-            select: function(event, ui) {
-                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id).trigger('change');
-            }
-        }).off('click').on('click', function() {
+    	var resourceTypeList=null;
+        $obj.off('click').on('click', function() {
         	var resourceType = $tab.find('[name=resourceType]').val();
-	    	if (!resourceType) { //资源类型不限
+        	//修正change当resourceType作用域
+        	resourceTypeList=resourceType;
+	    	if (!resourceType) {
 	    		return;
 	    	}
             $.ajax({
@@ -525,7 +518,18 @@ define(function(require, exports){
                             time: 2000
                         });
                     }
-                    $obj.autocomplete('option', 'source', list);
+                    $obj.autocomplete({
+			            minLength: 0,
+			            change: function(event, ui) {
+			                if (!ui.item && !!resourceTypeList) {
+			                   $(this).val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id);
+			            }
+			        })
+			        $obj.autocomplete('option', 'source', list);
                     $obj.autocomplete('search', '');
                 }
             });

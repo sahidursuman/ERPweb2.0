@@ -203,10 +203,10 @@ define(function(require, exports) {
 
     //部门统计
     PerformanceFun.initFindBusinessGroupTotal = function(args) {
-    	var method = 'sumFindByBusinessGroup';
+    	var method = 'sumFindByChildGroup';
 
     	if (!!args.businessGroupId) {
-    		method = 'sumFindByChildGroup';
+    		method = 'sumFindByBusinessGroup';
     	}
 
         $.ajax({
