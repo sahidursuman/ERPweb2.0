@@ -85,7 +85,7 @@ define(function(require, exports) {
             var $that=$(this),
                  resourceId=$that.closest('tr').attr('data-resourceId'),
                  resourceType=$that.closest('tr').attr('data-resourceType');
-            if ($that.hasClass('T-balance')) {
+            if ($that.hasClass('T-income')) {
                 // 余额
                 offsetByDetail.offsetBlanceDetail(0,resourceId,resourceType,4);
                 
@@ -95,7 +95,7 @@ define(function(require, exports) {
             }
         });
         //主营业务收付类别
-        offsetByDetail.getReceivableTypeList($tab.find('[name=resourceName]'));
+        offsetByDetail.getResourceList($tab.find('[name=resourceName]'),$tab);
     };
 
     /**
@@ -139,7 +139,11 @@ define(function(require, exports) {
                 data.resourceId=resourceId;
                 data.resourceType=resourceType;
                 data.payStatus=payStatus;
-                Tools.addTab(menuKey+"-blance", "冲抵明细-收入", blanceDetailTemplate(data));
+                var tab_Title='预收账款明细';
+                if (resourceType==20) {
+                    tab_Title='预付账款明细';
+                }
+                Tools.addTab(menuKey+"-blance", tab_Title, blanceDetailTemplate(data));
                 offsetByDetail.$blanceTab=$("#tab-"+menuKey+"-blance-content");
                 offsetByDetail.initBlance_event(offsetByDetail.$blanceTab);
 
@@ -193,9 +197,11 @@ define(function(require, exports) {
                 data.resourceId=resourceId;
                 data.resourceType=resourceType;
                 data.payStatus=payStatus;
-                Tools.addTab(menuKey+"-detail", "冲抵明细-支出", offsetDetailTemplate(data));
+                Tools.addTab(menuKey+"-detail", "冲抵明细", offsetDetailTemplate(data));
                 offsetByDetail.$detailTab=$("#tab-"+menuKey+"-detail-content");
                 offsetByDetail.initDetail_event(offsetByDetail.$detailTab);
+                //统计明细金额
+                offsetByDetail.getTotal(searchParam);
                 // 绑定翻页组件
                 laypage({
                     cont: offsetByDetail.$detailTab.find('.T-pagenation'),
@@ -219,6 +225,20 @@ define(function(require, exports) {
             /* Act on the event */
             offsetByDetail.offsetBlanceDetail(0);
         });  
+    };
+
+    //统计金额
+    offsetByDetail.getTotal=function(searchParam){
+        $.ajax({
+           url : KingServices.build_url('cash', 'findTotal'),
+            type : "POST",
+            data : "searchParam="+searchParam,
+            showLoading: false
+        })
+        .done(function(data) {
+             offsetByDetail.$detailTab.find('.T-incomeMoney').text(data.total.incomeMoney);
+             offsetByDetail.$detailTab.find('.T-sumPayMoney').text(data.total.payMoney);
+        })
     };
 
     //明细
@@ -281,31 +301,37 @@ define(function(require, exports) {
             });
         })
     };
+
     /**
-     * [getReceivableTypeList 获取主营业务收付类别]
-     * @param  {[type]} $obj [父对象]
-     * @return {[type]}      [description]
+     * [getResourceList 获取对方单位]
+     * @param  {[type]} $obj         [对方单位对象]
+     * @param  {[type]} resourceType [资源类型]
+     * @return {[type]}           
      */
-    offsetByDetail.getReceivableTypeList = function($obj) {
+    offsetByDetail.getResourceList = function($obj,$tab) {
         $obj.autocomplete({
             minLength: 0,
             change: function(event, ui) {
                 if (!ui.item) {
-                   $(this).nextAll().find('[name=resourceId]').val('');
+                   $(this).val('').nextAll('[name=resourceId]').val('');
                 }
             },
             select: function(event, ui) {
-                $(this).val(ui.item.name).nextAll('[name=receivableTypeId]').val(ui.item.id).trigger('change');
+                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id).trigger('change');
             }
         }).off('click').on('click', function() {
-             $.ajax({
-               url:KingServices.build_url("cash","findSelectValue"),
-               type: 'POST',
+            var resourceType = $tab.find('[name=resourceType]').val();
+            if (!resourceType) { 
+                return;
+            }
+            $.ajax({
+                url:KingServices.build_url("cash","findUnits"),
+                type: 'POST',
+                data:"resourceType="+resourceType,
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var all={ id:'',name:'全部'};
-                    var list = data.receivableTypes;list.unshift(all);
+                    var list = data.units;
                     if (list != null && list.length > 0) {
                         for (var i = 0; i < list.length; i++) {
                             list[i].value = list[i].name;
