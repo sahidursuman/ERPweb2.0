@@ -25,8 +25,8 @@
             <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td class="h-touristGroupInfo">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
-                    <p class="h-lineName">&lt;
-                        {{if rs.tripPlanDetails.length !=0}}
+                    <p class="h-lineName">
+                        {{if rs.tripPlanDetails.length >0}}
                             {{each rs.tripPlanDetails as tripPlanDetails index}}
                                 {{if index == 0}}
                                     {{tripPlanDetails.lineProductName}}
@@ -36,13 +36,14 @@
                             {{if tripPlan.lineProduct}}
                                 {{tripPlan.lineProduct.name}}
                             {{/if}}
-                        {{/if}}&gt;
+                        {{/if}}
+                        {{if rs.tripPlanDetails.length >1}}
                         <label class="T-action T-showLineInfo hct-button-right">
                             <button class="btn btn-success btn-sm btn-white show" index="0">
                                 <i class="fa fa-plus bigger-110 icon-only"></i>
                             </button>
                         </label>
-                        
+                        {{/if}}
                     </p>
                     <p class="h-memberName">
                         {{each rs.tripPlanDetails as tripPlanDetails index}}

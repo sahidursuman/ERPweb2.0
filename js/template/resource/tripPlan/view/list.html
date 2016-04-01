@@ -44,7 +44,6 @@
                 <p class="h-orderNumber">{{tripPlan.tripNumber}}</p>
                 <p class="hct-absolute-group h-lineName">
                     <span class="hct-span-left">
-				&lt;
                 {{if tripPlan.tripPlanDetails.length !=0}}
                     {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
                         {{if index == 0}}
@@ -55,7 +54,7 @@
                     {{if tripPlan.lineProduct}}
                         {{tripPlan.lineProduct.name}}
                     {{/if}}
-                {{/if}}&gt;
+                {{/if}}
 				</span> {{if tripPlan.tripPlanDetails.length > 1}}
                     <label class="T-action T-showLineInfo hct-button-right">
                         <button class="btn btn-success btn-sm btn-white show" index="0">
