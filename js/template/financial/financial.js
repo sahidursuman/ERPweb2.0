@@ -37,7 +37,9 @@ FinancialService.initPayEvent = function($container,rule)  {
         };
         if(val == 6){
             $balance.closest('div').removeClass('hidden');
-        };
+        }else {
+            $balance.closest('div').addClass('hidden');
+        }
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };

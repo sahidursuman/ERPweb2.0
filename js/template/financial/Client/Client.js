@@ -501,6 +501,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
             type = $tab.find('.T-saveClear').data('type');
             args.isAutoPay = $tab.find('.T-btn-autofill').hasClass('btn-primary') ? false : true; 
+            args.sumPayType = $tab.find('[name=sumPayType]').val();
         } else {
             type =args.type;
         }
