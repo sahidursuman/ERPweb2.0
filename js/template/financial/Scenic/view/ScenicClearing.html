@@ -143,7 +143,12 @@
                 <td>{{rs.memberCount}}</td>
                 <td>{{if rs.reduceMoney==null || rs.reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
                 <td>{{rs.needPayMoney}}</td>
-                <td><a class="T-option T-payedDetail">{{"社付："}}{{rs.payedMoney}}{{if !rs.isGuidePay || rs.isGuidePay != 1}}，{{"导付："}}{{rs.realGuidePayMoney}}{{/if}}</a></td>
+                <td class="align-left">
+                    <a class="T-option T-payedDetail">
+                        <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>
+                        {{if !rs.isGuidePay || rs.isGuidePay != 1}}<span class="in-block">{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span></span>{{/if}}
+                    </a>
+                </td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-scenicImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td>{{rs.settlementMoney}}</td>
                 <td>{{rs.unPayedMoney}}</td>

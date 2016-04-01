@@ -17,12 +17,13 @@ define(function(require, exports) {
 	};
 	
 	offsetByDetail.initModule = function() {
-        offsetByDetail.getList(0);
+        var args = FinancialService.getInitMothDate();
+        offsetByDetail.getList(0,args);
     };
 
     //初始化页面
-    offsetByDetail.getList=function(page) {
-    	var args = FinancialService.getInitMothDate();
+    offsetByDetail.getList=function(page,args) {
+    	
     	//修正页面
         if (!!offsetByDetail.$tab && arguments.length==1) {
              var $tab=offsetByDetail.$tab;
@@ -74,6 +75,7 @@ define(function(require, exports) {
     };
     //初始化事件
     offsetByDetail.init_event=function($tab){
+        Tools.setDatePicker($tab.find('.datepicker'), true);
         //搜索
     	$tab.find('.T-btn-search').off('click').on('click',function(event) {
     		event.preventDefault();
@@ -81,12 +83,21 @@ define(function(require, exports) {
             offsetByDetail.getList(0);
     	});
 
+        //资源类型过滤操作
+        
+
     	$tab.find('.T-btn-add').off('click').on('click', function(event) {
     		event.preventDefault();
     		/* Act on the event */
             offsetByDetail.addOffsetList();
     	});
-
+        //收支明细
+        $tab.find('.T-viewDetails').off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this);id=$that.closest('tr').data('id');
+            KingServices.paymentDetail(id);
+        });
         //主营业务收付类别
         offsetByDetail.getReceivableTypeList($tab.find('[name=receivableType]'));
 
@@ -318,6 +329,36 @@ define(function(require, exports) {
                 }
             });
         })
+    };
+
+
+     /**
+     * [loadResTypeSelect 会计科目加载资源]
+     * @param  {[type]} resTypeText [会计科目Text]
+     * @param  {[type]} $container  [容器]
+     * @return {[type]}             [description]
+     */
+    offsetByDetail.loadResTypeSelect =function(resTypeText, $container){
+        if (resTypeText==="预收账款" || resTypeText==="预付账款") {
+                $container.find('.T-resType').removeClass('hidden');
+                $container.find('[name=resourceType]').addClass('T-resourceType');
+            }else{
+                $container.find('.T-resType').addClass('hidden');
+                $container.find('[name=resourceType]').removeClass('T-resourceType');
+            }
+        var resPayTypeList=[{id:'20',name:'酒店'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],resTypeOption='';
+        if (resTypeText==="预付账款") {
+           for(var i = 0; i < resPayTypeList.length; i++){
+             resTypeOption+="<option  value=" + resPayTypeList[i].id + ">" + resPayTypeList[i].name + "</option>";
+           }
+        }
+        if (resTypeText==="预收账款") {
+            for(var i = 0; i < resRecTypeList.length; i++){
+             resTypeOption+="<option  value=" + resRecTypeList[i].id + ">" + resRecTypeList[i].name + "</option>";
+           }
+        }
+        $container.find(".T-resourceType").html(resTypeOption);
+        $container.find('input[name=resourceName]').val('').next().val('');
     };
 
     /**

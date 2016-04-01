@@ -21,7 +21,12 @@
             {{/each}}
         {{/if}}
     </td>
-    <td><a href="javascript:void(0)" class="T-action T-payedDetail"><span>社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span>,导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+    <td class="align-left">
+        <a href="javascript:void(0)" class="T-action T-payedDetail">
+            <span class="in-block">社收:<span class="F-float F-money">{{checking.transGetedMoney}}</span></span>
+            <span class="in-block">导游现收:<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span>
+        </a>
+    </td>
     <td><span class="F-float F-money">{{checking.backMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
     <td><span class="F-float F-money">{{checking.unIncomeMoney}}</span></td>
