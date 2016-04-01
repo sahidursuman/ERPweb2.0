@@ -10,6 +10,7 @@
      </div>
      <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
 {{/each}}
+<input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">房</span>
         <button class="btn btn-sm btn-success T-add-hotel"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
@@ -33,7 +34,7 @@
                 <th class="th-border" style="width: 100px">操作</th>
             </tr>
         </thead>
-        <tbody class="T-hotel-plan">
+        <tbody class="T-hotel-plan" id="hotelplan_body">
         {{each outHotelList as outHotel}}
             <tr data-entity-id="{{outHotel.outHotelId}}">
                 <td>
@@ -71,7 +72,7 @@
                 </td>
                 <td>
                     <input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoomType}}" type="text" />
-                    <input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoomId}}" />
+                    <input type="hidden" name="hotelRoomId" value="{{outHotel.hotelRoomId}}" />
                 </td>
                 <td>
                     <input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9" value="{{outHotel.price}}" type="text" />
@@ -101,5 +102,11 @@
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
         <button class="btn btn-sm btn-primary mar-r-20 {{if unifyId}} T-hotel-already {{else}}T-hotel-save {{/if}}"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+        <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
+            <label>
+                <input name="status" type="checkbox" class="ace T-hotel-status" {{if status == 3}}checked{{/if}}>
+                <span class="lbl font-w"> 房安排完成完成</span>
+            </label>
+        </span>
     </div>
 </div>

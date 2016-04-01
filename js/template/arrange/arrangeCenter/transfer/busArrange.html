@@ -10,6 +10,7 @@
      </div>
      <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
 {{/each}}
+<input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">车</span>
         <button class="btn btn-sm btn-success T-add-bus"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
@@ -35,7 +36,7 @@
             </tr>
         </thead> 
         <tbody class="T-bus-plan" id="busplan_body">
-        {{each outRemarkList as outBus}}
+        {{each  as outBus}}
             {{if outBus.id != null}}
             <tr entity-id="{{outBus.outRemarkId}}">
                 <td>

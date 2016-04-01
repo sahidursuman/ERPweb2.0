@@ -79,6 +79,21 @@ define(function(require, exports) {
         }
     };
 
+    Transfer.mergeArrange = function($mergeBtn)  {
+        switch($mergeBtn.closest('.tab-pane').data('target')) {
+            case 'bus': 
+                Transfer._mergeArrangeBus();
+                break;
+            case 'hotel':
+                Transfer._mergeArrangeHotel();
+                break;
+            default:break;
+        }
+    }
+
+    /**
+    * 获取未安排Id
+    **/
     Transfer.setArrangeId = function($checkBox) {
         var target = $checkBox.closest('.tab-pane').data('target'),
             checked = $checkBox[0].checked,
@@ -115,7 +130,8 @@ define(function(require, exports) {
                 }
             }
         }
-        // console.info(IdList);
+        
+        $checkBox.closest('.tab-pane').find('.T-merge-arrange').prop('disabled', IdList.length === 0);
     }
 
     /**
@@ -196,6 +212,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
+                    data.canMergeArrange = false;
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.busArrangeIdArray && Transfer.busArrangeIdArray.length)  {
                         for (var i = 0, len = data.outRemarkArrangeList.length, tmp; i < len; i ++)  {
@@ -204,6 +221,7 @@ define(function(require, exports) {
                             for (var j = 0, jLen = Transfer.busArrangeIdArray.length;j < jLen; j ++ ) {
                                 if (tmp.id == Transfer.busArrangeIdArray[j].outRemarkId)  {
                                     tmp.checked = true;
+                                    data.canMergeArrange = true;
                                     break;
                                 }
                             }
@@ -213,7 +231,6 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
-                    Transfer.buslistclick($container);
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -247,6 +264,8 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
+                    data.canMergeArrange = false;
+
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length)  {
                         for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i ++)  {
@@ -254,6 +273,7 @@ define(function(require, exports) {
 
                             for (var j = 0, jLen = Transfer.hotelArrangeIdArray.length;j < jLen; j ++ ) {
                                 if (tmp.id == Transfer.hotelArrangeIdArray[j].outRemarkId)  {
+                                    data.canMergeArrange = true;
                                     tmp.checked = true;
                                     break;
                                 }
@@ -346,76 +366,30 @@ define(function(require, exports) {
             });
         }
     };
-
+     
      /**
-     * 车安排事件
-     * @param  {object} $arrange 安排按钮
+     * 统一车安排事件
      * @return {[type]}          [description]
      */
-     Transfer.buslistclick = function($container,id){
-        $container.find('.T-cheked').on('click',function(){
-            var $that = $(this),$tr = $that.closest('tr'),outRemarkId=$that.closest('tr').data('id');
-                shuttleType= $tr.find("input[name=shuttleType]").val();
-            // 统一安排事件绑定
-            if($that.is(':checked')){
-                var transitJson = {
-                    outRemarkId : outRemarkId,
-                    shuttleType : shuttleType
-                };
-                Transfer.transitIds.push(transitJson);
-            }else{
-                for (var i = 0; i < Transfer.transitIds.length; i++) {
-                    if (Transfer.transitIds[i].outRemarkId==outRemarkId) {
-                        Transfer.transitIds.splice(i,1);
-                        break;
-                   } 
+    Transfer._mergeArrangeBus = function(){
+        var outRemarkList = JSON.stringify(Transfer.busArrangeIdArray);
+        $.ajax({
+            url: KingServices.build_url(service_name, "outBusUnifyArrange"),
+            type: "POST",
+            data:{outRemarkList:outRemarkList},
+            success: function(data) {
+                var result  = showDialog(data);
+                if (result) {
+                     var html = BusArrangeTemplate(data);
+                    addTab(busplanId, '车安排', html);
+                    Transfer.$busplanId = $("#tab-" + busplanId + "-content");
+                    $busplanId = Transfer.$busplanId
+                    Transfer.$checkJson = Transfer.$busviewId;
+                    Transfer.busplanclick($busplanId,outRemarkList.outRemarkId,outRemarkList.shuttleType);//车安排事件
+                    
                 }
             }
         })
-        //分页勾选效果
-        for (var i = 0; i < Transfer.transitIds.length; i++) {
-              var transitId = Transfer.transitIds[i].id,$trList=$container.find('.T-bus-list').find('tr');
-              $trList.each(function(index) {
-                  var outRemarkId = $trList.eq(index).data('id');
-                  if (!!outRemarkId && !!transitId && id == transitId) {
-                      $trList.eq(index).find('.T-cheked').prop('checked', true);
-                  };
-              });
-        }
-        //统一安排事件
-        $container.find('.T-start-merge').on('click',function(){
-             Transfer.busunify($container);
-        })
-     }
-     /**
-     * 统一车安排事件
-     * @param  {object} $container 安排按钮
-     * @return {[type]}          [description]
-     */
-    Transfer.busunify = function($container){
-        if (!!Transfer.transitIds && Transfer.transitIds.length>0) {
-            var outRemarkList=Transfer.transitIds;
-            var outRemarkList = JSON.stringify(outRemarkList);
-            $.ajax({
-                url: KingServices.build_url(service_name, "outBusUnifyArrange"),
-                type: "POST",
-                data:{outRemarkList:outRemarkList},
-                success: function(data) {
-                    var result  = showDialog(data);
-                    if (result) {
-                         var html = BusArrangeTemplate(data);
-                        addTab(busplanId, '车安排', html);
-                        Transfer.$busplanId = $("#tab-" + busplanId + "-content");
-                        $busplanId = Transfer.$busplanId
-                        Transfer.$checkJson = Transfer.$busviewId;
-                        Transfer.busplanclick($busplanId,outRemarkList.outRemarkId,outRemarkList.shuttleType);//车安排事件
-                        
-                    }
-                }
-            })
-        } else {
-            showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
-        }
     }
     /**
      * 车队安排事件
@@ -447,10 +421,10 @@ define(function(require, exports) {
 
     }
      //安排未安排保存
-    Transfer.submitbus = function($tab,shuttleType){
+    Transfer.submitbus = function($tab){
+        var shuttleType = $tab.find('[name=shuttleType]').val();
         var outBusList = Tools.getTableVal($('#busplan_body'), 'id');//车安排列表
             outBusList = JSON.stringify(outBusList);
-            // status = Transfer.getValue($tab,'status'),
             outRemarkList = [],//中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
             outRemarkId = $tab.find('input[name=outRemarkId]');
@@ -469,14 +443,16 @@ define(function(require, exports) {
             type : "POST",
             data : {
                 outBusList : outBusList,
-                outRemarkList : outRemarkList
+                outRemarkList : outRemarkList,
+                shuttleType : shuttleType
             },
             success: function(data) {
                 if (showDialog(data)) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
-                        Transfer._getBusList();
+                        Transfer.busArrangeIdArray = [];
+                        Transfer._refreshList();
+                        Tools.closeTab(busplanId)
                     });
-                    Tools.closeTab(busplanId)
                  }
 
             }
@@ -823,6 +799,27 @@ define(function(require, exports) {
         });
     };
 
+    /**统一安排
+     * @return {[type]}
+     */
+    Transfer._mergeArrangeHotel = function() {
+        $.ajax({
+            url: KingServices.build_url(service_name, "outHotelUnifyArrange"),
+            type: "POST",
+            data: {
+                outRemarkList:JSON.stringify(Transfer.hotelArrangeIdArray)
+            },
+            success: function(data) {
+                if (showDialog(data)) {
+                    var html = HotelArrangeTemplate(data);
+                    addTab(hotelplanId, '房安排', html);
+                    Transfer.$hotelplanId = $("#tab-" + hotelplanId + "-content");
+                    $hotelplanId = Transfer.$hotelplanId;
+                    Transfer.hotelplanclick($hotelplanId);
+                }
+            }
+        });
+    }
 
     /**
      * 安排房
@@ -851,6 +848,7 @@ define(function(require, exports) {
             });
         }
     };
+
     /**
      * 安排房事件
      * @param  {object} $hotelplanId 安排按钮
@@ -867,7 +865,7 @@ define(function(require, exports) {
         })
         //保存房未安排事件
         $hotelplanId.find('.T-hotel-save').on('click',function(){
-            Transfer.submitbus($hotelplanId,shuttleType);
+            Transfer.submithotel($hotelplanId);
         });
         //新增房
         $hotelplanId.find('.T-add-hotel').on('click',function(){
@@ -879,6 +877,45 @@ define(function(require, exports) {
         });
 
     }
+    //安排未安排房保存
+    Transfer.submithotel = function($hotelplanId){
+        var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
+        console.log(shuttleType)
+        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id');//车安排列表
+            outHotelList = JSON.stringify(outHotelList);
+            outRemarkList = [],//中转列表 Id
+            $tr = $hotelplanId.find('.T-bus-plan tr'),
+            outRemarkId = $hotelplanId.find('input[name=outRemarkIds]');
+            outRemarkId.each(function(){
+                if($(this).val().trim()){
+                 var outRemarkJson = {
+                     outRemarkId : $(this).val(),
+                     shuttleType : shuttleType
+                 }
+                 outRemarkList.push(outRemarkJson);
+                 }
+            })
+            outRemarkList = JSON.stringify(outRemarkList);
+        $.ajax({
+            url : KingServices.build_url(service_name, "saveOutHotelUnifyArrange"),
+            type : "POST",
+            data : {
+                outHotelList : outHotelList,
+                outRemarkList : outRemarkList,
+                shuttleType : shuttleType
+            },
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        Transfer.hotelArrangeIdArray = [];
+                        Transfer._refreshList('hotel');
+                        Tools.closeTab(hotelplanId)
+                    });
+                 }
+
+            }
+        })
+    };
     /**
      * 酒店autocomplete
      * @param  {[type]} tab       [容器]
@@ -893,7 +930,7 @@ define(function(require, exports) {
             parentObj.find("input[name=hotelName]").val("");
             parentObj.find("input[name=hotelId]").val("");
             parentObj.find("input[name=hotelRoomType]").val("");
-            parentObj.find("input[name=hotelRoomTypeId]").val("");
+            parentObj.find("input[name=hotelRoomId]").val("");
             parentObj.find("input[name=hotelMobileNumber]").val("");
             parentObj.find("input[name=hotelManagerName]").val("");
             parentObj.find("input[name=hotelPrice]").val("");
@@ -907,7 +944,7 @@ define(function(require, exports) {
                     var parents = $(this).closest('tr');
                     parents.find("input[name=hotelId]").val("");
                     parents.find("input[name=hotelRoomType]").val("");
-                    parents.find("input[name=hotelRoomTypeId]").val("");
+                    parents.find("input[name=hotelRoomId]").val("");
                     parents.find("input[name=hotelMobileNumber]").val("");
                     parents.find("input[name=hotelManagerName]").val("");
                     parents.find("input[name=hotelPrice]").val("");
@@ -965,13 +1002,13 @@ define(function(require, exports) {
                 if(ui.item == null){
                     $(this).val("");
                     var objParent = $(this).closest('tr');
-                    objParent.find("input[name=hotelRoomTypeId]").val("");
+                    objParent.find("input[name=hotelRoomId]").val("");
                     objParent.find("input[name=hotelPrice]").val("");
                 }
             },
             select:function(event,ui){
                 var $thisRoom =$(this).closest('tr');
-                $thisRoom.find("input[name=hotelRoomTypeId]").val(ui.item.id).trigger('change');
+                $thisRoom.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
                 var startTime=$thisRoom.find("input[name=checkInTime]").val();
                 $.ajax({
                     url: KingServices.build_url('hotel','findRoomDetailById'),
@@ -1233,7 +1270,7 @@ define(function(require, exports) {
             '<span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
             '<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
             '<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
-            '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomTypeId" value=""/></td>'+
+            '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomId" value=""/></td>'+
             '<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
             '<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
