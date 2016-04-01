@@ -187,16 +187,14 @@ define(function(require, exports) {
 		if(!!$tab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-			args = {
-				pageNo : args.pageNo || 0,
-				partnerAgencyId : Replace.$checkingTab.find('input[name=partnerAgencyId]').val(),
-				name : Replace.$checkingTab.find('input[name=partnerAgencyName]').val(),
-				orderNumber : order == '全部' ? '' : order,
-				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
-				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
-				projects : Replace.$checkingTab.find(".T-search-project").val(),
-				isConfirmAccount : Replace.$checkingTab.find(".T-check-status").find("button").data("value")
-			};
+				args.pageNo = args.pageNo || 0;
+				args.partnerAgencyId = Replace.$checkingTab.find('input[name=partnerAgencyId]').val();
+				args.name = Replace.$checkingTab.find('input[name=partnerAgencyName]').val();
+				args.orderNumber = order == '全部' ? '' : order;
+				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
+				args.projects = Replace.$checkingTab.find(".T-search-project").val();
+				args.isConfirmAccount = Replace.$checkingTab.find(".T-check-status").find("button").data("value");
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
