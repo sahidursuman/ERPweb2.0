@@ -29,16 +29,18 @@
         <thead>
             <tr class="bg-blur T-tr-fixed">
                 <th>对方单位</th>
+                <th>账款合计</th>
+                <th>冲抵合计</th>
                 <th>余额</th>
-                <th>冲抵明细</th>
             </tr>
         </thead>
         <tbody class="T-list">
             {{each result as rs}}
               <tr data-resourceId="{{rs.resourceId}}" data-resourceType="{{rs.resourceType}}">
                 <td>{{rs.resourceName}}</td>
-                <td><a class="cursor T-action T-balance">{{rs.balance}}</a></td>
-                <td><a class="cursor T-action T-viewDetails">查看</a></td>
+                <td><a class="cursor T-action T-income">{{rs.income}}</a></td>
+                <td><a class="cursor T-action T-viewDetails">{{rs.pay}}</a></td>
+                <td>{{rs.balance}}</td>
               </tr>
             {{/each}}
         </tbody>

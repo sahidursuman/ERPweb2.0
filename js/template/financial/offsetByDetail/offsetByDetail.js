@@ -85,7 +85,7 @@ define(function(require, exports) {
             var $that=$(this),
                  resourceId=$that.closest('tr').attr('data-resourceId'),
                  resourceType=$that.closest('tr').attr('data-resourceType');
-            if ($that.hasClass('T-balance')) {
+            if ($that.hasClass('T-income')) {
                 // 余额
                 offsetByDetail.offsetBlanceDetail(0,resourceId,resourceType,4);
                 
