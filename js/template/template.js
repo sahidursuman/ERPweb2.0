@@ -240,7 +240,7 @@
         options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
         start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
         options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>", 
-        1 == isBalance && (options += '<option value="6" ' + (start++ == payType ? "selected" : "") + ">冲抵</option>"), 
+        1 == isBalance && (options += '<option value="6" ' + (6 == payType ? "selected" : "") + ">冲抵</option>"), 
         options;
     }), template.helper("getArrangeIcon", function(status) {
         switch (1 * status) {

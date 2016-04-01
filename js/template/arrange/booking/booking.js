@@ -1135,6 +1135,7 @@ define(function(require, exports) {
 	BookingArrange.submitBooking = function($that, validator, tab_array){
 		var bookingOrder = {
 				id : BookingArrange.getValue($that,"id"),
+				bookingOrderNumber : BookingArrange.getValue($that,"orderNumber"),
 				partnerAgencyId : BookingArrange.getValue($that,"partnerAgencyId"),
 				contactId : BookingArrange.getValue($that,"partnerAgencyContactId"),
 				contactRealname : BookingArrange.getValue($that,"contactRealname"),
