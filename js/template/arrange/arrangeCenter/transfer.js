@@ -140,21 +140,30 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer.view = function($view)  {
-        var target = $view.closest('.tab-pane').data('target'),
-            id = $view.closest('tr').data('id');
+        var $tabPane = $view.closest('.tab-pane'),
+            target = $tabPane.data('target'),
+            id = $view.closest('tr').data('id'),
+            status = $tabPane.find('select[name="status"]').val(),
+            args = {};
 
         if (!id) {
             console.info('ID 为空，查看无效');
             return;
         }
 
+        if (status === '0') {
+            args.outRemarkId = id;
+        } else {
+            args.unifyId = id;
+        }
+
         switch(target) {
             // 中转部分
-            case 'bus':
-                Transfer._viewBus(id);
+            case 'bus':                
+                Transfer._viewBus(args);
                 break;
             case 'hotel':
-                Transfer._viewHotel(id);
+                Transfer._viewHotel(args);
                 break;
             case 'other':
                 Transfer._viewOther(id);
@@ -406,11 +415,15 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Transfer.busplanclick = function($busplanId,outRemarkId,shuttleType){
-        console.log($busplanId)
         Transfer.addResource($busplanId);//车安排弹窗
         Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
         Transfer.setDate($busplanId);//时间控件
-
+        //change触发计算
+        $busplanId.on('change', '.count, .price, .discount', function(){
+            var $that = $(this);
+            $Tr = $that.closest("tr");
+            Transfer.calculation($Tr);
+        });
         //关闭安排按钮
         $busplanId.find('.T-cancel').on('click',function(){
             Tools.closeTab(busplanId);
@@ -424,7 +437,7 @@ define(function(require, exports) {
             Transfer.addbus($busplanId);
         });
         //删除车
-        $busplanId.find('.T-contact-delete').on('click',function(){
+        $busplanId.find('.T-arrange-delete').on('click',function(){
             Transfer.deleteArrange($(this));
         });
 
@@ -872,7 +885,12 @@ define(function(require, exports) {
         Transfer.addResource($hotelplanId);//房安排弹窗
         Transfer.bindHotelChoose($hotelplanId); //房安排autocomplete列表
         Transfer.setDate($hotelplanId);//时间控件
-
+        //change触发计算
+       $hotelplanId.on('change', '.count, .price, .discount', function(){
+            var $that = $(this);
+            $Tr = $that.closest("tr");
+            Transfer.calculation($Tr);
+        });
         //关闭安排按钮
         $hotelplanId.find('.T-cancel').on('click',function(){
             Tools.closeTab(hotelplanId);
@@ -1100,49 +1118,40 @@ define(function(require, exports) {
 
     /**
      * 车查看
-     * @param  {int} id 安排ID
+     * @param  {object} args 安排ID
      * @return {[type]}    [description]
      */
-    Transfer._viewBus = function(id) {
-        if (!!id)  {
-            $.ajax({
-                url: KingServices.build_url(service_name, "getOutBusArrange"),
-                type: "POST",
-                data:{
-                    outRemarkId: id
-                },
-                success: function(data) {
-                    if (showDialog(data)) {
-                        var html = ViewBusTemplate(data);
-                        addTab(viewBusId, '车查看', html);
-                    }
+    Transfer._viewBus = function(args) {
+        $.ajax({
+            url: KingServices.build_url(service_name, "getOutBusArrange"),
+            type: "POST",
+            data:args,
+            success: function(data) {
+                if (showDialog(data)) {
+                    var html = ViewBusTemplate(data);
+                    addTab(viewBusId, '车查看', html);
                 }
-            });
-        }
-
+            }
+        });
     };
 
     /**
      * 房查看
-     * @param  {int} id 安排ID
+     * @param  {object} args 安排ID
      * @return {[type]}    [description]
      */
-    Transfer._viewHotel = function(id) {
-        if (!!id)  {
-            $.ajax({
-                url: KingServices.build_url(service_name, "getOutHotelArrange"),
-                type: "POST",
-                data:{
-                    outRemarkId: id
-                },
-                success: function(data) {
-                    if (showDialog(data)) {
-                        var html = ViewHotelTemplate(data);
-                        addTab(viewhotelId, '房查看', html);
-                    }
+    Transfer._viewHotel = function(args) {
+        $.ajax({
+            url: KingServices.build_url(service_name, "getOutHotelArrange"),
+            type: "POST",
+            data: args,
+            success: function(data) {
+                if (showDialog(data)) {
+                    var html = ViewHotelTemplate(data);
+                    addTab(viewhotelId, '房查看', html);
                 }
-            });
-        }
+            }
+        });
     };
     /**
      * 其他查看
@@ -1246,18 +1255,18 @@ define(function(require, exports) {
         '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>'+
         '<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
-        '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+        '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
         '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>'+
         '<td><input class="col-sm-12  T-dateTimePicker" name="useTime" type="text" value="" /></td>'+
         '<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
         '<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>'+
-        '<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
-        '<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
-        '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12 T-number price F-float F-money" name="fee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
+        '<td><input class="col-sm-12 T-number discount F-float F-count" name="reduceMoney"  maxlength="9" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney"  maxlength="9" type="text" value="" /></td>'+
         '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
         '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
-        '<td><a class="cursor T-contact-delete" data-catename="bus" title="删除">删除</a></td>'+
+        '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
         '</tr>';
         var $tbody = $obj.find('tbody');
         $tbody.append(html);
@@ -1285,10 +1294,10 @@ define(function(require, exports) {
             '<td><input class="col-sm-12" name="hotelManagerName" value="" readonly="readonly" type="text" /></td>'+
             '<td><input class="col-sm-12" name="hotelMobileNumber" value="" readonly="readonly" type="text" /></td>'+
             '<td><input class="col-sm-12" name="hotelRoomType" value=""  type="text" /><input type="hidden" name="hotelRoomId" value=""/></td>'+
-            '<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" value="" maxlength="9" type="text" /></td>'+
-            '<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="" type="text" /></td>'+
-            '<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
-            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number price F-float F-money" name="price" value="" maxlength="9" type="text" /></td>'+
+            '<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="" type="text" /></td>'+
+            '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>'+
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+

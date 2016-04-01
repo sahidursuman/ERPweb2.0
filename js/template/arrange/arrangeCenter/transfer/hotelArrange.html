@@ -98,20 +98,20 @@
                     <input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9" value="{{outHotel.price}}" type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" />
+                    <input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" />
+                    <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" />
+                    <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="{{outHotel.needPayMoney}}" type="text" />
                 </td>
                 <td>
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" />
                 </td>
                 <td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" /></td>
                 <td>
-                    <a class="cursor T-contact-delete" data-catename="hotel">
+                    <a class="cursor T-arrange-delete" data-catename="hotel">
                         删除
                     </a>
                 </td>
@@ -121,7 +121,7 @@
     </table>
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
-        <button class="btn btn-sm btn-primary mar-r-20 {{if unifyId}} T-hotel-already {{else}}T-hotel-save {{/if}}"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+        <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
                 <input name="status" type="checkbox" class="ace T-hotel-status" {{if status == 3}}checked{{/if}}>

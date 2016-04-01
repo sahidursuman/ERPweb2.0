@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":21,"md5":"ef45d2f9ab1f3b2a39b87ff174831f02"}*/
+/*TMODJS:{"debug":true,"version":27,"md5":"0b8fa0c3d370c4ae5b4ff780f4611f2a"}*/
 define(function(require) {
-    return require("../../../template")("arrange/transitPlan/view/hotelview", function($data, $filename) {
+    return require("/js/template/template")("arrange/transitPlan/view/hotelview", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, outRemark = $data.outRemark, $each = $utils.$each, outHotelList = $data.outHotelList, $out = ($data.view, 
             $data.$index, "");

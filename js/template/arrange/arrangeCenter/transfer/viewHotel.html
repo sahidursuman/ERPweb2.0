@@ -45,15 +45,7 @@
                     {{view.checkOutTime}}
                 </td>
                 <td>
-                    <select class="tripPlanHotelStar" name="hotelLevel" readonly="readonly">
-                        <option value="1" {{if view.hotelLevel == 1}}selected="selected"{{/if}}>三星以下</option>
-                        <option value="2" {{if view.hotelLevel == 2}}selected="selected"{{/if}}>三星</option>
-                        <option value="3" {{if view.hotelLevel == 3}}selected="selected"{{/if}}>准四星</option>
-                        <option value="4" {{if view.hotelLevel == 4}}selected="selected"{{/if}}>四星</option>
-                        <option value="5" {{if view.hotelLevel == 5}}selected="selected"{{/if}}>准五星</option>
-                        <option value="6" {{if view.hotelLevel == 6}}selected="selected"{{/if}}>五星</option>
-                        <option value="7" {{if view.hotelLevel == 7}}selected="selected"{{/if}}>五星以上</option>
-                    </select>
+                   {{view.hotelLevel  | getHotelLevelDesc}}
                 </td>
                 <td>
                     {{view.hotelName}}

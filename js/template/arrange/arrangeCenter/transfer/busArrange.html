@@ -122,7 +122,7 @@
                     <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" />
                 </td>
                 <td>
-                    <a class="cursor T-action T-contact-delete" data-catename="bus" title="删除">
+                    <a class="cursor T-action T-arrange-delete" data-catename="bus" title="删除">
                         删除
                     </a>
                 </td>
@@ -132,7 +132,7 @@
     </table>
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
-        <button class="btn btn-sm btn-primary mar-r-20 {{if unifyId}}T-busAlready-save{{else}} T-bus-save{{/if}}"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+        <button class="btn btn-sm btn-primary mar-r-20  T-bus-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <!-- <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
                 <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
