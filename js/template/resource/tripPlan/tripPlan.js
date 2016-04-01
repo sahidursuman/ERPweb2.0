@@ -594,6 +594,21 @@ define(function(require, exports) {
 			}
 		})
 
+		var setUpTourists = $tab.find('.T-setUp')
+		setUpTourists.each(function(i) {
+			var $this = setUpTourists.eq(i),
+				noticeJson = $this.attr('touristgroup');
+				
+			if (!!noticeJson && typeof noticeJson == 'string') {
+				noticeJson = JSON.parse(noticeJson);
+			}
+			if (noticeJson.length > 0) {
+				$this.text('已设置');
+			}else{
+				$this.text('点击设置');
+			}
+		})
+
 		$tab.find('.T-touristGroupList').on('click', '.T-groupView', function() {
 			var $this = $(this), $parent = $this.closest('tr'), id = $parent.data('id');
 			tripPlan.viewTouristGroup(id);
