@@ -465,7 +465,9 @@
                                             <td>
                                                 <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
                                             </td>
-                                            <td>{{if busCompany.isConfirmAccount}}<span style="color:#bbb;">已设置</span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a>{{/if}}</td>
+                                            <td>
+                                            {{if busCompany.isConfirmAccount}}
+                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a>{{/if}}</td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
                                                     <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
