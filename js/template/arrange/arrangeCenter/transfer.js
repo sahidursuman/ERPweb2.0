@@ -73,7 +73,7 @@ define(function(require, exports) {
 
 
     /**
-     * 安排入口
+     * 查看入口
      * @param  {object} $arrange 安排按钮
      * @return {[type]}          [description]
      */
@@ -270,7 +270,7 @@ define(function(require, exports) {
 
         if (!!id)  {
             $.ajax({
-                url: KingServices.build_url(service_name, "getOutBusArrange"),
+                url: KingServices.build_url(service_name, "getOutOtherArrange"),
                 type: "POST",
                 data:{
                     id: id
@@ -323,9 +323,9 @@ define(function(require, exports) {
         })
         .done(function(res) {
             if (showDialog(res)) {
-                var tab_key = tabKey + '-view-other';
+                var tab_key = tabKey + '_view_other';
 
-                if (Tools.addTab(otherViewId, '查看其他安排', ViewOtherTemplate(res))) {
+                if (Tools.addTab(tab_key, '查看其他安排', ViewOtherTemplate(res))) {
                     $('#tab-' + tab_key + '-content').find('.T-close').on('click', function(event) {
                         event.preventDefault();
 
@@ -493,7 +493,8 @@ define(function(require, exports) {
             if (showDialog(res)) {
                 // 刷新其他的安排列表
                 showMessageDialog($( "#confirm-dialog-message" ),res.message,function(){
-                    Tools.closeTab(Tools.getTabKey($tab));
+                    Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+                    // Transfer.refreshList();
                 });
             }
         });
@@ -682,6 +683,15 @@ define(function(require, exports) {
                 }
             });
         });
+    };
+
+    //计算
+    Transfer.calculation = function($obj){
+        var count = $obj.find(".count").val() || 0,
+            price = $obj.find(".price").val() || 0,
+            discount = $obj.find(".discount").val() || 0,
+            needPay = (count * price)-discount;
+        $obj.find(".needPay").val(needPay);
     };
 
     return Transfer;
