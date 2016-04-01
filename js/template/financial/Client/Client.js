@@ -11,6 +11,7 @@ define(function(require, exports) {
         receivedTemplate = require('./view/received'),
         detailsTemplate = require('./view/details'),
         touristsTemplate = require('./view/tourists'),
+        feeDetailsTemplate = require('./view/feeDetails'),
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
         tabId = "tab-"+menuKey+"-content";
@@ -234,6 +235,7 @@ define(function(require, exports) {
                         $tab.data('isEdited',true);
                     }
                     Client.initCheck($tab,args);
+                    Client.viewFeeDetails($tab,resultList);
                 } else {
                     Client.$checkTab.data("next",args);
                 }
@@ -525,13 +527,10 @@ define(function(require, exports) {
                     var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
-                    if(resultList[i].status == 5){
-                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
-                    } else {
-                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
-                    }
+                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
+                data.customerAccountList = resultList; 
                 if(Client.clearDataArray){
                     data = Client.pushClearData(data);
                 }
@@ -544,7 +543,8 @@ define(function(require, exports) {
                     if(args.isAutoPay){
                         Client.setAutoFillEdit($tab,true);
                     }
-                    Client.initClear($tab,args);  
+                    Client.initClear($tab,args);
+                    Client.viewFeeDetails($tab,resultList);  
                 } else {
                     Client.$clearTab.data('next', args);
                 }                  
@@ -1111,6 +1111,26 @@ define(function(require, exports) {
             }
         }).on("click",function(){
             $obj.autocomplete('search','');
+        });
+    };
+
+    //费用明细
+    Client.viewFeeDetails = function($tab,resultList){
+        $tab.find('.T-viewFeeDetails').off().on("click",function(){
+            var index = $(this).data("index"),
+                viewData = {
+                    transitFeeList : resultList[index].detailList.transitFee.transitFeeList,
+                    otherFee : resultList[index].detailList.otherFee
+                };
+            layer.open({
+                type: 1,
+                title:"费用明细",
+                skin: 'layui-layer-rim', 
+                area: '1024px', 
+                zIndex:1028,
+                content: feeDetailsTemplate(viewData),
+                scrollbar: false
+            });
         });
     };
 
