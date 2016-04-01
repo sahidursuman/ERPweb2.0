@@ -78,7 +78,7 @@
         <tbody class="T-checkList" data-right="1220005">
             {{each financialHotelListData as rs}}
 		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}data-change="true"{{/if}}>
-				<td class="h-touristGroupInfo">{{rs.title}}</td>
+				<td class="h-touristGroupInfo">{{#rs.title}}</td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
 				<td><span class="F-float F-money">{{rs.price}}</span></td>
