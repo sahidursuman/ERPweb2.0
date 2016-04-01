@@ -206,7 +206,7 @@ template.helper("getPayTypeOptions", function(payType,isBalance) {
     options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
     if (isBalance==1) {
-        options += '<option value="6" '+ (start++ == payType?'selected':'') +'>冲抵</option>';
+        options += '<option value="6" '+ (6 == payType?'selected':'') +'>冲抵</option>';
     }
     return options;
 });
