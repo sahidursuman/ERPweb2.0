@@ -2,7 +2,7 @@
 <tr data-id="{{rs.id}}">
 	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>
 	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
-	<td>{{rs.outOPUser}}</td>
+	<td>{{if rs.outOPUser}}{{rs.outOPUser.realName}}{{else}}-{{/if}}</td>
 	<td>{{if !!rs.businessGroup}}{{rs.businessGroup.name}}{{/if}}-{{if rs.group}}{{rs.group.name}}{{/if}}</td>
 	<td>
 		{{if rs.financialHotel == ""}}
