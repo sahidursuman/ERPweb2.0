@@ -139,14 +139,7 @@
         <tbody class="T-clearList">
             {{each financialHotelListData as rs}}
             <tr data-id="{{rs.id}}">
-                <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
-                        {{if rs.lineProductName || rs.guideName}}，{{/if}}
-                    {{/if}}
-                    {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}}
-                        {{if rs.guideName}}，{{/if}}
-                    {{/if}}
-                    {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
-                </td>
+                <td>{{rs.title}}</td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.price}}</span></td>

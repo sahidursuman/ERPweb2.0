@@ -29,7 +29,7 @@
 				</thead>
 				<tbody class="T-team-info">
 					<tr>
-						<td>{{baseInfo.fromPartnerAgency}}</td>
+						<td>{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）</td>
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime}}</td>
 						<td>{{baseInfo.endTime}}</td>
@@ -68,7 +68,7 @@
 	                    <td><a class="hct-cursor T-action T-bus F-float F-money" data-json="{{rs.receiveBus}}">{{rs.busNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-hotel F-float F-money" data-json="{{rs.receiveHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-other F-float F-money" data-json="{{rs.receiveOther}}">{{rs.otherNeedPayAllMoney}}</a></td>
-	                    <td><span class="F-float F-money">{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}</span></td>
+	                    <td><span class="F-float F-money">{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}</span></td>
                     </tr>
 				{{/each}}
 				</tbody>
@@ -108,7 +108,7 @@
 						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
 						{{if baseInfo.customerType == 0}}
 						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelNeedPayAllMoney}}</a></td>
-						<td>{{rs.hotelNeedPayAllMoney + rs.lineNeedPayAllMoney}}</td>
+						<td>{{(rs.hotelNeedPayAllMoney || 0)*1 + (rs.lineNeedPayAllMoney || 0)*1}}</td>
 						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
 						{{/if}}
 						<td>{{rs.status | getPartGroupStatusText}}</td>
@@ -147,7 +147,7 @@
 	                    <td><a class="hct-cursor T-action T-bus" data-json="{{rs.sendBus}}">{{rs.busNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-hotel" data-json="{{rs.sendHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-other" data-json="{{rs.sendOther}}">{{rs.otherNeedPayAllMoney}}</a></td>
-	                    <td><span class="F-float F-money">{{rs.busNeedPayAllMoney + rs.hotelNeedPayAllMoney + rs.otherNeedPayAllMoney}}</span></td>
+	                    <td><span class="F-float F-money">{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}</span></td>
                     </tr>
 				{{/each}}
 				</tbody>
