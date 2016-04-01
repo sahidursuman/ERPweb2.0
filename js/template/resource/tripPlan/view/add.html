@@ -315,7 +315,7 @@
                                     <td>
                                         <input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"　{{if guide.isConfirmAccount}} disabled="disabled" {{/if}}>
                                     </td>
-                                    <td>{{#guide.taskType | getTaskSelect}}</td>
+                                    <td>{{#guide.taskType | getTaskSelect: false, guide.isConfirmAccount}}</td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
                                             <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
@@ -341,8 +341,8 @@
                                         <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
-                                        {{if (!guide.isConfirmAccount || basicInfo.status != 1 || guide.isAccountGuide != 1)}}
-                                        <a class="cursor {{if guide.isConfirmAccount}}T-btn-deleteTripPlanList{{else}}gray{{/if}}" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="{{if guide.isConfirmAccount}}财务已对账，不可删除{{else}}删除{{/if}}">
+                                        {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
+                                        <a class="cursor {{if !guide.isConfirmAccount}}T-btn-deleteTripPlanList{{else}}gray{{/if}}" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="{{if guide.isConfirmAccount}}财务已对账，不可删除{{else}}删除{{/if}}">
                                                 删除
                                         </a> {{/if}}
                                     </td>
@@ -623,7 +623,7 @@
                                         <td>
                                             <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption}}
+                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption: restaurant.isConfirmAccount}}
                                             <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
                                         <td>
@@ -700,7 +700,7 @@
                                 <tbody>
                                     {{each hotelList as hotel}} {{if hotel != "[]" || hotel != null}}
                                     <tr {{if hotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}} data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId="{{hotel.hotel.id}}" data-entity-roomId="{{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}} {{/if}}" data-entity-offerId="{{hotel.offerId}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}">
-                                        <td class="T-whichDaysContainer T-whichDays" value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}  data-isconfirmaccount="{{hotel.isConfirmAccount}}"></td>
+                                        <td class="T-whichDaysContainer T-whichDays" value="{{hotel.whichDay}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}"  data-isconfirmaccount="{{hotel.isConfirmAccount}}"></td>
                                         <td>
                                             <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.isConfirmAccount || hotel.qouteId!=null}}disabled="disabled" {{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
                                                 {{if hotel.hotel !=null}}
@@ -749,7 +749,7 @@
                                         <td>
                                             <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption}}
+                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption: hotel.isConfirmAccount}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
@@ -877,7 +877,7 @@
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td class="inline-flex">
-                                            {{#scenic.payType | getPlanPayTypeOption}}
+                                            {{#scenic.payType | getPlanPayTypeOption: scenic.isConfirmAccount}}
                                             <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
@@ -1074,7 +1074,7 @@
                                         <td>
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption}}
+                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption: selfPay.isConfirmAccount}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
@@ -1196,7 +1196,7 @@
                                         <td>
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption}}
+                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption: ticket.isConfirmAccount}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
@@ -1290,7 +1290,7 @@
                                         <td>
                                             <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption}}
+                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption: other.isConfirmAccount}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
