@@ -244,11 +244,9 @@ define(function(require, exports){
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
-					    			$container.find('.T-resType').addClass('hidden');
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
-					    			$container.find('.T-resType').removeClass('hidden');
 					    		}
 					    	});
 
@@ -278,10 +276,17 @@ define(function(require, exports){
 					    			Payment.submitPayment();
 					    		}
 					    	})
-					    	.on("click",".T-subject",function(){
+					    	.on("change",".T-subject",function(){
 					    		var subjectName = $(this).find("option:selected").text();
 					    		$container.find('input[name=subjectName]').val(subjectName);
+					    		if (subjectName==="预收账款" || subjectName==="预付账款") {
+					    			$container.find('.T-resType').removeClass('hidden');
+					    		}else{
+					    			$container.find('.T-resType').addClass('hidden');
+					    		}
+					    		Payment.loadResTypeSelect(subjectName,$container);
 					    	});
+					    	$container.find('.T-subject').trigger('change');
 
 					    	//获取对方单位
 					    	Payment.getResourceList($container.find('[name=resourceName]'),$container);
@@ -392,12 +397,32 @@ define(function(require, exports){
 			}
 			$container.find(".T-subject").html(subjectHtml);
 			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+			Payment.loadResTypeSelect(subList[0].subjectName, $container);
 		} else {
 			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
 				$container.find(".T-subject").html("");
 				$container.find("input[name=subjectName]").val("");
 			});
 		}
+
+
+
+	};
+    
+    //加载对应的资源类型
+	Payment.loadResTypeSelect =function(resTypeText, $container){
+		var resPayTypeList=[{id:'20',name:'酒店'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],resTypeOption='';
+		if (resTypeText==="预付账款") {
+		   for(var i = 0; i < resPayTypeList.length; i++){
+			 resTypeOption+="<option  value=" + resPayTypeList[i].id + ">" + resPayTypeList[i].name + "</option>";
+		   }
+		}
+		if (resTypeText==="预收账款") {
+		    for(var i = 0; i < resRecTypeList.length; i++){
+			 resTypeOption+="<option  value=" + resRecTypeList[i].id + ">" + resRecTypeList[i].name + "</option>";
+		   }
+		}
+		$container.find(".T-resourceType").html(resTypeOption);
 	};
 
 	Payment.submitPayment = function(){

@@ -1960,6 +1960,11 @@ p#back-top a span {
     /*background-color: red;*/
     font-size: 12px;
 }
+.view-accountsPrint th{
+    border: 1px solid #E2E2E2 !important;
+    font-weight: normal !important;
+    color: #393939 !important;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -2721,5 +2726,12 @@ a.gray span{
     #tab-financial_count-outDetail-content {
         width: auto !important;
         padding: 40px !important;
+    }
+
+    .view-accountsPrint th{
+        font-family: '微软雅黑';
+        font-size: 13px !important;
+        font-weight: normal !important;
+        color: #707070 !important;
     }
 }
