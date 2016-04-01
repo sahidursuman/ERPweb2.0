@@ -9,6 +9,8 @@ define(function(require, exports) {
         BusArrangedListTemplate = require('./transfer/busArrangedList'),
         BusArrangeTemplate = require('./transfer/busArrange'),
         ViewBusTemplate = require('./transfer/viewBus'),
+        busplanId = "tab-" + tabKey + "-busplan",
+        viewBusId = "tab-" + tabKey + "-viewBus",
 
         HotelListTemplate = require('./transfer/hotelList'),
         HotelArrangedListTemplate = require('./transfer/hotelArrangedList'),
@@ -19,7 +21,9 @@ define(function(require, exports) {
         OtherArrangeTemplate = require('./transfer/otherArrange'),
         ViewOtherTemplate = require('./transfer/viewOther'),
 
-        Transfer = {},
+        Transfer = {
+            transitIds :[]
+        },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
 
@@ -109,7 +113,6 @@ define(function(require, exports) {
      */
     Transfer._getBusList = function($searchFrom, page) {
         var args = $searchFrom.serializeJson();
-
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
@@ -122,7 +125,7 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
-
+                    Transfer.buslistclick($container);
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -227,15 +230,495 @@ define(function(require, exports) {
                 url: KingServices.build_url(service_name, "getOutBusArrange"),
                 type: "POST",
                 data:{
-                    unifyId: id
+                    outRemarkId: id
                 },
                 success: function(data) {
                     if (showDialog(data)) {
+                        var html = BusArrangeTemplate(data);
+                        addTab(busplanId, '车安排', html);
+                        Transfer.$busplanId = $("#tab-" + busplanId + "-content");
+                        $busplanId = Transfer.$busplanId
+                        Transfer.$checkJson = Transfer.$busviewId;
+                        Transfer.busplanclick($busplanId);//车安排事件
                     }
                 }
             });
         }
     };
+
+     /**
+     * 车安排事件
+     * @param  {object} $arrange 安排按钮
+     * @return {[type]}          [description]
+     */
+     Transfer.buslistclick = function($container,id){
+        $container.find('.T-cheked').on('click',function(){
+            var $that = $(this),$tr = $that.closest('tr'),
+                shuttleType= $tr.find("input[name=shuttleType]").val();
+            // 统一安排事件绑定
+            var $that=$(this),outRemarkId=$that.closest('tr').data('id');
+            if($that.is(':checked')){
+                var transitJson = {
+                    outRemarkId : outRemarkId,
+                    shuttleType : shuttleType
+                };
+                Transfer.transitIds.push(transitJson);
+            }else{
+                for (var i = 0; i < Transfer.transitIds.length; i++) {
+                    if (Transfer.transitIds[i].outRemarkId==outRemarkId) {
+                        Transfer.transitIds.splice(i,1);
+                        break;
+                   } 
+                }
+            }
+        })
+        //分页勾选效果
+        for (var i = 0; i < Transfer.transitIds.length; i++) {
+              var transitId = Transfer.transitIds[i].id,$trList=$container.find('.T-bus-list').find('tr');
+              $trList.each(function(index) {
+                  var outRemarkId = $trList.eq(index).data('id');
+                  if (!!outRemarkId && !!transitId && id == transitId) {
+                      $trList.eq(index).find('.T-cheked').prop('checked', true);
+                  };
+              });
+        }
+        //统一安排事件
+        $container.find('.T-start-merge').on('click',function(){
+             Transfer.busunify($container);
+        })
+     }
+     /**
+     * 统一车安排事件
+     * @param  {object} $container 安排按钮
+     * @return {[type]}          [description]
+     */
+    Transfer.busunify = function($container){
+        if (!!Transfer.transitIds && Transfer.transitIds.length>0) {
+            var outRemarkList=Transfer.transitIds;
+            var outRemarkList = JSON.stringify(outRemarkList);
+            $.ajax({
+                url: KingServices.build_url(service_name, "outBusUnifyArrange"),
+                type: "POST",
+                data:{outRemarkList:outRemarkList},
+                success: function(data) {
+                    var result  = showDialog(data);
+                    if (result) {
+                         var html = BusArrangeTemplate(data);
+                        addTab(busplanId, '车安排', html);
+                        Transfer.$busplanId = $("#tab-" + busplanId + "-content");
+                        $busplanId = Transfer.$busplanId
+                        Transfer.$checkJson = Transfer.$busviewId;
+                        Transfer.busplanclick($busplanId,outRemarkList.outRemarkId,outRemarkList.shuttleType);//车安排事件
+                        
+                    }
+                }
+            })
+        } else {
+            showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
+        }
+    }
+    /**
+     * 车队安排事件
+     * @param  {[type]} $busplanId [容器]
+     * @return {[type]}      [description]
+     */
+    Transfer.busplanclick = function($busplanId,outRemarkId,shuttleType){
+        console.log($busplanId)
+        Transfer.addResource($busplanId);//车安排弹窗
+        Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
+        Transfer.setDate($busplanId);//时间控件
+
+        //关闭安排按钮
+        $busplanId.find('.T-cancel').on('click',function(){
+            Tools.closeTab(busplanId);
+        })
+        //保存车未安排事件
+        $busplanId.find('.T-bus-save').on('click',function(){
+            Transfer.submitbus($busplanId,shuttleType);
+        });
+        //新增车
+        $busplanId.find('.T-add-bus').on('click',function(){
+            Transfer.addbus($busplanId);
+        });
+
+    }
+     //安排未安排保存
+    Transfer.submitbus = function($tab,shuttleType){
+        var outBusList = Tools.getTableVal($('#busplan_body'), 'id');//车安排列表
+            outBusList = JSON.stringify(outBusList);
+            // status = Transfer.getValue($tab,'status'),
+            outRemarkList = [],//中转列表 Id
+            $tr = $tab.find('.T-bus-plan tr'),
+            outRemarkId = $tab.find('input[name=outRemarkId]');
+            outRemarkId.each(function(){
+                if($(this).val().trim()){
+                 var outRemarkJson = {
+                     outRemarkId : $(this).val(),
+                     shuttleType : shuttleType
+                 }
+                 outRemarkList.push(outRemarkJson);
+                 }
+            })
+            outRemarkList = JSON.stringify(outRemarkList);
+        $.ajax({
+            url : KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
+            type : "POST",
+            data : {
+                outBusList : outBusList,
+                outRemarkList : outRemarkList
+            },
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        Transfer._getBusList();
+                    });
+                    Tools.closeTab(busplanId)
+                 }
+
+            }
+        })
+    };
+
+     /**
+     * 车队安排弹窗事件
+     * @param  {[type]} $busplanId [容器]
+     * @return {[type]}      [description]
+     */
+    Transfer.addResource = function($busplanId){
+        $busplanId.find(".T-addBusCompanyResource").off('click').on("click",{function : KingServices.addBusCompany}, KingServices.addResourceFunction);
+        $busplanId.find(".T-addHotelResource").off('click').on("click",{function : KingServices.addHotel , type : "tr" , name : "hotelName" , id : "hotelId" , managerName : "hotelManagerName" , mobileNumber : "hotelMobileNumber"}, KingServices.addResourceFunction);
+        $busplanId.find(".T-addTicketResource").off('click').on("click",{function : KingServices.addTicket , type : "tr" , name : "ticketName" , id : "ticketId"}, KingServices.addResourceFunction);
+        $busplanId.find(".T-addRestaurantResource").off('click').on("click",{function : KingServices.addRestaurant , type : "tr" , name : "restaurant" , id : "restaurantId" , managerName : "manager" , mobileNumber : "mobileNumber"}, KingServices.addResourceFunction);
+        
+        $busplanId.find(".T-addBusResource,.T-addDriverResource").off('click').on("click",{
+            function : KingServices.addBusDriver,
+            busCompanyName : "busCompanyName",
+            busCompanyId : "busCompanyId",
+            busLicenseNumberId : "busLicenseNumberId",
+            busLicenseNumber : "busLicenseNumber",
+            busbrand : "busbrand",
+            seatCount : "seatCount",
+            driverName : "driverName",
+            driverId : "driverId",
+            driverMobileNumber : "MobileNumber",
+            type : "tr"
+        }, KingServices.addBusDriverFunction);
+    }
+     /**
+     * 车队autocomplete
+     * @param  {[type]} $busplanId [容器]
+     * @return {[type]}      [description]
+     */
+    Transfer.bindBusCompanyChoose = function($busplanId){
+        function clearData($tr, start) {
+            switch(start) {
+                case 'brand':
+                    $tr.find('input[name="busbrand"]').val('');
+                case 'licenseNumber':
+                    $tr.find('input[name="busLicenseNumber"]').val('');
+                    $tr.find('input[name="busLicenseNumberId"]').val('');
+                case 'CompanyName':
+                    $tr.find('input[name="busCompanyName"]').val('');
+                    $tr.find('input[name="busCompanyId"]').val('');
+                    $tr.find('input[name="mobileNumber"]').val('');
+                case 'driverName':
+                    $tr.find('input[name="driverName"]').val('');
+                    $tr.find('input[name="driverId"]').val('');
+                    $tr.find('input[name="driverMobileNumber"]').val('');
+                default: break;
+            }
+        }
+
+        function checkBusCompay($tr, start) {
+            setTimeout(function() {
+                var searchJson = {
+                    seatCount:$tr.find('input[name=seatCount]').val(),
+                    brand: $tr.find('input[name=busbrand]').val(),
+                    busId: $tr.find('input[name=busLicenseNumberId]').val(),
+                    busCompanyId:$tr.find('input[name=busCompanyId]').val()
+                };
+                $.ajax({
+                    url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+                    showLoading:false,
+                    type: 'post',
+                    data: searchJson,
+                })
+                .done(function(data) {
+                    if(showDialog(data)){
+                        data.busCompanyList = JSON.parse(data.busCompanyList);
+                        if (!data.busCompanyList || !data.busCompanyList.length) {
+                            clearData($tr, start);
+                        }
+                    }
+                });
+            }, 10);
+        }
+
+        //选择车座位数
+        var chooseSeatCount = $busplanId.find(".T-chooseSeatCount");
+        chooseSeatCount.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('tr');
+                    $this.val("");
+                    clearData(parents, 'brand');
+                }
+            },
+            select :function(event, ui){
+                var $this = $(this),parents = $(this).closest('tr');
+                checkBusCompay($(this).blur().closest('tr'), 'brand');
+            }
+        }).unbind("click").click(function(){
+            var obj = this, $tr = $(this).closest('tr');
+            $.ajax({
+                url: KingServices.build_url('bookingOrder','getSeatCountList'),
+                showLoading: false,
+                data:{
+                    brand:$tr.find("input[name=busbrand]").val(),
+                    busCompanyId:$tr.find("input[name=busCompanyId]").val()
+                },
+                success:function(data){
+                    if(showDialog(data)){
+                        var seatCountListJson = [];
+                        var seatCountList = data.seatCountList;
+                        if(seatCountList && seatCountList.length > 0){
+                            for(var i=0; i < seatCountList.length; i++){
+                                var seatCount = {
+                                    value : seatCountList[i]
+                                }
+                                seatCountListJson.push(seatCount);
+                            }
+                            $(obj).autocomplete('option','source', seatCountListJson);
+                            $(obj).autocomplete('search', '');
+                        }else{
+                            layer.tips('无数据', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            })
+        })
+        //选择品牌
+        var chooseBrand = $busplanId.find(".T-chooseBusBrand");
+        chooseBrand.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('tr');
+                    $this.val("");
+                    clearData(parents, 'LicenseNumber');
+                }
+            },
+            select :function(event, ui){
+                var $this = $(this),parents = $(this).closest('tr');
+                checkBusCompay($(this).blur().closest('tr'), 'LicenseNumber');
+            }
+        }).unbind("click").click(function(){
+            var obj = this;
+            var $tr = $(this).closest('tr');
+            var seatCount = $tr.find("[name=seatCount]").val();
+                $.ajax({
+                    url: KingServices.build_url('bookingOrder','getBusBrandList'),
+                    data:{
+                        seatCount:$tr.find("[name=seatCount]").val(),
+                        busCompanyId:$tr.find("[name=busCompanyId]").val()
+                    },
+                    showLoading:false,
+                    type:"POST",
+                    success:function(data){
+                        if(showDialog(data)){
+                            var busBrandListJson = [];
+                            var busBrandList = data.busBrandList;
+                            if(busBrandList && busBrandList.length > 0){
+                                for(var i=0; i < busBrandList.length; i++){
+                                    var busBrand = {
+                                        value : busBrandList[i]
+                                    }
+                                    busBrandListJson.push(busBrand);
+                                }
+                                $(obj).autocomplete('option','source', busBrandListJson);
+                                $(obj).autocomplete('search', '');
+                            }else{
+                                layer.tips('无数据', obj, {
+                                    tips: [1, '#3595CC'],
+                                    time: 2000
+                                });
+                            }
+                        }
+                    }
+                })
+        });
+        //选择车辆
+        var chooseLicense = $busplanId.find(".T-chooseBusLicenseNumber");
+        chooseLicense.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('tr');
+                    $this.val("");
+                    clearData(parents, 'licenseNumber');
+                }
+            },
+            select :function(event, ui){
+                var $this = $(this),parents = $(this).closest('tr');
+                    parents.find("input[name=busId]").val(ui.item.id).trigger('change');
+                    checkBusCompay(parents, 'licenseNumber');
+            }
+        }).unbind("click").click(function(){
+            var obj = this,parents = $(obj).closest('tr'),
+                seatCount = parents.find("[name=seatCount]").val(),
+                busCompanyId = parents.find("[name=busCompanyId]").val(),
+                busBrand = parents.find("[name=busbrand]").val();
+                $.ajax({
+                    url: KingServices.build_url('busCompany','getLicenseNumbers'),
+                    data: {
+                        seatCount: seatCount,
+                        brand: busBrand,
+                        busCompanyId: busCompanyId
+                    },
+                    showLoading:false,
+                    type:"POST",
+                    success:function(data){
+                        if(showDialog(data)){
+                            var licenseList = JSON.parse(data.busList);
+                            if(licenseList && licenseList.length > 0){
+                                for(var i=0; i < licenseList.length; i++){
+                                    licenseList[i].value = licenseList[i].licenseNumber;
+                                }
+                                $(obj).autocomplete('option','source', licenseList);
+                                $(obj).autocomplete('search', '');
+                            }else{
+                                layer.tips('无数据', obj, {
+                                    tips: [1, '#3595CC'],
+                                    time: 2000
+                                });
+                            }
+                        }
+                    }
+                })
+        });
+        // 选择车队
+        var chooseLicense = $busplanId.find(".T-busCompanyName");
+        chooseLicense.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('tr');
+                    $this.val("");
+                    clearData($that.closest('tr'), 'CompanyName');
+            
+                }
+            },
+            select :function(event, ui){
+                var $tr = $(this).blur().closest('tr');
+                checkBusCompay($tr, 'driverName');
+                $tr.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
+                $tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+                $.ajax({
+                    url: KingServices.build_url('busCompany', 'findBusCompanyById'),
+                    type: 'post',
+                    dataType: 'json',
+                    showLoading: false,
+                    data: {
+                        id: ui.item.id
+                    },
+                })
+                .done(function(data) {
+                    if (showDialog(data)) {
+                        data.busCompany = JSON.parse(data.busCompany || false);
+
+                        if (!!data.busCompany)
+                            $tr.find("input[name=mobileNumber]").val(data.busCompany.mobileNumber || '');
+                        else {
+                            $tr.find("input[name=mobileNumber]").val('');
+                        }
+                    }
+                });
+            }
+        }).unbind("click").click(function(){
+            var obj = this,parents = $(obj).closest('tr'),
+                seatCount = parents.find("[name=seatCount]").val(),
+                busBrand = parents.find("[name=busbrand]").val();
+            $.ajax({
+                url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
+                data:  {
+                    seatCount: parents.find("[name=seatCount]").val(),
+                    brand: parents.find("[name=busbrand]").val(),
+                    busId: parents.find('input[name="busLicenseNumberId"]').val()
+                },
+                showLoading:false,
+                type:"POST",
+                success:function(data){
+                    var result = showDialog(data);
+                    if(result){
+                        var busCompanyList = JSON.parse(data.busCompanyList);
+                        if(busCompanyList && busCompanyList.length > 0){
+                            for(var i=0; i < busCompanyList.length; i++){
+                                busCompanyList[i].value = busCompanyList[i].companyName;
+                            }
+                            $(obj).autocomplete('option','source', busCompanyList);
+                            $(obj).autocomplete('search', '');
+                        }else{
+                            layer.tips('无数据', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            })
+        });
+        //司机选择
+        var chooseDriver = $busplanId.find(".T-chooseDriver");
+        chooseDriver.autocomplete({
+            minLength:0,
+            change :function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this),parents = $(this).closest('tr');
+                    $this.val("");
+                    parents.find("input[name=driverId]").val("");
+                    parents.find("input[name=driverMobileNumber]").val("");
+                }
+            },
+            select :function(event, ui){
+                var $this = $(this),parents = $(this).closest('tr');
+                parents.find("input[name=driverId]").val(ui.item.id).trigger('change');
+                parents.find("input[name=MobileNumber]").val(ui.item.mobileNumber);
+            }
+        }).unbind("click").click(function(){
+            var obj = this,
+                $tr=$(this).closest('tr');//busCompanyId
+            var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
+            var busCompanyId = $tr.find("input[name=busCompanyId]").val();
+            $.ajax({
+                url: KingServices.build_url('busCompany','getDrivers'),
+                data:"busCompanyId="+busCompanyId+"",
+                showLoading:false,
+                type:"POST",
+                success:function(data){
+                    if(showDialog(data)){
+                        var driverList = JSON.parse(data.driverList);
+                        if(driverList && driverList.length > 0){
+                            for(var i=0; i < driverList.length; i++){
+                                driverList[i].value = driverList[i].name;
+                            }
+                            $(obj).autocomplete('option','source', driverList);
+                            $(obj).autocomplete('search', '');
+                        }else{
+                            layer.tips('无数据', obj, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            })
+        });
+    };
+
 
     /**
      * 安排房
@@ -293,6 +776,21 @@ define(function(require, exports) {
      * @return {[type]}    [description]
      */
     Transfer._viewBus = function(id) {
+        if (!!id)  {
+            $.ajax({
+                url: KingServices.build_url(service_name, "getOutBusArrange"),
+                type: "POST",
+                data:{
+                    outRemarkId: id
+                },
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var html = ViewBusTemplate(data);
+                        addTab(viewBusId, '车查看', html);
+                    }
+                }
+            });
+        }
 
     };
 
@@ -394,6 +892,33 @@ define(function(require, exports) {
             Transfer.otherSubmit($tab);
         });
     }
+     //添加车安排
+    Transfer.addbus = function($obj) {
+        var html = '<tr data-entity-id="">'+
+        '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="" />'+
+        '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />'+
+        '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+        '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>'+
+        '<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>'+
+        '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+        '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+        '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12  T-dateTimePicker" name="useTime" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="" /></td>'+
+        '<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>'+
+        '<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>'+
+        '<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
+        '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+        '<td><a class="cursor T-contact-delete" data-catename="bus" title="删除">删除</a></td>'+
+        '</tr>';
+        var $tbody = $obj.find('tbody');
+        $tbody.append(html);
+        Transfer.addResource($busplanId);//车安排弹窗
+        Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
+        Transfer.setDate($busplanId);//时间控件
+    };
 
     Transfer.addRestaurant = function($tbody) {
         var html = '<tr data-entity-id="">'+

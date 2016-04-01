@@ -6,7 +6,8 @@
  * author: yangcany
  */
 define(function(require, exports) {
-    var menuKey = "arrange_transit",
+    var 
+        menuKey = "arrange_transit",
         listTemplate = require("./view/list"),
         busplanTemplate = require("./view/busplan"),
         hotelplanTemplate = require("./view/hotelplan"),
