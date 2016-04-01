@@ -2426,6 +2426,12 @@ KingServices.paymentDetail = function(orderId){
 	});
 }
 
+KingServices.paymentDetail = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.paymentDetail(id);
+	});
+}
+
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),
