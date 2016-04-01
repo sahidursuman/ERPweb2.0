@@ -2,8 +2,7 @@
     <thead>
     <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
         <th style="min-width:50px">团信息</th>
-        <th style="min-width:70px">出团日期</th>
-        <th style="min-width:70px">完团日期</th>
+        <th style="min-width:70px">出游日期</th>
         <th style="min-width:80px">团队人数</th>
         <th style="min-width:40px">收入</th>
         <th style="min-width:40px">成本</th>
@@ -38,17 +37,32 @@
                     {{/if}}
                 {{/if}}
             </p>
-            <p class="h-memberName">{{if financialTripPlan.tripPlan.guide != null}}导游：{{financialTripPlan.tripPlan.guide.realname}}{{/if}}</p>
+            <p class="h-memberName">
+                {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
+                    {{if index == 0}}
+                        导游：{{tripPlanDetails.guideNames}}&nbsp;&nbsp;
+                        责任计调：{{tripPlanDetails.dutyOPUserName}}
+                    {{/if}}
+                {{/each}}
+            </p>
         </td>
         {{if financialTripPlan.tripPlan.tripPlanDetails.length == 0}}
-            <td>{{if financialTripPlan.tripPlan != null}}{{financialTripPlan.tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-            <td>{{if financialTripPlan.tripPlan != null}}{{financialTripPlan.tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+            <td>
+                {{if financialTripPlan.tripPlan != null}}
+                    {{financialTripPlan.tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}
+                <br/>-<br>
+                    {{financialTripPlan.tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}
+                {{/if}}
+            </td>
             <td><span class="F-count">{{financialTripPlan.tripPlan.touristAdultCount}}</span>大<span class="F-count">{{financialTripPlan.tripPlan.touristChildCount}}</span>小</td>
         {{else}}
         {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
             {{if index == 0}}
-                <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>
+                    {{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}
+                    <br>-<br>
+                    {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}
+                </td>
                 <td><span class="F-count">{{tripPlanDetails.adultCount}}</span>大
                     <span class="F-count">{{tripPlanDetails.childCount}}</span>小</td>
             {{/if}}
@@ -102,12 +116,21 @@
         {{each financialTripPlan.tripPlan.tripPlanDetails as tripPlanDetails index}}
             {{if index>0}}
             <tr class="hidden">
-                <td class="h-touristGroupInfo"><p>{{tripPlanDetails.lineProductName}}</p></td>
-                <td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                <td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td class="h-touristGroupInfo">
+                    <p>{{tripPlanDetails.lineProductName}}</p>
+                    <p>{{tripPlanDetails.travelAgencyName}}</p>
+                </td>
+                <td>
+                    {{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}
+                    <br>-<br>
+                    {{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}
+                </td>
+               
                 <td>
                     <span class="F-count">{{tripPlanDetails.adultCount}}</span>大
-                    <span class="F-count">{{tripPlanDetails.childCount}}</span>小
+                    <span class="F-count">{{tripPlanDetails.childCount}}</span>小<br>
+                    {{tripPlanDetails.contactUser}}
+
                 </td> 
                 {{if index == 1}}
                 <td rowspan="{{financialTripPlan.tripPlan.tripPlanDetails.length -1}}"></td>

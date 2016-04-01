@@ -725,8 +725,18 @@ define(function(require, exports){
 		//报账完成事件
 		$obj.find('.T-fanishAccount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-            var financialTripPlanId = $(this).attr('data-entity-financial-id');
-            Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			var checkTripIsReceived = Count.checkTripIsReceived($obj);
+			var financialTripPlanId = $(this).attr('data-entity-financial-id');
+			if(checkTripIsReceived){
+				showConfirmDialog($( "#confirm-dialog-message" ), 
+					'提交报账，团款现收将默认为已收到', function() {
+					Count.saveTripCount(id,financialTripPlanId,$obj,3);
+				});
+			}else{
+				Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			};
+            
+            
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
@@ -4458,7 +4468,8 @@ define(function(require, exports){
 		$tr.each(function(){
 			var data = {
 				id:$(this).attr('id'),
-				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val()
+				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val(),
+				isReceived:$(this).find('[name=receiveStatus]').val()
 			}
 			saveJson.touristGroupList.push(data);
 		});
@@ -5158,6 +5169,19 @@ define(function(require, exports){
 	    }
 	    return $obj;
 	};
+	//校验团款的接受状态
+	Count.checkTripIsReceived = function($obj){
+		var $tripDetail = $obj.find('.T-tripDetail');
+		var $trArr = $tripDetail.find('tr');
+		var isReceived = false;
+		$trArr.each(function(i){
+			var receiveStatus = $(this).find('[name=receiveStatus]').val();
+			if(receiveStatus == 0){
+				isReceived = true;
+			};
+		});
+		return isReceived;
+	}
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

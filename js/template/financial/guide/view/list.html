@@ -76,8 +76,7 @@
                 <td><span class="F-float F-money">{{rs.sumZhangmiantuibu}}</span></td>
                 <td><span class="F-float F-money">{{rs.sumSettlementMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.sumPayedMoney}}</span></td>
-                <td><span class="F-float F-money">{{if rs.sumUnPayedMoney != 0}}<span style="color:#FF0000;">{{rs.sumUnPayedMoney}}</span>{{else}}{{rs.sumUnPayedMoney}}{{/if}}</span>
-                </td>
+                <td><span class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
                 <td>{{if rs.checkFCount == rs.sumFCount}}<span style="color:#00CC00;">{{rs.checkFCount}}/{{rs.sumFCount}}</span>{{else}}<span style="color:#FF9900;">{{rs.checkFCount}}/{{rs.sumFCount}}</span>{{/if}}</td>
                 <td>{{if rs.payFCount == rs.sumFCount}}<span style="color:#00CC00;">{{rs.payFCount}}/{{rs.sumFCount}}</span>{{else}}<span style="color:#FF9900;">{{rs.payFCount}}/{{rs.sumFCount}}</span>{{/if}}</td>
                 <td>

@@ -76,7 +76,7 @@
                 <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
                 <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
                 <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
-                <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:#FF0000;" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                <td class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                 <td><span style="color:#{{if rs.checkedCount == rs.allCheckCount}}00CC00{{else}}FF9900{{/if}};">{{rs.checkedCount}}/{{rs.allCheckCount}}</span></td>
                 <td><span style="color:#{{if rs.payedCount == rs.allPayCount}}00CC00{{else}}FF9900{{/if}};">{{rs.payedCount}}/{{rs.allPayCount}}</span></td>
                 <td>
