@@ -671,7 +671,7 @@ var modalScripts = {
     'arrange_booking': 'js/template/arrange/booking/booking.js',
     'resource_subsection': 'js/template/resource/subsection/subsection.js',
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
-    'resource_touristGroup': 'js/template/resource/touristGroupN/touristGroup.js', //游客管理
+    // 'resource_touristGroup': 'js/template/resource/touristGroupN/touristGroup.js', //游客管理
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
     'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
@@ -680,6 +680,7 @@ var modalScripts = {
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
+    'resource_touristGroup':'js/template/arrange/arrangeCenter/arrange.js',//服务标准（单向操作）
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
