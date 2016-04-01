@@ -205,7 +205,16 @@
                                 {{/if}}
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
+                            <td>
+                                <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
+                                <span>
+                                    {{if touristGroup.isReceived  == 0}}
+                                        未收到
+                                    {{else}}
+                                        已收到
+                                    {{/if}}
+                                </span>
+                            </td>
                             <td>
                                 {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
                                 <a href="#" class="T-viewCostDetail">
