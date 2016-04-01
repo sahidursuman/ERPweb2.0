@@ -495,7 +495,7 @@ define(function(require, exports){
             minLength: 0,
             change: function(event, ui) {
                 if (!ui.item) {
-                   $(this).nextAll().find('[name=resourceId]').val('');
+                   $(this).val('').nextAll('[name=resourceId]').val('');
                 }
             },
             select: function(event, ui) {
