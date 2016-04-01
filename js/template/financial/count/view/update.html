@@ -264,7 +264,7 @@
                                     <input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" 
                                     {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                     &nbsp;&nbsp;
-                                    <select name="receiveStatus">
+                                    <select name="receiveStatus" disabled="dlsabled">
                                         <option value="0" {{if touristGroup.isReceived == 0}}selected="selected"{{/if}}>未收到</option>
                                         <option value="1" {{if touristGroup.isReceived == 1}}selected="selected"{{/if}}>已收到</option>
                                     </select>
