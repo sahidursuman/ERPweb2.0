@@ -2426,9 +2426,9 @@ KingServices.paymentDetail = function(orderId){
 	});
 }
 
-KingServices.paymentDetail = function(id){
+KingServices.viewDetails = function(id){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
-		module.paymentDetail(id);
+		module.viewDetails(id);
 	});
 }
 
