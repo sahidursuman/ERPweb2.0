@@ -95,7 +95,7 @@ define(function(require, exports) {
     PerformanceFun.getList = function(page) {
         var args = PerformanceFun.$form.serializeJson(),
             url, template, method, index = 0, totalFun,
-            childGroupSearchMethod = 'findByChildGroup';
+            childGroupSearchMethod = 'findByBusinessGroup';
 
         switch (args.object * 1) {
             case 1:
@@ -115,8 +115,8 @@ define(function(require, exports) {
             case 2:
                 if (!method) {
                     method = childGroupSearchMethod;
-                    if (!args.businessGroupId) {
-                        method = 'findByBusinessGroup';
+                    if (!!args.businessGroupId) {
+                        method = 'findByChildGroup';
                     }
                 }
 
@@ -125,7 +125,7 @@ define(function(require, exports) {
                 index = 2;
                 break;
             case 3:
-                method = childGroupSearchMethod;
+                method = "findByChildGroup";
                 delete args.businessGroupId;
                 template = listDeptTemplate;
                 totalFun = PerformanceFun.initFindBusinessGroupTotal;
@@ -135,7 +135,7 @@ define(function(require, exports) {
                 return;
         }
 
-        delete args.object;
+        args.object;
         args.pageNo = page || 0;
 
         $.ajax({
@@ -205,9 +205,11 @@ define(function(require, exports) {
     PerformanceFun.initFindBusinessGroupTotal = function(args) {
     	var method = 'sumFindByChildGroup';
 
-    	if (!!args.businessGroupId) {
-    		method = 'sumFindByBusinessGroup';
-    	}
+        if (!!args.object && args.object==2 && !!args.businessGroupId) {
+            method = 'sumFindByChildGroup';
+        }else if (!!args.object && args.object==2 && !args.businessGroupId) {
+            method = 'sumFindByBusinessGroup';
+        }
 
         $.ajax({
                 url: KingServices.build_url("performanceOfUser", method),
