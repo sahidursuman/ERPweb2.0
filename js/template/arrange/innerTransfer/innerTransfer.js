@@ -656,7 +656,7 @@ define(function(require, exports) {
                                     type = "1";
                                 innerTransfer.getSearchParam(divId, type);
                                 innerTransfer.innerList(divId, type, 0);
-                            }
+                            })
                         }
                     }
                 });
