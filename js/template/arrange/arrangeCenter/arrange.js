@@ -65,7 +65,16 @@ define(function(require, exports) {
 				// 查看
 				TransferFun.view($that);
 			}
-		})	
+		})
+		.on('change', 'input[type="checkbox"]', function(event) {
+			event.preventDefault();
+			TransferFun.setArrangeId($(this));
+		})
+		// 统一安排
+		.on('click', '.T-merge-arrange', function(event) {
+			event.preventDefault();
+			TransferFun.mergeArrange($(this));
+		})
 		.find('.nav').on('click', 'a', function(event) {
 			event.preventDefault();
 			

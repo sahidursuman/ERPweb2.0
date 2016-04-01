@@ -63,7 +63,6 @@ define(function(require, exports) {
         var target = $arrange.closest('.tab-pane').data('target');
 
         switch(target) {
-            // 中转部分
             case 'bus':
                 Transfer._arrangeBus($arrange);
                 break;
@@ -78,6 +77,44 @@ define(function(require, exports) {
         }
     };
 
+    Transfer.setArrangeId = function($checkBox) {
+        var target = $checkBox.closest('.tab-pane').data('target'),
+            checked = $checkBox[0].checked,
+            $tr = $checkBox.closest('tr'),
+            data = {
+                outRemarkId: $tr.data('id'),
+                shuttleType: $tr.find('input[name="shuttleType"]').val(),
+            },
+
+            IdList;
+
+        switch(target) {
+            case 'bus':
+                IdList = Transfer.busArrangeIdArray || [];
+                Transfer.busArrangeIdArray = IdList;
+                break;
+            case 'hotel':
+                IdList = Transfer.hotelArrangeIdArray || [];
+                Transfer.hotelArrangeIdArray = IdList;
+                break;
+
+            default: break;
+        }
+
+        if (IdList) {
+            if (checked)  {
+                IdList.push(data)
+            } else {
+                for (var i = 0, len = IdList.length; i < len ; i ++)  {
+                    if (IdList[i].outRemarkId == data.outRemarkId)  {
+                        IdList.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+        // console.info(IdList);
+    }
 
     /**
      * 查看入口
@@ -157,6 +194,20 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
+                    // 设置选中效果
+                    if (args.status == '0' && !!Transfer.busArrangeIdArray && Transfer.busArrangeIdArray.length)  {
+                        for (var i = 0, len = data.outRemarkArrangeList.length, tmp; i < len; i ++)  {
+                            tmp = data.outRemarkArrangeList[i];
+
+                            for (var j = 0, jLen = Transfer.busArrangeIdArray.length;j < jLen; j ++ ) {
+                                if (tmp.id == Transfer.busArrangeIdArray[j].outRemarkId)  {
+                                    tmp.checked = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
@@ -194,6 +245,20 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
+                    // 设置选中效果
+                    if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length)  {
+                        for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i ++)  {
+                            tmp = data.outHotelRemarkList[i];
+
+                            for (var j = 0, jLen = Transfer.hotelArrangeIdArray.length;j < jLen; j ++ ) {
+                                if (tmp.id == Transfer.hotelArrangeIdArray[j].outRemarkId)  {
+                                    tmp.checked = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
