@@ -453,28 +453,21 @@ define(function(require, exports) {
                 Transfer.addBusTransfer(0,$busplanId);
             });
             //删除中转数据
-            $busplanId.find('.T-del-bus').on('click', function() {
-                var $that = $(this),$div = $that.closest('div.T-transfersId-box'),
+            $busplanId.off('click').on('click','.T-del-bus',function() {
+                var $that = $(t+his),$div = $that.closest('div'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
                     Transfer.delBusTransfer($div, outRemarkId);
-                    $div.remove();
+                    $div.fadeOut(function(){
+                        $div.remove();
+                    })
+                    
                     var delBusTransferData = {
                         outRemarkId : outRemarkId
                     }
-
                     Transfer.delBusTransferId.push(delBusTransferData);
             });
 
         }
-    /**
-     * [delBusTransfer 删除中转车]
-     * @return {[type]} [description]
-     */
-    Transfer.delBusTransfer = function($tab,outRemarkId){
-        
-    };
-    //但是还是没有吧删除的id组装啊
-
     /**
      * 我现在是在做点击删除的时候吧id
      * 增加车安排弹窗任务
@@ -513,20 +506,25 @@ define(function(require, exports) {
                     event.preventDefault();
                     //缓存选中的数据
                     var checkData = Transfer.installCheckDatas($frame);
-                    console.log(checkData.length);
                     // 添加游客列表
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var busPlan = checkData[i];
-                        htmlData = ' <div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.outRemarkId||"")+'">'+
+                        htmlData = '<div class="form-group">'+
+                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
                         '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
                         '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
                         '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(busPlan.childCount||0)+'</span></label>'+
-                        '<label class="control-label ">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label></div>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'
-                        $busplanId.find('.T-busrequired').after(htmlData);
+                        '<label class="control-label mar-r-20">客人信息：'+
+                            '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
+                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>'+
+                        '</label>'+
+                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
+                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
+                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'+
+                        '</div> '
+
+                        $busplanId.find('.T-transfersId-box').after(htmlData);
                     };
                     
                     // 关闭对话框
@@ -735,7 +733,8 @@ define(function(require, exports) {
             data: {
                 outBusList: outBusList,
                 outRemarkList: outRemarkList,
-                shuttleType: shuttleType
+                shuttleType: shuttleType,
+                deleteOutRemarkList : JSON.stringify(Transfer.delBusTransferId),/////////
             },
             success: function(data) {
                 if (showDialog(data)) {
