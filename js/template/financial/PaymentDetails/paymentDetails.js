@@ -237,20 +237,18 @@ define(function(require, exports){
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
 					    	FinancialService.initPayEvent($container);
-					    	$container.find('.datepicker').datetimepicker({
-					    		autoclose: true,
-						        todayHighlight: true,
-						        format: 'L',
-						        language: 'zh-CN'
-					    	});
+					    	FinancialService.datetimepicker($container);
 
 					    	$container.find(".T-moneyType").off().on("change",function(){
 					    		Payment.loadSubjectHtml($(this).val(),$container);
 					    		if($(this).val() == 2){
 					    			$container.find(".T-Ntransfer").addClass('hidden');
+					    			$container.find(".T-payType-cash").addClass('hidden');
 					    			$container.find(".T-transfer").removeClass('hidden');
+					    			
 					    		} else {
 					    			$container.find(".T-Ntransfer").removeClass('hidden');
+					    			$container.find(".T-payType-cash").removeClass('hidden');
 					    			$container.find(".T-transfer").addClass('hidden');
 					    		}
 					    	});
@@ -277,14 +275,25 @@ define(function(require, exports){
 					    		if($this.hasClass('T-close-payment')){
 					    			layer.close(addGuideLayer);
 					    		} else if($this.hasClass('T-save-payment')){
+					    			var subjectName=$container.find('.T-subject').find("option:selected").text(),
+					    			    resourceName=$container.find('[name=resourceName]').val();
+					    			if ((subjectName==="预收账款" || subjectName==="预付账款") && !resourceName) {
+					    				showMessageDialog($("#confirm-dialog-message"), "对方单位不能为空");
+            							return;
+					    			}
 					    			if (!validator.form()) { return; }
 					    			Payment.submitPayment();
 					    		}
 					    	})
-					    	.on("click",".T-subject",function(){
+					    	.on("change",".T-subject",function(){
 					    		var subjectName = $(this).find("option:selected").text();
 					    		$container.find('input[name=subjectName]').val(subjectName);
+					    		Payment.loadResTypeSelect(subjectName,$container);
 					    	});
+					    	$container.find('.T-subject').trigger('change');
+
+					    	//获取对方单位
+					    	Payment.getResourceList($container.find('[name=resourceName]'),$container);
 
 				    		$container.find('.T-chooseAccount').autocomplete({
 						        minLength:0,
@@ -379,25 +388,61 @@ define(function(require, exports){
 			}
 		});
 	};
-
+   
+    /**
+     * [loadSubjectHtml 根据业务类别加载对应会计科目+]
+     * @param  {[type]} type       [业务类别]
+     * @param  {[type]} $container [容器]
+     * @return {[type]}            [description]
+     */
 	Payment.loadSubjectHtml = function(type,$container){
 		var subList = false,subjectHtml = "";
 		if(type == 0) { subList = Payment.subList0; }
 		else if(type == 1) { subList = Payment.subList1; }
-		else if(type == 2) { subList = Payment.subList2; }
-			
+		else if(type == 2) { subList = Payment.subList2; }	
 		if(subList.length > 0){
 			for(var i = 0; i < subList.length; i++){
 				subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
 			}
 			$container.find(".T-subject").html(subjectHtml);
 			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+			Payment.loadResTypeSelect(subList[0].subjectName, $container);
 		} else {
 			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
 				$container.find(".T-subject").html("");
 				$container.find("input[name=subjectName]").val("");
 			});
 		}
+	};
+    
+    /**
+     * [loadResTypeSelect 会计科目加载资源]
+     * @param  {[type]} resTypeText [会计科目Text]
+     * @param  {[type]} $container  [容器]
+     * @return {[type]}             [description]
+     */
+	Payment.loadResTypeSelect =function(resTypeText, $container){
+		var resPayTypeList=[{id:'20',name:'酒店'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],
+		    resTypeOption="<select name='resourceType' class='col-sm-12 T-selct-rsType'>";
+		if (resTypeText==="预付账款") {
+		   for(var i = 0; i < resPayTypeList.length; i++){
+			 resTypeOption+="<option  value=" + resPayTypeList[i].id + ">" + resPayTypeList[i].name + "</option>";
+		   }
+		}
+		if (resTypeText==="预收账款") {
+		    for(var i = 0; i < resRecTypeList.length; i++){
+			 resTypeOption+="<option  value=" + resRecTypeList[i].id + ">" + resRecTypeList[i].name + "</option>";
+		   }
+		}
+		resTypeOption+='</select>';
+		if (resTypeText==="预收账款" || resTypeText==="预付账款") {
+			$container.find(".T-resourceType").html(resTypeOption);
+			$container.find('.T-resType').removeClass('hidden');
+		}else{
+			$container.find(".T-resourceType").html("");
+			$container.find('.T-resType').addClass('hidden');
+		}
+		$container.find('input[name=resourceName]').val('').next().val('');
 	};
 
 	Payment.submitPayment = function(){
@@ -439,6 +484,60 @@ define(function(require, exports){
 		});
 	}
 
+	 /**
+     * [getResourceList 获取对方单位]
+     * @param  {[type]} $obj         [对方单位对象]
+     * @param  {[type]} resourceType [资源类型]
+     * @return {[type]}           
+     */
+    Payment.getResourceList = function($obj,$tab) {
+    	var resourceTypeList=null;
+        $obj.off('click').on('click', function() {
+        	var resourceType = $tab.find('[name=resourceType]').val();
+        	//修正change当resourceType作用域
+        	resourceTypeList=resourceType;
+	    	if (!resourceType) {
+	    		return;
+	    	}
+            $.ajax({
+                url:KingServices.build_url("cash","findUnits"),
+                type: 'POST',
+                data:"resourceType="+resourceType,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var list = data.units;
+                    if (list != null && list.length > 0) {
+                        for (var i = 0; i < list.length; i++) {
+                            list[i].value = list[i].name;
+                            list[i].id = list[i].id;
+                        };
+                    } else {
+                        layer.tips('没有内容', $obj, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $obj.autocomplete({
+			            minLength: 0,
+			            change: function(event, ui) {
+			                if (!ui.item && !!resourceTypeList) {
+			                   $(this).val('');
+			                }
+			            },
+			            select: function(event, ui) {
+			                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id);
+			            }
+			        })
+			        $obj.autocomplete('option', 'source', list);
+                    $obj.autocomplete('search', '');
+                }
+            });
+        })
+    };
+
 	// 暴露方法
 	exports.init = Payment.initModule;
+	//收付款
+	exports.viewDetails=Payment.viewDetails;
 });

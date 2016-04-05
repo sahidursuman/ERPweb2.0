@@ -6,6 +6,7 @@ define(function(require, exports) {
         listMainTemplate = require('./view/listMain'),
         updateTemplate = require('./view/update'),
         viewTemplate = require('./view/view'),
+        viewAccountsTemplate = require('./view/viewAccounts'),
         searchTemplate = require('./view/searchList'),
         lineproductSearchList = require("./view/lineproductSearchList"),
         addPartnerManagerTemplate = require('./view/addPartnerManager'),
@@ -18,6 +19,7 @@ define(function(require, exports) {
         updateTab = "tab-" + menuKey + "-update-content",
         addTabId = menuKey + "-add",
         updateTabId = menuKey + '-update',
+        viewAccountsTabId = menuKey + "-viewAccounts",
         viewTabId = menuKey + "-view";
     var touristGroup = {
         $tab: false,
@@ -45,6 +47,7 @@ define(function(require, exports) {
             statusSearch: "",
             customerType: "",
             memberType: "",
+            contactInfo:"",
             sortType: 'auto'
         },
         touristGroupId: "",
@@ -95,7 +98,7 @@ define(function(require, exports) {
                 quoteNumber: touristGroup.$searchArea.find('input[name=quoteNumber]').val(),
                 outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
                 otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
-                welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
+                contactInfo: touristGroup.$searchArea.find('input[name=contactInfo]').val(),
                 startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
                 createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
                 createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
@@ -133,8 +136,6 @@ define(function(require, exports) {
                     var $bussinessGroupObj = touristGroup.$tab.find(".T-chooseBussinessGroup"); //来源--业务部对象
                     var $lineProductObj = touristGroup.$tab.find(".T-chooseLineProduct"); //线路产品对象
                     var $outUserObj = touristGroup.$tab.find(".T-choose-outUserList"); //外联销售
-                    /*     var $otaOrderNumberObj = touristGroup.$tab.find(".T-choose-otaOrderNumber");  //组团单号
-                         var $welcomeBoardObj = touristGroup.$tab.find(".T-choose-welcomeBoard"); //接站牌*/
                     //来源--组团社
                     touristGroup.getListPartnerAgencyList($partnerAgencyObj);
                     //来源--业务部
@@ -207,7 +208,7 @@ define(function(require, exports) {
             realName: touristGroup.$searchArea.find('input[name=realName]').val(),
             outOPUserId: touristGroup.$searchArea.find('input[name=outOPUserId]').val(),
             otaOrderNumber: touristGroup.$searchArea.find('input[name=otaOrderNumber]').val(),
-            welcomeBoard: touristGroup.$searchArea.find('input[name=welcomeBoard]').val(),
+            contactInfo: touristGroup.$searchArea.find('input[name=contactInfo]').val(),
             startTimeSearch: touristGroup.$searchArea.find('input[name=startTime]').val(),
             createTimeEnd: touristGroup.$searchArea.find('input[name=createTimeEnd]').val(),
             createTimeStart: touristGroup.$searchArea.find('input[name=createTimeStart]').val(),
@@ -331,7 +332,6 @@ define(function(require, exports) {
                 }
             }
         });
-
     };
 
     //添加游客小组
@@ -544,7 +544,54 @@ define(function(require, exports) {
                         $('#inner-TransferIn').find('.T-T-transferIn-search').trigger('click');
                     };
                 }
+                var $viewAccount = $("#tab-resource_touristGroup-view-content");
+                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
+                    var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        touristGroup.viewAccountList(id);
+                });
             }
+        });
+    };
+    /**
+     * [viewAccountList 结算单打印]
+     * @return {[type]} [description]
+     */
+    touristGroup.viewAccountList = function(id){ 
+        $.ajax({
+                url: touristGroup.url("viewPartnerSettlement", "viewAccounts"),
+                data: "id=" + id+"&action=viewAccounts",
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                        if(result){
+                            var imgUrl = data.ERP_IMG_URL;
+                                // data.imgUrl = imgUrl;
+                            var html = viewAccountsTemplate(data);
+                            var viewAccountsLayer = layer.open({
+                                type: 1,
+                                title:"打印结算单",
+                                skin: 'layui-layer-rim',
+                                area: '750px', 
+                                zIndex:1028,
+                                content: html,
+                                scrollbar: false
+                            });
+                        //打印单团核算页面
+                        var $outAccountsTab = $("#T-touristGroupViewAccount");
+                            $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                            touristGroup.exportsOutAccounts($outAccountsTab);
+                        });
+                    }   
+                }
+        });       
+    };
+
+    //打印页面
+    touristGroup.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
         });
     };
 
@@ -683,7 +730,6 @@ define(function(require, exports) {
         touristGroup.formatTime($obj);
         //搜索线路
         $obj.find(".T-travelLine-search").on('click', function() {
-            // touristGroup.searchLinproduct(true,0,"",typeFlag);
             touristGroup.initLineProductSearch(typeFlag == 2, typeInner);
         });
 

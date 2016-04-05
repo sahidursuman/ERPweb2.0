@@ -187,15 +187,14 @@ define(function(require, exports) {
 		if(!!$tab){
 			var project = Replace.$checkingTab.find(".T-search-project").val().split(', '),
 				order = Replace.$checkingTab.find(".T-search-order").val();
-			args = {
-				pageNo : args.pageNo || 0,
-				partnerAgencyId : Replace.$checkingTab.find('input[name=partnerAgencyId]').val(),
-				name : Replace.$checkingTab.find('input[name=partnerAgencyName]').val(),
-				orderNumber : order == '全部' ? '' : order,
-				startDate : Replace.$checkingTab.find(".T-search-start-date").val(),
-				endDate : Replace.$checkingTab.find(".T-search-end-date").val(),
-				projects : Replace.$checkingTab.find(".T-search-project").val()
-			};
+				args.pageNo = args.pageNo || 0;
+				args.partnerAgencyId = Replace.$checkingTab.find('input[name=partnerAgencyId]').val();
+				args.name = Replace.$checkingTab.find('input[name=partnerAgencyName]').val();
+				args.orderNumber = order == '全部' ? '' : order;
+				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
+				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
+				args.projects = Replace.$checkingTab.find(".T-search-project").val();
+				args.isConfirmAccount = Replace.$checkingTab.find(".T-check-status").find("button").data("value");
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -322,6 +321,19 @@ define(function(require, exports) {
 		Replace.chooseOrder($searchArea.find('.T-search-order'));
 		Replace.chooseProject($searchArea.find('.T-search-project'));
 
+		//搜索下拉事件
+        $searchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+			if(isCheck){
+				Replace.checkingList(args,$tab);
+			}else{
+				Replace.balanceList(args,$tab);
+			}
+        });
 		$searchArea.find('.T-btn-search').off().on('click', function(event){
 			event.preventDefault();
 			args.pageNo = 0;
@@ -364,7 +376,8 @@ define(function(require, exports) {
 	                    travelAgencyName: $tab.find('input[name=partnerAgencyName]').val(),
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val(),
-	                    accountStatus : args.accountStatus
+	                    accountStatus : args.accountStatus,
+	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
 	                };
 	            argsData.orderNumber = argsData.orderNumber === "全部" ? "" : argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
@@ -502,7 +515,8 @@ define(function(require, exports) {
 				orderNumber : order == '全部' ? '' : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
 				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
-				accountStatus : Replace.$balanceTab.find("input[name=accountStatus]").val() 
+				accountStatus : Replace.$balanceTab.find("input[name=accountStatus]").val(),
+				isConfirmAccount : Replace.$balanceTab.find(".T-check-status").find("button").data("value")
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -729,7 +743,8 @@ define(function(require, exports) {
 				orderNumber : order == '全部' ? '' : order,
 				startDate : $tab.find(".T-search-start-date").val(),
 				endDate : $tab.find(".T-search-end-date").val(),
-				projects : $tab.find(".T-search-project").val()
+				projects : $tab.find(".T-search-project").val(),
+				isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){

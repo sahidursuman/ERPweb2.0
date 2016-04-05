@@ -73,7 +73,7 @@
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
                                                 <tr class="T-fontSize">
-                                                    <th class="th-border"   >收客单号</th>
+                                                    <th class="th-border"   >收客信息</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">客户联系人</th>
                                                     <th class="th-border">游客联系人</th>
@@ -88,7 +88,7 @@
                                                     {{if tripIncomeMap.groupIncomeMap != null}}
                                                         {{each tripIncomeMap.groupIncomeMap.groupIncomeMapList as groupIncome}}
                                                             <tr>
-                                                                <td>{{groupIncome.orderNumber}}</td>
+                                                                <td style="text-align: left;"> <p>收客单号：{{groupIncome.orderNumber}}</p> <p>{{tripBaseInfo.lineProductName}}</p></td>
                                                                 <td>{{groupIncome.partnerAgencyName}}</td>
                                                                 <td>
                                                                     {{groupIncome.partnerAgencyContactName}}<br>

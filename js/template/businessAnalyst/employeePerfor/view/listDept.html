@@ -1,29 +1,28 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
-	<colgroup>
-		<col style="width:10%;"></col>
-		<col style="width:10%;"></col>
-		<col style="width:10%;"></col>
-		<col style="width:20%;"></col>
-		<col style="width:20%;"></col>
-		<col style="width:15%;"></col>
-		<col style="width:15%;"></col>
-	</colgroup>
 	<thead>
 		<tr class="bg-blur">
-			<th class="col-sm-1">部门</th>
-			<th class="col-sm-2">收客量</th>
-			<th class="col-sm-1">发团量</th>
-			<th class="col-sm-1">发客量</th>
-			<th class="col-sm-1">外转客量</th>
-			<th class="col-sm-1">内转客量</th>
-			<th class="col-sm-2">代订单量</th>
+			<th>部门</th>
+			{{if isChildGroup}}
+			<th>子部门</th>
+			{{/if}}
+			<th>收客量</th>
+			<th>内转收客量</th>
+			<th>发团量</th>
+			<th>发客量</th>
+			<th>外转转出量</th>
+			<th>内转转出量</th>
+			<th>代订订单量</th>
 		</tr>
 	</thead>
 	<tbody>
 		{{each result as deptL}}
 		   <tr>
 	   		    <td>{{deptL.name}}</td>
+	   		    {{if isChildGroup}}
+	   		    <td class="text-bold">{{deptL.childName}}</td>
+	   		    {{/if}}
 	   			<td>{{deptL.getAdultCount}}大{{deptL.getChildCount}}小</td>
+	   			<td>{{deptL.getNotDirectAdultCount}}大{{deptL.getNotDirectChildCount}}小</td>
 	   			<td>{{deptL.tripCount}}</td>
 	   			<td>{{deptL.adultCount}}大{{deptL.childCount}}小</td>
 	   			<td>{{deptL.transAdultCount}}大{{deptL.transChildCount}}小</td>
@@ -33,8 +32,9 @@
 		{{/each}}
 
 		<tr style="background-color:#effef4">
-			<td style="font-weight: bold;">合计</td>
+			<td class="text-bold" {{if isChildGroup}}colspan="2" {{/if}}>合计</td>
 			<td class="T-sumAdultCount">0</td>
+			<td class="T-tripNotDirectAdChildCount">0</td>
 			<td class="T-tripTotalCount">0</td>
 			<td class="T-tripAdChildCount">0</td>
 			<td class="T-transAdChilTotalCount">0</td>
@@ -48,7 +48,7 @@
 		<small>共计 {{searchParam.totalCount}} 条记录</small>
 	</div>
 	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers T-listDept-pagenation">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 		</div>
 	</div>
 </div>

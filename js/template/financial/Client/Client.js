@@ -11,6 +11,7 @@ define(function(require, exports) {
         receivedTemplate = require('./view/received'),
         detailsTemplate = require('./view/details'),
         touristsTemplate = require('./view/tourists'),
+        feeDetailsTemplate = require('./view/feeDetails'),
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
         tabId = "tab-"+menuKey+"-content";
@@ -56,7 +57,8 @@ define(function(require, exports) {
                 pageNo : (page || 0),
                 startDate : Client.$tab.find('.T-search-start-date').val(),
                 endDate : Client.$tab.find('.T-search-end-date').val(),
-                accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value")
+                accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value"),
+                unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value")
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -122,6 +124,13 @@ define(function(require, exports) {
         });
         //状态框选择事件
         Client.$searchArea.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Client.listClient(0);
+        });
+        Client.$searchArea.find(".T-money-status").on('click','a',function(event){
             event.preventDefault();//阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
@@ -226,6 +235,7 @@ define(function(require, exports) {
                         $tab.data('isEdited',true);
                     }
                     Client.initCheck($tab,args);
+                    Client.viewFeeDetails($tab,resultList);
                 } else {
                     Client.$checkTab.data("next",args);
                 }
@@ -304,6 +314,14 @@ define(function(require, exports) {
 
         Tools.setDatePicker(Client.$checkSearchArea.find(".date-picker"), true);
 
+        //搜索下拉事件
+        Client.$checkSearchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            Client.ClientCheck(0, false, $tab, $(this).closest('.T-search-area').data('isview'));
+        });
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
@@ -325,7 +343,8 @@ define(function(require, exports) {
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
                     orderNumber : $tab.find('.T-search-orderNumber').val(),
                     otaOrderNumber : $tab.find('.T-search-number').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
@@ -482,6 +501,7 @@ define(function(require, exports) {
             args.fromPartnerAgencyId = $tab.data('id');
             type = $tab.find('.T-saveClear').data('type');
             args.isAutoPay = $tab.find('.T-btn-autofill').hasClass('btn-primary') ? false : true; 
+            args.sumPayType = $tab.find('[name=sumPayType]').val();
         } else {
             type =args.type;
         }
@@ -508,13 +528,10 @@ define(function(require, exports) {
                     var detailList = resultList[i].detailList,
                         transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
                     resultList[i].detailList = detailList;
-                    if(resultList[i].status == 5){
-                        resultList[i].rowLen = transitLen + detailList.otherFee.length;
-                    } else {
-                        resultList[i].rowLen = transitLen + ((detailList.otherFee.otherFeeList.length > 0) ? 1 : 0);
-                    }
+                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
                     resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                 }
+                data.customerAccountList = resultList; 
                 if(Client.clearDataArray){
                     data = Client.pushClearData(data);
                 }
@@ -527,7 +544,8 @@ define(function(require, exports) {
                     if(args.isAutoPay){
                         Client.setAutoFillEdit($tab,true);
                     }
-                    Client.initClear($tab,args);  
+                    Client.initClear($tab,args);
+                    Client.viewFeeDetails($tab,resultList);  
                 } else {
                     Client.$clearTab.data('next', args);
                 }                  
@@ -595,6 +613,14 @@ define(function(require, exports) {
         Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件
         Client.$clearSearchArea.find(".T-btn-search").click(function(){
+            Client.ClientClear(0, false, $tab);
+        });
+        //搜索下拉事件
+        Client.$clearSearchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
             Client.ClientClear(0, false, $tab);
         });
 
@@ -812,6 +838,7 @@ define(function(require, exports) {
                             Tools.closeTab(menuKey + "_clearing");
                             Client.listClient(Client.listPage);
                         } else {
+                            args.isAutoPay = false;
                             Client.ClientClear(args.pageNo, args);
                         }
                     });
@@ -1040,7 +1067,8 @@ define(function(require, exports) {
             accountStatus : $tab.find('[name=accountStatus]').val(),
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             partnerAgencyName : $tab.find(".T-partnerAgencyName").val(),
-            contactRealname : $tab.find('.T-search-contact').val()
+            contactRealname : $tab.find('.T-search-contact').val(),
+            isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
         }
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
@@ -1084,6 +1112,26 @@ define(function(require, exports) {
             }
         }).on("click",function(){
             $obj.autocomplete('search','');
+        });
+    };
+
+    //费用明细
+    Client.viewFeeDetails = function($tab,resultList){
+        $tab.find('.T-viewFeeDetails').off().on("click",function(){
+            var index = $(this).data("index"),
+                viewData = {
+                    transitFeeList : resultList[index].detailList.transitFee.transitFeeList,
+                    otherFee : resultList[index].detailList.otherFee
+                };
+            layer.open({
+                type: 1,
+                title:"费用明细",
+                skin: 'layui-layer-rim', 
+                area: '1024px', 
+                zIndex:1028,
+                content: feeDetailsTemplate(viewData),
+                scrollbar: false
+            });
         });
     };
 
