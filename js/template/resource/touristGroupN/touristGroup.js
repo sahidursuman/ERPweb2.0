@@ -1535,8 +1535,12 @@ define(function(require, exports) {
     touristGroup.batchAddTourists = function($obj, validate) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
             module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer){
+                var $tr = $layer.find('tr[data-default="1"]');
+                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == ""){
+                    $tr.remove();
+                }
                 touristGroup.memberNumber($layer);
-                rule.guestUpdate(validate)
+                rule.guestUpdate(validate);
             });
         });
     };

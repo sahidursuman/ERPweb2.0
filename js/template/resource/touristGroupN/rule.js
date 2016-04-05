@@ -168,6 +168,10 @@ define(function(require, exports) {
 	    		//手机号码
 				$ele: $obj.find('[name="mobileNumber"]'),
 				rules : [{
+                    type: 'null',
+                    errMsg: '手机号码不能为空'
+                },
+                {
                     type: 'mobile-phone',
                     errMsg: '请输入正确的手机号码'
                 }]
