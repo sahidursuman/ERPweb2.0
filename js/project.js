@@ -1076,7 +1076,7 @@ var _statusText = {
 				}else{
 					if($that.hasClass('F-float')){
 						// 精度控制
-						if ($that.hasClass('F-money') && value != 0) {
+						if ($that.hasClass('F-money')) {
 							value = Tools.toFixed(value, 2);
 						} else if ($that.hasClass('F-count')) {
 							value = Tools.toFixed(value, 1, false);
@@ -1762,13 +1762,13 @@ Tools.toFixed = function(data, length, fixed) {
  * @return {object}     返回转换后的html数据
  */
 Tools.filterMoney = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-money").each(function(){
 		var $taht = $(this);
 		if(!$taht.is(':not("input")')){
 			$taht.val(Tools.toFixed($taht.val(), 2))
-		}else if($taht.text() != 0){
+		}else{
 			$taht.text(Tools.toFixed($taht.text(), 2));
 		}
 	});
@@ -1780,7 +1780,7 @@ Tools.filterMoney = function(obj){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterCount = function(obj){
-	if(!obj)return;
+	if(!obj)return '' ;
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
@@ -1820,7 +1820,7 @@ Tools.thousandPoint = function(num, length){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterUnPoint = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-float").each(function(){
 		if(!$(this).is(':not("input")')){
