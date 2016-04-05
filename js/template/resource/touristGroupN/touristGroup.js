@@ -473,6 +473,9 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupMoney($that, 0, type);
             }else if($that.hasClass('T-guest-info')){
                 touristGroup.updateGuestInfo($that, type);
+            }else if($that.hasClass('datepicker')){
+                var start = $tab.find('.T-team-info [name="startTime"]').val();
+                $(this).datepicker('setStartDate', start);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -487,6 +490,14 @@ define(function(require, exports) {
                 $tab.find('.T-container').data('type', 'group');
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 转团 ');
                 $tab.find('.T-part-group-text').text('转团');
+            }
+        });
+        $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
+            var $that = $(this),
+                $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
+                console.log(1)
+            if($endTime.val() != "" && $that.val() > $endTime.val()){
+                $endTime.val('');
             }
         });
 
