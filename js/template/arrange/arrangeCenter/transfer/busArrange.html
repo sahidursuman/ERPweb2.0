@@ -1,20 +1,21 @@
 <div class="T-planbus globalAdd ">
     <div>
-        <button class="btn btn-sm btn-success T-add-transfersId">
+        <button class="btn btn-sm btn-success T-add-transfersId" placeholder="新增游客">
             <i class="ace-icon fa fa-plus"></i> 新增
         </button>
     </div>
     {{each outRemarkList as Busplan}}
     <div class="T-transfersId-box">
-        <div class="form-group">
-            <input type="hidden" name="outRemarkId" value="{{Busplan.outRemarkId}}">
+        <div class="form-group" >
+            <input type="hidden" name="outRemarkId"  value="{{Busplan.outRemarkId}}">
             <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
             <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
             <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
             <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
-            <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+            <label class="control-label mar-r-20">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+            <label class="control-label mar-r-20"><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>
         </div>
-    <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
+        <div class="bg-gray form-group T-busrequired">现车辆计划要求：{{Busplan.require}}</div>
     </div>
     {{/each}}
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
@@ -44,9 +45,10 @@
         </thead>
         <tbody class="T-bus-plan" id="busplan_body">
             {{each outBusList as outBus}}
-            <tr entity-id="{{outBus.outRemarkId}}">
+            <tr entity-id="{{outBus.outRemarkId}}" >
                 <td>
                     <div class="col-sm-12">
+                        <input type="hidden" value="{{outBus.outBusId}}" name="outBusId">
                         <input type="hidden" name="serviceType" value="{{if outBus.serviceType == 0}}0{{else}}1{{/if}}" />
                         <input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName" type="text" value="{{outBus.busCompanyName}}" />
                         <input type="hidden" name="busCompanyId" value="{{outBus.busCompanyId}}" />

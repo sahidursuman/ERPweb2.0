@@ -64,7 +64,8 @@
                                 <tbody id="restaurant_body">{{each outRestaurantList as outRestaurant}}
                                     {{if !!outRestaurant.id}}
                                     <tr data-entity-id="{{outRestaurant.id}}">
-                                        <td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
+                                        <td><input type="hidden" value="{{outRestaurant.hotelId}}" name="hotelId">
+                                        <input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" /></td>
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="serviceType" value="0" />

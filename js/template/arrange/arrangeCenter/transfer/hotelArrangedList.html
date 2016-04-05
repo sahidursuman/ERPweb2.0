@@ -12,14 +12,15 @@
     </thead>
     <tbody class="T-hotelarranged-list">
         {{each unifyList as hotel}}
-        {{each hotel.hotelList as itme}}
         {{each hotel.outRemarkList as seat index}}
         {{if index == 0}}
         <tr data-id="{{hotel.unifyId}}">
             <td class="h-touristGroupInfo" rowspan="{{hotel.outRemarkList.length}}">
+            {{each hotel.hotelList as itme}}
                 <p>{{itme.hotelName}}</p>
                 <p>{{itme.hotelRoom}}</p>
                 <p>{{itme.memberCount}}</p>
+            {{/each}}
             </td>
         {{/if}} 
             <td>
@@ -49,7 +50,6 @@
             </td>
             {{/if}}
         </tr>
-        {{/each}}
         {{/each}}
         {{/each}}
     </tbody>
