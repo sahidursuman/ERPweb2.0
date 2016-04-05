@@ -839,7 +839,7 @@ define(function(require, exports) {
                             infoData.touristGroupMemberJsonDel = JSON.parse(infoData.touristGroupMemberJsonDel || "[]");
                         }
 
-                        $that.val(infoData.guestName+"  "+infoData.adultCount+"大"+infoData.childCount+"小").data('json', JSON.stringify(infoData)).trigger('blur');
+                        $that.val(infoData.guestName+"  "+(infoData.adultCount || 0)+"大"+(infoData.childCount || 0)+"小").data('json', JSON.stringify(infoData)).trigger('blur');
                         $that.closest('.T-team-info').find('[name="mobileNumber"]').val(infoData.mobileNumber).trigger('blur');
                         layer.close(index);
                     });
@@ -1557,7 +1557,10 @@ define(function(require, exports) {
                 var $layer = $(obj);
                 touristGroup.getLineProductList(0, $layer);
                 $layer.find('.T-btn-search').on('click', function(){
-                    touristGroup.getLineProductList(0, $layer);
+                    touristGroup.getLineProductList({
+                        pageNo : 0,
+                        name : $layer.find('[name="lineProductName"]').val()
+                    }, $layer);
                 });
                 $layer.find('.T-btn-save').on('click', function(){
                     var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
