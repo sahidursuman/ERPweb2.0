@@ -103,7 +103,7 @@
 								<thead>
 									<tr>
 										<th  class="table-border"><span class="necessary">*</span>商品名称</th>
-										<th  class="table-border" width="100"><span class="necessary">*</span>针对客源</th>
+										<th  class="table-border hidden" width="100"><span class="necessary">*</span>针对客源</th>
 										<th  class="table-border" width="80">购物政策</th>
 										<th  class="table-border">备注</th>
 										<th  class="table-border" width="60">操作</th>
@@ -115,7 +115,7 @@
 											<td>
 												<input name="name" class="col-sm-12" value="{{shopPolicy.name}}" type="text" maxlength="100"/>
 											</td>
-											<td>
+											<td class="hidden">
 												<select name="customerType" class="col-sm-12">
 													<option value="0" {{if shopPolicy.customerType == 0}} selected="selected"{{/if}}>散客</option>
 													<option value="1" {{if shopPolicy.customerType == 1}} selected="selected"{{/if}}>团体</option>

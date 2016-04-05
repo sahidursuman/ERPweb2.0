@@ -1,9 +1,9 @@
 <div class="search-guideSingle">
     <div class="clearfix T-search-area mar-b-10">
-        <label class="pull-left text-right control-label no-padding-right mar-l-10">导游 </label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">导游：</label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!guide}}{{guide.guideName}}{{/if}} </label>
         <input type="hidden" name="guideId" class="col-xs-12" value="{{guide.id}}" />
-        <label class="pull-left text-right control-label no-padding-right mar-l-10">联系电话 </label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">联系电话：</label> 
         <label class="pull-left text-right control-label no-padding-right mar-l-10 T-mobileNumber">{{if !!guide}}{{guide.mobileNumber}}{{/if}}</label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10">开始日期 </label>
         <div class="col-xs-1">
@@ -22,10 +22,10 @@
     <div class="T-guideSinglePager-list">
         <table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
             <colgroup>
-                <col style="width:10%;"></col>
+                <col style="width:20%;"></col>
                 <col style="width:20%;"></col>
                 <col style="width:10%;"></col>
-                <col style="width:20%;"></col>
+                <col style="width:25%;"></col>
                 <col style="width:20%;"></col>
                 <col style="width:20%;"></col>
                 <col style="width:15%;"></col>
@@ -48,19 +48,19 @@
                     <th class="col-sm-2">总打单</th>
                     <th class="col-sm-1" >人均打单</th>
                     <th class="col-sm-1">社佣</th>
-                    <th class="col-sm-2">导佣</th>、
+                    <th class="col-sm-2">导佣</th>
                     <th class="col-sm-1">总佣金</th>
-                    <th class="col-sm-2">人数返佣</th>
+                    <th class="col-sm-2">人均返佣</th>
                 </tr>
             </thead>
             <tbody>
               {{each result as resultList}}
                 <tr>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.travelAgencyName}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.tripNumber}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.adult}}大{{resultList.child}}小</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.lineProductName}}</td>
-                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length+1}}{{else}}1{{/if}}">{{resultList.tripDate}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.travelAgencyName}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripNumber}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.adult}}大{{resultList.child}}小</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}"><p style="margin:0;" class="T-ctrl-tip" title="{{resultList.lineProductName}}"> <span>{{resultList.lineProductName}}</span></p></td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripDate}}</td>
                     {{if resultList.shopList.length==0}}
                         <td>-</td>
                         <td>-</td>
@@ -70,20 +70,35 @@
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
-                    {{/if}}
-                </tr>
-                <tr>
-                    {{each resultList.shopList as shopL}}
+                    {{else if resultList.shopList.length>0}}
+                        {{each resultList.shopList as shopL index}}
+                        {{if index == 0}}
                         <td>{{shopL.accountTime}}</td>
                         <td>{{shopL.shopName}}</td>
-                        <td class="T-allMoney cursor" style="color:#337ab7">{{shopL.allMoney}}</td>
+                        <td class="T-allMoney  cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}">{{shopL.allMoney}}</td>
                         <td>{{shopL.avgAllMoney}}</td>
                         <td>{{shopL.agencyMoney}}</td>
                         <td>{{shopL.guideMoney}}</td>
                         <td>{{shopL.totalMoney}}</td>
                         <td>{{shopL.avgMoney}}</td>
-                    {{/each}}
+                        {{/if}}
+                        {{/each}}
+                    {{/if}}
                 </tr>
+                {{each resultList.shopList as shopL index}}
+                {{if index > 0}}
+                <tr >
+                    <td>{{shopL.accountTime}}</td>
+                    <td>{{shopL.shopName}}</td>
+                    <td class="T-allMoney cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}">{{shopL.allMoney}}</td>
+                    <td>{{shopL.avgAllMoney}}</td>
+                    <td>{{shopL.agencyMoney}}</td>
+                    <td>{{shopL.guideMoney}}</td>
+                    <td>{{shopL.totalMoney}}</td>
+                    <td>{{shopL.avgMoney}}</td>
+                </tr>
+                {{/if}}
+                {{/each}}
                {{/each}}
             </tbody>
         </table>

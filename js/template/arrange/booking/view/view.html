@@ -1,11 +1,16 @@
 <div class="updateBooking">
- <button class="btn btn-sm btn-success btn-Booking-export bookingBtn T-bookingBtn ">导出项目代订</button>
+ <button class="btn btn-sm btn-success btn-Booking-export export-Btn T-bookingBtn ">导出项目代订</button>
 	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-	<h5 class="">
-				<label class="middle title-size">代订信息</label>
-						</h5>
-
-        
+		<div class="group-info-area form-inline">
+			<div class="form-group fixed-width-1">
+		        <span class="badge badge-primary">1</span>
+		        <label class="middle title-size">代订信息</label>
+		    </div>
+			<div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:1040px;">
+		        <label>代订单号：{{bookingOrder.orderNumber}}</label>
+		         
+		    </div> 
+		</div>
 
 		<table class="whereQ whereTwo" style="width: 100%">
 			<!-- <tr>

@@ -414,6 +414,7 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
+		BookingArrange.bookNumberChange($tab)
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
@@ -1134,6 +1135,7 @@ define(function(require, exports) {
 	BookingArrange.submitBooking = function($that, validator, tab_array){
 		var bookingOrder = {
 				id : BookingArrange.getValue($that,"id"),
+				bookingOrderNumber : BookingArrange.getValue($that,"orderNumber"),
 				partnerAgencyId : BookingArrange.getValue($that,"partnerAgencyId"),
 				contactId : BookingArrange.getValue($that,"partnerAgencyContactId"),
 				contactRealname : BookingArrange.getValue($that,"contactRealname"),
@@ -1509,6 +1511,28 @@ define(function(require, exports) {
 			}
 		})
 	};
+
+	//检查代订单号重复性
+    BookingArrange.bookNumberChange = function($tab) {
+        $tab.find('.T-bookNumberChange').on('change', function() {
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url('bookingOrder','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: { bookingOrderNumber: $this.val()}
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该代订单号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 	exports.init = BookingArrange.initModule;
 	exports.replaceDetail = BookingArrange.viewBooking;
