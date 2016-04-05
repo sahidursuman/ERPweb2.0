@@ -121,7 +121,6 @@ define(function(require, exports){
 		$.ajax({
 			url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
 			type : "POST",
-			showLoading: false
 		}).done(function(data){
 			data.businessTypes = JSON.parse(data.businessTypes);
 			data.costTypes = JSON.parse(data.costTypes);
