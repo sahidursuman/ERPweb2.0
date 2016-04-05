@@ -115,6 +115,9 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
 
                     $("#tab-" + menuKey + "-content").find(".T-transfer-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
