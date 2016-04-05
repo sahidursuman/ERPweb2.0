@@ -8,49 +8,53 @@
             <th>抵达时间</th>
             <th>班次</th>
             <th>要求</th>
+            {{if !isFrame}}
             <th>操作</th>
+            {{/if}}
         </tr>
     </thead>
     <tbody class="T-bus-list">
-    {{each outRemarkArrangeList as bus}}
-    <tr data-id="{{bus.outRemarkId}}" {{if bus.checked}} class="success"{{/if}}>
-        <td >
-            <label class="pos-rel">
-                <input type="checkbox" class="ace T-cheked" {{if bus.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
-            </label>
-        </td>
-        <td class="h-touristGroupInfo">
-            <p>中转单号：{{bus.orderNumber}}</p>
-            <p><span>&lt;{{bus.lineProductName}}&gt;</span></p>
-            <p><span>{{bus.startTime}}</span><span>{{bus.partnerAgencyName}}</span><span>外联销售：{{bus.outOPUserName}}</span></p>
-            <p>收客单号：{{bus.tgOrderNumber}}</p>
-        </td>
-        <td>
-        <span >{{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}</span>
-         <input type="hidden" name="shuttleType" value="{{if bus.shuttleType == 1}} 1 {{else if bus.shuttleType == 2}} 2{{/if}}" >
-        </td>
-        <td>
-            <p>{{bus.contactMemberName}}</p>
-            <p>{{bus.adultCount}}大{{bus.childCount}}小</p>
-        </td>
-        <td>{{bus.arriveTime}}</td>
-        <td>{{bus.shift}}</td>
-        <td>{{bus.require}}</td>
-        <td>
-            <a class="cursor T-arrange-item T-action">安排</a>
-            <a class="cursor T-view T-action">
-                <label class="padding-right20">|</label>查看
-        </td>
+        {{each outRemarkArrangeList as bus}}
+        <tr data-id="{{bus.outRemarkId}}" {{if bus.checked}} class="success" {{/if}}>
+            <td>
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace T-cheked" {{if bus.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
+                </label>
+            </td>
+            <td class="h-touristGroupInfo">
+                <p>中转单号：<span class="orderNumber">{{bus.orderNumber}}</span></p>
+                <p><span>&lt;<span class="lineProductName">{{bus.lineProductName}}</span>&gt;</span></p>
+                <p><span class="startTime">{{bus.startTime}}</span>
+                <span class="partnerAgencyName">{{bus.partnerAgencyName}}</span>外联销售：
+                <span class="outOPUserName">{{bus.outOPUserName}}</span></p>
+                <p>收客单号：<span class="tgOrderNumber">{{bus.tgOrderNumber}}</span></p>
+            </td>
+            <td>
+                <span>{{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}</span>
+                <input type="hidden" name="shuttleType" value="{{if bus.shuttleType == 1}} 1 {{else if bus.shuttleType == 2}} 2{{/if}}">
+            </td>
+            <td>
+                <p><span cals="contactMemberName">{{bus.contactMemberName}}</span></p>
+                <p>
+                    <span class="adultCount">{{bus.adultCount}}</span>大
+                    <span class="childCount">{{bus.childCount}}</span>小
+                </p>
+            </td>
+            <td>{{bus.arriveTime}}</td>
+            <td>{{bus.shift}}</td>
+            <td>{{bus.require}}</td>
+            {{if !isFrame}}
+            <td>
+                <a class="cursor T-arrange-item T-action">安排</a>
+                <a class="cursor T-view T-action">
+                    <label class="padding-right20">|</label>查看
+            </td>
+            {{/if}}
         </tr>
         {{/each}}
     </tbody>
 </table>
-<div class="text-center">
-    <button class="btn btn-sm btn-success w-150 R-right T-merge-arrange" {{if !canMergeArrange}} disabled="disabled" {{/if}} data-right="1130004">
-        <i class="ace-icon fa fa-user-plus"></i> 统一安排
-    </button>
-</div>
-<div class="style='clear: both;'"></div>
+<div class="clearfix"></div>
 <div class="row pageMode">
     <div class="col-xs-6">
         <small>共计 {{recordSize}} 条记录</small>
@@ -59,4 +63,11 @@
         <div class="T-pagenation text-right">
         </div>
     </div>
+</div>
+<div class="text-center">
+    {{if !isFrame}}
+    <button class="btn btn-sm btn-success w-150 R-right T-merge-arrange" {{if !canMergeArrange}} disabled="disabled" {{/if}} data-right="1130004">
+        <i class="ace-icon fa fa-user-plus"></i> 统一安排
+    </button>
+    {{/if}}
 </div>
