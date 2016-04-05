@@ -28,6 +28,7 @@ define(function(require, exports) {
         Transfer = {
             transitIds: [],
             installCheckData : [],
+            delBusTransferId : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
@@ -408,7 +409,7 @@ define(function(require, exports) {
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
-                        $busplanId = Transfer.$busplanId
+                        $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId, outRemarkList.outRemarkId, outRemarkList.shuttleType); //车安排事件
 
@@ -449,24 +450,40 @@ define(function(require, exports) {
             });
             //添加中转数据
             $busplanId.find('.T-add-transfersId').on('click', function() {
-                Transfer.addBusTransfer(0);
+                Transfer.addBusTransfer(0,$busplanId);
+            });
+            //删除中转数据
+            $busplanId.find('.T-del-bus').on('click', function() {
+                var $that = $(this),$div = $that.closest('div.T-transfersId-box'),
+                    outRemarkId = $div.find('[name=outRemarkId]').val();
+                    Transfer.delBusTransfer($div, outRemarkId);
+                    $div.remove();
+                    var delBusTransferData = {
+                        outRemarkId : outRemarkId
+                    }
+
+                    Transfer.delBusTransferId.push(delBusTransferData);
             });
 
         }
     /**
-    * 车队安排添加中转事件弹窗
-    * @param  {[type]} $busplanId [容器]
-    * @return {[type]}      [description]
-    */
+     * [delBusTransfer 删除中转车]
+     * @return {[type]} [description]
+     */
+    Transfer.delBusTransfer = function($tab,outRemarkId){
+        
+    };
+    //但是还是没有吧删除的id组装啊
+
     /**
-     * 增加车安排任务
+     * 我现在是在做点击删除的时候吧id
+     * 增加车安排弹窗任务
      * @param {int} shuttleType 接送团标志 0：接团；1：送团
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
-    Transfer.addBusTransfer = function(shuttleType, status) {
+    Transfer.addBusTransfer = function(shuttleType,$busplanId) {
         shuttleType = shuttleType || 0;
         status = 0;
-
         var layerFrame = layer.open({
             type: 1,
             title: "选择游客",
@@ -492,15 +509,28 @@ define(function(require, exports) {
                 }).trigger('click');
                 
                 // 添加
-                $frame.find('.T-confirm').on('click', function(event) {
+                $frame.find('.T-confirm').off('click').on('click', function(event) {
                     event.preventDefault();
                     //缓存选中的数据
-                    var checkData = Transfer.installCheckData($frame);
-                    console.log(checkData);
+                    var checkData = Transfer.installCheckDatas($frame);
+                    console.log(checkData.length);
                     // 添加游客列表
-                    // Transfer._mergeArrangeBus
+                    var htmlData = '';
+                    for (var i = 0;i<checkData.length; i++) {
+                        var busPlan = checkData[i];
+                        htmlData = ' <div class="form-group">'+
+                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.outRemarkId||"")+'">'+
+                        '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
+                        '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
+                        '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
+                        '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(busPlan.childCount||0)+'</span></label>'+
+                        '<label class="control-label ">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label></div>'+
+                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'
+                        $busplanId.find('.T-busrequired').after(htmlData);
+                    };
+                    
                     // 关闭对话框
-                    layerFrame.close();
+                    layer.close(layerFrame);
                 });
 
                 // 勾选
@@ -514,7 +544,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.id === Transfer.addBusTransferArray[i].id)  {
+                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
                             }
                         }
@@ -523,24 +553,29 @@ define(function(require, exports) {
             }
         });
     };
-    //缓存数据 T-bus-list
-    Transfer.installCheckData = function($frame){
+    //缓存数据 
+    Transfer.installCheckDatas = function($frame){
         var $tr = $frame.find('.T-bus-list').find('tr');//找到所有的tr
+        var installCheckData = [];
         $tr.each(function(i){
-            var $that = $(this);
+            var $that = $(this),id = $that.attr('data-id');
             var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
             if(selectFlag){
                 var checkData = {
+                    id : id,
                     orderNumber : $that.find('.orderNumber').text(),
                     lineProductName : $that.find('.lineProductName').text(),
                     startTime : $that.find('.startTime').text(),
                     partnerAgencyName : $that.find('.partnerAgencyName').text(),
                     adultCount : $that.find('.adultCount').text(),
                     childCount : $that.find('.childCount').text(),
+                    outOPUserName : $that.find('.outOPUserName').text(),
+                    require : $that.find('.require').text(),
                 };
-                Transfer.installCheckData.push(checkData);
+                installCheckData.push(checkData);
             }
         });
+        return installCheckData;
     };
     /**
      * 获取车队安排的列表
