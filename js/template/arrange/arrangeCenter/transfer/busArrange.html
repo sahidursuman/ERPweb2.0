@@ -1,14 +1,21 @@
 <div class="T-planbus globalAdd ">
-    {{each outRemarkList as Busplan}}
-    <div class="form-group">
-        <input type="hidden" name="outRemarkId" value="{{Busplan.outRemarkId}}">
-        <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
-        <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
-        <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
-        <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
-        <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+    <div>
+        <button class="btn btn-sm btn-success T-add-transfersId">
+            <i class="ace-icon fa fa-plus"></i> 新增
+        </button>
     </div>
+    {{each outRemarkList as Busplan}}
+    <div class="T-transfersId-box">
+        <div class="form-group">
+            <input type="hidden" name="outRemarkId" value="{{Busplan.outRemarkId}}">
+            <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
+            <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
+            <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
+            <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
+            <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+        </div>
     <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
+    </div>
     {{/each}}
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
@@ -113,11 +120,11 @@
     <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
         <button class="btn btn-sm btn-primary mar-r-20  T-bus-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
-        <!-- <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
+        <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
                 <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
                 <span class="lbl font-w"> 接团车辆安排完成</span>
             </label>
-        </span> -->
+        </span>
     </div>
 </div>

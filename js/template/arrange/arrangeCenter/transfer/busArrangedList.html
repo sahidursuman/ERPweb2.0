@@ -13,12 +13,13 @@
     </thead>
     <tbody class="T-busCompleted-list">
         {{each unifyList as bus}}
-            {{each bus.busList as businfo }}
                 {{each bus.outRemarkList as buslist index}}
             <tr data-id = "{{bus.unifyId}}">
             {{if index == 0}}
             <td class="h-touristGroupInfo" rowspan="{{bus.outRemarkList.length}}">
-            <p><span>{{businfo.busCompanyName}}</span> &nbsp;<span>{{businfo.licenseNumber}}</span></p>
+            {{each bus.busList as businfo }}<p>
+            <span>{{businfo.busCompanyName}}</span> &nbsp;<span>{{businfo.licenseNumber}}</span>
+            </p>{{/each}}
             </td>
             {{/if}}
              <td >
@@ -48,7 +49,6 @@
             </td>
             {{/if}}
         </tr>
-            {{/each}}
             {{/each}}
         {{/each}}
     </tbody>
