@@ -16,7 +16,8 @@ FinancialService.initPayEvent = function($container,rule)  {
     });
 
     var $cash = $container.find('input[name=cash-number]'),
-        $card = $container.find('input[name=card-number]');
+        $card = $container.find('input[name=card-number]'),
+        $balance =$container.find('.T-balance');
     getBankList($cash,0);
     getBankList($card,1);
     $select = $container.find('select[name=sumPayType]');
@@ -34,6 +35,11 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val == 5){
             $card.closest('div').removeClass('hidden');
         };
+        if(val == 6){
+            $balance.closest('div').removeClass('hidden');
+        }else {
+            $balance.closest('div').addClass('hidden');
+        }
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };
@@ -109,6 +115,19 @@ function getBankList($obj,payType){
         }
     });
 }
+
+//时间控件--保留时分秒
+FinancialService.datetimepicker=function($tab){
+    if (!!$tab) {
+       $tab.find(".datepicker").datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'L',
+            language: 'zh-CN'
+        })
+    }
+};
+
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
@@ -502,6 +521,10 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
+    if(unpayMoney < 0){
+        showMessageDialog($("#confirm-dialog-message"),"已对账未" + key + "总额为负，不能进行自动下账！");
+        return false;
+    }
     if(sumPayMoney > unpayMoney){
         showMessageDialog($("#confirm-dialog-message"),"本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
         return false;
@@ -529,6 +552,14 @@ FinancialService.getInitDate = function(){
     return { 
         startDate : Tools.addDay(new Date(), -30),
         endDate : Tools.addDay(new Date(), 30)
+    };
+};
+
+//获取当天日期的一个月
+FinancialService.getInitMothDate = function(){
+    return { 
+        startDate : Tools.addDay(new Date(),-30),
+        endDate : Tools.addDay(new Date(), 0)
     };
 };
 

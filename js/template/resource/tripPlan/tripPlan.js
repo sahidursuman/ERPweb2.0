@@ -594,6 +594,21 @@ define(function(require, exports) {
 			}
 		})
 
+		var setUpTourists = $tab.find('.T-setUp')
+		setUpTourists.each(function(i) {
+			var $this = setUpTourists.eq(i),
+				noticeJson = $this.attr('touristgroup');
+				
+			if (!!noticeJson && typeof noticeJson == 'string') {
+				noticeJson = JSON.parse(noticeJson);
+			}
+			if (noticeJson.length > 0) {
+				$this.text('已设置');
+			}else{
+				$this.text('点击设置');
+			}
+		})
+
 		$tab.find('.T-touristGroupList').on('click', '.T-groupView', function() {
 			var $this = $(this), $parent = $this.closest('tr'), id = $parent.data('id');
 			tripPlan.viewTouristGroup(id);
@@ -1354,7 +1369,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 	};
@@ -1385,7 +1400,7 @@ define(function(require, exports) {
 		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
@@ -1445,7 +1460,7 @@ define(function(require, exports) {
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
 		tripPlan.addBusResource($tab);
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
@@ -1472,7 +1487,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_restaurant");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1503,7 +1518,7 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_hotel");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1532,7 +1547,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_scenic");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1581,7 +1596,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_selfPay");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1613,7 +1628,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_ticket");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
@@ -1642,7 +1657,7 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_other");
-		tripPlan.calculatePrice($tab);
+		tripPlan.calculatePrice($tab, true);
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);    
 	};
@@ -1671,8 +1686,11 @@ define(function(require, exports) {
 			tr.eq(tr.length-1).find(".T-whichDaysContainer").html(selectText);
 		}else{
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
-				var val = ($(this).attr("value") || 1)*1;
-				var selectText = '<select class="w-100" name="whichDay">';
+				var val = ($(this).attr("value") || 1)*1,isDis = $(this).data('isconfirmaccount'), disabled = '';
+				if (isDis) {
+					disabled = 'disabled = "disabled"';
+				}
+				var selectText = '<select class="w-100" name="whichDay" '+disabled+'>';
 				max = (max >= val-1)? max: val-1;
 				min = (min <= val-1)? min: val-1;
 				console.info(max);
@@ -1892,6 +1910,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('insurance','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
                 showLoading: false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -1997,6 +2018,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('guide', 'findAll'),
 				dataType: "json",
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success: function(data) {
 					var result = showDialog(data);
@@ -2089,7 +2113,8 @@ define(function(require, exports) {
 				showLoading: false,
 				data:{
 					brand:$tr.find("input[name=brand]").val(),
-					busCompanyId:$tr.find("input[name=busCompanyId]").val()
+					busCompanyId:$tr.find("input[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -2132,7 +2157,8 @@ define(function(require, exports) {
 				url: KingServices.build_url('bookingOrder','getBusBrandList'),
 				data:{
 					seatCount:$tr.find("[name=needSeatCount]").val(),
-					busCompanyId:$tr.find("[name=busCompanyId]").val()
+					busCompanyId:$tr.find("[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2181,7 +2207,8 @@ define(function(require, exports) {
 				url: KingServices.build_url('busCompany','getLicenseNumbers'),
 				data: {
 					seatCount:$tr.find("[name=needSeatCount]").val(),
-					brand:$tr.find("[name=brand]").val()
+					brand:$tr.find("[name=brand]").val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2225,7 +2252,8 @@ define(function(require, exports) {
 					dataType: 'json',
 					showLoading: false,
 					data: {
-						id: ui.item.id
+						id: ui.item.id,
+						menuKey:menuKey
 					},
 				})
 				.done(function(data) {
@@ -2248,7 +2276,8 @@ define(function(require, exports) {
 				data:  {
 					seatCount: $tr.find("[name=needSeatCount]").val(),
 					brand: $tr.find("[name=brand]").val(),
-					busId: $tr.find('input[name="busId"]').val()
+					busId: $tr.find('input[name="busId"]').val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2377,6 +2406,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('restaurant','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
                 showLoading:false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2499,7 +2531,10 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('hotel','findHotelListByLevel'),
                 showLoading:false,
-                data:"level=" + hotelStarValue,
+                data:{
+                	level:hotelStarValue,
+                	menuKey:menuKey
+                },
                 success: function(data) {
 					if(showDialog(data)){
 						var hotelList = JSON.parse(data.hotelList);
@@ -2543,7 +2578,8 @@ define(function(require, exports) {
                     data: {
                     	id: ui.item.id,
                     	whichDay: whichDay,
-                    	enterTime: enterTime
+                    	enterTime: enterTime,
+                    	menuKey:menuKey
                     },
                     success: function(data) {
 						if(showDialog(data)){
@@ -2610,6 +2646,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('scenic','findAll'),
                 type: 'POST',
+                data:{
+					menuKey:menuKey
+				},
                 showLoading: false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2739,6 +2778,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('shop','findAll'),
                 type: 'POST',
+                data:{
+					menuKey:menuKey
+				},
                 showLoading:false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2852,6 +2894,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('selfpay','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success:function(data){
 					if(showDialog(data)){
@@ -2957,6 +3002,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('ticket','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					if(showDialog(data)) {

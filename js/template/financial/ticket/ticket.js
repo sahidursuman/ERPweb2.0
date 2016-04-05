@@ -161,6 +161,7 @@ define(function(require, exports) {
 			args.startDate = $tab.find('.T-search-start-date').val();
 			args.endDate = $tab.find('.T-search-end-date').val();
 			args.accountStatus = $tab.find('[name=accountStatus]').val();
+			args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
 		}
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listTicketAccount'),
@@ -242,6 +243,15 @@ define(function(require, exports) {
 		Tools.setDatePicker($tab.find('.datepicker'), true);
 		FinancialService.updateUnpayMoney($tab, new FinRule(0));
 
+		//搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+			Ticket.checkingList(args,$tab);
+        });
 		$tab.find(".T-btn-search").off().on('click', function(event){
 			event.preventDefault();
 			args.pageNo = 0;
@@ -274,7 +284,8 @@ define(function(require, exports) {
                 startDate: $tab.find('.T-search-start-date').val(),
                 accountInfo: $tab.find('.T-search-type').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeTicketFinancial");
         });
@@ -432,6 +443,7 @@ define(function(require, exports) {
 			args.endDate = $tab.find('.T-search-end-date').val();
 			args.accountInfo = $tab.find('.T-search-type').val();
 			args.accountStatus = $tab.find('[name=accountStatus]').val();
+			args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
 		}
 
 		$.ajax({
@@ -505,6 +517,16 @@ define(function(require, exports) {
         FinancialService.initPayEvent($tab);
 		Tools.setDatePicker($tab.find('.datepicker'), true);
 
+		//搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+			args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+			Ticket.clearingList(args,$tab);
+        });
 		$tab.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			args.pageNo = 0;
