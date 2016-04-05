@@ -2,10 +2,10 @@
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
         <tbody>
             <tr>
-                <td style="text-align:left"><label style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">线路：{{tripPlan.lineProductName}}</label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">类别：{{tripPlan.lineProductType}}</label></td>
                 <td style="text-align:left"><label style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.days}}</span></label></td>
             </tr>
             <tr>
                 <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
@@ -14,7 +14,7 @@
                 <td style="text-align:left"><label style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
             </tr>
             <tr>
-                <td style="text-align:left"> <label style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label></td>
+                <td style="text-align:left"> <label style="font-weight: bold;">导游：{{if tripPlan.guideName != null}}{{tripPlan.guideName}}{{/if}}</label></td>
                 <td style="text-align:left"><label style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
                 <td></td>
                 <td></td>

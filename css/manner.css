@@ -97,6 +97,9 @@ input {
     padding-right: 5px;
 }
 
+.div-h-30 {
+    height:30px;
+}
 
 /**
  * 设置自定义popover的样式
@@ -435,7 +438,9 @@ table tr td {
 .mar-t-20 {
     margin-top: 20px;
 }
-
+.mar-t-30 {
+    margin-top: 30px;
+}
 
 .mar-t-10 {
     margin-top: 10px;
