@@ -1641,7 +1641,7 @@ define(function(require, exports) {
                     curr: (data.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                            touristGroup.getLineProductListt(args, $layer);
+                            touristGroup.getLineProductList(args, $layer);
                         }
                     }
                 }); 
