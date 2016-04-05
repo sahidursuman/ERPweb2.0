@@ -18,7 +18,27 @@
                     <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
                     <label>收客单号：</label>
                     <input name="orderNumber" type="text" class="mar-r-10" value="{{searchParam.orderNumber}}" style="width:100px;" />
-
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                    全部
+                                {{else if searchParam.isConfirmAccount == 1}}
+                                    已对账
+                                {{else}}
+                                    未对账
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
+                    
                     <button class="btn-height btn-sm search-btn T-search" >
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
@@ -160,7 +180,7 @@
                     {{else}}<!-- 若无费用明细 -->-
                     {{/if}}
                 </td>
-                <td rowspan="{{rs.rowLen}}"><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td> 
+                <td rowspan="{{rs.rowLen}}" class="align-left"><a class="T-option T-payedDetail in-block" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td> 
                 {{if rs.outFeeList.length > 0}}
                 <!-- 若有中转结算价 -->
                     <td><span class="F-float F-money">{{rs.outTransferBackMoney}}</span></td>

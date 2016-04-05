@@ -24,7 +24,8 @@ define(function(require, exports) {
 				startTime : "",
 				endTime	: "",
 				lineProductId : "",			
-				lineProductName	: "",						
+				lineProductName	: "",	
+				contactUserName : "",					
 				partnerAgencyId	: "",	//地接社	
 				partnerAgencyName :"",					
 				status	: "",		
@@ -107,6 +108,10 @@ define(function(require, exports) {
 	    	//模拟click事件
 	    	transfer.$divIdOutObj.find(".T-transferOut-search").trigger("click");
 	    	transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
+	    	//选项卡切换数据交互
+	    	transfer.$tab.find('.Transfer-Out').off('click').on('click',{divId:"Transfer-Out",type:"1"},transfer.getListPage );
+	    	transfer.$tab.find('.Transfer-In').off('click').on('click',{divId:"Transfer-In",type:"2"},transfer.getListPage);
+
 
 	    	//搜索下拉事件
 	    	transfer.$divIdOutObj.find(".dropdown-menu a").click(function(){
@@ -225,7 +230,6 @@ define(function(require, exports) {
 						});
 					}
 			})
-
 		};
 
 		/**
@@ -298,6 +302,7 @@ define(function(require, exports) {
 				lineProductName :getValue("lineProductName"),
 				partnerAgencyId : getValue("partnerAgencyId"),
 				partnerAgencyName : getValue("partnerAgencyName"),
+				contactUserName : getValue("contactUserName"),
 				userName:getValue("userName"),
 				startTime : getValue("startTime"),
 				endTime : getValue("endTime"),
@@ -553,12 +558,14 @@ define(function(require, exports) {
 				data: 'outTransferId='+ id,
 			})
 			.done(function(data) {
-				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-					var divId="Transfer-Out",
-						type="1";
-						transfer.getSearchParam(divId,type);
-						transfer.findPager(divId,type,0);	
-				})
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), '退回成功', function() {
+						var divId="Transfer-Out",
+							type="1";
+							transfer.getSearchParam(divId,type);
+							transfer.findPager(divId,type,0);	
+					})
+				}
 			})
 		};
 

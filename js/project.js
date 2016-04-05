@@ -14,6 +14,11 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event',
 	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
+
+var KingSettings = {
+	// 询价服务的开关
+	pusher: false,
+};
 /**
  * 图片地址
  */
@@ -718,6 +723,7 @@ var modalScripts = {
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
 	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
+	'financial_offsetByDetail':"js/template/financial/offsetByDetail/offsetByDetail.js",//冲抵明细
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
@@ -2141,6 +2147,18 @@ KingServices.getMainList = function(key, onlyStyle) {
 }
 
 /**
+ * 购物统计总打单详情
+ * @param  {[type]} tripPlanId    团ID
+ * @param  {[type]} shopArrangeId 购物安排ID
+ * @return {[type]}               [description]
+ */
+KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId)  {
+	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
+		module.viewConsumeMoney(tripPlanId, shopArrangeId);
+	});
+}
+
+/**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
@@ -2408,6 +2426,12 @@ KingServices.paymentDetail = function(orderId){
 	});
 }
 
+KingServices.viewDetails = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.viewDetails(id);
+	});
+}
+
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),
@@ -2650,18 +2674,13 @@ Tools.trFixed = function(obj){
 //根据需要加载插件js
 var modulePlugin = {
 	"plugin_print":'components/jquery-plugin/jQuery.print.js',//加载打印插件
-	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js'//加载导出插件
+	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js',//加载导出插件
+	'plugin_pusher': 'components/pusher/pusher.min.js',
 };
 Tools.loadPluginScript = function(pluginKey){
-	
-	switch(pluginKey){
-		case  'plugin_print' :
-			$.getScript(modulePlugin.plugin_print);	
-			break;
-		case  'plugin_export' :
-			$.getScript(modulePlugin.plugin_export);
-		break;	
-	};	
+	if (!!pluginKey && !!modulePlugin[pluginKey])  {
+		$.getScript(modulePlugin[pluginKey]);
+	}
 };
 
 window.onbeforeunload=function(e){

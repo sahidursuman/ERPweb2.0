@@ -144,6 +144,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "accountTime";
         $.ajax({
@@ -206,6 +207,15 @@ define(function(require, exports) {
         FinancialService.updateUnpayMoney($tab,ruleCheck);
         hotel.getHotelList($tab,false);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            hotel.hotelCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -220,7 +230,8 @@ define(function(require, exports) {
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startTime: $tab.find('input[name=startDate]').val(),
                 endTime: $tab.find('input[name=endDate]').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");
         });
@@ -243,6 +254,7 @@ define(function(require, exports) {
             args.startTime = $tab.find("input[name=startDate]").val();
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = "accountTime";
         if(args.autoPay == 1){
@@ -300,19 +312,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(args.isAutoPay== 2?3: 1));
-                                hotel.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
-                                hotel.clearTempSumDate = {
-                                    id : args.hotelId,
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    hotel.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
+                                    hotel.clearTempSumDate = {
+                                        id : args.hotelId,
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 hotel.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr-1;
@@ -336,11 +350,24 @@ define(function(require, exports) {
 
         FinancialService.initPayEvent($tab);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            if(args.isAutoPay == 1){
+                args.isAutoPay = 0;
+            }
+            args.pageNo = 0;
+            hotel.hotelClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             if(args.isAutoPay == 1){
                 args.isAutoPay = 0;
             }
+            args.pageNo = 0;
             hotel.hotelClear(args,$tab);
         });
         //保存结算事件

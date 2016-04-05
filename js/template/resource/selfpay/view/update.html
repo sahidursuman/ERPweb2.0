@@ -110,7 +110,7 @@
 								<thead>
 									<tr>
 										<th class="table-border" width="100"><span class="necessary">*</span>项目名称</th>
-										<th class="table-border" width="100">针对客源</th>
+										<th class="table-border hidden" width="100">针对客源</th>
 										<th class="table-border" width="400"><span class="necessary">*</span>时间范围</th>
 										
 										<th class="table-border" width="125"><span class="necessary">*</span>市场价格(元)</th>
@@ -128,7 +128,7 @@
 										<td>
 											<input name="name" value="{{itemList.name}}" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100">
 										</td>
-										<td>
+										<td class="hidden">
 											<select class="col-sm-12" name="customerType" style="min-width:100px;">
 												<option value="0" {{if itemList.customerType == 0}}selected="selected"{{/if}}>散客</option>
 												<option value="1" {{if itemList.customerType == 1}}selected="selected"{{/if}}>团体</option>

@@ -35,7 +35,9 @@ define(function(require, exports) {
 		Tools.addTab(menuKey, '购物统计', listMainTemplate());
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
-		shopStat.datepicker(shopStat.$searchArea)
+		//shopStat.datepicker(shopStat.$searchArea)
+		Tools.setDatePicker(shopStat.$searchArea.find('.T-tripTime .datepicker'), true)
+		Tools.setDatePicker(shopStat.$searchArea.find('.T-shopTime .datepicker'), true)
 		shopStat.listShopStat(0);
 		//获取客户、团号和购物店列表
    		shopStat.autocompleteDate(shopStat.$tab);
@@ -61,16 +63,18 @@ define(function(require, exports) {
 	   			fromPartnerAgencyId: shopStat.getValue(shopStat.$searchArea,'fromPartnerAgencyId'),
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
-	   			startTime: shopStat.getValue(shopStat.$searchArea,'startTime'),
-	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber')
+	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber'),
+	   			startShopTime: shopStat.getValue(shopStat.$searchArea,'startShopTime'),
+	   			endShopTime: shopStat.getValue(shopStat.$searchArea,'endShopTime'),
+	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
 	   		}
 		};
-		if(searchData.startTime > searchData.endTime){
-	        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-	        return false;
-	    }
 	   	// 修正页码
 	   	searchData.pageNo = page || 0;
+	   	//select修改查询
+	   	shopStat.$searchArea.find('[name=isShopping],[name=customerType]').off('change').on('change', function() {
+	   		shopStat.listShopStat(0);
+	   	})
 	   	//购物统计列表请求Ajax
 	 	$.ajax({
 	 		url : KingServices.build_url("financial/shopAccount","shopStatistics"),
@@ -157,6 +161,15 @@ define(function(require, exports) {
 			type:'POST',
 			showLoading:false,
 			success:function(data){
+				var sumPlayList = data.sumPlayList;
+				var newSumPlayList = [];
+				//删除停车返佣和人数返佣的数据
+				for(var i = 0;i<sumPlayList.length;i++){
+					if(sumPlayList[i].name != '停车返佣' && sumPlayList[i].name != '人数返佣'){
+						newSumPlayList.push(sumPlayList[i]);
+					}
+				};
+				data.sumPlayList = newSumPlayList;
 				var html = viewConsumeMoneyTemplate(data);
 				layer.open({
                     type : 1,
@@ -246,4 +259,5 @@ define(function(require, exports) {
 	};
 
 	exports.init = shopStat.initModule;
+	exports.viewConsumeMoney=shopStat.viewConsumeMoney;
 });

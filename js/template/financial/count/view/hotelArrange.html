@@ -23,7 +23,6 @@
                 <th class="th-border">已付</th>
                 <th class="th-border">导付</th>
                 <th class="th-border">单据</th>
-                <th class="th-border">差额</th>
                 <th class="th-border">导游报账备注</th>
                 <th class="th-border" rowspan="2">是否对账</th>
             </tr> 
@@ -119,7 +118,6 @@
                             <span style="color:#bbb;">查看</span>
                         {{/if}}
                     </td>
-                    <td><span class="difference F-float F-money"></span></td>
                     <td><input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{ if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                     <td>
                         {{if arrange.isConfirmAccount == 0}}
@@ -147,7 +145,7 @@
 <div style="width:60%;">
     <div> 
         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].opCheckRemark}}{{/if}}" />
+        <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].opCheckRemark}}{{/if}}" />
     
         <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
         <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].financeCheckRemark}}{{/if}}" />

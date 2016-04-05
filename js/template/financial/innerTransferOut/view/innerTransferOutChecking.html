@@ -3,10 +3,10 @@
           <div class="T-search" >
               <label  class="control-label">部门：</label>
               <input type="text" class="mar-r-10" name="toBusinessGroupName" value="{{searchParam.toBusinessGroupName}}" />
-              <label class="control-label mar-r-10">账期：
+              <label class="control-label">账期：
                 <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}"/>
                 <span>至</span>
-                <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endDate}}"/>
+                <input type="text" style="width:100px;" class="date-picker mar-r-10" name="endDate" value="{{searchParam.endDate}}"/>
               </label>
           
               <label class="control-label mar-r-10">线路名称：
@@ -25,11 +25,31 @@
                   {{/each}} 
                   </select>
               </label>
+              <label>对账状态：</label>
+              <div class="btn-group T-check-status mar-r-10">
+                  <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                      <span>
+                          {{if searchParam.isConfirmAccount === 0}}
+                              未对账
+                          {{else if searchParam.isConfirmAccount === 1}}
+                              已对账
+                          {{else}}
+                              全部
+                          {{/if}}
+                      </span>
+                      <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                      <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                      <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                      <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                  </ul>
+              </div>
               <button class="mar-r-10 btn-sm search-btn T-checking-search" >
                    <i class="ace-icon fa fa-search"></i>
                        搜索
               </button>
-              <button class="btn-sm search-btn T-btn-export mar-r-10">导出报表</button>
+              <button class="btn-sm search-btn T-btn-export">导出报表</button>
             <input name="accountStatus" value="{{searchParam.accountStatus}}" type="hidden">
           </div>
           <form class="form-horizontal" role="form" onsubmit="return false">
