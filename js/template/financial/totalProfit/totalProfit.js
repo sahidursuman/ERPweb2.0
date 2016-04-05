@@ -83,7 +83,6 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
             data:args,
-            showLoading:false,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
@@ -120,7 +119,6 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("financialTotal","findTotal"),
             data:args,
-            showLoading:false,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){

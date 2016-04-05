@@ -309,7 +309,7 @@ define(function(require, exports) {
                         }
                     }).off("click").on("click",function(){
                         var Obj = groupCollective;
-                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
+                        $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
                         $(Obj).autocomplete('search','');
                     });
 
@@ -327,7 +327,7 @@ define(function(require, exports) {
                         }
                     }).off("click").on("click",function(){
                         var Obj = partner;
-                        $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
+                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
                         $(Obj).autocomplete('search','');
                     });
                 }
