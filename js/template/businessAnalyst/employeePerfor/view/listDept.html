@@ -2,7 +2,9 @@
 	<thead>
 		<tr class="bg-blur">
 			<th>部门</th>
+			{{if isChildGroup}}
 			<th>子部门</th>
+			{{/if}}
 			<th>收客量</th>
 			<th>内转收客量</th>
 			<th>发团量</th>
@@ -16,7 +18,9 @@
 		{{each result as deptL}}
 		   <tr>
 	   		    <td>{{deptL.name}}</td>
+	   		    {{if isChildGroup}}
 	   		    <td class="text-bold">{{deptL.childName}}</td>
+	   		    {{/if}}
 	   			<td>{{deptL.getAdultCount}}大{{deptL.getChildCount}}小</td>
 	   			<td>{{deptL.getNotDirectAdultCount}}大{{deptL.getNotDirectChildCount}}小</td>
 	   			<td>{{deptL.tripCount}}</td>
