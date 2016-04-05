@@ -473,6 +473,9 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupMoney($that, 0, type);
             }else if($that.hasClass('T-guest-info')){
                 touristGroup.updateGuestInfo($that, type);
+            }else if($that.hasClass('datepicker')){
+                var start = $tab.find('.T-team-info [name="startTime"]').val();
+                $(this).datepicker('setStartDate', start);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -487,6 +490,14 @@ define(function(require, exports) {
                 $tab.find('.T-container').data('type', 'group');
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 转团 ');
                 $tab.find('.T-part-group-text').text('转团');
+            }
+        });
+        $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
+            var $that = $(this),
+                $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
+                console.log(1)
+            if($endTime.val() != "" && $that.val() > $endTime.val()){
+                $endTime.val('');
             }
         });
 
@@ -562,6 +573,17 @@ define(function(require, exports) {
                 $(this).datepicker('setStartDate', start);
             }
     	});
+        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+            var $that = $(this), $tr = $that.closest('tr'),
+                $endTime = $tr.find('[name="tripEndTime"]'),
+                lineData = $tr.find('[name="lineProductName"]').data('json');
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+            if($that.val() != "" && !!lineData.days){
+                $endTime.val(Tools.addDay($that.val(), lineData.days));
+            }
+        });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
@@ -826,6 +848,9 @@ define(function(require, exports) {
                             }
                         }
                     });
+                    $tbody.on('change', '[name="idCardType"]', function(event){
+                        validate = rule.guestUpdate(validate);
+                    });
 
                     $layer.find('.T-btn-save').on('click', function(){
                         if(!validate.form())return;
@@ -839,7 +864,7 @@ define(function(require, exports) {
                             infoData.touristGroupMemberJsonDel = JSON.parse(infoData.touristGroupMemberJsonDel || "[]");
                         }
 
-                        $that.val(infoData.guestName+"  "+infoData.adultCount+"大"+infoData.childCount+"小").data('json', JSON.stringify(infoData)).trigger('blur');
+                        $that.val(infoData.guestName+"  "+(infoData.adultCount || 0)+"大"+(infoData.childCount || 0)+"小").data('json', JSON.stringify(infoData)).trigger('blur');
                         $that.closest('.T-team-info').find('[name="mobileNumber"]').val(infoData.mobileNumber).trigger('blur');
                         layer.close(index);
                     });
@@ -1535,8 +1560,12 @@ define(function(require, exports) {
     touristGroup.batchAddTourists = function($obj, validate) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
             module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer){
+                var $tr = $layer.find('tr[data-default="1"]');
+                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == ""){
+                    $tr.remove();
+                }
                 touristGroup.memberNumber($layer);
-                rule.guestUpdate(validate)
+                rule.guestUpdate(validate);
             });
         });
     };
@@ -1557,7 +1586,10 @@ define(function(require, exports) {
                 var $layer = $(obj);
                 touristGroup.getLineProductList(0, $layer);
                 $layer.find('.T-btn-search').on('click', function(){
-                    touristGroup.getLineProductList(0, $layer);
+                    touristGroup.getLineProductList({
+                        pageNo : 0,
+                        name : $layer.find('[name="lineProductName"]').val()
+                    }, $layer);
                 });
                 $layer.find('.T-btn-save').on('click', function(){
                     var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
@@ -1609,7 +1641,7 @@ define(function(require, exports) {
                     curr: (data.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                            touristGroup.getLineProductListt(args, $layer);
+                            touristGroup.getLineProductList(args, $layer);
                         }
                     }
                 }); 
