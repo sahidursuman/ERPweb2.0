@@ -21,10 +21,10 @@
                         <a data-value="0" href="javascript:void(0)">全部</a>
                     </li>
                     <li>
-                        <a data-value="2" href="javascript:void(0)">未结清</a>
+                        <a data-value="1" href="javascript:void(0)">已结清</a>
                     </li>
                     <li>
-                        <a data-value="1" href="javascript:void(0)">已结清</a>
+                        <a data-value="2" href="javascript:void(0)">未结清</a>
                     </li>
                 </ul>
             </div>
@@ -73,7 +73,7 @@
                         <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
                         <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
                         <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
-                        <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                         <td>{{if rs.allCheckCount != rs.checkedCount}}
                             <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}} {{if rs.allCheckCount == rs.checkedCount}}
                             <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}}

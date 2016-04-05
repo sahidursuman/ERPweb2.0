@@ -211,7 +211,7 @@
                         <tr>
                             <th class="th-border">序号</th>
                             <th class="th-border">客户</th>
-                            <th class="th-border">收客单号</th>
+                            <th class="th-border">收客信息</th>
                             <th class="th-border">游客信息</th>
                             <th class="th-border">包含自费</th>
                             <th class="th-border">备注</th>
@@ -224,10 +224,12 @@
                     </thead>
                     <tbody class="T-tripDetail">
                    {{each touristGroups as touristGroup index}}
-                        <tr id="{{touristGroup.id}}">
+                        <tr id="{{touristGroup.id}}"
+                        subStatus = "{{touristGroup.subStatus}}" 
+                        isInnerTransferConfirm = "{{touristGroup.isInnerTransferConfirm}}">
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-                            <td>{{touristGroup.orderNumber}}</td>
+                            <td style="text-align: left;"> <p>收客单号：{{touristGroup.orderNumber}}</p> <p>{{touristGroup.lineProduct.name}}</p></td>
                             <td>
                                 <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
                                 <br/>
@@ -259,11 +261,20 @@
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span>
                             </td>
-                            <td><input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" 
-                            {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
                             <td>
-                                {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
-                                    <a href="#" class="T-viewCostDetail">
+                                <div class="inline-flex">
+                                    <input name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" 
+                                    {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                    &nbsp;&nbsp;
+                                    <select name="receiveStatus" disabled="dlsabled">
+                                        <option value="0" {{if touristGroup.isReceived == 0}}selected="selected"{{/if}}>未收到</option>
+                                        <option value="1" {{if touristGroup.isReceived == 1}}selected="selected"{{/if}}>已收到</option>
+                                    </select>
+                                </div>
+                                
+                            </td>
+                            <td><a href="#" class="T-viewCostDetail">
+                                    {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
                                         {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                             {{touristGroupFee.name}} ：
                                             <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
@@ -275,8 +286,8 @@
                                             <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                             <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                         {{/each}}
-                                    </a>
-                                {{/if}}
+                                    {{/if}}
+                                </a>
                                 {{if touristGroup.isConfirmAccount == 0}}
                                 <a style="margin-top:5px;" data-status="1" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                                 {{/if}}

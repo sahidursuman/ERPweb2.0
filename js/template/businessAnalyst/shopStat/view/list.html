@@ -1,24 +1,23 @@
 <p style="display:none;" class="T-print">购物统计表</p>
 <table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
     <colgroup>
+        <col style="width:18%;"></col>
+        <col style="width:9%;"></col>
+        <col style="width:9%;"></col>
+        <col style="width:8%;"></col>
         <col style="width:15%;"></col>
-        <col style="width:15%;"></col>
-        <col style="width:10%;"></col>
-        <col style="width:15%;"></col>
-        <col style="width:10%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
-        <col style="width:6%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+        <col style="width:8%;"></col>
+
     </colgroup>
     <thead>
         <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
-            <th class="P-trFontSize">客户</th>
-            <th class="P-trFontSize">团号</th>
-            <th class="P-trFontSize">人数</th>
+            <th class="P-trFontSize">团信息</th>
+            <th class="P-trFontSize">导游</th>
             <th class="P-trFontSize">出团日期</th>
             <th class="P-trFontSize">进店日期</th>
             <th class="P-trFontSize">购物店</th>
@@ -33,10 +32,16 @@
     <tbody class="T-tourguidPer-list">
         {{each shopListdata as rs index}}
         <tr>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.partnerAgencyName}}</td>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.tripNumber}}</td>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.startTime |dateFormat: 'yyyy-MM-dd'}} - {{rs.endTime |dateFormat: 'yyyy-MM-dd'}}</td>
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}" style="text-align:left">
+                <span>客户：{{rs.partnerAgencyName}}</span><br/>
+                <span>团号：{{rs.tripNumber}}</span><br/>
+                <span>人数：{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span><br/>
+
+            </td>
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}" style="text-align:left">
+                <span>{{rs.guidName}}</span><br/><span>{{rs.guideMobileNumber}}</span>
+            </td>
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.startTime |dateFormat: 'yyyy.MM.dd'}}<br/> - <br/> {{rs.endTime |dateFormat: 'yyyy.MM.dd'}}</td>
             {{if rs.shopList.length == 0}}
                 <td></td>
                 <td></td>
@@ -62,17 +67,18 @@
         {{/each}}
         {{/each}}
         <tr style="background: #e0effd;">
-            <td colspan="2" class="T-fontSize">合计</td>
-            <td class="P-tdFontSize">{{totalShop.touristAdultCount}}大{{totalShop.touristChildCount}}小</td>
-            <td class="P-tdFontSize">-</td>
-            <td class="P-tdFontSize">-</td>
-            <td class="P-tdFontSize">-</td>
-            <td class="P-tdFontSize">{{totalShop.consumeMoney}}</td>
-            <td class="P-tdFontSize">{{totalShop.avgConsumeMoney}}</td>
-            <td class="P-tdFontSize">{{totalShop.guideRebateMoney}}</td>
-            <td class="P-tdFontSize">{{totalShop.travelAgencyRebateMoney}}</td>
-            <td class="P-tdFontSize">{{totalShop.sumRebateMoney}}</td>
-            <td class="P-tdFontSize">{{totalShop.avgRebateMoney}}</td>
+
+            <td colspan="2" class="T-fontSize" style="text-align:right">合计</td>
+            <td class="P-tdFontSize" >{{totalShop.touristAdultCount}}大{{totalShop.touristChildCount}}小</td>
+            <td class="P-tdFontSize" >-</td>
+            <td class="P-tdFontSize" >-</td>
+            <td class="P-tdFontSize" >{{totalShop.consumeMoney}}</td>
+            <td class="P-tdFontSize" >{{totalShop.avgConsumeMoney}}</td>
+            <td class="P-tdFontSize" >{{totalShop.guideRebateMoney}}</td>
+            <td class="P-tdFontSize" >{{totalShop.travelAgencyRebateMoney}}</td>
+            <td class="P-tdFontSize" >{{totalShop.sumRebateMoney}}</td>
+            <td class="P-tdFontSize" >{{totalShop.avgRebateMoney}}</td>
+
         </tr>
     </tbody>
 </table>

@@ -28,13 +28,32 @@
                     <label class="control-label">收客单号：</label>
                     <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
                 </div>
-                <div class="form-group mar-r-10">
-                    <button class="btn-sm search-btn T-btn-search" >
-                         <i class="ace-icon fa fa-search"></i>
-                             搜索
+                <label class="form-group control-label">对账状态：</label>
+                <div class="form-group btn-group T-check-status mar-r-10">
+                    <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                        <span>
+                            {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                全部
+                            {{else if searchParam.isConfirmAccount == 1}}
+                                已对账
+                            {{else}}
+                                未对账
+                            {{/if}}
+                        </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
                     </button>
+                    <ul class="dropdown-menu">
+                        <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                        <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                        <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                    </ul>
                 </div>
                 <div class="form-group mar-r-10">
+                    <button class="btn-sm search-btn T-btn-search" >
+                        <i class="ace-icon fa fa-search"></i>搜索
+                    </button>
+                </div>
+                <div class="form-group">
                     <button class="btn-sm search-btn T-btn-export ">导出报表</button>
                 </div>
             </form>
@@ -100,7 +119,12 @@
                     {{else}}-
                     {{/if}}
                 </td>
-                <td><a href="javascript:void(0)" class="T-action T-payedDetail"><span>社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span>，导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span></a></td>
+                <td class="align-left">
+                    <a href="javascript:void(0)" class="T-action T-payedDetail">
+                        <span class="in-block">社收：<span class="transGetedMoney F-float F-money">{{checking.transGetedMoney}}</span></span>
+                        <span class="in-block">导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span>
+                    </a>
+                </td>
                 <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
                 <td class="T-unReceivedMoney F-float F-money" name="unPayedMoney">{{if checking.unPayedMoney}}{{checking.unPayedMoney}}{{else}}{{checking.unIncomeMoney}}{{/if}}</td>
