@@ -676,7 +676,8 @@ var modalScripts = {
     'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     // 'arrange_transit': 'js/template/arrange/transit/transit.js',
-    'arrange_transit': 'js/template/arrange/transitPlan/transitPlan.js',
+    // 'arrange_transit': 'js/template/arrange/transitPlan/transitPlan.js',
+    'arrange_transit': 'js/template/arrange/arrangeCenter/arrange.js',
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
