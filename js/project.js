@@ -1820,7 +1820,7 @@ Tools.thousandPoint = function(num, length){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterUnPoint = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-float").each(function(){
 		if(!$(this).is(':not("input")')){
