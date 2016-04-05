@@ -176,7 +176,28 @@ define(function(require, exports) {
                     errMsg: '请输入正确的手机号码'
                 }]
 	    	}];
-
+	    	$obj.find('.T-addTouristTbody').children('tr').each(function(index, el) {
+                var $that = $(this);
+                if($that.find('[name="idCardType"]').val() == 0){
+                    settings.push({//校验身份证号码
+                        $ele: $that.find('input[name="idCardNumber"]'),
+                        rules: [
+                        {
+                            type: 'id',
+                            errMsg: '请输入正确的身份证号码'
+                        }]
+                    });
+                }else if($that.find('[name="idCardType"]').val() == 1){
+                	settings.push({//校验护照号码
+                        $ele: $that.find('input[name="idCardNumber"]'),
+                        rules: [
+                        {
+                            type: 'passport-id',
+                            errMsg: '请输入正确的护照号码'
+                        }]
+                    });
+                }
+            });
 	        return settings;
 	    },
 		checkGuest : function($container){

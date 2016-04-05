@@ -826,6 +826,9 @@ define(function(require, exports) {
                             }
                         }
                     });
+                    $tbody.on('change', '[name="idCardType"]', function(event){
+                        validate = rule.guestUpdate(validate);
+                    });
 
                     $layer.find('.T-btn-save').on('click', function(){
                         if(!validate.form())return;
