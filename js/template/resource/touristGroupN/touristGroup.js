@@ -573,6 +573,17 @@ define(function(require, exports) {
                 $(this).datepicker('setStartDate', start);
             }
     	});
+        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+            var $that = $(this), $tr = $that.closest('tr'),
+                $endTime = $tr.find('[name="tripEndTime"]'),
+                lineData = $tr.find('[name="lineProductName"]').data('json');
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+            if($that.val() != "" && !!lineData.days){
+                $endTime.val(Tools.addDay($that.val(), lineData.days));
+            }
+        });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
