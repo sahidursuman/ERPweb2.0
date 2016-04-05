@@ -1076,7 +1076,7 @@ var _statusText = {
 				}else{
 					if($that.hasClass('F-float')){
 						// 精度控制
-						if ($that.hasClass('F-money')) {
+						if ($that.hasClass('F-money') && value != 0) {
 							value = Tools.toFixed(value, 2);
 						} else if ($that.hasClass('F-count')) {
 							value = Tools.toFixed(value, 1, false);
@@ -1768,7 +1768,7 @@ Tools.filterMoney = function(obj){
 		var $taht = $(this);
 		if(!$taht.is(':not("input")')){
 			$taht.val(Tools.toFixed($taht.val(), 2))
-		}else{
+		}else if($taht.text() != 0){
 			$taht.text(Tools.toFixed($taht.text(), 2));
 		}
 	});

@@ -184,6 +184,10 @@ define(function(require, exports) {
                 if(result){
                     data.bookingOrderList = JSON.parse(data.bookingOrderList);
                     var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
+                    
                     replace.$tab.find('.T-list').html(html);
                     replace.$tab.find(".T-totalSize").text("共计 " + data.recordSize + " 条记录");
 

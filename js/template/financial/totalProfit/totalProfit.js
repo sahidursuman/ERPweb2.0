@@ -86,7 +86,12 @@ define(function(require, exports) {
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    TotalProfit.$tab.find('.T-list').html(tableTemplate(data));
+                    var html = tableTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
+
+                    TotalProfit.$tab.find('.T-list').html(html);
 
                     TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
                     //点击线路产品事件

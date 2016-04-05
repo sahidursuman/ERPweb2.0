@@ -43,7 +43,7 @@
                     <span>({{touristGroupL.lineProduct.type}})</span>
                 </p>
                 {{/if}}
-                <p class="h-orderNumber">客户：{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
+                <p class="h-orderNumber">{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
             </td>
             <td class="F-float F-count" style="vertical-align:middle">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}</td>
             <td style="vertical-align:middle">{{touristGroupL.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
