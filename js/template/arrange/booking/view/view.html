@@ -1,5 +1,5 @@
-<div class="col-xs-12 updateBooking">
- <button class="btn btn-sm btn-success btn-Booking-export bookingBtn T-bookingBtn ">导出信息</button>
+<div class="updateBooking">
+ <button class="btn btn-sm btn-success btn-Booking-export bookingBtn T-bookingBtn ">导出项目代订</button>
 	<form class="form-horizontal bookingMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 	<h5 class="">
 				<label class="middle title-size">代订信息</label>
@@ -22,9 +22,11 @@
 			</tr>
 			<tr>
 				<td class="style-myself">游客 </td> 
-				<td style="text-align: left;padding-left: 6px;" colspan="2">{{bookingOrder.touristRealname}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristRealname}}</td>
 				<td class="style-myself">游客电话 </td>
-				<td style="text-align: left;padding-left: 6px;" colspan="4">{{bookingOrder.touristMobileNumber}}</td>
+				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.touristMobileNumber}}</td>
+				<td class="style-myself">外联销售 </td>
+				<td style="text-align: left;padding-left: 6px;">{{if bookingOrder.outOPUser}}{{bookingOrder.outOPUser.realName}}{{/if}}</td>
 			</tr>
 			<tr>
 				<td class="style-myself">备注 </td>
@@ -36,11 +38,19 @@
 
 			<tr>
 				<td class="style-myself">总应收 </td>
-				<td style="text-align: left;padding-left: 6px;">{{bookingOrder.sumNeedGetMoney}}</td>
+				<td style="text-align: left;padding-left: 6px;" class="F-float F-money">{{bookingOrder.sumNeedGetMoney}}</td>
+				<td class="style-myself">已收 </td>
+				<td style="text-align: left;padding-left: 6px;"class="F-float F-money">{{bookingOrder.getedMoney}}</td>
+				<td class="style-myself">预收款 </td>
+				<td style="text-align: left;padding-left: 6px;"class="F-float F-money">{{bookingOrder.preIncomeMoney}}	</td>
+			</tr>
+			<tr>
 				<td class="style-myself">总成本 </td>
-				<td style="text-align: left;padding-left: 6px;" >{{bookingOrder.sumCostMoney}}</td>
-				<td class="hidden" class="style-myself">预付款 </td>
-				<td  class="hidden" style="text-align: left;padding-left: 6px;" >{{bookingOrder.prePayMoney}}</td>
+				<td style="text-align: left;padding-left: 6px;" class="F-float F-money">{{bookingOrder.sumCostMoney}}</td>
+				<td class="style-myself">已付 </td>
+				<td  style="text-align: left;padding-left: 6px;" class="F-float F-money">{{bookingOrder.payedMoney}}</td>
+				<td></td>
+				<td></td>
 			</tr>
 		</table>
 	</form>
@@ -67,7 +77,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="hotelBookingList">{{each bookingOrder.bookingHotelList as hotelList}}
@@ -93,13 +103,13 @@
 										</td>
 										<td>{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}</td>
 										<td>{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}</td>
-										<td>{{hotelList.days}}</td>
-										<td>{{hotelList.roomCount}}</td>
-										<td>{{hotelList.costPrice}}/天</td>
-										<td>{{hotelList.salePrice}}/天</td>
-										<td>{{hotelList.sumCostMoney}}</td>
-										<td>{{hotelList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{hotelList.prePayMoney}}</td>
+										<td class="F-float F-count">{{hotelList.days}}</td>
+										<td class="F-float F-count">{{hotelList.roomCount}}</td>
+										<td><span class="F-float F-money">{{hotelList.costPrice}}</span>/天</td>
+										<td><span class="F-float F-money">{{hotelList.salePrice}}</span>/天</td>
+										<td class="F-float F-money">{{hotelList.sumCostMoney}}</td>
+										<td class="F-float F-money">{{hotelList.sumNeedGetMoney}}</td>
+										<td class="F-float F-money">{{hotelList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -128,7 +138,7 @@
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
 										<th class="th-border">订单号</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="scenicBookingList">{{each bookingOrder.bookingScenicList as scenicList}}
@@ -136,13 +146,13 @@
 										<td>{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 										<td>{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}</td>
 										<td>{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}</td>
-										<td>{{scenicList.roomCount}}</td>
-										<td>{{scenicList.costPrice}}</td>
-										<td>{{scenicList.salePrice}}</td>
-										<td>{{scenicList.sumCostMoney}}</td>
-										<td>{{scenicList.sumNeedGetMoney}}</td>
+										<td class="F-float F-count">{{scenicList.roomCount}}</td>
+										<td class="F-float F-money">{{scenicList.costPrice}}</td>
+										<td class="F-float F-money">{{scenicList.salePrice}}</td>
+										<td class="F-float F-money">{{scenicList.sumCostMoney}}</td>
+										<td class="F-float F-money">{{scenicList.sumNeedGetMoney}}</td>
 										<td>{{scenicList.orderNumber}}</td>
-										<td class="hidden">{{scenicList.prePayMoney}}</td>
+										<td class="F-float F-money">{{scenicList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -174,7 +184,7 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="ticketBookingList">{{each bookingOrder.bookingTicketList as ticketList}}
@@ -196,12 +206,12 @@
 										<td>{{ticketList.shift}}</td>
 										<td>{{ticketList.seatLevel}}</td>
 										<td>{{ticketList.startTime}}</td>
-										<td>{{ticketList.roomCount}}</td>
-										<td>{{ticketList.costPrice}}</td>
-										<td>{{ticketList.salePrice}}</td>
-										<td>{{ticketList.sumCostMoney}}</td>
-										<td>{{ticketList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{ticketList.prePayMoney}}</td>
+										<td class="F-float F-count">{{ticketList.roomCount}}</td>
+										<td class="F-float F-money">{{ticketList.costPrice}}</td>
+										<td class="F-float F-money">{{ticketList.salePrice}}</td>
+										<td class="F-float F-money">{{ticketList.sumCostMoney}}</td>
+										<td class="F-float F-money">{{ticketList.sumNeedGetMoney}}</td>
+										<td class="F-float F-money">{{ticketList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>
@@ -232,22 +242,22 @@
 										<th class="th-border">销售单价</th>
 										<th class="th-border">成本</th>
 										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
+										<th class="th-border ">预付款</th>
 									</tr>
 								</thead>
 								<tbody class="busBookingList">{{each bookingOrder.bookingBusCompanieList as busList}}
 									<tr data-entity-id="{{busList.id}}">
 										<td>{{busList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 										<td>{{busList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-										<td>{{busList.needSeatCount}}</td>
+										<td class="F-float F-count">{{busList.needSeatCount}}</td>
 										<td>{{busList.needBusBrand}}</td>
 										<td>{{if busList.busCompany != null}}{{busList.busCompany.companyName}}{{/if}}</td>
-										<td>{{busList.roomCount}}</td>
-										<td>{{busList.costPrice}}</td>
-										<td>{{busList.salePrice}}</td>
-										<td>{{busList.sumCostMoney}}</td>
-										<td>{{busList.sumNeedGetMoney}}</td>
-										<td class="hidden">{{busList.prePayMoney}}</td>
+										<td class="F-float F-count">{{busList.roomCount}}</td>
+										<td class="F-float F-money">{{busList.costPrice}}</td>
+										<td class="F-float F-money">{{busList.salePrice}}</td>
+										<td class="F-float F-money">{{busList.sumCostMoney}}</td>
+										<td class="F-float F-money">{{busList.sumNeedGetMoney}}</td>
+										<td class="F-float F-money">{{busList.prePayMoney}}</td>
 									</tr>{{/each}}
 								</tbody>
 							</table>

@@ -22,8 +22,8 @@ define(function(require, exports) {
 		policyHtmlItem = '<tr class="timeArea">'+
 		    	'<td data-index="1" class="clearfix div-1" style="margin-bottom:3px"><div><input name=\"startTime\" maxlength=\"100\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/>'+
 		    	'<label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"T-date datepicker\" style=\"width:100px\"/></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:3px">'+
-		    	'<input name="costMoneyStart" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
-		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"margin-left:10px;\">'+
+		    	'<input name="costMoneyStart" maxlength=\"9\" class=\"F-float F-money\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label>'+
+		    	'<input name=\"costMoneyEnd\" maxlength=\"9\" class=\"F-float F-money\"  type=\"text\" style=\"width:100px\"/><label class=\"priceArea\" style=\"margin-left:10px;\">'+
 		    	'<button class=\"btn btn-success btn-sm btn-white T-action T-add add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i>'+
 
 		    	'</button></label></div></td><td><div data-index="1" class="clearfix div-1" style="margin-bottom:7px"><input name="guideRate" maxlength=\"5\" type="text" class="form-control"/>'+
@@ -67,7 +67,7 @@ define(function(require, exports) {
 		}
 
 		$.ajax({
-			url:""+APP_ROOT+"back/shop.do?method=listShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+			url: KingServices.build_url('shop', 'listShop'),
 			type:"POST",
 			data: {
 				pageNo: page,
@@ -187,9 +187,9 @@ define(function(require, exports) {
 	 */
 	shop.updateShop = function(id) {
 		$.ajax({
-			url:""+APP_ROOT+"back/shop.do?method=getShopById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+			url: KingServices.build_url('shop', 'getShopById'),
 			type:"POST",
-			data:"id="+id+"",
+			data: {id: id},
 			dataType:"json",
 			success:function(data){
 				var result = showDialog(data);
@@ -252,9 +252,9 @@ define(function(require, exports) {
 		if(!!id){
 			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
 					$.ajax({
-							url:""+APP_ROOT+"back/shop.do?method=deleteShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
+							url: KingServices.build_url('shop', 'deleteShop'),
 	 						type:"POST",
-	 						data:"id="+id+"",
+	 						data: {id: id},
 					}).done(function(data){
 						if(showDialog(data)){
 							shop.listShop(0);
@@ -272,9 +272,9 @@ define(function(require, exports) {
 	 */
 	shop.viewShop = function(id){
 		$.ajax({
-			url:""+APP_ROOT+"back/shop.do?method=getShopById&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view",
+			url: KingServices.build_url('shop', 'getShopById'),
 			type:"POST",
-			data:"id="+id+"",
+			data: {id: id},
 			dataType:"json",
 			beforeSend:function(){
 				globalLoadingLayer = openLoadingLayer();
@@ -297,9 +297,13 @@ define(function(require, exports) {
 						scrollbar: false,    // 推荐禁用浏览器外部滚动条
 					    success:function(){
 							$(".timeArea").each(function(i) {
-								var priceAreaHeight = $(".price" + i).height();
-								$(this).height(priceAreaHeight);
-								$(this).css("line-height",priceAreaHeight + "px")
+								$(".T-priceArea").each(function(j) {
+									if (i==j) {
+										var priceAreaHeight = $(".T-priceArea").eq(j).height();
+										$(".timeArea").eq(j).height(priceAreaHeight);
+										$(".timeArea").eq(j).css("line-height",priceAreaHeight + "px");
+									}
+								})
 							});
 					    }
 					});
@@ -337,10 +341,8 @@ define(function(require, exports) {
     		var $that = $(this);
 
     		if ($that.hasClass('T-shop-standard-delete'))  {
-    			// 删除政策
-    			$that.closest('tr').fadeOut(function() {
-    				$(this).remove();
-    			});
+    			// 删除
+    			shop.deleteProductItem($that);
     		} else if ($that.hasClass('T-shop-rate-add')){
     			// 添加/修改政策
 	    		var $policyInput = $(this).next(),
@@ -369,12 +371,12 @@ define(function(require, exports) {
     		var status = shop.$formContainer.find('.T-shop-status').prop('checked')? 1: 0,
     			form = shop.$formContainer.find(".T-shopMainForm").serialize()+"&status="+status+"",
     			formData = shop.$formContainer.find(".T-shopMainForm").serializeJson(),
-	    		url = APP_ROOT+"back/shop.do?method=addShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=add",
+    			url = KingServices.build_url('shop', 'addShop'),
 	    		// 政策列表数据封装
 	    		policyDataList = [];
 
     		if (type === 1)  {
-    			url = APP_ROOT+"back/shop.do?method=updateShop&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=update";
+    			url = KingServices.build_url('shop', 'updateShop');
     		}
 
     		shop.$formContainer.find('.T-shop-standard-list').children('tr').each(function(i){
@@ -649,7 +651,7 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
-								url:""+APP_ROOT+"back/shop.do?method=deleteShopTimeArea&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
+    							url: KingServices.build_url('shop', 'deleteShopTimeArea'),
 			                    dataType: "json",
 			                    data:"id="+id,
 			                    success: function(data) {
@@ -683,7 +685,7 @@ define(function(require, exports) {
 		var td = obj.closest('td');
 		var index = td.find("div").length;
 		// var priceAreaDiv = "<div data-index=\""+(index+1)+"\" class=\"shopPolicyPriceList clearfix div-"+(index+1)+"\" style=\"margin-bottom:2px\"><input name=\"costMoneyStart\" maxlength=\"9\" type=\"text\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"costMoneyEnd\" type=\"text\" style=\"width:100px\" maxlength=\"9\"/><label class=\"priceArea\" style=\"float:right\"><button class=\"btn btn-danger btn-sm btn-white del\"><i class=\"ace-icon fa fa-minus bigger-110 icon-only delSelf\"></i></button></label></div>";
-		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" style="width:100px"><label class="priceArea" style="margin-left:10px;"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
+		var priceAreaDiv = '<div data-index="'+ (index+1) + '" class="clearfix div-'+ (index+1) + '" style="margin-bottom:2px"> <input name="costMoneyStart" maxlength="9" type="text" style="width:100px" class="input-success  F-float F-money"><label>&nbsp;至&nbsp;</label><input name="costMoneyEnd" maxlength="9" type="text" class="input-success  F-float F-money" style="width:100px"><label class="priceArea" style="margin-left:10px;"><button class="btn btn-danger btn-sm btn-white T-action T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button></label> </div>';
 		var guideRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"guideRate\" type=\"text\" maxlength=\"5\" class='form-control'/></div>";
 		var travelAgencyRateInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix div-"+(index+1)+"\" style=\"margin-bottom:7px\"><input name=\"travelAgencyRate\" type=\"text\" maxlength=\"5\"  class='form-control'/></div>";
 		td.append(priceAreaDiv);
@@ -697,6 +699,59 @@ define(function(require, exports) {
 
 		td.next().append(guideRateInput);
 		td.next().next().append(travelAgencyRateInput);
+	};
+
+	shop.deleteProductItem = function($delBtn)  {
+		if ($delBtn && $delBtn.length) {
+			var $tr = $delBtn.closest('tr'),
+				id = $tr.data('entity-id');
+			if(id){
+				var dialogObj = $( "#confirm-dialog-message" )
+				dialogObj.removeClass('hide').dialog({
+					modal: true,
+					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
+					title_html: true,
+					draggable:false,
+					buttons: [ 
+						{
+							text: "取消",
+							"class" : "btn btn-minier",
+							click: function() {
+								$( this ).dialog( "close" );
+							}
+						},
+						{
+							text: "确定",
+							"class" : "btn btn-primary btn-minier",
+							click: function() {
+								$( this ).dialog( "close" );
+								$.ajax({
+									url: KingServices.build_url('shop', 'deleteShopPolicy'),
+				                    dataType: "json",
+				                    data: {id: id},
+				                    success: function(data) {
+				                    	layer.close(globalLoadingLayer);
+										if(showDialog(data)){
+								    		$tr.fadeOut(function(){
+								    			$(this).remove();
+								    		});
+											layer.msg(data.message || "删除成功");
+										}
+				                    }
+				                });
+							}
+						}
+					],
+					open:function(event,ui){
+						$(this).find("p").text("你确定要删除该条记录？");
+					}
+				});
+			}else{
+				$tr.fadeOut(function(){
+					$(this).remove();
+	    		});
+			}
+		}
 	};
 
 	/**
@@ -726,7 +781,7 @@ define(function(require, exports) {
 						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
-								url:""+APP_ROOT+"back/shop.do?method=deleteShopCostRebate&token="+$.cookie("token")+"&menuKey=resource_shop&operation=delete",
+								url: KingServices.build_url('shop', 'deleteShopCostRebate'),
 			                    dataType: "json",
 			                    data:"id="+id,
 			                    success: function(data) {

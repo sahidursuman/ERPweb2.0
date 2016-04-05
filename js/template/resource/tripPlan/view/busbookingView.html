@@ -8,7 +8,6 @@
 					<th class="th-border">车队</th>
 					<th class="th-border">车座数</th>
 					<th class="th-border">车量品牌</th>
-					<th class="th-border">数量</th>
 					<th class="th-border">单价</th>
 					<th class="th-border">金额</th>
 					<th class="th-border">操作人</th>
@@ -24,11 +23,10 @@
 				    <td>{{busOrderList.orderType}}</td>
 					<td>{{busOrderList.tripNumber}}</td>
 					<td>{{busOrderList.companyName}}</td>
-					<td>{{busOrderList.seatCount}}</td>
+					<td class="F-float F-count">{{busOrderList.seatCount}}</td>
 					<td>{{busOrderList.brand}}</td>
-					<td class="count">{{busOrderList.seatCount}}</td>
-					<td class="price">{{busOrderList.price}}</td>
-					<td class="totalMoney">{{busOrderList.price * busOrderList.seatCount}}</td>
+					<td class="price F-float F-money">{{busOrderList.price}}</td>
+					<td class="totalMoney F-float F-money">{{busOrderList.price * busOrderList.seatCount}}</td>
 					<td>{{busOrderList.creator}}</td>
 					<td>{{busOrderList.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 					<td>{{busOrderList.remark}}</td>

@@ -1,42 +1,73 @@
 <div class="col-xs-12 T-bankAcc-container">
-	<form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>银行账号:</label>
-			<div class="col-sm-4">
-				<input type="text" name="bankNumber" value="{{bankAccount.bankAccountNumber}}" class="col-sm-12"  maxlength="32"/>
-				<input type="hidden" name="bankNumberId" value="{{bankAccount.id}}" class="col-sm-12"  maxlength="32"/>
+	<form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false" data-type="{{bankAccount.type}}">
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right">类型：</label>
+			<div class="col-sm-3">
+			{{if bankAccount.incomeMoney != 0 || bankAccount.payMoney != 0}}
+				<label>
+					{{if bankAccount.type == 0}}
+						<span>现金账户</span>
+					{{else}}
+						<span>银行账户</span>
+					{{/if}}
+				</label>
+			{{else}}
+				<select class="col-sm-12 T-accountType" name="type" >
+					<option value="0">现金账户</option>
+					<option value="1" {{if bankAccount.type == 1}}selected="selected"{{/if}}>银行账户</option>
+				</select>
+			{{/if}}
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
 			<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
 				<label>
-					<input checked="checked" type="checkbox" class="ace T-checkStatus" value="1" />
+					<input {{if bankAccount.status == 1}}checked ="checked" {{/if}} type="checkbox" class="ace T-checkStatus"  />
 					<span class="lbl">
 						启用
 					</span>
 				</label> 
 			</div>
 		</div>
-		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户银行:</label>
-			<div class="col-sm-4">
-				<input type="text" name="bankName" class="col-sm-12" value="{{bankAccount.openingBank}}" maxlength="32" />
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>账户名称：</label>
+			<div class="col-sm-3">
+				<input type="text" name="aliasName" value="{{bankAccount.aliasName}}" class="col-sm-12"  maxlength="32" />
 			</div>
+			<div class="T-cashHidden">
+				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>银行账号:</label>
+				<div class="col-sm-3">
+					<input type="text" name="bankNumber" value="{{bankAccount.bankAccountNumber}}" class="col-sm-12 T-edit-feild"  maxlength="32"/>
+					<input type="hidden" name="bankNumberId" value="{{bankAccount.id}}" class="col-sm-12"  maxlength="32"/>
+				</div>
+			</div>
+		</div>
+		<input name="incomeMoney" value="{{bankAccount.incomeMoney}}" type="hidden">
+		<input name="payMoney" value="{{bankAccount.payMoney}}" type="hidden">
+		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初余额:</label>
 			<div class="col-sm-3">
-				<input type="text" name="balanceMoney" class="col-sm-12" value="{{bankAccount.beginningBalance}}" maxlength="9" />
+				<input type="text" name="balanceMoney" class="col-sm-12 T-edit-feild" value="{{bankAccount.beginningBalance}}" maxlength="9"  />
+			</div>
+			<div class="T-cashHidden">
+				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户银行:</label>
+				<div class="col-sm-3">
+					<input type="text" name="bankName" class="col-sm-12" value="{{bankAccount.openingBank}}" maxlength="32"  />
+				</div>
 			</div>
 		</div>
-		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户户名:</label>
-			<div class="col-sm-4">
-				<input type="text" name="accountName" class="col-sm-12" value="{{bankAccount.accountName}}" maxlength="20" />
-			</div>
+		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>期初日期:</label>
 			<div class="col-sm-3">
-				<input type="text" name="startTime" value="{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 datepicker" />
+				<input type="text" name="startTime" style="width: 175px;" value="{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}" class="col-sm-12 datepicker T-edit-feild" />
+			</div>
+			<div class="T-cashHidden">
+				<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>开户户名:</label>
+				<div class="col-sm-3">
+					<input type="text" name="accountName" class="col-sm-12" value="{{bankAccount.accountName}}" maxlength="20"  />
+				</div>
 			</div>
 		</div>
-		<div class="form-group guideInterval">
+		<div class="form-group">
 			<label class="col-sm-2 control-label no-padding-right">备注:</label>
 			<div class="col-sm-8">
 				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="500">{{bankAccount.remark}}</textarea> 

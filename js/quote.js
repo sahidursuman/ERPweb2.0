@@ -9,11 +9,13 @@ define(function(require, exports) {
 		success: function(data){
 			if(data.success == 1){
 
-				data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
+				data.quote = JSON.parse(data.quote);
 				data.daysList = JSON.parse(data.daysList);
-				data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+				data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
+				data.guideQuote = JSON.parse(data.guideQuote);
+				data.insuranceQuote = JSON.parse(data.insuranceQuote);
 				//var shareQuoteHtml = template("shareQuoteTemplate",data);
-				var startTime = data.quoteDetailJson.startTime;
+				var startTime = data.quote.startTime;
 				for (var i = 0, len = data.daysList.length; i < len; i++) {
 					data.daysList[i].times = checkInTime(i,startTime);
 				}
@@ -63,7 +65,7 @@ define(function(require, exports) {
 			else{
 				alert(data.message);
 			}
-			document.title = '报价单—来自'+data.quoteDetailJson.travelAgency.name;
+			// document.title = '报价单—来自'+data.quote.travelAgency.name;
 			function checkInTime(i,startTime) {
 				var	date = new Date(startTime.replace("-", "/").replace("-", "/"));
 				var timer = date.getTime()+(i)*24*60*60*1000;

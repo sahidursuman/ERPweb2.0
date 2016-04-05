@@ -12,9 +12,10 @@
 										<span class="lbl"></span>
 									</label>
 								</th>
+								<th class="th-border">收客单号</th>
 								<th class="th-border">外联销售</th>
 								<th class="th-border">线路产品</th>
-								<th class="th-border">来源</th>
+								<th class="th-border">客户</th>
 								<th class="th-border">联系人</th>
 								<th class="th-border">联系电话</th>
 								<th class="th-border">客源地</th>
@@ -23,7 +24,10 @@
 								<th class="th-border">现收团款</th>
 								<th class="th-border">住宿标准</th>
 								<th class="th-border">包含自费</th>
-								<th class="th-border" style="width: 300px">备注</th>
+								<th class="th-border">全陪</th>
+								<th class="th-border">全陪电话</th>
+								<th class="th-border">接站牌</th>
+								<th class="th-border">备注</th>
 								<th class="th-border" style="width: 50px">操作</th>
 							</tr>
 						</thead>
@@ -35,32 +39,21 @@
 										<span class="lbl"></span>
 									</label>
 								</td>
+								<td>{{touristGroup.orderNumber}}</td>
 								<td name="creatorName">{{touristGroup.creatorName}}</td>
-								<td name="lineProductName">{{touristGroup.lineProduct.name}}</td>
-								<td name="travelAgencyName">{{touristGroup.partnerAgency.travelAgencyName}}</td>
-								<td name="contactMemberName">{{touristGroup.contactMember.name}}</td>
-								<td name="contactMemberMobileNumber">{{touristGroup.contactMember.mobileNumber}}</td>
+								<td name="lineProductName">{{if touristGroup.lineProduct}}{{touristGroup.lineProduct.name}}{{/if}}</td>
+								<td name="travelAgencyName">{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+								<td name="contactMemberName">{{if touristGroup.contactMember}}{{touristGroup.contactMember.name}}{{/if}}</td>
+								<td name="contactMemberMobileNumber">{{if touristGroup.contactMember}}{{touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 								<td name="areaData">{{touristGroup.areaData}}</td>
 								<td name="ageData">{{touristGroup.ageData}}</td>
-								<td name="peopleCount">{{touristGroup.adultCount+touristGroup.childCount}}</td>
+								<td name="peopleCount" data-adultCount="{{touristGroup.adultCount}}" data-childCount="{{touristGroup.childCount}}">{{touristGroup.adultCount+touristGroup.childCount}}</td>
 								<td name="currentNeedPayMoney">{{touristGroup.currentNeedPayMoney}}</td>
-								<td name="hotelLevel">{{if touristGroup.hotelLevel==1 }}
-								   三星以下
-								   {{else if touristGroup.hotelLevel==2 }}
-								   三星
-								   {{else if touristGroup.hotelLevel==3 }}
-								   准四星
-								   {{else if touristGroup.hotelLevel==4 }}
-								   四星
-								   {{else if touristGroup.hotelLevel==5 }}
-								   准五星
-								   {{else if touristGroup.hotelLevel==6 }}
-								   五星
-								   {{else if touristGroup.hotelLevel==7 }}
-								   五星以上
-								   {{/if}}
-								</td>
+								<td name="hotelLevel">{{touristGroup.hotelLevel | getHotelLevelDesc}}</td>
 								<td name="includeSelfPay">{{touristGroup.includeSelfPay}}</td>
+								<td>{{touristGroup.accompanyGuideName}}</td>
+								<td>{{touristGroup.accompanyGuideMobile}}</td>
+								<td>{{touristGroup.welcomeBoard}}</td>
 								<td name="remark">{{touristGroup.remark}}</td>
 								<td>
 									<a class="cursor T-groupView">

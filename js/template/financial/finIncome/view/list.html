@@ -1,7 +1,7 @@
 <div class="row T-search-area">
     <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group">
-            <label>业务类别：</label>
+        <div class="form-group mar-r-10">
+            <label>业务类别 </label>
             <select name="T-business-type" class="T-business-type">
                 <option value="0">客户</option>
                 <option value="1">内转</option>
@@ -9,25 +9,59 @@
                 <option value="3">代订</option>
             </select>
         </div>
-        <div class="form-group marginLeft-30">
-            <label>对方单位：</label>
-            <input type="text" class="form-control T-org-name" style="width: 180px;"  maxlength="100">
+        <div class="form-group mar-r-10">
+            <label>对方单位 </label>
+            <input type="text" class="form-control T-org-name" style="width: 180px;" maxlength="100">
         </div>
-        <div class="form-group input-daterange marginLeft-30">
+        <div class="form-group input-daterange mar-r-10">
             <label>账期：</label>
             <input type="text" class="form-control T-datepicker T-start" value="{{startDate}}">
             <label>&nbsp;至&nbsp;</label>
             <input type="text" class="form-control T-datepicker T-end" value="{{endDate}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group T-finance-status btn-group mar-r-10">
+            <button data-value="{{accountStatus}}" data-toggle="dropdown" class="btn-sm dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if accountStatus == 0}}
+                        全部
+                    {{else if accountStatus == 1}}
+                        已结清
+                    {{else}}
+                        未结清
+                    {{/if}}
+                </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                </button>    
+            <ul class="dropdown-menu">
+                <li>
+                    <a data-value="0" href="javascript:void(0)">全部</a>
+                </li>
+                <li>
+                    <a data-value="1" href="javascript:void(0)">已结清</a>
+                </li>
+                <li>
+                    <a data-value="2" href="javascript:void(0)">未结清</a>
+                </li>
+            </ul>
+        </div>
+        <div class="form-group">
             <button class="btn-sm search-btn T-btn-search">
-                <i class="ace-icon fa fa-search"></i> 搜索 
+                <i class="ace-icon fa fa-search"></i> 搜索
             </button>
         </div>
     </form>
 </div>
+<div class="form-inline row T-sum-area">
+</div>
 <div class="row">
     <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <colgroup>
+            <col style="width: 30%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 25%;">
+        </colgroup>
         <thead>
             <tr class="bg-blur">
                 <th>对方单位</th>
@@ -37,7 +71,7 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody class="T-list">        
+        <tbody class="T-list">
         </tbody>
     </table>
     <div class="row pageMode">

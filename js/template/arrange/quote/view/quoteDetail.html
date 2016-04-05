@@ -1,24 +1,24 @@
 <div style="background-color:#fff; font-family: '微软雅黑'" id="top">
     <div class="shareQuoteS" style="" id="D1">
         <div class="quote-title-style">
-            <h5 class="share-title-h5">{{quoteDetailJson.lineProduct.name}}</h5>
-            <p class="share-startTime">出游日期：{{quoteDetailJson.startTime | dateFormat:'yyyy-MM-dd'}}</p>
+            <h5 class="share-title-h5">{{quote.lineProduct.name}}</h5>
+            <p class="share-startTime">出游日期：{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</p>
         </div>
         <div class="share-quoteBigMain">
             <div class="share-quote-offer">
-                <p style="font-size: 16px;color: #ff6511;"><span>{{quoteDetailJson.partnerAgency.travelAgencyName}}</span> <span style="margin-left: 12px;">{{quoteDetailJson.partnerAgencyContact.contactRealname}}</span> <span style="margin-left: 12px;">{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}：</span></p>
+                <p style="font-size: 16px;color: #ff6511;"><span>{{quote.partnerAgency.travelAgencyName}}</span> <span style="margin-left: 12px;">{{quote.partnerAgencyContact.contactRealname}}</span> <span style="margin-left: 12px;">{{quote.partnerAgencyContact.contactMobileNumber}}：</span></p>
                 <p class="share-thank-p">感谢惠顾，线路行程和报价为您展示如下，如有不明白之处请来电，谢谢！</p>
-                <p class="share-agency-name"><span>{{quoteDetailJson.travelAgency.name}}</span>
-                    <span style="margin-left: 8px;">{{quoteDetailJson.user.realName}}</span>
-                    <span style="margin-left: 8px;">{{quoteDetailJson.user.mobileNumber}}</span></p>
-                <p style="margin-left:560px;color: #444;margin-top: -5px;">{{quoteDetailJson.createTime}}</p>
+                <p class="share-agency-name"><span>{{quote.partnerAgency.travelAgency.name}}</span>
+                    <span style="margin-left: 8px;">{{quote.user.realName}}</span>
+                    <span style="margin-left: 8px;">{{quote.user.mobileNumber}}</span></p>
+                <p class="share-agency-times">{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</p>
                 <div class="share-quote-offerdetails">
                     <p class="share-dividing">线路报价</p>
-                    <p>{{quoteDetailJson.lineProduct.name}}</p>
-                    <p style="margin-top: -5px;"><span>天数：{{quoteDetailJson.lineProduct.days}}</span>
-                        <span style="margin-left: 20px; ">类别：{{quoteDetailJson.lineProduct.type}}</span>
-                        <span style="margin-left: 20px; ">出游日期：{{quoteDetailJson.startTime | dateFormat:'yyyy-MM-dd'}}</span>
-                        <span style="margin-left: 20px; ">出游人数：{{quoteDetailJson.adultCount}}大{{quoteDetailJson.childCount}}小</span>
+                    <p>{{quote.lineProduct.name}}</p>
+                    <p style="margin-top: -5px;"><span>天数：<span class="F-float F-count">{{quote.lineProduct.days}}</span></span>
+                        <span style="margin-left: 20px; ">类别：{{quote.lineProduct.type}}</span>
+                        <span style="margin-left: 20px; ">出游日期：{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</span>
+                        <span style="margin-left: 20px; ">出游人数：<span class="F-float F-count">{{quote.adultCount}}</span>大<span class="F-float F-count">{{quote.childCount}}</span>小</span>
                     </p>
                     <table class="whereQ whereTwo quoteTable" style="width: 100%;margin-bottom: 10px;">
                         <tr style="font-weight: bold;background-color: #F3F3F3;">
@@ -29,50 +29,73 @@
                         </tr>
                         <tr>
                             <td>单价</td>
-                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥{{quoteDetailJson.adultQuotePrice}}</td>
-                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥{{quoteDetailJson.childQuotePrice}}</td>
-                            <td rowspan="3" style="font-size: 14px;font-weight: bold;">￥{{quoteDetailJson.sumQuoteFee}}</td>
+                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥<span class="F-float F-money">{{quote.adultQuotePrice}}</span></td>
+                            <td style="font-size: 14px;color: #ff6511;font-weight: bold;">￥<span class="F-float F-money">{{quote.childQuotePrice}}</span></td>
+                            <td rowspan="3" style="font-size: 14px;font-weight: bold;">￥<span class="F-float F-money">{{quote.sumQuoteFee}}</span></td>
                         </tr>
                         <tr>
                             <td>数量</td>
-                            <td>{{quoteDetailJson.adultCount}}</td>
-                            <td>{{quoteDetailJson.childCount}}</td>
+                            <td><span class="F-float F-count">{{quote.adultCount}}</span></td>
+                            <td><span class="F-float F-count">{{quote.childCount}}</span></td>
                         </tr>
                     </table>
-                    <p><span style="color: #ff6511">*</span>备注：&nbsp;&nbsp;&nbsp;单房差报价：{{quoteDetailJson.singleRoomQuotePrice}}，单房差数量：{{quoteDetailJson.singleRoomCount}}。</p>
-                    {{if !!busCompanyArrange}}
-                    <p style="margin-left: 55px;">交通：
-                        <span>{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.brand}}{{/if}}</span>
-                        <span>{{if !!busCompanyArrange.bus}}{{busCompanyArrange.bus.seatCount}}{{/if}}座，</span>
-                        <span>{{busCompanyArrange.remark}}</span></p>
+                    <p><span style="color: #FE9C52">*说明：</span>&nbsp;&nbsp;&nbsp;单房差报价：{{quote.singleRoomQuotePrice}}，单房差数量：{{quote.singleRoomCount}}。</p>
+                     <!-- 导游 -->
+
+                    <p style="margin-left: 55px;">导游：
+                    <span>导服费￥{{if !!guideQuote}}{{guideQuote.quotePrice}}{{/if}}。</span> 
+                    </p>
+
+                    <!-- 保险 -->
+                    <div style="margin-left: 55px;">保险：
+                     <p style="width: 70%;margin-left: 42px;margin-top: -18px;">
+                    {{each insuranceQuote as insuranceList}}
+                    <span>{{insuranceList.insurance.name}}，</span><span>{{insuranceList.insuranceItem.name}}，</span><span>单价￥{{insuranceList.quotePrice}}。</span><br> 
+                    {{/each}}
+                    </p>
+                    </div>
+                    
+                    <!-- 交通 -->
+                    <div style="margin-left: 55px; {{if busCompanyQuote.length == 0}}margin-top: 25px;margin-bottom: 20px;{{/if}}">交通：
+                    <p style="width: 70%;margin-left: 42px;margin-top: -18px">
+                     {{each busCompanyQuote as busCompany}}
+                    {{if !!busCompanyQuote}}
+                        <span>{{busCompany.brand}}</span>
+                        <span><span class="F-float F-count">{{busCompany.needSeatCount}}</span>座，</span>
+                        <span>座位价￥{{busCompany.quotePrice}}。</span>
+                        <span>{{busCompany.remark}}</span> <br>
                     {{/if}}
+                    {{/each}}
+                    </p>
+                    </div>
+                    <p style="margin-left: 8px;"><span style="color: #FE9C52">备注：</span><span>{{quote.remark}}</span></p>
                 </div>
             </div>
             <div class="share-quote-arrange">
                 <p class="share-dividing">线路安排</p>
-                {{each daysList as viewQuoteDaysList i}}
-                <table class="whereQ quoteTable quoteTable-arrange" style="width: 100%;margin-bottom: 30px;">
+                {{each daysList as daysList i}}
+                <table class="whereQ quoteTable quoteTable-arrange">
                     <tr style="font-weight: bold;background-color: #F3F3F3;">
-                        <td class="style-myself" colspan="3"><span>第{{i+1}}天</span> <span style="margin-left: 10px;">{{viewQuoteDaysList.times}}</span> <span></span></td>
+                        <td class="style-myself" colspan="3"><span>第{{i+1}}天</span> <span style="margin-left: 10px;">{{daysList.times}}</span> <span></span></td>
                     </tr>
                     <!-- 交通 -->
-                    {{if viewQuoteDaysList.ticketArrange != null}} {{each viewQuoteDaysList.ticketArrange as ticketList index}} {{if index == 0}}
+                    {{if daysList.ticketQuote != null}} {{each daysList.ticketQuote as ticketList index}} {{if index == 0}}
                     <tr>
-                        <td style="width: 160px"rowspan="{{viewQuoteDaysList.ticketArrange.length}}">交通</td>
+                        <td style="width: 160px"rowspan="{{daysList.ticketQuote.length}}">交通</td>
                             <td style="text-align: left;"> <span>
                             {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
-                            <td style="width: 180px;">￥{{ticketList.price}}</td>
+                            <td style="width: 180px;">￥<span class="F-float F-money">{{ticketList.quotePrice}}</span></td>
                     </tr>
-                    {{/if}} {{/each}} {{each viewQuoteDaysList.ticketArrange as ticketList index}} {{if index > 0}}
+                    {{/if}} {{/each}} {{each daysList.ticketQuote as ticketList index}} {{if index > 0}}
                     <tr>
                             <td style="text-align: left;"> <span>
                             {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}</span></td>
-                            <td style="width: 180px;">￥{{ticketList.price}}</td>
+                            <td style="width: 180px;">￥<span class="F-float F-money">{{ticketList.quotePrice}}</span></td>
                     </tr> 
                     {{/if}} {{/each}} {{/if}}
 
                     <!-- 购物 -->
-                    {{each viewQuoteDaysList.shopArrange as shopList}}
+                    {{each daysList.shopArrange as shopList}}
                     <tr>
                         <td>购物</td>
                         <td>{{shopList.shop.name}}</td>
@@ -81,24 +104,24 @@
 
                     {{/each}}
                     <!-- 餐饮 -->
-                    {{if viewQuoteDaysList.restaurantArrange != null}} {{each viewQuoteDaysList.restaurantArrange as restaurantList index}} {{if index == 0}}
+                    {{if daysList.restaurantQuote != null}} {{each daysList.restaurantQuote as restaurantList index}} {{if index == 0}}
                     <tr>
-                        <td rowspan="{{viewQuoteDaysList.restaurantArrange.length}}">餐饮</td>
-                        <td>{{restaurantList.restaurantStandard.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.restaurantStandard.price}}</td>
+                        <td rowspan="{{daysList.restaurantQuote.length}}">餐饮</td>
+                        <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
+                        <td>￥<span class="F-float F-money">{{restaurantList.quotePrice}}</span></td>
                     </tr>
-                    {{/if}} {{/each}} {{each viewQuoteDaysList.restaurantArrange as restaurantList index}} {{if index > 0}}
+                    {{/if}} {{/each}} {{each daysList.restaurantQuote as restaurantList index}} {{if index > 0}}
                     <tr>
-                        <td>{{restaurantList.restaurantStandard.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
-                        <td>￥{{restaurantList.restaurantStandard.price}}</td>
+                        <td>{{restaurantList.type}} <span style="margin-left: 15px;">{{restaurantList.restaurant.name}}</span></td>
+                        <td>￥<span class="F-float F-money">{{restaurantList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
 
 
                     <!-- 住宿 -->
-                    {{if viewQuoteDaysList.hotelArrange != null}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index == 0}}
+                    {{if daysList.hotelQuote != null}} {{each daysList.hotelQuote as hotelList index}} {{if index == 0}}
                     <tr>
-                        <td rowspan="{{viewQuoteDaysList.hotelArrange.length}}">住宿</td>
+                        <td rowspan="{{daysList.hotelQuote.length}}">住宿</td>
                         <td><span>
                         {{if hotelList.hotel.level == 0}}   
                                 未选择
@@ -117,14 +140,13 @@
                             {{else if hotelList.hotel.level == 7}}
                                 五星以上
                             {{/if}}</span><span style="margin-left: 15px;">{{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
-                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
-                            <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                            <span>{{if hotelList.hotelRoom.containBreakfast == 1}}含早{{else}}不含早{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containLunch == 1}}含午{{else}}不含午{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containDinner == 1}}含晚{{else}}不含晚{{/if}}</span>
                             </td>
-                            <td>￥{{hotelList.price}}</td>
+                            <td>￥<span class="F-float F-money">{{hotelList.quotePrice}}</span></td>
                         </tr>
-                        {{/if}} {{/each}} {{each viewQuoteDaysList.hotelArrange as hotelList index}} {{if index > 0}}
+                        {{/if}} {{/each}} {{each daysList.hotelQuote as hotelList index}} {{if index > 0}}
                         <tr>
                             <td> <span>
                             {{if hotelList.hotel.level == 0}}   
@@ -145,44 +167,42 @@
                             五星以上
                             {{/if}}</span>
                             <span style="margin-left: 15px;"> {{hotelList.hotel.name}}</span> <span style="margin-left: 15px;">{{hotelList.hotelRoom.type}}</span>
-                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}{{/if}}</span>
-                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}{{/if}}</span>
-                            <span style="margin-left: 15px;">{{hotelList.hotel.remark}}</span>
+                            <span>{{if hotelList.hotelRoom.containBreakfast == 0}}含早{{else}}不含早{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containLunch == 0}}含午{{else}}不含午{{/if}}</span>
+                            <span>{{if hotelList.hotelRoom.containDinner == 0}}含晚{{else}}不含晚{{/if}}</span>
                             </td>
-                            <td>￥{{hotelList.price}}</td>
+                            <td>￥<span class="F-float F-money">{{hotelList.quotePrice}}</span></td>
                         </tr>
                         {{/if}} {{/each}} {{/if}}
 
                     <!-- 景点 -->
-                    {{if viewQuoteDaysList.scenicArrange != null}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index == 0}}
+                    {{if daysList.scenicQuote != null}} {{each daysList.scenicQuote as scenicList index}} {{if index == 0}}
                     <tr>
-                        <td rowspan="{{viewQuoteDaysList.scenicArrange.length}}">景点</td>
+                        <td rowspan="{{daysList.scenicQuote.length}}">景点</td>
                         <td>{{scenicList.scenic.name}} <span style="margin-left: 15px;">{{if !!scenicList.tourDuration}}{{scenicList.tourDuration}}{{/if}}</span>
-                        <span style="margin-left: 15px;">{{scenicList.remark}}</span></td>
-                        <td>￥{{scenicList.price}}</td>
+                        <td>￥<span class="F-float F-money">{{scenicList.quotePrice}}</span></td>
                     </tr>
-                    {{/if}} {{/each}} {{each viewQuoteDaysList.scenicArrange as scenicList index}} {{if index > 0}}
+                    {{/if}} {{/each}} {{each daysList.scenicQuote as scenicList index}} {{if index > 0}}
                     <tr>
                         <td>{{scenicList.scenic.name}}</td>
-                        <td>￥{{scenicList.price}}</td>
+                        <td>￥<span class="F-float F-money">{{scenicList.quotePrice}}</span></td>
                     </tr>
                     {{/if}} {{/each}} {{/if}}
                     
                     <!-- 自费 -->
-                    {{each viewQuoteDaysList.selfPayArrange as selfPayList}}
+                    {{each daysList.selfPayQuote as selfPayList}}
                     <tr>
                         <td>自费</td>
                         <td>{{selfPayList.selfPayItem.name}}</td>
-                        <td>￥{{selfPayList.price}}</td>
+                        <td>￥<span class="F-float F-money">{{selfPayList.quotePrice}}</span></td>
                     </tr>
                     {{/each}}
                     <!-- 其他 -->
-                    {{each viewQuoteDaysList.otherArrange as otherList}}
+                    {{each daysList.otherQuote as otherList}}
                     <tr>
                         <td>其他</td>
                         <td>{{otherList.name}}</td>
-                        <td>￥{{otherList.price}}</td>
+                        <td>￥<span class="F-float F-money">{{otherList.quotePrice}}</span></td>
                     </tr>
                     {{/each}}
                 </table>
@@ -190,13 +210,13 @@
             </div>
             <div class="share-quote-schedule">
                 <p id="D2" class="share-dividing">日程安排</p>
-                {{each daysList as viewQuoteDaysList i}}
+                {{each daysList as daysList i}}
                 <div class="share-quote-origin">
-                    <span class="share-startTime-divid">{{viewQuoteDaysList.times}}</span>
+                    <span class="share-startTime-divid">{{daysList.times}}</span>
                     <p style="margin-top: 6px;color: #222;font-size: 15px">出发地--成都</p>
                     <div class="share-detailedContent">
-                        <div style="width: 960px;margin: auto;overflow: scroll;">
-                            {{#viewQuoteDaysList.lineProductDay.detail}}
+                        <div class="share-detailedContent-div">
+                            {{#daysList.lineProductDay.detail}}
                         </div>
                     </div>
                 </div>
@@ -206,22 +226,22 @@
                 <p id="D3" class="share-dividing">注意事项</p>
                 <div class="form-group">
                     <p><span class="share-attention"></span><b style="position: absolute;margin-left: 5px;">费用包含</b></p>
-                    <p>{{quoteDetailJson.includeFee}}</p>
+                    <p>{{quote.includeFee}}</p>
                 </div>
                 <div class="form-group" style="margin-top: 20px;">
                     <p><span class="share-attention"></span><b style="position: absolute;margin-left: 5px;">费用不含</b></p>
-                    <p>{{quoteDetailJson.excludeFee}}</p>
+                    <p>{{quote.excludeFee}}</p>
                 </div>
                 <div class="form-group" style="margin-top: 20px;">
                     <p><span class="share-attention"></span><b style="position: absolute;margin-left: 5px;">行程特色</b> </p>
-                    <p>{{quoteDetailJson.lineFeature}}</p>
+                    <p>{{quote.lineFeature}}</p>
                 </div>
                 <div class="form-group" style="margin-top: 20px;">
                     <p><span class="share-attention"></span> <b style="position: absolute;margin-left: 5px;">行程须知</b> </p>
-                    <p>{{quoteDetailJson.lineNotice}}</p>
+                    <p>{{quote.lineNotice}}</p>
                 </div>
             </div>
-        <div class="share-anchor" style="width: 30px;height: 170px;background-color: #eaeaea;position: fixed;top: 340px;border-radius: 20px;margin-left: -45px;">
+        <div class="share-anchor">
             <ul class="share-anchor-ul">
                 <li><a href="#D1">D1</a></li>
                 <li><a href="#D2">D2</a></li>

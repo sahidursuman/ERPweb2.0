@@ -1,0 +1,56 @@
+<div class="container-fluid globalAdd">
+	<div class="row hct-top-header">
+		<div class="col-xs-12">
+			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+			<label class="control-label mar-l-10">{{lineProduct.name}}</label>
+			<label class="control-label mar-l-15">游记数：{{lineProduct.sumNoteCount}}</label>
+			<label class="control-label mar-l-15">出游人数：{{lineProduct.sumTouristAdultCount}}大{{lineProduct.sumTouristChildCount}}小</label>
+			<label class="control-label marginLeft-30">点赞：{{lineProduct.sumLikeCount}}</label>
+			<label class="control-label mar-l-10">评论：{{lineProduct.sumCommentCount}}</label>
+			<label class="control-label mar-l-10">分享：{{lineProduct.sumShareCount}}</label>
+			<label class="control-label mar-l-10">浏览：{{lineProduct.sumViewCount}}</label>
+		</div>
+	</div>
+	<div class="row hct-thumbnail-list T-thumbnail">
+	{{each noteList as rs}}
+  		<div class="col-xs-3">
+    		<div class="thumbnail hct-thumbnail" data-id="{{rs.id}}">
+      			<div class="thumbnail-img cursor T-action T-view-group" style="background-image: url({{rs.coverImage ? imgUrl + rs.coverImage : '/images/default_youji.png'}})" title="{{rs.title}}">
+                    <img class="error-img" src="/images/loading-error.png">
+                </div>
+      			<div class="caption">
+        			<h3 class="cursor T-action T-view-group">{{rs.title}}</h3>
+        			<div class="caption-info">
+        				<div class="caption-user pull-left cursor T-action T-view-user">
+        					<div class="caption-user-header pull-left{{if !rs.guideInfo.photo}} default-img{{/if}}">
+        						{{if rs.guideInfo.photo}}<img src="{{imgUrl + rs.guideInfo.photo}}">{{/if}}
+        					</div>
+        					<div class="caption-user-info pull-left">
+        						<p>{{rs.guideInfo.name}}</p>
+        						<p class="starLevel">{{#rs.guideInfo.guideSatisfaction | getScoreStar}}</p>
+        					</div>
+        				</div>
+        				<div class="caption-comment pull-right">
+        					<p class="caption-comment-info">
+	        					<label class="control-label"><i class="fa fa-heart"></i>{{rs.likeCount}}</label>
+	        					<label class="control-label mar-l-10 cursor T-action T-view-comment"><i class="fa fa-comment"></i>{{rs.commentCount}}</label>
+        					</p>
+							<p class="text-right caption-date">{{rs.startTime}}</p>
+        				</div>
+        			</div>
+      			</div>
+    		</div>
+  		</div>
+  	{{/each}}
+	</div>
+
+	<div class="row pageMode">
+        <div class="col-xs-4">
+            <small>共计 {{recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+</div>

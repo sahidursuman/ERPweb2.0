@@ -1,25 +1,61 @@
 <div class="row">
-    <div class="form-horizontal T-search-area  search-area">    
-        <div class="form-group" >      
-            <label style="margin-left:15px;">保险公司：</label>
-            <input type="text" class="T-chooseInsure" name="insuranceName" value="{{if searchParam.insuranceName == ""}}全部{{else}}{{searchParam.insuranceName}}{{/if}}" />
+    <div class="form-horizontal T-search-area  search-area">
+        <div class="form-group">
+            <label class="mar-l-10">保险公司 </label>
+            <input type="text" class="T-chooseInsure" name="insuranceName" value="{{searchParam.insuranceName}}" 
+            placeholder='所有保险公司'/>
             <input type="hidden" name="insuranceId" value="{{searchParam.insuranceId}}" />
-
-            <label class="marginLeft-30">账期：</label>
-            <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
+            <label>账期 </label>
+            <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
             <label>&nbsp;至&nbsp;</label>
-            <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />   
-
-            <button class="btn-sm marginLeft-30 T-search search-btn">
-                <i class="ace-icon fa fa-search"></i> 搜索 
-            </button> 
+            <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
+            <div class="btn-group T-finance-status mar-r-10">
+                <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
+                    <span>
+               {{if searchParam.accountStatus == "0"}}全部{{else if searchParam.accountStatus == "1"}}已结清{{else}}未结清{{/if}}
+            </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a data-value="0" href="javascript:void(0)">全部</a>
+                    </li>
+                    <li>
+                        <a data-value="2" href="javascript:void(0)">未结清</a>
+                    </li>
+                    <li>
+                        <a data-value="1" href="javascript:void(0)">已结清</a>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn-sm  T-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索
+            </button>
+        </div>
+    </div>
+    <div class="form-inline T-sum-area">
+        <div class="form-group mar-r-20">
+            <label class="control-label">账面应付合计：</label>
+            <label class="control-label F-float F-money T-sumNeedPay"></label>
+        </div>
+        <div class="form-group mar-r-20">
+            <label class="control-label">结算金额合计：</label>
+            <label class="control-label F-float F-money T-sumStMoney"></label>
+        </div>
+        <div class="form-group mar-r-20">
+            <label class="control-label">已付金额合计：</label>
+            <label class="control-label F-float F-money T-sumPaiedMoney"></label>
+        </div>
+        <div class="form-group ">
+            <label class="control-label">未付金额合计：</label>
+            <label class="control-label F-float F-money T-sumUnPaiedMoney"></label>
         </div>
     </div>
     <div class="row insuranceList">
         <div class="col-xs-12">
             <table class="table table-striped table-bordered table-hover T-showHighLight">
                 <thead>
-                    <tr class="bg-blur" >
+                    <tr class="bg-blur T-tr-fixed">
                         <th>保险公司</th>
                         <th>账面应付</th>
                         <th>结算金额</th>
@@ -31,34 +67,28 @@
                     </tr>
                 </thead>
                 <tbody class="T-list">
-                {{each financialInsuranceList as rs}}
-                <tr data-id="{{rs.insuranceId}}" data-name="{{rs.insuranceName}}">
-                    <td>{{if rs.insuranceName == null || rs.insuranceName == ""}}-{{else}}{{rs.insuranceName}}{{/if}}</td>
-                    <td>{{rs.sumNeedPayMoney}}</td>
-                    <td>{{rs.sumSettlementMoney}}</td>
-                    <td>{{rs.sumPayedMoney}}</td>
-                    <td><span {{if rs.sumUnPayedMoney != 0}}style="color:red"{{/if}}>{{rs.sumUnPayedMoney}}</span></td>
-                    <td>{{if rs.allCheckCount != rs.checkedCount}}
-                            <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
-                        {{/if}}
-                        {{if rs.allCheckCount == rs.checkedCount}}
-                            <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span>
-                        {{/if}}
-                    </td>
-                    <td>{{if rs.allPayCount != rs.payedCount}}
-                            <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
-                        {{/if}}
-                        {{if rs.allPayCount == rs.payedCount}}
-                            <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span>
-                        {{/if}}
-                    </td>
-                    <td>
-                        <a class="cursor R-right T-check T-option  " data-right="1270002|1270005">对账</a>
-                        <label class="cursor R-right" data-right="1270002"><a class="R-right" data-right="1270003"> |</a></label>
-                        <a class="cursor T-option T-clear R-right" data-right="1270003">付款</a>
-                    </td>
-                </tr>
-                {{/each}}
+                    {{each financialInsuranceList as rs}}
+                    <tr data-id="{{rs.insuranceId}}" data-name="{{rs.insuranceName}}">
+                        <td>{{if rs.insuranceName == null || rs.insuranceName == ""}}-{{else}}{{rs.insuranceName}}{{/if}}</td>
+                        <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
+                        <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td>{{if rs.allCheckCount != rs.checkedCount}}
+                            <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}} {{if rs.allCheckCount == rs.checkedCount}}
+                            <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}}
+                        </td>
+                        <td>{{if rs.allPayCount != rs.payedCount}}
+                            <span style="color:#ff9900"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span> {{/if}} {{if rs.allPayCount == rs.payedCount}}
+                            <span style="color:green"> {{rs.payedCount}}{{"/"}}{{rs.allPayCount}}</span> {{/if}}
+                        </td>
+                        <td>
+                            <a class="cursor R-right T-check T-option  " data-right="1270002|1270005">对账</a>
+                            <label class="cursor R-right" data-right="1270002"><a class="R-right" data-right="1270003"> |</a></label>
+                            <a class="cursor T-option T-clear R-right" data-right="1270003">付款</a>
+                        </td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
             <div class="row pageMode">

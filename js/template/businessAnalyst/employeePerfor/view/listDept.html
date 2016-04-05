@@ -23,14 +23,24 @@
 		{{each result as deptL}}
 		   <tr>
 	   		    <td>{{deptL.name}}</td>
-	   			<td>{{deptL.getCount}}</td>
-	   			<td>{{deptL.tripPlanCount}}</td>
-	   			<td>{{deptL.tripPlanMemberCount}}</td>
-	   			<td>{{deptL.transCount}}</td>
-	   			<td>{{deptL.innerCount}}</td>
-	   			<td>{{deptL.orderCount}}</td>		
+	   			<td>{{deptL.getAdultCount}}大{{deptL.getChildCount}}小</td>
+	   			<td>{{deptL.tripCount}}</td>
+	   			<td>{{deptL.adultCount}}大{{deptL.childCount}}小</td>
+	   			<td>{{deptL.transAdultCount}}大{{deptL.transChildCount}}小</td>
+	   			<td>{{deptL.innerAdultCount}}大{{deptL.innerChildCount}}小</td>
+	   			<td>{{deptL.orderCount}}</td>
 		   	</tr>
 		{{/each}}
+
+		<tr style="background-color:#effef4">
+			<td style="font-weight: bold;">合计</td>
+			<td class="T-sumAdultCount">0</td>
+			<td class="T-tripTotalCount">0</td>
+			<td class="T-tripAdChildCount">0</td>
+			<td class="T-transAdChilTotalCount">0</td>
+			<td class="T-innerAdChilTotalCount">0</td>
+			<td class="T-orderTotalCount">0</td>
+		</tr>
 	</tbody>
 </table>
 <div class="row pageMode">

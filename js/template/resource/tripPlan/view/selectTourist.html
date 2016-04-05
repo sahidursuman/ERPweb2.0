@@ -1,0 +1,77 @@
+<div class="col-sm-12" style="margin-top:10px;">
+	<div class="tabbable T-addtourist-TripPlanBus globalAdd" data-tasktype="{{busData.taskType}}">
+		<div class=" col-xs-12" style="padding:10px 0 0 0;">
+			<div class="tab-pane fade active in">
+				<div class="col-xs-12" class="search-TravelLineList">
+					<table class="table table-striped table-bordered table-hover add-travelLineList-table">
+						<thead>
+							<tr>
+								<th class="th-border">
+									<label class="pos-rel">
+										<input type="checkbox" class="ace T-checkAll">
+										<span class="lbl"></span>
+									</label>
+								</th>
+								<th class="th-border">外联销售</th>
+								<th class="th-border">线路产品</th>
+								<th class="th-border">客户</th>
+								<th class="th-border">联系人</th>
+								<th class="th-border">联系电话</th>
+								<th class="th-border">客源地</th>
+								<th class="th-border">年龄</th>
+								<th class="th-border">人数</th>
+								<th class="th-border">全陪</th>
+								<th class="th-border">全陪电话</th>
+								<th class="th-border">接站牌</th>
+								<th class="th-border">送客地点</th>
+								<th class="th-border">备注</th>
+								<th class="th-border">集合时间</th>
+								<th class="th-border">集合地点</th>
+								<th class="th-border" style="width: 50px">操作</th>
+							</tr>
+						</thead>
+						<tbody class="T-group-list">{{each touristGroupList as rs}}
+							<tr data-entity-id="{{rs.id}}">
+								<td>
+									<label class="pos-rel">
+										<input type="checkbox" class="ace T-tourist-check">
+										<span class="lbl"></span>
+									</label>
+								</td>
+								<td name="creatorName">{{if !!rs.outOPUser}}{{rs.outOPUser.realName}}{{/if}}</td>
+								<td name="lineProductName">{{rs.lineProduct.name}}</td>
+								<td name="travelAgencyName">{{rs.partnerAgency.travelAgencyName}}</td>
+								<td name="contactMemberName">{{rs.contactMember.name}}</td>
+								<td name="contactMemberMobileNumber">{{rs.contactMember.mobileNumber}}</td>
+								<td name="areaData">{{rs.areaData}}</td>
+								<td name="ageData">{{rs.ageData}}</td>
+								<td name="peopleCount" data-adultCount="" data-childCount="">{{rs.adultCount + rs.childCount}}</td>
+								<td>{{rs.accompanyGuideName}}</td>
+								<td>{{rs.accompanyGuideMobile}}</td>
+								<td>{{rs.welcomeBoard}}</td>
+								<td>{{rs.sendPosition}}</td>
+								<td>{{rs.remark}}</td>
+								<td><input type="text" name="setPlaceTime" class="T-dateTimePicker col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlaceTime}}{{else}}{{busData.setPlaceTime}}{{/if}}"></td>
+								<td><input type="text" name="setPlacePosition" class="col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlacePosition}}{{else}}{{busData.setPlacePosition}}{{/if}}"></td>
+								<td>
+									<a class="cursor T-groupView">
+										查看
+									</a>
+								</td>
+							</tr>{{/each}}
+						</tbody>
+					</table>
+					 <div class="col-md-12 text-center mar-t-20">
+			            <button class="btn btn-sm btn-primary T-cancel">
+			                <i class="ace-icon fa fa-times-circle"></i> 取消
+			            </button>
+
+			            <button data-entity-id="" class="btn btn-sm btn-primary T-saveGroup">
+			                <i class="ace-icon fa fa-check-circle"></i> 提交信息
+			            </button>
+			        </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

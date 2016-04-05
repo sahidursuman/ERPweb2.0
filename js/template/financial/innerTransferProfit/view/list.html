@@ -1,30 +1,34 @@
-<div class="financial_innerTransferInProfit" >
-    <div class="row border" style="padding: 0 20px;">
-        <div class="form-inline search-area T-search-area" style="padding-top:10px;">
-            <div class="form-group">
+<div class="financial_innerTransferInProfit col-xs-12" >
+    <div class="row">
+        <div class="form-inline search-area T-search-area">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>线路产品：</span></label>
                 <input type="text" value="{{searchParam.lineProductName}}" name="lineProductName" placeholder="线路产品" />
                 <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
             <label class="control-label"><span>组团社：</span></label>
                 <input type="text" value="{{searchParam.partnerAgencyName}}"  name="partnerAgencyName"  placeholder="组团社" />
                 <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
             <label class="control-label"><span>部门：</span></label>
                 <input type="text" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName" placeholder="部门" />
                 <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId" />
             </div>
-            <div class="form-group mar-l-10"> 
+            <div class="form-group mar-r-10">
+                <label class="control-label"><span>收客单号：</span></label>
+                <input type="text" value="{{searchParam.indexOrderNumber}}" name="indexOrderNumber" placeholder="收客单号" />
+            </div>
+            <div class="form-group mar-r-10"> 
                 <label class="control-label"><span>开始日期：</span></label>
-                <input type="text" value="{{searchParam.startTime}}" name="startTime" class="date-picker" style="width:100px;" placeholder="开始日期" />
+                <input type="text" value="{{searchParam.startTime}}" name="startTime" class="datepicker" style="width:100px;" placeholder="开始日期" />
             </div>
-            <div class="form-group mar-l-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>结束日期：</span></label>
-                <input class="date-picker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />
+                <input class="datepicker" name="endTime" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" />
             </div>
-            <div class="form-group marginLeft-30">
+            <div class="form-group">
                 <button class="btn-sm  btn-height search-btn T-search" style="border-top-width: 4px;border-bottom-width: 4px;">
                     <i class="ace-icon fa fa-search"></i>
                      搜索
@@ -32,56 +36,81 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">总人数：{{sumAdultCount+sumChildCount}}</label>
-            <label class="control-label marginLeft-30">团款应收合计：{{sumTripIncome}}</label>
-            <label class="control-label marginLeft-30">中转成本合计：{{sumOutCost}}</label>
-            <label class="control-label marginLeft-30">内转成本合计：{{sumInnerCost}}</label>
-            <label class="control-label marginLeft-30">毛利合计：{{sumProfit}}</label>
-            <label class="control-label marginLeft-30">人均毛利合计：{{sumAverProfit }}</label>
+            <label class="control-label">总人数：<span class="F-float F-count">{{sumAdultCount}} 大 {{sumChildCount}} 小</span></label>
+            <label class="control-label marginLeft-30">团款应收合计：<span class="F-float F-money">{{sumTripIncome}}</span></label>
+            {{if searchParam.isSelectTransfer == "1"}}
+            <label class="control-label marginLeft-30">中转成本合计：<span class="F-float F-money">{{sumOutCost}}</span></label>
+            {{/if}}
+            <label class="control-label marginLeft-30">内转成本合计：<span class="F-float F-money">{{sumInnerCost}}</span></label>
+            <label class="control-label marginLeft-30">毛利合计：<span class="F-float F-money">{{sumProfit}}</span></label>
+            <label class="control-label marginLeft-30">人均毛利合计：<span class="F-float F-money">{{sumAverProfit }}</span></label>
+            <label class="pos-rel pull-right">
+                <input type="checkbox" class="ace T-checkTurn" {{if searchParam.isSelectTransfer == "1"}}checked="checked"{{/if}}/> 
+                <span class="lbl"> 核算中转</span>
+            </label>
         </div>
     </div>
-    <div class="row ticketList" style="margin-top:10px;">
+    <div class="row ticketList">
         <table class="table table-striped table-bordered table-hover T-showHighLight">
             <thead>
-            <tr class="bg-blur">
-                 <th> 转出部门</th>
-                 <th class="col-sm-1">线路产品</th>
-                 <th> 出游日期</th>
-                 <th> 游客</th>  
-                 <th> 人数</th>
-                 <th> 组团社</th>   
-                 <th> 团款应收</th> 
-                 <th> 中转</th>
-                 <th> 中转成本</th>
-                 <th> 转入部门</th>
-                 <th> 内转成本</th>  
-                 <th> 毛利</th>
-                 <th> 人均毛利</th>
+            <tr class="bg-blur T-tr-fixed">
+                <th>收客单号</th>
+                <!-- <th>转出部门</th> -->
+                <th class="col-sm-1">线路产品</th>
+                <th>出游日期</th>
+                <th>游客</th>
+                <th>人数</th>
+                <th>客户</th>
+                <!-- <th>组团社</th> -->
+                <th>收客部门</th>   
+                <th>团款应收</th> 
+                {{if searchParam.isSelectTransfer == "1"}}
+                <th>中转</th>
+                <th>中转成本</th>
+                {{/if}}
+                <th>接收部门</th>
+                <th>内转成本</th>  
+                <th>毛利</th>
+                <th>人均毛利</th>
             </tr>
             </thead>
             <tbody class="T-list">
             {{each touristGroupInnerTransferList as innerTransferList index}}
             <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}"> 
-                <td>{{innerTransferList.fromBusinessGroupName}}</td> 
-                <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{innerTransferList.lineProductName}}</a></td>
+                <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{if innerTransferList.orderNumber == null || innerTransferList.orderNumber == ""}}-{{else}}{{innerTransferList.orderNumber}}{{/if}}</a></td>
+                <!-- <td>{{innerTransferList.fromBusinessGroupName}}</td> --> 
+                <td>{{innerTransferList.lineProductName}}</td>
                 <!--给日期转码-->
                 <td>{{innerTransferList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td>{{if innerTransferList.contact == null || innerTransferList.contact ==""}}无{{else}}{{innerTransferList.contact}}{{/if}}</td>
                 <td><a href="javascript:void(0)" class="T-option T-showTourist">
-                {{innerTransferList.adultCount}}大{{innerTransferList.childCount}}小</a></td>
-                <td>{{if innerTransferList.partnerAgencyName == null || innerTransferList.partnerAgencyName == ""}}无{{else}}{{innerTransferList.partnerAgencyName}}{{/if}}</td>
-                <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">{{innerTransferList.needInComeMoney}}</a></td>
-                <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}无{{else}}{{innerTransferList.change}}{{/if}}</td> 
-                <td><a href="javascript:void(0)" class="T-option T-showChangePay">{{innerTransferList.changeNeedPayMoney}}</a></td>
+                        <span class="F-float F-count">{{innerTransferList.adultCount}}</span>大
+                        <span class="F-float F-count">{{innerTransferList.childCount}}</span>小
+                    </a>
+                </td>
+                <td>{{if innerTransferList.area == null || innerTransferList.area == ""}}-{{else}}{{innerTransferList.area}}{{/if}}</td>
+                <td>{{if !innerTransferList.fromBusinessGroupName}}无{{else}}{{innerTransferList.fromBusinessGroupName}}{{/if}}</td>
+                <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">
+                        <span class="F-float F-money">{{innerTransferList.needInComeMoney}}</span>
+                    </a>
+                </td>
+                {{if searchParam.isSelectTransfer == "1"}}
+                <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}-{{else}}{{innerTransferList.change}}{{/if}}</td> 
+                <td><a href="javascript:void(0)" class="T-option T-showChangePay">
+                        <span class="F-float F-money">{{innerTransferList.totalPaySettlementMoney}}</span>
+                    </a>
+                </td>
+                {{/if}}
                 <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
-                <td>
-                    <a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">{{innerTransferList.transNeedPayAllMoney}}</a>
+                <td><a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">
+                        <span class="F-float F-money">{{innerTransferList.transNeedPayAllMoney}}</span>
+                    </a>
                 </td>
                 <td>
-                    <span style="color: red">{{innerTransferList.grossProfit}}</span>
+                    <span class="F-float F-money" style="color: red">{{innerTransferList.grossProfit}}</span>
                 </td>
                 <td>
-                  <span style="color: red"> {{innerTransferList.averageGrossProfit}}</span>
+                   <span class="F-float F-money" style="color: red"> {{innerTransferList.averageGrossProfit}}</span>
                 </td>
             </tr>   
             {{/each}}

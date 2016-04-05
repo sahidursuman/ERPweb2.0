@@ -1,5 +1,5 @@
 <div class="col-xs-12">
-	<table class="table table-striped table-bordered table-hover row">
+	<table class="table table-striped table-bordered table-hover T-chex-radio row">
 		<thead>
 			<tr>
 				<th>报价单号</th>
@@ -21,11 +21,13 @@
 				 data-lineProductName= '{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.name}}{{/if}}'
 				 data-lineProducId= '{{if !!lineProduct.lineProduct}}{{lineProduct.lineProduct.id}}{{/if}}'
 				 data-startTime='{{lineProduct.startTime}}'
+				 data-days='{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}'
 				 data-fromPartnerAgencyId='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.id}}{{/if}}' 
 				 data-fromPartnerAgencyName='{{if lineProduct.partnerAgency != null}}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}'
 				 data-partnerAgencyContactName ='{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.contactRealname}}-[{{lineProduct.partnerAgencyContact.contactMobileNumber}}]{{/if}}'
 				 data-partnerAgencyContactId = '{{if lineProduct.partnerAgencyContact != null}}{{lineProduct.partnerAgencyContact.id}}{{/if}}'
-				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='{{lineProduct.adultQuotePrice}}' data-childCount='{{lineProduct.childCount}}' data-childPrice='{{lineProduct.childQuotePrice}}' >
+				 data-adultCount='{{lineProduct.adultCount}}' data-adultPrice='{{lineProduct.adultQuotePrice}}' data-childCount='{{lineProduct.childCount}}' data-childPrice='{{lineProduct.childQuotePrice}}'
+				 data-customerType="{{if lineProduct.lineProduct != null}}{{lineProduct.lineProduct.customerType}}{{/if}}">
 					<td>
 					    {{lineProduct.quoteNumber}}
 					</td>
@@ -42,13 +44,13 @@
 						{{/if}}
 					</td>
 
-					<td>{{lineProduct.adultCount}} 大 {{lineProduct.childCount}} 小</td>
-					<td>{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}</td>
-					<td>{{lineProduct.createTime}}</td>
+					<td><span class="F-float F-count">{{lineProduct.adultCount}}</span> 大 <span class="F-float F-count">{{lineProduct.childCount}}</span> 小</td>
+					<td><span class="F-float F-count">{{if lineProduct.lineProduct !=null }}{{lineProduct.lineProduct.days}}{{/if}}</span></td>
+					<td>{{lineProduct.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 
 					<td>{{if lineProduct.partnerAgency !=null }}{{lineProduct.partnerAgency.travelAgencyName}}{{/if}}</td>
 					<td>{{if lineProduct.partnerAgencyContact !=null }}{{lineProduct.partnerAgencyContact.contactRealname}}{{/if}}</td>
-					<td>{{lineProduct.startTime}}</td>
+					<td>{{lineProduct.createTime}}</td>
 					<td>
 					 	<label class="pos-rel"> <input type="radio" class="ace T-cheked" name="form-field-radio"> <span class="lbl"></span> </label>
 				    </td>

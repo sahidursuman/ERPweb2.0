@@ -152,7 +152,7 @@ define(function(require,exports){
 				var $busList = $obj.find(".T-busListForm .T-busList");
 				var $addBtn = $busList.find(".T-busCompany-add"); 
 				$addBtn.on('click',function(){
-					BusCompany.addBusList($busList,1);
+					BusCompany.addBusList($obj,1);
 					validator = rule.update(validator);
 				});
 				//新增司机事件
@@ -171,7 +171,6 @@ define(function(require,exports){
 					if(checkStatus == true){
 						status = 1;
 					};
-					console.log(status);
 					var form = $mainObj.serialize()+"&status="+status+"",
 						formData = $mainObj.serializeJson();
 					//车辆数据的组装
@@ -351,7 +350,7 @@ define(function(require,exports){
 								//新增车辆
 								var $addBtn = $busList.find(".T-busCompany-add");
 								$addBtn.on('click',function(){
-									BusCompany.addBusList($busList,2);
+									BusCompany.addBusList($obj,2);
 									validator = rule.update(validator);
 								});
 								//删除原有车辆
@@ -388,7 +387,6 @@ define(function(require,exports){
 										status = 1;
 									}
 									var form = $updateObj.serialize()+"&status="+status+"";
-									console.log(form);
 									//return
 									var busJsonAdd = [],
 										busJsonDel = [],
@@ -507,11 +505,11 @@ define(function(require,exports){
 	//新增车辆函数
 	BusCompany.addBusList = function($obj,typeFlag){
 		var html = "<tr><td><input class=\"col-sm-12\" name=\"licenseNumber\" type=\"text\" maxlength=\"10\"/></td><td><input class=\"col-sm-12\" name=\"brand\" type=\"text\" maxlength=\"32\"/></td><td><input class=\"col-sm-10\" name=\"seatCount\" type=\"text\" value=\"1\"  maxlength=\"3\"/></td><td class=\"col-sm-1\"><div class=\"input-group col-sm-12\"><input name=\"buyTime\" type=\"text\" class=\"datepicker\" style='width: 130px' /><span class=\"input-group-addon\"><i class=\"fa fa-calendar\"></i></span></div></td><td><select name=\"isChartered\"><option value=\"1\">是</option><option value=\"0\" selected=\"selected\">否</option></select></td>" +								"<td class=\"time\">" +
-					"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
+					"<div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker T-startTime T-calc\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" readonly=\"readonly\" class=\"datepicker T-endTime T-calc\" style=\"width:100px\"/><label class=\"timeArea hide\" style=\"float:right\"><button class=\"btn  btn-sm btn-white T-add\"><i class=\"ace-icon fa fa-plus bigger-110 icon-only\"></i></button></label></div>" +
 					"</td>" +
-					"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
+					"<td><div data-index=\"1\" class=\"clearfix div-1\" style=\"margin-top:2px\"><input style=\"width:100px;\" name=\"contractPrice\" class=\" F-float F-money T-minPrice T-calc\" maxlength=\"9\" type=\"text\" readonly=\"readonly\"/><label>&nbsp;元</label></div></td>" +
 					"<td><input name=\"remark\"  maxlength=\"1000\"  type=\"text\" class=\"col-sm-12\"/></td><td style=\"width:70px\"><a class=\"btn-xs T-bus-delete\">删除</a></td></tr>";
-		$obj.find("tbody").append(html);
+		$obj.find(".T-busTbody-list").append(html);
 		validator = rule.update(validator);
 		$(window).trigger('resize');
 		BusCompany.bindTime($obj, "buyTime");
@@ -548,10 +546,33 @@ define(function(require,exports){
 		var $addTimeArea = $obj.find('.timeArea .T-add');
 		$addTimeArea.unbind().on('click',function(){
 			BusCompany.addTimeArea($(this),typeFlag,validator);
-			
 		});
-		
+
+		$obj.find('.T-busTbody-list').on('change', '.T-calc', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that = $(this),index=$that.index(),$tr=$that.closest('tr'),days=[],minBusPriceArr=[];
+			   if($that.hasClass('T-startTime')){//包车时限结束日期--基数按天数
+			   	  var minPrice=BusCompany.minBusPrice($obj);
+			   	  if (!isNaN(minPrice)) {
+			   	  	 $obj.find('.T-lowestPrice').val(minPrice);
+			   	  };
+			    }else if($that.hasClass('T-endTime')){//包车时限结束日期--基数按天数
+			   	  var minPrice=BusCompany.minBusPrice($obj);
+			   	  if (!isNaN(minPrice)) {
+			   	  	 $obj.find('.T-lowestPrice').val(minPrice);
+			   	  };
+			    }else if($that.hasClass('T-minPrice')){//包车价格
+			        var minPrice = BusCompany.minBusPrice($obj);
+			        //最低价
+			        if (!isNaN(minPrice)) {
+			          $obj.find('.T-lowestPrice').val(minPrice);
+			        }
+			    }
+		});	
 	};
+
+
 	BusCompany.datepicker = function(obj, min, max, show){
 		if(min){
 			min = min.split('-');
@@ -576,10 +597,10 @@ define(function(require,exports){
 	//动态增加班车时限
 	BusCompany.addTimeArea = function($obj,typeFlag,validator){
 		var $td = $obj.closest('td');
+		var $tr=$obj.closest('tr');
 		var index = $td.find('div').length;
-		//console.log(index);
-		var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white T-del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
-		var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\"width:100px;\" name=\"contractPrice\" type=\"text\" maxlength=\"9\"/><label>&nbsp;元</label></div>";
+		var timeLimitDiv = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:2px\"><input name=\"startTime\" type=\"text\" class=\"datepicker T-startTime T-calc\" style=\"width:100px\"/><label>&nbsp;至&nbsp;</label><input name=\"endTime\" type=\"text\" class=\"datepicker T-endTime T-calc\" style=\"width:100px\"/><label class=\"timeArea\" style=\"float:right\"><button class=\"btn  btn-sm btn-white T-del\"><i class=\"fa fa-minus bigger-110 icon-only\"></i></button></label></div>";
+		var contractPriceInput = "<div data-index=\""+(index+1)+"\" class=\"clearfix appendDiv div-"+(index+1)+"\" style=\"margin-top:7px\"><input style=\"width:100px;\" name=\"contractPrice\" class=\"F-float F-money T-minPrice T-calc\" type=\"text\" maxlength=\"9\"/><label>&nbsp;元</label></div>";
 		$td.next().append(contractPriceInput);
 		$td.append(timeLimitDiv);
 		BusCompany.datepicker($td.find(".datepicker"));
@@ -718,6 +739,38 @@ define(function(require,exports){
 			$obj.find("input[name="+name+"]").datepicker("remove");
 		}
 	}
+
+
+
+	/**
+    * 获取车队最低价
+    * @param  {[type]} $tab [description]
+    * @return {[type]}      [description]
+    */
+   BusCompany.minBusPrice = function($tab){
+   		var temp=[];
+	   	$tab.find('.T-busTbody-list').find('tr').each(function(i) {
+	   		var $that=$(this),index=$that.find('.T-minPrice').closest('div').data('index'),$minPriceTr=$that.find('.T-minPrice');
+	   		$minPriceTr.each(function(j) {
+	   			if(j<=index){
+	   			  var minPrice = $(this).val()*1,
+	   			      startTime = $(this).closest('td').prev('td').find('div').eq(j).find('.T-startTime').val(),
+	   			      endTime = $(this).closest('td').prev('td').find('div').eq(j).find('.T-endTime').val();
+	   			  if(minPrice!=null && startTime!=null && !isNaN(minPrice)){
+	   			  	 // 计算时间区间天数
+	   	    	     var days = Tools.getDateDiff(startTime,endTime);    
+	   	    	         temp.push(minPrice/days);
+	   			  }
+	   			 
+	   			}
+	   		});
+	   		
+	   	});
+        //返回包车价与时间区间商集合
+	   	return Math.min.apply(Math,temp);
+	}
+
+
 	//查看车队
 	BusCompany.viewbusCompany = function($id){
 		$.ajax({

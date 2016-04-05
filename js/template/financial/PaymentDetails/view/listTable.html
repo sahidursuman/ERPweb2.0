@@ -1,21 +1,40 @@
 {{each result as rs}}
-    <tr><td>{{rs.accountTime}}</td>
-        <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{/if}}</td>
+    <tr data-id="{{rs.id}}">
+        <td>{{rs.accountTime}}</td>
+        <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{else if rs.moneyType == 2}}转账{{/if}}</td>
         <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>
         <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
         <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>
         <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>
-        <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{/if}}</td>
+        <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{else if rs.payType == 5}}网付{{/if}}</td>
         {{if rs.moneyType == 0}}
-        <td>{{rs.incomeDifferenceMoney}}</td>
+        <td><a {{if rs.subjectName == '主营业务收入' || rs.subjectName == '主营业务支出'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></a></td>
         <td>-</td>
-        {{else}}
+        {{else if rs.moneyType == 1}}
         <td>-</td>
-        <td>{{rs.payDifferenceMoney}}</td>
+        <td><a {{if rs.subjectName == '主营业务收入' || rs.subjectName == '主营业务支出'}}class="T-viewDetails"{{else}}style="color:#000;"{{/if}}><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></a></td>
+        {{else if rs.moneyType == 2}}
+        <td>{{if rs.incomeDifferenceMoney == 0}}-
+            {{else}}<span class="F-float F-money">{{rs.incomeDifferenceMoney}}</span></td>
+            {{/if}}
+        <td>{{if rs.payDifferenceMoney == 0}}-
+            {{else}}<span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
+            {{/if}}
         {{/if}}
-        <td>{{if rs.bankName == null || rs.bankName == ""}}-{{else}}{{rs.bankName}}{{/if}}</td>
+        <td>
+            {{if rs.bankAccount != null}}
+                {{if rs.bankAccount.bankAccountNumber == null || rs.bankAccount.bankAccountNumber == ""}}
+                        -
+                    {{else}}
+                        {{rs.bankAccount.bankAccountNumber}}
+                {{/if}}
+            {{else}}
+                -
+            {{/if}}
+        </td>
         <td>{{rs.remark}}</td>
         <td>{{rs.user.realName}}</td>
         <td>{{rs.createTime}}</td>
+        <td><a class="{{if rs.deleteStatus == 1}}cursor T-delete{{else}}gray{{/if}}"><span>删除</span></a></td>
     </tr>
 {{/each}}

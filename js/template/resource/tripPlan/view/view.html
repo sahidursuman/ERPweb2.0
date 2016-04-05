@@ -1,357 +1,641 @@
-<div class="container-fluid" style="overflow: hidden;">
-	<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
-		<tr>
-			<td class="style-myself">线路：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.name}}</td>
-			<td class="style-myself">类别：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.type}}</td>
-			<td class="style-myself">应用范围：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{if tripPlan.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}</td>
-			<td class="style-myself">天数：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.lineProduct.days}}</td>
-			<td class="style-myself">团号：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.tripNumber}}</td>
-		</tr>
-		<tr>
-			<td class="style-myself">出团日期：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px"><span name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></td>
-			<td class="style-myself">完团日期：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-			<td class="style-myself">团队人数：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
-			<td class="style-myself">导游：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" >{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</td>
-			<td class="style-myself">全陪：</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px">{{tripPlan.accompanyGuideName}}</td>
-		</tr>
+<h5 class="base-title">基本信息</h5>
+<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 28px">
+	<tr>
+		<td class="style-myself">线路产品：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.lineProduct.name}}</td>
+		<td class="style-myself">针对客源：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.tripPlanType == 0}}散客{{else if basicInfo.tripPlanType == 1}}团体{{/if}}</td>
+		<td class="style-myself">人数：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px"><span  class="F-float F-count">{{basicInfo.touristAdultCount}}</span>大人&nbsp;<span  class="F-float F-count">{{basicInfo.touristChildCount}}</span>小孩</td>
+		<td class="style-myself">团号：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.tripNumber}}</td>
+	</tr>
+	<tr>
+		<td class="style-myself">出游日期：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px"><span name="startTime_Choose">{{basicInfo.startTime | dateFormat:'yyyy-MM-dd'}}</span></td>
+		<td class="style-myself">完团日期：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+		<td class="style-myself" colspan="4"></td>
+	</tr>
 
-		<tr>
-			<td  class="style-myself">计划导付金额</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllPayMoney}}</td>
+	<tr>
+		<td  class="style-myself">购物商家：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.shopNames}}</td>
 
-			<td class="style-myself">导游现收团款</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllNowMoney}}</td>
+		<td class="style-myself">自费商家：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.selfPayItemNames}}</td>
 
-			<td class="style-myself">导游预支金额</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{tripPlan.guideAllPreMoney}}</td>
-		</tr>
+		<td class="style-myself">&nbsp;</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">
+			<div class="checkbox checkbox-inline mar-0">
+			    <label>
+			        <input type="checkbox" class="ace" disabled="disabled" type="checkbox" name="isContainSelfPay" {{if basicInfo.isContainSelfPay == 1}}checked{{/if}}>
+			        <span class="lbl"> 包含自费</span>
+			    </label>
+			</div>
+		</td>
 
-		<tr>
-			<td  class="style-myself">备注</td>
-			<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="9">{{tripPlan.remark}}</td>
-		</tr>
-	</table>
+		<td class="style-myself">接站牌：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{basicInfo.welcomeBoard}}</td>
+	</tr>
+
+	<tr>
+		<td class="style-myself">全陪:</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.accompanyGuideName}}</td>
+		<td class="style-myself">全陪电话：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{basicInfo.accompanyGuideMobile}}</td>
+		<td class="style-myself">责任计调:</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.dutyOPUser}}{{basicInfo.dutyOPUser.realName}}{{/if}}</td>
+		<td class="style-myself">责任部门:</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px">{{if basicInfo.businessGroup}}{{basicInfo.businessGroup.name}}{{/if}}</td>
+	</tr>
+
+	<tr>
+		<td  class="style-myself">备注：</td>
+		<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="9">{{basicInfo.remark}}</td>
+	</tr>
+</table>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>计划现收：<span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span></td>
+            <td>计划导付：<span class="T-guidePayMoneyLabel">0</span></td>
+            <td>计划预支款：<span class="F-float F-money">{{basicInfo.guidePlanAllPreMoney}}</span></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="trip-arrange">
+    <h5 class="base-title">行程安排</h5>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th class="th-border">日期</th>
+                <th class="th-border">行程简要</th>
+                <th class="th-border">含餐情况</th>
+                <th class="th-border">住宿地点</th>
+                <th class="th-border">景点</th>
+            </tr>
+            {{each tripPlanDayList as day}}
+            <tr>
+                <td>{{basicInfo.startTime | getDateText : day.whichDay}}</td>
+                <td>{{day.title}}</td>
+                <td>{{#day.repastDetail | getRestaurantDesc}}</td>
+                <td>{{day.restPosition}}</td>
+                <td>{{day.scenicItemNames}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
-<div class="container-fluid" style="margin-top:10px ;">
 
-	<div class="row no-margin">
-		<div style="margin: 30px auto 10px auto">
-				<span  class="title-size">
-					<strong>旅游车安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding"> 
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-					<tr>
-						<th class="th-border">司机</th>
-						<th class="th-border">司机电话</th>
-						<th class="th-border">车牌号</th>
-						<th class="th-border">车辆品牌</th>
-						<th class="th-border">合同号</th>
-						<th class="th-border">导付</th>
-						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-					</tr>
-				</thead>
-				<tbody> 
-				{{each busCompanyList as busCompany}}
-					<tr>
-						<td>{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}</td>
-						<td>{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}</td>
-						<td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
-						<td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{/if}}</td>
-						<td>{{busCompany.contractNumber}}</td>
-						<td>{{busCompany.guidePayMoney}}</td>
-						<td>{{busCompany.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 餐安排 -->
-		<div class="tipPlan-gap">
-				<span class="title-size">
-					<strong>餐安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding"> 
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-					<tr>
-						<th class="th-border">日期</th>
-						<th class="th-border">餐厅</th>
-						<th class="th-border">联系电话</th>
-						<th class="th-border">类型</th>
-						<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
-						<th class="th-border">人数</th>
-						<th class="th-border">导付</th>
-						<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-					</tr>
-				</thead>
-				<tbody> 
-				{{each restaurantList as restaurant}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{restaurant.whichDay}}">第{{restaurant.whichDay}}天</td>
-						<td>{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}</td>
-						<td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
-						<td>
-							{{if restaurant.restaurantStandard == null}}
-								{{restaurant.type}}
-							{{else}}
-								{{restaurant.restaurantStandard.type}}
-							{{/if}}
-						</td>
-						<td>{{restaurant.price}}</td>
-						<td>{{restaurant.memberCount}}</td>
-						<td>{{restaurant.guidePayMoney}}</td>
-						<td>{{restaurant.remark}}</td>
-					</tr>
-                {{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 房安排 -->
-		<div class="tipPlan-gap ">
-				<span class="title-size">
-					<strong>房安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">日期</th>
-					<th class="th-border">星级</th>
-					<th class="th-border">酒店</th>
-					<th class="th-border">联系电话</th>
-					<th class="th-border">房型</th>
-					<th class="th-border">数量</th>
-					<th class="th-border">导付</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-				{{each hotelList as hotel}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{hotel.whichDay}}">第{{hotel.whichDay}}天</td>
-						<td>{{if hotel.hotel.level == 1}}三星以下{{else if hotel.hotel.level == 2}}三星{{else if hotel.hotel.level == 3}}准四星{{else if hotel.hotel.level == 4}}四星{{else if hotel.hotel.level == 5}}准五星{{else if hotel.hotel.level == 6}}五星{{else if hotel.hotel.level == 7}}五星以上{{/if}}</td>
-						<td>{{hotel.hotel.name}}</td>
-						<td>{{hotel.hotel.mobileNumber}}</td>
-						<td>{{hotel.hotelRoom.type}}</td>
-						<td>{{hotel.memberCount}}</td>
-						<td>{{hotel.guidePayMoney}}</td>
-						<td>{{hotel.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 景点安排 -->
-		<div class="tipPlan-gap ">
-				<span class="title-size">
-					<strong>景点安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">日期</th>
-					<th class="th-border">时段</th>
-					<th class="th-border">景区</th>
-					<th class="th-border">收费项</th>
-					<th class="th-border">游览时长</th>
-					<th class="th-border">单价</th>
-					<th class="th-border">数量</th>
-					<th class="th-border">订单号</th>
-					<th class="th-border">导付</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-                {{each scenicList as scenic}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{scenic.whichDay}}">第{{scenic.whichDay}}天</td>
-						<td>{{scenic.tourTime}}</td>
-						<td>{{scenic.scenic.name}}</td>
-						<td>{{scenic.scenicItem.name}}</td>
-						<td>{{scenic.tourDuration}}</td>
-						<td>{{scenic.price}}</td>
-						<td>{{scenic.memberCount}}</td>
-						<td>{{scenic.orderNumber}}</td>
-						<td>{{scenic.guidePayMoney}}</td>
-						<td>{{scenic.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 购物安排 -->
-		<div class="tipPlan-gap ">
-				<span class="title-size">
-					<strong>购物安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">日期</th>
-					<th class="th-border">购物店</th>
-					<th class="th-border">商品名</th>
-					<th class="th-border">联系电话</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-				{{each shopList as shop}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{shop.whichDay}}">第{{shop.whichDay}}天</td>
-						<td>{{shop.shop.name}}</td>
-						<td>{{shop.shopPolicy.name}}</td>
-						<td>{{shop.shop.mobileNumber}}</td>
-						<td>{{shop.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 自费安排 -->
-		<div class="tipPlan-gap ">
-				<span class="title-size">
- 					<strong>自费安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">日期</th>
-					<th class="th-border">自费商家</th>
-					<th class="th-border">自费项目</th>
-					<th class="th-border">联系电话</th>
-					<th class="th-border">单价</th>
-					<th class="th-border">底价</th>
-					<th class="th-border">数量</th>
-					<th class="th-border">导付</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-				{{each selfPayList as selfPay}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{selfPay.whichDay}}">第{{selfPay.whichDay}}天</td>
-						<td>{{selfPay.selfPay.name}}</td>
-						<td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}</td>
-						<td>{{selfPay.selfPay.mobileNumber}}</td>
-						<td>{{selfPay.marketPrice}}</td>
-						<td>{{selfPay.price}}</td>
-						<td>{{selfPay.memberCount}}</td>
-						<td>{{selfPay.guidePayMoney}}</td>
-						<td>{{selfPay.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 票务安排 -->
-		<div class="tipPlan-gap ">
-				<span class="title-size">
-					<strong>票务安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">票务公司</th>
-					<th class="th-border">类型</th>
-					<th class="th-border">出发城市</th>
-					<th class="th-border">到达城市</th>
-					<th class="th-border">日期</th>
-					<th class="th-border">班次</th>
-					<th class="th-border">座位级别</th>
-					<th class="th-border">单价</th>
-					<th class="th-border">数量</th>
-					<th class="th-border">导付</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-				{{each ticketList as ticket}}
-					<tr>
-						<td>{{ticket.ticket.name}}</td>
-						<td>
-		                    {{if ticket.type == 1}}
-		                       		飞机票
-	                        {{else if ticket.type ==2}}
-		                       	 	 汽车票
-                            {{else if ticket.type ==3}}  
-		                       		 火车票
-                            {{else if ticket.type ==4}}
-		                        	 轮船票
-		                    {{/if}}
-						</td>
-						<td>{{ticket.startingCity}}</td>
-						<td>{{ticket.arriveCity}}</td>
-						<td>{{if ticket.startTime != null}}{{ticket.startTime}}{{/if}}</td>
-						<td>{{ticket.shift}}</td>
-						<td>{{ticket.seatLevel}}</td>
-						<td>{{ticket.price}}</td>
-						<td>{{ticket.memberCount}}</td>
-						<td>{{ticket.guidePayMoney}}</td>
-						<td>{{ticket.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table>
-		</div>
-		<!-- 其他安排 -->
-		<div class=" tipPlan-gap">
-				<span class="title-size">
-					<strong>其他安排</strong>
-				</span>
-		</div>
-		<div class="col-sm-12 no-padding">
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="th-border">日期</th>
-					<th class="th-border">项目</th>
-					<th class="th-border">联系人</th>
-					<th class="th-border">联系电话</th>
-					<th class="th-border">单价</th>
-					<th class="th-border">数量</th>
-					<th class="th-border">导付</th>
-					<th class="th-border" style="border-right: 1px solid #ddd;">备注</th>
-				</tr>
-				</thead>
-				<tbody>
-				{{each otherList as other}}
-					<tr>
-						<td class="T-viewWhichDaysContainer" whichDay="{{other.whichDay}}">第{{other.whichDay}}天</td>
-						<td>{{other.name}}</td>
-						<td>{{other.managerName}}</td>
-						<td>{{other.mobileNumber}}</td>
-						<td>{{other.price}}</td>
-						<td>{{other.memberCount}}</td>
-						<td>{{other.guidePayMoney}}</td>
-						<td>{{other.remark}}</td>
-					</tr>
-				{{/each}}
-				</tbody>
-			</table> 
-		</div>
-	</div>
+{{if insuranceList.length}}
+<h5 class="base-title">保险安排</h5>
+<table class="table table-bordered">
+    <colgroup>
+        <col style="width:200px"/>
+        <col style="width:200px"/>
+        <col style="width:80px;"/>
+        <col style="width:80px;"/>                                                    
+        <col style="width:80px;"/>
+        <col style="width:80px;"/>
+        <col/>
+        <col style="width:50px;"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="th-border">保险公司</th>
+            <th class="th-border">险种</th>
+            <th class="th-border">单价</th>
+            <th class="th-border">数量</th>
+            <th class="th-border">应付</th>
+            <th class="th-border">预付款</th>
+            <th class="th-border">备注</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each insuranceList as insurance index}}
+        {{if insurance != "[]" || insurance != null}}
+        <tr data-entity-arrangeid="{{insurance.id}}">
+            <td>{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}</td>
+            <td>{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}</td>
+            <td class="F-float F-money">{{insurance.price}}</td>
+            <td class="F-float F-count">{{insurance.memberCount}}</td>
+            <td class="F-float F-money">{{insurance.needPayMoney}}</td>
+            <td class="F-float F-money">{{insurance.prePayMoney}}</td>
+            <td>{{insurance.remark}}</td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if guideList.length}}
+<h5 class="base-title">导游安排</h5>
+<table class="table table-bordered">
+    <colgroup>
+       <col style="width:120px">
+       <col style="width:100px">
+       <col style="width:100px;">
+       <col style="width:60px;">                                                    
+       <col style="width:80px;">
+       <col style="width:110px;">
+       <col style="width:80px;">
+       <col style="width:80px;">
+       <col>
+       <col style="width:50px;">
+     </colgroup>
+    <thead>
+    <tr>
+        <th class="th-border">指定报账导游</th>
+        <th class="th-border">开始日期</th>
+        <th class="th-border">结束日期</th>
+        <th class="th-border">任务</th>
+        <th class="th-border">导游</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">导服费</th>
+        <th class="th-border">管理费</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each guideList as guide}}
+        {{if guide != "[]" || guide != null}}
+            <tr data-entity-arrangeid={{guide.id}} >
+                <td><input type="radio" name='isAccountGuide' disabled="disabled"  {{if guide.isAccountGuide == 1}} checked="checked" {{/if}}></td>
+                <td>{{guide.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+                <td>{{guide.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+                <td>{{#guide.taskType | getTaskDesc}}</td>
+                <td>{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}</td>
+                <td>{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}</td>
+                <td class="F-float F-money">{{guide.price}}</td>
+                <td class="F-float F-money">{{guide.manageFee}}</td>
+                <td>{{guide.remark}}</td>
+            </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if busCompanyList.length}}
+<h5 class="base-title">车辆安排</h5>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th class="th-border">开始日期</th>
+        <th class="th-border">结束日期</th>
+        <th class="th-border">任务</th>
+        <th class="th-border">车座数</th>
+        <th class="th-border">车辆品牌</th>
+        <th class="th-border">车牌号</th>
+        <th class="th-border">所属车队</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">司机</th>
+        <th class="th-border">司机电话</th>
+        <th class="th-border">合同号</th>
+        <th class="th-border">车费</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each busCompanyList as busCompany}}
+       		{{if busCompany != "[]" || busCompany != null}}
+            <tr>
+                <td>{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+                <td>{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+                <td>{{#busCompany.taskType | getTaskDesc}}</td>
+                <td class="F-float F-mcount">{{busCompany.needSeatCount}}</td>
+                <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}</td>
+                <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
+                <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+                <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}</td>
+                <td>{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}</td>
+				<td>{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}</td>
+				<td>{{busCompany.contractNumber}}</td>
+				<td class="F-float F-money">{{busCompany.price}}</td>
+				<td class="F-float F-money">{{busCompany.reduceMoney}}</td>
+				<td class="F-float F-money">{{busCompany.needPayMoney}}</td>
+				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
+				<td class="T-guidePayFeild" data-type={{busCompany.payType}}>{{busCompany.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
+				<td>{{busCompany.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if restaurantList.length}}
+<h5 class="base-title">餐饮安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+        <col style="width:110px"> 
+        <col style="width:50px;"> 
+        <col style="width:150px;"> 
+        <col style="width:110px;"> 
+        <col style="width:110px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;">
+        <col style="width:80px;">
+        <col style="width:90px;">
+        <col> 
+    </colgroup>
+    <thead>
+    <tr>
+        <th class="th-border" style="width:100px;">日期</th>
+        <th class="th-border">类型</th>
+        <th class="th-border">餐厅</th>
+        <th class="th-border">联系人</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
+        <th class="th-border">人数</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each restaurantList as restaurant}}
+            {{if restaurant != "[]" || restaurant != null}}
+            <tr data-entity-arrangeid="{{restaurant.id}}">
+                <td class="T-whichDaysContainer" value="{{restaurant.whichDay}}">{{basicInfo.startTime | getDateText: restaurant.whichDay}}</td>
+                <td>{{restaurant.type}}</td>
+                <td><span class="T-restaurant-name" data-ischoose="{{restaurant.isChoose}}" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}">{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}</span></td>
+                <td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}}{{/if}}{{/if}}</td>
+                <td>{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}</td>
+                <td class="F-float F-money">{{restaurant.price}}</td>
+                <td class="F-float F-count">{{restaurant.memberCount}}</td>
+                <td class="F-float F-money">{{restaurant.reduceMoney}}</td>
+                <td class="F-float F-money">{{restaurant.needPayMoney}}</td>
+                <td class="F-float F-money">{{restaurant.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{restaurant.payType}}>{{restaurant.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}</span></td>
+                <td>{{restaurant.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if hotelList.length}}
+<h5 class="base-title">酒店安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+        <col style="width:110px"> 
+        <col style="width:90px;"> 
+        <col style="width:150px;"> 
+        <col style="width:100px;"> 
+        <col style="width:110px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;"> 
+        <col style="width:60px;">
+        <col style="width:60px;">
+        <col style="width:60px;">
+        <col style="width:90px;">
+        <col>
+        <col style="width:80px;"> 
+      </colgroup>
+    <thead>
+    <tr>
+        <th class="th-border" style="width:100px;">日期</th>
+        <th class="th-border">星级</th>
+        <th class="th-border">酒店</th>
+        <th class="th-border">联系人</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">房型</th>
+        <th class="th-border">单价</th>
+        <th class="th-border">数量</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+        <th class="th-border">状态</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each hotelList as hotel}}
+        {{if hotel != "[]" || hotel != null}}
+            <tr>
+                <td class="T-whichDaysContainer T-whichDays"  value="{{hotel.whichDay}}">{{basicInfo.startTime | getDateText: hotel.whichDay}}</td>
+                <td>{{hotel.hotel.level | getHotelLevelDesc}}</td>
+                <td>{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}</td>
+                <td>{{if hotel.hotel !=null}}{{hotel.hotel.managerName}}{{/if}}</td>
+                <td>{{if hotel.hotel !=null}}{{hotel.hotel.mobileNumber}}{{/if}}</td>
+                <td>{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}</td>
+                <td class="F-float F-money">{{hotel.price}}</td>
+                <td class="F-float F-count">{{hotel.memberCount}}</td>
+                <td class="F-float F-money">{{hotel.reduceMoney}}</td>
+                <td class="F-float F-money">{{hotel.needPayMoney}}</td>         
+                <td class="F-float F-money">{{hotel.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{hotel.payType}}>{{hotel.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}</span></td>
+                <td>{{hotel.remark}}</td>
+                <td>{{hotel.orderStatus | getOrderStatusDesc}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if scenicList.length}}
+<h5 class="base-title">景区安排</h5>
+<table class="table table-bordered">
+     <colgroup> 
+       <col style="width:110px"> 
+       <col style="width:90px;"> 
+       <col style="width:150px;"> 
+       <col style="width:100px;"> 
+       <col style="width:80px;"> 
+       <col style="width:60px;"> 
+       <col style="width:60px;"> 
+       <col style="width:60px;"> 
+       <col style="width:110px;">
+       <col style="width:60px;">
+       <col style="width:90px;">
+       <col style="width:60px;">
+       <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th class="th-border" style="width:100px;">日期</th>
+        <th class="th-border">时间</th>
+        <th class="th-border">景区</th>
+        <th class="th-border">收费项目</th>
+        <th class="th-border">时长</th>
+        <th class="th-border">单价</th>
+        <th class="th-border">数量</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">订单号</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each scenicList as scenic}}
+        {{if scenic != "[]" || scenic != null}}
+            <tr data-entity-arrangeid="{{scenic.id}}">
+                <td class="T-whichDaysContainer" value="{{scenic.whichDay}}">{{basicInfo.startTime | getDateText: scenic.whichDay}}</td>
+                <td>{{scenic.tourTime}}</td>
+                <td>{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}</td>
+                <td>{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}</td>
+                <td>{{scenic.tourDuration}}</td>
+                
+                <td class="F-float F-money">{{scenic.price}}</td>
+                <td class="F-float F-count">{{scenic.memberCount}}</td>
+                <td class="F-float F-money">{{scenic.reduceMoney}}</td>
+                <td>{{scenic.orderNumber}}</td>
+                
+                <td class="F-float F-money">{{scenic.needPayMoney}}</td>
+                <td class="F-float F-money">{{scenic.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{scenic.payType}}>{{scenic.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}</span></td>
+                <td>{{scenic.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if shopList.length}}
+<h5 class="base-title">购物安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+      <col style="width:110px"> 
+      <col style="width:150px;"> 
+      <col style="width:90px;"> 
+      <col style="width:110px;"> 
+      <col style="width:120px;"> 
+      <col>
+      <col style="width:60px;"> 
+      </colgroup> 
+    <thead>
+    <tr>
+        <th class="th-border" style="width:100px;">日期</th>
+        <th class="th-border">购物店</th>
+        <th class="th-border">联系人</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">商品名</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each shopList as shop}}
+        {{if shop != "[]" || shop != null}}
+            <tr>
+                <td class="T-whichDaysContainer" value="{{shop.whichDay}}">{{basicInfo.startTime | getDateText: shop.whichDay}}</td>
+                <td>{{if shop.shop != null}}{{shop.shop.name}}{{/if}}</td>
+                <td>{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}</td>
+                <td>{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}</td>
+                <td>
+                    {{if !!shop.shopArrangeItemSet}}
+                    {{if shop.shopArrangeItemSet.length > 0}}
+                    {{each shop.shopArrangeItemSet as rs index}}
+                    <div {{if index > 0}}class="mar-t-10"{{/if}}>
+                    {{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}
+                    </div>
+                    {{/each}}
+                    {{/if}}
+                    {{/if}}
+                </td>
+                <td>{{shop.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if selfPayList.length}}
+<h5 class="base-title">自费安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+        <col style="width:110px"> 
+        <col style="width:150px;"> 
+        <col style="width:150px;"> 
+        <col style="width:90px;"> 
+        <col style="width:110px;"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px">
+        <col style="width:80px">
+        <col style="width:80px"> 
+        <col style="width:90px;"> 
+        <col>
+    </colgroup>  
+    <thead>
+    <tr>
+        <th style="width:100px;">日期</th>
+        <th>自费商家</th>
+        <th>自费项目</th>
+        <th>联系人</th>
+        <th>联系电话</th>
+        <th>单价</th>
+        <th>底价</th>
+        <th>数量</th>
+        <th>优惠</th>
+        <th>应付</th>
+        <th>预付款</th>
+        <th>计划导付</th>
+        <th>备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each selfPayList as selfPay}}
+        {{if selfPay != "[]" || selfPay != null}}
+            <tr data-entity-arrangeid="{{selfPay.id}}">
+                <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}">{{basicInfo.startTime | getDateText: selfPay.whichDay}}</td>
+                <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}</td>
+                <td>{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}</td>
+                <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}}{{/if}}</td>
+                <td>{{if selfPay.selfPay != null}}{{selfPay.selfPay.mobileNumber}}{{/if}}</td>
+                <td class="F-float F-money">{{selfPay.marketPrice}}</td>
+                <td class="F-float F-money">{{selfPay.price}}</td>
+                <td class="F-float F-count">{{selfPay.memberCount}}</td>
+                <td class="F-float F-money">{{selfPay.reduceMoney}}</td>
+                <td class="F-float F-money">{{selfPay.needPayMoney}}</td>
+                <td class="F-float F-money">{{selfPay.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{selfPay.payType}}>{{selfPay.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}</span></td>
+                <td>{{selfPay.remark}}</td>
+            </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if ticketList.length}}
+<h5 class="base-title">票务安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+        <col style="width:120px"> 
+        <col style="width:90px;"> 
+        <col style="width:120px;"> 
+        <col style="width:120px;"> 
+        <col style="width:100px;"> 
+        <col style="width:150px"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px">
+        <col style="width:80px">
+        <col style="width:80px">
+        <col style="width:90px"> 
+        <col>
+    </colgroup>  
+    <thead>
+    <tr>
+        <th class="th-border">票务公司</th>
+        <th class="th-border">类型</th>
+        <th class="th-border">出发城市</th>
+        <th class="th-border">到达城市</th>
+        <th class="th-border">班次</th>
+        <th class="th-border">时间</th>
+        <th class="th-border">座位级别</th>
+        <th class="th-border">单价</th>
+        <th class="th-border">数量</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each ticketList as ticket}}
+        {{if ticket != "[]" || ticket != null}}
+            <tr data-entity-arrangeid="{{ticket.id}}">
+                <td>{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}</td>
+                <td>{{ticket.type | getTicketText}}</td>
+                <td>{{ticket.startingCity}}</td>
+                <td>{{ticket.arriveCity}}</td>
+                <td>{{ticket.shift}}</td>
+                <td>{{ticket.startTime}}</td>
+                <td>{{ticket.seatLevel}}</td>
+                <td class="F-float F-money">{{ticket.price}}</td>
+                <td class="F-float F-count">{{ticket.memberCount}}</td>
+                <td class="F-float F-money">{{ticket.reduceMoney}}</td>
+                <td class="F-float F-money">{{ticket.needPayMoney}}</td>
+                <td class="F-float F-money">{{ticket.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{ticket.payType}}>{{ticket.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}</span></td>
+                <td>{{ticket.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+{{if otherList.length}}
+<h5 class="base-title">其它安排</h5>
+<table class="table table-bordered">
+    <colgroup> 
+        <col style="width:110px"> 
+        <col style="width:120px;"> 
+        <col style="width:100px;"> 
+        <col style="width:110px;"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px"> 
+        <col style="width:80px">
+        <col style="width:80px">
+        <col style="width:90px">
+        <col>
+    </colgroup>  
+    <thead>
+    <tr>
+        <th class="th-border" style="width:100px;">日期</th>
+        <th class="th-border">项目</th>
+        <th class="th-border">联系人</th>
+        <th class="th-border">联系电话</th>
+        <th class="th-border">单价</th>
+        <th class="th-border">数量</th>
+        <th class="th-border">优惠</th>
+        <th class="th-border">应付</th>
+        <th class="th-border">预付款</th>
+        <th class="th-border">计划导付</th>
+        <th class="th-border">备注</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{each otherList as other}}
+        {{if other != "[]" || other != null}}
+            <tr data-entity-arrangeid="{{other.id}}">
+                <td class="T-whichDaysContainer" value="{{other.whichDay}}">{{basicInfo.startTime | getDateText: other.whichDay}}</td>
+                <td>{{other.name}}</td>
+                <td>{{other.managerName}}</td>
+                <td>{{other.mobileNumber}}</td>
+                <td class="F-float F-money">{{other.price}}</td>
+                <td class="F-float F-count">{{other.memberCount}}</td>
+                <td class="F-float F-money">{{other.reduceMoney}}</td>
+                <td class="F-float F-money">{{other.needPayMoney}}</td>
+                <td class="F-float F-money">{{other.prePayMoney}}</td>
+                <td class="T-guidePayFeild" data-type={{other.payType}}>{{other.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}</span></td>
+                <td>{{other.remark}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}   
+
+<div class="text-center mar-t-20">
+    <button class="btn btn-xs T-close btn-primary w100"> 关闭 </button>
 </div>
-   
+
+

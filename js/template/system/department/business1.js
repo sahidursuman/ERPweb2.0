@@ -210,7 +210,7 @@ define(function(require, exports) {
 												data.group = group;
 												var tr = '<tr class="business-' + data.group.id + '">';
 												tr += '<td>' + data.group.name+'</td><td>' + data.group.createTime + '</td>';
-												tr += '<td><div class="hidden-sm hidden-xs btn-group"><button data-entity-id="' + data.group.id + '" class="btn btn-xs btn-info btn-group-edit"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></button></div>';
+												tr += '<td><div class="btn-group"><button data-entity-id="' + data.group.id + '" class="btn btn-xs btn-info btn-group-edit"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></button></div>';
 												tr += '<div class="hidden-md hidden-lg"> <div class="inline pos-rel"><button class="btn btn-minier btn-primary dropdown-toggle\" data-toggle="dropdown" data-position="auto"><i class="ace-icon fa fa-cog icon-only bigger-110"></i> </button>';
 												tr += '<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close"> <li> <a data-entity-id="' + data.group.id + '" href="javascript:void(0)" class="tooltip-success btn-group-edit" data-rel="tooltip"> <span class="green"> <i class="ace-icon fa fa-pencil-square-o bigger-120"></i> </span> </a> </li> </ul>';
 												tr += '</div> </div> </td> </tr>';
@@ -683,7 +683,7 @@ define(function(require, exports) {
 							var tmp = user.status==1?"已启用":"已停用";
 							tr += "<td>" + tmp +"</td>";
 							tr += "<td>" +
-									"<div class=\"hidden-sm hidden-xs btn-group\"> " +
+									"<div class=\"btn-group\"> " +
 									"<button data-entity-id=\"" + user.id + "\" class=\"btn btn-xs btn-danger btn-user-auth\" title=\"授权\"> <i class=\"ace-icon fa fa-key bigger-120\"></i> </button>" +
 									"</div>" +
 									"<div class=\"hidden-md hidden-lg\">" +

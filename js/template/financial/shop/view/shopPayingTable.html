@@ -2,20 +2,17 @@
     <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
         <td>{{rs.tripMessage}}</td>
         <td>{{rs.accountTime}}</td>
-        <td>{{rs.count}}</td>
+        <td><span>{{rs.count}}</span></td>
         <td>{{if rs.shopItem.length >0}}{{rs.shopItem[0].itemName}}{{if rs.shopItem.length >1}}...{{/if}}<a class="cursor T-action T-see-group">展开</a>{{/if}}</td>
-        <td>{{rs.consumeMoney}}</td>
-        <td>{{rs.travelAgencyRebateMoney}}</td>
-        <td>{{rs.guideRebateMoney}}</td>
-        <td>{{rs.customerRebateMoney}}</td>
-        <td>{{rs.parkingRebateMoney}}</td>
-        <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
-        <td>{{rs.backMoney}}</td>
-        <td><a class="cursor T-action T-payDetails">{{rs.receiveMoney}}</a>
-        <td>{{rs.settlementMoney}}</td>
-        <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
-        <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-        <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} value="{{rs.IncomeRemark}}"></td>
+        <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
+        <td><span class="F-float F-money">{{rs.travelAgencyRebateMoney}}</span></td>
+        <td><span class="F-float F-money">{{rs.guideRebateMoney}}</span></td>
+        <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billimage="{{rs.billImage}}">查看</a>{{/if}}</td>
+        <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
+        <td><a class="cursor T-action T-payDetails">&nbsp;&nbsp;社收:<span class="F-float F-money">{{rs.receiveMoney}}</span>&nbsp;&nbsp;导游现收:<span class="F-float F-money">{{rs.rebateCurrentIncomeMoney}}</span></a></td>        <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+        <td name="unPayedMoney"><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
+        <td><input type="text" class="col-sm-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
+        <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
         <td>{{rs.checkTime}}</td>
         <td>{{rs.checkName}}</td>
         <td>
@@ -44,9 +41,9 @@
                     <tr>
                         <td>{{i + 1}}</td>
                         <td>{{list.itemName}}</td>
-                        <td>{{list.consumeMoney}}</td>
-                        <td>{{list.travelAgencyRebateMoney}}</td>
-                        <td>{{list.guideRebateMoney}}</td>
+                        <td><span class="F-float F-money">{{list.consumeMoney}}</span></td>
+                        <td><span class="F-float F-money">{{list.travelAgencyRebateMoney}}</span></td>
+                        <td><span class="F-float F-money">{{list.guideRebateMoney}}</span></td>
                     </tr>
                     {{/each}}
                 </tbody>

@@ -1,3 +1,8 @@
+/**
+ * 财务管理--单团利润
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
 	var menuKey = "financial_planProfit",
         listMainTemplate = require("./view/listMain"),
@@ -20,20 +25,22 @@ define(function(require, exports) {
             lineProductId : "",
             guideName : "",
             guideId : "",
+            tripPlanType : "",
             start : dateJson.startDate,
             end : dateJson.endDate,
             billStatus : "",
+            operateCalculteOut : 1,
             sortType: 'auto'
         };
         var data = {};
         data.searchParam = plan.searchData;
         var html = listMainTemplate(data);
-        Tools.addTab(menuKey,"发团利润",html);
+        Tools.addTab(menuKey,"单团利润",html);
         
-        plan.listMain("","","","","",dateJson.startDate,dateJson.endDate,"");
+        plan.listMain("","","","","","",dateJson.startDate,dateJson.endDate,"",plan.searchData.operateCalculteOut);
     };
 
-    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
+    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus,operateCalculteOut){
         plan.searchData = {
             pageNo : 0,
             tripNumber : tripNumber,
@@ -41,9 +48,11 @@ define(function(require, exports) {
             lineProductId : lineProductId,
             guideName : guideName,
             guideId : guideId,
+            tripPlanType : tripPlanType,
             start : startTime,
             end : endTime,
             billStatus : billStatus,
+            operateCalculteOut : operateCalculteOut,
             sortType: 'auto'
         };
         var searchParam = JSON.stringify(plan.searchData);
@@ -99,14 +108,19 @@ define(function(require, exports) {
         });
     };
 
-    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,startTime,endTime,billStatus){
+    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus,operateCalculteOut){
         if (plan.$searchArea && arguments.length === 1) {
+            operateCalculteOut = 1;
+            if(!plan.$tab.find(".T-checkTurn").is(":checked")){
+                operateCalculteOut = 0;
+            }
             // 初始化页面后，可以获取页面的参数
             tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
             lineProductName = plan.$searchArea.find("input[name=lineProductName]").val(),
             lineProductId = plan.$searchArea.find("input[name=lineProductId]").val(),
             guideName = plan.$searchArea.find("input[name=guideName]").val(),
             guideId = plan.$searchArea.find("input[name=guideId]").val(),
+            tripPlanType = plan.$searchArea.find("select[name=tripPlanType]").val(),
             startTime = plan.$searchArea.find("input[name=startTime]").val(),
             endTime = plan.$searchArea.find("input[name=endTime]").val(),
             billStatus = plan.$searchArea.find(".T-status button").data("value")
@@ -128,9 +142,11 @@ define(function(require, exports) {
             lineProductId : lineProductId,
             guideName : guideName,
             guideId : guideId,
+            tripPlanType : tripPlanType,
             start : startTime,
             end : endTime,
             billStatus : billStatus,
+            operateCalculteOut : operateCalculteOut,
             sortType: 'auto'
         };
 
@@ -142,18 +158,39 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    data.isTurn = operateCalculteOut;
                 	var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
 			    	$("#tab-" + menuKey + "-content").find(".T-planProfit-list").html(html);
+                    if(operateCalculteOut == 0){
+                        plan.$tab.find(".T-turn").hide();
+                    } else{
+                        plan.$tab.find(".T-turn").show();
+                    }
                     plan.$tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
-			    	plan.getSumData();
+			    	plan.getSumData(plan.$tab,operateCalculteOut);
                     plan.getQuery();
 
-                    plan.$tab.find(".T-tripDetail").on("click",function(){
-                        var id = $(this).closest('tr').data("id");
-                        KingServices.tripDetail(id);
+                    // plan.$tab.find(".T-tripDetail").on("click",function(){
+                    //     var id = $(this).closest('tr').data("id");
+                    //     KingServices.tripDetail(id);
+                    // });
+
+                    //核算中转
+                    plan.$tab.find(".T-checkTurn").off().on("click",function(){
+                        plan.listPlan(0); 
                     });
 
+                    plan.$tab.find('.T-toTripAccount').off().on('click',function(){
+                        var id = $(this).closest('tr').data('id');
+                        var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        KingServices.viewTripAccount(id);
+                    });
+                    
 			    	// 绑定翻页组件
                     laypage({
                         cont: plan.$tab.find('.T-pagenation'),
@@ -170,7 +207,7 @@ define(function(require, exports) {
         });
     };
 
-    plan.getSumData = function(){
+    plan.getSumData = function($tab,operateCalculteOut){
         var searchParam = JSON.stringify(plan.searchData);
         $.ajax({
             url: KingServices.build_url('financialTrip', 'findTotal'),
@@ -179,14 +216,48 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
-                    var total = data.total;
-                    plan.$tab.find(".T-totalIncome").text(total.totalIncome);
-                    plan.$tab.find(".T-totalTrip").text(total.totalTrip);
-                    plan.$tab.find(".T-totalOut").text(total.totalOut);
-                    plan.$tab.find(".T-profit").text(total.profit);
-                    plan.$tab.find(".T-perCapitaProfit").text(total.perCapitaProfit);
-                    plan.$tab.find(".T-personCount").text(total.adultCount + " 大 " + total.childCount + " 小");
-                    plan.$tab.find(".T-tripCount").text(total.tripCount);
+                    var total = data.total
+                        moneys = total.list[0];
+                    var totalDataHtml = "<tr style='background: #e0effd;'><td rowspan='3'>合计</td><td rowspan='3'></td><td>应收/付</td><td><span class='F-float F-money'>" + moneys.needPayAllMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfIncome + "</span></td><td><span class='F-float F-money'>" + moneys.incomeMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideMoney + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideTip + "</span></td><td><span class='F-float F-money'>" + moneys.shopCostMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfMoney + "</span></td><td><span class='F-float F-money'>" + moneys.guideDeductions + "</span></td>";
+                    if(operateCalculteOut){
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
+                                         "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
+                    }
+                    totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
+                    if(operateCalculteOut){
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
+                    }
+                    totalDataHtml += "<td rowspan='3'><span class='F-float F-money'>" + total.profit + "</span></td><td rowspan='3'><span class='F-float F-money'>" + total.perCapitaProfit + "</span></td></tr>";
+
+                    for(var i = 1; i <= 2; i++){
+                        moneys = total.list[i]
+                        totalDataHtml += "<tr style='background: #e0effd;'><td>";
+                        totalDataHtml += (i == 1) ? "已" : "未";
+                        totalDataHtml += "收/付</td><td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<span class='F-float F-money'>" + moneys.needPayAllMoney + "</span>";
+                        } else {
+                            totalDataHtml += "-";
+                        }
+                        totalDataHtml += "</td><td><span class='F-float F-money'>" + moneys.shopMoney + "</span></td><td><span class='F-float F-money'>" + ((i == 2) ? "-" : moneys.selfIncome) + "</span></td><td><span class='F-float F-money'>" + ((i == 2) ? "-" : moneys.incomeMoney) + "</span></td><td><span class='F-float F-money'>" + (moneys.guideMoney || "-") + "</span></td><td><span class='F-float F-money'>" + moneys.insuranceMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.busMoney + "</span></td><td><span class='F-float F-money'>" + moneys.restaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.hotelMoney + "</span></td><td><span class='F-float F-money'>" + moneys.scenicMoney + "</span></td><td><span class='F-float F-money'>" + moneys.ticketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.selfPayMoney + "</span></td><td><span class='F-float F-money'>" +
+                                        moneys.otherMoney + "</span></td><td><span class='F-float F-money'>" + (moneys.guideTip || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.shopCostMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.selfMoney || "-") + "</span></td><td><span class='F-float F-money'>" + (moneys.guideDeductions || "-") + "</span></td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td><span class='F-float F-money'>" + moneys.outBusMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outRestaurantMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outHotelMoney + 
+                                             "</span></td><td><span class='F-float F-money'>" + moneys.outTicketMoney + "</span></td><td><span class='F-float F-money'>" + moneys.outOtherMoney + "</span></td>";
+                        }
+                        totalDataHtml += "<td><span class='F-float F-money'>" + moneys.guideBackPaySMoney + "</span></td><td><span class='F-float F-money'>" + moneys.totalIncome + "</span></td><td><span class='F-float F-money'>" + moneys.totalTrip + "</span></td>";
+                        if(operateCalculteOut){
+                            totalDataHtml += "<td><span class='F-float F-money'>" + moneys.totalOut + "</span></td>";
+                        }
+                    }
+                    totalDataHtml = Tools.filterCount(totalDataHtml);
+                    totalDataHtml = Tools.filterMoney(totalDataHtml);
+                    totalDataHtml = Tools.filterUnPoint(totalDataHtml);
+                    $tab.find(".T-planProfit-list").append(totalDataHtml);
                 }
             }
         });

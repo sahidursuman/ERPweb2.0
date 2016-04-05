@@ -307,10 +307,10 @@ define(function(require, exports) {
 		    index = $tbody.find('tr').find('td').children('div').length;
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
 			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
-			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="0" name="customerRebateMoney" class="col-sm-12 T-customerRebateMoney T-calc" type="text" maxlength="10"/></div></td>'+
-			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 T-marketPrice T-calc F-float F-money" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="0" name="customerRebateMoney" class="col-sm-12 T-customerRebateMoney T-calc F-float F-money" type="text" maxlength="10"/></div></td>'+
+			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalInnerPrice" class="col-sm-12 T-contractPrice T-calc  F-float F-money" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalGuideRate" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalTravelAgencyRate" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5"/></div></td>'+
 			'<td><input name="remark" type="text" class="col-sm-12" style="min-width:100px;" maxlength="1000"/></div></td>'+
@@ -400,9 +400,9 @@ define(function(require, exports) {
 	 */
 	selfpay.addTimeArea = function($this,$tbody){
 	 var $parents = $this.closest('tr'), $td = $parents.find("td"),index = $td.find('div').length; 
-		$td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea col-sm-2" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
-		$td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 T-marketPrice T-calc" type="text" maxlength="10"></div>');
-		$td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 T-contractPrice T-calc" type="text" maxlength="10"></div>');
+		$td.eq(2).append('<div class="col-sm-12 no-padding T-dateTimeArea" style=""><input type="hidden" name="rebateListId" value="" /><input name="startTime" value="" type="text" class="datepicker col-sm-4"><label class="col-sm-2 control-label center">&nbsp;至&nbsp;</label><input name="endTime" value="" type="text" class="datepicker col-sm-4"><label class="priceArea" style="padding-top:0px;"><button class="btn btn-danger btn-sm btn-white T-del"><i class="ace-icon fa fa-minus bigger-110 icon-only" style="line-height: 20px"></i></button></label></div>');
+		$td.eq(3).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="marketPrice" value="" class="col-sm-12 T-marketPrice T-calc F-float F-money" type="text" maxlength="10"></div>');
+		$td.eq(5).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="contractPrice" value="" class="col-sm-12 T-contractPrice T-calc F-float F-money" type="text" maxlength="10"></div>');
 		$td.eq(6).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="guideRate" value="" class="col-sm-12 T-guideRate T-calc" type="text" maxlength="5"></div>');
 		$td.eq(7).append('<div class="col-sm-12 no-padding" style="padding-top:5px!important;"><input data-index="'+(index)+'" name="travelAgencyRate" value="" class="col-sm-12 T-travelAgencyRate T-calc" type="text" maxlength="5"></div>');
 		$parents.find(".T-del").off().on("click", selfpay.deteleDateArea);

@@ -1,0 +1,26 @@
+{{each result as rs}}
+<tr>
+	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
+	<td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-
+		{{else}}
+			<a class="cursor T-viewLine" data-lid="{{rs.lineProductId}}">{{rs.lineProductName}}</a>
+		{{/if}} 
+	</td>
+	<td>{{rs.customerType}}</td>
+	<td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
+	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>
+	<td>{{rs.adultCount || 0}} 大 {{rs.childCount || 0}} 小</td>
+	<td>{{if rs.fromPartnerAgencyName == null || rs.fromPartnerAgencyName == ""}}-{{else}}{{rs.fromPartnerAgencyName}}{{/if}}</td>
+	<td>{{rs.outOPUserName}}</td>
+	<td>{{rs.businessGroupName}}-{{rs.groupName}}</td>
+	<td><span class="F-float F-money">{{rs.tripIncome}}</span></td>
+	<td><span class="F-float F-money">{{rs.otherIncome}}</span></td>
+	<td><span class="F-float F-money">{{rs.outCost}}</span></td>
+	<td><span class="F-float F-money">{{rs.tripCost}}</span></td>
+	<td><span class="F-float F-money">{{rs.transferCost}}</span></td>
+	<td><span class="F-float F-money">{{rs.income}}</span></td>
+	<td><span class="F-float F-money">{{rs.cost}}</span></td>
+	<td><span class="F-float F-money">{{rs.profit}}</span></td>
+	<td><span class="F-float F-money">{{rs.avgProfit}}</span></td>
+</tr>
+{{/each}}

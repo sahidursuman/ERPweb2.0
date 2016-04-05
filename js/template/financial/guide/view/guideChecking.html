@@ -3,84 +3,86 @@
     <div>
         <div class="T-search-area">
             <form class="form-inline" role="form" onsubmit="return false">
-                <div class="form-group">
+                <div class="form-group mar-r-10">
                     <label>导游：</label>
-                    <span class="T-guideName">{{guideName}}</span>
+                    <input type="text" class="T-guideName" value="{{guideName}}" />
                 </div>
-                <div class="form-group input-daterange marginLeft-30">
+                <div class="form-group input-daterange mar-r-10">
                     <label>账期：</label>
                     <input type="text" class="form-control datepicker T-search-start-date" style="width:100px;" value="{{startDate}}">
                     <label>&nbsp;至&nbsp;</label>
                     <input type="text" class="form-control datepicker T-search-end-date" style="width:100px;" value="{{endDate}}">
                 </div>
-                <div class="form-group marginLeft-30">
+                <div class="form-group mar-r-10">
                     <label>团号：</label>
                     <input type="text" class="form-control T-tripPlanNumber" style="width: 160px;" value="{{tripPlanNumber}}" maxlength="20">
                 </div>
-                <div class="form-group marginLeft-30">
+                <div class="form-group mar-r-10">
                     <label>线路产品：</label>
                     <input type="text" class="form-control T-lineProductName" style="width: 200px;" data-id="{{lineProductId}}" value="{{lineProductName}}" maxlength="100">
                 </div>
-                <div class="form-group marginLeft-30">
+                <div class="form-group mar-r-10">
                     <button class="btn-sm search-btn T-btn-search">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
                 </div>
-                <div class="form-group marginLeft-30">
+                <div class="form-group mar-r-10">
                     <button class="btn-sm search-btn T-btn-export">导出报表</button>
                 </div>
             </form>
+            <input name="accountStatus" value="{{accountStatus}}" type="hidden">
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
-            <div class="form-group col-sm-10">
-                <label class=" control-label pull-left">预支款合计：{{sumData.sumGuideAllPreMoney}}</label>
-                <label class=" control-label marginLeft-30">现收合计：{{sumData.sumGuideAllNowIncomeMoney}}</label>
-                <label class=" control-label marginLeft-30">现付合计：{{sumData.sumGuideAllNowPayMoney}}</label>
-                <label class=" control-label marginLeft-30">导服费合计：{{sumData.sumPrice}}</label>
-                <label class=" control-label marginLeft-30">管理费合计：{{sumData.sumManageFee}}</label>
-                <label class=" control-label marginLeft-30">购物导佣合计：{{sumData.sumShoppingRebateMoney}}</label>
-                <label class=" control-label marginLeft-30">自费导佣合计：{{sumData.sumSelfPayRebateMoney}}</label>
+            <div class="form-group col-sm-11">
+                <label class=" control-label mar-r-20">预支款合计：<span class="F-float F-money">{{sumData.sumGuideAllPreMoney}}</span></label>
+                <label class=" control-label mar-r-20">现收合计：<span class="F-float F-money">{{sumData.sumGuideAllNowIncomeMoney}}</span></label>
+                <label class=" control-label mar-r-20">现付合计：<span class="F-float F-money">{{sumData.sumGuideAllNowPayMoney}}</span></label>
+                <label class=" control-label mar-r-20">导服费合计：<span class="F-float F-money">{{sumData.sumPrice}}</span></label>
+                <label class=" control-label mar-r-20">管理费合计：<span class="F-float F-money">{{sumData.sumManageFee}}</span></label>
+                <label class=" control-label mar-r-20">购物导佣合计：<span class="F-float F-money">{{sumData.sumShoppingRebateMoney}}</span></label>
+                <label class=" control-label ">自费导佣合计：<span class="F-float F-money">{{sumData.sumSelfPayRebateMoney}}</span></label>
             </div>
-            <div class="form-group col-sm-10">
-                <label class=" control-label pull-left">导游收入合计：{{sumData.sumGuideIncomeMoney}}</label>
-                <label class=" control-label marginLeft-30">账面应付合计：{{sumData.sumZhangmiantuibu}}</label>
-                <label class=" control-label marginLeft-30">结算金额合计：<span class="T-stMoney">{{sumData.sumSettlementMoney}}</span></label>
-                <label class=" control-label marginLeft-30">已付金额合计：{{sumData.sumPayedMoney}}</label>
-                <label class=" control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney">{{sumData.sumUnPayedMoney}}</span></label>
-                <label class=" control-label marginLeft-30">未付金额合计(已对账)：<span>{{sumData.sumConfirmedUnPayedMoney}}</span></label>
+            <div class="form-group col-sm-11">
+                <label class=" control-label mar-r-20">导游收入合计：<span class="F-float F-money">{{sumData.sumGuideIncomeMoney}}</span></label>
+                <label class=" control-label mar-r-20">账面应付合计：<span class="F-float F-money">{{sumData.sumZhangmiantuibu}}</span></label>
+                <label class=" control-label mar-r-20">结算金额合计：<span class="T-stMoney F-float F-money">{{sumData.sumSettlementMoney}}</span></label>
+                <label class=" control-label mar-r-20">已付金额合计：<span class="F-float F-money">{{sumData.sumPayedMoney}}</span></label>
+                <label class=" control-label mar-r-20">未付金额合计：<span class="T-unpayMoney F-float F-money">{{sumData.sumUnPayedMoney}}</span></label>
+                <label class=" control-label">未付金额合计(已对账)：<span class="F-float F-money">{{sumData.sumConfirmedUnPayedMoney}}</span></label>
             </div>
         </form>
     </div>
-    <div class="clearfix"></div>
-    <table class="table table-striped table-bordered table-hover" style="margin-top: 30px">
+    <div class="overflow-x min-w-1050" >
+    <table class="table table-striped table-bordered table-hover hct_align_middle w-1500">
         <thead>
-            <tr>
-                <th class="th-border">团号</th>
-                <th class="th-border">线路</th>
-                <th class="th-border">完团日期（账期）</th>
-                <th class="th-border">预支款</th>
-                <th class="th-border">现收</th>
-                <th class="th-border">现付</th>
-                <th class="th-border">导服费</th>
-                <th class="th-border">管理费</th>
-                <th class="th-border">购物导拥</th>
-                <th class="th-border">自费导拥</th>
-                <th class="th-border">导游收入</th>
-                <th class="th-border">账面退补</th>
-                <th class="th-border">结算金额</th>
-                <th class="th-border">已付金额</th>
-                <th class="th-border">未付金额</th>
-                <th class="th-border col-sm-1">备注</th>
-                <th class="th-border col-sm-1">对账时间</th>
-                <th class="th-border">对账人</th>
-                <th class="th-border" style="min-width: 105px;">对账</th>
+            <tr class="T-tr-fixed  bg-blur">
+                <th>团号</th>
+                <th>线路</th>
+                <th>完团日期（账期）</th>
+                <th>预支款</th>
+                <th>现收</th>
+                <th>现付</th>
+                <th>导服费</th>
+                <th>管理费</th>
+                <th>购物导佣</th>
+                <th>自费导佣</th>
+                <th>导游收入</th>
+                <th>账面退补</th>
+                <th>结算金额</th>
+                <th>已付金额</th>
+                <th>未付金额</th>
+                <th class="col-sm-1">备注</th>
+                <th class="col-sm-1">对账时间</th>
+                <th>对账人</th>
+                <th style="min-width: 105px;">对账</th>
             </tr>
         </thead>
         <tbody class="T-checkList" data-right="1200005">            
         </tbody>
     </table>
+    </div>
     <div class="clearfix"></div>
-    <div class="row pageMode">
+    <div class="row pageMode" style="padding-top: 15px;">
         <div class="col-xs-4">
             <small class="T-sumItem">没有查询到相关记录</small>
         </div>

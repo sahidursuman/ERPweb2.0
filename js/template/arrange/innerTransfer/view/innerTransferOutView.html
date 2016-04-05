@@ -1,70 +1,68 @@
-
-<div class="col-xs-12">
-	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-			<h5 class="widget-title">
-				<label class="middle title-size">线路产品信息</label>
-			</h5>
-			<table class="whereQ whereTwo" style="width: 100%">
-				<tr>
-					<td class="style-myself CheckPlan">线路产品</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.lineProduct!=null}} {{innerTransfer.lineProduct.name}}{{/if}}</td>
-					<td class="style-myself CheckPlan">出游日期</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{innerTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-				</tr>
-				<tr>
-					<td class="style-myself CheckPlan">客户来源</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.fromBusinessGroup!=null}}{{innerTransfer.fromBusinessGroup.name}}{{/if}}</td>
-					<td class="style-myself CheckPlan">同行联系人</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}{{/if}}</td>
-					<td class="style-myself CheckPlan">联系人电话</td>
-					<td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
-					
-				</tr>
-
-			</table>
-		</div>
-	</form>
-</div>
+<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+    <div class=" ui-sortable-handle">
+        <h5 class="widget-title">
+			<label class="middle title-size">线路产品信息</label>
+		</h5>
+        <table class="whereQ whereTwo" style="width: 100%">
+            <tr>
+                <td class="style-myself CheckPlan">线路产品</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.lineProduct!=null}} {{innerTransfer.lineProduct.name}}{{/if}}</td>
+                <td class="style-myself CheckPlan">出游日期</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{innerTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+            </tr>
+            <tr>
+                <td class="style-myself CheckPlan">客户</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.fromBusinessGroup!=null}}{{innerTransfer.fromBusinessGroup.name}}{{/if}}</td>
+                <td class="style-myself CheckPlan">客户联系人</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.dutyOPUser != null}}{{innerTransfer.dutyOPUser.realName}}{{/if}}</td>
+                <td class="style-myself CheckPlan">联系人电话</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if innerTransfer.dutyOPUser != null}}{{innerTransfer.dutyOPUser.mobileNumber}}{{/if}}</td>
+            </tr>
+        </table>
+    </div>
+</form>
 <!-- 收客信息end -->
-<div class="col-xs-12">
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
-							<label class="middle title-size">游客小组信息</label>
-						</h5>
-					<div class="widget-body TransferTable">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
-								<thead>
-									<tr>
-										<th class="th-border">序号</th>
-										<th class="th-border">姓名</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">证件类型</th>
-										<th class="th-border">证件号</th>
-										<th class="th-border">联系人</th>
-									</tr>
-								</thead>
-								<tbody>
-									{{each innerTransfer.touristGroup.touristGroupMemberList as result i}}
-									<tr>
-										<td>{{i+1}}</td>
-										<td>{{result.name}}</td>
-										<td>{{result.mobileNumber}}</td>
-										<td>身份证</td>
-										<td>{{result.idCardNumber}}</td>
-										<td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>
-									</tr>
-									{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-</div>
+<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+    <div class="form-group">
+        <div class="col-xs-12 col-sm-12 widget-container-col">
+            <div class=" ui-sortable-handle">
+                <h5 class="">
+						<label class="middle title-size">游客小组信息</label>
+					</h5>
+                <div class="widget-body TransferTable">
+                    <div class="widget-main no-padding">
+                        <table class="table table-striped table-bordered table-hover hotelRoomStandardList">
+                            <thead>
+                                <tr>
+                                    <th class="th-border">序号</th>
+                                    <th class="th-border">姓名</th>
+                                    <th class="th-border">联系电话</th>
+                                    <th class="th-border">证件类型</th>
+                                    <th class="th-border">证件号</th>
+                                    <th class="th-border">联系人</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{each innerTransfer.touristGroup.touristGroupMemberList as result i}}
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td>{{result.name}}</td>
+                                    <td>{{result.mobileNumber}}</td>
+                                    <td>
+                                        {{if result.idCardType==0}}身份证
+                                        {{else if result.idCardType==1}}护照
+                                        {{else if result.idCardType==2}}其他
+                                        {{/if}}
+                                    </td>
+                                    <td>{{result.idCardNumber}}</td>
+                                    <td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -20,7 +20,7 @@ define(function(require, exports) {
 	    tabIdOut="tab-"+menuKey+"-updateTransferOut-content",
 	    transfer={
 	    	$searchParam : {
-	    		creator : "",	
+	    		creator : "",
 				startTime : "",
 				endTime	: "",
 				lineProductId : "",			
@@ -36,6 +36,9 @@ define(function(require, exports) {
 	    	$divIdOutObj:"",
 	    	$divIdInObj:"",
 	    	allData : {}
+	    };
+		var getFeeItemPayTypeOptions =  {
+	         payType : 1
 	    };
 
 	    /**
@@ -136,8 +139,7 @@ define(function(require, exports) {
 				var divId = "Transfer-Out",
 				    type = "1";
 				    transfer.getSearchParam(divId,type);
-				var exportUrl="" + KingServices.build_url("transfer","findExcel") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam));
-				window.location.href=exportUrl;
+				exportXLS( APP_ROOT + 'back/transfer.do?method=findExcel&token='+ $.cookie("token") + "&searchParam="+encodeURIComponent(JSON.stringify(transfer.$searchParam)));
 			});
 	    };
 
@@ -397,7 +399,7 @@ define(function(require, exports) {
 		    $("#" + divId).find('.T-listTransferOut').off('click').on('click', '.T-action', function(event) {
 	    		event.preventDefault();
 	    		/* Act on the event */
-	    		var $that=$(this),id=$that.closest('tr').data('value');
+	    		var $that=$(this),id=$that.closest('tr').data('value'),status=$that.closest('tr').data('status');
 	    		if ($that.hasClass('T-transfer-view'))  {
 					// 查看我社转出信息
 					transfer.viewTransferOut(id);
@@ -407,6 +409,12 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-transfer-delete'))  {
 					//撤销
 					transfer.deleteTransferOut(id);
+				} else if ($that.hasClass('T-transfer-confirm'))  {
+					//撤销
+					transfer.transferOutConfirm(id,status);
+				} else if ($that.hasClass('T-returnTransfer-confirm'))  {
+					//确认退回
+					transfer.returnTransferOutConfirm(id);
 				}
 		    });
 
@@ -423,6 +431,9 @@ define(function(require, exports) {
 				} else if ($that.hasClass('T-transferIn-refuse'))  {
 					//拒绝
 					transfer.deleteTransferIn(id);
+				} else if ($that.hasClass('T-returnTransferIn-refuse'))  {
+					//申请回退
+					transfer.returnTransferIn(id);
 				}
 		    });
 	    };
@@ -465,11 +476,10 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-							var type="1",
- 							    divId="Transfer-Out";
-								transfer.getSearchParam(divId,type);
-								transfer.findPager(divId,type,0);
-								transfer.listMainHead(0);
+							showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+								transfer.$tab.find('.T-transferOut-search').trigger('click');
+							})
+							
 						}
 					})
 					
@@ -489,8 +499,15 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){	
-						data.touristGroupTransfer=JSON.parse(data.touristGroupTransfer);
-						data.parentTouristGroup=JSON.parse(data.parentTouristGroup);
+						var data = {
+							cashFlag: data.cashFlag,
+                            isParent: data.isParent,
+						    touristGroupTransfer : JSON.parse(data.touristGroupTransfer),
+						    parentTouristGroup : JSON.parse(data.parentTouristGroup),
+						    getPayType : getFeeItemPayTypeOptions.getPayType
+						    
+						};
+						
 						var html = updateTransferOutTemplate(data),
 						    title="编辑我社转出",
 						    tab_id=menuKey+"-updateTransferOut";
@@ -505,6 +522,45 @@ define(function(require, exports) {
 			});
 		};
 
+		/**
+		 * transferOutConfirm 外转确认
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
+		transfer.transferOutConfirm = function(id,status){
+			$.ajax({
+				url: KingServices.build_url("transfer","updateStatus"),
+				data: 'id='+ id +"&status="+status,
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					var divId="Transfer-Out",
+						type="1";
+						transfer.getSearchParam(divId,type);
+						transfer.findPager(divId,type,0);	
+				})
+			})
+		};
+
+		/**
+		 * transferOutConfirm 确认退回
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
+		transfer.returnTransferOutConfirm = function(id){
+			$.ajax({
+				url: KingServices.build_url("transfer","confirmApplyForTransferBack"),
+				data: 'outTransferId='+ id,
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					var divId="Transfer-Out",
+						type="1";
+						transfer.getSearchParam(divId,type);
+						transfer.findPager(divId,type,0);	
+				})
+			})
+		};
 
 	    /**
 	     * [init_updata_tab 为编辑我社转出绑定事件]
@@ -577,6 +633,10 @@ define(function(require, exports) {
 					transfer.PayMoneyF($tab);
 				});
 
+				//计算金额
+				transfer.calcPayMoney($tab);
+				$tab.find('.T-calc').trigger('change');
+
 				//精度调整
 				var $price=$tab.find('.T-price'),
 					$count=$tab.find('.count')
@@ -622,14 +682,17 @@ define(function(require, exports) {
 		 * @return {[type]}           [description]
 		 */
 		transfer.newAddFee=function($tab,validator){
-		  var html="<tr class=\"transferFee1SelectId\">"+
-			"<td><span name=\"type\" value=\"0\">其他费用</span></td>"+
-			"<td><input  name=\"discribe\" type=\"text\" class=\"col-sm-12  no-padding-right\" /></td>"+
-			"<td><input  name=\"count\" type=\"text\" maxlength=\"5\" class=\"col-sm-12  no-padding-right count\" /></td>"+
-			"<td><input  name=\"otherPrice\" type=\"text\" maxlength=\"11\" class=\"col-sm-12  no-padding-right price\" /></td>"+
+			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
+		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
+            "<option value=\"3\">中转结算价</option><option value=\"4\">车辆费用</option><option value=\"5\">餐厅费用</option><option value=\"6\">保险费用</option>"+
+            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>"+
+            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其它费用</option></select></td>"+
+			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
+			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
+            "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
-
 			var $tbody=$tab.find(".T-addTransferCost");
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
@@ -662,6 +725,36 @@ define(function(require, exports) {
 			transfer.PayMoneyF($tab);
 
 		};
+
+
+	    /**
+	     * calcPayMoney 根据费用【单价、数量】项目计算金额
+	     * @param  {[type]} $tab [description]
+	     * @return {[type]}      [description]
+	     */
+	    transfer.calcPayMoney = function($tab){
+	        $tab.find('.T-addTransferCost').on('change', '.T-calc', function(event) {
+	            /* Act on the event */
+	            var $that=$(this),$tr = $that.closest('tr');
+	            if ($that.hasClass('T-count')) {  //若数量改变
+	                var count = $tr.find('.T-count').val(),
+	                    price = $tr.find('.T-price').val(),payMoney;
+	                if (!isNaN(price) && !isNaN(count)) {
+	                     payMoney=parseFloat(price*count);        
+	                    $tr.find('.T-payMoney').val(payMoney);
+	                };
+
+	            }else if($that.hasClass('T-price')){ //若价格改变
+	                var count = $tr.find('.T-count').val(),
+	                    price = $tr.find('.T-price').val(),payMoney;
+	                if (!isNaN(price) && !isNaN(count)) {
+	                     payMoney=parseFloat(price*count);        
+	                    $tr.find('.T-payMoney').val(payMoney);
+	                };
+	            };
+	        });
+	    };
+
 
 
 		/**
@@ -777,20 +870,27 @@ define(function(require, exports) {
 			$tab.find(".T-addTransferCost tr").each(function(i){
 				var $that=$(this);
 				var id=$that.attr("data-entity-id"),
-				    type = $that.find("[name=type]").attr("value"),
-				    discribe = $that.find("input[name=discribe]").val(),
+				    type = $that.find("select[name=type]").val(),
+				    remark = $that.find("input[name=remark]").val(),
 				    count = $that.find("input[name=count]").val(),
 				    otherPrice = $that.find("input[name=otherPrice]").val();
-				if(i>1){
-					var otherFeeJson = {
-						"type":type,    
-						"id":id,
-						"discribe":discribe,
+				    var otherFeeJson = {
+						"type":type,
 						"count":count,
-						"otherPrice" : otherPrice
+						"remark":remark,
+						"price" : otherPrice
 					}
+					if(!!id && id!=null ){
+				    	 otherFeeJson = {
+				    		"id":id,
+				    		"type":type,
+							"count":count,
+							"remark":remark,
+							"price" : otherPrice
+				          }
+				    }
 					otherFeeJsonAdd.push(otherFeeJson);
-				}
+				
 			})   
 			var saveDate={
 				touristGroupTransfer : {
@@ -802,19 +902,19 @@ define(function(require, exports) {
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
 					"transPayedMoney":transPayedMoney,//已付
-					"transAdultPrice":transAdultPrice,//大人转客单价
-					"transChildPrice":transChildPrice,//小孩转客单价
 					"transRemark":transRemark//转客费用备注
 				},			
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
+				type: 'post',
 				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
-				success:function(data){
-					var result = showDialog(data);  
-					if(result){
-					    $tab.data('isEdited', false);
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+						$tab.data('isEdited', false);
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
@@ -826,10 +926,9 @@ define(function(require, exports) {
 							    transfer.findPager(divId,type,0);	
 							Tools.closeTab(Tools.getTabKey($tab.prop('id')));						
 						}
-						
-					}
-				}
-			});
+					})
+				};
+			})
 		};
 
 		/**
@@ -897,14 +996,14 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "否",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "是",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$.ajax({
 								url:KingServices.build_url("transfer","refuse"),
@@ -936,50 +1035,35 @@ define(function(require, exports) {
 	 * @return {[type]}                [description]
 	 */
 	transfer.updateTransferIn=function(id){
-	  	   var dialogObj = $( "#confirm-dialog-message" );
-				dialogObj.removeClass('hide').dialog({
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-					title_html: true,
-					draggable:false,
-					buttons: [ 
-						{
-							text: "否",
-							"class" : "btn btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
-							}
-						},
-						{
-							text: "是",
-							"class" : "btn btn-primary btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
-								$.ajax({
-									url:KingServices.build_url("transfer","saveLine"),
-									data:"transferId="+id+"",
-									success:function(data){
-										var result = showDialog(data);
-										if(result){  	
-										   var touristGroupId = data.touristGroupId;
-										   //跳转游客小组新增页面
-										   KingServices.updateTransfer(touristGroupId);
-										   //外转确认后数据刷新--模拟Click
-										   transfer.$divIdInObj.find(".T-transferIn-search").off("click").on("click",{divId:"Transfer-In",type:"2"},transfer.getListPage);
-	    	                               transfer.$divIdInObj.find(".T-transferIn-search").trigger("click");
-								
-										}
-									}
-								});
-								
-							}
-						}
-					],
-					open:function(event,ui){
-						$(this).find("p").text("是否确认外转？");
-					}
-				});
+		$.ajax({
+			url:KingServices.build_url("transfer","confirm"),
+			data:"outTransferId="+id+"",
+		})
+		.done(function(data) {
+			var touristGroupId = data.touristGroupId;
+		    //跳转游客小组新增页面
+			KingServices.updateTransfer(touristGroupId,id);
+		})
 
+	};
+
+	/**
+	 * returnTransferIn 申请退回
+	 * @param  {[type]} id 记录Id
+	 * @return {[type]}    [description]
+	 */
+	transfer.returnTransferIn=function(id){
+		 showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+		 	$.ajax({
+				url:KingServices.build_url("transfer","transferBack"),
+				data:"outTransferId="+id+"",
+			})
+			.done(function(data) {
+				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					transfer.$tab.find('.T-transferIn-search').trigger('click');
+				})
+			});
+		 });
 	};
 
 

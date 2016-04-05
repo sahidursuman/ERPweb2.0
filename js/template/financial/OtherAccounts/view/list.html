@@ -1,30 +1,59 @@
 <div class="row  globalAdd T-other">
-    <div class="form-horizontal search-area">
-        <div class="form-group T-search-area">
-            <label class="control-label pull-left marginLeft-30">项目名称：</label>
-            <input type="text" class="T-search-head col-sm-1 T-search-head-office" 
-            name="otherId" value="{{searchParam.name}}" />
-            <label class="pull-left text-right   marginLeft-30">账期:</label>
-            <div class="col-sm-1 input-daterange">
-                <div class="input-group col-sm-12">
-                    <input class="col-sm-12 datepicker  T-time T-subsectionStartTime" name="startTime" value="{{startAccountTime}}" type="text">
+    <div class="form-horizontal T-search-area">
+        <form class="form-horizontal" role="form" onsubmit="return false">
+            <div class="form-group">
+                <label class="mar-l-10">项目名称 </label>
+                <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="otherId" value="{{searchParam.name}}" 
+                placeholder="所有项目"/>
+                <label>账期 </label>
+                <input class="date-picker T-time T-subsectionStartTime" name="startTime" placeholder="开始日期" type="text" value="{{startAccountTime}}" style="width:100px;" />
+                <label>&nbsp;至&nbsp;</label>
+                <input class="date-picker mar-r-10 T-time T-subsectionStartTime" name="endTime" value="{{endAccountTime}}" placeholder="结束日期" type="text" style="width:100px;" />
+                <div class="btn-group T-finance-status mar-r-10">
+                    <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
+                        <span>
+               {{if searchParam.accountStatus == "0"}}全部{{else if searchParam.accountStatus == "1"}}已结清{{else}}未结清{{/if}}
+            </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a data-value="0" href="javascript:void(0)">全部</a>
+                        </li>
+                        <li>
+                            <a data-value="1" href="javascript:void(0)">已结清</a>
+                        </li>
+                        <li>
+                            <a data-value="2" href="javascript:void(0)">未结清</a>
+                        </li>
+                    </ul>
                 </div>
+                <button class=" btn-sm search-btn T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
             </div>
-            <label class="pull-left text-right "> 至 </label>
-            <div class="col-sm-1 input-daterange">
-                <div class="input-group col-sm-12">
-                    <input class="col-sm-12 datepicker T-time T-subsectionStartTime" name="endTime" value="{{endAccountTime}}" type="text">
-                </div>
-            </div>
-            <button class="btn-sm T-search search-btn marginLeft-30">
-                <i class="ace-ico n fa fa-search"></i> 搜索
-            </button>
+        </form>
+    </div>
+    <div class="form-inline T-sum-area">
+        <div class="form-group mar-r-20 ">
+            <label class="control-label">账面应付合计：</label>
+            <label class="control-label F-float F-money T-sumNeedPay"></label>
+        </div>
+        <div class="form-group mar-r-20">
+            <label class="control-label">结算金额合计：</label>
+            <label class="control-label F-float F-money T-sumStMoney"></label>
+        </div>
+        <div class="form-group mar-r-20">
+            <label class="control-label">已付金额合计：</label>
+            <label class="control-label F-float F-money T-sumPaiedMoney"></label>
+        </div>
+        <div class="form-group ">
+            <label class="control-label">未付金额合计：</label>
+            <label class="control-label F-float F-money T-sumUnPaiedMoney"></label>
         </div>
     </div>
-    <div class="col-xs-12">
+    <div class="row col-xs-12">
         <table class="table table-striped table-bordered table-hover T-showHighLight">
             <thead>
-                <tr class="bg-blur">
+                <tr class="bg-blur T-tr-fixed">
                     <th>项目名称</th>
                     <th>账面应付</th>
                     <th>结算金额</th>
@@ -39,10 +68,10 @@
                 {{each financialOtherList as other}}
                 <tr data-id="{{other.id}}" data-name="{{other.name}}">
                     <td>{{other.name}}</td>
-                    <td>{{other.sumNeedPayMoney}}</td>
-                    <td>{{other.sumSettlementMoney }}</td>
-                    <td>{{other.sumPayedMoney }}</td>
-                    <td>{{other.sumUnPayedMoney }}</td>
+                    <td class="F-float F-money">{{other.sumNeedPayMoney}}</td>
+                    <td class="F-float F-money">{{other.sumSettlementMoney }}</td>
+                    <td class="F-float F-money">{{other.sumPayedMoney }}</td>
+                    <td class="F-float F-money">{{other.sumUnPayedMoney }}</td>
                     <td>
                         {{if other.count == other.confirmedCount }}
                         <span style="color:green">{{other.confirmedCount}}{{"/"}}{{other.count}}</span> {{else}}

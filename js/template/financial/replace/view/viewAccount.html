@@ -2,12 +2,12 @@
 	<table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <td class="th-border">应收类别</td>
-                <td class="th-border">发生业务</td>
-                <td class="th-border">金额</td>
-                <td class="th-border">备注</td>
-                <td class="th-border">操作人</td>
-                <td class="th-border">操作时间</td>
+                <th class="th-border">应收类别</th>
+                <th class="th-border">发生业务</th>
+                <th class="th-border">金额</th>
+                <th class="th-border">备注</th>
+                <th class="th-border">操作人</th>
+                <th class="th-border">操作时间</th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +15,7 @@
             <tr>
                 <td>{{rs.resourceType}}</td>
                 <td>{{rs.businessType}}</td>
-                <td>{{rs.incomeMoney}}</td>
+                <td><span class="F-float F-money">{{rs.incomeMoney}}</span></td>
                 <td>{{rs.remark}}</td>
                 <td>{{rs.creatorName}}</td>
                 <td>{{rs.createTime}}</td>

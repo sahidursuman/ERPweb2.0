@@ -4,7 +4,7 @@
 }
 </style>
 <div class="col-xs-12 T-updateLineProductContainer">
-    <form class="form-horizontal T-mainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
+    <form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
             <h5 class=" pull-left ">
 				<i class="ace-icon fa fa-info-circle title-size"></i>
@@ -15,25 +15,40 @@
             <div class="widget-body">
                 <div class="widget-main">
                     <div class="form-group">
-                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
-                        <div class="col-sm-3">
+                        <label class="col-sm-1 control-label no-padding-right linproductName"><span class="necessary">*</span>线路产品名称:</label>
+                        <div class="col-sm-2">
                             {{if clipboardMode == false}}
                             <input type="hidden" name="lineProductId" value="{{lineProduct.id}}">{{/if}}
-                            <input type="hidden" name="travellineId" value="{{lineProduct.travelLine.id}}">
                             <input type="text" name="name" class="col-sm-12" value="{{lineProduct.name}}" placeholder="请输入线路产品名称">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="col-sm-12" readonly="readonly" name="days" value="{{lineProduct.days}}">
+                        <div class="col-sm-2">
+                            <input type="text" class="col-sm-12 F-float F-count" readonly="readonly" name="days" value="{{lineProduct.days}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">线路模板:</label>
+                        <div class="col-sm-2">
+                            <input type="hidden" name="travellineId" value="{{lineProduct.travelLine.id}}">
+                            <input type="text" readonly="readonly" class="col-sm-12" value="{{lineProduct.travelLine.name}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+                        <div class="col-sm-2 checkbox" style="margin-left:-10px;margin-top: -6px">
+                            <label>
+                                {{if lineProduct.status == 1}}
+                                <input checked="checked" type="checkbox" class="ace busCompany-status" name="status" value="1"> {{else}}
+                                <input type="checkbox" class="ace busCompany-status" value="0"> {{/if}}
+                                <span class="lbl">
+                                        启用
+                                    </span>
+                            </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>线路类型:</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <input type="text" name="type" class="col-sm-12" value="{{lineProduct.type}}">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>针对客源:</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <select name="customerType">
                                 {{if lineProduct.customerType == 1}}
                                 <option value="0">散客</option>
@@ -46,20 +61,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label no-padding-right">是否启用:</label>
-                        <div class="col-sm-2 checkbox" style="margin-left:-10px;margin-top: -6px">
-                            <label>
-                                {{if lineProduct.status == 1}}
-                                <input checked="checked" type="checkbox" class="ace busCompany-status" name="status" value="1"> {{else}}
-                                <input type="checkbox" class="ace busCompany-status" value="0"> {{/if}}
-                                <span class="lbl">
-										启用
-									</span>
-                            </label>
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{lineProduct.shopNames}}" name="" maxlength="80" data-propover="{{lineProduct.shopIds}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{lineProduct.selfPayItemNames}}" name="" maxlength="80" data-propover="{{lineProduct.selfPayItemIds}}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label no-padding-right">线路产品备注:</label>
+                        <label class="col-sm-1 control-label no-padding-right">备注:</label>
                         <div class="col-sm-8">
                             <textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{lineProduct.remark}}</textarea>
                         </div>
@@ -68,27 +80,53 @@
             </div>
         </div>
     </form>
-    <!-- .<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class="widget-box ui-sortable-handle">
-					<div class="widget-header">
-						<h5 class="widget-title">
-							<i class="ace-icon fa fa-bus"></i>
-							成本快速查看器
-						</h5>
-					</div>
-					<div class="widget-body">
-						<div class="widget-main">
-							<div id="calendar" style="width:500px;margin:0 auto"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form> -->
+    <form class="form-horizontal T-guideService-form" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class=" ui-sortable-handle">
+            <h5 class="widget-title">
+                <h5 class="pull-left title-size">
+                    <i class="ace-icon fa fa-calendar-minus-o"></i>
+                    <label class="middle title-size">导游服务标准</label>
+                </h5>
+                <div class="pull-right line-bluer  line-separatedT"></div>
+                <div style="clear: both"></div>
+                <h5 class="" style="color: #666!important;font-size: 14px!important;">
+                    <a href="javascript:void(0)" class="T-add T-add-service">
+                        <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                            <i class="ace-icon fa fa-plus"></i>
+                            新增
+                        </button>
+                    </a>
+                </h5>
+            </h5>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <table class="table table-striped table-bordered table-hover lineDayList" style="border: 1px solid #ddd;">
+                        <thead>
+                            <tr>
+                                <th class="th-border">服务标准</th>
+                                <th class="th-border">服务内容</th>
+                                <th class="th-border">服务要求</th>
+                                <th class="th-border">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="T-service-list">
+                        {{each serviceStandardList as service}}
+                            <tr serviceId="{{service.id}}" name="{{service.serviceTitle}}" content="{{service.serviceContent}}" require = "{{service.serviceRequire}}">
+                                <td><input type="text" class="col-xs-12" name="serviceName" value="{{service.serviceTitle}}">
+                                <input type="hidden" name="serviceId" value="{{service.id}}"></td>
+                                <td><input type="text" class="col-xs-12" name="serviceContent" value="{{service.serviceContent}}"></td>
+                                <td><input type="text" class="col-xs-12" name="serviceRequire" value="{{service.serviceRequire}}"></td>
+                                <td><a class="cursor T-action T-addService">添加服务标准</a><a class="cursor"> |</a> <a class="cursor T-action T-delete">删除</a></td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
     <form class="form-horizontal T-middleForm" role="form" style="margin-top:10px" onsubmit="return false">
-        <div class="form-group">
+        <div class="form-group globalAdd">
             <div class="col-xs-12 col-sm-12 widget-container-col">
                 <div class=" ui-sortable-handle">
                     <h5 class="pull-left title-size">
@@ -101,10 +139,16 @@
                         <div class="widget-main">
                             <div class="clearfix"></div>
                             <div class="col-xs-12 col-sm-12 widget-container-col">
-                                <div class=" ui-sortable-handle">
+                                <div class="ui-sortable-handle T-baseArrange">
                                     <h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addInsurance">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
                                     <div class="widget-body">
                                         <div class="widget-main">
@@ -114,48 +158,56 @@
                                                         <th class="th-border">公司名称</th>
                                                         <th class="th-border">保险类型</th>
                                                         <th class="th-border">保险价格</th>
-                                                        <th class="th-border">公司电话</th>
                                                         <th class="th-border">联系人姓名</th>
                                                         <th class="th-border">联系电话</th>
+                                                        <th class="th-border">公司电话</th>
                                                         <th class="th-border">备注</th>
+                                                        <th class="th-border" style="width: 10%;">操作</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="T-insuranceForm">
                                                     {{if insuranceTemplate != null}}
-                                                    <tr>
+                                                    {{each insuranceTemplate as rs}}
+                                                    <tr data-entity-arrangeid = "{{rs.id}}">
                                                         <td>
-                                                            <input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{insuranceTemplate.insurance.name}}" />
-                                                            <input type="hidden" name="insuranceId" value="{{insuranceTemplate.insurance.id}}" /> {{if clipboardMode == false}}
-                                                            <input type="hidden" name="templateId" value="{{insuranceTemplate.id}}" />{{/if}}
+                                                            <input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{rs.insurance.name}}" />
+                                                            <input type="hidden" name="insuranceId" value="{{rs.insurance.id}}" /> {{if clipboardMode == false}}
+                                                            <input type="hidden" name="templateId" value="{{rs.id}}" />{{/if}}
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" value="{{insuranceTemplate.type}}" />
-                                                            <input type="hidden" name="typeId" value="{{insuranceTemplate.typeId}}">
+                                                            <input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" value="{{rs.type}}" />
+                                                            <input type="hidden" name="typeId" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.id}}{{/if}}">
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="price" type="text" value="{{insuranceTemplate.price}}" />
+                                                            <input class="col-xs-12 F-float F-money" name="price" type="text" value="{{rs.price}}" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="telNumber" type="text" readonly="readonly" value="{{insuranceTemplate.insurance.telNumber}}" />
+                                                            <input class="col-xs-12" name="managerName" type="text" readonly="readonly" value="{{rs.insurance.managerName}}" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="managerName" type="text" readonly="readonly" value="{{insuranceTemplate.insurance.managerName}}" />
+                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{rs.insurance.mobileNumber}}" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{insuranceTemplate.insurance.mobileNumber}}" />
+                                                            <input class="col-xs-12" name="telNumber" type="text" readonly="readonly" value="{{rs.insurance.telNumber}}" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="remark" type="text" value="{{insuranceTemplate.remark}}" />
+                                                            <input class="col-xs-12" name="remark" type="text" value="{{rs.remark}}" />
+                                                        </td>
+                                                        <td>
+                                                            <a data-entity-id="{{rs.id}}" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+                                                                删除
+                                                            </a>
                                                         </td>
                                                     </tr>
-                                                    {{else}}
+                                                    {{/each}}
+                                                    {{else}}<!-- 
                                                     <tr>
                                                         <td>
                                                             <input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" />
                                                             <input type="hidden" name="insuranceId" value="" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12" name="type" type="text" value="" />
+                                                            <input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" value="" />
                                                         </td>
                                                         <td>
                                                             <input class="col-xs-12" name="price" type="text" value="" />
@@ -172,7 +224,12 @@
                                                         <td>
                                                             <input class="col-xs-12" name="remark" type="text" value="" />
                                                         </td>
-                                                    </tr>
+                                                        <td>
+                                                            <a data-entity-id="" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+                                                                删除
+                                                            </a>
+                                                        </td>
+                                                    </tr> -->
                                                     {{/if}}
                                                 </tbody>
                                             </table>
@@ -182,10 +239,16 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-xs-12 col-sm-12 widget-container-col">
-                                <div class=" ui-sortable-handle">
+                                <div class="ui-sortable-handle T-baseArrange">
                                     <h5 class="" style="color: #666!important;font-size: 14px!important;">
 											<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 											<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+                                            <a href="javascript:void(0)" class="T-add T-addBusCompany">
+                                                <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                    <i class="ace-icon fa fa-plus"></i>
+                                                    新增
+                                                </button>
+                                            </a>
 										</h5>
                                     <div class="widget-body">
                                         <div class="widget-main">
@@ -193,75 +256,44 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="th-border">需求座位数</th>
-                                                        <th class="th-border">车队名称</th>
-                                                        <th class="th-border">车辆牌照</th>
-                                                        <th class="th-border">座位价</th>
-                                                        <th class="th-border">实际座位数</th>
-                                                        <th class="th-border">联系电话</th>
-                                                        <th class="th-border">包车价</th>
+                                                        <th class="th-border">车辆品牌</th>
                                                         <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="T-busCompanyForm">
                                                     {{if busCompanyTemplate != null}}
-                                                    <tr>
+                                                    {{each busCompanyTemplate as rs}}
+                                                    <tr data-entity-arrangeid = "{{rs.id}}">
                                                         <td>
-                                                            <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{busCompanyTemplate.needSeatCount}}" />
+                                                            <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
+                                                        </td>
+                                                        <td><input type="text" class="col-xs-12 T-busBrand" name="brand" value="{{rs.brand}}"></td>
+                                                        <td>
+                                                            <input class="col-xs-12" name="remark" type="text" value="{{rs.remark}}" />
                                                         </td>
                                                         <td>
-                                                            <input class="col-xs-12 T-buscompany-name bind-change" name="companyName" type="text" value="{{busCompanyTemplate.busCompany.companyName}}" />
-                                                            <input type="hidden" name="busCompanyId" value="{{busCompanyTemplate.busCompany.id}}" /> {{if clipboardMode == false}}
-                                                            <input type="hidden" name="templateId" value="{{busCompanyTemplate.id}}" />{{/if}}
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-licenseNumber bind-change" name="licenseNumber" type="text" value="{{busCompanyTemplate.bus.licenseNumber}}" />
-                                                            <input type="hidden" name="busLicenseNumberId" value="{{busCompanyTemplate.bus.id}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatPrice" type="text" value="{{busCompanyTemplate.price}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatCount" type="text" readonly="readonly" value="{{busCompanyTemplate.bus.seatCount}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyTemplate.busCompany.mobileNumber}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" value="{{busCompanyTemplate.charteredPrice}}" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="remark" type="text" value="{{busCompanyTemplate.remark}}" />
+                                                            <a data-entity-id="{{rs.id}}" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+                                                                删除
+                                                            </a>
                                                         </td>
                                                     </tr>
-                                                    {{else}}
+                                                    {{/each}}
+                                                    {{else}}<!-- 
                                                     <tr>
                                                         <td>
                                                             <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" />
                                                         </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-buscompany-name bind-change" name="companyName" type="text" value="" />
-                                                            <input type="hidden" name="busCompanyId" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12 T-licenseNumber" name="licenseNumber" type="text" value="" />
-                                                            <input type="hidden" name="busLicenseNumberId" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatPrice" type="text" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="seatCount" type="text" readonly="readonly" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" />
-                                                        </td>
-                                                        <td>
-                                                            <input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" value="" />
-                                                        </td>
+                                                        <td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>
                                                         <td>
                                                             <input class="col-xs-12" name="remark" type="text" value="" />
                                                         </td>
-                                                    </tr>
+                                                        <td>
+                                                            <a data-entity-id="" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+                                                                删除
+                                                            </a>
+                                                        </td>
+                                                    </tr> -->
                                                     {{/if}}
                                                 </tbody>
                                             </table>
@@ -302,7 +334,7 @@
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="">
-														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
+														<label class="title-size">简要行程：{{lineProductDaysList.lineProductDay.title}}</label>
 													</h5>
                                                     
 
@@ -315,12 +347,6 @@
                                                             </button>
                                                             <button class="btn btn-app btn-inverse btn-xs T-add T-addScenic" style="background: #1fade0!important;">
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 景区
-                                                            </button>
-                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addShop" style="background: #1fade0!important;">
-                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 购物
-                                                            </button>
-                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
-                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 自费
                                                             </button>
                                                             <button class="btn btn-app btn-inverse btn-xs T-add T-addTraffic" style="background: #1fade0!important;">
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 交通
@@ -371,17 +397,17 @@
                                                                                                         <!-- <td><input type="text" readonly="readonly" name="payType" value="{{restaurantList.restaurant.payType}}"/></td> -->
                                                                                                         <td>
                                                                                                             <select name="type" class="T-restauranType col-xs-12">
-                                                                                                                <option value="早餐" {{if restaurantList.restaurantStandard.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
-                                                                                                                <option value="午餐" {{if restaurantList.restaurantStandard.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
-                                                                                                                <option value="晚餐" {{if restaurantList.restaurantStandard.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
+                                                                                                                <option value="早餐" {{if restaurantList.type=="早餐" }}selected="selected" {{/if}}>早餐</option>
+                                                                                                                <option value="午餐" {{if restaurantList.type=="午餐" }}selected="selected" {{/if}}>午餐</option>
+                                                                                                                <option value="晚餐" {{if restaurantList.type=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change" value="{{restaurantList.restaurantStandard.price}}" />
-                                                                                                            <input type="hidden" name="typeId" value="{{restaurantList.restaurantStandard.id}}" />
+                                                                                                            <input type="text" name="typeName" class="T-choose-restaurantStandardsName col-xs-12 bind-change F-float F-money" value="{{restaurantList.price}}" />
+                                                                                                            <input type="hidden" name="typeId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" name="remark" value="{{restaurantList.remark}}" />
@@ -400,8 +426,8 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.酒店 -->
-                                                                            {{each lineProductDaysList.hotelTemplate as hotelList}}
-                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="{{hotelList.orderIndex}}">
+                                                                            {{if lineProductDaysList.hotelTemplate.length > 0}}
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="{{each lineProductDaysList.hotelTemplate as hotelList index}}{{if index == 0}}{{hotelList.orderIndex}}{{/if}}{{/each}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
                                                                                     <span>酒店</span>
@@ -423,6 +449,7 @@
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
+                                                                                                    {{each lineProductDaysList.hotelTemplate as hotelList}}
                                                                                                     <tr>
                                                                                                         <td>
                                                                                                             <select class="col-xs-12 T-choose-hotelStarLevel">
@@ -446,7 +473,7 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="contractPrice" value="{{hotelList.price}}"  />
+                                                                                                            <input type="text" class="F-float F-money" name="contractPrice" value="{{hotelList.price}}"  />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐 {{/if}}{{if hotelList.hotelRoom.containLunch==1}}-含午餐{{/if}}{{if hotelList.hotelRoom.containDinner==1}}-含晚餐{{/if}}" />
@@ -459,18 +486,19 @@
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="{{hotelList.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete T-delTr">
                                                                                                                 删除
                                                                                                             </a>
                                                                                                         </td>
                                                                                                     </tr>
+                                                                                                    {{/each}}
                                                                                                 </tbody>
                                                                                             </table>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            {{/each}}
+                                                                            {{/if}}
                                                                             <!-- /.景区 -->
                                                                             {{each lineProductDaysList.scenicTemplate as scenicList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="{{scenicList.orderIndex}}">
@@ -504,7 +532,7 @@
                                                                                                             <input type="hidden" name="chargingId" value="{{scenicList.scenicItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="price" value="{{scenicList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="price" value="{{scenicList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
@@ -514,123 +542,6 @@
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <a data-entity-id="{{scenicList.id}}" data-entity-name="scenicTemplate" class="cursor btn-restaurant-delete T-delete">
-                                                                                                                删除
-                                                                                                            </a>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            {{/each}}
-                                                                            <!-- /.购物 -->
-                                                                            {{each lineProductDaysList.shopTemplate as shopList}}
-                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="{{shopList.orderIndex}}">
-                                                                                <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
-                                                                                    <i class="ace-icon fa fa-circle"></i>
-                                                                                    <span>购物</span>
-                                                                                </div>
-                                                                                <div class="widget-box transparent" style="margin-top: 20px">
-                                                                                    <div class="widget-body">
-                                                                                        <div class="widget-main">
-                                                                                            <table class="table table-striped table-bordered table-hover">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th class="th-border">商家名称</th>
-                                                                                                        <th class="th-border">商品政策</th>
-                                                                                                        <th class="th-border">联系电话</th>
-                                                                                                        <th class="th-border">停车返佣（元/辆）</th>
-                                                                                                        <th class="th-border">人数返佣（元/人）</th>
-                                                                                                        <th class="th-border">备注</th>
-                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="T-choose-shopVendorName col-xs-12 bind-change" value="{{shopList.shop.name}}" />
-                                                                                                            <input type="hidden" name="shopId" value="{{shopList.shop.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{shopList.id}}" />{{/if}}
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="chooseGoodsPolicy col-xs-12 bind-change" name="goodsPolicy" value="{{shopList.shopPolicy.name}}" />
-                                                                                                            <input type="hidden" name="shopPolicyId" value="{{shopList.shopPolicy.id}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{shopList.shop.mobileNumber}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" name="remark" value="{{shopList.remark}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <a data-entity-id="{{shopList.id}}" data-entity-name="shopTemplate" class="cursor btn-restaurant-delete T-delete">
-                                                                                                                删除
-                                                                                                            </a>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            {{/each}}
-                                                                            <!-- /.自费 -->
-                                                                            {{each lineProductDaysList.selfPayTemplate as selfPayList}}
-                                                                            <div  class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="{{selfPayList.orderIndex}}" >
-                                                                                      <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
-                                                                                         <i class="ace-icon fa fa-circle"></i>
-                                                                                        <span>自费</span>
-                                                                                      </div>
-                                                                                <div class="widget-box transparent " style="margin-top: 20px">
-                                                                                    <div class="widget-body">
-                                                                                        <div class="widget-main">
-                                                                                            <table class="table table-striped table-bordered table-hover mar">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th class="th-border">公司名称</th>
-                                                                                                        <th class="th-border">项目名称</th>
-                                                                                                        <th class="th-border">联系电话</th>
-                                                                                                        <th class="th-border">价格</th>
-                                                                                                        <th class="th-border">联系人</th>
-                                                                                                        <th class="th-border">备注</th>
-                                                                                                        <th class="th-border" style="width: 60px;">操作</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="T-choose-ticketCompanyName col-xs-12 bind-change" value="{{selfPayList.selfPay.name}}" />
-                                                                                                            <input type="hidden" name="companyId" value="{{selfPayList.selfPay.id}}" /> {{if clipboardMode == false}}
-                                                                                                            <input type="hidden" name="templateId" value="{{selfPayList.id}}" />{{/if}}
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12 chooseItemName bind-change" name="selfPayItemName" value="{{selfPayList.selfPayItem.name}}" />
-                                                                                                            <input type="hidden" name="selfPayItemId" value="{{selfPayList.selfPayItem.id}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{selfPayList.selfPay.mobileNumber}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" name="contractPrice" value="{{selfPayList.price}}" />
-                                                                                                            <input type="hidden" readonly="readonly" name="marketPrice" value="{{selfPayList.marketPrice}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <input type="text" class="col-xs-12" name="remark" value="{{selfPayList.remark}}" />
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <a data-entity-id="{{selfPayList.id}}" data-entity-name="selfPayTemplate" class="cursor btn-restaurant-delete T-delete">
                                                                                                                 删除
                                                                                                             </a>
                                                                                                         </td>
@@ -681,7 +592,7 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="price" value="{{ticketList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="price" value="{{ticketList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{ticketList.ticket.managerName}}" />
@@ -742,13 +653,13 @@
                                                                                                             <input type="text" class="col-xs-12" name="mobileNumber" value="{{otherList.mobileNumber}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{otherList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{otherList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="{{otherList.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{otherList.id}}" data-entity-type="9" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{otherList.id}}" data-entity-name="otherTemplate" class="cursor btn-restaurant-delete T-delete">
                                                                                                                 删除
                                                                                                             </a>
                                                                                                         </td>
@@ -826,6 +737,12 @@
                 </div>
             </div>
         </div>
+        发布到: <select name="publishAuthArea" id="publishAuthArea">
+            <option value="1" {{if lineProduct.publishAuthArea == 1}}selected="selected"{{/if}}>个人</option>
+            <option value="2" {{if lineProduct.publishAuthArea == 2}}selected="selected"{{/if}}>子部门</option>
+            <option value="3" {{if lineProduct.publishAuthArea == 3}}selected="selected"{{/if}}>业务部</option>
+            <option value="4" {{if lineProduct.publishAuthArea == 4}}selected="selected"{{/if}}>公司</option>
+        </select>
         <div class="space-10"></div>
         <button class="btn btn-block btn-primary T-btn-submit guideSubmit" style="line-height: 16px !important;">
             <i class="ace-icon fa fa-check"></i> 提交信息

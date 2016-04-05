@@ -1,0 +1,59 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="th-border"><span class="necessary">*</span>指定导游报账</th>
+        <th class="th-border"><span class="necessary">*</span>开始日期</th>
+        <th class="th-border">结束日期</th>
+        <th class="th-border">任务</th>
+        <th class="th-border">导游</th>
+        <th class="th-border">导服费</th>
+        <th class="th-border">管理费</th>
+        <th class="th-border">导游预支金额</th>
+        <th class="th-border">备注</th>
+        <th class="th-border">对账状态</th>
+    </tr>
+    </thead>
+    <tbody class="T-count-guide">
+    {{each guideArranges as rs index}}
+        <tr arrangeid = "{{rs.id}}" isAccountGuide = "{{rs.isAccountGuide}}">
+            <td><input disabled="disabled" type="radio" name="" {{if rs.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
+            <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+            <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+            <td>
+                {{if rs.taskType == 0}}
+                    全程
+                {{else if rs.taskType == 1}}
+                    接机
+                {{else if rs.taskType == 2}}
+                    送机
+                {{else if rs.taskType == 3}}
+                    前段
+                {{else if rs.taskType == 4}}
+                    中段
+                {{else if rs.taskType == 5}}
+                    后段
+                {{/if}}
+            </td>
+            <td>{{rs.guide.realname}}</td>
+            <td>{{if rs.isAccountGuide == 1}}<input name="price" class="F-float F-money" value="{{rs.price}}" type="text" {{if rs.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}>{{else}}
+            <span class="F-float F-money">{{rs.price}}</span>{{/if}}</td>
+            <td>{{if rs.isAccountGuide == 1}}<input name="manageFee" class="F-float F-money" value="{{rs.manageFee}}" type="text" {{if rs.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}>{{else}}<span class="F-float F-money">{{rs.manageFee}}</span>{{/if}}</td>
+            <td><span class="F-float F-money">{{rs.guideAllPreMoney}}</span></td>
+            <td><input type="text" name="remark" value="{{rs.remark}}" {{if rs.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td>{{if rs.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+{{if tripPlan.billStatus > -1}}
+    <div style="width:60%;">
+        <div> 
+            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.guideRemark.length>0}}{{remarkArrangeList.guideRemark[0].opCheckRemark}}{{/if}}" />
+        
+            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.guideRemark.length>0}}{{remarkArrangeList.guideRemark[0].financeCheckRemark}}{{/if}}" />
+        </div>
+    </div>
+{{/if}}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>跟团游记 - 火柴头</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../components/ace-admin/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/manner.css" />
+	<style type="text/css">
+		html,
+		body{
+			overflow-y: auto;
+		}
+		body{
+			min-width: 320px!important;
+		}
+		.container-fluid{
+			margin: auto;
+			width: auto;
+			max-width: 680px;
+		}
+		.row{
+			margin-left: 0;
+			margin-right: 0;
+		}
+		.hct-top-header.row,
+		.hct-note.row{
+			margin-left: -12px;
+			margin-right: -12px;
+		}
+		a.control-label,
+		label.control-label{
+			font-size: 12px;
+			color: #313131;
+			font-weight: normal;
+		}
+		.note-guide-info p{
+			font-size: 14px;
+			color: #313131;
+		}
+		.company-logo{
+			padding: 10px 10px 0 20px;
+		}
+		.company-logo img{
+			display: block;
+			width: auto;
+			height: auto;
+			max-width: 300px;
+		}
+		.company-logo h3{
+			padding-left: 10px;
+			color: #333;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid globalAdd hct-min-width" id="groupTravelContent">
+
+	</div>
+	<script id="groupTravel" type="text/html">
+		<div class="row hct-top-header">
+			<div class="col-xs-12">
+				<div class="company-logo T-companyLogo">
+					{{if !!companyLogo}}
+					<img src="{{erpImgUrl + companyLogo}}" alt="{{travelAgencyName}}">
+					{{else}}
+					<h3>{{travelAgencyName}}</h3>
+					{{/if}}
+				</div>
+			</div>
+			<div class="col-xs-12 yj-title">
+				<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+				<label class="control-label mar-l-10">{{note.title}}</label>
+			</div>
+		</div>
+		<div class="row hct-note">
+			<div class="col-xs-12">
+				<a class="pull-left cursor" href="guideEvaluate.html?noteId={{note.id}}" data-id="{{note.id}}">
+					<div class="caption-user-header pull-left{{if !note.guideInfo.photo}} default-img{{/if}}">
+						{{if note.guideInfo.photo}}<img src="{{imgUrl + note.guideInfo.photo}}">{{/if}}
+					</div>
+					<div class="note-guide-info pull-left">
+						<p>{{note.guideInfo.name}}</p>
+						<p class="starLevel">{{#note.guideInfo.guideSatisfaction | getScoreStar}}</p>
+					</div>
+				</a>
+				<div class="pull-right note-date">
+					<p>
+						<label class="control-label">出行日期：{{note.startTime}}</label>
+		        		<label class="control-label mar-l-10">出游天数：{{note.days}}天</label>
+		        	</p>
+				</div>
+			</div>
+			<div class="col-xs-12 score-body">
+				<div class="pull-left note-score">
+					<p class="scoreCount">{{note.tripSatisfaction}}%</p>
+					<p class="starLevel">{{#note.tripSatisfaction | getScoreStar}}</p>
+				</div>
+				<div class="pull-left note-line-score">
+					<p>此线路产品跟团游客满意度为{{note.tripSatisfaction}}%</p>
+					<p>已有{{note.scoreCount}}人评分</p>
+				</div>
+				<div class="pull-right p-no-mar">
+					<p>&nbsp;</p>
+					<p class="comment-info">
+						<label class="control-label"><i class="fa fa-heart"></i>{{note.likeCount}}</label>
+		        		<label class="control-label mar-l-15"><i class="fa fa-comment"></i>{{note.commentCount}}</label>
+		        		<label class="control-label mar-l-15"><i class="fa fa-share-alt"></i>{{note.shareCount}}</label>
+		        		<label class="control-label mar-l-15"><i class="fa fa-eye"></i>{{note.viewCount}}</label>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row note-days-list">
+			{{each tripPLanDayList as rs}}
+			<div class="note-days-item">
+				<div class="note-days-header">
+					<div class="pull-left note-days">D{{rs.whichDay}}</div>
+					<div class="pull-left note-address">{{rs.title}}</div>
+					<div class="pull-left note-date">{{rs.time}}</div>
+				</div>
+				<div class="note-details-container">
+					{{if rs.playItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>游玩</h3>
+						</div>
+						{{each rs.playItemList as play}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!play.itemImage}}<img src="{{imgUrl + play.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#play.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{play.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{play.likeCount}}</label>
+			        				<a class="control-label mar-l-10" href="singleEvaluation.html?noteItemId={{play.id}}" data-id="{{play.id}}"><i class="fa fa-comment"></i>{{play.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
+					{{if rs.traficItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>交通</h3>
+						</div>
+						{{each rs.traficItemList as bus}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!bus.itemImage}}<img src="{{imgUrl + bus.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#bus.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{bus.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{bus.likeCount}}</label>
+			        				<a class="control-label mar-l-10" href="singleEvaluation.html?noteItemId={{bus.id}}" data-id="{{bus.id}}"><i class="fa fa-comment"></i>{{bus.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
+					
+					{{if rs.hotelItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>住宿</h3>
+						</div>
+						{{each rs.hotelItemList as hotel}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!hotel.itemImage}}<img src="{{imgUrl + hotel.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#hotel.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{hotel.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{hotel.likeCount}}</label>
+			        				<a class="control-label mar-l-10 cursor" href="singleEvaluation.html?noteItemId={{hotel.id}}" data-id="{{hotel.id}}"><i class="fa fa-comment"></i>{{hotel.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
+
+					{{if rs.noteItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>笔记</h3>
+						</div>
+						{{each rs.noteItemList as noteList}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!noteList.itemImage}}<img src="{{imgUrl + noteList.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#noteList.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{noteList.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{noteList.likeCount}}</label>
+			        				<a class="control-label mar-l-10 cursor" href="singleEvaluation.html?noteItemId={{noteList.id}}" data-id="{{noteList.id}}"><i class="fa fa-comment"></i>{{noteList.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
+
+					{{if rs.lineItemList.length > 0}}
+					<div class="note-details-item">
+						<div class="note-details-header">
+							<h3>线路简介</h3>
+						</div>
+						{{each rs.lineItemList as line}}
+						<div class="note-details-list">
+							<div class="note-details-body">
+								<div class="note-db-img">
+									{{if !!line.itemImage}}<img src="{{imgUrl + line.itemImage}}">{{/if}}
+								</div>
+								<div class="note-db-itemText">
+									{{#line.itemText}}
+								</div>
+							</div>
+							<div class="note-details-footer">
+								<div class="pull-left note-df-dateTime">{{line.createTime}}</div>
+								<div class="pull-right comment-info">
+									<label class="control-label"><i class="fa fa-heart"></i>{{line.likeCount}}</label>
+			        				<a class="control-label mar-l-10 cursor"  href="singleEvaluation.html?noteItemId={{line.id}}" data-id="{{line.id}}"><i class="fa fa-comment"></i>{{line.commentCount}}</a>
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					{{/if}}
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</script>
+	<script src="../components/ace-admin/assets/js/jquery.1.11.1.min.js" type="text/javascript"></script>
+	<script src="../js/libs/template.js" type="text/javascript"></script>
+	<script src="common.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$.ajax({
+			url : "/huochaitou/base.do?method=findNoteById",
+			data : {noteId : getQueryString("noteId"), fromOut : 1},
+			type : "POST",
+			success : function(data){
+				if(!!data){
+					data.imgUrl = imgUrl;
+				    var html = template('groupTravel', data);
+				    document.getElementById('groupTravelContent').innerHTML = html;
+					setShare()
+				}
+			}
+		});
+		function setShare(){
+			with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+			window._bd_share_config = {
+	            common : {
+	                bdText : $(".yj-title label").text(), 
+	                bdDesc : $(".yj-title label").text(), 
+	                bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
+	            },
+	            share : [{
+	                "bdSize" : 16
+	            }],
+	            slide : [{	   
+					bdImg : 2,
+					bdPos : "right",
+					bdTop : 100
+				}],
+	        };
+		}
+	</script>
+</body>
+</html>

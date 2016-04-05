@@ -1,0 +1,218 @@
+<div class="ui-sortable-handle widget-container-col">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-medkit"></i> 自费安排
+        <a href="javascript:void(0)" class="T-addSelf">
+            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                <i class="ace-icon fa fa-plus"></i>
+                新增
+            </button>
+        </a>
+    </h5>
+</div>
+<div class="overflow-x min-w-1050">
+    <table class="table overflow-table table-striped table-bordered table-hover w-1400">
+        <thead>
+        <tr>
+            <th class="th-border" colspan="16">消费</th>
+            <th class="th-border" colspan="2">社佣</th>
+            <th class="th-border" colspan="2">导佣</th>
+            <th class="th-border" rowspan="2">导游报账备注</th>
+            <th class="th-border" rowspan="2">是否对账</th>
+        </tr>
+        <tr>
+          <th class="th-border"><span class="necessary">*</span>时间</th>
+          <th class="th-border"><span class="necessary">*</span>自费商家</th>
+          <th class="th-border"><span class="necessary">*</span>项目</th>
+          <th class="th-border"><span class="necessary">*</span>单价</th>
+          <th class="th-border"><span class="necessary">*</span>应收数量</th>
+          <th class="th-border">应收优惠</th>
+          <th class="th-border">应收</th>
+          <th class="th-border">现收</th>
+          <th class="th-border"><span class="necessary">*</span>底价</th>
+          <th class="th-border"><span class="necessary">*</span>应付数量</th>
+          <th class="th-border">优惠</th>
+          <th class="th-border">应付</th>
+          <th class="th-border">已付</th>
+          <th class="th-border">导付</th>
+          <th class="th-border">单据</th>
+          <th class="th-border">人数返佣</th>
+          <th class="th-border"><span class="necessary">*</span>比例%</th>
+          <th class="th-border">返佣</th>
+          <th class="th-border"><span class="necessary">*</span>比例%</th>
+          <th class="th-border">返佣</th>
+        </tr></thead>
+        <tbody class="T-count-selfPay">
+        {{each dayList as day}}
+        {{if day.selfPayArrange != null}}
+        {{each day.selfPayArrange as arrangeList}}
+        {{each arrangeList.selfPayArrangeList as arrange index}}
+        {{if arrange != null}}
+        <tr selfPayArrangeId="{{arrange.id}}" selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = {{arrange.whichDay}} {{if index == 0}}rowspan="{{arrangeList.selfPayArrangeList.length}}"{{/if}}
+        isConfirmAccount="{{arrange.isConfirmAccount}}">
+                {{if index == 0 }}<td rowspan="{{arrangeList.selfPayArrangeList.length}}"><span class="whichDay"></span></td>{{/if}}
+                {{if index == 0 }}
+                    <td rowspan="{{arrangeList.selfPayArrangeList.length}}">
+                        <span class="nameType">{{arrange.selfPay.name}}</span>
+                    </td>
+                {{/if}}
+                <td>
+                {{if arrange.selfPayItem != null}}
+                    {{if arrange.selfPayItem != null}}
+                        {{arrange.selfPayItem.name}}
+                    {{/if}}
+                {{else}}
+                <input name="selfPayItemName" value="" type="text" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}><input name="selfPayItemId" type="hidden">
+                {{/if}}
+                </td>
+                <td>
+                
+                <input type="text" name="marketPrice" value="{{arrange.realMarketPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+                
+                <td><input name="needCount" value="{{arrange.needIncomeCount}}" type="text" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}></td>
+    
+                 <td><span class="needInReduceMoney"></span></td>
+                
+                <td>{{if arrange.badStatus == 1}}<span class="needIncome F-float F-money"></span>{{else}}<span class="needIncome F-float F-money"></span>{{/if}}
+                </td>
+    
+                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realGetMoney}}</span>{{else}}<input type="text" class="F-float F-money w-80" name="realGetMoney" value="{{arrange.realGetMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+                </td>
+               
+                
+                <td>
+                {{if tripPlan.billStatus == -1}}
+                    {{if arrange.badStatus == 1}}
+                        <span class="price F-float F-money">{{arrange.realPrice}}</span>
+                    {{else}}
+                        <span class="price F-float F-money">{{arrange.realPrice}}</span>
+                    {{/if}}
+                    <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
+                {{else}}
+                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-50" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                {{/if}}
+                </td>
+                
+                
+                
+                <td>{{if arrange.badStatus == 1}}
+                <span class='F-floatF-count'>{{arrange.memberCount}}</span>{{else}}<input class="w-50" type="text" name="realCount" class="F-floatF-count" {{if arrange.billUpdateTime != null}}value="{{arrange.realCount}}"{{else}}value="{{arrange.memberCount}}"{{/if}} maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="memberCount" value="{{arrange.memberCount}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} /></td>
+                
+                <td>{{if arrange.badStatus == 1}}<span class="F-float F-money">{{arrange.realReduceMoney}}</span>{{else}}<input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+                </td>
+                
+                <td>
+                    {{if arrange.isConfirmAccount == 1}}
+                        <span class="needPayMoney F-float F-money" >{{arrange.tempSettlementMoney}}</span>
+                    {{else}}
+                        <span class="needPayMoney F-float F-money" >{{arrange.payedMoney+arrange.realGuidePayMoney}}</span>
+                    {{/if}}
+                        <input type="hidden" class="selfMoney">
+                </td>
+                
+                <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
+                
+                <td><div  class="inline-flex">{{if arrange.badStatus == 1}}
+                <span>
+                    {{if arrange.realPayType == 0}}
+                        现金
+                        {{else if arrange.realPayType == 1}}
+                        刷卡
+                        {{else if arrange.realPayType == 2}}
+                        签单
+                    {{/if}}
+                </span>
+                &nbsp;
+                <span class="F-float F-money">{{if arrange.realPayType == 2}}{{arrange.realSignMoney}}{{else}}{{arrange.realGuidePayMoney}}{{/if}}</span>{{else}}
+                <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
+                    <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+                    <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+                    <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
+                </select>
+                &nbsp;
+                <input type="text" class="F-float F-money w-80" name="realGuidePayMoney" 
+                {{if arrange.realPayType == 2}}value="{{arrange.realSignMoney}}"{{else}}{{if arrange.billUpdateTime!=null}}value="{{arrange.realGuidePayMoney}}"{{else}}value="{{arrange.guidePayMoney}}" {{/if}} old="{{arrange.realGuidePayMoney}}" maxlength="11"  {{/if}} {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>{{/if}}
+                    
+                    <input type="hidden" name="payedMoney" value="{{arrange.payedMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                    <input type="hidden" name="guidePayMoney" value="{{arrange.guidePayMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />
+                    </div>
+                    </td>
+                
+                
+                
+                <td>{{if arrange.billImage != null && arrange.billImage != ""}}
+                        <a href="javascript:void(0);" url="{{arrange.billImage}}" class="btn-view">查看</a>
+                    {{else}}
+                        <span style="color:#bbb;">查看</span>
+                    {{/if}}
+                </td>
+    
+                <td>{{if arrange.badStatus == 1}}<span class="customerRebateMoney F-float F-money">{{arrange.customerRebateMoney}}</span>{{else}}<span class="customerRebateMoney">{{arrange.customerRebateMoney}}</span>{{/if}}</td>
+    
+                <td>{{if arrange.badStatus == 1}}<span>{{arrange.travelAgencyRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="travelAgencyRate" value="{{arrange.travelAgencyRate*100 | parseInt}}" maxlength="5" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}} />{{/if}}
+                    </td>
+                
+                <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="F-float F-money">
+                            {{arrange.travelAgencyRebateMoney}}
+                        </span>
+                    {{else}}
+                        <input name="travelAgencyRebateMoney" value="{{arrange.travelAgencyRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    {{/if}}
+                    
+                </td>
+                
+                <td>{{if arrange.badStatus == 1}}<span>{{arrange.guideRate*100 | parseInt}}</span>{{else}}<input class="w-50" type="text" name="guideRate" value="{{arrange.guideRate*100 | parseInt}}" maxlength="5"
+                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}
+                </td>
+                
+                <td>
+                    {{if arrange.badStatus == 1}}
+                        <span class="F-float F-money">
+                            {{arrange.guideRebateMoney}}
+                        </span>
+                    {{else}} 
+                        <input name="guideRebateMoney" value="{{arrange.guideRebateMoney}}" type="text" class="w-80"
+                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                    {{/if}}
+                </td>
+                
+                <td>
+                    <input name="billRemark" value="{{arrange.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                </td>
+                
+                <td>
+                    {{if arrange.isConfirmAccount == 0}}
+                        未对账
+                    {{else}}
+                        已对账
+                    {{/if}}
+                    &nbsp;&nbsp;
+                    {{if arrange.payedMoney == 0 &&　arrange.isConfirmAccount == 0}}
+                        <a href="javascript:void(0)" class="T-selfArrDel">删除</a>
+                    {{else}}
+                        <span style="color:#bbb;">删除</span>
+                    {{/if}}
+                </td>                             
+        </tr>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+        {{/if}}
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{if tripPlan.billStatus > -1}}
+    <div style="width:60%;">
+        <div> 
+            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].opCheckRemark}}{{/if}}" />
+        
+            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].financeCheckRemark}}{{/if}}" />
+        </div>
+    </div>
+{{/if}}

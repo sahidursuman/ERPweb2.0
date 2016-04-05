@@ -1,0 +1,44 @@
+<table class="table table-striped table-bordered T-showHighLight  table-hover">
+	<thead>
+		<tr>
+			<th class="th-border">商家名称</th>
+			<th class="th-border">自费项目</th>
+			<th class="th-border">操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{each selfPayList as rs}}
+		<tr data-entity-id="{{rs.id}}" data-entity-name="{{rs.name}}" data-entity-itemname="{{each rs.selfPayItemList as item index}}{{if index == 0}}{{item.name}}{{/if}}{{/each}}">
+			<td style="vertical-align:middle" rowspan="{{rs.selfPayItemList.length}}">{{rs.name}}</td>
+			{{each rs.selfPayItemList as item index}}
+			{{if index == 0}}
+			<td>
+				{{item.name}}<input name="itemId" type="hidden" value="{{item.id}}">
+			</td>
+			<td><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span></label></td>
+			{{/if}}
+			{{/each}}
+		</tr>
+			{{each rs.selfPayItemList as item index}}
+				{{if index > 0}}
+				<tr data-entity-id="{{rs.id}}" data-entity-name="{{rs.name}}" data-entity-itemname="{{item.name}}">
+					<td>
+						{{item.name}}<input name="itemId" type="hidden" value="{{item.id}}">
+					</td>
+					<td><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span></label></td>
+				</tr>
+				{{/if}}
+			{{/each}}
+		{{/each}}
+
+	</tbody>
+</table>
+<div class="row pageMode">
+	<div class="col-xs-6">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>

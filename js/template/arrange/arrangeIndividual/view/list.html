@@ -1,0 +1,87 @@
+<table class="table table-striped table-bordered table-hover globalAdd T-showHighLight table-fixed">
+    <colgroup>
+        <col style="width:45px;">
+        <col style="width: 300px;">
+        <col style="width:50px">
+        <col style="width:90px">
+        <col style="width:60px">
+        <col style="width:100px">
+        <col style="width:120px;">
+        <col style="width:100px;">
+        <col style="width:50px;">
+        <col>
+        <col style="width:50px;">
+    </colgroup>
+    <thead>
+        <tr class="bg-blur T-tr-fixed">
+            <th>选择</th>
+            <th>收客信息</th>
+            <th>天数</th>
+            <th>出游日期</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>人数</th>
+            <th>客源地</th>
+            <th>年龄</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="T-arrageVisitor-list">
+        {{each touristGroupList as touristGroupL}}
+        <tr data-value="{{touristGroupL.id}}" data-entity-id="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}" data-entity-partnerAgency="{{if !!touristGroupL.partnerAgency}} {{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}" data-entity-name="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}" data-entity-type="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.type}}{{/if}}" data-entity-days="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}" data-entity-startTime="{{touristGroupL.startTime}}" data-entity-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}" class="tr-{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.id}}{{/if}}-{{touristGroupL.startTime}}" data-entity-adultCount="{{touristGroupL.adultCount}}" data-entity-childCount="{{touristGroupL.childCount}}">
+            <td style="vertical-align:middle;padding: 5px;">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label>
+            </td>
+            <td class="h-touristGroupInfo">
+                <p class="h-orderNumber">收客单号：{{touristGroupL.orderNumber}}</p>
+               
+                {{if !!touristGroupL.lineProduct}}
+                <p class="h-lineName" title="{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.name}}{{/if}}">
+                    <span>{{touristGroupL.lineProduct.name}}</span>
+                    <span>({{touristGroupL.lineProduct.type}})</span>
+                </p>
+                {{/if}}
+                <p class="h-orderNumber">客户：{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
+            </td>
+            <td class="F-float F-count" style="vertical-align:middle">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}</td>
+            <td style="vertical-align:middle">{{touristGroupL.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
+            {{if !!touristGroupL.contactMember}}
+            <td style="vertical-align:middle">{{touristGroupL.contactMember.name}}</td>
+            <td style="vertical-align:middle">{{touristGroupL.contactMember.mobileNumber}}</td>
+            {{else}}
+            <td></td>
+            <td></td>
+            {{/if}}
+            <td class="F-float F-count" style="vertical-align:middle">{{touristGroupL.adultCount}} 大 {{touristGroupL.childCount}}小</td>
+            <td style="vertical-align:middle">{{touristGroupL.areaData}}</td>
+            <td style="vertical-align:middle">{{touristGroupL.ageData}}</td>
+            <td class="T-ctrl-tip" title="{{touristGroupL.remark}}" style="vertical-align:middle"><span style="height: 35px">{{touristGroupL.remark}}</span></td>
+            <td style="vertical-align:middle"><a class="cursor T-arrageVisitor-view T-action"> 查看 </a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-xs-12">
+    </div>
+</div>
+<div class="T-arrangeTouristMergeList">
+    <div>
+        <button class="btn btn-sm btn-success T-start-touristGroup-merge R-right" data-right="1130004">
+            <i class="ace-icon fa fa-user-plus"></i> 开始并团
+        </button>
+
+        <label class=" mar-r-10" style="color:#D2691E; ">已选人数 <span class="T-chosenAdultAndChildCount" style="color:#D2691E;">大人 0 小孩 0 </span></label>
+    </div>
+</div>
+<div class="row pageMode">
+    <div class="col-xs-5">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-7">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

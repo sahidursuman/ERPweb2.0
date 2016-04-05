@@ -71,7 +71,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="count"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '内转的数量不合法'
 							}
 						]

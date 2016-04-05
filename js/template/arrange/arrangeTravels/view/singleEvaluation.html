@@ -1,0 +1,124 @@
+<div class="container-fluid globalAdd hct-min-width hct-mar-auto">
+	<div class="row hct-top-header">
+		<div class="col-xs-12 yj-title">
+			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+			<label class="control-label mar-l-10">{{note.title}}</label>
+			<a class="hct-top-share T-action T-share" data-title="{{note.title}}" data-id="{{noteItem.id}}" data-type="singleEvaluation"><i class="fa fa-share-alt"></i>分享</a>
+		</div>
+	</div>
+	<div class="row hct-note">
+		<div class="col-xs-12">
+			<div class="pull-left cursor T-action T-view-user" data-id="{{note.id}}">
+				<div class="caption-user-header pull-left{{if !note.guideInfo.photo}} default-img{{/if}}">
+					{{if note.guideInfo.photo}}<img src="{{imgUrl + note.guideInfo.photo}}">{{/if}}
+				</div>
+				<div class="note-guide-info pull-left">
+					<p class="pull-left">{{note.guideInfo.name}}</p>
+					<p class="pull-left starLevel">{{#note.guideInfo.guideSatisfaction | getScoreStar}}</p>
+				</div>
+			</div>
+			<div class="pull-right note-date">
+				<p>
+					<label class="control-label">出行日期：{{note.startTime}}</label>
+	        		<label class="control-label mar-l-10">出游天数：{{note.days}}天</label>
+	        	</p>
+			</div>
+		</div>
+		<div class="col-xs-12 score-body">
+			<div class="pull-left note-score">
+				<p class="scoreCount">{{note.tripSatisfaction}}%</p>
+				<p class="starLevel">{{#note.tripSatisfaction | getScoreStar}}</p>
+			</div>
+			<div class="pull-left note-line-score">
+				<p>此线路产品跟团游客满意度为{{note.tripSatisfaction}}%</p>
+				<p>已有{{note.scoreCount}}人评分</p>
+			</div>
+			<div class="pull-right p-no-mar">
+				<p>&nbsp;</p>
+				<p class="comment-info">
+					<label class="control-label"><i class="fa fa-heart"></i>{{note.likeCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-comment"></i>{{note.commentCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-share-alt"></i>{{note.shareCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-eye"></i>{{note.viewCount}}</label>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="row note-days-list">
+		<div class="note-days-item">
+			<div class="note-days-header">
+				<div class="pull-left note-days">D{{noteItem.tripPlanDay.whichDay}}</div>
+				<div class="pull-left note-address">{{noteItem.tripPlanDay.title}}</div>
+				<div class="pull-left note-date">{{noteItem.tripPlanDay.time}}</div>
+			</div>
+			<div class="note-details-container">
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>{{noteItem.itemType | getNoteItemText}}</h3>
+					</div>
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!noteItem.itemImage}}<img src="{{imgUrl + noteItem.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#noteItem.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{noteItem.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{noteItem.likeCount}}</label>
+		        				<label class="control-label mar-l-10"><i class="fa fa-comment"></i>{{noteItem.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="praise-content">
+		<div class="praise-cont-head">
+			收到的赞 {{noteItem.likeCount}}
+		</div>
+		<ul class="praise-cont-body">
+			{{each noteItem.noteItemLikeList as like}}
+			<li class="{{if !like.photo}}default-img{{/if}}">
+				{{if like.photo}}
+				<img src="{{like.photo}}" alt="{{like.name}}">
+				{{/if}}
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="comment-content">
+		<div class="comment-cont-head">
+			收到的评论 {{noteItem.commentCount}}
+		</div>
+		<div class="comment-cont-body">
+			{{each noteItem.noteItemCommentList as comment}}
+			<div class="comment-cont-item">
+				<div class="comment-user">
+					<div class="caption-user-header pull-left{{if !comment.photo}} default-img{{/if}}">
+						{{if comment.photo}}<img src="{{imgUrl + comment.photo}}">{{/if}}
+					</div>
+					<div class="pull-left comment-cont-name">
+						{{comment.name}}
+					</div>
+					<div class="pull-right comment-cont-date">{{comment.createTime}}</div>
+				</div>
+				<div class="comment-cont-text">
+					<p>{{comment.commentContent}}</p>
+				</div>
+				<ul class="comment-cont-images">
+					{{each comment.images as img}}
+					<li>
+						<a href="{{imgUrl + img}}" class="T-photos"><img src="{{imgUrl + img}}"></a>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+</div>

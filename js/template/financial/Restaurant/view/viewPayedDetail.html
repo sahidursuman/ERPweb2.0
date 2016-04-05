@@ -13,6 +13,7 @@
 										<th class="th-border">付款方</th>
 										<th class="th-border">金额</th>
 										<th class="th-border">付款方式</th>
+										<th class="th-border">账户名称</th>
 										<th class="th-border">备注</th>
 										<th class="th-border">操作人</th>
 										<th class="th-border">操作时间</th>
@@ -25,8 +26,9 @@
 										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>
 										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>
 										<td>{{if rs.payParty == null || rs.payParty == ""}}-{{else}}{{rs.payParty}}{{/if}}</td>
-										<td>{{rs.payDifferenceMoney}}</td>
-										<td>{{rs.payType | getPayTypeText}}</td>
+										<td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
+										<td>{{if rs.payParty == '社付'}}{{rs.payType | getPayTypeText}}{{else}}{{rs.payType | getPlanPayTypeText}}{{/if}}</td>
+										<td>{{if rs.accountName == null || rs.accountName == ""}}-{{else}}{{rs.accountName}}{{/if}}</td>
 										<td>{{rs.remark}}</td>
 										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>
 										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>

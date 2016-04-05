@@ -1,249 +1,124 @@
-<div class="financialOutDetail">
-    <div class="col-md-12">
-        <button data-entity-id="{{tripPlanId}}" class="btn btn-xs btn-success btn-transfter T-download pull-right">
-            <i class="ace-icon fa fa-file-excel-o"></i>导出电子表格
-        </button>
-    </div>
-    <div class="col-xs-12">
-        <div class="tabbable">
-            <ul class="nav nav-tabs" id="finacial-count-view-tab">
-                <li class="active" style="width:125px;">
-                    <a aria-expanded="true" data-toggle="tab" href="#receptionList-financial-count" style="text-align:center;">
-                        &nbsp;接团&nbsp;
-                    </a>
+<div class="countUpdate">
+    <p style="display:none;" class="T-print">单团核算表</p>
+    <table class="table table-striped table-bordered table-hover all T-main-table">
+        <tbody>
+            <tr>
+                <td  style="text-align:left"><label style="font-weight: bold;">线路：{{tripBaseInfo.lineProductName}}</label></td>
+                <td  style="text-align:left"><label style="font-weight: bold;">团队人数：{{tripBaseInfo.adultCount}}大{{tripBaseInfo.childCount}}小</label></td>
+                <td  style="text-align:left"><label style="font-weight: bold;">出团日期：{{tripBaseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</label></td>
+                <td  style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripBaseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}<span class="T-ProductDays" style="font-weight: bold;"></span></label></td>
+                <td class="T-noprint"><a href="javascript:void(0)" class="T-export" style="font-weight: bold;">打印</a></td>
+            </tr>
+            <tr>
+                <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripBaseInfo.tripNumber}}</label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">责任计调：{{tripBaseInfo.dutyOPUserName}}</label></td>
+                <td colspan="3" style="text-align:left"><label style="font-weight: bold;">
+                    {{each tripBaseInfo.guideList as guide}}
+                        导游：{{guide.guideName}}&nbsp;&nbsp;{{guide.guideCardNumber}}&nbsp;&nbsp;&nbsp;
+                    {{/each}}
+                </label></td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align:left">
+                  <label style="font-weight: bold;">发团收入：{{tripBaseInfo.tripPlanIncome}}</label>
+                  <label style="font-weight: bold;margin-left:30px;">发团成本：
+                  <span class="F-float F-money">{{tripBaseInfo.tripPlanPaySMoney}}</span></label>
+                  <label style="font-weight: bold;margin-left:30px;">中转成本：
+                  <span class="F-float F-money">{{tripBaseInfo.transitPaySMoney}}</span></label>
+                  <label style="font-weight: bold;margin-left:30px;">毛利：
+                  <span class="F-float F-money">{{tripBaseInfo.grossProfit}}</span></label>
+                  <label style="font-weight: bold;margin-left:30px;">毛利率：
+                  <span class="F-float F-money">{{tripBaseInfo.grossProfitRate}}</span></label>
+                  <label style="font-weight: bold;margin-left:30px;">人均毛利：
+                  <span class="F-float F-money">{{tripBaseInfo.perGrossProfit}}</span></label>  
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
+    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
+    <div class="tabbable">
+        <ul class="nav nav-tabs T-noprint">
+            {{if !showJson.incomeShowFlag}}
+                <li class="active align-center" style="width:140px;">
+                    <a data-toggle="tab" href="#financial-count-trip-income" aria-expanded="true">发团收入明细</a>
                 </li>
-                <li style="width:125px;">                  
-                <a aria-expanded="false" data-toggle="tab" href="#carList-financial-count" style="text-align:center;">
-                        &nbsp;小车&nbsp;
-                    </a>
+            {{/if}}
+
+            {{if !showJson.costShowFlag}}
+                <li class="align-center" style="width:140px;">
+                    <a data-toggle="tab" href="#financial-count-trip-cost" aria-expanded="true">发团成本明细</a>
                 </li>
-                <li style="width:125px;">                
-                    <a aria-expanded="false" data-toggle="tab" href="#sendList-financial-count" style="text-align:center;">
-                        &nbsp;送团&nbsp;
-                    </a>  
+            {{/if}}
+            
+            {{if !showJson.transitShowFlag}}
+                <li class="align-center" style="width:140px;">
+                    <a data-toggle="tab" href="#financial-count-transit-cost" aria-expanded="true">中转成本明细</a>
                 </li>
-            </ul>
-            <div class="tab-content" style="position:relative;top: -2px">
-                <div id="receptionList-financial-count" class="tab-pane fade active in">
-                    <div class="form-group busList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
+            {{/if}}
+        </ul>
+        <div class="tab-content" style="position:relative;top: -2px">
+            <!-- 发团收入明细 -->
+            <div id="financial-count-trip-income" class="tab-pane fade active in T-print">
+                {{if tripIncomeMap.groupIncomeMap.groupIncomeMapList.length != 0}}
+                    <!-- 团款-->
+                    <div class="form-group tripCost">
+                        <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">1</span>
-                                        <label class="middle title-size">接团车俩</label>
+                                    <h5>
+                                        <label class="middle title-size">团款</label>
                                     </h5>
                                 <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover busListTable margin-top" >
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
-                                                    <th class="th-border">车队</th>
-                                                    <th class="th-border">车牌</th>
-                                                    <th class="th-border">车辆品牌</th>
-                                                    <th class="th-border">司机</th>
-                                                    <th class="th-border">司机电话</th>
-                                                    <th class="th-border">用车时间</th>
-                                                    <th class="th-border">上车地点</th>
-                                                    <th class="th-border">车费</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each receiveGroup.outBusList as outBus}}
-                                                    {{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
-                                                <tr>
-                                                    <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
-                                                    <td>{{outBus.boardLocation}}</td>
-                                                    <td>{{outBus.fee}}</td>
-                                                    <td>{{outBus.reduceMoney}}</td>
-                                                    <td>{{outBus.needPayMoney}}</td>
-                                                    <td>{{outBus.payedMoney}}</td>
-                                                    <td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outBus.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group hotelList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class="box ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">2</span>
-                                        <label class="middle title-size">酒店安排</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover hotelListTable margin-top">
-                                            <thead>
-                                                <tr>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">星级</th>
-                                                    <th class="th-border">酒店</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
-                                                    <th class="th-border">房型</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each receiveGroup.outHotelList as outHotel}}
-                                                    {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
-                                                <tr>
-                                                    <td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                                                    <td>{{if outHotel.hotel.level == 1}}
-                                                        三星以下
-                                                        {{else if outHotel.hotel.level == 2}}
-                                                        三星
-                                                        {{else if outHotel.hotel.level == 3}}
-                                                        准四星
-                                                        {{else if outHotel.hotel.level == 4}}
-                                                        四星
-                                                        {{else if outHotel.hotel.level == 5}}
-                                                        准五星
-                                                        {{else if outHotel.hotel.level == 6}}
-                                                        五星
-                                                        {{else if outHotel.hotel.level == 7}}
-                                                        五星以上星
-                                                        {{/if}}
-                                                    </td>
-                                                    <td>{{outHotel.hotel.name}}</td>
-                                                    <td>{{outHotel.hotel.managerName}}</td>
-                                                    <td>{{outHotel.hotel.mobileNumber}}</td>
-                                                    <td>{{outHotel.hotelRoom.type}}</td>
-                                                    <td>{{outHotel.price}}</td>
-                                                    <td>{{outHotel.memberCount}}</td>
-                                                    <td>{{outHotel.reduceMoney}}</td>
-                                                    <td>{{outHotel.needPayMoney}}</td>
-                                                    <td>{{outHotel.payedMoney}}</td>
-                                                    <td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outHotel.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group ticketList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">3</span>
-                                        <label class="middle title-size">票务安排</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover ticketListTable margin-top">
-                                            <thead>
-                                                <tr>
-                                                    <th class="th-border">票务公司</th>
-                                                    <th class="th-border">类型</th>
-                                                    <th class="th-border">出发城市</th>
-                                                    <th class="th-border">到达城市</th>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">班次</th>
-                                                    <th class="th-border">座位级别</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" width="100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each receiveGroup.outTicketList as outTicket}}
-                                                    {{if outTicket.id != null && outTicket.ticket != null}}
-                                                <tr>
-                                                    <td>{{outTicket.ticket.name}}</td>
-                                                    <td>{{if outTicket.type == 1}}
-                                                        机票
-                                                        {{else if outTicket.type == 2}}
-                                                        汽车票
-                                                        {{else if outTicket.type == 3}}
-                                                        火车票
-                                                        {{/if}}
-                                                    </td>
-                                                    <td>{{outTicket.startingCity}}</td>
-                                                    <td>{{outTicket.arriveCity}}</td>
-                                                    <td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
-                                                    <td>{{outTicket.shift}}</td>
-                                                    <td>{{outTicket.seatLevel}}</td>
-                                                    <td>{{outTicket.price}}</td>
-                                                    <td>{{outTicket.memberCount}}</td>
-                                                    <td>{{outTicket.reduceMoney}}</td>
-                                                    <td>{{outTicket.needPayMoney}}</td>
-                                                    <td>{{outTicket.payedMoney}}</td>
-                                                    <td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outTicket.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group restaurantList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">4</span>
-                                        <label class="middle title-size">餐厅安排</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover restaurantListTable margin-top">
-                                            <thead>
-                                                <tr>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">餐厅</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
-                                                    <th class="th-border">类型</th>
-                                                    <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
+                                                <tr class="T-fontSize">
+                                                    <th class="th-border"   >收客单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">客户联系人</th>
+                                                    <th class="th-border">游客联系人</th>
                                                     <th class="th-border">人数</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border">备注</th>
+                                                    <th class="th-border">明细</th>
+                                                    <th class="th-border">应收</th>
+                                                    <th class="th-border">结算</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
-                                                {{if outRestaurant.id != null && outRestaurant.restaurant != null}}
-                                                <tr data-entity-id="{{outRestaurant.id}}">
-                                                    <td>{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                                    <td>{{outRestaurant.restaurant.name}}</td>
-                                                    <td>{{outRestaurant.restaurant.managerName}}</td>
-                                                    <td>{{outRestaurant.restaurant.mobileNumber}}</td>
-                                                    <td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
-                                                    <td>{{outRestaurant.price}}</td>
-                                                    <td>{{outRestaurant.memberCount}}</td>
-                                                    <td>{{outRestaurant.reduceMoney}}</td>
-                                                    <td>{{outRestaurant.needPayMoney}}</td>
-                                                    <td>{{outRestaurant.payedMoney}}</td>
-                                                    <td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outRestaurant.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
+                                            <tbody>
+                                                {{if tripIncomeMap != null}}
+                                                    {{if tripIncomeMap.groupIncomeMap != null}}
+                                                        {{each tripIncomeMap.groupIncomeMap.groupIncomeMapList as groupIncome}}
+                                                            <tr>
+                                                                <td>{{groupIncome.orderNumber}}</td>
+                                                                <td>{{groupIncome.partnerAgencyName}}</td>
+                                                                <td>
+                                                                    {{groupIncome.partnerAgencyContactName}}<br>
+                                                                    {{groupIncome.partnerAgencyContactMobile}}
+                                                                </td>
+                                                                <td>    
+                                                                    {{groupIncome.touristContactName}}<br>
+                                                                    {{groupIncome.touristContactMobile}}
+                                                                </td>
+                                                                <td>{{groupIncome.adultCount}}大{{groupIncome.childCount}}小</td>
+                                                                <td>
+                                                                    {{if groupIncome.touristGroupFeeList !=null}}
+                                                                        {{each groupIncome.touristGroupFeeList as groupFee}}
+                                                                            {{groupFee.name}}:{{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}<br/>
+                                                                        {{/each}}
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="F-float F-money">{{groupIncome.needPayAllMoney}}</span></td>
+                                                                <td><span class="F-float F-money">{{groupIncome.settlementMoney}}</span></td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                    <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumNeedPayAllMoney}}</span></td>
+                                                    <td class="td-border">
+                                                    <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumSettlementMoney}}</span></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -251,220 +126,369 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group otherList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
+                {{/if}}
+
+                {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList.length != 0}}
+                    <!-- 购物-->
+                    <div class="form-group tripShop">
+                        <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">5</span>
-                                        <label class="middle title-size">其他安排</label>
+                                    <h5>
+                                        <label class="middle title-size">购物</label>
                                     </h5>
                                 <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover otherListTable margin-top">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border" colspan="5">打单</th>
+                                                    <th class="th-border" colspan="2">社佣</th>
+                                                    <th class="th-border" colspan="2">导佣</th>
+                                                    <th class="th-border" rowspan="2">应收</th>
+                                                    <th class="th-border" rowspan="2">结算</th>
+                                                </tr>
+                                                <tr>
+                                                  <th class="th-border">时间</th>
+                                                  <th class="th-border">购物店</th>
+                                                  <th class="th-border">商品</th>
+                                                  <th class="th-border">打单金额</th>
+                                                  <th class="th-border">单据</th>
+                                                  <th class="th-border">比例%</th>
+                                                  <th class="th-border">返佣</th>
+                                                  <th class="th-border">比例%</th>
+                                                  <th class="th-border">返佣</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripIncomeMap.shopIncomeMap != null}}
+                                                    {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList != null}}
+                                                        {{each tripIncomeMap.shopIncomeMap.shopIncomeMapList as shopIncome}}
+                                                            <tr rowspan = "{{shopIncome.shopArrangeItemList.length}}">
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    {{shopIncome.dateTime | dateFormat: 'yyyy-MM-dd'}}
+                                                                </td>
+
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    {{shopIncome.shopName}}
+                                                                </td>
+                                                                    {{if shopIncome.shopArrangeItemList != null}}
+                                                                        {{each shopIncome.shopArrangeItemList as item index}}
+                                                                            {{if index == 0}}
+                                                                                <td>{{item.name}}</td>
+                                                                                <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
+                                                                                <td>
+                                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                                    {{else}}
+                                                                                        <span style="color:#bbb;">查看</span>
+                                                                                    {{/if}}
+                                                                                </td>
+                                                                                <td>{{item.travelAgencyRate*100}}</td>
+                                                                                <td>
+                                                                                    <span class="F-float F-money">
+                                                                                        {{item.travelAgencyRebateMoney}}
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td>{{item.guideRate*100}}</td>
+                                                                                <td>
+                                                                                    <span class="F-float F-money">{{item.guideRebateMoney}}</span>
+                                                                                </td>
+                                                                            {{/if}}
+                                                                        {{/each}}
+                                                                    {{/if}}
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    <span class="F-float F-money">{{shopIncome.needPayAllMoney}}</span>
+                                                                </td>
+
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    <span class="F-float F-money">{{shopIncome.needPayAllMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                            {{if shopIncome.shopArrangeItemList != null}}
+                                                                {{each shopIncome.shopArrangeItemList as item index}}
+                                                                    {{if index > 0}}
+                                                                    <tr rowspan = "{{shopIncome.shopArrangeItemList.length}}">
+                                                                        <td>{{item.name}}</td>
+                                                                        <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
+                                                                        <td>
+                                                                            {{if item.billImage != null && item.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>{{item.travelAgencyRate*100}}</td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">
+                                                                                {{item.travelAgencyRebateMoney}}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>{{item.guideRate*100}}</td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{item.guideRebateMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {{/if}}
+                                                                {{/each}}
+                                                            {{/if}}
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="9" style="text-align:left">合计</td>
+                                                    <td>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumNeedPayAllMoney}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumSettlementMoney}}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripIncomeMap.selfPayIncomeMap.selfPayIncomeMapList.length != 0}}
+                    <!-- 自费-->
+                    <div class="form-group tripSelf">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">自费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">自费商家</th>
+                                                    <th class="th-border">项目</th>
+                                                    <th class="th-border">单价 </th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应收</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripIncomeMap.selfPayIncomeMap !=null}}
+                                                    {{if tripIncomeMap.selfPayIncomeMap.selfPayIncomeMapList !=null}}
+                                                        {{each tripIncomeMap.selfPayIncomeMap.selfPayIncomeMapList as selfIncome}}
+
+                                                            <tr>
+                                                                <td>
+                                                                    {{selfIncome.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{selfIncome.selfPayName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{selfIncome.selfPayItemName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{selfIncome.marketPrice}}
+                                                                </td>
+                                                                <td>
+                                                                    {{selfIncome.count}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{selfIncome.reduceMoney}}</span>
+                                                                </td>
+
+                                                                <td>
+                                                                    <span class="F-float F-money">{{selfIncome.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{selfIncome.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.selfPayIncomeMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.selfPayIncomeMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripIncomeMap.guideIncomeMap.guideIncomeMapList.length != 0}}
+                    <!-- 导游管理费-->
+                    <div class="form-group tripCost">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">导游管理费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">开始日期</th>
+                                                    <th class="th-border">结束日期</th>
+                                                    <th class="th-border">任务</th>
+                                                    <th class="th-border">导游</th>
+                                                    <th class="th-border">管理费</th>
+                                                    <th class="th-border">应收</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripIncomeMap.guideIncomeMap != null}}
+                                                    {{if tripIncomeMap.guideIncomeMap.guideIncomeMapList != null}}
+                                                        {{each tripIncomeMap.guideIncomeMap.guideIncomeMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.endTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.taskType == 0}}
+                                                                        全程
+                                                                    {{else if item.taskType == 1}}
+                                                                        接机
+                                                                    {{else if item.taskType == 2}}
+                                                                        送机
+                                                                    {{else if item.taskType == 3}}
+                                                                        前段
+                                                                    {{else if item.taskType == 4}}
+                                                                        中段
+                                                                    {{else if item.taskType == 5}}
+                                                                        后段
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.guideName}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.manageFee}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="5" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.guideIncomeMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.guideIncomeMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripIncomeMap.otherIncomeMap.otherIncomeMapList.length != 0}}
+                    <!-- 其他收入-->
+                    <div class="form-group tripOtherIn">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">其他收入</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
                                                 <tr>
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">项目</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应收</th>
+                                                    <th class="th-border">结算</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>{{each receiveGroup.outOtherList as outOther}}
-                                            {{if outOther != null && outOther.name != null}}
-                                                <tr data-entity-id="{{outOther.id}}">
-                                                    <td>{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                                    <td>{{outOther.name}}</td>
-                                                    <td>{{outOther.managerName}}</td>
-                                                    <td>{{outOther.mobileNumber}}</td>
-                                                    <td>{{outOther.price}}</td>
-                                                    <td>{{outOther.memberCount}}</td>
-                                                    <td>{{outOther.reduceMoney}}</td>
-                                                    <td>{{outOther.needPayMoney}}</td>
-                                                    <td>{{outOther.payedMoney}}</td>
-                                                    <td>{{if outOther.payType == 0}}现付{{else if outOther.payType == 1}}签单{{else if outOther.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outOther.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="clear:both;height:0px;line-height:0px;"></div>
-                </div>
-                <div id="carList-financial-count" class="tab-pane fade">
-                    <div class="form-group busList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">1</span>
-                                        <label class="middle title-size">中转小车</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover busListTable margin-top">
-                                            <thead>
+                                            <tbody>
+                                                {{if tripIncomeMap.otherIncomeMap != null}}
+                                                    {{if tripIncomeMap.otherIncomeMap.otherIncomeMapList != null}}
+                                                        {{each tripIncomeMap.otherIncomeMap.otherIncomeMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.title}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                     
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">    查看
+                                                                        </a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
                                                 <tr>
-                                                    <th class="th-border">车队</th>
-                                                    <th class="th-border">车牌</th>
-                                                    <th class="th-border">车辆品牌</th>
-                                                    <th class="th-border">司机</th>
-                                                    <th class="th-border">司机电话</th>
-                                                    <th class="th-border">用车时间</th>
-                                                    <th class="th-border">上车地点</th>
-                                                    <th class="th-border">车费</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each bus as outBus}}
-                                                    {{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
-                                                <tr>
-                                                    <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
-                                                    <td>{{outBus.boardLocation}}</td>
-                                                    <td>{{outBus.fee}}</td>
-                                                    <td>{{outBus.reduceMoney}}</td>
-                                                    <td>{{outBus.needPayMoney}}</td>
-                                                    <td>{{outBus.payedMoney}}</td>
-                                                    <td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outBus.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="clear:both;height:0px;line-height:0px;"></div>
-                </div>
-                <div id="sendList-financial-count" class="tab-pane fade">
-                    <div class="form-group busList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">1</span>
-                                        <label class="middle title-size">送团车俩</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover busListTable margin-top">
-                                            <thead>
-                                                <tr>
-                                                    <th class="th-border">车队</th>
-                                                    <th class="th-border">车牌</th>
-                                                    <th class="th-border">车辆品牌</th>
-                                                    <th class="th-border">司机</th>
-                                                    <th class="th-border">司机电话</th>
-                                                    <th class="th-border">用车时间</th>
-                                                    <th class="th-border">上车地点</th>
-                                                    <th class="th-border">车费</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each sendGroup.outBusList as outBus}}
-                                                    {{if outBus.id != null && outBus.busCompany != null && outBus.bus != null && outBus.driver != null}}
-                                                <tr>
-                                                    <td>{{if outBus.busCompany != null}}{{outBus.busCompany.companyName}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.bus != null}}{{outBus.bus.brand}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
-                                                    <td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-                                                    <td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
-                                                    <td>{{outBus.boardLocation}}</td>
-                                                    <td>{{outBus.fee}}</td>
-                                                    <td>{{outBus.reduceMoney}}</td>
-                                                    <td>{{outBus.needPayMoney}}</td>
-                                                    <td>{{outBus.payedMoney}}</td>
-                                                    <td>{{if outBus.payType == 0}}现付{{else if outBus.payType == 1}}签单{{else if outBus.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outBus.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group hotelList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">2</span>
-                                        <label class="middle title-size">酒店安排</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover hotelListTable margin-top">
-                                            <thead>
-                                                <tr>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">星级</th>
-                                                    <th class="th-border">酒店</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
-                                                    <th class="th-border">房型</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each sendGroup.outHotelList as outHotel}}
-                                                {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
-                                                <tr>
-                                                    <td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                                                    <td>{{if outHotel.hotel.level == 1}}
-                                                        三星以下
-                                                        {{else if outHotel.hotel.level == 2}}
-                                                        三星
-                                                        {{else if outHotel.hotel.level == 3}}
-                                                        准四星
-                                                        {{else if outHotel.hotel.level == 4}}
-                                                        四星
-                                                        {{else if outHotel.hotel.level == 5}}
-                                                        准五星
-                                                        {{else if outHotel.hotel.level == 6}}
-                                                        五星
-                                                        {{else if outHotel.hotel.level == 7}}
-                                                        五星以上星
-                                                        {{/if}}
+                                                    <td colspan="5" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.otherIncomeMap.sumNeedPayAllMoney}}
+                                                        </span>
                                                     </td>
-                                                    <td>{{outHotel.hotel.name}}</td>
-                                                    <td>{{outHotel.hotel.managerName}}</td>
-                                                    <td>{{outHotel.hotel.mobileNumber}}</td>
-                                                    <td>{{outHotel.hotelRoom.type}}</td>
-                                                    <td>{{outHotel.price}}</td>
-                                                    <td>{{outHotel.memberCount}}</td>
-                                                    <td>{{outHotel.reduceMoney}}</td>
-                                                    <td>{{outHotel.needPayMoney}}</td>
-                                                    <td>{{outHotel.payedMoney}}</td>
-                                                    <td>{{if outHotel.payType == 0}}现付{{else if outHotel.payType == 1}}签单{{else if outHotel.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outHotel.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripIncomeMap.otherIncomeMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
                                             </tbody>
                                         </table>
                                     </div>
@@ -472,59 +496,73 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group ticketList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
+                {{/if}}
+                <div style="clear:both;height:0px;line-height:0px;"></div>
+            </div>
+
+            <!-- 发团成本明细 -->
+            <div id="financial-count-trip-cost" class="tab-pane fade T-print">
+                {{if tripPayMap.insurancePayMap.insurancePayMapList.length != 0}}
+                    <!-- 保险-->
+                    <div class="form-group insurance">
+                        <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">3</span>
-                                        <label class="middle title-size">票务安排</label>
+                                    <h5>
+                                        <label class="middle title-size">保险</label>
                                     </h5>
                                 <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover ticketListTable margin-top">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
                                             <thead>
                                                 <tr>
-                                                    <th class="th-border">票务公司</th>
-                                                    <th class="th-border">类型</th>
-                                                    <th class="th-border">出发城市</th>
-                                                    <th class="th-border">到达城市</th>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">班次</th>
-                                                    <th class="th-border">座位级别</th>
+                                                    <th class="th-border">保险公司</th>
+                                                    <th class="th-border">险种</th>
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
+                                                    <th class="th-border">应收</th>
+                                                    <th class="th-border">结算</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>{{each sendGroup.outTicketList as outTicket}}
-                                                    {{if outTicket.id != null && outTicket.ticket != null}}
+                                            <tbody>
+                                                {{if tripPayMap.insurancePayMap != null}}
+                                                    {{if tripPayMap.insurancePayMap.insurancePayMapList != null}}
+                                                        {{each tripPayMap.insurancePayMap.insurancePayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.insuranceName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.insuranceItemName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
                                                 <tr>
-                                                    <td>{{outTicket.ticket.name}}</td>
-                                                    <td>{{if outTicket.type == 1}}
-                                                        机票
-                                                        {{else if outTicket.type == 2}}
-                                                        汽车票
-                                                        {{else if outTicket.type == 3}}
-                                                        火车票
-                                                        {{/if}}
+                                                    <td colspan="4" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.insurancePayMap.sumNeedPayAllMoney}}
+                                                        </span>
                                                     </td>
-                                                    <td>{{outTicket.startingCity}}</td>
-                                                    <td>{{outTicket.arriveCity}}</td>
-                                                    <td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
-                                                    <td>{{outTicket.shift}}</td>
-                                                    <td>{{outTicket.seatLevel}}</td>
-                                                    <td>{{outTicket.price}}</td>
-                                                    <td>{{outTicket.memberCount}}</td>
-                                                    <td>{{outTicket.reduceMoney}}</td>
-                                                    <td>{{outTicket.needPayMoney}}</td>
-                                                    <td>{{outTicket.payedMoney}}</td>
-                                                    <td>{{if outTicket.payType == 0}}现付{{else if outTicket.payType == 1}}签单{{else if outTicket.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outTicket.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.insurancePayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
                                             </tbody>
                                         </table>
                                     </div>
@@ -532,95 +570,188 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group restaurantList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
+                {{/if}}
+
+
+                {{if tripPayMap.busPayMap.busPayMapList.length != 0}}
+                    <!-- 车费-->
+                    <div class="form-group busFee">
+                        <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">4</span>
-                                        <label class="middle title-size">餐厅安排</label>
+                                    <h5>
+                                        <label class="middle title-size">车费</label>
                                     </h5>
                                 <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover restaurantListTable margin-top">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">开始日期</th>
+                                                    <th class="th-border">结束日期</th>
+                                                    <th class="th-border">任务</th>
+                                                    <th class="th-border">车队</th>
+                                                    <th class="th-border">车牌号</th>
+                                                    <th class="th-border">司机</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.busPayMap != null}}
+                                                    {{if tripPayMap.busPayMap.busPayMapList != null}}
+                                                        {{each tripPayMap.busPayMap.busPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.endTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.taskType == 0}}
+                                                                        全程
+                                                                    {{else if item.taskType == 1}}
+                                                                        接机
+                                                                    {{else if item.taskType == 2}}
+                                                                        送机
+                                                                    {{else if item.taskType == 3}}
+                                                                        前段
+                                                                    {{else if item.taskType == 4}}
+                                                                        中段
+                                                                    {{else if item.taskType == 5}}
+                                                                        后段
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.busCompanyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.licenseNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.driverName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="8" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.busPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.busPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripPayMap.restaurantPayMap.restaurantPayMapList.length != 0}}
+                    <!-- 餐厅-->
+                    <div class="form-group restaurant">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">餐厅</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
                                             <thead>
                                                 <tr>
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">餐厅</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
                                                     <th class="th-border">类型</th>
-                                                    <th class="th-border">餐标</th>
+                                                    <th class="th-border">餐标(元/人)</th>
                                                     <th class="th-border">人数</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>{{each sendGroup.outRestaurantList as outRestaurant}}
-                                                {{if outRestaurant.id != null && outRestaurant.restaurant != null}}
-                                                <tr data-entity-id="{{outRestaurant.id}}">
-                                                    <td>{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                                    <td>{{outRestaurant.restaurant.name}}</td>
-                                                    <td>{{outRestaurant.restaurant.managerName}}</td>
-                                                    <td>{{outRestaurant.restaurant.mobileNumber}}</td>
-                                                    <td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
-                                                    <td>{{outRestaurant.price}}</td>
-                                                    <td>{{outRestaurant.memberCount}}</td>
-                                                    <td>{{outRestaurant.reduceMoney}}</td>
-                                                    <td>{{outRestaurant.needPayMoney}}</td>
-                                                    <td>{{outRestaurant.payedMoney}}</td>
-                                                    <td>{{if outRestaurant.payType == 0}}现付{{else if outRestaurant.payType == 1}}签单{{else if outRestaurant.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outRestaurant.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
-                                            </tbody>
-                                        </table> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group otherList">
-                        <div class="col-xs-12 col-sm-12 widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="">
-                                        <span class="badge badge-primary">5</span>
-                                        <label class="middle title-size">其他安排</label>
-                                    </h5>
-                                <div class="widget-body">
-                                    <div class="widget-main no-padding">
-                                        <table class="table table-striped table-bordered table-hover otherListTable margin-top">
-                                            <thead>
+                                            <tbody>
+                                                {{if tripPayMap.restaurantPayMap != null}}
+                                                    {{if tripPayMap.restaurantPayMap.restaurantPayMapList != null}}
+                                                        {{each tripPayMap.restaurantPayMap.restaurantPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.restaurantName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.type}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.memberCount}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
                                                 <tr>
-                                                    <th class="th-border">日期</th>
-                                                    <th class="th-border">项目</th>
-                                                    <th class="th-border">联系人</th>
-                                                    <th class="th-border">联系电话</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">优惠</th>
-                                                    <th class="th-border">应付款</th>
-                                                    <th class="th-border">已付款</th>
-                                                    <th class="th-border">付款方式</th>
-                                                    <th class="th-border" style="width: 100px">备注</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>{{each sendGroup.outOtherList as outOther}}
-                                            {{if outOther != null && outOther.name != null}}
-                                                <tr data-entity-id="{{outOther.id}}">
-                                                    <td>{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                                    <td>{{outOther.name}}</td>
-                                                    <td>{{outOther.managerName}}</td>
-                                                    <td>{{outOther.mobileNumber}}</td>
-                                                    <td>{{outOther.price}}</td>
-                                                    <td>{{outOther.memberCount}}</td>
-                                                    <td>{{outOther.reduceMoney}}</td>
-                                                    <td>{{outOther.needPayMoney}}</td>
-                                                    <td>{{outOther.payedMoney}}</td>
-                                                    <td>{{if outOther.payType == 0}}现付{{else if outOther.payType == 1}}签单{{else if outOther.payType == 2}}转账{{else}}网付{{/if}}</td>
-                                                    <td>{{outOther.remark}}</td>
-                                                </tr>{{/if}}{{/each}}
+                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.restaurantPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.restaurantPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
                                             </tbody>
                                         </table>
                                     </div>
@@ -628,8 +759,1039 @@
                             </div>
                         </div>
                     </div>
-                    <div style="clear:both;height:0px;line-height:0px;"></div>
-                </div>
+                {{/if}}
+
+                {{if tripPayMap.hotelPayMap.hotelPayMapList.length != 0}}
+                    <!-- 房费-->
+                    <div class="form-group hotel">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">房费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">酒店</th>
+                                                    <th class="th-border">房型</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.hotelPayMap != null}}
+                                                    {{if tripPayMap.hotelPayMap.hotelPayMapList != null}}
+                                                        {{each tripPayMap.hotelPayMap.hotelPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.hotelName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.roomType}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.hotelPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.hotelPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+                
+                {{if tripPayMap.scenicPayMap.scenicPayMapList.length != 0}}
+                    <!-- 景区-->
+                    <div class="form-group scenic">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">景区</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">景区</th>
+                                                    <th class="th-border">收费项目</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.scenicPayMap != null}}
+                                                    {{if tripPayMap.scenicPayMap.scenicPayMapList != null}}
+                                                        {{each tripPayMap.scenicPayMap.scenicPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.scenicName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.scenicItemName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                 <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                 <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                 <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.scenicPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.scenicPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+                
+                {{if tripPayMap.ticketPayMap.ticketPayMapList.length != 0}}
+                    <!-- 票务-->
+                    <div class="form-group ticket">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">票务</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">票务商家</th>
+                                                    <th class="th-border">类型</th>
+                                                    <th class="th-border">班次</th>
+                                                    <th class="th-border">出发地</th>
+                                                    <th class="th-border">目的地</th>
+                                                    <th class="th-border">座位级别</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">票数</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.ticketPayMap != null}}
+                                                    {{if tripPayMap.ticketPayMap.ticketPayMapList != null}}
+                                                        {{each tripPayMap.ticketPayMap.ticketPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.ticketName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.ticketType == 1}}机票
+                                                                        {{else if item.ticketType== 2}}汽车票
+                                                                        {{else if item.ticketType == 3}}火车票
+                                                                        {{else if item.ticketType == 4}}轮船票
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.shift}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.startingCity}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.arriveCity}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.seatLevel}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="11" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.ticketPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.ticketPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripPayMap.selfPayPayMap.selfpPayPayMapList.length != 0}}
+                    <!-- 自费-->
+                    <div class="form-group self">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">自费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">自费商家</th>
+                                                    <th class="th-border">项目</th>
+                                                    <th class="th-border">底价</th>
+                                                    <th class="th-border">应付数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.selfPayPayMap != null}}
+                                                    {{if tripPayMap.selfPayPayMap.selfpPayPayMapList != null}}
+                                                        {{each tripPayMap.selfPayPayMap.selfpPayPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.selfPayName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.selfPayItemName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.selfPayPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.selfPayPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripPayMap.otherPayMap.otherPayMapList.length != 0}}
+                    <!-- 其他支出-->
+                    <div class="form-group otherOut">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">其他支出</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">项目</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.otherPayMap != null}}
+                                                    {{if tripPayMap.otherPayMap.otherPayMapList != null}}
+                                                        {{each tripPayMap.otherPayMap.otherPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.dateTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.name}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.count}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.billImage != null && item.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.otherPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.otherPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+
+                {{if tripPayMap.guidePayMap.guidePayMapList.length != 0}}
+                    <!-- 导游支出-->
+                    <div class="form-group scenic">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">导游支出</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">开始日期</th>
+                                                    <th class="th-border">结束日期</th>
+                                                    <th class="th-border">任务</th>
+                                                    <th class="th-border">导游</th>
+                                                    <th class="th-border">导服费</th>
+                                                    <th class="th-border">购物导佣</th>
+                                                    <th class="th-border">自费导佣</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripPayMap.guidePayMap != null}}
+                                                    {{if tripPayMap.guidePayMap.guidePayMapList != null}}
+                                                        {{each tripPayMap.guidePayMap.guidePayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.endTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.taskType == 0}}
+                                                                        全程
+                                                                    {{else if item.taskType == 1}}
+                                                                        接机
+                                                                    {{else if item.taskType == 2}}
+                                                                        送机
+                                                                    {{else if item.taskType == 3}}
+                                                                        前段
+                                                                    {{else if item.taskType == 4}}
+                                                                        中段
+                                                                    {{else if item.taskType == 5}}
+                                                                        后段
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.guideName}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.price}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.shopRebateMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.selfPayRebateMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.guidePayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripPayMap.guidePayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+                <div style="clear:both;height:0px;line-height:0px;"></div>
+            </div>
+
+            <!-- 中转成本明细 -->
+            <div id="financial-count-transit-cost" class="tab-pane fade T-print">
+                {{if tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length != 0}}
+                    <!-- 车费-->
+                    <div class="form-group transitBus">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">车费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">用车时间</th>
+                                                    <th class="th-border">车队</th>
+                                                    <th class="th-border">车牌号</th>
+                                                    <th class="th-border">司机</th>
+                                                    <th class="th-border">车费</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripTransitPayMap.busTransitPayMap != null}}
+                                                    {{if tripTransitPayMap.busTransitPayMap.busTransitPayMapList != null}}
+                                                        {{each tripTransitPayMap.busTransitPayMap.busTransitPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.useTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.busCompanyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.licenseNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.driverName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="10" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.busTransitPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.busTransitPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+    
+                {{if tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length != 0}}
+                    <!-- 房费-->
+                    <div class="form-group transitHotel">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">房费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">酒店</th>
+                                                    <th class="th-border">房型</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripTransitPayMap.hotelTransitPayMap != null}}
+                                                    {{if tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList != null}}
+                                                        {{each tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.checkInTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.hotelName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.roomType}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.hotelMemberCount}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="10" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.hotelTransitPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.hotelTransitPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList.length != 0}}
+                    <!-- 餐费-->
+                    <div class="form-group transitRest">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">餐费</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">餐厅</th>
+                                                    <th class="th-border">类型</th>
+                                                    <th class="th-border">餐标(元/人)</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripTransitPayMap.restaurantTransitPayMap != null}}
+                                                    {{if tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList != null}}
+                                                        {{each tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                     {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.restaurantName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.standardType}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.memberCount}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="10" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.restaurantTransitPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.restaurantTransitPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList.length != 0}}
+                    <!-- 票务-->
+                    <div class="form-group transitTicket">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">票务</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">票务商家</th>
+                                                    <th class="th-border">类型</th>
+                                                    <th class="th-border">班次</th>
+                                                    <th class="th-border">出发地</th>
+                                                    <th class="th-border">目的地</th>
+                                                    <th class="th-border">座位级别</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">票数</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripTransitPayMap.ticketTransitPayMap != null}}
+                                                    {{if tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList != null}}
+                                                        {{each tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                     {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.ticketName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.type == 1}}机票
+                                                                        {{else if item.type== 2}}汽车票
+                                                                        {{else if item.type == 3}}火车票
+                                                                        {{else if item.type == 4}}轮船票
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.shift}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.startingCity}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.arriveCity}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.seatLevel}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.memberCount}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="14" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.ticketTransitPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.ticketTransitPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+
+                {{if tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList.length != 0}}
+                    <!-- 其他-->
+                    <div class="form-group transitOther">
+                        <div class=" widget-container-col">
+                            <div class=" ui-sortable-handle">
+                                    <h5>
+                                        <label class="middle title-size">其他</label>
+                                    </h5>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
+                                                    <th class="th-border">日期</th>
+                                                    <th class="th-border">项目</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">优惠</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">结算</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{if tripTransitPayMap.otherTransitPayMap != null}}
+                                                    {{if tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList != null}}
+                                                        {{each tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList as item}}
+                                                            <tr>
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.startTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.name}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.memberCount}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                {{/if}}
+                                                <tr>
+                                                    <td colspan="9" style="text-align:left">合计</td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.otherTransitPayMap.sumNeedPayAllMoney}}
+                                                        </span>
+                                                    </td>
+                                                    <td class="td-border">
+                                                        <span class="F-float F-money">
+                                                            {{tripTransitPayMap.otherTransitPayMap.sumSettlementMoney}}
+                                                        </span>
+                                                    </td>
+                                                </tr
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+                <div style="clear:both;height:0px;line-height:0px;"></div>
             </div>
         </div>
     </div>

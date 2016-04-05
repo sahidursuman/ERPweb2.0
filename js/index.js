@@ -76,11 +76,14 @@
 					window.location.href = "login.html";
 				}
 				else{
+					var $login = $('#loginUserInfo');
+
+					$login.prev().toggleClass('hidden', !data.messageStatus);
 					if(data.realName != ""){//department
 						$(".navbar .light-blue .userName").text(data.realName);
-						$("#loginUserInfo").find(".userName").text(data.realName);
-						$("#loginUserInfo").find(".phoneNumber").text(data.mobileNumber); 
-						$("#loginUserInfo").find(".department").text(data.groupName);  
+						$login.find(".userName").text(data.realName);
+						$login.find(".phoneNumber").text(data.mobileNumber); 
+						$login.find(".department").text(data.groupName);  
 					}
 					else{
 						$(".navbar .light-blue .userName").text(data.userName);
@@ -121,6 +124,7 @@
 				seajs.use("" + ASSETS_ROOT + modalScripts[target],function(module){
 					// module.listGuide(0,"",1);
 					module.init();
+					IndexData.current_model = modalScripts[target];
 				});
 			}
 		});
@@ -130,7 +134,7 @@
 			event.preventDefault();
 			var $that = $(this), $prev = $tabList.find('.active');
 			if ($that.index() != $prev.index()) {  // 通过序号，避免双击将自己设置为前有一个
-				$that.data('prev-tab', $prev);
+				Tools.processTabHistory($that, true);
 			}
 			Tools.justifyTab();
 		})
@@ -176,5 +180,9 @@
 		if ($(window).width() < 1367) {
 			$(document).find("#sidebar-collapse").trigger('click')
 		}
+	});
+
+	$(document).find("#sidebar-collapse").on('click', function(){
+		$(document).trigger('resize');
 	});
 }(window.jQuery);

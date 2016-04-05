@@ -51,10 +51,10 @@
 										<td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 										<td class="T-hotelPrice-{{offer.id}}">
 										{{if room.isContractPrice == 1}}
-											{{room.price}}
+											<span class="F-float F-money">{{room.price}}</span>
 										{{else}}
 											{{if offer.status == '已同意'}}
-												{{room.replyPrice}}
+												<span class="F-float F-money">{{room.replyPrice}}</span>
 											{{else}}
 												-
 											{{/if}}
@@ -99,10 +99,10 @@
 									<tr><td class="T-hotelType-{{offer.id}}">{{room.type}}</td>
 									<td class="T-hotelPrice-{{offer.id}}">
 									{{if room.isContractPrice == 1}}
-										{{room.price}}
+										<span class="F-float F-money">{{room.price}}</span>
 									{{else}}
 										{{if offer.status == '已同意'}}
-											{{room.replyPrice}}
+											<span class="F-float F-money">{{room.replyPrice}}</span>
 										{{else}}
 											-
 										{{/if}}

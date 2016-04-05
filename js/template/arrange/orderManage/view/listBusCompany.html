@@ -1,20 +1,19 @@
-<div class="row col-xs-12 listBusCompany">
-	<table class="table table-striped table-bordered table-hover table-fixed">
+<div class=" listBusCompany">
+	<table class="table table-striped table-bordered table-hover T-showHighLight">
 			<colgroup>
-		    	<col style="width:30%;"></col>
-		    	<col style="width:10%;"></col>
-		    	<col style="width:25%;"></col>
-		    	<col style="width:15%;"></col>
-		    	<col style="width:10%;"></col>
-			 	<col style="width:15%;"></col>
- 				<col style="width:95px"></col>
-		    	<col style="width:95px"></col>
-		    	<col style="width:80px;"></col>
-		 	 	<col style="width:10%;"></col>
-		 	 	<col style="width:100px;"></col>
-		 	 	<col style="width:25%;"></col>
-		 	 	<col style="width:100px;"></col>
-		    </colgroup>
+				<col style="width:175px;">
+				<col style="width:80px;">
+				<col style="width:175px;">
+				<col style="">
+				<col style="width:70px;">
+				<col style="width:150px;">
+				<col style="width:80px">
+				<col style="width:80px">
+				<col style="width:80px;">
+				<col style="width:110px;">
+				<col style="">
+				<col style="width:100px;">
+			</colgroup>
 			<thead>
 				<tr class="bg-blur">
 					<th>订单号</th>
@@ -23,7 +22,6 @@
 					<th>车队</th>
 					<th>车座数</th>
 					<th>车量品牌</th>
-					<th>数量</th>
 					<th>单价</th>
 					<th>金额</th>
 					<th>操作人</th>
@@ -39,11 +37,10 @@
 				    <td>发团</td>
 					<td>{{if busOrderList.tripPlan!=null}}{{busOrderList.tripPlan.tripNumber}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null && busOrderList.busCompanyArrange.busCompany!=null}}{{busOrderList.busCompanyArrange.busCompany.companyName}}{{/if}}</td>
-					<td>{{if !!busOrderList.busCompanyArrange}}{{busOrderList.busCompanyArrange.needSeatCount}}{{/if}}</td>
+					<td class="F-float F-count">{{if !!busOrderList.busCompanyArrange}}{{busOrderList.busCompanyArrange.needSeatCount}}{{/if}}</td>
 					<td>{{if busOrderList.busCompanyArrange!=null}}{{busOrderList.busCompanyArrange.brand}}{{/if}}</td>
-					<td>{{busOrderList.seatCount}}</td>
-					<td>{{busOrderList.price}}</td>
-					<td>{{busOrderList.seatCount*busOrderList.price}}</td>
+					<td class="F-float F-money">{{busOrderList.price}}</td>
+					<td class="F-float F-money">{{busOrderList.seatCount*busOrderList.price}}</td>
 					<td>{{if busOrderList.user!=null}}{{busOrderList.user.realName}}{{/if}}</td>
 					<td>{{if busOrderList.createTime!=null}}{{busOrderList.createTime  | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 					<td>{{busOrderList.remark}}</td>
@@ -62,20 +59,15 @@
 			{{/each}}									
 			</tbody>
 	</table>
-
- 
 	<!--分页条数-->
 	<div class="row pageMode">
-			<div class="col-xs-6">
+			<div class="col-xs-5">
 				<small>共计 {{searchParam.totalCount}} 条记录</small>
 			</div>
-			<div class="col-xs-6">
+			<div class="col-xs-7">
 				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 				</div>
 			</div>
 	</div>
 	<!--分页条数-->	
-
-
-
 </div>

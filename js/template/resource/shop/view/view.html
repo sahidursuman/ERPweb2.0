@@ -28,9 +28,9 @@
 		</tr>
 		<tr>
 			<td class="style-myselfOne">人数返佣(元/人)：</td>
-			<td class="styleOne-self">{{shop.customerRebateMoney}}</td>
+			<td class="styleOne-self"><span class='F-float F-money'>{{shop.customerRebateMoney}}</span></td>
 			<td class="style-myselfOne">停车返佣(辆/人)：</td>
-			<td class="styleOne-self">{{shop.parkingRebateMoney}}	</td>
+			<td class="styleOne-self"><span class='F-float F-money'>{{shop.parkingRebateMoney}}</span></td>
 		</tr>
 		<tr>
 			<td class="style-myself">所在地区：</td>
@@ -54,7 +54,7 @@
 		</tr>
 	</table>
 </form>
-<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+<form class="form-horizontal" id="shopFormCol-x12" role="form" style="margin-top:10px" onsubmit="return false">
 	<table class="whereQ whereTwo">
 		<tr>
 			<td colspan="8" class="HeadManage" style="text-align: left">商品列表</td>
@@ -91,7 +91,7 @@
 			</td>
 			<td class="no-padding" width="200">
 				{{each shopPolicy.shopTimeAreaList as hopTimeArea i}}
-					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}}" style="padding-bottom: 7px;">
+					<div class="col-sm-12{{if i != 0}} border-top{{/if}} price{{i}} T-priceArea" style="padding-bottom: 7px;">
 						{{each hopTimeArea.shopCostRebateList as shopCostRebate}}
 							<label class="col-sm-12 control-label center">
 								{{shopCostRebate.costMoneyStart}} 至 {{shopCostRebate.costMoneyEnd}}<br>

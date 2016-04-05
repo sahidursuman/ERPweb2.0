@@ -60,6 +60,7 @@ define(function(require,exports){
 				pageNo:0,
 				accountName:'',
 				sortType:'atuo',
+				bankAccountNumber:'',
 				status:1
 			};
 			Infrastructure.$listBankhObj = $obj;
@@ -113,6 +114,7 @@ define(function(require,exports){
 			data:{
 				number:number,
 				subjectName:subjectName,
+				type : $obj.find('select[name=selectType]').val(),
 				status:1
 			},
 			success:function(data){
@@ -128,28 +130,42 @@ define(function(require,exports){
 	};
 	//修改会计科目
 	Infrastructure.editAccountant = function($obj,args){
-		var oldTitle = $obj.find('.title').text();
+		var oldTitle = $obj.attr('title'),
+			oldStatus = $obj.attr('status'),
+			oldType = $obj.attr('type');
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
+		var selected = '';
+		if (oldStatus == 0) {
+			selected = 'selected="selected"'
+		};
 		var selectHtml = '<select name="selectStatus">'+
-		'<option value="1">启用</option>'+
-		'<option value="0">停用</option>'+
+		'<option value="1">已启用</option>'+
+		'<option value="0" '+selected+'>已停用</option>'+
 		'</select>';
 		$obj.find('.status').html(selectHtml);
+
+		var selected2 = 'selected="selected"';
+		var typeHtml = '<select name="selectType">'+'<option value="0">收入</option>'+'<option value="1" ';
+		if(oldType == 1){ typeHtml += selected2; }
+		typeHtml += '>支出</option><option value="2"';
+		if(oldType == 2){ typeHtml += selected2; }
+		typeHtml += '>转账</option></select>';
+		$obj.find('.T-type').html(typeHtml);
 		$obj.find('input').off('change').on('change',function(){
 			Infrastructure.installAccData($obj,args);
 		});
 		$obj.find('select').off('blur').on('blur',function(){
 			Infrastructure.installAccData($obj,args);
 		});
-
 	};
 	//组装会计科目数据
 	Infrastructure.installAccData = function($obj,args){
 		var updateData={
 			id:$obj.attr('id'),
 			subjectName:$obj.find('input[name=subjectName]').val(),
-			status:$obj.find('select[name=selectStatus]').val()
+			status:$obj.find('select[name=selectStatus]').val(),
+			type:$obj.find('select[name=selectType]').val()
 		};
 		$.ajax({
 			url:KingServices.build_url('subject','updateSubject'),
@@ -169,7 +185,8 @@ define(function(require,exports){
 	Infrastructure.listBankAcc = function(args,$obj){
 		if(arguments.length == 3){
 			var $searchArea = Infrastructure.$listBankhObj.find('.T-search-area');
-			args.accountName = $searchArea.find('input[name=bankAccountNumber]').val();
+			//args.accountName = $searchArea.find('input[name=bankAccountNumber]').val();
+			args.bankAccountNumber = $searchArea.find('input[name=bankAccountNumber]').val();
 			args.status = $searchArea.find(".T-status").find("button").data("value");
 		};
 		args.pageNo = args.pageNo || 0;
@@ -182,6 +199,11 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.newBankAccountList = JSON.parse(data.newBankAccountList);
+					for(var i = 0;i<data.newBankAccountList.length;i++){
+						var bankNumber = data.newBankAccountList[i].bankAccountNumber || "";
+						bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+						data.newBankAccountList[i].bankAccountNumber = bankNumber;
+					}
 					var html = bankAccTemplate(data);
 					$obj.html(html);
 					//绑定事件
@@ -246,9 +268,9 @@ define(function(require,exports){
 		var html = addTemolate();
 		var addBankAccLayer = layer.open({
 			type: 1,
-			title:"新增银行账户",
+			title:"新增资金账户",
 			skin: 'layui-layer-rim', //加上边框
-			area: '600px', //宽高
+			area: '800px', //宽高
 			zIndex:1028,
 			content: html,
 			scrollbar: false,
@@ -256,6 +278,10 @@ define(function(require,exports){
 				var $addTabObj = $('.T-bankAcc-container');
 				//给添加页面绑定事件
 				Infrastructure.bankAccEvent($addTabObj,args,$obj,1);
+
+				$addTabObj.find('.T-btn-close').on("click",function(){
+					layer.close(addBankAccLayer);
+				});
 			}
 		});
 		Infrastructure.addLayer = addBankAccLayer;
@@ -270,13 +296,20 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					console.log(data);
 					data.bankAccount = JSON.parse(data.bankAccount);
-					console.log(data);
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
+					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+					data.bankAccount.bankAccountNumber = bankNumber;
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '修改资金账户'
+					}else{
+						typeTitle = '修改银行账户'
+					};				
 					var html = updateTemplate(data);
 					var updateBankAccLayer = layer.open({
 						type: 1,
-						title:"修改银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,
@@ -284,6 +317,7 @@ define(function(require,exports){
 						scrollbar: false,
 						success:function(){
 							var $updateTabObj = $('.T-bankAcc-container');
+							
 							//给添加页面绑定事件
 							Infrastructure.bankAccEvent($updateTabObj,args,$obj,2);
 						}
@@ -297,13 +331,38 @@ define(function(require,exports){
 	Infrastructure.bankAccEvent = function($obj,args,$parentObj,typeFlag){
 		//格式化日期格式
 		Infrastructure.formatDate($obj);
-		
+		//格式化银行账号
+		var $inputObj = $obj.find('input[name=bankNumber]');
+		Infrastructure.formatBank($inputObj);
 		//表单验证
 		var validator = rule.check($obj);
+		if(typeFlag == 2){
+			var incomeMoney = $obj.find('input[name=incomeMoney]').val();
+			var payMoney = $obj.find('input[name=payMoney]').val();
+			if(incomeMoney != 0 || payMoney != 0){
+				//提示
+				$obj.find('input[type=text]').each(function(index, el) {
+					var $that = $(this);
+
+					if ($that.hasClass('T-edit-feild')) {
+						$that.prop('disabled',true);
+					}
+				});
+			};
+		}
+		if($obj.find(".T-mainForm").data('type') != "1"){
+			$obj.find(".T-cashHidden").addClass('hidden');
+		}
+		$obj.find('.T-accountType').on("change",function(){
+			if($(this).val() == 0){
+				$obj.find(".T-cashHidden").addClass('hidden');
+			} else {
+				$obj.find(".T-cashHidden").removeClass('hidden');
+			}
+		});
 
 		//提交事件
 		$obj.find('.T-submit').on('click',function(){
-
 			if(!validator.form()){return;};
 			var subData = Infrastructure.installData($obj,typeFlag);
 			var method = typeFlag == 2 ? 'updateBank':'addBank'
@@ -336,10 +395,19 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					data.bankAccount = JSON.parse(data.bankAccount);
+					var bankNumber = data.bankAccount.bankAccountNumber || "";
+					bankNumber = bankNumber.replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");
+					data.bankAccount.bankAccountNumber = bankNumber;
+					var typeTitle = "";
+					if(data.bankAccount.type == 0){
+						typeTitle = '查看资金账户'
+					}else{
+						typeTitle = '查看银行账户'
+					};
 					var html = viewTemplate(data);
 					var viewBankAccTemplate = layer.open({
 						type: 1,
-						title:"查看银行账户",
+						title:typeTitle,
 						skin: 'layui-layer-rim', //加上边框
 						area: ['800px'], //宽高
 						zIndex:1028,
@@ -378,6 +446,13 @@ define(function(require,exports){
 			language: 'zh-CN'
 		});
 	};
+	//格式化银行账户
+	Infrastructure.formatBank = function($obj){
+		$obj.keyup(function(){  
+	        var value=$(this).val().replace(/\s/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");    
+	        $(this).val(value); 
+        }) 
+	};
 	//组装url
 	Infrastructure.Url = function(method){
 		var url = KingServices.build_url('bank',method);
@@ -386,20 +461,44 @@ define(function(require,exports){
 	//组装数据
 	Infrastructure.installData = function($obj,typeFlag){
 		var status = 0,
-		    checkStatus = $obj.find('.T-checkStatus').is(':checked');
+		    checkStatus = $obj.find('.T-checkStatus').is(':checked'),
+		    type;
 		if(checkStatus){
 			status = 1;
 		};
-		var subData = {
-			accountName:$obj.find('input[name=accountName]').val(),
-			bankAccountNumber:$obj.find('input[name=bankNumber]').val(),
-			beginningBalance:$obj.find('input[name=balanceMoney]').val(),
-			beginningTime:$obj.find('input[name=startTime]').val(),
-			openingBank:$obj.find('input[name=bankName]').val(),
-			remark:$obj.find('textarea[name=remark]').val(),
-			status:status,
-			id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
-		};
+		
+		if ($obj.find('.T-accountType').length) {
+			type = $obj.find('.T-accountType').val();
+		} else {
+			type = $obj.find(".T-mainForm").data('type');
+		}
+
+		if(type == 0){
+			var subData = {
+				type : type,
+				aliasName:$obj.find('input[name=aliasName]').val(),
+				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
+				beginningTime:$obj.find('input[name=startTime]').val(),
+				remark:$obj.find('textarea[name=remark]').val(),
+				status:status,
+				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
+			};
+		}else{
+			var bankNumber = $obj.find('input[name=bankNumber]').val().replace(/\s+/g, "");
+			var subData = {
+				type : type,
+				aliasName:$obj.find('input[name=aliasName]').val(),
+				accountName:$obj.find('input[name=accountName]').val(),
+				bankAccountNumber:bankNumber,
+				beginningBalance:$obj.find('input[name=balanceMoney]').val(),
+				beginningTime:$obj.find('input[name=startTime]').val(),
+				openingBank:$obj.find('input[name=bankName]').val(),
+				remark:$obj.find('textarea[name=remark]').val(),
+				status:status,
+				id:typeFlag == 2 ? $obj.find('input[name=bankNumberId]').val():'',
+			};
+		}
+		
 		return subData;
 	};
 	exports.init = Infrastructure.initModule;

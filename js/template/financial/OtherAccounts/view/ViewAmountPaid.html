@@ -14,9 +14,9 @@
 	<tr>
 		<td>{{paid.receivableType}}</td>
 		<td>{{paid.businessType}}</td>
-		<td>{{paid.payParty}}</td>
-		<td>{{paid.payDifferenceMoney}}</td>
-		<td>{{paid.payType | getPayTypeText}}</td>
+		<td class="F-float F-money">{{paid.payParty}}</td>
+		<td class="F-float F-money">{{paid.payDifferenceMoney}}</td>
+        <td>{{if paid.payParty == '社付'}}{{paid.payType | getPayTypeText}}{{else}}{{paid.payType | getPlanPayTypeText}}{{/if}}</td>
 		<td>{{paid.remark}}</td> 
 		<td>{{paid.checkRealname}}</td>
 		<td>{{paid.checkTime}}</td>

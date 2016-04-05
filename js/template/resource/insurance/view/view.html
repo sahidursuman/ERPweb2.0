@@ -49,8 +49,8 @@
         {{each insurance.insuranceItemList as rs}}
         <tr data-entity-id="{{rs.id}}">
             <td>{{rs.name}}</td>
-            <td>{{rs.price}}</td>
-            <td>{{rs.days}}天</td>
+            <td><span class='F-float F-money'>{{rs.price}}</span></td>
+            <td><span class='F-float F-count'>{{rs.days}}<span>天</td>
             <td>{{rs.type}}</td>
             <td>{{rs.remark}}</td>
         </tr>

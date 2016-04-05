@@ -1,10 +1,14 @@
 {{each list as rs}}
     <tr data-id='{{rs.id}}'>
         <td>{{rs.orgName}}</td>
-        <td>{{rs.needPayMoney}}</td>
-        <td>{{rs.payedMoney}}</td>
-        <td><span{{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>
-        <td>
+        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+        <td class="F-float F-money">{{rs.payedMoney}}</td>
+        <td><span class="F-float F-money" {{if rs.needPayMoney != rs.payedMoney}} style="color: #f00;"{{/if}}>{{rs.unPayedMoney}}</span></td>
+        <td>{{if currentType == 10 }}
+        		<a class="cursor T-action T-pay-borrow">借款
+        			<label style="padding-left:5px;">|</label>
+        		</a>
+        	{{/if}}
             <a class="cursor T-action T-pay-task R-right" data-right="1290002">付款</a>
         </td>
     </tr>

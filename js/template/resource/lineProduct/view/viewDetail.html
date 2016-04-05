@@ -10,41 +10,102 @@
             <div class="widget-body">
                 <div class="widget-main">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">线路产品名称:</label>
-                        <div class="col-sm-3">
+                        <label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
+                        <div class="col-sm-2">
                             <label class="control-label">{{viewLineProduct.lineProduct.name}}</label>
                         </div>
-                        <label class="col-sm-2 control-label no-padding-right">线路天数:</label>
-                        <div class="col-sm-3">
+                        <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
+                        <div class="col-sm-2">
                             <label class="control-label">{{viewLineProduct.lineProduct.days}}</label>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">线路类型:</label>
-                        <div class="col-sm-3">
-                            <label class="control-label">{{viewLineProduct.lineProduct.type}}</label>
+                        <label class="col-sm-1 control-label no-padding-right">线路模板:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label">{{viewLineProduct.lineProduct.travelLine.name}}</label>
                         </div>
-                        <label class="col-sm-2 control-label no-padding-right">针对客源:</label>
-                        <div class="col-sm-3">
-                            <label class="control-label">
-                                {{if viewLineProduct.lineProduct.customerType == 1}} 团体 {{else}} 散客 {{/if}}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">是否启用:</label>
-                        <div class="col-sm-8">
+                        <label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+                        <div class="col-sm-2">
                             <label class="control-label">
                                 {{if viewLineProduct.lineProduct.status == 1}} 已启用 {{else}} 已停用 {{/if}}
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">线路产品备注:</label>
+                        <label class="col-sm-1 control-label no-padding-right">线路类型:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label">{{viewLineProduct.lineProduct.type}}</label>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">针对客源:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label">
+                                {{if viewLineProduct.lineProduct.customerType == 1}} 团体 {{else}} 散客 {{/if}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{if !!viewLineProduct.lineProduct.shopNames}}
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label" style="text-align: left">{{viewLineProduct.lineProduct.shopNames}}</label>
+                        </div>
+                        {{/if}}
+                        {{if !!viewLineProduct.lineProduct.selfPayItemNames}}
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label" style="text-align: left">{{viewLineProduct.lineProduct.selfPayItemNames}}</label>
+                        </div>
+                        {{/if}}
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">备注:</label>
                         <div class="col-sm-8">
                             <label class="control-label linepRemark">{{viewLineProduct.lineProduct.remark}}</label>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-xs-12 col-sm-12 widget-container-col">
+    <form class="form-horizontal T-guideService-form" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class=" ui-sortable-handle">
+            <h5 class="widget-title">
+                <h5 class="pull-left title-size">
+                    <i class="ace-icon fa fa-calendar-minus-o"></i>
+                    <label class="middle title-size">导游服务标准</label>
+                </h5>
+                <div class="pull-right line-bluer  line-separatedT"></div>
+                <div style="clear: both"></div>
+                
+            </h5>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <table class="table table-striped table-bordered table-hover T-showHighLight table-fixed" 
+                    style="border: 1px solid #ddd;">
+                    <colgroup>
+                        <col style="width:15%;"></col>
+                        <col style="width:30%;"></col>
+                        <col style="width:30%;"></col>
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="th-border">服务标准</th>
+                                <th class="th-border">服务内容</th>
+                                <th class="th-border">服务要求</th>
+                            </tr>
+                        </thead>
+                        <tbody class="T-service-list">
+                        {{each serviceStandardList as service}}
+                            <tr serviceId="{{service.id}}" name="{{service.serviceTitle}}" content="{{service.serviceContent}}" require = "{{service.serviceRequire}}">
+                                <td>{{service.serviceTitle}}</td>
+                                <td class="T-ctrl-tip" title="{{service.serviceContent}}">
+                                <span style="height: 35px">{{service.serviceContent}}</span></td>
+                                <td class="T-ctrl-tip" title="{{service.serviceRequire}}">
+                                <span style="height: 35px">{{service.serviceRequire}}</span></td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -82,25 +143,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{if viewLineProduct.insuranceTemplate != null}}
+                                        {{each viewLineProduct.insuranceTemplate as rs}}
                                         <tr>
-                                            {{if viewLineProduct.insuranceTemplate != null}}
-                                            <td>{{viewLineProduct.insuranceTemplate.insurance.name}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.type}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.price || 0}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.insurance.telNumber}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.insurance.managerName}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.insurance.mobileNumber}}</td>
-                                            <td>{{viewLineProduct.insuranceTemplate.remark}}</td>
-                                            {{else}}
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            {{/if}}
+                                            <td>{{rs.insurance.name}}</td>
+                                            <td>{{rs.type}}</td>
+                                            <td>{{rs.price || 0}}</td>
+                                            <td>{{rs.insurance.telNumber}}</td>
+                                            <td>{{rs.insurance.managerName}}</td>
+                                            <td>{{rs.insurance.mobileNumber}}</td>
+                                            <td>{{rs.remark}}</td>
                                         </tr>
+                                        {{/each}}
+                                        {{else}}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        {{/if}}
                                     </tbody>
                                 </table>
                             </div>
@@ -120,34 +185,30 @@
                                     <thead>
                                         <tr>
                                             <th class="th-border">需求座位数</th>
-                                            <th class="th-border">车队名称</th>
-                                            <th class="th-border">车辆牌照</th>
-                                            <th class="th-border">座位价</th>
-                                            <th class="th-border">实际座位数</th>
-                                            <th class="th-border">联系电话</th>
+                                            <th class="th-border">车辆品牌</th>
                                             <th class="th-border">备注</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{if viewLineProduct.busCompanyTemplate != null}}
+                                        {{each viewLineProduct.busCompanyTemplate as rs}}
                                         <tr>
-                                            {{if viewLineProduct.busCompanyTemplate != null}}
-                                            <td>{{viewLineProduct.busCompanyTemplate.needSeatCount}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.busCompany.companyName}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.bus.licenseNumber}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.price}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.bus.seatCount}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.busCompany.mobileNumber}}</td>
-                                            <td>{{viewLineProduct.busCompanyTemplate.remark}}</td>
-                                            {{else}}
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            {{/if}}
+                                            <td>{{rs.needSeatCount}}</td>
+                                            <td>{{rs.brand}}</td>
+                                            <td>{{rs.remark}}</td>
                                         </tr>
+                                        {{/each}}
+                                        {{else}}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        {{/if}}
                                     </tbody>
                                 </table>
                             </div>
@@ -185,7 +246,7 @@
                                 <div class="ui-sortable-handle">
                                     <h5 class="">
 
-											<label class="middle title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
+											<label class="middle title-size">简要行程：{{lineProductDaysList.lineProductDay.title}}</label>
 										</h5>
 
 
@@ -219,9 +280,9 @@
                                                                                         <tr>
                                                                                             <td>{{restaurantList.restaurant.name}}</td>
                                                                                             <td>{{restaurantList.restaurant.mobileNumber}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.type}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.price}}</td>
-                                                                                            <td>{{restaurantList.restaurantStandard.menuList}}</td>
+                                                                                            <td>{{restaurantList.type}}</td>
+                                                                                            <td>{{restaurantList.price}}</td>
+                                                                                            <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}</td>
                                                                                             <td>{{restaurantList.remark}}</td>
                                                                                         </tr>
                                                                                     </tbody>
@@ -232,8 +293,8 @@
                                                                 </div>
                                                                 {{/each}}
                                                                 <!-- /.酒店安排 -->
-                                                                {{each lineProductDaysList.hotelTemplate as hotelList}}
-                                                                <div class="timeline-item clearfix viewLineProductDaysDetail" data-entity-index="{{hotelList.orderIndex}}">
+                                                                {{if lineProductDaysList.hotelTemplate.length > 0}}
+                                                                <div class="timeline-item clearfix viewLineProductDaysDetail" data-entity-index="{{each lineProductDaysList.hotelTemplate as hotelList index}}{{if index == 0}}{{hotelList.orderIndex}}{{/if}}{{/each}}">
                                                                     <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                         <i class="ace-icon fa fa-circle"></i>
                                                                         <span>酒店</span>
@@ -254,6 +315,7 @@
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
+                                                                                        {{each lineProductDaysList.hotelTemplate as hotelList}}
                                                                                         <tr>
                                                                                             <td>
                                                                                                 {{if hotelList.hotel.level == 1}} 三星以下 {{else if hotelList.hotel.level == 2}} 三星 {{else if hotelList.hotel.level == 3}} 准四星 {{else if hotelList.hotel.level == 4}} 四星 {{else if hotelList.hotel.level == 5}} 准五星 {{else if hotelList.hotel.level == 6}} 五星 {{else}} 五星以上 {{/if}}
@@ -268,13 +330,14 @@
                                                                                             <!-- <td>{{if hotelList.hotel.payType == 0}}现付{{else}}账期{{/if}}</td> -->
                                                                                             <td>{{hotelList.remark}}</td>
                                                                                         </tr>
+                                                                                        {{/each}}
                                                                                     </tbody>
                                                                                 </table>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                {{/each}}
+                                                                {{/if}}
                                                                 <!-- /.景区安排  -->
                                                                 {{each lineProductDaysList.scenicTemplate as scenicList}}
                                                                 <div class="timeline-item clearfix viewLineProductDaysDetail" data-entity-index="{{scenicList.orderIndex}}">
@@ -425,12 +488,12 @@
                                                                     </div>
                                                                 </div>
                                                                 {{/each}}
-                                                                <!-- /.其他安排 -->
+                                                                <!-- /.其它安排 -->
                                                                 {{each lineProductDaysList.otherTemplate as otherList}}
                                                                 <div class="timeline-item clearfix viewLineProductDaysDetail" data-entity-index="{{otherList.orderIndex}}">
                                                                     <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                         <i class="ace-icon fa fa-circle"></i>
-                                                                        <span>其他</span>
+                                                                        <span>其它</span>
                                                                     </div>
                                                                     <div class="widget-box transparent" style="margin-top: 20px">
                                                                         <div class="widget-body">

@@ -10,12 +10,12 @@
 	            <span class="control-label">{{lineProductInfo.type}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
-	            <span class="pull-left align-right no-padding-right">应用范围：</span>
+	            <span class="pull-left align-right no-padding-right">针对客源：</span>
 	            <span class="control-label">{{lineProductInfo.customerType}}</span>
 	        </div>
 			<div class="col-sm-3 font-size-12 ">
 	            <span class="pull-left align-right no-padding-right">天数：</span>
-	            <span class="control-label">{{lineProductInfo.days}}</span>
+	            <span class="control-label"><span class="F-float F-count">{{lineProductInfo.days}}</span></span>
 	        </div>
 			<div class="col-sm-3 font-size-12 margin-top10">
 	            <span class="pull-left align-right no-padding-right">出团日期：</span>
@@ -23,7 +23,7 @@
 	        </div>
 			<div class="col-sm-3 font-size-12 margin-top10">
 	            <span class="pull-left align-right no-padding-right">人数：</span>
-	            <span class="control-label">{{lineProductInfo.adultCount}}大{{lineProductInfo.childCount}}小</span>
+	            <span class="control-label"><span class="F-float F-count">{{lineProductInfo.adultCount}}</span>大<span class="F-float F-count">{{lineProductInfo.childCount}}</span>小</span>
 	        </div>
 		</div>
 		<div class="search-area clearfix" style="margin: 18px 0;border-top: 1px dotted #ccc;padding: 20px 0;border-bottom: 1px dotted #ccc;">
@@ -59,7 +59,7 @@
 					</div>
 					<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>数量:</label>
 					<div class="col-sm-2">
-						<input type="text" class="col-sm-12 hotelQuoteWidth" name="roomCount" value="{{}}"/>
+						<input type="text" class="col-sm-12 hotelQuoteWidth F-float F-count" name="roomCount" value="{{}}"/>
 					</div>
 					<label class="pull-left text-right control-label no-padding-right"><span class="necessary">*</span>询价截止时间:</label>
 					<div class="col-sm-2">

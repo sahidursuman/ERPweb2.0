@@ -4,7 +4,7 @@
 			{{lineProduct.name}}
 		</td>
 		<td>
-			{{lineProduct.days}}天
+			<span class="F-float F-count">{{lineProduct.days}}</span>天
 		</td>
 		<td>
 			{{lineProduct.type}}
@@ -16,6 +16,7 @@
 			团体
 			{{/if}}
 		</td>
+		<td>{{if !!lineProduct.businessGroup}}{{lineProduct.businessGroup.name}} {{/if}}</td>
 		<td>
 			<label class="choice-TravelLine-click">
 				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">

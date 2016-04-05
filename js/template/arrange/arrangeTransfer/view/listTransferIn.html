@@ -1,115 +1,81 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
-<thead>
-	<tr class="bg-blur">
-		<th>同行线路产品</th>
-		<th>天数</th>
-		<th>出游日期</th>
-		<th>游客</th>
-		<th>人数</th>
-		<th>来源总社</th>
-		<th>转客人</th>
-		<th>联系电话</th>
-		<th>应收</th>
-		<th>已收</th>
-		<th>现收</th>
-		<th>我方状态</th>
-		<th>操作</th>
-	</tr>
-</thead>
- <tbody class="T-listTransferIn">
- 	{{each result as result}}
-		<tr data-value="{{result.id}}">
-			<td>{{if result.lineProduct != null}}{{result.lineProduct.name}}{{/if}}</td>
-			<td>{{if result.lineProduct != null}}{{result.lineProduct.days}}{{/if}}</td>
-			<td>{{result.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-			<td>{{if result.touristGroup!=null}}{{if result.touristGroup.contactMember!=null}}{{result.touristGroup.contactMember.name}}{{/if}}{{/if}}</td>
-
-			<td>{{if result.touristGroup!=null}}{{result.touristGroup.adultCount}}{{/if}}大{{if result.touristGroup!=null}}{{result.touristGroup.childCount}}{{/if}}小</td>
-
-			<td>
-				{{if result.fromName!=null}}
-					{{result.fromName}}
-				{{/if}}
-			</td>
-
-			<td>
-			   {{if result.user!=null}}
-					{{if result.user.realName!=null}}
-				        {{result.user.realName}}
-				 	{{/if}}
-				{{/if}}
-			</td>
-  
-
-			<td>
-			   {{result.fromNumber}}
-			</td>
-
-			<td>{{if result.touristGroup != null}}{{result.touristGroup.transNeedPayAllMoney}}{{/if}}</td>
-			<td>{{if result.touristGroup != null}}{{result.touristGroup.transPayedMoney}}{{/if}}</td>
-			<td>{{result.touristGroup.currentNeedPayMoney}}</td>  
-			<td class="result-status">{{if result.transName==null}}未使用{{else}}{{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>{{else if result.status == 1}}<span style="color: green;" data-status="1">已接收</span>{{else}}<span style="color: red;" data-status="2">已拒收</span>{{/if}}{{/if}}</td>
-			  <td>
-				<div class="hidden-sm hidden-xs btn-group">
-					<a data-value="{{result.id}}" class="cursor T-transferIn-view T-action">
+    <thead>
+        <tr class="bg-blur">
+            <th>同行线路信息</th>
+            <th>天数</th>
+            <th>游客</th>
+            <th>客户总社</th>
+            <th>转客人</th>
+            <th>联系电话</th>
+            <th>应收</th>
+            <!-- <th>已收</th> -->
+            <th>现收</th>
+            <th>我方状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="T-listTransferIn">
+        {{each result as result}}
+        <tr data-value="{{result.id}}" data-status="{{result.status}}">
+            <td class="h-touristGroupInfo">
+                {{if result.lineProduct != null}}<p class="h-orderNumber">{{result.lineProduct.name}}</p>{{/if}}
+                <p class="">
+                    <span class="h-lineName">{{result.startTime | dateFormat:'yyyy-MM-dd'}}</span>
+                    <span class="F-float F-count">{{if result.touristGroup!=null}}{{result.touristGroup.adultCount}}{{/if}}</span>大
+                    <span class="F-float F-count">{{if result.touristGroup!=null}}{{result.touristGroup.childCount}}{{/if}}</span>小
+                </p>
+            </td>
+            <td><span class="F-float F-count">{{if result.lineProduct != null}}{{result.lineProduct.days}}{{/if}}</span></td>
+            <td>{{if result.touristGroup!=null}}{{if result.touristGroup.contactMember!=null}}{{result.touristGroup.contactMember.name}}{{/if}}{{/if}}</td>
+            <td>
+                {{if result.fromName!=null}} {{result.fromName}} {{/if}}
+            </td>
+            <td>
+                {{if result.user!=null}} {{if result.user.realName!=null}} {{result.user.realName}} {{/if}} {{/if}}
+            </td>
+            <td>
+                {{result.fromNumber}}
+            </td>
+            <td><span class="F-float F-money">{{if result.touristGroup != null}}{{result.touristGroup.transNeedPayAllMoney}}{{/if}}</span></td>
+            <td><span class="F-float F-money">{{result.touristGroup.currentNeedPayMoney}}</span></td>
+            <td class="result-status">
+            {{if result.transName==null}}未使用{{else}}
+            {{if result.status == 0}}<span style="color:#D2691E;" data-status="0">未确认</span>
+            {{else if result.status == 1}}<span style="color: green;" data-status="1">已确认</span>
+            {{else if result.status == 4}}<span style="color: red;" data-status="4">已退回</span>
+            {{/if}}{{/if}}</td>
+            
+            <td>
+                <div class="btn-group">
+                    <a data-value="{{result.id}}" class="cursor T-transferIn-view T-action">
 						查看
 					</a>
-					<a data-value="{{result.id}}" class="cursor {{if result.status == 0}}T-transferIn-confirm{{/if}}  R-right T-action"  style="{{if result.status==1 || result.status ==2}} color:#bbb; {{/if}}" data-right="1180007">
-						<label class="padding-right20">|</label>
-						确认
-					</a>
-					<a data-value="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=2}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==1 || result.status==2}} color:#bbb; {{/if}}"  data-right="1180008">
-						<label class="padding-right20">|</label>
-						拒绝
-					</a>
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!=4}}T-transferIn-confirm{{/if}}  R-right T-action" style="{{if result.status==1 || result.status==4 }} color:#bbb; {{/if}}" data-right="1180007">
+                        <label class="padding-right20">|</label>
+                        确认
+                    </a>
+                    <a data-value="{{result.id}}" class="cursor {{if result.status!=1 && result.status!=4}}T-transferIn-refuse{{/if}} R-right T-action" style="{{if result.status==1 || result.status==4}} color:#bbb; {{/if}}" data-right="1180008">
+                        <label class="padding-right20">|</label>
+                        拒绝
+                    </a>
 
-				</div>
+                    <a data-value="{{result.id}}" class="cursor  {{if result.status==1}}T-returnTransferIn-refuse{{/if}} R-right T-action" style="{{if result.status!=1}} color:#bbb; {{/if}}" data-right="1180008">
+                        <label class="padding-right20">|</label>
+                        退回
+                    </a>
 
-				<div class="hidden-md hidden-lg">
-					<div class="inline pos-rel">
-						<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-							<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-						</button>
-
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-
-							<li>
-								<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transferIn-view" data-rel="tooltip">
-									<span class="red">
-										<i class="ace-icon fa fa-search-plus bigger-120"></i>
-									</span>
-								</a>
-							</li>
-
-							<li>
-								<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-success T-transferIn-confirm" data-rel="tooltip">
-									<span class="green">
-										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-
-					        <li>
-								<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transferIn-refuse" data-rel="tooltip">
-									<span class="red">
-										<i class="ace-icon fa fa-trash-o bigger-120"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</td>
-		</tr>
-	   {{/each}}
-	</tbody>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>
 <div class="row pageMode">
-	<div class="col-xs-6">
-		<small>共计 {{searchParam.totalCount}}条记录</small>
-	</div>
-	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-		</div>
-	</div>
+    <div class="col-xs-5">
+        <small>共计 {{searchParam.totalCount}}条记录</small>
+    </div>
+    <div class="col-xs-7">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
 </div>

@@ -1,0 +1,63 @@
+<div class="col-xs-12" style="margin-top:5px">
+	<input name="searchKey" class="col-xs-3 input-default-height guideInputList T-lineproduct-name" value="{{searchKey}}" placeholder="请输入线路产品或团号"/>&nbsp;
+	<button class=" btn-sm  T-lineProduct-search pull-left search-btn">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
+</div>
+<div class="col-xs-12" style="margin-top:10px">
+	<table class="table table-striped table-bordered table-hover search-travelLineList-table T-chex-radio">
+		<thead>
+		<tr>
+			<td>团号</td>
+			<td>线路产品</td>
+			<td>出团日期</td>
+			<td>完团日期</td>
+			<td>导游</td>
+			<td>团队人数</td>
+			<td>剩余座数</td>
+			<td>状态</td>
+			<td>选择计划</td>
+		</tr>
+		</thead>
+		<tbody class="T-chosenTrip-list">{{each tripPlanList as tripPlanList}}
+			<tr data-value="{{tripPlanList.id}}"  data-seatCount ="{{if tripPlanList.bus!=null}}{{tripPlanList.bus.seatCount}}{{/if}}"  data-adultCount="{{tripPlanList.touristAdultCount}}"   data-childCount="{{tripPlanList.touristChildCount}}">
+				
+				<td>{{tripPlanList.tripNumber}}</td>
+				<td>{{tripPlanList.lineProductName}}</td>
+				<td>{{tripPlanList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{tripPlanList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td>{{tripPlanList.guideName}}</td>
+				<td class="F-float F-count">{{tripPlanList.touristCount}}</td>
+				<td class="T-remainSeatCount">{{tripPlanList.leaveCount}}</td>
+				<td>
+					{{if tripPlanList.status==0}}未发团
+						{{else}}已发团
+					{{/if}}
+				</td>
+				<td>
+					<label class="pos-rel">
+						<input type="radio" class="ace ridioCheck" name="form-field-radio">
+						<span class="lbl"></span>
+					</label>
+				</td>
+			</tr>{{/each}}
+	    </tbody>
+	</table>
+	<div class="row pageMode">
+		<div class="col-xs-5">
+			<small>共计 <small class="T-total">{{recordSize}}</small> 条记录</small>
+		</div>
+		<div class="col-xs-7">
+			<div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
+		</div>
+	</div>
+
+	<div class="space-10"></div>
+	<form class="form-horizontal" role="form" onsubmit="return false" style="margin-top:25px;"> 
+		<div class="form-group col-sm-12" style="text-align: center;"> 
+			<button class="btn btn-sm btn-danger T-cancelChooseTipPlan otherButton"> <i class="ace-icon fa fa-times "></i> 取消 </button> 
+			<button class="btn btn-sm btn-primary T-savechooseTipPlan otherButton" style="margin-left: 30px"> <i class="ace-icon fa fa-check"></i> 确定 </button>
+		</div>
+	</form>
+</div>

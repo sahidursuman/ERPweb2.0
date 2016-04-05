@@ -13,7 +13,11 @@ define(function(require, exports) {
 	rule.traveLineCheckor = function($container)  {
 		this.$container = $container;
 
-		var settings = [
+		return $container.formValidate(this.getTraveLineSettings(this.$container));
+	};
+
+	rule.getTraveLineSettings = function($container) {
+		return settings = [
 			{
 				$ele: $container.find('input[name="name"]'),
 				rules: [
@@ -22,10 +26,23 @@ define(function(require, exports) {
 						errMsg: '线路名称不能为空'
 					}
 				]
+			},
+			{
+				$ele: $container.find('input[name="BriefTrip"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '简要行程不能为空'
+					}
+				]
 			}
 		];
+	};
 
-		return $container.formValidate(settings);
+	rule.update = function(validator) {
+		validator.update(this.getTraveLineSettings(this.$container));
+
+		return validator;
 	};
 
 	/**
@@ -96,6 +113,15 @@ define(function(require, exports) {
 					{
 						type: 'null',
 						errMsg: '线路产品名称不能为空'
+					}
+				]
+			},
+			{
+				$ele: $mainForm.find('input[name="BriefTrip"]'),
+				rules: [
+					{
+						type: 'null',
+						errMsg: '简要行程不能为空'
 					}
 				]
 			}

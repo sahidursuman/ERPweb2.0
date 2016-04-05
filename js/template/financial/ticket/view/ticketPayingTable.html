@@ -5,16 +5,16 @@
         <td>{{if rs.type == 1}}机票{{else if rs.type == 2}}汽车票{{else if rs.type == 3}}火车票{{else if rs.type == 4}}轮船票{{/if}}</td>
         <td>{{rs.shift}}</td>
         <td>{{rs.seatLevel}}</td>
-        <td>{{rs.price}}</td>
-        <td>{{rs.memberCount}}</td>
-        <td>{{rs.reduceMoney}}</td>
-        <td>{{rs.needPayMoney}}</td>
-        <td class="T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}"><a class="cursor T-action T-payDetails">社付{{rs.payedMoney}}{{if rs.isGuidePay != 1}}，导付{{rs.realGuidePayMoney}}{{/if}}</a></td>
+        <td class="F-float F-money">{{rs.price}}</td>
+        <td class="F-float F-count">{{rs.memberCount}}</td>
+        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+        <td class="T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}"><a class="cursor T-action T-payDetails">社付<span class="F-float F-money" >{{rs.payedMoney}}{{if rs.isGuidePay != 1}}</span>，导付<span class="F-float F-money" >{{rs.realGuidePayMoney}}{{/if}}</span></a></td>
         <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
-        <td>{{rs.settlementMoney}}</td>
-        <td>{{rs.unPayedMoney}}</td>
-        <td><input type="text" class="col-sm-12 T-reciveMoney" name="payMoney" data-le="{{rs.unPayedMoney}}" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}} value="{{rs.payMoney}}"></td>
-        <td><input type="text" class="col-sm-12 T-payRemark" name="payRemark" {{if !source && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
+        <td class="F-float F-money">{{rs.settlementMoney}}</td>
+        <td class="F-float F-money">{{rs.unPayedMoney}}</td>
+        <td><input type="text" class="col-sm-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
+        <td><textarea class="col-sm-12 hct-textarea T-payRemark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
         <td>{{rs.checkTime}}</td>
         <td>{{rs.checkUserName}}</td>
         <td>

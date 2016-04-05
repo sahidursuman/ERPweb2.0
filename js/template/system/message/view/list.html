@@ -1,54 +1,48 @@
-<div class="operation-area clearfix">
-	<button class="pull-right btn btn-sm btn-success T-set-read-all {{if !unReadMsgCount }} hidden {{/if}}">全部标记为已读</button>
-</div>
-<div class="row">
-    <div class="col-xs-12">
-        <table id="simple-table" class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
-            <colgroup>
-                <col style="width:60%">
-                    <col style="width:100px">
-                        <col style="width:180px">
-                            <col style="width:100px">
-            </colgroup>
-            <thead>
-                <tr class="bg-blur">
-                    <th>消息主体</th>
-                    <th>是否已读</th>
-                    <th>
-                        <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 发送时间
-                    </th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody class="T-message-list">
-                {{each msgList as msg}}
-                <tr data-id="{{msg.id}}">
-                    <td class="align-left">{{msg.content}}</td>
-                    <td>
-                        {{if msg.isRead == 1}}
-                        <span style="color: green"><b>已读</b></span> {{else if msg.isRead == 0}}
-                        <span style="color: red"><b>未读</b></span> {{/if}}
-                    </td>
-                    <td>
-                        <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> {{msg.createTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}
-                    </td>
-                    <td>
-                        <a href="javascript:void(0);" class="T-view {{if msg.isRead != 1}} T-unread {{/if}}">查看</a>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        <div class="row pageMode">
-            <div class="col-xs-6">
-                <small>共计 {{recordSize}} 条记录</small>
-            </div>
-            <div class="col-xs-6">
-                <div class="dataTables_paginate paging_simple_numbers T-pagenation">
-                </div>
-            </div>
+<table id="simple-table" class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
+    <colgroup>
+        <col style="width:180px">
+        <col style="width:60%">
+        <col style="width:100px">
+        <col style="width:180px">
+        <col style="width:100px">
+    </colgroup>
+    <thead>
+        <tr class="bg-blur">
+            <th>发生业务</th>
+            <th>消息主体</th>
+            <th>是否已读</th>
+            <th>
+                <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 发送时间
+            </th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="T-message-list">
+        {{each msgList as msg}}
+        <tr data-id="{{msg.id}}">
+            <td>{{if msg.menu == null || msg.menu == ""}}-{{else}}{{msg.menu.name}}{{/if}}</td>
+            <td class="align-left">{{msg.content}}</td>
+            <td>
+                {{if msg.isRead == 1}}
+                <span style="color: green"><b>已读</b></span> {{else if msg.isRead == 0}}
+                <span style="color: red"><b>未读</b></span> {{/if}}
+            </td>
+            <td>
+                <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> {{msg.createTime | dateFormat : 'yyyy-MM-dd hh:mm:ss'}}
+            </td>
+            <td>
+                <a href="javascript:void(0);" class="T-view {{if msg.isRead != 1}} T-unread {{/if}}">查看</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
         </div>
     </div>
-    <!-- /.span -->
 </div>
-<!-- /.row -->

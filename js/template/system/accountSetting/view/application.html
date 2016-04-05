@@ -1,0 +1,19 @@
+<div class="applicationMain" id="T-applicationMain" style="margin-top: 10px;">
+	<form class="T-main-form" role="form" onsubmit="return false">
+		<span class="addPhone-prompt">为了保证您的账号安全，更换手机前请先进行安全验证</span>
+		<span class="addPhone-prompt" style="display: inline-block;margin-top: -10px;">发送成功，
+			<a class="T-solution">收不到验证怎么办?</a> 
+		</span> 
+		<h5 class="application-style">验证方式</h5>
+		<div class="application">
+			<span class="fixedPhone">绑定手机</span>
+			<input type="text" placeholder="" name="mobile" class="newPhone application-newPhone" disabled="disabled" value="{{oldMobile}}">
+		</div>
+		<div class="application mar-t-20 pad-b-20">
+			<input type="text" name="verifyCode" placeholder="短信验证码" class="Verification-code" style="width: 240px;height: 40px !important;">
+			<input class="applicationBtn T-applicationBtn" type="button" id="send" value="发送验证码">
+		</div>
+		<button class="btn btn-block btn-primary T-newPhone guideSubmit" style="width:400px;margin-left:20px;">
+			<i class="ace-icon fa fa-check"></i> 确定 </button>
+	</form>
+</div>

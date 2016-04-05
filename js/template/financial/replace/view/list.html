@@ -1,26 +1,63 @@
 <div class="row T-search-area">
     <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group">
-            <label>客户：</label>
-            <input type="text" class="form-control T-search-customer" value="{{searchParam.travelAgencyName || "全部"}}" style="width: 220px;">
+        <div class="form-group mar-l-10 mar-r-10">
+            <label>客户 </label>
+            <input type="text" class="form-control T-search-customer" value="{{searchParam.travelAgencyName}}" style="width: 220px;"placeholder="所有客户">
         </div>
-        <div class="form-group marginLeft-30">
-            <label>账期：</label>
+        <div class="form-group mar-r-10">
+            <label>账期 </label>
             <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
             <label>&nbsp;至&nbsp;</label>
             <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group T-finance-status btn-group mar-r-10">
+            <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if searchParam.accountStatus == 0}}
+                        全部
+                    {{else if searchParam.accountStatus == 1}}
+                        已结清
+                    {{else}}
+                        未结清
+                    {{/if}}
+                </span>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a data-value="0" href="javascript:void(0)">全部</a></li>
+                <li><a data-value="1" href="javascript:void(0)">已结清</a></li>
+                <li><a data-value="2" href="javascript:void(0)">未结清</a></li>
+            </ul>
+        </div>
+        <div class="form-group ">
             <button class="btn-sm search-btn T-btn-search">
-                <i class="ace-icon fa fa-search"></i> 搜索 
+                <i class="ace-icon fa fa-search"></i> 搜索
             </button>
         </div>
     </form>
 </div>
-<div class="row">
+<div class="form-inline T-sum-area" >
+    <div class="form-group mar-r-20">
+        <label class="control-label">代订金额合计：</label>
+        <label class="control-label F-float F-money T-sumMoney"></label>
+    </div>
+    <div class="form-group mar-r-20">
+        <label class="control-label">结算金额合计：</label>
+        <label class="control-label F-float F-money T-sumStMoney"></label>
+    </div>
+    <div class="form-group mar-r-20">
+        <label class="control-label">已收金额合计：</label>
+        <label class="control-label F-float F-money T-sumReceiveMoney"></label>
+    </div>
+    <div class="form-group ">
+        <label class="control-label">未收金额合计：</label>
+        <label class="control-label F-float F-money T-sumUnReceivedMoney"></label>
+    </div>
+</div>
+<div >
     <table class="table table-striped table-bordered table-hover T-showHighLight">
         <thead>
-            <tr class="bg-blur">
+            <tr class="bg-blur T-tr-fixed">
                 <th>客户</th>
                 <th>代订金额</th>
                 <th>结算金额</th>
@@ -32,13 +69,13 @@
             </tr>
         </thead>
         <tbody class="T-list">
-        {{each bookingAccountList as rs}}
-            <tr data-id="{{rs.partnerAgencyId}}" data-name="{{rs.fromPartnerAgencyName}}">
+            {{each bookingAccountList as rs}}
+            <tr data-id="{{rs.partnerAgencyId}}" data-name="{{rs.fromPartnerAgencyName}}" data-accountStatus = "{{searchParam.accountStatus}}">
                 <td>{{rs.fromPartnerAgencyName}}</td>
-                <td>{{rs.bookingMoney}}</td>
-                <td>{{rs.settlementMoney}}</td>
-                <td>{{rs.receiveMoney}}</td>
-                <td><span {{if rs.unReceivedMoney != 0}}style="color:#FF0000;"{{/if}}>{{rs.unReceivedMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.receiveMoney}}</span></td>
+                <td><span class="F-float F-money" {{if rs.unReceivedMoney !=0 }}style="color:#FF0000;" {{/if}}>{{rs.unReceivedMoney}}</span></td>
                 <td><span style="color:#{{if rs.checkStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.checkStep}}/{{rs.allRecord}}</span></td>
                 <td><span style="color:#{{if rs.reciveStep == rs.allRecord}}00CC00{{else}}FF9900{{/if}};">{{rs.reciveStep}}/{{rs.allRecord}}</span></td>
                 <td>
@@ -47,7 +84,7 @@
                     <a class="cursor T-action T-balance R-right" data-right="1290003">收款</a>
                 </td>
             </tr>
-        {{/each}}
+            {{/each}}
         </tbody>
     </table>
     <div class="row pageMode">

@@ -1,45 +1,37 @@
 /**
- * 财务管理--购物账务
- *
- * by David Bear 2015-11-24
+ * 财务管理--现金日记
  */
 define(function(require, exports){
 	var listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
-		listSearchTemplate = require("./view/search"),
 		addTemplate = require("./view/add"),
+		detailsTemplate = require("./view/viewDetails"),
 		rule = require("./rule"),
 		menuKey = "financial_payment_details";
 
 	var Payment = {
 		$tab : false,
-		total : {}
+		total : {},
+		subList0 : false,
+		subList1 : false
 	};
 	/**
 	 * 初始化模块
 	 */
-	Payment.initModule = function(bankId,bankNo){
+	Payment.initModule = function(argsData){
 		Payment.$tab = null;
 		var date = new Date(),
-        year = date.getFullYear(),
-        month = Tools.addZero2Two(date.getMonth() + 1),
-        day = Tools.addZero2Two(date.getDate()),
-		args = {
-			pageNo : 0,
-			endTime : year + "-" + month + "-" + day,
-			startTime : year + "-" + month + "-01",
-			bankId : bankId ? bankId : "",
-			payType : bankId ? 1 : ""
-		},
+	        year = date.getFullYear(),
+	        month = Tools.addZero2Two(date.getMonth() + 1),
+	        day = Tools.addZero2Two(date.getDate()),
+	        args = argsData || {};
+		args.pageNo = 0;
+		args.endTime = year + "-" + month + "-" + day;
+		args.startTime = year + "-" + month + "-01";
 		data = {
 			searchParam : args
 		};
-		Tools.addTab(menuKey, "现金日记", listTemplate(data));
-		Payment.$tab = $('#tab-' + menuKey + '-content');
-		FinancialService.initPayEvent(Payment.$tab);
-		Payment.getTotal(args);
-		Payment.ajaxInit(args);
-		Payment.initSearch(args,bankNo);
+		Payment.initSearch(args,args.bankNo);
 	};
 	/**
 	 * 获取收/付款合计
@@ -57,31 +49,69 @@ define(function(require, exports){
 			data : {searchParam : JSON.stringify(args)},
 			showLoading: false
 		}).done(function(data){
-			Payment.$tab.find('.T-incomeMoney').html(data.total.incomeMoney);
-			Payment.$tab.find('.T-payMoney').html(data.total.payMoney);
+			$tab.find('.T-incomeMoney').text(data.total.incomeMoney);
+			$tab.find('.T-payMoney').text(data.total.payMoney);
 			Payment.total = data.total;
+			Payment.allClac($tab,args.beginningBalance);
 		});
 	};
+	//计算合计
+	Payment.allClac = function($tab,beginningBalance) {
+		var beginningBalance = beginningBalance * 1 || $tab.find('.T-beginningBalance').val()-0 || '',
+			incomeMoney = $tab.find('.T-incomeMoney').text()-0,
+			payMoney = $tab.find('.T-payMoney').text()-0;
+		if (($tab.find('.T-search-payment').val() == 1 || $tab.find('.T-search-payment').val() == 0) && beginningBalance != '') {
+			var all = ((beginningBalance + incomeMoney) - payMoney).toFixed(2),
+				html = ''
+				+'<div class="form-group mar-r-10">'
+	            +'<label>合计：</label>'
+	            +'<label class="F-float F-money">'+ all +'</label>'
+	        	+'</div>';
+	        var $payMoney = $tab.find('.T-payMoney').closest('div.form-group');
+	        if ($payMoney.next('div.form-group').length) {
+				$payMoney.next('div.form-group').find('.F-float').text(all);
+	        }else {
+				$tab.find('.T-payMoney').closest('div.form-group').after(html)
+	        }
+		}else {
+			$tab.find('.T-payMoney').closest('div.form-group').next().remove();
+		}
+	}
 	/**
 	 * 初始化事件
 	 * @param  {object} $tab $tab
 	 */
 	Payment.init_event = function($tab){
 		var $searchArea = $tab.find('.T-search-area'),
-			$datepicker = $searchArea.find('.datepicker');
+			$datepicker = $searchArea.find('.T-search-time');
 		Tools.setDatePicker($datepicker, true);
 
 		$searchArea.on('click',".T-btn-search",function(event){
 			event.preventDefault();
-			Payment.getTotal(0);
+			Payment.getTotal(0,$tab);
 			Payment.ajaxInit(0);
 		})
 		.on('click',".T-btn-add",function(event){
 			Payment.addPayment();
+		});
+
+		$tab.on('change', '.T-beginningBalance, .T-search-payment', function() {
+			Payment.getTotal(0,$tab);
+			Payment.ajaxInit(0);
+		})
+
+		$tab.on("click",".T-viewDetails",function(event){
+			Payment.viewDetails($(this).closest('tr').data("id"));
+		})
+		.on("click",".T-delete",function(){
+			var id = $(this).closest('tr').data("id");
+			showConfirmMsg($("#confirm-dialog-message"),"是否确认删除该条数据？",function(){
+		        Payment.deletePayment(id);
+		    },function(){},"放弃","删除");
 		});	
 
 		Payment.getSubjectList($tab);
-		FinancialService.initPayEvent($tab);	
+		// FinancialService.initPayEvent($tab);	
 	};
 	/**
 	 * 初始化搜索栏
@@ -99,13 +129,20 @@ define(function(require, exports){
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
-			data.payTypeList = ['现金', '银行转账', '支票', '其它'];
-			var html = listSearchTemplate(data);
-			Payment.$tab.find('.T-search-area').html(html);
+			Tools.addTab(menuKey, "现金日记", listTemplate(data));
+			$tab = $('#tab-' + menuKey + '-content').off();
+
+			FinancialService.initPayEvent($tab);
+			Payment.getTotal(args,$tab);
+			Payment.ajaxInit(args);
+			Payment.$tab = $tab;
+
 			Payment.init_event(Payment.$tab);
 			if(bankNo){
-				Payment.$tab.find(".T-card-number").val(bankNo);
-				Payment.$tab.find(".T-card-number").closest('div').removeClass('hidden');
+				var $obj = (args.accountType == 0) ? Payment.$tab.find(".T-cash-number") : Payment.$tab.find(".T-card-number");
+				$obj.val(bankNo);
+				$obj.next().val(args.bankId);
+				$obj.closest('div').removeClass('hidden');
 			}
 		});
 	};
@@ -163,9 +200,14 @@ define(function(require, exports){
 			subjectId : Payment.$tab.find('.T-search-subject').val(),
 			voucher : Payment.$tab.find('.T-search-voucher').val()
 		}
-
-		if (args.payType == 1) {
-			args.bankId = Payment.$tab.find('.T-bankId').val();
+		if(args.payType == ""){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val() || Payment.$tab.find('input[name=card-id]').val();
+		}
+		else if(args.payType == 0){
+			args.bankId = Payment.$tab.find('input[name=cash-id]').val();
+		}
+		else if (args.payType == 1) {
+			args.bankId = Payment.$tab.find('input[name=card-id]').val();
 		}
 		return args;
 	};
@@ -182,21 +224,35 @@ define(function(require, exports){
 					    type: 1,
 					    title:"新增现金日记账",
 					    skin: 'layui-layer-rim', //加上边框
-					    area: '750px', //宽高
+					    area: '800px', //宽高
 					    zIndex:1028,
 					    content: html,
 					    scrollbar: false,
 					    success:function(){
+					    	Payment.subList0 = data.subjectdata0;
+					    	Payment.subList1 = data.subjectdata1;
+					    	Payment.subList2 = data.subjectdata2;
 					    	var $container = $(".T-addPayment-container"),
 					    		$bankCount = $container.find(".T-choose-bankCount"),
 					    		$bankCountList = $container.find(".T-bankCount-list"),
 					    		validator = rule.check($container);
-					    	FinancialService.initPayEvent($container.find('.T-bank-area'));
+					    	FinancialService.initPayEvent($container);
 					    	$container.find('.datepicker').datetimepicker({
 					    		autoclose: true,
 						        todayHighlight: true,
 						        format: 'L',
 						        language: 'zh-CN'
+					    	});
+
+					    	$container.find(".T-moneyType").off().on("change",function(){
+					    		Payment.loadSubjectHtml($(this).val(),$container);
+					    		if($(this).val() == 2){
+					    			$container.find(".T-Ntransfer").addClass('hidden');
+					    			$container.find(".T-transfer").removeClass('hidden');
+					    		} else {
+					    			$container.find(".T-Ntransfer").removeClass('hidden');
+					    			$container.find(".T-transfer").addClass('hidden');
+					    		}
 					    	});
 
 					    	$bankCountList.find("li").on("click",function(){
@@ -229,17 +285,126 @@ define(function(require, exports){
 					    		var subjectName = $(this).find("option:selected").text();
 					    		$container.find('input[name=subjectName]').val(subjectName);
 					    	});
+
+				    		$container.find('.T-chooseAccount').autocomplete({
+						        minLength:0,
+						        change :function(event, ui){
+						            if(ui.item == null){
+						               $(this).val('').nextAll('.T-accountId').val('');
+						            }
+						        },
+						        select :function(event, ui){
+									$(this).nextAll('.T-accountId').val(ui.item.id).trigger('change');
+						        }
+						    }).on("click", function(){
+						        var $this = $(this),
+					    			id = "";
+					    		if($this.hasClass('T-type-out')){
+					    			id = $container.find('input[name=in-id]').val();
+					    		} else if($this.hasClass('T-type-in')){
+					    			id = $container.find('input[name=out-id]').val();
+					    		}
+
+						        $.ajax({
+						            url:KingServices.build_url('financialIncomeOrPay','selectBankAccount'),
+						            data : {id : id},
+						            showLoading:false,
+						            success:function(data){
+						                if(showDialog(data)){
+						                    var cardNumberJson = [];
+						                    var bankList = data.bankList;
+						                    if(bankList && bankList.length > 0){
+						                        for(var i=0; i < bankList.length; i++){
+						                            var seatCount = {
+						                                value : "账户："+ bankList[i].accountName+",余额："+ bankList[i].balance,
+						                                id: bankList[i].id
+						                            }
+						                            cardNumberJson.push(seatCount);
+						                        }
+						                        $this.autocomplete('option','source', cardNumberJson);
+						                        $this.autocomplete('search', '');
+						                    }else{
+						                        layer.tips('没有内容', $that, {
+						                            tips: [1, '#3595CC'],
+						                            time: 2000
+						                        });
+						                    }
+						                }
+						            }
+						        })
+						    });
 					    }
 					});
 				}
 			}
 		});
-		
+	};
+
+	//查看收/付款金额明细
+	Payment.viewDetails = function(id){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","getIncomeOrPayDetailById"),
+			type:"POST",
+			data : {id : id},
+			success:function(data){
+				if(showDialog(data)){
+					var html = detailsTemplate(data);
+					var addGuideLayer = layer.open({
+					    type: 1,
+					    title:"收/付款金额明细",
+					    skin: 'layui-layer-rim',
+					    area: '800px',
+					    zIndex:1028,
+					    content: html,
+					    scrollbar: false
+					});
+				}
+			}
+		});
+	};
+
+	//删除记录
+	Payment.deletePayment = function(id){
+		$.ajax({
+			url:KingServices.build_url("financialIncomeOrPay","deleteIncomeorPay"),
+			type:"POST",
+			data : {id : id},
+			success:function(data){
+				if(showDialog(data)){
+					showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+						Payment.getTotal(0,Payment.$tab);
+						Payment.ajaxInit(0);
+					});
+				}
+			}
+		});
+	};
+
+	Payment.loadSubjectHtml = function(type,$container){
+		var subList = false,subjectHtml = "";
+		if(type == 0) { subList = Payment.subList0; }
+		else if(type == 1) { subList = Payment.subList1; }
+		else if(type == 2) { subList = Payment.subList2; }
+			
+		if(subList.length > 0){
+			for(var i = 0; i < subList.length; i++){
+				subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+			}
+			$container.find(".T-subject").html(subjectHtml);
+			$container.find("input[name=subjectName]").val(subList[0].subjectName);
+		} else {
+			showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
+				$container.find(".T-subject").html("");
+				$container.find("input[name=subjectName]").val("");
+			});
+		}
 	};
 
 	Payment.submitPayment = function(){
 		var form = $(".T-addPayment-container .T-form").serializeJson();
-		form.bankId = form['card-id'];
+		form.bankId = form['card-id'] || form['cash-id'];
+		form.bankIdIn = form['in-id'];
+		form.bankIdOut = form['out-id'];
 		delete(form['card-id']);
 		delete(form['card-number']);
 		

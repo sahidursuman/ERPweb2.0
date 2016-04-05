@@ -170,22 +170,20 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {	
+					var busCompanyQuote = JSON.parse(data.busCompanyQuote);
+                    data.busCompanyQuote=busCompanyQuote;
 
-					console.info(data);
-					var busCompanyArrange = JSON.parse(data.busCompanyArrange);
-                    data.busCompanyArrange=busCompanyArrange;
+					var guideQuote = JSON.parse(data.guideQuote);
+					data.guideQuote=guideQuote;
 
-					var guideArrange = JSON.parse(data.guideArrange);
-					data.guideArrange=guideArrange;
-
-					var insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.insuranceArrange=insuranceArrange;
+					var insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.insuranceQuote=insuranceQuote;
 
 					var daysList = JSON.parse(data.daysList);
 					data.daysList=daysList;
 
-					var quoteDetailJson = JSON.parse(data.quoteDetailJson);
-					data.quoteDetailJson=quoteDetailJson;
+					var quote = JSON.parse(data.quote);
+					data.quoteDetailJson=quote;
 
               
 
@@ -221,7 +219,6 @@ define(function(require, exports) {
 							// window.open(url);
 							// showConfirmDialogOfShare($( "#confirm-dialog-message" ),"复制此分享链接:"+"  "+ url);
 							$btn.data('clipboard-text', url);
-							console.log()
 							bindCopy();
 						}
 					}
@@ -257,7 +254,15 @@ define(function(require, exports) {
 					$(this).find("p").html("分享链接:&nbsp;"+ url);
 				}
 			});
-			new ZeroClipboard($('.T-copy-clip-btn-share'));
+			// new ZeroClipboard($('.T-copy-clip-btn-share'));
+			var clipboard = new Clipboard('.T-copy-clip-btn-share');
+		        clipboard.on('success', function(e) {
+		            e.clearSelection();
+		        });
+		        clipboard.on('error', function(e) {
+		            console.error('Action:', e.action);
+		            console.error('Trigger:', e.trigger);
+       			}); 
 		}
 	};
 	//新增报价
@@ -278,15 +283,19 @@ define(function(require, exports) {
 						data.viewLineProduct = {
 								lineProduct: JSON.parse(data.lineProduct),
 								busCompanyTemplate: JSON.parse(data.busCompanyTemplate),
-								guideTemplate: JSON.parse(data.guideTemplate),
+								//guideTemplate: JSON.parse(data.guideTemplate),
 								insuranceTemplate: JSON.parse(data.insuranceTemplate),
 								daysList: JSON.parse(data.daysList)
 						};
 						data.viewLineProduct.editorName = menukey + '-ueditor'
 						var htmlT = data.viewLineProduct;
+						var addHtml = addQuoteTemplate(htmlT);
+						$a.mainId = id;
+						$a.mainHtml = addHtml;
 						var html = mainQuoteTemplate($a);
 						if(Tools.addTab(menukey+'-add',"新增报价",html)){
-							addQuoteInit(htmlT);
+							var $container = $("#tab-arrange_quote-add-content");
+							quote.init_event($container,id,$a,addHtml);
 						}
 					}
 				}
@@ -295,25 +304,10 @@ define(function(require, exports) {
 			var htmlT = '';
 			var html = mainQuoteTemplate($a);
 			if(Tools.addTab(menukey+'-add',"新增报价",html)){
-				addQuoteInit(htmlT);
+				var $container = $("#tab-arrange_quote-add-content");
+				var addHtml = addQuoteTemplate(htmlT);
+				quote.init_event($container,id,$a,addHtml);
 			}
-		}
-
-		function addQuoteInit(htmlT){
-			var $container = $("#tab-arrange_quote-add-content");
-
-			var addHtml = addQuoteTemplate(htmlT);
-			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(addHtml)
-
-			$container.find('.inquiryContent').on("click",function(){
-				var quoteId = $container.find('[name=quoteId]').val();
-				if(!!quoteId == false){
-					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-					return false;
-				} 
-				quote.quoteStatus(quoteId,$container,'add','add');
-			});	
-			quote.init_event($container,id,$a);
 		}
 	};
 
@@ -470,17 +464,18 @@ define(function(require, exports) {
 							offer.brand = '';
 						}
 						var html =''
-						+'<tr>'
+						+'<tr data-entity-id="">'
 						+'<td><input class="col-xs-12 bind-change T-chooseSeatCount ui-autocomplete-input" name="needSeatCount" readonly="readonly" type="text" maxlength="2" value="'+offer.seatCount+'" autocomplete="off"></td>'
-						+'<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand ui-autocomplete-input" type="text" readonly="readonly" value="'+offer.brand+'" autocomplete="off"></td>'
+						+'<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand ui-autocomplete-input" type="text" readonly="readonly" value="'+offer.brand+'" autocomplete="off"><input type="hidden" name="offerId" value="'+offer.id+'"></td>'
 						+'<td><input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change ui-autocomplete-input" readonly="readonly" type="text" value="'+offer.companyName+'" autocomplete="off"><input type="hidden" name="busCompanyId" value="'+offer.busCompanyId+'"><input type="hidden" name="offerId" value="'+offer.id+'"></td>'
 						+'<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="'+offer.managerName+'"></td>'
 						+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="'+offer.mobileNumber+'"></td>'
 						+'<td><input class="col-xs-12 T-changeQuote" readonly="readonly" name="seatcountPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
 						+'<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="'+offer.seatPrice+'"></td>'
 						+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value=""></td>'
+        				+'<td><a data-entity-id="" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">删除</a></td>'
 						+'</tr>';
-						$obj.find('tbody').html(html);
+						$obj.find('tbody').append(html);
 						$container.find('.quoteContent').trigger('click');
 						//报价计算器
 						quote.costCalculation($container)
@@ -503,17 +498,41 @@ define(function(require, exports) {
 
 						var whichDays = data.hotelList[0].whichDays;
 							whichDays = JSON.parse(whichDays),
-							hotelList = data.hotelList,
-							html = quote.hotelHtml(hotelList);
+							hotelList = data.hotelList;
 
 						for (var i = 0, len = whichDays.length; i < len; i++) {
-							var whichDay = whichDays[i].whichDay-1;
+							var whichDay = whichDays[i].whichDay-1,
+								hasHotelDiv = '0';
 							if ($a.tag == 'add') {
-								$container.find("#dayListAdd-"+ whichDay +" .T-timeline-detail-container").append(html);
+								if (!!$container.find("#dayListAdd-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
+								if (hasHotelDiv == 0) {
+									$container.find("#dayListAdd-"+ whichDay +" .T-timeline-detail-container").append(html);
+								}else{
+									$container.find("#dayListAdd-"+ whichDay +" .T-resourceHotelList tbody").append(html);
+								}
 							}else if($a.tag == 'update') {
-								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+								if (!!$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
+								if (hasHotelDiv == 0) {
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+								}else{
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList tbody").append(html);
+								}
 							}else if($a.tag == 'copy') {
-								$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+								if (!!$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList").length) {
+									hasHotelDiv = '1';
+								}
+								var html = quote.hotelHtml(hotelList,hasHotelDiv)
+								if (hasHotelDiv == 0) {
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-timeline-detail-container").append(html);
+								}else{
+									$container.find("#dayList"+$a.tag+"-"+ whichDay +" .T-resourceHotelList tbody").append(html);
+								}
 							}
 						}
 						$container.find('.quoteContent').trigger('click');
@@ -528,84 +547,150 @@ define(function(require, exports) {
 	};
 
 	//酒店html
-	quote.hotelHtml = function(hotelList){
+	quote.hotelHtml = function(hotelList,hasHotelDiv){
 		var html = "";
-		for(var i=0; i < hotelList.length; i++){
+		if (hasHotelDiv == 0) {
 			html += "<div class='T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle' data-entity-index='" + i +"'>" + 
-				"<div class='timeline-info' style='color:#1fade0;margin-left: 4px'><i class='ace-icon fa fa-circle'></i><span>酒店</span></div>" + 
-				"<div class='widget-box transparent' style='margin-top: 20px'><div class='widget-body'><div class='widget-main'>" +
-				"<table class='table table-striped table-bordered table-hover'>" +
-					"<thead><tr>" + 
-						"<th class='th-border'>酒店星级</th>" + 
-						"<th class='th-border'>酒店名称</th>" + 
-						"<th class='th-border'>房型</th>" + 
-						"<th class='th-border'>成本价</th>" + 
-						"<th class='th-border'>市场价</th>" + 
-						"<th class='th-border'>含餐</th>" +
-						"<th class='th-border'>备注</th>" + 
-						"<th class='th-border' style='width: 60px;'>操作</th>" + 
-					"</tr></thead>" +
-					"<tbody><tr>" + 
-						"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel' disabled='disabled'><option";
-						 if (hotelList[i].hotelLevel==0)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value=''>全部</option><option";
-						 if (hotelList[i].hotelLevel==1)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='1'>三星以下</option><option";
-						 if (hotelList[i].hotelLevel==2)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='2'>三星</option><option";
-						 if (hotelList[i].hotelLevel==3)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='3'>准四星</option><option";
-						 if (hotelList[i].hotelLevel==4)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='4'>四星</option><option";
-						 if (hotelList[i].hotelLevel==5)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='5'>准五星</option><option";
-						 if (hotelList[i].hotelLevel==6)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='6'>五星</option><option";
-						 if (hotelList[i].hotelLevel==7)
-						 {
-						 	html += " selected='selected'";
-						 }
-						 html += " value='7'>五星以上</option></select></td>" +
-						 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
-						 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
-						 "<td><input type='text' readonly='readonly' class='T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-						 "<td><input type='text' name='marketPrice' class='T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
-						 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
-						 if (hotelList[i].containBreakfast==1){
-					 		html += "含早餐"; 
-					 	}
-					 	if (hotelList[i].containLunch==1){
-					 		html += "含午餐"; 
-					 	}
-					 	if (hotelList[i].containDinner==1){
-					 		html += "含晚餐";
-					 	}
-					 	html +="' /></td>" + 
-					 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
-					 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
-					"</tr></tbody>" + 
-				"</table></div></div></div></div>";
+			"<div class='timeline-info' style='color:#1fade0;margin-left: 4px'><i class='ace-icon fa fa-circle'></i><span>酒店</span></div>" + 
+			"<div class='widget-box transparent' style='margin-top: 20px'><div class='widget-body'><div class='widget-main'>" +
+			"<table class='table table-striped table-bordered table-hover'>" +
+			"<thead><tr>" + 
+			"<th class='th-border'>酒店星级</th>" + 
+			"<th class='th-border'>酒店名称</th>" + 
+			"<th class='th-border'>房型</th>" + 
+			"<th class='th-border'>成本价</th>" + 
+			"<th class='th-border'>市场价</th>" + 
+			"<th class='th-border'>含餐</th>" +
+			"<th class='th-border'>备注</th>" + 
+			"<th class='th-border' style='width: 60px;'>操作</th>" + 
+			"</tr></thead>" +
+			"<tbody>";
+			for(var i=0; i < hotelList.length; i++){
+				html += "<tr>" + 
+					"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel' disabled='disabled'><option";
+					 if (hotelList[i].hotelLevel==0)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value=''>全部</option><option";
+					 if (hotelList[i].hotelLevel==1)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='1'>三星以下</option><option";
+					 if (hotelList[i].hotelLevel==2)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='2'>三星</option><option";
+					 if (hotelList[i].hotelLevel==3)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='3'>准四星</option><option";
+					 if (hotelList[i].hotelLevel==4)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='4'>四星</option><option";
+					 if (hotelList[i].hotelLevel==5)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='5'>准五星</option><option";
+					 if (hotelList[i].hotelLevel==6)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='6'>五星</option><option";
+					 if (hotelList[i].hotelLevel==7)
+					 {
+					 	html += " selected='selected'";
+					 }
+					 html += " value='7'>五星以上</option></select></td>" +
+					 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
+					 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
+					 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+					 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
+					 if (hotelList[i].containBreakfast==1){
+				 		html += "含早餐"; 
+				 	}
+				 	if (hotelList[i].containLunch==1){
+				 		html += "含午餐"; 
+				 	}
+				 	if (hotelList[i].containDinner==1){
+				 		html += "含晚餐";
+				 	}
+				 	html +="' /></td>" + 
+				 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
+				 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
+				"</tr>"
+			}
+			html += "</tbody></table></div></div></div></div>";
+		}else {
+			for(var i=0; i < hotelList.length; i++){
+				html += "<tr>" + 
+				"<td><input type='hidden' name='offerId' value='" + hotelList[i].offerId + "' /><select class='col-xs-12 T-choose-hotelStarLevel' disabled='disabled'><option";
+				 if (hotelList[i].hotelLevel==0)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value=''>全部</option><option";
+				 if (hotelList[i].hotelLevel==1)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='1'>三星以下</option><option";
+				 if (hotelList[i].hotelLevel==2)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='2'>三星</option><option";
+				 if (hotelList[i].hotelLevel==3)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='3'>准四星</option><option";
+				 if (hotelList[i].hotelLevel==4)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='4'>四星</option><option";
+				 if (hotelList[i].hotelLevel==5)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='5'>准五星</option><option";
+				 if (hotelList[i].hotelLevel==6)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='6'>五星</option><option";
+				 if (hotelList[i].hotelLevel==7)
+				 {
+				 	html += " selected='selected'";
+				 }
+				 html += " value='7'>五星以上</option></select></td>" +
+				 "<td><input type='text' class='T-choose-hotelName col-xs-12 bind-change' name='hotelNmae' value='" + hotelList[i].hotelName + "' disabled='disabled'/><input type='hidden' name='hotelId' value='" + hotelList[i].hotelId + "' /></td>" + 
+				 "<td><input type='text' class='T-choose-hotelRoom col-xs-12 bind-change' name='hotelRoom' value='" + hotelList[i].type + "' disabled='disabled'/><input type='hidden' name='hotelRoomId' value='" + hotelList[i].roomId +"' /></td>" +
+				 "<td><input type='text' readonly='readonly' class='col-xs-12 T-changeQuote' name='contractPrice' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' name='marketPrice' class='col-xs-12 T-changeQuote' value='" + hotelList[i].replyPrice + "' style='width:70px;' /></td>" +
+				 "<td><input type='text' class='col-xs-12' readonly='readonly' name='containBreakfast' value='";
+				 if (hotelList[i].containBreakfast==1){
+			 		html += "含早餐"; 
+			 	}
+			 	if (hotelList[i].containLunch==1){
+			 		html += "含午餐"; 
+			 	}
+			 	if (hotelList[i].containDinner==1){
+			 		html += "含晚餐";
+			 	}
+			 	html +="' /></td>" + 
+			 	"<td><input type='text' class='col-xs-12' name='remark' value='' /></td>" +
+			 	"<td><a data-entity-type='8' class='cursor btn-restaurant-delete T-delete'>删除</a></td>" +
+				"</tr>"
+			}
 		}
 		return html;
 	};
@@ -627,59 +712,30 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
+					data.busCompanyQuote = JSON.parse(data.busCompanyQuote);
 					data.daysList = JSON.parse(data.daysList);
-					data.guideArrange = JSON.parse(data.guideArrange);
-					data.insuranceArrange = JSON.parse(data.insuranceArrange);
-					data.quoteDetailJson = JSON.parse(data.quoteDetailJson);
+					data.guideQuote = JSON.parse(data.guideQuote);
+					data.insuranceQuote = JSON.parse(data.insuranceQuote);
+					data.quote = JSON.parse(data.quote);
 					data.editorName = menukey +'-' + tag + '-ueditor'
 					var $a = {
 						a: 'update',
 						tag: tag
 					}
-					var html = mainQuoteTemplate($a);
 					var title = (!!isCopy)? '复制报价' : '修改报价';
 					data.isCopy = (!!isCopy)? '1' : '';
+					$a.isCopy = (!!isCopy)? '1' : '';
 					data.tag = tag;
+					var updateHtml = updateQuoteTemplate(data);
+					$a.mainHtml = updateHtml;
+					$a.mainId = id;
+					var html = mainQuoteTemplate($a);
 					if(Tools.addTab(menukey+'-'+tag,title,html)){
 						var $container = $("#tab-arrange_quote-"+$a.tag+"-content");
-
-						var updateHtml = updateQuoteTemplate(data);
+						quote.init_event($container,id,$a,updateHtml,target);
 						// var hotelStarValue = $(this).closest('tr').find('.resourceHotelStar').val();
-						$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
+						//$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(updateHtml)
 
-						//精度控制
-						var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
-						    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
-						    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
-						    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
-						    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
-						    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
-						Tools.inputCtrolFloat($guideFee);
-				        Tools.inputCtrolFloat($price);
-				        Tools.inputCtrolFloat($seatCount);
-				        Tools.inputCtrolFloat($contractPrice);
-				        Tools.inputCtrolFloat($parkingRebateMoney);
-				        Tools.inputCtrolFloat($customerRebateMoney);
-
-						$container.find('.inquiryContent').on("click",function(){
-							var quoteId = $container.find('[name=quoteId]').val();
-							if(!quoteId){
-								showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
-								return false;
-							} 
-							quote.quoteStatus(quoteId,$container,'update',$a.tag);
-						});	
-
-						quote.init_event($container,id,$a);
-						if (!!target) {
-							$container.find('.inquiryContent').trigger('click');
-							if (target == "T-hotel") {
-								$container.find('.hotelInquiryContent').trigger('click');
-							}else if (target == "T-bus") {
-								$container.find('.busInquiryResult').trigger('click');
-							}
-						}
 					}
 				}
 			}
@@ -687,8 +743,37 @@ define(function(require, exports) {
 	};
 
 	//报价详情页事件绑定
-	quote.init_event =function($container,id,$a) {
+	quote.init_event =function($container,id,$a,htmlT,target) {
+
+		addQuoteInit($container,htmlT,$a);
+		function addQuoteInit($container,htmlT,$a){
+			$container.find('#quoteContent-'+$a.a+'-'+$a.tag).html(htmlT)
+			$container.find('.inquiryContent').on("click",function(){
+				var quoteId = $container.find('[name=quoteId]').val();
+				if(!!quoteId == false){
+					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+					return false;
+				} 
+				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
+			});	
+		}
 		var validator = rule.quoteCheckor($container);
+
+		//自费和购物 浮动显示 和 多选
+		var $shop = $container.find('.T-shopMultiselect');
+		var $selfPay = $container.find('.T-selfPayMultiselect');
+		KingServices.viewOptionalShop($shop);
+		KingServices.viewOptionalSelfPay($selfPay);
+
+		//购物商家多选
+		$container.find('.T-multiselect').on('click', function() {
+			var $this = $(this);
+			if ($this.hasClass('T-shopMultiselect')) {
+				KingServices.shopMultiselect($this);
+			}else if ($this.hasClass('T-selfPayMultiselect')) {
+				KingServices.selfPayMultiselect($this);
+			}
+		})
 
 		// 监听修改
 		$container.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
@@ -699,17 +784,40 @@ define(function(require, exports) {
 		// 监听保存，并切换tab
 		.on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
 			event.preventDefault();
-			quote.saveQuote(id,$container,tab_id, title, html);
+			quote.saveQuote(id,$container,'',tab_id, title, html);
 		})
 		.on(SWITCH_TAB_BIND_EVENT, function(event) {
 			event.preventDefault();
-			quote.init_event($container,id);
+			quote.init_event($container,$container.find('[name=mainId]').val(),$a,$container.find('[name=mainHtml]').val());
 		})
 		// 保存后关闭
 		.on(CLOSE_TAB_SAVE, function(event) {
 			event.preventDefault();
-			quote.saveQuote(id,$container);
+			quote.saveQuote(id,$container,'');
 		});
+
+		//精度控制
+		var $guideFee=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=guideFee]'),
+		    $price=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=price]'),
+		    $seatCount=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=seatcountPrice]'),
+		    $contractPrice=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=contractPrice]'),
+		    $parkingRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=parkingRebateMoney]'),
+		    $customerRebateMoney=$container.find('#quoteContent-'+$a.a+'-'+$a.tag).find('input[name=customerRebateMoney]');
+		Tools.inputCtrolFloat($guideFee);
+        Tools.inputCtrolFloat($price);
+        Tools.inputCtrolFloat($seatCount);
+        Tools.inputCtrolFloat($contractPrice);
+        Tools.inputCtrolFloat($parkingRebateMoney);
+        Tools.inputCtrolFloat($customerRebateMoney);
+
+		if (!!target) {
+			$container.find('.inquiryContent').trigger('click');
+			if (target == "T-hotel") {
+				$container.find('.hotelInquiryContent').trigger('click');
+			}else if (target == "T-bus") {
+				$container.find('.busInquiryResult').trigger('click');
+			}
+		}
 
 		//下拉
 		quote.autocomplete($container);
@@ -732,7 +840,7 @@ define(function(require, exports) {
 			init_editor($(this).find('.T-editor').prop('id'), {readonly: true});
 		});
 		//添加具体行程安排相应事件
-		$container.find('.T-daylist').off('click.dayList').on('click.dayList', '.T-add', function(event) {
+		$container.off('click.dayList').on('click.dayList', '.T-add', function(event) {
 			event.preventDefault();
 			var $that = $(this);
 			if ($that.hasClass('T-addRestaurant')) {
@@ -754,8 +862,14 @@ define(function(require, exports) {
 				// 添加交通
 				quote.addResourceTraffic($that, validator, $container);
 			} else if ($that.hasClass('T-addOther')) {
-				// 添加交通 
+				// 添加其他
 				quote.addOther($that, validator, $container);
+			} else if ($that.hasClass('T-addInsurance')) {
+				// 添加保险
+				quote.addResourceInsurance($that, validator, $container);
+			} else if ($that.hasClass('T-addBusCompany')) {
+				// 添加车队
+				quote.addResourceBusCompany($that, validator, $container);
 			}
 		})
 		.on('click', '.T-delete', function(){
@@ -778,7 +892,11 @@ define(function(require, exports) {
 			if ($table.length > 0) {
 				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
 					$time = $this.val();
-					quote.changeStartTime($container, $time, $a);
+					if (!!$time) {
+						quote.changeStartTime($container, $time, $a);
+					}else{
+						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+					}
 				})
 			}
 		})
@@ -799,7 +917,7 @@ define(function(require, exports) {
 		var $dayListArea = $container.find('.T-timeline-container');
 		quote.bindInsuranceChosen($container.find('.T-insurance-name'),$container.find('.T-insurance-item') ,validator, $container);
 		quote.bindBusChosen($container.find('.T-chooseSeatCount'), $container.find('.T-chooseBrand'), $container.find('.T-chooseBusCompany'), validator, $container)
-		quote.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'), validator, $container);
+		quote.bindRestaurantEvent($dayListArea.find('.T-choose-restaurantName'), $dayListArea.find('.T-choose-restaurantStandardsName'), $dayListArea.find('.T-RestaurantList [name=type]'), validator, $container);
 		quote.bindHotelEvent($dayListArea.find('.T-choose-hotelName'), $dayListArea.find('.T-choose-hotelRoom'), $dayListArea.find('.T-choose-hotelStarLevel'), validator, $container);
 		quote.bindScenicEvent($dayListArea.find('.T-choose-scenicName'), validator, $container);
 		quote.bindShopEvent($dayListArea.find('.T-choose-shopVendorName'), validator, $container);
@@ -853,7 +971,6 @@ define(function(require, exports) {
 				partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
 				partnerAgencyContactId: quote.getValue($container,'managerId')
 			}
-			console.log(lineProductInfo)
 			var whichDay = $whichDiv.data("entity-whichday");
 			var quoteId = quote.getValue($container,'quoteId');
 
@@ -872,10 +989,10 @@ define(function(require, exports) {
 			}
 		});
 		//保存报价
-		$container.find('.T-btn-submit-quote').on('click',function(){
+		$container.find('.T-btn-submit-quote').off('click').on('click',function(){
 			if (!validator.form())   return;
 			var id = $container.find('input[name=quoteId]').val();
-			quote.saveQuote(id, $container);
+			quote.saveQuote(id, $container, $a);
 		})
 	};
 
@@ -901,7 +1018,7 @@ define(function(require, exports) {
 				scenic: [],
 				selfpay: []
 			}
-			var $hotel = $arrange.eq(index).find('.T-resourceHotelList');
+			var $hotel = $arrange.eq(index).find('.T-resourceHotelList tr');
 			$hotel.each(function(i) {
 				var hotelJson = {
 					id: quote.getValue($hotel.eq(i), 'hotelId'),
@@ -938,7 +1055,7 @@ define(function(require, exports) {
 		});
 		json = JSON.stringify(json);
 		$.ajax({
-			url: KingServices.build_url('productQuote','findCostPrice'),
+			url: KingServices.build_url('quote','findCostPrice'),
 			type: 'POST',
 			data: {dayList: json},
 			success: function(data) {
@@ -1051,7 +1168,7 @@ define(function(require, exports) {
 								    }
 								});	
 								//提交
-								$layerContent.find(".T-searchtravelLine").on('click', function() {
+								$layerContent.find(".T-searchtravelLine").off('click').on('click', function() {
 									var $tr = $layerContent.find('.T-normal-list tr'), id ='';
 									$tr.each(function(i){
 										var $selectFlag = $(this).find('input[name=choice-TravelLine]').is(":checked");
@@ -1365,8 +1482,6 @@ define(function(require, exports) {
 									}
 									saveJson.params.push(json);
 								})
-								console.log(quote.hotelSelectedArray);
-								console.log(quote.hotelSelectedArray.length);
 
 			    				for (var i = 0; i < quote.hotelSelectedArray.length; i++) {
 			    					var json = {
@@ -1679,10 +1794,6 @@ define(function(require, exports) {
 	};
 	//保险选择
 	quote.bindInsuranceChosen = function($input, $item, validator, $container) {
-		if (!$input || !$input.length) {
-			console.error('绑定保险的autocomplete，主体Dom为空!');
-			return;
-		}
 		$input.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -1832,9 +1943,9 @@ define(function(require, exports) {
 			if (!!$(obj).attr('readonly')) return;
 			$.ajax({
 				url:KingServices.build_url("bookingOrder","getSeatCountList"),
+				showLoading: false,
 				success:function(data){
-					var result = showDialog(data);
-					if(result){
+					if(showDialog(data)){
 						var seatCountListJson = [];
 						var seatCountList = data.seatCountList;
 						if(seatCountList && seatCountList.length > 0){
@@ -2004,13 +2115,20 @@ define(function(require, exports) {
 			quote.costCalculation($container)
 		});
 		
-		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), validator, $container);
+		quote.bindRestaurantEvent($(".updateRestaurantList .chooseRestaurantName"), $(".updateRestaurantList .restaurantStandardsName"), $(".updateRestaurantList [name=type]"), validator, $container);
 		
 		
 		
 	};
 		
-	quote.bindRestaurantEvent = function( obj, typeObj, validator, $container) {
+	quote.bindRestaurantEvent = function( obj, typeObj, $type, validator, $container) {
+		$type.on('change', function() {
+			var $this = $(this), $parents = $this.closest('tr');
+			$parents.find('[name=price]').val('');
+			$parents.find('[name=standardId]').val(0);
+			$parents.find('[name=marketPrice]').val('');
+			$parents.find('[name=menuList]').val('');
+		})
 		//绑定选择餐厅名称事件
 		obj.autocomplete({
 			minLength:0,
@@ -2088,7 +2206,7 @@ define(function(require, exports) {
 					var $tr = $(this).closest('tr');
 					$tr.find("input[name=pricePerPerson]").val("");
 					$tr.find("input[name=menuList]").val("");
-					$tr.find("input[name=standardId]").val(0);
+					$tr.find("input[name=standardId]").val("");
 					$tr.find("input[name=marketPrice]").val("");
 					quote.costCalculation($container)
 				}
@@ -2147,26 +2265,42 @@ define(function(require, exports) {
 	//添加酒店
 	quote.addResourceHotel = function($btn, validator, $container){
 		//添加行程安排酒店
-		var hotelDetails = '<div class="T-timeline-item timeline-item clearfix updateHotelList updateLineProductDaysDetail T-resourceHotelList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
-		'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
-		'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">含餐</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
-		'<tbody><tr>'+
-		'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
-		'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
-		'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
-		'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
-		'<td><input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" style="width:70px;"/></td>'+
-		'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
-		'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
-		'<td><a class="cursor btn-restaurant-delete T-delete deleteAllother">删除 </a></td></tr></tbody></table></div></div></div></div>';
-		$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
+		var $hasTr = $btn.closest('.T-dailyArrangeList').find('.T-resourceHotelList');
+		if ($hasTr.length > 0) {
+			var html = ''+
+			'<tr>'+
+			'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
+			'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
+			'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
+			'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
+			'<td><input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" style="width:70px;"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><a class="cursor btn-restaurant-delete T-delete T-delTr deleteAllother" data-entity-name="hotelTemplate">删除</a></td></tr>';
+			$hasTr.find('tbody').append(html);
+		}else{
+			var hotelDetails = '<div class="T-timeline-item timeline-item clearfix updateHotelList updateLineProductDaysDetail T-resourceHotelList ui-sortable-handle" data-entity-index='+quote.updateLineProductIndex+'><div class="timeline-info"  style="color:#1fade0" ><i class="ace-icon fa fa-circle" ></i><span >酒店</span></div>'+
+			'<div class="widget-box transparent" style="margin-top: 20px"><div class="widget-body"><div class=""><table class="table table-striped table-bordered table-hover">'+
+			'<thead><tr><th  class="th-border">酒店星级</th><th  class="th-border">酒店名称</th><th class="th-border">房型</th><th class="th-border">成本价</th><th class="th-border">市场价</th><th class="th-border">含餐</th><th class="th-border">备注</th><th  class="th-border" style="width: 60px;">操作</th></tr></thead>'+
+			'<tbody><tr>'+
+			'<td><select class="col-xs-12 resourceHotelStar"><option  selected="selected" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}} value="">全部</option>'+
+			'<option value="1">三星以下</option><option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
+			'<td><input type="text" class="col-xs-12 chooseHotelName bind-change" name="hotelNmae"/><input type="hidden" name="hotelId"/></td>'+
+			'<td><input type="text" class="col-xs-12 chooseHotelRoom bind-change" name="hotelRoom"/><input type="hidden" name="hotelRoomId"/></td>'+
+			'<td><input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" style="width:70px;"/></td>'+
+			'<td><input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" style="width:70px;"/></td>'+
+			'<td><input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast"/></td>'+
+			'<td><input type="text" class="col-xs-12" name="remark"/></td>'+
+			'<td><a class="cursor btn-restaurant-delete T-delete T-delTr deleteAllother" data-entity-name="hotelTemplate">删除</a></td></tr></tbody></table></div></div></div></div>';
+			$btn.closest(".T-dailyArrangeList").find(".T-timeline-detail-container").append(hotelDetails);
+			quote.updateLineProductIndex += 1;
+		}
 		var $contractPrice= $container.find('input[name=contractPrice]');
 		    Tools.inputCtrolFloat($contractPrice);
-		quote.updateLineProductIndex += 1;
 		//绑定选择酒店名称事件
 		quote.costCalculation($container)
-		quote.bindHotelEvent($(".updateHotelList .chooseHotelName"), $(".updateHotelList .chooseHotelRoom"), $(".updateHotelList .resourceHotelStar"), validator,$container)
+		quote.bindHotelEvent($container.find(".chooseHotelName"), $container.find(".chooseHotelRoom"), $container.find(".resourceHotelStar"), validator,$container)
 	};
 	quote.bindHotelEvent = function(obj, typeObj, selObj, validator ,$container){
 		var $hotelStar = selObj;
@@ -2203,8 +2337,8 @@ define(function(require, exports) {
                     success: function(data) {
 						var result = showDialog(data);
 						if(result){
-							var hotel = JSON.parse(data.hotel);
-							$tr.find("input[name=mobileNumber]").val(hotel.mobileNumber);
+							$tr.find("input[name=mobileNumber]").val(data.hotel.mobileNumber);
+							$tr.find('.resourceHotelStar').val(data.hotel.level);
 							//objParent.find("input[name=payType]").val(hotel.payType == 0? "现付" : "账期" + (hotel.payPeriod ? "(" + hotel.payPeriod.month + "个月)" : "" ));
 							// 更新表单验证的配置
 							validator = rule.quoteUpdate(validator);
@@ -2281,7 +2415,12 @@ define(function(require, exports) {
 
 							$tr.find("input[name=contractPrice]").val(hotelRoom.normalInnerPrice);
 							$tr.find("input[name=marketPrice]").val(hotelRoom.normalMarketPrice);
-							$tr.find("input[name=containBreakfast]").val(hotelRoom.containBreakfast == "0" ? "不含" : "包含");
+							var containEat = '';
+							containEat += hotelRoom.containBreakfast == "0" ? "" : "含早餐、";
+							containEat += hotelRoom.containLunch == "0" ? "" : "含午餐、";
+							containEat += hotelRoom.containDinner == "0" ? "" : "含晚餐、";
+
+							$tr.find("input[name=containBreakfast]").val(containEat);
 							quote.costCalculation($container)
 						}
                     }
@@ -2701,6 +2840,8 @@ define(function(require, exports) {
 							$tr.find("input[name=managerName]").val(selfpay.managerName);
 							$tr.find("input[name=selfPayItemName]").val("");
 							$tr.find("input[name=selfPayItemId]").val("");
+							$tr.find("input[name=contractPrice]").val("");
+							$tr.find("input[name=marketPrice]").val("");
 							quote.costCalculation($container)
 
 							// 更新表单验证的配置
@@ -2937,59 +3078,125 @@ define(function(require, exports) {
 
 		quote.updateLineProductIndex += 1;
 	};
+
+	//添加保险安排
+	quote.addResourceInsurance = function($btn, validator, $container) {
+		var insuranceDetails = ''
+		+'<tr>'
+		+'<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /></td>'
+		+'<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="" /><input type="hidden" name="insuranceItemId" value="" /></td>'
+		+'<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /></td>'
+		+'<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text"></td>'
+		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>'
+	    +'<td><a data-entity-id="" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">删除</a></td>'
+		+'</tr>';
+
+		var $content=$btn.closest(".T-baseArrange").find(".T-insuranceForm");
+		    $content.append(insuranceDetails);
+		var $price=$content.find('input[name=price]');
+		    Tools.inputCtrolFloat($price);
+
+		quote.bindInsuranceChosen($container.find('.T-insurance-name'), $container.find('.T-insurance-item'), validator,$container);
+	};
+	//添加车队安排
+	quote.addResourceBusCompany = function($btn, validator, $container) {
+		var busCompanyDetails = ''
+		+'<tr>'
+		+'<td><input class="col-xs-12 bind-change  T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="" /></td>  '
+		+'<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="" /></td>'
+		+'<td><input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>'
+		+'<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   '
+		+'<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>'
+		+'<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="" /></td>'
+		+'<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value=""></td>'
+		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>'
+        +'<td><a data-entity-id="" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">删除</a></td>'
+		+'</tr>';
+
+		var $content=$btn.closest(".T-baseArrange").find(".T-busCompanyForm");
+		    $content.append(busCompanyDetails);
+		var $price=$content.find('input[name=seatPrice]');
+		    Tools.inputCtrolFloat($price);
+		quote.bindBusChosen($container.find('.T-chooseSeatCount'), $container.find('.T-chooseBrand'), $container.find('.T-chooseBusCompany'), validator, $container)
+	};
+
 	//删除日程安排
 	quote.deleteLineProductDaysArrange = function($obj, $container){
 		var dialogObj = $( "#confirm-dialog-message" );
-
-		if (!!$obj.data("entity-id")) {
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier",
-						click: function() {
-							$( this ).dialog( "close" );
-							var id = $obj.data("entity-id"), objParents = $obj.closest('.T-timeline-item'), 
-							    type = $obj.data("entity-type");
-							
-							$.ajax({
-								url: KingServices.build_url('productQuote', 'delete'),
-								type:"POST",
-								showLoading:false,
-								data:"id="+id+"&type="+type+"",
-								success:function(data){
-									layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){	
-										var index = objParents.index();									
-										$(".T-timeline-item").eq(index).remove();
-										quote.costCalculation($container);
+		if($obj.hasClass('T-delTr')) {
+			var id = $obj.data('entity-id'),$parents = $obj.closest('tr'), type = $obj.data('entity-type');
+			if (!!id) {
+				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+					$.ajax({
+						url: KingServices.build_url('quote', 'deleteItem'),
+						type:"POST",
+						showLoading:false,
+						data: {
+							id: id,
+							type: type
+						},
+						success:function(data){
+							if(showDialog(data)){
+								if (type == '8') {
+									var $div = $obj.closest('.T-resourceHotelList'),
+										$tr = $div.find('tbody tr');
+									if ($tr.length == 1) {
+										$div.remove();
+										quote.updateRouteIndex('',$obj.closest('.T-quoteContainer'));
+									}else{
+										$parents.remove();
 									}
+								}else{
+									$parents.remove();
 								}
-							});
+							}
 						}
+					});
+				})
+			}else{
+				if (type == '8') {
+					var $div = $obj.closest('.T-resourceHotelList'),
+						$tr = $div.find('tbody tr');
+					if ($tr.length == 1) {
+						$div.remove();
+						quote.updateRouteIndex('',$obj.closest('.T-quoteContainer'));
+					}else{
+						$parents.remove();
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
+				}else{
+					$parents.remove();
 				}
-			});
+			}
 		} else {
-			$obj.closest('.T-timeline-item').remove();
-			quote.updateRouteIndex($obj.closest('.T-updateLineProductContainer'),$container);
-			quote.costCalculation($container);
+			if (!!$obj.data("entity-id")) {
+				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+					var id = $obj.data("entity-id"), objParents = $obj.closest('.T-timeline-item'), 
+					    type = $obj.data("entity-type");
+					
+					$.ajax({
+						url: KingServices.build_url('quote', 'deleteItem'),
+						type:"POST",
+						showLoading:false,
+						data: {
+							id: id,
+							type: type
+						},
+						success:function(data){
+							layer.close(globalLoadingLayer);
+							var result = showDialog(data);
+							if(result){	
+								var index = objParents.index();									
+								$(".T-timeline-item").eq(index).remove();
+							}
+						}
+					});
+				})
+			} else {
+				$obj.closest('.T-timeline-item').remove();
+				quote.updateRouteIndex('',$obj.closest('.T-quoteContainer'));
+			}
 		}
+		quote.costCalculation($container);
 	};
 	/**
 	 * 更新安排的序号
@@ -3040,14 +3247,35 @@ define(function(require, exports) {
 			allQuote = 0,//总报价
 			days = $container.find('.T-lineProductDays').data('entity-days');
 
-		insurancePrice = $container.find('.T-arrangeInsuranceList [name=price]').val()-0 || 0;
-		insuranceMarketPrice = $container.find('.T-arrangeInsuranceList [name=marketPrice]').val()-0 || 0;
-		seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
-		seatCountMarketPrice = $container.find('.T-arrangeBusCompanyList [name=marketPrice]').val()-0 || 0;
+		//insurancePrice = $container.find('.T-arrangeInsuranceList [name=price]').val()-0 || 0;
+		//insuranceMarketPrice = $container.find('.T-arrangeInsuranceList [name=marketPrice]').val()-0 || 0;
+		//seatCountPrice = $container.find('.T-arrangeBusCompanyList [name=seatcountPrice]').val()-0 || 0;
+		//seatCountMarketPrice = $container.find('.T-arrangeBusCompanyList [name=marketPrice]').val()-0 || 0;
 		guidePrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
-		guideMarketPrice = $container.find('.T-arrangeGuideList [name=guideFee]').val()-0 || 0;
+		guideMarketPrice = $container.find('.T-arrangeGuideList [name=marketPrice]').val()-0 || 0;
 		adultCount = $container.find('[name=adultCount]').val()-0 || 0;
 		childCount = $container.find('[name=childCount]').val()-0 || 0;
+
+		var insurancePriceArray = $container.find('.T-arrangeInsuranceList [name = price]');
+		for (var i = 0, len = insurancePriceArray.length; i < len; i++) {
+			var value = insurancePriceArray.eq(i).val()-0 || 0;
+			insurancePrice += (value-0)
+		}
+		var insuranceMarketPriceArray = $container.find('.T-arrangeInsuranceList [name = marketPrice]');
+		for (var i = 0, len = insuranceMarketPriceArray.length; i < len; i++) {
+			var value = insuranceMarketPriceArray.eq(i).val()-0 || 0;
+			insuranceMarketPrice += (value-0)
+		}
+		var seatCountPriceArray = $container.find('.T-arrangeBusCompanyList [name = seatcountPrice]');
+		for (var i = 0, len = seatCountPriceArray.length; i < len; i++) {
+			var value = seatCountPriceArray.eq(i).val()-0 || 0;
+			seatCountPrice += (value-0)
+		}
+		var seatCountMarketPriceArray = $container.find('.T-arrangeBusCompanyList [name = marketPrice]');
+		for (var i = 0, len = seatCountMarketPriceArray.length; i < len; i++) {
+			var value = seatCountMarketPriceArray.eq(i).val()-0 || 0;
+			seatCountMarketPrice += (value-0)
+		}
 
 		var scenicPriceArray = $container.find('.T-resourceScenicList [name=price]');
 		for (var i = 0,len = scenicPriceArray.length; i < len; i++) {
@@ -3184,7 +3412,7 @@ define(function(require, exports) {
 	 * @param  {[type]} id [报价ID]
 	 * @return {[type]}    [description]
 	 */
-	quote.saveQuote = function(id, $container) {
+	quote.saveQuote = function(id, $container, $a,tab_id, title, html) {
 		var isContainGuideFee = 0, isContainSelfPay = 0, isChildNeedRoom = 0,argumentsLen = arguments.length;
 		if ($container.find('[name=includeGuideFee]').prop("checked")) {
 			isContainGuideFee = 1;
@@ -3198,33 +3426,37 @@ define(function(require, exports) {
 		var quoteJson = {
 			id: quote.getValue($container,'quoteId'),
 			adultCostPrice: $container.find('.T-adultCost').val(),
-			adultCount: quote.getValue($container,'adultCount'),
 			adultQuotePrice: $container.find('.T-adultQuote').val(),
 			adultGrossProfit: $container.find('.T-adultGrossProfit').text(),
 			childCostPrice: $container.find('.T-childCost').val(),
-			childCount: quote.getValue($container,'childCount'),
 			childQuotePrice: $container.find('.T-childQuote').val(),
 			childGrossProfit: $container.find('.T-childGrossProfit').text(),
 			days: $container.find('.T-lineProductDays').data("entity-days"),
 			lineProductId: quote.getValue($container,'lineProductId'),
+			includeFee: quote.getValue($container,'includeFee'),
+			excludeFee: quote.getValue($container,'excludeFee'),
+			lineFeature: quote.getValue($container,'lineFeature'),
+			lineNotice: quote.getValue($container,'lineNotice'),
+			shopNames: $container.find('.T-shopMultiselect').val(),
+			shopIds: quote.jsonToString($container.find('.T-shopMultiselect').data('propover')), 
+			selfPayItemNames: $container.find('.T-selfPayMultiselect').val(),
+			selfPayItemIds: quote.jsonToString($container.find('.T-selfPayMultiselect').data('propover')),
+			startTime: quote.getValue($container,'startTime'),
+			adultCount: quote.getValue($container,'adultCount'),
+			childCount: quote.getValue($container,'childCount'),
 			partnerAgencyId: quote.getValue($container,'partnerAgencyId'),
 			partnerAgencyContactId: quote.getValue($container,'managerId'),
-			singleRoomCostPrice: $container.find('.T-oneRoomCost').val(),
 			singleRoomCount: quote.getValue($container,'singleRoomCount'),
+			singleRoomCostPrice: $container.find('.T-oneRoomCost').val(),
 			singleRoomQuotePrice: $container.find('.T-oneRoomQuote').val(),
 			oneRoomGrossProfit: $container.find('.T-oneRoomGrossProfit').text(),
-			startTime: quote.getValue($container,'startTime'),
 			sumCostFee: $container.find('.T-allCost').val(),
 			sumQuoteFee: $container.find('.T-allQuote').val(),
 			grossProfit: $container.find('.T-allGrossProfit').text(),
 			isContainGuideFee: isContainGuideFee,//quote.getValue($container,'includeGuideFee'),
 			isContainSelfPay: isContainSelfPay,//quote.getValue($container,'includeSelfpay'),
 			isChildNeedRoom: isChildNeedRoom,//quote.getValue($container,'childNeedBed'),
-			remark: quote.getValue($container,'quoteRemark'),
-			includeFee: quote.getValue($container,'includeFee'),
-			excludeFee: quote.getValue($container,'excludeFee'),
-			lineFeature: quote.getValue($container,'lineFeature'),
-			lineNotice: quote.getValue($container,'lineNotice')
+			remark: quote.getValue($container,'quoteRemark')
 		}
 
 		if ((quoteJson.adultCount + quoteJson.childCount) == 0) {
@@ -3238,33 +3470,44 @@ define(function(require, exports) {
 		var guideList = $container.find('.T-arrangeGuideList');
 		var insuranceList = $container.find('.T-arrangeInsuranceList');
 		var saveJson = {
-			busCompany: {
-				arrangeId: quote.getValue(busList,'arrangeId'),
-				offerId: quote.getValue(busList,'offerId'),
-				brand: quote.getValue(busList,'brand'),
-				busCompanyId: quote.getValue(busList,'busCompanyId'),
-				needSeatCount: quote.getValue(busList,'needSeatCount'),
-				price: quote.getValue(busList,'seatcountPrice'),
-				marketPrice: quote.getValue(busList,'marketPrice') || quote.getValue(busList,'seatcountPrice'),
-				remark: quote.getValue(busList,'remark')
-			},
-			guide: {
-				arrangeId: quote.getValue(guideList,'arrangeId'),
+			busCompanyQuote: [],
+			insuranceQuote: [],
+			lineDayList: [],
+			"guideQuote": {
+				id: quote.getValue(guideList,'arrangeId'),
 				price: quote.getValue(guideList,'guideFee'),
-				marketPrice: quote.getValue(guideList,'marketPrice') || quote.getValue(guideList,'guideFee'),
+				marketPrice: quote.getValue(guideList,'marketPrice'),
 				remark: quote.getValue(guideList,'remark')
-			},
-			insurance: {
-				arrangeId: quote.getValue(insuranceList,'arrangeId'),
-				insuranceId: quote.getValue(insuranceList,'insuranceId'),
-				insuranceItemId: quote.getValue(insuranceList,'insuranceItemId'),
-				price: quote.getValue(insuranceList,'price'),
-				marketPrice: quote.getValue(insuranceList,'marketPrice') || quote.getValue(insuranceList,'price'),
-				remark: quote.getValue(insuranceList,'remark'),
-				type: quote.getValue(insuranceList,'type')
-			},
-			lineDayList: []
+			}
 		}
+
+		var $trs = busList.find('tbody tr');
+		$trs.each(function(i) {
+			var json = {
+				id: $trs.eq(i).data('entity-id'),// quote.getValue($trs.eq(i),'arrangeId'),
+				offerId: quote.getValue($trs.eq(i),'offerId'),
+				brand: quote.getValue($trs.eq(i),'brand'),
+				busCompanyId: quote.getValue($trs.eq(i),'busCompanyId'),
+				needSeatCount: quote.getValue($trs.eq(i),'needSeatCount'),
+				price: quote.getValue($trs.eq(i),'seatcountPrice'),
+				marketPrice: quote.getValue($trs.eq(i),'marketPrice') || quote.getValue($trs.eq(i),'seatcountPrice'),
+				remark: quote.getValue($trs.eq(i),'remark')
+			}
+			saveJson.busCompanyQuote.push(json)
+		});
+
+		var $trs = insuranceList.find('tbody tr');
+		$trs.each(function(i) {
+			var json = {
+				id: $trs.eq(i).data('entity-id'),//quote.getValue($trs.eq(i),'arrangeId'),
+				insuranceId: quote.getValue($trs.eq(i),'insuranceId'),
+				insuranceItemId: quote.getValue($trs.eq(i),'insuranceItemId'),
+				price: quote.getValue($trs.eq(i),'price'),
+				marketPrice: quote.getValue($trs.eq(i),'marketPrice') || quote.getValue($trs.eq(i),'price'),
+				remark: quote.getValue($trs.eq(i),'remark')
+			}
+			saveJson.insuranceQuote.push(json)
+		});
 
 		$container.find(".T-dailyArrangeList").each(function(index, el) { // 获取每天的数据
 			var $that = $(this), $list, $item;
@@ -3272,13 +3515,13 @@ define(function(require, exports) {
 			saveJson.lineDayList[index] = {
 				//detailEditor : encodeURIComponent(UE.getEditor($that.find('.T-editor').prop('id')).getContent()),
 				whichDay: index+1,
-				restaurant : [],
-				hotel : [],
-				scenic : [],
-				shop : [],
-				selfPay : [],
-				ticket : [],
-				otherArrangeList: []
+				restaurantQuote : [],
+				hotelQuote : [],
+				scenicQuote : [],
+				shopQuote : [],
+				selfPayQuote : [],
+				ticketQuote : [],
+				otherQuote: []
 			}
 			//获取餐饮
 			$list= $that.find(".T-RestaurantList");
@@ -3290,20 +3533,21 @@ define(function(require, exports) {
 					if(restaurantId){
 						var standardId = $item.find("[name=typeId]").val();
 						var restaurantJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							restaurantId : restaurantId,
 							standardId : $item.find("input[name=standardId]").val(),
 							price : $item.find("[name=price]").val(),
+							type : $item.find("[name=type]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].restaurant.push(restaurantJson);
+						saveJson.lineDayList[index].restaurantQuote.push(restaurantJson);
 					}
 				}
 			}
 			//获取酒店
-			$list = $that.find(".T-resourceHotelList");
+			$list = $that.find(".T-resourceHotelList tbody tr");
 			if($list.length > 0){
 				for(var j=0; j<$list.length;j++){
 					$item = $list.eq(j);
@@ -3315,17 +3559,16 @@ define(function(require, exports) {
 							return false;
 						}
 						var hotelJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							offerId: $item.find("[name=offerId]").val(),
 							hotelId : hotelId,
 							hotelRoomId : hotelRoomId,
-							count: $item.find("[name=count]").val(),
 							price : $item.find("[name=contractPrice]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=contractPrice]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].hotel.push(hotelJson)
+						saveJson.lineDayList[index].hotelQuote.push(hotelJson)
 					}
 				}
 			}
@@ -3342,15 +3585,15 @@ define(function(require, exports) {
 							return false;
 						}
 						var scenicJson= {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							scenicId : scenicId,
-							itemId : itemId,
+							scenicItemId : itemId,
 							price : $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].scenic.push(scenicJson);
+						saveJson.lineDayList[index].scenicQuote.push(scenicJson);
 					}
 					
 				}
@@ -3369,13 +3612,13 @@ define(function(require, exports) {
 							return false;
 						}
 						var shopJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							shopId : shopId,
 							policyId : policyId,
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].shop.push(shopJson);
+						saveJson.lineDayList[index].shopQuote.push(shopJson);
 					}
 				}
 			}
@@ -3387,7 +3630,7 @@ define(function(require, exports) {
 					var selfPayId = $item.find("[name=companyId]").val();
 					if(selfPayId){
 						var selfPayJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							selfPayItemId :$item.find("[name=selfPayItemId]").val(),
 							selfPayId : selfPayId,
 							price : $item.find("[name=contractPrice]").val(),
@@ -3395,7 +3638,7 @@ define(function(require, exports) {
 							remark : $item.find("[name=remark]").val(),
 							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].selfPay.push(selfPayJson);
+						saveJson.lineDayList[index].selfPayQuote.push(selfPayJson);
 					}
 					
 				}
@@ -3408,18 +3651,15 @@ define(function(require, exports) {
 					var ticketId = $item.find("[name=tickeId]").val();
 					if(ticketId){
 						ticketJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							ticketId : ticketId,
 							type : $item.find("[name=type]").val(),
 							price : $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark : $item.find("[name=remark]").val(),
-							orderIndex : $item.attr("data-entity-index"),
-							startTime: $item.find("[name=time]").val(),
-							count: $item.find("[name=count]").val(),
-							seatLevel: $item.find("[name=seatLevel]").val()
+							orderIndex : $item.attr("data-entity-index")
 						}
-						saveJson.lineDayList[index].ticket.push(ticketJson);
+						saveJson.lineDayList[index].ticketQuote.push(ticketJson);
 					}
 				}
 			}
@@ -3431,32 +3671,33 @@ define(function(require, exports) {
 					var otherName = $item.find("[name=name]").val();
 					if(otherName){
 						otherJson = {
-							arrangeId: $item.find("[name=arrangeId]").val(),
+							id: $item.find("[name=arrangeId]").val(),
 							name : $item.find("[name=name]").val(),
 							managerName : $item.find("[name=managerName]").val(),
 							mobileNumber : $item.find("[name=mobileNumber]").val(),
-							memberCount: $item.find("[name=count]").val(),
 							price: $item.find("[name=price]").val(),
 							marketPrice: $item.find('[name=marketPrice]').val() || $item.find("[name=price]").val(),
 							remark: $item.find("[name=remark]").val()
 						}
-						saveJson.lineDayList[index].otherArrangeList.push(otherJson);
+						saveJson.lineDayList[index].otherQuote.push(otherJson);
 					}
 				}
 			}
 		});
 		quoteJson = JSON.stringify(quoteJson);
 		saveJson = JSON.stringify(saveJson);
+		var quoteUrl = 'addQuote';
+		if ($a.a == 'update' && !!$a.isCopy == false) {quoteUrl = 'updateQuote'}
 		$.ajax({
-			url: KingServices.build_url("productQuote","saveQuote"),
+			url: KingServices.build_url("quote",quoteUrl),
 			type: 'POST',
 			data: "quoteJson="+encodeURIComponent(quoteJson)+"&saveJson="+encodeURIComponent(saveJson),
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					showMessageDialog($( "#confirm-dialog-message" ), "报价添加成功，请在报价管理中查看！",function(){
+					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
 						var idString = $container.attr("id");
-						if(argumentsLen === 2){
+						if(argumentsLen === 3){
 							if (idString == "tab-arrange_quote-add-content") {
 								Tools.closeTab("arrange_quote-add");
 								quote.listQuote(0);
@@ -3472,9 +3713,9 @@ define(function(require, exports) {
                             if (idString == "tab-arrange_quote-add-content") {
 								quote.addQuote($container.find(".T-newData").data("id"));
 							}else if (idString == "tab-arrange_quote-update-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','','update');
 							}else if (idString == "tab-arrange_quote-copy-content") {
-								quote.updateQuote($container.find(".T-newData").data("id"),"T-bus");
+								quote.updateQuote($container.find(".T-newData").data("id"),'','1','copy');
 							}
                         }
 					});
@@ -3575,7 +3816,7 @@ define(function(require, exports) {
 	                }
 	            });
             }else{
-				layer.tips('请选择客户来源', obj, {
+				layer.tips('请选择客户', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
@@ -3603,6 +3844,12 @@ define(function(require, exports) {
 			format: 'L',
 			language: 'zh-CN'
 		});
+	}
+	quote.jsonToString = function(jTs) {
+		if (typeof jTs != 'string') {
+			jTs = JSON.stringify(jTs);
+		}
+		return jTs;
 	}
 	quote.updateQuoteToOffer = function(id,target) {
 		var quoteContent = $(document).find('#tab-arrange_quote-add-content,#tab-arrange_quote-update-content,#tab-arrange_quote-copy-content'), isThere = 0;

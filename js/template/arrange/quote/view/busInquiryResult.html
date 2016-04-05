@@ -24,7 +24,7 @@
 					{{each rs.busCompanyOfferList as offer index}}
 						{{if index == 0}}
 							<td>{{offer.busCompanyName}}</td>
-							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}<span class="F-float F-money">{{offer.replyPrice}}</span>{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
 									{{if offer.status == "已拒绝"}}
@@ -53,7 +53,7 @@
 					{{if index > 0}}
 						<tr>
 							<td>{{offer.busCompanyName}}</td>
-							<td class="T-price">{{if offer.status == '已同意'}}{{offer.replyPrice}}{{else}}-{{/if}}</td>
+							<td class="T-price">{{if offer.status == '已同意'}}<span class="F-float F-money">{{offer.replyPrice}}</span>{{else}}-{{/if}}</td>
 							<td>{{offer.remark}}</td>
 							<td>{{if offer.reserveMinutes == -1}}
 									{{if offer.status == "已拒绝"}}
