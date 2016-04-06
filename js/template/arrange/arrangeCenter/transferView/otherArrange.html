@@ -149,13 +149,12 @@
                                 </thead>
                                 <tbody id="ticket_body">
                                 {{each outTicketList as outTicket}}
-                                    {{if outTicket.id != null && outTicket.ticket != null}}
                                     <tr data-entity-id="{{outTicket.id}}">
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="serviceType" value="0" />
-                                                <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" />
-                                                <input type="hidden" name="ticketId" value="{{outTicket.ticket.id}}" />
+                                                <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="{{outTicket.ticketName}}" type="text" />
+                                                <input type="hidden" name="ticketId" value="{{outTicket.id}}" />
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                 </span>
@@ -169,7 +168,7 @@
                                                 <option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
                                             </select>
                                         </td>
-                                        <td><input class="col-sm-12" name="startCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="startingCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
                                         <td><input class="col-sm-12" name="arriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" /></td>
                                         <td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
                                         <td><input class="col-sm-12" name="shift" value="{{outTicket.shift}}" type="text" maxlength="20" /></td>
@@ -186,7 +185,6 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    {{/if}}
                                     {{/each}}
                                 </tbody>
                             </table>

@@ -313,7 +313,7 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                Transfer._getBusList($searchFrom, obj.curr - 1);
+                                Transfer._getHotelList($searchFrom, obj.curr - 1);
                             }
                         }
                     });
