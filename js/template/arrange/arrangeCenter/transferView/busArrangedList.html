@@ -15,7 +15,7 @@
     </thead>
     <tbody class="T-busCompleted-list">
         {{each unifyList as bus}}
-                {{each bus.outRemarkList as buslist index}}
+        {{each bus.outRemarkList as buslist index}}
             <tr data-id = "{{bus.unifyId}}">
             {{if index == 0}}
             <td class="h-touristGroupInfo" rowspan="{{bus.outRemarkList.length}}">
@@ -41,7 +41,7 @@
             <td>{{buslist.arriveTime}}</td>
             <td>{{buslist.shift}}</td>
             <td>{{buslist.require}}</td>
-            <td>{{buslist.arrangeUserName}}</td>
+            <td>{{bus.arrangeUserName}}</td>
             <td>{{if buslist.status == 3}}
             <i class="ace-icon fa fa-check green bigger-130"></i>
             已完成{{else}}
