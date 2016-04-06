@@ -7,6 +7,8 @@
             <th>客人信息</th>
             <th>入住时间</th>
             <th>要求</th>
+            <th>安排人</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -42,6 +44,8 @@
             <td>
                 {{hotel.require}}
             </td>
+            <td>{{hotel.arrangeUserName}}</td>
+            <td>{{if hotel.status == 3}}已完成{{else}}未完成{{/if}}</td>
             {{if index == 0}}
             <td rowspan="{{hotel.outRemarkList.length}}">
                 <a class="cursor T-arrange-item T-action">安排</a>
