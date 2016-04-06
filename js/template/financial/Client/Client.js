@@ -50,6 +50,7 @@ define(function(require, exports) {
                 startDate : date.startDate,
                 endDate : date.endDate,
                 accountStatus:2,
+                partnerAgencyType: 2
                 sortType : "desc"
             };
 
@@ -60,6 +61,7 @@ define(function(require, exports) {
                 endDate : Client.$tab.find('.T-search-end-date').val(),
                 accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value"),
+                partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val()
                 sortType : Client.$tab.find("select[name=orderBy]").val()
             };
 
@@ -124,6 +126,11 @@ define(function(require, exports) {
             event.preventDefault();
             Client.listClient(0);
         });
+        Client.$searchArea.find('[name=partnerAgencyType]').on('change', function(event) {
+            event.preventDefault();
+            Client.listClient(0);
+        });
+
         //状态框选择事件
         Client.$searchArea.find(".T-finance-status").on('click','a',function(event){
             event.preventDefault();//阻止相应控件的默认事件
