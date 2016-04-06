@@ -46,7 +46,7 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(restaurant.searchData);

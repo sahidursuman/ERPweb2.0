@@ -47,13 +47,15 @@ define(function(require, exports) {
 
         args.pageNo = page || 0;
         args.accountStatus = 2;
+        args.sortType = "desc";
         if (!!FinGuide.$tab) {
             args = {
                 pageNo: (page || 0),
                 guideId: FinGuide.$tab.find('.T-search-name').data('id'),
                 startDate: FinGuide.$tab.find('.T-search-start-date').val(),
                 endDate: FinGuide.$tab.find('.T-search-end-date').val(),
-                accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value")
+                accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value"),
+                sortType : FinGuide.$tab.find("select[name=orderBy]").val()
             }
 
             var guideName = FinGuide.$tab.find('.T-search-name').val();
@@ -74,6 +76,7 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 data.guideName = data.guideName || '全部';
                 data.accountStatus = args.accountStatus;
+                data.sortType = args.sortType;
                 Tools.addTab(menuKey, "导游账务", listTemplate(data));
                 FinGuide.$tab = $('#tab-' + menuKey + '-content');
                 // 绑定事件

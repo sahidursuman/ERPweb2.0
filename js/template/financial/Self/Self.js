@@ -33,10 +33,6 @@ define(function(require, exports) {
             endDate = Self.$searchArea.find("input[name=endDate]").val();
             accountStatus = Self.$searchArea.find(".T-finance-status").find("button").data("value");
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
         selfPayName = (selfPayName == "全部") ? "" : selfPayName;
 
         Self.searchData = {
@@ -46,7 +42,7 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: Self.$searchArea ? Self.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "listFinancialSummaryOfSelfPay"),
@@ -55,7 +51,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.searchParam.accountStatus = Self.searchData.accountStatus;
+                    data.searchParam = Self.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);
