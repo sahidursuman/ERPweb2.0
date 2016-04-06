@@ -35,14 +35,16 @@ define(function(require, exports) {
      */
     FinShop.getList = function(page, $tab) {
         var args = FinancialService.getInitDate();
-            args.accountStatus = 2;
+        args.accountStatus = 2;
+        args.sortType = "desc";
         args.pageNo = page || 0;
         if (!!$tab) {
             args = {
                 pageNo: (page || 0),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
-                accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+                accountStatus : $tab.find(".T-finance-status").find("button").data("value"),
+                sortType : $tab.find("select[name=orderBy]").val()
             }
             var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;

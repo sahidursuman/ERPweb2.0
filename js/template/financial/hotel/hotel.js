@@ -46,7 +46,7 @@ define(function(require, exports) {
             startTime : startDate,
             endTime : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: hotel.$searchArea ? hotel.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(hotel.searchData);

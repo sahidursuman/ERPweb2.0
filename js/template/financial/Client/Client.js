@@ -49,7 +49,8 @@ define(function(require, exports) {
                 pageNo : (page || 0),
                 startDate : date.startDate,
                 endDate : date.endDate,
-                accountStatus:2
+                accountStatus:2,
+                sortType : "desc"
             };
 
         if(Client.$tab){
@@ -58,7 +59,8 @@ define(function(require, exports) {
                 startDate : Client.$tab.find('.T-search-start-date').val(),
                 endDate : Client.$tab.find('.T-search-end-date').val(),
                 accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value"),
-                unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value")
+                unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value"),
+                sortType : Client.$tab.find("select[name=orderBy]").val()
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),

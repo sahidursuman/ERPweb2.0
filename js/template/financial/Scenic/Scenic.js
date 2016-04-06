@@ -41,7 +41,7 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: scenic.$searchArea ? scenic.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(scenic.searchData);
