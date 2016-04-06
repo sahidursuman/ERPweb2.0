@@ -205,9 +205,13 @@ template.helper("getPayTypeOptions", function(payType,isBalance) {
     // options += '<option value="1" '+ (start++ == payType?'selected':'') +'>网上支付</option>';
     options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
+    if (isBalance==5) {
+        options += '<option value="5" '+ (5 == payType?'selected':'') +'>网付</option>';
+    }
     if (isBalance==1) {
         options += '<option value="6" '+ (6 == payType?'selected':'') +'>冲抵</option>';
     }
+    
     return options;
 });
 
