@@ -2191,12 +2191,14 @@ define(function(require, exports) {
                 var money = $(this).find('[name="money"]').val() * 1;
                 countMoney += money;
             });
-            return Tools.toFixed(countMoney);
+            countMoney = Tools.toFixed(countMoney)
+            return isNaN(countMoney) ? 0 : countMoney;
         },
         //计算金额
         calcMoney : function($that, $tab){
-            var $tr = $that.closest('tr');
-            $tr.find('[name="money"]').val($tr.find('[name="count"]').val() * $tr.find('[name="price"]').val());
+            var $tr = $that.closest('tr'),
+                price = $tr.find('[name="count"]').val() * $tr.find('[name="price"]').val()
+            $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
             $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
         },
         //组装应收数据
