@@ -39,7 +39,9 @@
         <td>
             <p>{{hotel.checkInTime}}</p>
         </td>
-        <td>{{hotel.hotelLevel}}</td>
+        <td>
+            {{hotel.hotelLevel  | getHotelLevelDesc}}
+        </td>
         <td>
             {{hotel.roomCount}}
         </td>
