@@ -117,7 +117,7 @@
                     {{if outBus.isConfirmAccount == 0 }}未对账{{else}}已对账{{/if}}
                 </td>
                 <td>
-                    <a class="cursor T-action T-arrange-delete" data-catename="bus" title="删除">
+                    <a class="cursor T-action T-arrange-delete" {{ if outBus.isConfirmAccount == 1 }}disabled="disabled" {{/if}}data-catename="bus" title="删除">
                         删除
                     </a>
                 </td>
