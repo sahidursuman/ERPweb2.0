@@ -28,7 +28,7 @@ define(function(require, exports) {
     //产品销量页面list
     PerformanceFun.listemployeePerfor = function() {
         var html = listMainTemplate();
-        addTab(menuKey, "员工业绩", html);
+        Tools.addTab(menuKey, "员工业绩", html);
         //初始化页面绑定事件
         PerformanceFun.init_event();
         PerformanceFun.first = true;

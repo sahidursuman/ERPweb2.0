@@ -25,7 +25,7 @@ define(function(require, exports) {
                         ticketList = JSON.parse(ticketList);
                         data.ticketList = ticketList;
                         var html = listTemplate(data);
-                        addTab(menuKey,"旅客管理",html);
+                        Tools.addTab(menuKey,"旅客管理",html);
 
                         $("#"+tabId+".date-picker").datepicker({
                             autoclose: true,
@@ -77,20 +77,20 @@ define(function(require, exports) {
                         //给添加小组绑定事件
                         $("#"+tabId+" .traveller .btn-addGroup").click(function(){
                             var add = addGroup();
-                            addTab(menuKey+"-addGroup","添加小组",add);
+                            Tools.addTab(menuKey+"-addGroup","添加小组",add);
                         });
                         //给查看小组绑定事件
                         $("#"+tabId+" .traveller .look-Group").click(function(){
                             alert();
                             var add = lookGroup();
-                            addTab(menuKey+"-lookGroup","查看小组",add);
+                            Tools.addTab(menuKey+"-lookGroup","查看小组",add);
                         });
 
                         //给查看小组绑定事件
                         $("#"+tabId+" .notGroup .btn-not").click(function(){
                             alert();
                             var not = notGroup();
-                            addTab(menuKey+"-notGroup","未分团",not);
+                            Tools.addTab(menuKey+"-notGroup","未分团",not);
                         });
 
                     }

@@ -43,7 +43,7 @@ define(function(require, exports) {
         var data = {};
         data.searchParam = replace.searchData;
         var html = listMain(data);
-        addTab(menuKey,"代订利润",html);
+        Tools.addTab(menuKey,"代订利润",html);
 
         replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "","","");
     };
