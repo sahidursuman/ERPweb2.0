@@ -241,11 +241,11 @@ define(function(require, exports) {
         $searchArea.find('.T-export').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var startTime = $searchArea.find('input[name=startTime]').val();
+            var startTime = $searchArea.find('input[name=tripTime]').val();
             if (!!startTime && startTime!=null) {
                 exportXLS(KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(getArgs($searchArea)));
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "请选择出游日期");
+                showMessageDialog($("#confirm-dialog-message"), "请在高级选项里选择接团日期！");
                 return;
             };
         });
@@ -865,7 +865,7 @@ define(function(require, exports) {
                                 showMessageDialog($("#confirm-dialog-message"), '联系人的手机号码不能为空！');
                                 return false;
                             }
-                            if(jsonAdd.mobileNumber == "" && jsonAdd.idCardNumber){
+                            if(jsonAdd.mobileNumber == "" && jsonAdd.idCardNumber == ""){
                                 showMessageDialog($("#confirm-dialog-message"), '手机号码和证件号必填一项！');
                                 return false;
                             }
