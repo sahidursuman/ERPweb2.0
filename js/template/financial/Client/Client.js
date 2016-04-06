@@ -50,7 +50,7 @@ define(function(require, exports) {
                 startDate : date.startDate,
                 endDate : date.endDate,
                 accountStatus:2,
-                partnerAgencyType: 2
+                partnerAgencyType: '',
                 sortType : "desc"
             };
 
@@ -61,7 +61,7 @@ define(function(require, exports) {
                 endDate : Client.$tab.find('.T-search-end-date').val(),
                 accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value"),
-                partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val()
+                partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val(),
                 sortType : Client.$tab.find("select[name=orderBy]").val()
             };
 
