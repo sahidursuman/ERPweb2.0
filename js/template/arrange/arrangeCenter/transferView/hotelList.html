@@ -9,9 +9,10 @@
             <th>星级</th>
             <th>间数</th>
             <th>要求</th>
-            <th>安排结果</th>
             <th>状态</th>
+            {{if !isFrame}}
             <th>操作</th>
+            {{/if}}
         </tr>
     </thead>
     <tbody class="T-hotel-list">
@@ -23,9 +24,9 @@
             </label>
         </td>
         <td class="h-touristGroupInfo">
-            <p>中转单号：{{hotel.orderNumber}}</p>
-            <p><span>&lt;{{hotel.lineProductName}}&gt;</span></p>
-            <p><span>{{hotel.startTime}}</span><span>{{hotel.partnerAgencyName}}</span><span>外联销售：{{hotel.outOPUserName}}</span></p>
+            <p>中转单号：<span class="orderNumber">{{hotel.orderNumber}}</span></p>
+            <p><span class="lineProductName">&lt;{{hotel.lineProductName}}&gt;</span></p>
+            <p><span class="startTime">{{hotel.startTime}}</span><span class="partnerAgencyName">{{hotel.partnerAgencyName}}</span><span>外联销售：<span class="outOPUserName">{{hotel.outOPUserName}}</span></span></p>
             <p>收客单号：{{hotel.tgOrderNumber}}</p>
         </td>
         <td>
@@ -34,7 +35,7 @@
         </td>
         <td>
             <p>{{hotel.contactMemberName}}</p>
-            <p>{{hotel.adultCount}}大{{hotel.childCount}}小</p>
+            <p><span class="adultCount">{{hotel.adultCount}}</span>大<span class="childCount">{{hotel.childCount}}</span>小</p>
         </td>
         <td>
             <p>{{hotel.checkInTime}}</p>
@@ -43,10 +44,7 @@
         <td>
             {{hotel.roomCount}}
         </td>
-        <td>{{hotel.require}}</td>
-        <td>
-            <a>{{hotel.hotelName}}</a>
-        </td>
+        <td><span class="require">{{hotel.require}}</span></td>
         <td>
             {{if hotel.status == 1}}
                 <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
@@ -54,6 +52,7 @@
                 <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
             {{/if}}
         </td>
+        {{if !isFrame}}
         <td>
             <a class="cursor T-inform T-action">
                 通知</a>
@@ -62,15 +61,17 @@
             <a class="cursor T-view T-action">
                 <label class="padding-right20">|</label>查看
         </td>
+        {{/if}}
         </tr>
         {{/each}}
     </tbody>
 </table>
-
 <div class="text-center">
+   {{if !isFrame}}
     <button class="btn btn-sm btn-success w-150 R-right T-merge-arrange" {{if !canMergeArrange}} disabled="disabled" {{/if}} data-right="1130004">
         <i class="ace-icon fa fa-user-plus"></i> 统一安排
     </button>
+    {{/if}}
 </div>
   
 <div class="row pageMode">

@@ -1,12 +1,13 @@
 <div class="T-planbus globalAdd ">
     <div>
-        <button class="btn btn-sm btn-success T-add-transfersId" placeholder="新增游客">
+        <button class="btn btn-sm btn-success T-add-BusTransfersId" placeholder="新增游客">
             <i class="ace-icon fa fa-plus"></i> 新增
         </button>
     </div>
     {{each outRemarkList as Busplan}}
     <div class="T-transfersId-box">
         <div class="form-group" >
+
             <input type="hidden" name="outRemarkId"  value="{{Busplan.id}}">
             <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
             <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
@@ -19,6 +20,7 @@
     </div>
     {{/each}}
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
+    <input type="hidden" name="unifyId"  value="{{unifyId}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">车</span>
         <button class="btn btn-sm btn-success T-add-bus"> <i class="ace-icon fa fa-plus"></i> 新增 </button>

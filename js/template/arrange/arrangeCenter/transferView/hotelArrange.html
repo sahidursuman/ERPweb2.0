@@ -1,24 +1,27 @@
 <div class="T-planbus globalAdd ">
     <div>
-        <button class="btn btn-sm btn-success T-add-transfersId" placeholder="新增游客">
+        <button class="btn btn-sm btn-success T-add-HotelTransfersId" placeholder="新增游客">
             <i class="ace-icon fa fa-plus"></i> 新增
         </button>
     </div>
     {{each outRemarkList as hotelmain}}
-    <div class="form-group">
-        <input type="hidden" name="outRemarkIds" value="{{hotelmain.outRemarkId}}" />
-        <label class="control-label mar-r-20">中转单号：{{hotelmain.orderNumber}}</label>
-        <label class="control-label mar-r-20">线路产品：{{hotelmain.lineProductName}}</label>
-        <label class="control-label mar-r-20">用车时间：{{hotelmain.arriveTime}}</label>
-        <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{hotelmain.adultCount}}</span>大<span class="F-float F-count">{{hotelmain.childCount}}</span></label>
-        <label class="control-label mar-r-20">外联销售：<span class="F-float F-money">{{hotelmain.outOPUserName}}</span></label>
-        <label class="control-label ">
-            <button class="btn btn-sm btn-success T-del-hotel">删除 </button>
-        </label>
-    </div>
-    <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
+    <div class="T-transfersId-hotel">
+        <div class="form-group">
+            <input type="hidden" name="outRemarkId" value="{{hotelmain.id}}" />
+            <label class="control-label mar-r-20">中转单号：{{hotelmain.orderNumber}}</label>
+            <label class="control-label mar-r-20">线路产品：{{hotelmain.lineProductName}}</label>
+            <label class="control-label mar-r-20">用车时间：{{hotelmain.arriveTime}}</label>
+            <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{hotelmain.adultCount}}</span>大<span class="F-float F-count">{{hotelmain.childCount}}</span></label>
+            <label class="control-label mar-r-20">外联销售：<span class="F-float F-money">{{hotelmain.outOPUserName}}</span></label>
+            <label class="control-label ">
+                <button class="btn btn-sm btn-success T-del-hotel">删除 </button>
+            </label>
+            <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
+        </div>
+     </div>
     {{/each}}
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
+    <input type="hidden" name="unifyId"  value="{{unifyId}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">房</span>
         <button class="btn btn-sm btn-success T-add-hotel"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
