@@ -5,25 +5,25 @@
  */
 
 define(function(require, exports) {
-    var BusListTemplate = require('./transfer/busList'),
-        BusArrangedListTemplate = require('./transfer/busArrangedList'),
-        BusArrangeTemplate = require('./transfer/busArrange'),
-        ViewBusTemplate = require('./transfer/viewBus'),
-        addbustransferTemplate = require('./transfer/addbustransfer'),
+    var BusListTemplate = require('./transferView/busList'),
+        BusArrangedListTemplate = require('./transferView/busArrangedList'),
+        BusArrangeTemplate = require('./transferView/busArrange'),
+        ViewBusTemplate = require('./transferView/viewBus'),
+        addbustransferTemplate = require('./transferView/addbustransfer'),
         addtransferId = "tab-" + tabKey + "-addtransfer",
         busplanId = "tab-" + tabKey + "-busplan",
         viewBusId = "tab-" + tabKey + "-viewBus",
 
-        HotelListTemplate = require('./transfer/hotelList'),
-        HotelArrangedListTemplate = require('./transfer/hotelArrangedList'),
-        HotelArrangeTemplate = require('./transfer/hotelArrange'),
-        ViewHotelTemplate = require('./transfer/viewHotel'),
+        HotelListTemplate = require('./transferView/hotelList'),
+        HotelArrangedListTemplate = require('./transferView/hotelArrangedList'),
+        HotelArrangeTemplate = require('./transferView/hotelArrange'),
+        ViewHotelTemplate = require('./transferView/viewHotel'),
         hotelplanId = "tab-" + tabKey + "-hotelplan",
         viewhotelId = "tab-" + tabKey + "-viewhotel",
 
-        OtherListTemplate = require('./transfer/otherList'),
-        OtherArrangeTemplate = require('./transfer/otherArrange'),
-        ViewOtherTemplate = require('./transfer/viewOther'),
+        OtherListTemplate = require('./transferView/otherList'),
+        OtherArrangeTemplate = require('./transferView/otherArrange'),
+        ViewOtherTemplate = require('./transferView/viewOther'),
 
         Transfer = {
             transitIds: [],
@@ -1551,6 +1551,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney"  maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('tbody');
@@ -1585,6 +1586,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('tbody');
