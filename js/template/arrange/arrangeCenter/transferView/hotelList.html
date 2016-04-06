@@ -9,7 +9,6 @@
             <th>星级</th>
             <th>间数</th>
             <th>要求</th>
-            <th>状态</th>
             {{if !isFrame}}
             <th>操作</th>
             {{/if}}
@@ -45,13 +44,6 @@
             {{hotel.roomCount}}
         </td>
         <td><span class="require">{{hotel.require}}</span></td>
-        <td>
-            {{if hotel.status == 1}}
-                <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
-            {{else if hotel.status == 0}}
-                <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
-            {{/if}}
-        </td>
         {{if !isFrame}}
         <td>
             <a class="cursor T-inform T-action">

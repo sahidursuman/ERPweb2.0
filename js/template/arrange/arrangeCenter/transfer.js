@@ -568,7 +568,7 @@ define(function(require, exports) {
                         '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
                         '<label class="control-label mar-r-20">客人信息：'+
                             '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>'+
+                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>小'+
                         '</label>'+
                         '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
                         '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
@@ -1228,7 +1228,7 @@ define(function(require, exports) {
                         '<label class="control-label mar-r-20">用车时间：'+(hotelPlan.arriveTime||"")+'</label>'+
                         '<label class="control-label mar-r-20">客人信息：'+
                             '<span class="F-float F-count">'+(hotelPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>'+
+                            '<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>小'+
                         '</label>'+
                         '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(hotelPlan.outOPUserName||"")+'</span></label>'+
                         '<label class="control-label "><button class="btn btn-sm btn-success T-del-hotel">删除 </button></label>'+
@@ -1296,7 +1296,7 @@ define(function(require, exports) {
         outHotelList = JSON.stringify(outHotelList);
         outRemarkList = [], //中转列表 Id
             $tr = $hotelplanId.find('.T-bus-plan tr'),
-            outRemarkId = $hotelplanId.find('input[name=outRemarkIds]');
+            outRemarkId = $hotelplanId.find('input[name=outRemarkId]');
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
