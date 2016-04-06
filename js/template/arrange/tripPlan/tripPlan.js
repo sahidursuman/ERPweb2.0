@@ -1887,23 +1887,34 @@ define(function(require, exports) {
             return trim(idCard ? idCard[0] : " ");
         },
         saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
-            var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
+            var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val()),
+                touristGroupMemberList = [];
             if (data != "") {
                 var dataArray = data.split(/\r?\n/);
                 if (dataArray.length > 0) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
                         if(memberInfo){
-                            $obj.append(T.touristsList({touristGroupMemberList:[{
-                                name : F.getName(memberInfo),
-                                mobileNumber : F.getPhone(memberInfo),
-                                idCardNumber : F.getIdCard(memberInfo)
-                            }]}));
+                            var name = F.getName(memberInfo),
+                                mobileNumber = F.getPhone(memberInfo),
+                                idCardNumber = F.getIdCard(memberInfo);
+                            if(name != "" || !!mobileNumber || !!idCardNumber){
+                                touristGroupMemberList.push({
+                                    name : name,
+                                    mobileNumber : mobileNumber,
+                                    idCardNumber : idCardNumber
+                                });
+                                $obj.append(T.touristsList({touristGroupMemberList:[{
+                                    name : name,
+                                    mobileNumber : F.getPhone(memberInfo),
+                                    idCardNumber : idCardNumber
+                                }]}));
+                            }
                             layer.close(addVisotorMoreLayer);
                         }
                     }
                     if(fn){
-                        fn($obj);
+                        fn($obj, touristGroupMemberList);
                     }
                 }
             }else{
