@@ -454,13 +454,11 @@ define(function(require, exports) {
             });
             //删除中转数据
             $busplanId.off('click').on('click','.T-del-bus',function() {
-                var $that = $(t+his),$div = $that.closest('div'),
+                var $that = $(this),$div = $that.closest('div'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    Transfer.delBusTransfer($div, outRemarkId);
                     $div.fadeOut(function(){
                         $div.remove();
                     })
-                    
                     var delBusTransferData = {
                         outRemarkId : outRemarkId
                     }
@@ -542,7 +540,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
+                            if (item.outRemarkId === Transfer.addBusTransferArray[i].id)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
                             }
                         }
@@ -712,11 +710,12 @@ define(function(require, exports) {
     //安排保存
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
-        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'); //车安排列表
-        outBusList = JSON.stringify(outBusList);
+        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
+        outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
-            outRemarkId = $tab.find('input[name=outRemarkId]');
+            outRemarkId = $tab.find('input[name=outRemarkId]'),
+            status = $tab.find('.T-finishedArrange').is(':checked')?3:1;
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
@@ -731,6 +730,7 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type: "POST",
             data: {
+                status:status,
                 outBusList: outBusList,
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType,
@@ -1193,8 +1193,8 @@ define(function(require, exports) {
         //安排未安排房保存
     Transfer.submithotel = function($hotelplanId) {
         var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
-        console.log(shuttleType)
-        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'); //车安排列表
+        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'), //车安排列表
+            status = $hotelplanId.find('.T-finishedArrange').is(':checked')?3:1;
         outHotelList = JSON.stringify(outHotelList);
         outRemarkList = [], //中转列表 Id
             $tr = $hotelplanId.find('.T-bus-plan tr'),
@@ -1213,6 +1213,7 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutHotelUnifyArrange"),
             type: "POST",
             data: {
+                status : status,
                 outHotelList: outHotelList,
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType
@@ -1538,7 +1539,7 @@ define(function(require, exports) {
             '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />' +
             '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>' +
-            '<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>' +
+            '<td><input class="col-sm-12 T-chooseBusBrand" name="brand" type="text" value="" /></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>' +
