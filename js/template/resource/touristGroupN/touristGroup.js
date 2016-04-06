@@ -241,8 +241,9 @@ define(function(require, exports) {
         $searchArea.find('.T-export').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var startTime = $searchArea.find('input[name=tripTime]').val();
-            if (!!startTime && startTime!=null) {
+            var startTime = $searchArea.find('input[name="tripTime"]').val(),
+                dateType = $searchArea.find('[name="dateType"]').val();
+            if (!!startTime && dateType == "0") {
                 exportXLS(KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(getArgs($searchArea)));
             }else{
                 showMessageDialog($("#confirm-dialog-message"), "请在高级选项里选择接团日期！");
@@ -2017,8 +2018,8 @@ define(function(require, exports) {
                 data.receiveTrip.push(receiveTripData);
             });
             data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
-            if(typeof data.receiveTripDe === "object"){
-                data.receiveTripDe = JSON.stringify(data.receiveTripDe || "[]");
+            if(typeof data.receiveTripDel === "object"){
+                data.receiveTripDel = JSON.stringify(data.receiveTripDel || "[]");
             }
         }
 
@@ -2097,6 +2098,26 @@ define(function(require, exports) {
                 data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
             }
         }
+        if(data.baseInfo.customerType === 1){
+            data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
+            if(typeof data.receiveTripDel === "object"){
+                data.receiveTripDel = JSON.stringify(data.receiveTripDel || "[]");
+            }
+            $joinGroup.find('tr').each(function(index){
+                data.receiveTripDel.push({
+                    id : $(this).data('id')
+                });
+            });
+            data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
+            if(typeof data.sendTripDel === "object"){
+                data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
+            }
+            $sendGroup.find('tr').each(function(index){
+                data.sendTripDel.push({
+                    id : $(this).data('id')
+                });
+            });
+        }
 
         //其它信息
         data.otherInfo = {
@@ -2129,11 +2150,16 @@ define(function(require, exports) {
                     showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                         if(!!tabArgs){
                             if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
-                                touristGroup.initEdit($("#tab-"+tabArgs[0]+"-content"));
+                                touristGroup.init_events($("#tab-"+tabArgs[0]+"-content"));
                             };
                         }else{
                             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                            touristGroup.listTouristGroup(0);
+                            var $listTab = $("#tab-" + K.menu + "-content");
+                            if($listTab.length > 0){
+                                $listTab.find('.T-search-area').find('.T-touristGroupList-search').trigger('click');
+                            }else{
+                                touristGroup.listTouristGroup(0);
+                            }
                         }
                     });
                 }
