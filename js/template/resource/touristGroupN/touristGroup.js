@@ -1261,6 +1261,7 @@ define(function(require, exports) {
                         id : id
                     });
                     $this.closest('.T-fee-list').data('del-json', delJson);
+                    $tr.remove();
                 }else{
                     $tr.remove();
                     F.calcMoney($(this), $layer);
