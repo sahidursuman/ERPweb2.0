@@ -28,6 +28,7 @@ define(function(require, exports) {
         Transfer = {
             transitIds: [],
             installCheckData : [],
+            delBusTransferId : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
@@ -408,7 +409,7 @@ define(function(require, exports) {
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
-                        $busplanId = Transfer.$busplanId
+                        $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId, outRemarkList.outRemarkId, outRemarkList.shuttleType); //车安排事件
 
@@ -449,24 +450,31 @@ define(function(require, exports) {
             });
             //添加中转数据
             $busplanId.find('.T-add-transfersId').on('click', function() {
-                Transfer.addBusTransfer(0);
+                Transfer.addBusTransfer(0,$busplanId);
+            });
+            //删除中转数据
+            $busplanId.off('click').on('click','.T-del-bus',function() {
+                var $that = $(this),$div = $that.closest('div'),
+                    outRemarkId = $div.find('[name=outRemarkId]').val();
+                    $div.fadeOut(function(){
+                        $div.remove();
+                    })
+                    var delBusTransferData = {
+                        outRemarkId : outRemarkId
+                    }
+                    Transfer.delBusTransferId.push(delBusTransferData);
             });
 
         }
     /**
-    * 车队安排添加中转事件弹窗
-    * @param  {[type]} $busplanId [容器]
-    * @return {[type]}      [description]
-    */
-    /**
-     * 增加车安排任务
+     * 我现在是在做点击删除的时候吧id
+     * 增加车安排弹窗任务
      * @param {int} shuttleType 接送团标志 0：接团；1：送团
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
-    Transfer.addBusTransfer = function(shuttleType, status) {
+    Transfer.addBusTransfer = function(shuttleType,$busplanId) {
         shuttleType = shuttleType || 0;
         status = 0;
-
         var layerFrame = layer.open({
             type: 1,
             title: "选择游客",
@@ -492,15 +500,33 @@ define(function(require, exports) {
                 }).trigger('click');
                 
                 // 添加
-                $frame.find('.T-confirm').on('click', function(event) {
+                $frame.find('.T-confirm').off('click').on('click', function(event) {
                     event.preventDefault();
                     //缓存选中的数据
-                    var checkData = Transfer.installCheckData($frame);
-                    console.log(checkData);
+                    var checkData = Transfer.installCheckDatas($frame);
                     // 添加游客列表
-                    // Transfer._mergeArrangeBus
+                    var htmlData = '';
+                    for (var i = 0;i<checkData.length; i++) {
+                        var busPlan = checkData[i];
+                        htmlData = '<div class="form-group">'+
+                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
+                        '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
+                        '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
+                        '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
+                        '<label class="control-label mar-r-20">客人信息：'+
+                            '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
+                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>'+
+                        '</label>'+
+                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
+                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
+                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'+
+                        '</div> '
+
+                        $busplanId.find('.T-transfersId-box').after(htmlData);
+                    };
+                    
                     // 关闭对话框
-                    layerFrame.close();
+                    layer.close(layerFrame);
                 });
 
                 // 勾选
@@ -514,7 +540,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.id === Transfer.addBusTransferArray[i].id)  {
+                            if (item.outRemarkId === Transfer.addBusTransferArray[i].id)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
                             }
                         }
@@ -523,24 +549,29 @@ define(function(require, exports) {
             }
         });
     };
-    //缓存数据 T-bus-list
-    Transfer.installCheckData = function($frame){
+    //缓存数据 
+    Transfer.installCheckDatas = function($frame){
         var $tr = $frame.find('.T-bus-list').find('tr');//找到所有的tr
+        var installCheckData = [];
         $tr.each(function(i){
-            var $that = $(this);
+            var $that = $(this),id = $that.attr('data-id');
             var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
             if(selectFlag){
                 var checkData = {
+                    id : id,
                     orderNumber : $that.find('.orderNumber').text(),
                     lineProductName : $that.find('.lineProductName').text(),
                     startTime : $that.find('.startTime').text(),
                     partnerAgencyName : $that.find('.partnerAgencyName').text(),
                     adultCount : $that.find('.adultCount').text(),
                     childCount : $that.find('.childCount').text(),
+                    outOPUserName : $that.find('.outOPUserName').text(),
+                    require : $that.find('.require').text(),
                 };
-                Transfer.installCheckData.push(checkData);
+                installCheckData.push(checkData);
             }
         });
+        return installCheckData;
     };
     /**
      * 获取车队安排的列表
@@ -679,11 +710,12 @@ define(function(require, exports) {
     //安排保存
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
-        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'); //车安排列表
-        outBusList = JSON.stringify(outBusList);
+        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
+        outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
-            outRemarkId = $tab.find('input[name=outRemarkId]');
+            outRemarkId = $tab.find('input[name=outRemarkId]'),
+            status = $tab.find('.T-finishedArrange').is(':checked')?3:1;
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
@@ -698,9 +730,11 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type: "POST",
             data: {
+                status:status,
                 outBusList: outBusList,
                 outRemarkList: outRemarkList,
-                shuttleType: shuttleType
+                shuttleType: shuttleType,
+                deleteOutRemarkList : JSON.stringify(Transfer.delBusTransferId),/////////
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1159,8 +1193,8 @@ define(function(require, exports) {
         //安排未安排房保存
     Transfer.submithotel = function($hotelplanId) {
         var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
-        console.log(shuttleType)
-        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'); //车安排列表
+        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'), //车安排列表
+            status = $hotelplanId.find('.T-finishedArrange').is(':checked')?3:1;
         outHotelList = JSON.stringify(outHotelList);
         outRemarkList = [], //中转列表 Id
             $tr = $hotelplanId.find('.T-bus-plan tr'),
@@ -1179,6 +1213,7 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutHotelUnifyArrange"),
             type: "POST",
             data: {
+                status : status,
                 outHotelList: outHotelList,
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType
@@ -1504,7 +1539,7 @@ define(function(require, exports) {
             '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />' +
             '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>' +
-            '<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>' +
+            '<td><input class="col-sm-12 T-chooseBusBrand" name="brand" type="text" value="" /></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>' +
