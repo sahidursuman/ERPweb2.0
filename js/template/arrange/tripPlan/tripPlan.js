@@ -1162,7 +1162,7 @@ define(function(require, exports) {
                 $tab.find('[name="fromPartnerAgencyId"]').val(groupData.partnerAgency ? groupData.partnerAgency.id : "");
                 $tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
                 $tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
-                $tab.find('[name="getType"]').val(groupData.getType);
+                $tab.find('[name="getType"]').val(groupData.getType||1);
                 $tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
                 /*$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());*/
                 $tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
