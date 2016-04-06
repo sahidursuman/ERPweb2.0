@@ -66,7 +66,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 				       var html=listTemplate(data);
-	                   addTab(menuKey,"导游业绩",html);
+	                   Tools.addTab(menuKey,"导游业绩",html);
 	                   //初始化JQuery对象
 				       tourguidPerObj.$tab=$("#" + tabId);//最大区域模块
 				       tourguidPerObj.$searchArea=tourguidPerObj.$tab.find('.T-search-area');//搜索模块区域
