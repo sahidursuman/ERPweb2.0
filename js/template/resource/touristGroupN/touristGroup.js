@@ -859,6 +859,17 @@ define(function(require, exports) {
                             showMessageDialog($("#confirm-dialog-message"), '至少设置一个联系人！');
                             return false;
                         }
+                        for(var i=0; i<infoData.touristGroupMemberJsonAdd.length; i++){
+                            var jsonAdd = infoData.touristGroupMemberJsonAdd[i];
+                            if(!!jsonAdd.isContactUser && jsonAdd.mobileNumber == ""){
+                                showMessageDialog($("#confirm-dialog-message"), '联系人的手机号码不能为空！');
+                                return false;
+                            }
+                            if(jsonAdd.mobileNumber == "" && jsonAdd.idCardNumber){
+                                showMessageDialog($("#confirm-dialog-message"), '手机号码和证件号必填一项！');
+                                return false;
+                            }
+                        }
                         infoData.touristGroupMemberJsonDel = $layer.find('.T-addTouristTbody').data('del-json');
                         if(typeof infoData.touristGroupMemberJsonDel !== "object"){
                             infoData.touristGroupMemberJsonDel = JSON.parse(infoData.touristGroupMemberJsonDel || "[]");
@@ -1559,9 +1570,9 @@ define(function(require, exports) {
     //批量添加游客
     touristGroup.batchAddTourists = function($obj, validate) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
-            module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer){
+            module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer, data){
                 var $tr = $layer.find('tr[data-default="1"]');
-                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == ""){
+                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == "" && data.length > 0){
                     $tr.remove();
                 }
                 touristGroup.memberNumber($layer);
@@ -2238,7 +2249,7 @@ define(function(require, exports) {
                     id = $that.data('id'),
                     name = $that.find('[name="name"]').val(),
                     mobileNumber = $that.find('[name="mobileNumber"]').val();
-                if(name != "" && mobileNumber != ""){
+                if(name != "" || mobileNumber != ""){
                     var jsonData = {
                         name : name,
                         mobileNumber : mobileNumber,
