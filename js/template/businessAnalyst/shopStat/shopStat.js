@@ -35,7 +35,6 @@ define(function(require, exports) {
 		Tools.addTab(menuKey, '购物统计', listMainTemplate());
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
-		Tools.filterMoney();
 		//shopStat.datepicker(shopStat.$searchArea)
 		Tools.setDatePicker(shopStat.$searchArea.find('.T-tripTime .datepicker'), true)
 		Tools.setDatePicker(shopStat.$searchArea.find('.T-shopTime .datepicker'), true)
