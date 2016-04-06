@@ -84,7 +84,7 @@ define(function(require, exports) {
                 }
             }
         });
-    }
+    };
 
     /**
      * 获取游客管理列表
@@ -1653,6 +1653,7 @@ define(function(require, exports) {
                     curr: (data.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                            args.pageNo = (obj.curr - 1);
                             touristGroup.getLineProductList(args, $layer);
                         }
                     }
