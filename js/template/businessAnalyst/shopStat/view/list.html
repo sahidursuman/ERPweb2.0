@@ -57,12 +57,12 @@
         <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
             <td class="P-tdFontSize">{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.shopName}}</td>
-            <td class="P-tdFontSize"><a href="javascript:void(0)" class="T-option T-consumeMoney">{{shop.consumeMoney}}</a></td>
-            <td class="P-tdFontSize">{{shop.aveconsumeMoney}}</td>
-            <td class="P-tdFontSize">{{shop.guideRebateMoney}}</td>
-            <td class="P-tdFontSize">{{shop.travelAgencyRebateMoney}}</td>
-            <td class="P-tdFontSize">{{shop.sumRebateMoney}}</td>
-            <td class="P-tdFontSize">{{shop.aveRebateMoney}}</td>
+            <td class="P-tdFontSize"><a href="javascript:void(0)" class="T-option T-consumeMoney"><span class='F-float F-money'>{{shop.consumeMoney}}</span></a></td>
+            <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveconsumeMoney}}</span></td>
+            <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.guideRebateMoney}}</span></td>
+            <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.travelAgencyRebateMoney}}</span></td>
+            <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.sumRebateMoney}}</span></td>
+            <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveRebateMoney}}</span></td>
         </tr>
         {{/each}}
         {{/each}}
@@ -72,12 +72,12 @@
             <td class="P-tdFontSize" >{{totalShop.touristAdultCount}}大{{totalShop.touristChildCount}}小</td>
             <td class="P-tdFontSize" >-</td>
             <td class="P-tdFontSize" >-</td>
-            <td class="P-tdFontSize" >{{totalShop.consumeMoney}}</td>
-            <td class="P-tdFontSize" >{{totalShop.avgConsumeMoney}}</td>
-            <td class="P-tdFontSize" >{{totalShop.guideRebateMoney}}</td>
-            <td class="P-tdFontSize" >{{totalShop.travelAgencyRebateMoney}}</td>
-            <td class="P-tdFontSize" >{{totalShop.sumRebateMoney}}</td>
-            <td class="P-tdFontSize" >{{totalShop.avgRebateMoney}}</td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.consumeMoney}}</span></td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.avgConsumeMoney}}</span></td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.guideRebateMoney}}</span></td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.travelAgencyRebateMoney}}</span></td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.sumRebateMoney}}</span></td>
+            <td class="P-tdFontSize" ><span class='F-float F-money'>{{totalShop.avgRebateMoney}}</span></td>
 
         </tr>
     </tbody>

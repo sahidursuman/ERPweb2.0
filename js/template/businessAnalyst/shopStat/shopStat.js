@@ -35,6 +35,7 @@ define(function(require, exports) {
 		Tools.addTab(menuKey, '购物统计', listMainTemplate());
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
+		Tools.filterMoney();
 		//shopStat.datepicker(shopStat.$searchArea)
 		Tools.setDatePicker(shopStat.$searchArea.find('.T-tripTime .datepicker'), true)
 		Tools.setDatePicker(shopStat.$searchArea.find('.T-shopTime .datepicker'), true)
@@ -85,7 +86,7 @@ define(function(require, exports) {
 				if(result){
 					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
-		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
+		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//绑定页面事件
 		       		shopStat.initEvent();
 		       		//设置记录条数
