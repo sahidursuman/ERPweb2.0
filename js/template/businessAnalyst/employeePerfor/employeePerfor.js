@@ -95,7 +95,7 @@ define(function(require, exports) {
     PerformanceFun.getList = function(page) {
         var args = PerformanceFun.$form.serializeJson(),
             url, template, method, index = 0, totalFun,
-            childGroupSearchMethod = 'findByBusinessGroup';
+            childGroupSearchMethod = 'findByChildGroup';
 
         switch (args.object * 1) {
             case 1:
@@ -114,9 +114,9 @@ define(function(require, exports) {
                 break;
             case 2:
                 if (!method) {
-                    method = childGroupSearchMethod;
+                    method = 'findByBusinessGroup';
                     if (!!args.businessGroupId) {
-                        method = 'findByChildGroup';
+                        method = childGroupSearchMethod;
                     }
                 }
 
@@ -125,7 +125,7 @@ define(function(require, exports) {
                 index = 2;
                 break;
             case 3:
-                method = "findByChildGroup";
+                method = childGroupSearchMethod;
                 delete args.businessGroupId;
                 template = listDeptTemplate;
                 totalFun = PerformanceFun.initFindBusinessGroupTotal;
