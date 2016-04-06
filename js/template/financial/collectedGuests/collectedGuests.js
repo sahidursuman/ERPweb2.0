@@ -172,6 +172,10 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
+                    
                     $("#tab-" + menuKey + "-content").find(".T-guest-list").html(html);
                     var $tab = $("#tab-" + menuKey + "-content");
                     $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
