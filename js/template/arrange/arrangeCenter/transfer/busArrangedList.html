@@ -8,6 +8,8 @@
             <th>抵达时间</th>
             <th>班次</th>
             <th>要求</th>
+            <th>安排人</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -38,7 +40,9 @@
             </td>
             <td>{{buslist.arriveTime}}</td>
             <td>{{buslist.shift}}</td>
-            <td>{{buslist.require}}<input type="hidden" value="{{outBus.outBusId}}" name="outBusId"></td>
+            <td>{{buslist.require}}</td>
+            <td>{{buslist.arrangeUserName}}</td>
+            <td>{{if buslist.status == 3}}已完成{{else}}未完成{{/if}}</td>
             {{if index == 0}}
             <td rowspan="{{bus.outRemarkList.length}}">
                 <a class="cursor T-action T-inform">通知</a>

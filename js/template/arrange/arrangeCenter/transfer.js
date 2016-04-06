@@ -453,28 +453,19 @@ define(function(require, exports) {
                 Transfer.addBusTransfer(0,$busplanId);
             });
             //删除中转数据
-            $busplanId.find('.T-del-bus').on('click', function() {
-                var $that = $(this),$div = $that.closest('div.T-transfersId-box'),
+            $busplanId.off('click').on('click','.T-del-bus',function() {
+                var $that = $(this),$div = $that.closest('div'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    Transfer.delBusTransfer($div, outRemarkId);
-                    $div.remove();
+                    $div.fadeOut(function(){
+                        $div.remove();
+                    })
                     var delBusTransferData = {
                         outRemarkId : outRemarkId
                     }
-
                     Transfer.delBusTransferId.push(delBusTransferData);
             });
 
         }
-    /**
-     * [delBusTransfer 删除中转车]
-     * @return {[type]} [description]
-     */
-    Transfer.delBusTransfer = function($tab,outRemarkId){
-        
-    };
-    //但是还是没有吧删除的id组装啊
-
     /**
      * 我现在是在做点击删除的时候吧id
      * 增加车安排弹窗任务
@@ -513,20 +504,25 @@ define(function(require, exports) {
                     event.preventDefault();
                     //缓存选中的数据
                     var checkData = Transfer.installCheckDatas($frame);
-                    console.log(checkData.length);
                     // 添加游客列表
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var busPlan = checkData[i];
-                        htmlData = ' <div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.outRemarkId||"")+'">'+
+                        htmlData = '<div class="form-group">'+
+                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
                         '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
                         '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
                         '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(busPlan.childCount||0)+'</span></label>'+
-                        '<label class="control-label ">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label></div>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'
-                        $busplanId.find('.T-busrequired').after(htmlData);
+                        '<label class="control-label mar-r-20">客人信息：'+
+                            '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
+                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>'+
+                        '</label>'+
+                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
+                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
+                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'+
+                        '</div> '
+
+                        $busplanId.find('.T-transfersId-box').after(htmlData);
                     };
                     
                     // 关闭对话框
@@ -544,7 +540,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
+                            if (item.outRemarkId === Transfer.addBusTransferArray[i].id)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
                             }
                         }
@@ -714,11 +710,12 @@ define(function(require, exports) {
     //安排保存
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
-        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'); //车安排列表
-        outBusList = JSON.stringify(outBusList);
+        var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
+        outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
-            outRemarkId = $tab.find('input[name=outRemarkId]');
+            outRemarkId = $tab.find('input[name=outRemarkId]'),
+            status = $tab.find('.T-finishedArrange').is(':checked')?3:1;
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
@@ -733,9 +730,11 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type: "POST",
             data: {
+                status:status,
                 outBusList: outBusList,
                 outRemarkList: outRemarkList,
-                shuttleType: shuttleType
+                shuttleType: shuttleType,
+                deleteOutRemarkList : JSON.stringify(Transfer.delBusTransferId),/////////
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1194,8 +1193,8 @@ define(function(require, exports) {
         //安排未安排房保存
     Transfer.submithotel = function($hotelplanId) {
         var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
-        console.log(shuttleType)
-        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'); //车安排列表
+        var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'), //车安排列表
+            status = $hotelplanId.find('.T-finishedArrange').is(':checked')?3:1;
         outHotelList = JSON.stringify(outHotelList);
         outRemarkList = [], //中转列表 Id
             $tr = $hotelplanId.find('.T-bus-plan tr'),
@@ -1214,6 +1213,7 @@ define(function(require, exports) {
             url: KingServices.build_url(service_name, "saveOutHotelUnifyArrange"),
             type: "POST",
             data: {
+                status : status,
                 outHotelList: outHotelList,
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType
@@ -1539,7 +1539,7 @@ define(function(require, exports) {
             '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />' +
             '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>' +
-            '<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>' +
+            '<td><input class="col-sm-12 T-chooseBusBrand" name="brand" type="text" value="" /></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" type="text" value="" /><input type="hidden" name="busLicenseNumberId" value="" /><span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><div class="col-sm-12"><input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" /><input type="hidden" name="driverId" value="" /><span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input class="col-sm-12" name="MobileNumber" readonly="readonly" type="text" value="" /></td>' +

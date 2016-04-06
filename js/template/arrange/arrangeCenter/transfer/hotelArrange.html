@@ -1,21 +1,29 @@
 <div class="T-planbus globalAdd ">
-{{each outRemarkList as hotelmain}}
-    <div class="form-group"> 
+    <div>
+        <button class="btn btn-sm btn-success T-add-transfersId" placeholder="新增游客">
+            <i class="ace-icon fa fa-plus"></i> 新增
+        </button>
+    </div>
+    {{each outRemarkList as hotelmain}}
+    <div class="form-group">
         <input type="hidden" name="outRemarkIds" value="{{hotelmain.outRemarkId}}" />
-        <label class="control-label mar-r-20">中转单号：{{hotelmain.orderNumber}}</label>  
-        <label class="control-label mar-r-20">线路产品：{{hotelmain.lineProductName}}</label> 
-        <label class="control-label mar-r-20">用车时间：{{hotelmain.arriveTime}}</label> 
+        <label class="control-label mar-r-20">中转单号：{{hotelmain.orderNumber}}</label>
+        <label class="control-label mar-r-20">线路产品：{{hotelmain.lineProductName}}</label>
+        <label class="control-label mar-r-20">用车时间：{{hotelmain.arriveTime}}</label>
         <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{hotelmain.adultCount}}</span>大<span class="F-float F-count">{{hotelmain.childCount}}</span></label>
-        <label class="control-label ">外联销售：<span class="F-float F-money">{{hotelmain.outOPUserName}}</span></label>
-     </div>
-     <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
-{{/each}}
-<input type="hidden" name="shuttleType" value="{{shuttleType}}">
+        <label class="control-label mar-r-20">外联销售：<span class="F-float F-money">{{hotelmain.outOPUserName}}</span></label>
+        <label class="control-label ">
+            <button class="btn btn-sm btn-success T-del-hotel">删除 </button>
+        </label>
+    </div>
+    <div class="bg-gray form-group">现酒店计划要求：{{hotelmain.require}}</div>
+    {{/each}}
+    <input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">房</span>
         <button class="btn btn-sm btn-success T-add-hotel"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
     </div>
-    <table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
+    <table class="table table-striped table-bordered table-hover hotelListTable margin-top" style="border:1px solid #ddd;">
         <thead>
             <tr>
                 <th class="th-border"><span class="necessary">*</span>入住日期</th>
@@ -31,33 +39,35 @@
                 <th class="th-border">应付款</th>
                 <th class="th-border">预付款</th>
                 <th class="th-border">备注</th>
+                <th class="th-border">对账状态</th>
                 <th class="th-border" style="width: 100px">操作</th>
             </tr>
         </thead>
         <tbody class="T-hotel-plan" id="hotelplan_body">
-        {{each outHotelList as outHotel}}
+            {{each outHotelList as outHotel}}
             <tr data-entity-id="{{outHotel.outHotelId}}">
                 <td>
                     <input type="hidden" name="serviceType" value="1" />
-                    <input class="col-sm-12 T-datepicker datepicker"  name="checkInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" />
+                    <input class="col-sm-12 T-datepicker datepicker" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}} {{/if}} name="checkInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" />
                 </td>
                 <td>
                     <input type="hidden" name="serviceType" value="1" />
-                    <input class="col-sm-12 T-datePicker datepicker" name="checkOutTime" value="{{outHotel.checkOutTime}}" type="text" /></td>
+                    <input class="col-sm-12 T-datePicker datepicker" name="checkOutTime" value="{{outHotel.checkOutTime}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}} {{/if}} type="text" />
+                </td>
                 <td>
-                    <select class="tripPlanHotelStar" name="hotelLevel">
-                        <option value="1" {{if outHotel.hotelLevel == 1}}selected="selected"{{/if}}>三星以下</option>
-                        <option value="2" {{if outHotel.hotelLevel == 2}}selected="selected"{{/if}}>三星</option>
-                        <option value="3" {{if outHotel.hotelLevel == 3}}selected="selected"{{/if}}>准四星</option>
-                        <option value="4" {{if outHotel.hotelLevel == 4}}selected="selected"{{/if}}>四星</option>
-                        <option value="5" {{if outHotel.hotelLevel == 5}}selected="selected"{{/if}}>准五星</option>
-                        <option value="6" {{if outHotel.hotelLevel == 6}}selected="selected"{{/if}}>五星</option>
-                        <option value="7" {{if outHotel.hotelLevel == 7}}selected="selected"{{/if}}>五星以上</option>
+                    <select class="tripPlanHotelStar" name="hotelLevel" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}} {{/if}}>
+                        <option value="1" {{if outHotel.hotelLevel==1 }}selected="selected" {{/if}}>三星以下</option>
+                        <option value="2" {{if outHotel.hotelLevel==2 }}selected="selected" {{/if}}>三星</option>
+                        <option value="3" {{if outHotel.hotelLevel==3 }}selected="selected" {{/if}}>准四星</option>
+                        <option value="4" {{if outHotel.hotelLevel==4 }}selected="selected" {{/if}}>四星</option>
+                        <option value="5" {{if outHotel.hotelLevel==5 }}selected="selected" {{/if}}>准五星</option>
+                        <option value="6" {{if outHotel.hotelLevel==6 }}selected="selected" {{/if}}>五星</option>
+                        <option value="7" {{if outHotel.hotelLevel==7 }}selected="selected" {{/if}}>五星以上</option>
                     </select>
                 </td>
                 <td>
                     <div class="col-sm-12">
-                        <input class="col-sm-12 T-chooseHotel bind-change" name="hotelName" value="{{outHotel.hotelName}}" type="text" />
+                        <input class="col-sm-12 T-chooseHotel bind-change" name="hotelName" value="{{outHotel.hotelName}}" type="text" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}} {{/if}}/>
                         <input type="hidden" name="hotelId" value="{{outHotel.hotelId}}" />
                         <span class="addResourceBtn T-addHotelResource" title="添加酒店">
                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -65,32 +75,36 @@
                     </div>
                 </td>
                 <td>
-                     <input type="hidden" name="outHotelId" value="{{outHotel.outHotelId}}" />
+                    <input type="hidden" name="outHotelId" value="{{outHotel.outHotelId}}" />
                     <input class="col-sm-12" name="hotelManagerName" value="{{outHotel.hotelManagerName}}" readonly="readonly" type="text" />
-                    </td>
+                </td>
                 <td>
                     <input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotelMobileNumber}}" readonly="readonly" type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoomType}}" type="text" />
+                    <input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoomType}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text" />
                     <input type="hidden" name="hotelRoomId" value="{{outHotel.hotelRoomId}}" />
                 </td>
                 <td>
-                    <input class="col-sm-12 T-number price F-float F-money" name="price"  maxlength="9" value="{{outHotel.price}}" type="text" />
+                    <input class="col-sm-12 T-number price F-float F-money" name="price" maxlength="9" value="{{outHotel.price}}"  {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}} {{/if}} type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" />
+                    <input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" value="{{outHotel.memberCount}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text"  />
                 </td>
                 <td>
-                    <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" />
+                    <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="{{outHotel.needPayMoney}}" type="text" />
+                    <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="{{outHotel.needPayMoney}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text" />
                 </td>
                 <td>
-                    <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" />
+                    <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text" />
                 </td>
-                <td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" /></td>
+                <td>
+                    <input class="col-sm-12" name="remark" {{ if outHotel.isConfirmAccount == 1}}disabled="disabled" {{else}}{{/if}} type="text" value="{{outHotel.remark}}" maxlength="1000" />
+                </td>
+                <td><input type="hidden" name="isConfirmAccount" value="{{if outHotel.isConfirmAccount == 0}}0{{else if outHotel.isConfirmAccount == 1}}1{{/if}}">
+                {{if outHotel.isConfirmAccount == 0}}未对账{{else if outHotel.isConfirmAccount == 1}}已对账{{/if}}</td>
                 <td>
                     <a class="cursor T-arrange-delete" data-catename="hotel">
                         删除
@@ -105,9 +119,9 @@
         <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
-                <input name="status" type="checkbox" class="ace T-hotel-status" {{if status == 3}}checked{{/if}}>
-                <span class="lbl font-w"> 房安排完成完成</span>
-            </label>
+                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked='checked'{{/if}}>
+                <span class="lbl font-w">安排完成</span>
+        </label>
         </span>
     </div>
 </div>
