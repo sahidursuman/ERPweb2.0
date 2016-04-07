@@ -49,7 +49,7 @@
         {{if selfpayArrange != null}}
             {{if selfpayArrange.listMap.length}}
                 {{each selfpayArrange.listMap as arrange index}}
-                    <tr selfPayItemId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}">
+                    <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange">
                         <td rowspan="{{arrange.selfPayItem.length}}">
                         <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
                         <td rowspan="{{arrange.selfPayItem.length}}">
@@ -447,7 +447,7 @@
                         {{each arrange.selfPayItem as itemSet index}}
                             {{if index >0}}
                                 <tr  badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
-                                isConfirmAccount="{{itemSet.isConfirmAccount}}">
+                                isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
                                         <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
                                     </td>
