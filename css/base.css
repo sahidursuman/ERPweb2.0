@@ -909,6 +909,11 @@ input.datepicker:not([class^="col-"]) {
 	width: 80px;
 }
 
+/*导游名字输入框*/
+.w-70 {
+	width: 60px;
+}
+
 /*时间input的宽度*/
 .w-100 {
 	width: 100px;
