@@ -62,7 +62,7 @@ define(function(require, exports) {
 			success:function(data){
 						
 			  var html=listTemplate(data);
-		       addTab(menuKey,"客户客量",html);
+		       Tools.addTab(menuKey,"客户客量",html);
 
 		       //初始化JQuery对象
 		       customerVolObj.$tab=$("#" + tabId);//最大区域模块
