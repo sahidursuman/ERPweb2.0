@@ -693,6 +693,7 @@ define(function(require, exports) {
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
         var unifyId = $tab.find('[name=unifyId]').val();
+        console.log(unifyId)
         var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
         outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
@@ -1707,7 +1708,7 @@ define(function(require, exports) {
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>' +
             '</tr>';
-        var $tbody = $obj.find('<div class="T-hotel-plan"></div>');
+        var $tbody = $obj.find('.T-hotel-plan');
         $tbody.append(html);
         Transfer.addResource($obj); //房安排弹窗
         Transfer.bindHotelChoose($obj); //房安排autocomplete列表

@@ -1,23 +1,30 @@
 <div class="T-planbus globalAdd ">
-    <div>
-        <button class="btn btn-sm btn-success T-add-transfersId" placeholder="新增游客">
-            <i class="ace-icon fa fa-plus"></i> 新增
-        </button>
-    </div>
-    {{each outRemarkList as Busplan}}
-    <div class="T-transfersId-box">
-        <div class="form-group" >
-            <input type="hidden" name="outRemarkId"  value="{{Busplan.id}}">
-            <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
-            <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
-            <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
-            <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
-            <label class="control-label mar-r-20">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
-            <label class="control-label mar-r-20"><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>
-            <div class="bg-gray form-group">现车辆计划要求：{{Busplan.require}}</div>
-        </div>
-    </div>
-    {{/each}}
+    <button class="btn btn-sm btn-success mar-b-10 T-add-BusTransfersId"><i class="ace-icon fa fa-plus"></i>添加安排 </button>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <th class="th-border">中转信息及计划要求</th>
+            <th class="th-border">操作</th>
+        </thead>
+        <tbody class="T-task-list">
+            {{each outRemarkList as Busplan}}
+            <tr><td style="text-align: left;">
+                    <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
+                    <label class="control-label mar-r-20">中转单号：{{Busplan.orderNumber}}</label>
+                    <label class="control-label mar-r-20">线路产品：{{Busplan.lineProductName}}</label>
+                    <label class="control-label mar-r-20">用车时间：{{Busplan.arriveTime}}</label>
+                    <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{Busplan.adultCount}}</span>大<span class="F-float F-count">{{Busplan.childCount}}</span></label>
+                    <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
+                </td>
+                <td rowspan="2">
+                    <a class="cursor {{if taskSize > 1}} T-del-bus {{/if}}" {{if taskSize <=1 }} disabled="disabled" {{/if}} title="删除">
+                        删除
+                    </a>
+                </td>
+            </tr>
+            <tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：{{Busplan.require}}</td></tr>
+            {{/each}}
+        </tbody>
+    </table>
     <input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <input type="hidden" name="unifyId" value="{{unifyId}}">
     <div class="form-group form-inline">
@@ -116,7 +123,7 @@
                     {{if outBus.isConfirmAccount == 0 }}未对账{{else}}已对账{{/if}}
                 </td>
                 <td>
-                {{ if outBus.isConfirmAccount == 1 }}
+                     {{ if outBus.isConfirmAccount == 1 }}
                     <a class="cursor" style="color:#bbb;" data-catename="bus" title="删除">删除</a>
                     {{else}}
                     <a class="cursor T-action T-arrange-delete" data-catename="bus" title="删除">删除</a>
@@ -131,9 +138,9 @@
         <button class="btn btn-sm btn-primary mar-r-20  T-bus-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
-                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked="checked"{{/if}}>
+                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
                 <span class="lbl font-w">安排完成</span>
-            </label>
+        </label>
         </span>
     </div>
 </div>
