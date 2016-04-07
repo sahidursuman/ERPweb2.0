@@ -38,8 +38,8 @@ define(function(require, exports) {
 	tourguidPerObj.listtourguidPer=function(page,sortType,order,startTime,endTime,guideId,guideName){
 	   if (tourguidPerObj.$searchArea && arguments.length===1) {
 	   		//初始化页面后可以获取页面参数
-	   		sortType=tourguidPerObj.$tab.find('[name=sortType]').val();
-	   		order=tourguidPerObj.$tab.find('[name=orderBy]').val();
+	   		order=tourguidPerObj.$tab.find('[name=sortType]').val();
+	   		sortType=tourguidPerObj.$tab.find('[name=orderBy]').val();
 	   		startTime=tourguidPerObj.$tab.find('input[name=startTime]').val();
 	   		endTime=tourguidPerObj.$tab.find('input[name=endTime]').val();
 	   		guideId =tourguidPerObj.$tab.find('input[name=guidChooseId]').val();
