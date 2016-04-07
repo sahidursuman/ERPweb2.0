@@ -6,9 +6,9 @@
                     <label>酒店：</label>
                     <input type="text" class="mar-r-10" name="hotelName" value="{{hotelName}}" />
                     <label>账期：</label>
-                    <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
+                    <input class="date-picker T-time" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />   
                     <label>&nbsp;至&nbsp;</label>
-                    <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
+                    <input class="date-picker T-time mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />   
 
                     <label>账务类别：</label>
                     <input name="accountInfo" class="mar-r-10" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
@@ -34,9 +34,9 @@
                         </ul>
                     </div>
                     <label>对账时间：</label>
-                    <input class="date-picker T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+                    <input class="date-picker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
-                    <input class="date-picker mar-r-10 T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+                    <input class="date-picker T-checkTime mar-r-10 T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
                     
                     <button class=" btn-sm T-search search-btn btn-height">
                         <i class="ace-icon fa fa-search"></i>搜索

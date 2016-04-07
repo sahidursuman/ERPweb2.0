@@ -582,7 +582,8 @@ define(function(require, exports) {
     scenic.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(option == "check" ? 0 : (scenic.isOuter ? 3 : 1))).check($tab);
-            Tools.setDatePicker($tab.find('.datepicker'), true);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

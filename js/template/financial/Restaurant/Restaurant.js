@@ -207,7 +207,8 @@ define(function(require, exports) {
         var ruleCheck = new FinRule(0);
 
         restaurant.init_event(args,$tab,"check");
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
         FinancialService.updateUnpayMoney($tab,ruleCheck);
         restaurant.getRestaurantList($tab,false);
 
@@ -354,7 +355,8 @@ define(function(require, exports) {
     restaurant.initClear = function(args,$tab){
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
         restaurant.getRestaurantList($tab,true);
 
         //搜索下拉事件
