@@ -438,7 +438,7 @@
             return "已取消";
 
           case 5:
-            return "已拆分";
+            return "已分段";
 
           case 6:
             return "已内转";

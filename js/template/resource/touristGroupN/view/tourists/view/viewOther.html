@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">消费日期</div>
-			<div class="col-xs-3 control-label">{{consumeTime}}</div>
+			<div class="col-xs-3 control-label">{{consumeTime | dateFormat: 'yyyy-MM-dd'}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-10 {{if isRestaurantRequired != 1}}hidden {{/if}}T-ask-restaurant">
 			<div class="col-xs-1 text-right no-padding-right control-label">餐厅要求</div>

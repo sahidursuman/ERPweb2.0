@@ -25,7 +25,7 @@
 			</div>
 			<div class="col-xs-8" style="padding-top: 4px;">
 				<label class="control-label pull-left" style="width: 35px;">应付</label>
-				<span class="control-label pull-left">{{needPayAllMoney}}</span>
+				<span class="control-label pull-left F-float F-money">{{needPayAllMoney}}</span>
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
@@ -46,9 +46,9 @@
 						<td>
 							{{rs.type | getFeeItemText}}
 						</td>
-						<td>{{rs.count}}</td>
-						<td>{{rs.price}}</td>
-						<td>{{rs.price*rs.count}}</td>
+						<td class="F-float F-count">{{rs.count}}</td>
+						<td class="F-float F-money">{{rs.price}}</td>
+						<td class="F-float F-money">{{rs.price*rs.count}}</td>
 						<td>{{rs.remark}}</td>
 					</tr>
 					{{/each}}

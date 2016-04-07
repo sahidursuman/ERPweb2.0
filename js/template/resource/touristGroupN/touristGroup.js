@@ -496,7 +496,6 @@ define(function(require, exports) {
         $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
             var $that = $(this),
                 $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
-                console.log(1)
             if($endTime.val() != "" && $that.val() > $endTime.val()){
                 $endTime.val('');
             }
@@ -663,6 +662,10 @@ define(function(require, exports) {
                     $that.val($tr.find('[name="travelAgencyName"]').text()+"（"+$tr.find('[name="travelAgencyContactName"]').text()+"）").data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
                     layer.close(index);
                 });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
+                    layer.close(index);
+                });
 
                 $layer.find('.T-client-list').on('click', 'tr', function(event){
                     $(this).find('[type="radio"]')[0].checked = true;
@@ -746,10 +749,10 @@ define(function(require, exports) {
                             '</div></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
-                        '<td><input type="text" class="w-110 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>'+
+                        '<td><input type="text" class="w-110 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100" name="operateCurrentNeedPayMoney"></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-inner-turn">内转</a> | <a class="cursor T-action T-outer-turn">外转</a> | <a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -765,9 +768,9 @@ define(function(require, exports) {
     touristGroup.addSendGroup = function($tab, validate){
     	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime"></td>'+
                     '<td><input type="text" class="col-xs-12" name="leaveShift"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus" readonly name="receiveBus" placeholder="点击填写车"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther" placeholder="点击填写它"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" placeholder="点击填写车"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" placeholder="点击填写它"></td>'+
                     '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-send-group-list').append(html);
@@ -891,16 +894,39 @@ define(function(require, exports) {
 
     //更新/查看 应收团款
     touristGroup.updateJionGroupMoney = function($that, type, optionType){
-        var title = "应收团款", data = $that.data('json'), html = "";
-        if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+        var title = "应收团款", data = {}, moneyData = $that.data('json'), html = "";
+        if(typeof moneyData !== "object"){
+            moneyData = JSON.parse(moneyData || "{}");
         }
         if(!!type){
-            data.type = type;
+            moneyData.type = type;
             title = "线路应付";
+
+            var $tr = $that.closest('tr'),
+                $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
+                receivable = $tab.find('.T-team-info .T-receivable').data('json');
+            if(typeof receivable !== "object"){
+                receivable = JSON.parse(receivable || "{}");
+            }
+            var lineData = $tr.find('[name="lineProductName"]').data('json');
+            if(!lineData && optionType !== 1){
+                layer.tips('请先选择线路产品！', $that.closest('tr').find('[name="lineProductName"]'), {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+                return false;
+            }
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+            data.lineData = lineData;
+            data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
+            data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
         }
+        $.extend(data, moneyData);
         if(optionType===1){
             html = T.viewMoney(data);
+            html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateMoney(data);
         }
@@ -952,6 +978,7 @@ define(function(require, exports) {
         }
         if(optionType === 1){
             html = T.viewBus(data);
+            html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateBus(data);
         }
@@ -1015,6 +1042,7 @@ define(function(require, exports) {
         data.type = type;
         if(optionType === 1){
             html = T.viewHotel(data);
+            html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateHotel(data);
         }
@@ -1088,6 +1116,7 @@ define(function(require, exports) {
         }
         if(optionType === 1){
             html = T.viewOther(data);
+            html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateOther(data);
         }
@@ -1280,7 +1309,7 @@ define(function(require, exports) {
         return validate;
     };
 
-    //参团内转操作
+/*    //参团内转操作
     touristGroup.updateInnerTurn = function($that, optionType){
         var data = {},
             innerJson = $that.data('json'),
@@ -1419,7 +1448,7 @@ define(function(require, exports) {
                 });
             }
         });
-    };
+    };*/
 
     //缓存选中的自选酒店
     touristGroup.selectHotelCache = [];
@@ -1465,6 +1494,10 @@ define(function(require, exports) {
                         }
                     }
                     $that.data('json', JSON.stringify(touristGroup.selectHotelCache)).val(str);
+                    layer.close(index);
+                });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
                     layer.close(index);
                 });
             }
@@ -1595,7 +1628,7 @@ define(function(require, exports) {
             type: 1,
             title: "选择线路产品",
             skin: 'layui-layer-rim', //加上边框
-            area: '80%, 80%', //宽高
+            area: '80%', //宽高
             zIndex: 1028,
             content: T.chooseLineProduct(),
             scrollbar: false,
@@ -1621,6 +1654,10 @@ define(function(require, exports) {
                         days : $tr.find('[name="days"]').text()
                     }
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
+                    layer.close(index);
+                });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
                     layer.close(index);
                 });
                 
@@ -1665,7 +1702,7 @@ define(function(require, exports) {
                 }); 
  
                 // 让对话框居中
-                $(window).trigger('resize');
+                $(document).trigger('resize');
             }else if(!!layerIndex){
                 layer.close(layerIndex);
             }

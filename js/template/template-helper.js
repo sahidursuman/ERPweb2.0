@@ -429,7 +429,7 @@ template.helper("getPartGroupStatusText", function(status){
         case 2:     return '已分团';
         case 3:     return '已外转';
         case 4:     return '已取消';
-        case 5:     return '已拆分';
+        case 5:     return '已分段';
         case 6:     return '已内转';
         default:     return '-';
     }

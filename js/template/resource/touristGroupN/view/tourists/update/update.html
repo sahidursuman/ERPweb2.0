@@ -85,7 +85,7 @@
 				<tbody class="T-join-group-list">
 				{{each receiveTrip as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime" value="{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}"></td>
+						<td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime" value="{{rs.arriveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
 	                    <td><input type="text" class="col-xs-12" name="arriveShift" value="{{rs.arriveShift}}"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.receiveBus}}" placeholder="点击填写车"></td>
 	                    <td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.receiveHotel}}" placeholder="点击填写房"></td>
@@ -113,7 +113,7 @@
 						<th>线路应付</th>
 						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}">返程住宿</th>
 						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}">参团小计</th>
-						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}" width="95">本段现收团款</th>
+						<th width="95">本段现收团款</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -129,14 +129,12 @@
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime" value="{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status > 1}} disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime" value="{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status > 1}} disabled{{/if}}></td>
-						<td><input type="text" class="w-110{{if rs.status == 0 || rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" placeholder="点击填写线路应付"></td>
-						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-110{{if rs.status == 0 || rs.status == 1}} T-action T-hotel hct-cursor{{/if}}" readonly name="hotelNeedPayMoney" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.hotelInfo}}" placeholder="点击填写返程住宿"></td>
+						<td><input type="text" class="w-110 F-float F-money{{if rs.status == 0 || rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" placeholder="点击填写线路应付"></td>
+						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-110 F-float F-money{{if rs.status == 0 || rs.status == 1}} T-action T-hotel hct-cursor{{/if}}" readonly name="hotelNeedPayMoney" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.hotelInfo}}" placeholder="点击填写返程住宿"></td>
 						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.hotelNeedPayAllMoney || 0)*1 + (rs.lineNeedPayAllMoney || 0)*1}}"></td>
-						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}"><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" value="{{rs.operateCurrentNeedPayMoney}}"{{if rs.status > 1}} disabled{{/if}}></td>
+						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" value="{{rs.operateCurrentNeedPayMoney}}" readonly></td>
 						<td class="T-status" data-status="{{rs.status}}">{{rs.status | getPartGroupStatusText}}</td>
 						<td>
-							<a class="cursor T-inner-turn{{if rs.outTransferInfo != "{}" || rs.status != 1}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.innerTransferInfo}}">内转</a> | 
-							<a class="cursor T-outer-turn{{if rs.innerTransferInfo != "{}" || rs.status != 1}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.outTransferInfo}}">外转</a> | 
 							<a class="cursor{{if rs.status == 1}} T-action T-delete{{else}} hct-color-BBB{{/if}}">删除</a>
 						</td>
 					</tr>
@@ -166,11 +164,11 @@
 				<tbody class="T-send-group-list">
 				{{each sendTrip as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}"></td>
+						<td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
 	                    <td><input type="text" class="col-xs-12" name="leaveShift" value="{{rs.leaveShift}}"></td>
-	                    <td><input type="text" class="w-100 hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" placeholder="点击填写车"></td>
-	                    <td><input type="text" class="w-100 hct-cursor T-action T-hotel" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.sendHotel}}" placeholder="点击填写房"></td>
-	                    <td><input type="text" class="w-100 hct-cursor T-action T-other" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.sendOther}}" placeholder="点击填写它"></td>
+	                    <td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" placeholder="点击填写车"></td>
+	                    <td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.sendHotel}}" placeholder="点击填写房"></td>
+	                    <td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.sendOther}}" placeholder="点击填写它"></td>
 	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
 	                    <td><a class="cursor T-action T-delete">删除</a></td>
                     </tr>
