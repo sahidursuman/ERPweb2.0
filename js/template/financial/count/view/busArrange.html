@@ -31,7 +31,8 @@
             <th class="th-border">付款方式</th>
             <th class="th-border">金额</th>
             <th class="th-border">单据</th>
-            <th class="th-border">备注</th>   
+            <th class="th-border">导游报账备注</th>
+            <th class="th-border" rowspan="2">是否对账</th>
         </tr>
         </thead>
         <tbody class="T-count-bus">
@@ -209,14 +210,18 @@
                             {{/if}}
                         </td><!-- 备注 -->
 
+
+
+                        <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+
                         <td>
-                            {{if arrange.isConfirmAccount == 0 }}
+                            {{if busCompany.isConfirmAccount == 0 }}
                                 未对账
                             {{else}}
                                 已对账
                             {{/if}}
                             &nbsp;&nbsp;
-                            {{if arrange.payedMoney == 0 && arrange.isConfirmAccount == 0}}
+                            {{if busCompany.payedMoney == 0 && busCompany.isConfirmAccount == 0}}
                                 <a href="javascript:void(0)" class="T-busArrDel">删除</a>
                             {{else}}
                                 <span style="color:#bbb;">删除</span>
@@ -234,7 +239,7 @@
     <div style="width:60%;">
         <div> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
+            <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
         
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
             <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].financeCheckRemark}}{{/if}}" />

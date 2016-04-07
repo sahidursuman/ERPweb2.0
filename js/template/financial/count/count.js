@@ -57,7 +57,10 @@ define(function(require, exports){
 	};
 	//列表头部
 	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+
+		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
+			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -67,7 +70,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-		};
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+		} 
+		timeStatus = timeStatus || 0
 		//修正页码
 		pageNo = pageNo || 0;
 		$.ajax({
@@ -82,7 +87,8 @@ define(function(require, exports){
                 startTime:startTime,
                 billStatus:status,
                 lineProductName:lineProductName,
-                guideName:guideName
+                guideName:guideName,
+                timeStatus : timeStatus
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -104,12 +110,13 @@ define(function(require, exports){
 		                startTime:startTime,
 		                billStatus:status,
 		                lineProductName:lineProductName,
-		                guideName:guideName
+		                guideName:guideName,
+		                timeStatus : timeStatus
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
                 	//格式化日期
-                	Count.formatDate(Count.$searchArea);
+                	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
                 	//获取搜索区域的列表数据
                 	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
                 	Count.getLineproductData($lineProductObj);
@@ -121,6 +128,7 @@ define(function(require, exports){
 			}
 		});
 	};
+
 	//搜索区域事件
 	Count.initListHeaderEvents = function(){
 		var $searchObj = Count.$searchArea;
@@ -137,6 +145,13 @@ define(function(require, exports){
 			$(this).closest('div').find("span").text($(this).text());
 			Count.listCountHeader(0);
 		});
+        $searchObj.find(".T-time-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Count.listCountHeader(0);
+        });
 	};
 	//获取主体列表数据
 	Count.listCountBody = function($data){
@@ -206,6 +221,31 @@ define(function(require, exports){
 				//单团明细
 				var tripId = $(this).attr('data-entity-id');
 				Count.viewTripDetail(tripId);
+			} else if($that.hasClass('T-showLineInfo')){
+				var $tr = $that.closest('tr');
+                    $nextTr = $tr.nextAll('tr'),
+                    $icon = $that.find('i.fa'),
+                    isHide = 1,
+                    count = 0;
+                if($icon.hasClass('fa-plus')){
+                    $icon.removeClass('fa-plus').addClass('fa-minus');
+                    isHide = 0;
+                }else{
+                    $icon.removeClass('fa-minus').addClass('fa-plus');
+                    isHide = 1;
+                }
+                for(var i=0; i<$nextTr.length; i++){
+                    if(!!$nextTr.eq(i).attr('id')){
+                        break;
+                    }else{
+                        if(isHide === 1){
+                            $nextTr.eq(i).addClass('hidden');
+                        }else{
+                            $nextTr.eq(i).removeClass('hidden');
+                        }
+                    }
+                    count++;
+                }
 			}
 
 		});
@@ -255,7 +295,7 @@ define(function(require, exports){
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
 	                //查看团款明细说明
 					$detailId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroups);
 					});
 	                //绑定自动计算事件
 	                Count.detailEvents($detailId);
@@ -368,6 +408,8 @@ define(function(require, exports){
 		Count.tripTransferCost($obj);
 		//计算团收入
 		Count.tripIncome($obj);
+		//计算成本
+		Count.tripCost($obj);
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
 			var id = $obj.find('.financial-tripPlanId').val();
@@ -580,6 +622,7 @@ define(function(require, exports){
 			Count.addOtherIn($otherIn,$obj);
 		});
 		//车费--计算、新增
+		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
 		$busObj.find('input').off('change').on('change',function(){
 			var nameFlag = $(this).attr('name');
@@ -764,8 +807,18 @@ define(function(require, exports){
 		//报账完成事件
 		$obj.find('.T-fanishAccount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-            var financialTripPlanId = $(this).attr('data-entity-financial-id');
-            Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			var checkTripIsReceived = Count.checkTripIsReceived($obj);
+			var financialTripPlanId = $(this).attr('data-entity-financial-id');
+			if(checkTripIsReceived){
+				showConfirmDialog($( "#confirm-dialog-message" ), 
+					'提交报账，团款现收将默认为已收到', function() {
+					Count.saveTripCount(id,financialTripPlanId,$obj,3);
+				});
+			}else{
+				Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			};
+            
+            
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
@@ -834,7 +887,7 @@ define(function(require, exports){
 					Count.$updateTab = $updateTabId;
 					//查看团款明细说明
 					$updateTabId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail(tmp.touristGroups);
+						Count.viewCostDetail($(this),tmp.touristGroup);
 					});
 					//加载列表
 					Count.installList($updateTabId,tmp);
@@ -2136,8 +2189,9 @@ define(function(require, exports){
 			var $nextTr = $thisTr.nextAll(),
 				sumMoney = 0,//总金额
 				sumTravelMoney = 0,//社佣合计
-				sumGuideMoney = 0;//导佣合计				
-			for(var i = 2;i<$nextTr.length;i++){
+				sumGuideMoney = 0;//导佣合计
+						
+			for(var i = 1;i<$nextTr.length;i++){
 				var thatTdLen = $nextTr.eq(i).children('td').length,
 					$that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
@@ -2484,7 +2538,8 @@ define(function(require, exports){
 			needReduce = Count.changeTwoDecimal(needReduce);
 			selfRealCount = Count.changeTwoDecimal(selfRealCount);
 			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
-            if((badStatus == 0  || badStatus == undefined) && isConfirmAccount == 0){needPayMoney.text(needSum);}
+            if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined))
+            	{needPayMoney.text(needSum);}
             //计算自费费用
             $parent.find('.selfMoney').val(needSum);*/
 			
@@ -3315,7 +3370,6 @@ define(function(require, exports){
 	//票务金额计算
 	Count.autoTicketSum = function($obj,$parentObj){
 		Count.changeCountAndMoney($obj,$parentObj);
-		
 	};
 	//新增票务
 	Count.addTicket = function($obj,$parentObj){
@@ -3406,8 +3460,7 @@ define(function(require, exports){
 		'<td><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>0</td>'+
-		guideTdHtml
-		+
+		guideTdHtml+
 		'<td>未对账<a href="javascript:void(0)" class="T-otherOutArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
@@ -3533,6 +3586,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url("shop","findAll"),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3687,6 +3743,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('selfpay','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3879,7 +3938,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busId: parents.find('input[name="busId"]').val()
+					busId: parents.find('input[name="busId"]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
@@ -3931,7 +3991,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -3978,7 +4039,8 @@ define(function(require, exports){
 			var searchJson = {
 					brand:"",
 					busId:parents.find('input[name=busId]').val(),
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('bookingOrder','getSeatCountList'),
@@ -4015,6 +4077,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('restaurant','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -4025,6 +4090,11 @@ define(function(require, exports){
 							restaurantList[i].value = restaurantList[i].name;
 						}
 					}
+					var newItem = {
+						id:-1,
+						value:"导游自选"
+					};
+					restaurantList.unshift(newItem)
 					$restObj.autocomplete({
 						minLength:0,
 						change:function(event,ui){
@@ -4132,6 +4202,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('hotel','findHotelList'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -4235,6 +4308,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('scenic','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -4363,6 +4439,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('ticket','findAll'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -5990,6 +6069,48 @@ define(function(require, exports){
 		'</td>';
 		return tdHtml;
 	};
+
+	//主页时间控件绑定
+	Count.setDatePicker = function($obj) {
+	    options = $.extend({}, {
+	        autoclose: true,
+	        todayHighlight: true,
+	        format: 'yyyy-mm-dd',
+	        language: 'zh-CN'
+	    });
+	    
+	    $obj.datepicker(options);
+	    var $start = $obj.eq(0),
+	    	$end = $obj.eq(1);
+	    $start.on("change",function(event){
+	     	event.preventDefault();
+	        var startDate = $(this).val(),
+	           	endDate = $end.val();
+	        $end.datepicker('setStartDate', startDate);
+	        if(endDate == ""){
+	        	$end.val("");
+	        } else if($end.val() < startDate){
+	        	$end.val(startDate);
+	        }
+	    });
+	    if (!!$start.val()) {
+	    	$start.trigger('change');
+	    }
+	    return $obj;
+	};
+	//校验团款的接受状态
+	Count.checkTripIsReceived = function($obj){
+		var $tripDetail = $obj.find('.T-tripDetail');
+		var $trArr = $tripDetail.find('tr');
+		var isReceived = false;
+		$trArr.each(function(i){
+			var receiveStatus = $(this).find('[name=receiveStatus]').val();
+			if(receiveStatus == 0){
+				isReceived = true;
+			};
+		});
+		return isReceived;
+	}
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

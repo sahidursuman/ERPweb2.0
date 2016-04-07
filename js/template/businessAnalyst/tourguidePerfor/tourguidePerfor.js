@@ -31,18 +31,19 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	tourguidPerObj.initModule=function(){
-		tourguidPerObj.listtourguidPer(0,"all","asc");
+		tourguidPerObj.listtourguidPer(0,"person","desc");
 	};
 
 	//导游业绩页面list
 	tourguidPerObj.listtourguidPer=function(page,sortType,order,startTime,endTime,guideId,guideName){
-	   if (tourguidPerObj.$searchArea && arguments.length===3) {
+	   if (tourguidPerObj.$searchArea && arguments.length===1) {
 	   		//初始化页面后可以获取页面参数
+	   		sortType=tourguidPerObj.$tab.find('[name=sortType]').val();
+	   		order=tourguidPerObj.$tab.find('[name=orderBy]').val();
 	   		startTime=tourguidPerObj.$tab.find('input[name=startTime]').val();
 	   		endTime=tourguidPerObj.$tab.find('input[name=endTime]').val();
 	   		guideId =tourguidPerObj.$tab.find('input[name=guidChooseId]').val();
 	   		guideName =tourguidPerObj.$tab.find('input[name=guideName]').val();
-
 	   };
 
 	   // 修正页码
@@ -70,9 +71,7 @@ define(function(require, exports) {
 				       tourguidPerObj.$tab=$("#" + tabId);//最大区域模块
 				       tourguidPerObj.$searchArea=tourguidPerObj.$tab.find('.T-search-area');//搜索模块区域
 				       //初始化页面控件
-				       tourguidPerObj.datepicker(tourguidPerObj.$tab);
-				       //改变排序状态
-				       tourguidPerObj.changeOrderBy(data.searchParam);
+				       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
 				       //初始化页面绑定事件
 				       tourguidPerObj.init_event();
 				       //autocomplete数据
@@ -112,7 +111,7 @@ define(function(require, exports) {
     		event.preventDefault();
     		/* Act on the event */
     		//导游业绩列表查询
-    		tourguidPerObj.listtourguidPer(0,"all","asc");
+    		tourguidPerObj.listtourguidPer(0);
     	});
     	//导游打单
     	tourguidPerObj.$tab.find('.T-tourCount').on('click', function(event) {
@@ -121,40 +120,8 @@ define(function(require, exports) {
     		/* Act on the event */
     		tourguidPerObj.guidePlayList(0,guideId,"","","");
     	});
-
-    	//团均、人均、购物总额排序
-    	tourguidPerObj.$tab.find('.T-thead').off('click').on('click', '.T-orderBy', function(event) {
-    		event.preventDefault();
-    		/* Act on the event */
-    		var $that=$(this);
-    		var sortType=$that.attr('data-sortType'),order=$that.attr('data-orderBy');
-
-    		if ($that.hasClass('T-all')) {
-    			tourguidPerObj.listtourguidPer(0,sortType,order);
-    		}else if ($that.hasClass('T-trip')) {
-    			tourguidPerObj.listtourguidPer(0,sortType,order);
-    		}else if ($that.hasClass('T-person')) {
-    			tourguidPerObj.listtourguidPer(0,sortType,order);
-    		}
-    	});
     };
     
-    /**
-     * [changeOrderBy 升降序状态的修改]
-     * @param  {[type]} searchParam [description]
-     * @return {[type]}             [description]
-     */
-    tourguidPerObj.changeOrderBy=function(searchParam){
-    	var $orderByList=tourguidPerObj.$tab.find('.T-orderBy');
-    	$orderByList.each(function(index) {
-    		if ($orderByList.eq(index).attr("data-sortType")==searchParam.sortType && searchParam.order=='asc') {
-    			$orderByList.eq(index).attr('data-orderBy', 'desc');
-    		}else if ($orderByList.eq(index).attr("data-sortType")==searchParam.sortType && searchParam.order=='desc') {
-    			$orderByList.eq(index).attr('data-orderBy', 'asc');
-    		}
-    	})
-    };
-
 	//导游业绩的Autocomplete
     tourguidPerObj.guideChooseList=function($obj){
 		var guideChooseList = $obj.find(".T-Choose-tourgSet");
@@ -225,22 +192,22 @@ define(function(require, exports) {
 
     //导游打单事件
 	tourguidPerObj.initGuidePlay_event=function($tab){
-		tourguidPerObj.datepicker($tab);
+		Tools.setDatePicker($tab.find('.datepicker'), true);
+		//tip
+		Tools.descToolTip($tab.find('.T-ctrl-tip'),1);
 		$tab.find('.T-guideSingle-search').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
 			tourguidPerObj.guidePlayList(0);
 		});
-	};
 
-	//时间控件初始化
-	tourguidPerObj.datepicker = function($obj){
-		$obj.find(".datepicker").datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
-		})
+		//总打单详情页
+		$tab.find('.T-allMoney').off('click').on('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var $that=$(this),tripPlanId=$that.attr('data-tripPlanId'),shopArrangeId=$that.attr('data-arrangeId');
+			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId);
+		});;
 	};
 	//获取控件中的值
 	tourguidPerObj.getValue = function($obj,name){

@@ -9,14 +9,43 @@
                     <option value="2">转账</option>
                 </select>
             </div>
-            <div class="T-Ntransfer">
-                <label class="col-sm-2 control-label no-padding-right">对方单位：</label>
-                <div class="col-sm-3">
-                    <input type="text" name="resourceName" class="col-sm-12" />
+            <div class="T-resType hidden">
+                <label class="col-sm-2 control-label no-padding-right">资源类型：</label>
+                <div class="col-sm-3 T-resourceType">
                 </div>
             </div>
         </div>
-        <div class="form-group T-bank-area T-Ntransfer">
+        <div class="form-group T-bank-area">
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
+            <div class="col-sm-3">
+                <select name="subjectId" class="col-sm-12 T-option T-subject">
+                    {{each subjectdata0 as sub0}}
+                    <option value="{{sub0.id}}">{{sub0.subjectName}}</option>
+                    {{/each}}
+                </select>
+                <input type="hidden" name="subjectName" value="{{each subjectdata0 as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
+            </div>
+           <div class="T-Ntransfer">
+                <label class="col-sm-2 control-label no-padding-right">对方单位：</label>
+                <div class="col-sm-3">
+                    <input type="text" name="resourceName" class="col-sm-12" />
+                    <input type="hidden" name="resourceId" class="col-sm-12" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group T-transfer hidden">
+            <label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转出账户：</label>
+            <label class="col-sm-3">
+                <input type="text" name="out-number" class="money T-chooseAccount T-type-out" style="width: 100%;">
+                <input type="hidden" name="out-id" class="T-accountId">
+            </label>
+            <label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转入账户：</label>
+            <label class="col-sm-3">
+                <input type="text" name="in-number" class="money T-chooseAccount T-type-in" style="width: 100%;">
+                <input type="hidden" name="in-id" class="T-accountId">
+            </label>
+        </div>
+        <div class="form-group T-payType-cash">
             <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>支付方式：</label>
             <div class="col-sm-3">
                 <select name="payType" class="col-sm-12">
@@ -42,27 +71,10 @@
                 </label>
             </div>
         </div>
-        <div class="form-group T-transfer hidden">
-            <label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转出账户：</label>
-            <label class="col-sm-3">
-                <input type="text" name="out-number" class="money T-chooseAccount T-type-out" style="width: 100%;">
-                <input type="hidden" name="out-id" class="T-accountId">
-            </label>
-            <label class="col-sm-2 control-label no-padding-right bankNum"><span class="necessary">*</span>转入账户：</label>
-            <label class="col-sm-3">
-                <input type="text" name="in-number" class="money T-chooseAccount T-type-in" style="width: 100%;">
-                <input type="hidden" name="in-id" class="T-accountId">
-            </label>
-        </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>会计科目：</label>
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账金额：</label>
             <div class="col-sm-3">
-                <select name="subjectId" class="col-sm-12 T-option T-subject">
-                    {{each subjectdata0 as sub0}}
-                    <option value="{{sub0.id}}">{{sub0.subjectName}}</option>
-                    {{/each}}
-                </select>
-                <input type="hidden" name="subjectName" value="{{each subjectdata0 as sub index}}{{if index == 0}}{{sub.subjectName}}{{/if}}{{/each}}" />
+                <input type="text" name="incomeMoney" class="col-sm-12 F-float F-money" maxlength="9" />
             </div>
             <label class="col-sm-2 control-label no-padding-right">所属部门：</label>
             <div class="col-sm-3">
@@ -74,19 +86,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账金额：</label>
+            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账日期：</label>
             <div class="col-sm-3">
-                <input type="text" name="incomeMoney" class="col-sm-12 F-float F-money" maxlength="9" />
+                <input type="text" name="billTime" class="col-sm-12 datepicker" style="width: 100%" />
             </div>
             <label class="col-sm-2 control-label no-padding-right">凭证编号：</label>
             <div class="col-sm-3">
                 <input type="text" name="voucher" class="col-sm-12" maxlength="45" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>记账日期：</label>
-            <div class="col-sm-3">
-                <input type="text" name="billTime" class="col-sm-12 datepicker" style="width: 100%" />
             </div>
         </div>
         <div class="form-group">

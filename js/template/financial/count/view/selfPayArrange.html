@@ -844,7 +844,6 @@
         <div> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
             <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkarrange.selfRemark.length>0}}{{remarkarrange.selfRemark[0].opCheckRemark}}{{/if}}" />
-        
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
             <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkarrange.selfRemark.length>0}}{{remarkarrange.selfRemark[0].financeCheckRemark}}{{/if}}" />
         </div>

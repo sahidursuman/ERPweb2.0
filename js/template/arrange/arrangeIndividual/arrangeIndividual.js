@@ -188,7 +188,12 @@ define(function(require, exports) {
         });
         Tools.descToolTip($visitorObj.find(".T-ctrl-tip"), 1);
         //散拼checkbox绑定事件
-        $visitorObj.find(".T-cheked").off().click(arrangeIndividual.addTouristGroupMerge);
+        $visitorObj.find('.T-cheked').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this);
+            arrangeIndividual.addTouristGroupMerge($that);
+        });
         $visitorObj.find('.T-start-touristGroup-merge').off().on('click', function(event) {
             event.preventDefault();
             var list = arrangeIndividual.touristGroupMergeData.touristGroupMergeList;
@@ -221,6 +226,25 @@ define(function(require, exports) {
                 });
             }
         };
+
+        //全选功能
+        $visitorObj.find('.T-checkedAll').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this),$trList=arrangeIndividual.$tab.find('tbody').children('tr');
+            if ($that.is(':checked')) {
+                // statement
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", true); 
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            } else {
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", false);
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            }
+        });
     };
 
     /**
@@ -452,10 +476,10 @@ define(function(require, exports) {
     /**
      * addTouristGroupMerge 散拼信息
      */
-    arrangeIndividual.addTouristGroupMerge = function() {
+    arrangeIndividual.addTouristGroupMerge = function($that) {
         var $visitorObj = arrangeIndividual.$tab.find('.T-touristVisitor-list'),
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
-            $that = $(this),
+            //$that = $(this),
             $parents = $that.closest('tr'),
             memberCount = $parents.attr("data-memberCount");
         //计算已选人数
@@ -486,6 +510,7 @@ define(function(require, exports) {
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
             arrangeIndividual.touristGroupId.push(touristGroupIds);
         } else {
+<<<<<<< HEAD
             var touristGroupMergeList = arrangeIndividual.touristGroupMergeData.touristGroupMergeList;
             if (touristGroupMergeList.length > 0) {
                 for (var i = 0; i < touristGroupMergeList.length; i++) {
@@ -493,6 +518,32 @@ define(function(require, exports) {
                         touristGroupMergeList.splice(i, 1);
                         break;
                     }
+=======
+            console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
+            //若取消选中状态---用于生成计划查询数组
+            arrangeIndividual.removeTouristGroupMergeData(lineProductId, startTime);
+            //移除取消分页选中效果
+            arrangeIndividual.removeTouristGroupId(touristGroupId);
+
+        }
+
+    };
+
+    /**
+     * removeTouristGroupMergeData 删除散拼
+     * @param  {[type]} $merge        [description]
+     * @param  {[type]} lineProductId [description]
+     * @param  {[type]} startTime     [description]
+     * @return {[type]}               [description]
+     */
+    arrangeIndividual.removeTouristGroupMergeData = function(lineProductId, startTime) {
+        var touristGroupMergeList = arrangeIndividual.touristGroupMergeData.touristGroupMergeList;
+        if (touristGroupMergeList.length > 0) {
+            for (var i = 0; i < touristGroupMergeList.length; i++) {
+                if (touristGroupMergeList[i].lineProductId == lineProductId && touristGroupMergeList[i].startTime == startTime) {
+                    touristGroupMergeList.splice(i, 1);
+                    break;
+>>>>>>> remotes/origin/master
                 }
             }
             for (var i = 0; i < arrangeIndividual.touristGroupId.length; i++) {

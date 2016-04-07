@@ -64,8 +64,8 @@ define(function(require, exports) {
                 // 绑定翻页组件
                 laypage({
                     cont: $tab.find('.T-pagenation'),
-                    pages: data.totalPage, //总页数
-                    curr: (data.pageNo + 1),
+                    pages: data.searchParam.totalPage, //总页数
+                    curr: (data.searchParam.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             FinShop.getList(obj.curr - 1, $tab);
@@ -215,12 +215,17 @@ define(function(require, exports) {
             args.endDate = $tab.find('.T-search-end-date').val();
             args.tripMessage = $tab.find('.T-search-trip').val();
             args.accountStatus = $tab.find('[name=accountStatus]').val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.sortType = 'accountTime';
         args.order = 'asc';
         var method = 'listReciveShopAcccount';
         if (!type) {
             method = 'listCheckShopAcccount';
+        }
+        
+        if (args.shopId) {
+            FinShop.settlementId = args.shopId;
         }
 
         $.ajax({
@@ -316,6 +321,15 @@ define(function(require, exports) {
 
         //搜索顶部的事件绑定
         var $searchArea = $tab.find('.T-search-area');
+        //搜索下拉事件
+        $searchArea.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            FinShop.initOperationList(args, type, $tab);
+        });
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
             args.pageNo = 0;
@@ -396,7 +410,8 @@ define(function(require, exports) {
                     tripMessage: $tab.find('.T-search-trip').val(),
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : args.accountStatus
+                    accountStatus : args.accountStatus,
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
                 FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });
@@ -609,6 +624,7 @@ define(function(require, exports) {
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripMessage: $tab.find('.T-search-trip').val(),
                 accountStatus : $tab.find('input[name=accountStatus]').val(),
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 sortType : "accountTime",
                 order : "asc"
             };

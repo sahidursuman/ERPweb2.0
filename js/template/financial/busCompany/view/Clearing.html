@@ -3,16 +3,37 @@
         <div class="T-search-area">
             <div class="form-group">
                 <label>车队：</label>
-                <input type="text" class="mar-r-20" name="busCompanyName" value="{{busCompanyName}}" />
+                <input type="text" class="mar-r-10" name="busCompanyName" value="{{busCompanyName}}" />
                 <label>账期：</label>
                 <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
                 <label>&nbsp;至&nbsp;</label>
-                <input class="date-picker mar-r-20" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
+                <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
                 <label>账务类别：</label>
-                <input class="mar-r-20" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
+                <input class="mar-r-10" name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
                 <label>车牌号：</label>
-                <input class="mar-r-20" name="licenseNumber" placeholder="车牌号" type="text" value="{{searchParam.licenseNumber}}" style="width:200px;" />
-                <button class="btn-sm T-search search-btn btn-height mar-r-20 ">
+                <input class="mar-r-10" name="licenseNumber" placeholder="车牌号" type="text" value="{{searchParam.licenseNumber}}" style="width:200px;" />
+
+                <label>对账状态：</label>
+                <div class="btn-group T-check-status mar-r-10">
+                    <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                        <span>
+                            {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                全部
+                            {{else if searchParam.isConfirmAccount == 1}}
+                                已对账
+                            {{else}}
+                                未对账
+                            {{/if}}
+                        </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                        <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                        <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                    </ul>
+                </div>
+                <button class="btn-sm T-search search-btn btn-height">
                     <i class="ace-icon fa fa-search"></i>搜索
                 </button>
             </div>
@@ -131,7 +152,12 @@
                 <td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.prePayedMoney}}</span></td>
-                <td><a class="T-option T-payedDetail">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span>{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span>{{/if}}</a></td>
+                <td class="align-left">
+                    <a class="T-option T-payedDetail">
+                        <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>
+                        {{if !rs.isGuidePay || rs.isGuidePay != 1}}<span class="in-block">{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span></span>{{/if}}
+                    </a>
+                </td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-busCompanyImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
