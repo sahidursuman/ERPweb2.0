@@ -422,7 +422,7 @@ define(function(require, exports) {
                 // 查看费用明细、并加载打印插件
                 var pluginKey = 'plugin_print';
                 Tools.loadPluginScript(pluginKey);
-                FinGuide.viewFeeDetail($that.data('id'));
+                FinGuide.viewFeeDetail($that.data('id'), $that.data('guidearrangeid'));
             } else if($that.hasClass('T-borrow-detail')){
                 FinGuide.viewOperationDetail(id, 2);
             }
@@ -817,13 +817,14 @@ define(function(require, exports) {
      * @param  {int} tripId 发团计划ID
      * @return {[type]}        [description]
      */
-    FinGuide.viewFeeDetail = function(tripId) {
+    FinGuide.viewFeeDetail = function(tripId, guideArrangeId) {
         if (!!tripId) {
             $.ajax({
                     url: KingServices.build_url('account/guideFinancial', 'viewTripPlanFeeDetail'),
                     type: 'post',
                     data: {
-                        tripPlanId: tripId
+                        tripPlanId: tripId,
+                        guideArrangeId: guideArrangeId
                     },
                 })
                 .done(function(data) {
