@@ -1162,7 +1162,7 @@ define(function(require, exports) {
                 $tab.find('[name="fromPartnerAgencyId"]').val(groupData.partnerAgency ? groupData.partnerAgency.id : "");
                 $tab.find('[name="contactRealname"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.contactRealname : "")
                 $tab.find('[name="fromPartnerAgencyContactId"]').val(groupData.partnerAgencyContact ? groupData.partnerAgencyContact.id : "");
-                $tab.find('[name="getType"]').val(groupData.getType);
+                $tab.find('[name="getType"]').val(groupData.getType||1);
                 $tab.find('[name="outOPUserName"]').val(groupData.outOPUser ? groupData.outOPUser.realName : $tab.find('[name="outOPUserName"]').val());
                 /*$tab.find('[name="dutyOPUserId"]').val(groupData.outOPUser ? groupData.outOPUser.id : $tab.find('[name="dutyOPUserId"]').val());*/
                 $tab.find('[name="otaOrderNumber"]').val(groupData.otaOrderNumber);
@@ -1887,23 +1887,34 @@ define(function(require, exports) {
             return trim(idCard ? idCard[0] : " ");
         },
         saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
-            var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
+            var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val()),
+                touristGroupMemberList = [];
             if (data != "") {
                 var dataArray = data.split(/\r?\n/);
                 if (dataArray.length > 0) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
                         if(memberInfo){
-                            $obj.append(T.touristsList({touristGroupMemberList:[{
-                                name : F.getName(memberInfo),
-                                mobileNumber : F.getPhone(memberInfo),
-                                idCardNumber : F.getIdCard(memberInfo)
-                            }]}));
+                            var name = F.getName(memberInfo),
+                                mobileNumber = F.getPhone(memberInfo),
+                                idCardNumber = F.getIdCard(memberInfo);
+                            if(name != "" || !!mobileNumber || !!idCardNumber){
+                                touristGroupMemberList.push({
+                                    name : name,
+                                    mobileNumber : mobileNumber,
+                                    idCardNumber : idCardNumber
+                                });
+                                $obj.append(T.touristsList({touristGroupMemberList:[{
+                                    name : name,
+                                    mobileNumber : F.getPhone(memberInfo),
+                                    idCardNumber : idCardNumber
+                                }]}));
+                            }
                             layer.close(addVisotorMoreLayer);
                         }
                     }
                     if(fn){
-                        fn($obj);
+                        fn($obj, touristGroupMemberList);
                     }
                 }
             }else{

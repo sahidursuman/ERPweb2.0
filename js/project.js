@@ -677,7 +677,7 @@ var modalScripts = {
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     // 'arrange_transit': 'js/template/arrange/transit/transit.js',
     // 'arrange_transit': 'js/template/arrange/transitPlan/transitPlan.js',
-    'arrange_transit': 'js/template/arrange/arrangeCenter/arrange.js',
+    'arrange_transit': 'js/template/arrange/arrangeCenter/arrange.js',//单向操作
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
@@ -1097,7 +1097,7 @@ var _statusText = {
 				if ( elem ) {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
-					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && !!ret) {
 						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
@@ -2639,7 +2639,6 @@ Tools.trFixed = function(obj){
 			$focus.blur();
 			$focus.datetimepicker('hide');
 		}else if($(".datepicker.datepicker-dropdown").length > 0){
-			console.log($(".datepicker.datepicker-dropdown").length);
 			$(".datepicker.datepicker-dropdown").remove();
 		}
 

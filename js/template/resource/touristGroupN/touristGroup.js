@@ -84,7 +84,7 @@ define(function(require, exports) {
                 }
             }
         });
-    }
+    };
 
     /**
      * 获取游客管理列表
@@ -241,11 +241,12 @@ define(function(require, exports) {
         $searchArea.find('.T-export').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var startTime = $searchArea.find('input[name=startTime]').val();
-            if (!!startTime && startTime!=null) {
+            var startTime = $searchArea.find('input[name="tripTime"]').val(),
+                dateType = $searchArea.find('[name="dateType"]').val();
+            if (!!startTime && dateType == "0") {
                 exportXLS(KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(getArgs($searchArea)));
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "请选择出游日期");
+                showMessageDialog($("#confirm-dialog-message"), "请在高级选项里选择接团日期！");
                 return;
             };
         });
@@ -473,6 +474,9 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupMoney($that, 0, type);
             }else if($that.hasClass('T-guest-info')){
                 touristGroup.updateGuestInfo($that, type);
+            }else if($that.hasClass('datepicker')){
+                var start = $tab.find('.T-team-info [name="startTime"]').val();
+                $(this).datepicker('setStartDate', start);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -487,6 +491,14 @@ define(function(require, exports) {
                 $tab.find('.T-container').data('type', 'group');
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 转团 ');
                 $tab.find('.T-part-group-text').text('转团');
+            }
+        });
+        $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
+            var $that = $(this),
+                $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
+                console.log(1)
+            if($endTime.val() != "" && $that.val() > $endTime.val()){
+                $endTime.val('');
             }
         });
 
@@ -562,6 +574,17 @@ define(function(require, exports) {
                 $(this).datepicker('setStartDate', start);
             }
     	});
+        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+            var $that = $(this), $tr = $that.closest('tr'),
+                $endTime = $tr.find('[name="tripEndTime"]'),
+                lineData = $tr.find('[name="lineProductName"]').data('json');
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+            if($that.val() != "" && !!lineData.days){
+                $endTime.val(Tools.addDay($that.val(), lineData.days));
+            }
+        });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
     		event.preventDefault();
@@ -826,6 +849,9 @@ define(function(require, exports) {
                             }
                         }
                     });
+                    $tbody.on('change', '[name="idCardType"]', function(event){
+                        validate = rule.guestUpdate(validate);
+                    });
 
                     $layer.find('.T-btn-save').on('click', function(){
                         if(!validate.form())return;
@@ -834,12 +860,23 @@ define(function(require, exports) {
                             showMessageDialog($("#confirm-dialog-message"), '至少设置一个联系人！');
                             return false;
                         }
+                        for(var i=0; i<infoData.touristGroupMemberJsonAdd.length; i++){
+                            var jsonAdd = infoData.touristGroupMemberJsonAdd[i];
+                            if(!!jsonAdd.isContactUser && jsonAdd.mobileNumber == ""){
+                                showMessageDialog($("#confirm-dialog-message"), '联系人的手机号码不能为空！');
+                                return false;
+                            }
+                            if(jsonAdd.mobileNumber == "" && jsonAdd.idCardNumber == ""){
+                                showMessageDialog($("#confirm-dialog-message"), '手机号码和证件号必填一项！');
+                                return false;
+                            }
+                        }
                         infoData.touristGroupMemberJsonDel = $layer.find('.T-addTouristTbody').data('del-json');
                         if(typeof infoData.touristGroupMemberJsonDel !== "object"){
                             infoData.touristGroupMemberJsonDel = JSON.parse(infoData.touristGroupMemberJsonDel || "[]");
                         }
 
-                        $that.val(infoData.guestName+"  "+infoData.adultCount+"大"+infoData.childCount+"小").data('json', JSON.stringify(infoData)).trigger('blur');
+                        $that.val(infoData.guestName+"  "+(infoData.adultCount || 0)+"大"+(infoData.childCount || 0)+"小").data('json', JSON.stringify(infoData)).trigger('blur');
                         $that.closest('.T-team-info').find('[name="mobileNumber"]').val(infoData.mobileNumber).trigger('blur');
                         layer.close(index);
                     });
@@ -1225,6 +1262,7 @@ define(function(require, exports) {
                         id : id
                     });
                     $this.closest('.T-fee-list').data('del-json', delJson);
+                    $tr.remove();
                 }else{
                     $tr.remove();
                     F.calcMoney($(this), $layer);
@@ -1534,9 +1572,13 @@ define(function(require, exports) {
     //批量添加游客
     touristGroup.batchAddTourists = function($obj, validate) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
-            module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer){
+            module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer, data){
+                var $tr = $layer.find('tr[data-default="1"]');
+                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == "" && data.length > 0){
+                    $tr.remove();
+                }
                 touristGroup.memberNumber($layer);
-                rule.guestUpdate(validate)
+                rule.guestUpdate(validate);
             });
         });
     };
@@ -1557,7 +1599,10 @@ define(function(require, exports) {
                 var $layer = $(obj);
                 touristGroup.getLineProductList(0, $layer);
                 $layer.find('.T-btn-search').on('click', function(){
-                    touristGroup.getLineProductList(0, $layer);
+                    touristGroup.getLineProductList({
+                        pageNo : 0,
+                        name : $layer.find('[name="lineProductName"]').val()
+                    }, $layer);
                 });
                 $layer.find('.T-btn-save').on('click', function(){
                     var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
@@ -1609,7 +1654,8 @@ define(function(require, exports) {
                     curr: (data.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                            touristGroup.getLineProductListt(args, $layer);
+                            args.pageNo = (obj.curr - 1);
+                            touristGroup.getLineProductList(args, $layer);
                         }
                     }
                 }); 
@@ -1972,8 +2018,8 @@ define(function(require, exports) {
                 data.receiveTrip.push(receiveTripData);
             });
             data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
-            if(typeof data.receiveTripDe === "object"){
-                data.receiveTripDe = JSON.stringify(data.receiveTripDe || "[]");
+            if(typeof data.receiveTripDel === "object"){
+                data.receiveTripDel = JSON.stringify(data.receiveTripDel || "[]");
             }
         }
 
@@ -2052,6 +2098,26 @@ define(function(require, exports) {
                 data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
             }
         }
+        if(data.baseInfo.customerType === 1){
+            data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
+            if(typeof data.receiveTripDel === "object"){
+                data.receiveTripDel = JSON.stringify(data.receiveTripDel || "[]");
+            }
+            $joinGroup.find('tr').each(function(index){
+                data.receiveTripDel.push({
+                    id : $(this).data('id')
+                });
+            });
+            data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
+            if(typeof data.sendTripDel === "object"){
+                data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
+            }
+            $sendGroup.find('tr').each(function(index){
+                data.sendTripDel.push({
+                    id : $(this).data('id')
+                });
+            });
+        }
 
         //其它信息
         data.otherInfo = {
@@ -2084,11 +2150,16 @@ define(function(require, exports) {
                     showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                         if(!!tabArgs){
                             if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
-                                touristGroup.initEdit($("#tab-"+tabArgs[0]+"-content"));
+                                touristGroup.init_events($("#tab-"+tabArgs[0]+"-content"));
                             };
                         }else{
                             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                            touristGroup.listTouristGroup(0);
+                            var $listTab = $("#tab-" + K.menu + "-content");
+                            if($listTab.length > 0){
+                                $listTab.find('.T-search-area').find('.T-touristGroupList-search').trigger('click');
+                            }else{
+                                touristGroup.listTouristGroup(0);
+                            }
                         }
                     });
                 }
@@ -2146,12 +2217,14 @@ define(function(require, exports) {
                 var money = $(this).find('[name="money"]').val() * 1;
                 countMoney += money;
             });
-            return Tools.toFixed(countMoney);
+            countMoney = Tools.toFixed(countMoney)
+            return isNaN(countMoney) ? 0 : countMoney;
         },
         //计算金额
         calcMoney : function($that, $tab){
-            var $tr = $that.closest('tr');
-            $tr.find('[name="money"]').val($tr.find('[name="count"]').val() * $tr.find('[name="price"]').val());
+            var $tr = $that.closest('tr'),
+                price = $tr.find('[name="count"]').val() * $tr.find('[name="price"]').val()
+            $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
             $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
         },
         //组装应收数据
@@ -2206,7 +2279,7 @@ define(function(require, exports) {
                     id = $that.data('id'),
                     name = $that.find('[name="name"]').val(),
                     mobileNumber = $that.find('[name="mobileNumber"]').val();
-                if(name != "" && mobileNumber != ""){
+                if(name != "" || mobileNumber != ""){
                     var jsonData = {
                         name : name,
                         mobileNumber : mobileNumber,

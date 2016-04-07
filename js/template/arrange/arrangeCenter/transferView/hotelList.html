@@ -1,0 +1,78 @@
+<table class="table table-striped table-bordered table-hover T-showHighLight">
+    <thead>
+        <tr class="bg-blur">
+            <th>选择</th>
+            <th>中转信息</th>
+            <th>类型</th>
+            <th>客人信息</th>
+            <th>入住时间</th>
+            <th>星级</th>
+            <th>间数</th>
+            <th>要求</th>
+            {{if !isFrame}}
+            <th>操作</th>
+            {{/if}}
+        </tr>
+    </thead>
+    <tbody class="T-hotel-list">
+    {{each outHotelRemarkList as hotel}}
+    <tr data-id="{{hotel.outRemarkId}}" {{if hotel.checked}} class="success"{{/if}}>
+        <td>
+            <label class="pos-rel">
+                <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-hotelcheked" {{if hotel.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
+            </label>
+        </td>
+        <td class="h-touristGroupInfo">
+            <p>中转单号：<span class="orderNumber">{{hotel.orderNumber}}</span></p>
+            <p><span class="lineProductName">&lt;{{hotel.lineProductName}}&gt;</span></p>
+            <p><span class="startTime">{{hotel.startTime}}</span><span class="partnerAgencyName">{{hotel.partnerAgencyName}}</span><span>外联销售：<span class="outOPUserName">{{hotel.outOPUserName}}</span></span></p>
+            <p>收客单号：{{hotel.tgOrderNumber}}</p>
+        </td>
+        <td>
+         <span >{{if hotel.shuttleType == 1}} 接团 {{else if hotel.shuttleType == 2}} 送团{{/if}}</span>
+         <input type="hidden" name="shuttleType" value="{{if hotel.shuttleType == 1}} 1 {{else if hotel.shuttleType == 2}} 2{{/if}}" >
+        </td>
+        <td>
+            <p>{{hotel.contactMemberName}}</p>
+            <p><span class="adultCount">{{hotel.adultCount}}</span>大<span class="childCount">{{hotel.childCount}}</span>小</p>
+        </td>
+        <td>
+            <p>{{hotel.checkInTime}}</p>
+        </td>
+        <td>{{hotel.hotelLevel}}</td>
+        <td>
+            {{hotel.roomCount}}
+        </td>
+        <td><span class="require">{{hotel.require}}</span></td>
+        {{if !isFrame}}
+        <td>
+            <!-- <a class="cursor T-inform T-action">
+                通知</a> -->
+            <a class="cursor T-arrange-item T-action">
+                <!-- <label class="padding-right20">|</label>  -->
+                安排</a>
+            <a class="cursor T-view T-action">
+                <label class="padding-right20">|</label>查看
+        </td>
+        {{/if}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div class="text-center">
+   {{if !isFrame}}
+    <button class="btn btn-sm btn-success w-150 R-right T-merge-arrange" {{if !canMergeArrange}} disabled="disabled" {{/if}} data-right="1130004">
+        <i class="ace-icon fa fa-user-plus"></i> 统一安排
+    </button>
+    {{/if}}
+</div>
+  
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

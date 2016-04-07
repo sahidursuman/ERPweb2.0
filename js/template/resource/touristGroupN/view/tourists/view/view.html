@@ -113,8 +113,8 @@
 						{{/if}}
 						<td>{{rs.status | getPartGroupStatusText}}</td>
 						<td>
-							<a class="cursor T-inner-turn{{if rs.outTransferInfo != "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.innerTransferInfo}}">内转</a> | 
-							<a class="cursor T-outer-turn{{if rs.innerTransferInfo != "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.outTransferInfo}}">外转</a>
+							<a class="cursor T-inner-turn{{if rs.outTransferInfo == "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.innerTransferInfo}}">内转</a> | 
+							<a class="cursor T-outer-turn{{if rs.innerTransferInfo == "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.outTransferInfo}}">外转</a>
 						</td>
 					</tr>
 				{{/each}}

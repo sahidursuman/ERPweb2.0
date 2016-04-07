@@ -58,6 +58,7 @@
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
                                         <th class="th-border">备注</th>
+                                        <th class="th-border">对账状态</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
@@ -94,6 +95,8 @@
                                         <td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
                                         <td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" /></td>
                                         <td><input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" /></td>
+                                         <td><input type="hidden" name="isConfirmAccount" value="{{if outRestaurant.isConfirmAccount == 0}}0{{else if outRestaurant.isConfirmAccount == 1}}1{{/if}}">
+                                         {{if outRestaurant.isConfirmAccount == 0}}未对账{{else if outRestaurant.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
                                             <a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
                                                 删除
@@ -144,18 +147,18 @@
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
                                         <th class="th-border">备注</th>
+                                        <th class="th-border">对账状态</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ticket_body">
                                 {{each outTicketList as outTicket}}
-                                    {{if outTicket.id != null && outTicket.ticket != null}}
                                     <tr data-entity-id="{{outTicket.id}}">
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="hidden" name="serviceType" value="0" />
-                                                <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" />
-                                                <input type="hidden" name="ticketId" value="{{outTicket.ticket.id}}" />
+                                                <input class="col-sm-12 T-autocomplete-input T-chooseTicket bind-change" name="ticketName" value="{{outTicket.ticketName}}" type="text" />
+                                                <input type="hidden" name="ticketId" value="{{outTicket.id}}" />
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                                 </span>
@@ -169,7 +172,7 @@
                                                 <option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
                                             </select>
                                         </td>
-                                        <td><input class="col-sm-12" name="startCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
+                                        <td><input class="col-sm-12" name="startingCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" /></td>
                                         <td><input class="col-sm-12" name="arriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" /></td>
                                         <td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" /></td>
                                         <td><input class="col-sm-12" name="shift" value="{{outTicket.shift}}" type="text" maxlength="20" /></td>
@@ -180,13 +183,14 @@
                                         <td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
                                         <td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" /></td>
                                         <td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" /></td>
+                                        <td><input type="hidden" name="isConfirmAccount" value="{{if outTicket.isConfirmAccount == 0}}0{{else if outTicket.isConfirmAccount == 1}}1{{/if}}">
+                                         {{if outTicket.isConfirmAccount == 0}}未对账{{else if outTicket.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
                                             <a class="cursor T-arrange-delete" data-catename="ticket">
                                                 删除
                                             </a>
                                         </td>
                                     </tr>
-                                    {{/if}}
                                     {{/each}}
                                 </tbody>
                             </table>
@@ -225,6 +229,7 @@
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
                                         <th class="th-border">备注</th>
+                                        <th class="th-border">对账状态</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
@@ -244,6 +249,8 @@
                                         <td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
                                         <td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" type="text" value="{{outOther.prePayMoney}}" /></td>
                                         <td><input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" /></td>
+                                        <td><input type="hidden" name="isConfirmAccount" value="{{if outOther.isConfirmAccount == 0}}0{{else if outOther.isConfirmAccount == 1}}1{{/if}}">
+                                         {{if outOther.isConfirmAccount == 0}}未对账{{else if outOther.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
                                             <a class="cursor T-arrange-delete" title="删除" data-catename="other">
                                                 删除
