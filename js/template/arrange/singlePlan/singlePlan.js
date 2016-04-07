@@ -926,6 +926,7 @@ define(function(require, exports) {
         $tab.find('.T-action-plan-list').append(list);
     }
     singlePlan.viewTripPlan = function(id, planType){
+        planType = 0;
         var html = T.viewTripPlanSingle, viewMenuKey = menuKey+"_single_view";
         $.ajax({
             url : KingServices.build_url("tripController", "viewTripPlan"),
@@ -1748,5 +1749,6 @@ define(function(require, exports) {
     //散客发团计划编辑
     exports.updateSingleTripPlan = singlePlan.updateSingleTripPlan;
     exports.addTripPlan = singlePlan.addTripPlan;
+    exports.viewTripPlan = singlePlan.viewTripPlan;
     exports.listTripPlanSingle = singlePlan.listTripPlanSingle;
 });
