@@ -326,15 +326,25 @@ define(function(require, exports) {
      * @param  {int} page        页面
      * @return {[type]}             [description]
      */
-    Transfer._getAddHotelList = function($searchFrom, page) {
+    Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
-
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: args,
+                data: {
+                    tgOrderNumber : args.tgOrderNumber,
+                    orderNumber : args.orderNumber,
+                    touristName :　args.touristName,
+                    hotelName : args.hotelName,
+                    checkInTime : args.checkInTime,
+                    lineProductName : args.lineProductName,
+                    hotelLevel : args.hotelLevel,
+                    arrangeUserName : args.arrangeUserName,
+                    pageNo : args.pageNo,
+                    selectedOutRemarkList : JSON.stringify(selectedOutRemarkList)
+                },
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -526,6 +536,16 @@ define(function(require, exports) {
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
     Transfer.addBusTransfer = function(shuttleType,$busplanId) {
+        var outRemarkId = $busplanId.find('[name=outRemarkId]');
+        var selectedOutRemarkList = [];
+        outRemarkId.each(function(){
+            if($(this).val().trim()){
+            var outRemarkIdData = {
+                outRemarkId:$(this).val()
+            };
+            selectedOutRemarkList.push(outRemarkIdData);
+        }
+        });
         shuttleType = shuttleType || 0;
         status = 0;
         var layerFrame = layer.open({
@@ -549,7 +569,7 @@ define(function(require, exports) {
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
-                    Transfer._getAddBusList($(this).closest('form'));
+                    Transfer._getAddBusList($(this).closest('form'),0,selectedOutRemarkList);
                 }).trigger('click');
                 
                 // 添加
@@ -632,14 +652,28 @@ define(function(require, exports) {
      * @param  {int} page        页面
      * @return {[type]}             [description]
      */
-    Transfer._getAddBusList = function($searchFrom, page) {
+    Transfer._getAddBusList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: args,
+                data: {
+                    tgOrderNumber : args.tgOrderNumber ,
+                    orderNumber : args.orderNumber,
+                    touristName : args.touristName,
+                    driverName : args.driverName,
+                    arriveTime : args.arriveTime,
+                    lineProductName : args.lineProductName,
+                    shift : args.shift,
+                    arrangeUserName : args.arrangeUserName,
+                    status : args.status,
+                    shuttleType : args.shuttleType,
+                    pageNo : args.pageNo,
+                    selectedOutRemarkList : JSON.stringify(selectedOutRemarkList)
+                }
+                
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -1185,6 +1219,16 @@ define(function(require, exports) {
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
     Transfer.addHotelTransfer = function(shuttleType,$hotelplanId) {
+         var outRemarkId = $hotelplanId.find('[name=outRemarkId]');
+        var selectedOutRemarkList = [];
+        outRemarkId.each(function(){
+            if($(this).val().trim()){
+            var outRemarkIdData = {
+                outRemarkId:$(this).val()
+            };
+            selectedOutRemarkList.push(outRemarkIdData);
+        }
+        });
         shuttleType = shuttleType || 0;
         status = 0;
         var layerFrame = layer.open({
@@ -1209,7 +1253,7 @@ define(function(require, exports) {
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
-                    Transfer._getAddHotelList($(this).closest('form'));
+                    Transfer._getAddHotelList($(this).closest('form'),0,selectedOutRemarkList);
                 }).trigger('click');
                 
                 // 添加
@@ -1715,6 +1759,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9"  type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>' +
             '</tr>',
             $line = filterUnAuth(html);
@@ -1738,6 +1783,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>' +
             '</tr>';
 
@@ -1757,6 +1803,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>' +
             '</tr>';
 
