@@ -17,10 +17,9 @@
         <div class="form-group T-finance-status btn-group mar-r-10">
             <label>客户类型</label>
             <select name="partnerAgencyType">
-                <option value="" {{if searchParam.partnerAgencyType == ""}}selected{{/if}}>全部</option>
-                <option value="0" {{if searchParam.partnerAgencyType == 0}}selected{{/if}}>地接社</option>
+                <option value="" {{if searchParam.partnerAgencyType == ''}}selected{{/if}}>全部</option>
+                <option value="0" {{if searchParam.partnerAgencyType == 0 && searchParam.partnerAgencyType.length > 0}}selected{{/if}}>地接社</option>
                 <option value="1" {{if searchParam.partnerAgencyType == 1}}selected{{/if}}>组团社</option>
-                <option value="2" {{if searchParam.partnerAgencyType == 2}}selected{{/if}}>地接社和组团社</option>
             </select>
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
