@@ -94,7 +94,7 @@
                     <td>{{item.touristGroupMemberList[0].mobileNumber}}</td>
                     <td>{{item.touristGroupMemberList[0].idCardType | getCardText}}</td>
                     <td>{{item.touristGroupMemberList[0].idCardNumber}}</td>
-                    <td>{{if item.touristGroupMemberList[0].gender == 1}} 男 {{else}} 女{{/if}}</td>
+                    <td>{{if item.touristGroupMemberList[0].gender == 1}} 男 {{else if item.touristGroupMemberList[0].gender == 2}} 女 {{/if}}</td>
                     <td>{{item.touristGroupMemberList[0].age}}</td>
                     <td>{{item.touristGroupMemberList[0].area}}</td>
                     {{/if}}
@@ -106,7 +106,7 @@
                     <td>{{member.mobileNumber}}</td>
                     <td>{{member.idCardType | getCardText}}</td>
                     <td>{{member.idCardNumber}}</td>
-                    <td>{{if member.gender == 1}} 男 {{else}} 女{{/if}}</td>
+                    <td>{{if member.gender == 1}} 男 {{else if member.gender == 2}} 女 {{/if}}</td>
                     <td>{{member.age}}</td>
                     <td>{{member.area}}</td>
                 </tr>
