@@ -1306,7 +1306,7 @@ define(function(require, exports) {
             lineData = JSON.parse(lineData || "{}");
         }
         data.lineData = lineData;
-        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val();
+        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
         $.extend(data, innerJson);
         if(optionType === 1){
@@ -1377,7 +1377,7 @@ define(function(require, exports) {
             lineData = JSON.parse(lineData || "{}");
         }
         data.lineData = lineData;
-        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val();
+        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
         $.extend(data, outerJson);
 

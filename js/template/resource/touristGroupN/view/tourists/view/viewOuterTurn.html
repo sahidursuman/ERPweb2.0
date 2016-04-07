@@ -6,7 +6,7 @@
 			<div class="col-xs-1 text-right no-padding-right control-label">天数</div>
 			<div class="col-xs-1 control-label">{{if !!lineData}}{{lineData.days}}{{/if}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">出团日期</div>
-			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.startTime}}{{/if}}</div>
+			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
 			<div class="col-xs-1 text-right no-padding-right control-label">同行</div>
@@ -39,8 +39,8 @@
 					</tr>
 				</thead>
 				<tbody class="T-fee-list">
-				{{if innerTransferFee && innerTransferFee.length > 0}}
-					{{each innerTransferFee as rs}}
+				{{if outTransferFee && outTransferFee.length > 0}}
+					{{each outTransferFee as rs}}
 					<tr>
 						<td>{{rs.type | getFeeItemText}}</td>
 						<td>{{rs.count}}</td>
