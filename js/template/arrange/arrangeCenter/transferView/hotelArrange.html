@@ -1,12 +1,12 @@
 <div class="T-planbus globalAdd ">
-<button class="btn btn-sm btn-success mar-b-10 T-add-task"> <i class="ace-icon fa fa-plus"></i> 添加安排 </button>
+<button class="btn btn-sm btn-success mar-b-10 T-add-HotelTransfersId"> <i class="ace-icon fa fa-plus"></i> 添加安排 </button>
 
 <table class="table table-striped table-bordered">
     <thead>
         <th class="th-border">中转信息及计划要求</th>
         <th class="th-border">操作</th>
     </thead>
-    <tbody class="T-task-list">
+    <tbody class="T-transfersId-hotel">
         {{each outRemarkList as item}}
         <tr>
             <td style="text-align: left;">
@@ -18,7 +18,7 @@
                 <label class="control-label ">外联销售：<span class="F-float F-money">{{item.outOPUserName}}</span></label>
             </td>
             <td rowspan="2">
-                <a class="cursor T-action {{if taskSize > 1}}T-delete-task {{/if}}" {{if taskSize <= 1}} disabled="disabled" {{/if}}title="删除">
+                <a class="cursor T-action {{if taskSize > 1}}T-del-hotel{{/if}}" {{if taskSize <= 1}} disabled="disabled" {{/if}}title="删除">
                     删除
                 </a>
             </td>
@@ -80,6 +80,7 @@
                     <div class="col-sm-12">
                         <input class="col-sm-12 T-chooseHotel bind-change" name="hotelName" value="{{outHotel.hotelName}}" type="text" />
                         <input type="hidden" name="hotelId" value="{{outHotel.hotelId}}" />
+                        <input type="hidden" name="outhotelId" value="{{outHotel.outhotelId}}" />
                         <span class="addResourceBtn T-addHotelResource" title="添加酒店">
                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                         </span>

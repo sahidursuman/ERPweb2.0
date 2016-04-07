@@ -75,7 +75,8 @@
                 <td>
                     <div class="col-sm-12">
                         <input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" type="text" value="{{outBus.licenseNumber}}" />
-                        <input type="hidden" name="busId" value="{{if outBus.bus != null}}{{outBus.bus.id}}{{/if}}" />
+                        <input type="hidden" name="busId" value="{{outBus.busId}}" />
+                        <input type="hidden" name="outBusId" value="{{outBus.outBusId}}" />
                         <span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                         </span>
@@ -84,7 +85,7 @@
                 <td>
                     <div class="col-sm-12">
                         <input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="{{if outBus != null}}{{outBus.driverName}}{{/if}}" />
-                        <input type="hidden" name="driverId" value="{{if outBus.driver != null}}{{outBus.driverId}}{{/if}}" />
+                        <input type="hidden" name="driverId" value="{{outBus.driverId}}" />
                         <span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                         </span>

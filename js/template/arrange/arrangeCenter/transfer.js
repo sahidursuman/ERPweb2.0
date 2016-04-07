@@ -329,23 +329,13 @@ define(function(require, exports) {
      */
     Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
+        args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList);
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: {
-                    tgOrderNumber : args.tgOrderNumber,
-                    orderNumber : args.orderNumber,
-                    touristName :　args.touristName,
-                    hotelName : args.hotelName,
-                    checkInTime : args.checkInTime,
-                    lineProductName : args.lineProductName,
-                    hotelLevel : args.hotelLevel,
-                    arrangeUserName : args.arrangeUserName,
-                    pageNo : args.pageNo,
-                    selectedOutRemarkList : JSON.stringify(selectedOutRemarkList)
-                },
+                data: args
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -655,26 +645,13 @@ define(function(require, exports) {
      */
     Transfer._getAddBusList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
+        args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList)
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: {
-                    tgOrderNumber : args.tgOrderNumber ,
-                    orderNumber : args.orderNumber,
-                    touristName : args.touristName,
-                    driverName : args.driverName,
-                    arriveTime : args.arriveTime,
-                    lineProductName : args.lineProductName,
-                    shift : args.shift,
-                    arrangeUserName : args.arrangeUserName,
-                    status : args.status,
-                    shuttleType : args.shuttleType,
-                    pageNo : args.pageNo,
-                    selectedOutRemarkList : JSON.stringify(selectedOutRemarkList)
-                }
-                
+                data: args
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -1202,10 +1179,10 @@ define(function(require, exports) {
             
             //删除中转数据
             $hotelplanId.off('click').on('click','.T-del-hotel',function() {
-                var $that = $(this),$div = $that.closest('div'),
+                var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    $div.fadeOut(function(){
-                        $div.remove();
+                    $tr.fadeOut(function(){
+                        $that.parents('tr').remove()
                     })
                     var delHotelTransferData = {
                         outRemarkId : outRemarkId
@@ -1266,20 +1243,16 @@ define(function(require, exports) {
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var hotelPlan = checkData[i];
-                        htmlData = '<div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(hotelPlan.id||"")+'">'+
-                        '<label class="control-label mar-r-20">中转单号：'+(hotelPlan.orderNumber||"")+'</label>'+
-                        '<label class="control-label mar-r-20">线路产品：'+(hotelPlan.lineProductName||"")+'</label>'+
-                        '<label class="control-label mar-r-20">用车时间：'+(hotelPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：'+
-                            '<span class="F-float F-count">'+(hotelPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>小'+
-                        '</label>'+
-                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(hotelPlan.outOPUserName||"")+'</span></label>'+
-                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-hotel">删除 </button></label>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(hotelPlan.require||"")+'</div>'+
-                        '</div> '
-
+                       var htmlData = '<tr><td style="text-align: left;">'+
+                            '<input type="hidden" name="outRemarkId" value="'+(hotelPlan.id||"")+'">'+
+                            '<label class="control-label mar-r-20">中转单号：'+(hotelPlan.orderNumber||"")+'</label>'+
+                            '<label class="control-label mar-r-20">线路产品：'+(hotelPlan.lineProductName||"")+'</label>'+
+                            '<label class="control-label mar-r-20">抵达时间：'+(hotelPlan.startTime||"")+'</label>'+
+                            '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(hotelPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>小</label>'+
+                            '<label class="control-label ">外联销售：<span class="F-float F-money">'+(hotelPlan.outOPUserName||"")+'</span></label></td>'+
+                            '<td rowspan="2"><a class="cursor T-del-hotel " title="删除">删除</a>'+
+                            '</td></tr>'+
+                            '<tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：'+(hotelPlan.require||"")+'</td></tr>'
                         $hotelplanId.find('.T-transfersId-hotel').after(htmlData);
                     };
                     
