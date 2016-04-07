@@ -563,7 +563,8 @@ define(function(require, exports) {
 
     Self.init_event = function(args,$tab,option) {
         var validator = new FinRule(Self.showBtnFlag ? 3 : 1).check($tab);
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
         // 监听修改
         $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

@@ -586,7 +586,8 @@ define(function(require, exports) {
     busCompany.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(0)).check($tab);
-            Tools.setDatePicker($tab.find(".date-picker"), true);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change', "input", function(event) {
