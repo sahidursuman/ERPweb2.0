@@ -25,7 +25,7 @@ define(function(require, exports) {
 				maxGuideCount=data.travelAgency.maxGuideCount,
 				unGuideCount=maxGuideCount-data.guideCount;  
 
-				addTab(menuKey,"系统信息",html);
+				Tools.addTab(menuKey,"系统信息",html);
 				
 				//未使用操作号上限
 				$(".T-unUserCount").text(unUserCount);  
