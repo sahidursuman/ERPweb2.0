@@ -143,6 +143,8 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
 
         $.ajax({
@@ -234,7 +236,9 @@ define(function(require, exports) {
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });
@@ -259,6 +263,8 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         if(args.autoPay == 1){
             args.isAutoPay = 0;
@@ -283,7 +289,6 @@ define(function(require, exports) {
                     var resultList = data.financialRestaurantList;
                     //暂存数据读取
                     if(restaurant.clearTempSumDate && restaurant.clearTempSumDate.id == args.restaurantId){
-                        console.log("ddddd");
                         data.sumPayMoney = restaurant.clearTempSumDate.sumPayMoney;
                         data.sumPayType = restaurant.clearTempSumDate.sumPayType;
                         data.sumPayRemark = restaurant.clearTempSumDate.sumPayRemark;
@@ -397,7 +402,7 @@ define(function(require, exports) {
                     billTime : $tab.find('input[name=tally-date]').val()
                 };
                 args.isAutoPay = 1;
-                restaurant.restaurantClear(args);
+                restaurant.restaurantClear(args,$tab);
             });
         });
 
