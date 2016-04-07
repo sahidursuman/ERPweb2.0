@@ -569,6 +569,9 @@ define(function(require, exports) {
                 touristGroup.updateOuterTurn($that, type);
             }else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
+                /*if($tab.find('.T-part-group-list tr').length === 0){
+                    $tab.find('.T-team-info').find('[name="lineProductName"]').attr('readonly', 'readonly');
+                }*/
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
@@ -752,6 +755,7 @@ define(function(require, exports) {
     	$tab.find('.T-part-group-list').append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
+        //$tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
     };
 
     /**
@@ -1230,7 +1234,7 @@ define(function(require, exports) {
                 '</tr>');
             rule.needUpdate(validate);
         });
-        //是否外传
+        //是否外转
         $layer.find('.T-abversion').on('change', function(){
             var $peer = $layer.find('.T-peer'),
                 $internal = $layer.find('.T-internal');
@@ -1373,7 +1377,7 @@ define(function(require, exports) {
             lineData = JSON.parse(lineData || "{}");
         }
         data.lineData = lineData;
-        data.lineData.startTime = $tr.find('[name="startTime"]').val();
+        data.lineData.startTime = $tr.find('[name="tripStartTime"]').val();
         data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
         $.extend(data, outerJson);
 
@@ -2048,7 +2052,6 @@ define(function(require, exports) {
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
-            console.log($innerTurn.data('json'))
             if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
                 joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
             }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
@@ -2118,6 +2121,12 @@ define(function(require, exports) {
                 });
             });
         }
+
+        /*if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId){
+            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
+            showMessageDialog($("#confirm-dialog-message"), msg);
+            return false;
+        }*/
 
         //其它信息
         data.otherInfo = {
