@@ -17,11 +17,11 @@
         <div class="form-group mar-r-10">
             <label class="control-label">组团单号：</label>
             <input type="text" class="form-control T-search-number" placeholder="组团单号" value="{{searchParam.otaOrderNumber}}">
-        </div><br />
+        </div>
         <div class="form-group mar-r-10">
             <label class="control-label">线路名称：</label>
             <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
-        </div>
+        </div><br />
         <div class="form-group mar-r-10">
             <label class="control-label">录入人：</label>
             <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
@@ -33,7 +33,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">游客：</label>
             <input type="text" class="form-control T-search-contactInfo" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo">
-        </div>
+        </div> 
         <label class="form-group">对账状态：</label>
         <div class="form-group btn-group T-check-status mar-r-10">
             <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
@@ -54,6 +54,13 @@
                 <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
             </ul>
         </div>
+        <div class="form-group mar-r-10">
+            <label>对账时间：</label>
+            <input class="date-picker T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+            <label>&nbsp;至&nbsp;</label>
+            <input class="date-picker T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+        </div>
+                
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索 

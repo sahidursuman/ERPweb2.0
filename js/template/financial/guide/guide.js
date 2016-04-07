@@ -223,6 +223,8 @@ define(function(require, exports) {
             args.lineProductId = $line.data('id');
             args.lineProductName = $line.val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
 
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
@@ -402,8 +404,11 @@ define(function(require, exports) {
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
                         lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                        startCheck : $tab.find('.T-checkStartTime').val(),
+                        endCheck : $tab.find('.T-checkEndTime').val()
                     };
+                console.log(argsData);
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 FinancialService.exportReport(argsData,"exportArrangeGuideFinancial");
             });
@@ -595,7 +600,9 @@ define(function(require, exports) {
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
                 payType: $tab.find('select[name=sumPayType]').val(),
-                accountStatus : $tab.find('input[name=accountStatus]').val()
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
 
             if (args.lineProductName === '全部') {
@@ -652,7 +659,9 @@ define(function(require, exports) {
                 accountStatus : accountStatus,
                 borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false,
                 isOuter : FinGuide.isOuter,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
 
             if (args.lineProductName === '全部') {

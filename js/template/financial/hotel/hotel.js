@@ -145,6 +145,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "accountTime";
         $.ajax({
@@ -231,8 +233,11 @@ define(function(require, exports) {
                 startTime: $tab.find('input[name=startDate]').val(),
                 endTime: $tab.find('input[name=endDate]').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
+            console.log(argsData);
             FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");
         });
 
@@ -255,6 +260,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "accountTime";
         if(args.autoPay == 1){
