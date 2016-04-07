@@ -434,6 +434,8 @@ define(function(require, exports) {
                 data: args,
                 success: function(data) {
                     if (showDialog(data)) {
+                        data.taskSize = data.outRemarkList.length;
+                        
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
