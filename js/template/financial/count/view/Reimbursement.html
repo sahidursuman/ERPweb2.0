@@ -150,7 +150,7 @@
                         <tr>
                             <th class="th-border">序号</th>
                             <th class="th-border">客户</th>
-                            <th class="th-border">收客单号</th>
+                            <th class="th-border">收客信息</th>
                             <th class="th-border">游客信息</th>
                             <th class="th-border">包含自费</th>
                             <th class="th-border">备注</th>
@@ -204,17 +204,26 @@
                                             <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                             <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                         {{/each}}
-                                    </a>
-                                    {{/if}}<a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
-                                </td>
-                                <td>
-                                    {{if touristGroup.isConfirmAccount == 0}}
-                                        未对账
                                     {{else}}
-                                        已对账
+                                        {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
+                                            {{touristGroupFee.name}} ：
+                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                        {{/each}}
                                     {{/if}}
-                                </td>
-                            </tr>
+                                </a>
+                                {{if touristGroup.isConfirmAccount == 0}}
+                                    <a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{if touristGroup.isConfirmAccount == 0}}
+                                    未对账
+                                {{else}}
+                                    已对账
+                                {{/if}}
+                            </td>
+                        </tr>
                         {{/each}}
                     {{/if}}
                     </tbody>

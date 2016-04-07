@@ -54,6 +54,9 @@
               {{if !!transit.touristGroupMemberName}}
                 <span class="h-memberName">{{transit.touristGroupMemberName}}</span>
               {{/if}}
+             {{if !!transit.mobileNumber}}
+                <span class="h-mobileNumber">{{transit.mobileNumber}}</span>
+              {{/if}}
               {{if transit.touristGroupOutRemark != null || transit.touristGroupOutRemark != null}}
                 <span class="h-peopleCount">({{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.adultCount}}大{{/if}} {{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.childCount}}小{{/if}})</span>
               {{/if}}

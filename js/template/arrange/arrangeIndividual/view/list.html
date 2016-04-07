@@ -1,6 +1,6 @@
 <table class="table table-striped table-bordered table-hover globalAdd T-showHighLight table-fixed">
     <colgroup>
-        <col style="width:45px;">
+        <col style="width:75px;">
         <col style="width: 300px;">
         <col style="width:50px">
         <col style="width:90px">
@@ -14,7 +14,7 @@
     </colgroup>
     <thead>
         <tr class="bg-blur T-tr-fixed">
-            <th>选择</th>
+            <th><label class="pos-rel"> <input type="checkbox" class="ace T-checkedAll"> <span class="lbl"></span> 选择</label></th>
             <th>收客信息</th>
             <th>天数</th>
             <th>出游日期</th>
@@ -52,7 +52,7 @@
                     <span>({{touristGroupL.lineProduct.type}})</span>
                 </p>
                 {{/if}}
-                <p class="h-orderNumber">客户：{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
+                <p class="h-orderNumber">{{if !!touristGroupL.partnerAgency}}{{touristGroupL.partnerAgency.travelAgencyName}}{{/if}}</p>
             </td>
             <td class="F-float F-count" style="vertical-align:middle">{{if !!touristGroupL.lineProduct}}{{touristGroupL.lineProduct.days}}{{/if}}</td>
             <td style="vertical-align:middle">{{touristGroupL.startTime | dateFormat: 'yyyy-MM-dd' }}</td>

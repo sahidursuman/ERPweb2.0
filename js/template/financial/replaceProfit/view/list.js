@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":243,"md5":"3d27a143ac34fccef939633825131fb6"}*/
+/*TMODJS:{"debug":true,"version":246,"md5":"590eacf1f13a098f5837abd9f4528905"}*/
 define(function(require) {
     return require("../../../template")("financial/replaceProfit/view/list", function($data, $filename) {
         try {
@@ -8,10 +8,10 @@ define(function(require) {
                 $out += ' <tr data-id="', $line = 2, $out += $escape(rs.id), $out += '"> <td><a class="T-option T-replaceDetail">', 
                 $line = 3, $out += $escape(rs.orderNumber), $out += "</a></td> <td>", $line = 4, 
                 null != rs.partnerAgency && ($line = 4, $out += $escape(rs.partnerAgency.travelAgencyName), 
-                $line = 4), $out += "</td> <td>", $line = 5, $out += $escape(rs.outOPUser), $out += "</td> <td>", 
-                $line = 6, rs.businessGroup && ($line = 6, $out += $escape(rs.businessGroup.name), 
-                $line = 6), $out += "-", $line = 6, rs.group && ($line = 6, $out += $escape(rs.group.name), 
-                $line = 6), $out += "</td> <td> ", $line = 8, "" == rs.financialHotel ? ($out += " - ", 
+                $line = 4), $out += "</td> <td>", $line = 5, rs.outOPUser ? ($line = 5, $out += $escape(rs.outOPUser.realName), 
+                $line = 5) : ($out += "-", $line = 5), $out += "</td> <td>", $line = 6, rs.businessGroup && ($line = 6, 
+                $out += $escape(rs.businessGroup.name), $line = 6), $out += "-", $line = 6, rs.group && ($line = 6, 
+                $out += $escape(rs.group.name), $line = 6), $out += "</td> <td> ", $line = 8, "" == rs.financialHotel ? ($out += " - ", 
                 $line = 10) : ($out += " ", $line = 11, $out += $escape(rs.financialHotel), $out += " ", 
                 $line = 12), $out += " </td> <td> ", $line = 15, "" == rs.financialTicket ? ($out += " - ", 
                 $line = 17) : ($out += " ", $line = 18, $out += $escape(rs.financialTicket), $out += " ", 
@@ -31,7 +31,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each bookingOrderList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>\r\n	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>\r\n	<td>{{rs.outOPUser}}</td>\r\n	<td>{{if !!rs.businessGroup}}{{rs.businessGroup.name}}{{/if}}-{{if rs.group}}{{rs.group.name}}{{/if}}</td>\r\n	<td>\r\n		{{if rs.financialHotel == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialHotel}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialTicket == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialTicket}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialScenic == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialScenic}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialBus == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialBus}}\r\n		{{/if}}\r\n	</td>\r\n	<td><a class="T-option T-needPayDetail F-float F-money">{{rs.sumNeedGetMoney}}</a></td>\r\n	<td><a class="T-option T-costDetail F-float F-money">{{rs.sumCostMoney}}</a></td>\r\n	<td><span class="F-float F-money">{{rs.financialGrossProfit}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each bookingOrderList as rs}}\r\n<tr data-id="{{rs.id}}">\r\n	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>\r\n	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>\r\n	<td>{{if rs.outOPUser}}{{rs.outOPUser.realName}}{{else}}-{{/if}}</td>\r\n	<td>{{if !!rs.businessGroup}}{{rs.businessGroup.name}}{{/if}}-{{if rs.group}}{{rs.group.name}}{{/if}}</td>\r\n	<td>\r\n		{{if rs.financialHotel == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialHotel}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialTicket == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialTicket}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialScenic == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialScenic}}\r\n		{{/if}}\r\n	</td>\r\n	<td>\r\n		{{if rs.financialBus == ""}}\r\n			-\r\n		{{else}}\r\n			{{rs.financialBus}}\r\n		{{/if}}\r\n	</td>\r\n	<td><a class="T-option T-needPayDetail F-float F-money">{{rs.sumNeedGetMoney}}</a></td>\r\n	<td><a class="T-option T-costDetail F-float F-money">{{rs.sumCostMoney}}</a></td>\r\n	<td><span class="F-float F-money">{{rs.financialGrossProfit}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

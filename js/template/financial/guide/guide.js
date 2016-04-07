@@ -219,6 +219,7 @@ define(function(require, exports) {
             args.tripPlanNumber = $tab.find('.T-tripPlanNumber').val();
             args.lineProductId = $line.data('id');
             args.lineProductName = $line.val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
 
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
@@ -300,6 +301,26 @@ define(function(require, exports) {
 
         var $datePicker = Tools.setDatePicker($searchArea.find('.datepicker'), true);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            var $btn = $tab.find('.T-saveClear');
+            var args = {
+                guideId: $btn.data('id'), 
+                guideName:$btn.data('name'),
+                startDate: $datePicker.eq(0).val(),
+                endDate: $datePicker.eq(1).val(),
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+            };
+            if(type){
+                args.isOuter = FinGuide.isOuter;
+            }
+            FinGuide.initOperationModule(args, type, $tab);
+        });
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
             var $btn = $tab.find('.T-saveClear');
@@ -377,8 +398,8 @@ define(function(require, exports) {
                         accountStatus: $searchArea.find('input[name=accountStatus]').val(),
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
-                        lineProductId: $searchArea.find('.T-lineProductName').data('id')
-
+                        lineProductId: $searchArea.find('.T-lineProductName').data('id'),
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                     };
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 FinancialService.exportReport(argsData,"exportArrangeGuideFinancial");
@@ -627,7 +648,8 @@ define(function(require, exports) {
                 lineProductName: $line.val(),
                 accountStatus : accountStatus,
                 borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false,
-                isOuter : FinGuide.isOuter
+                isOuter : FinGuide.isOuter,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
 
             if (args.lineProductName === '全部') {
@@ -647,6 +669,7 @@ define(function(require, exports) {
                         if (!!type) {
                             data.list = FinancialService.getTempDate(data.list, FinGuide.payingJson,true);
                             data.isOuter = FinGuide.isOuter;
+                            data.isConfirmAccount = args.isConfirmAccount;
                             if($tab.find('.T-saveClear').data('borrow') == "borrow"){
                                 data.isPayMoney = true;
                                 var sumPayMoney = 0;

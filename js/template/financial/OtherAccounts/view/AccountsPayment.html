@@ -4,14 +4,35 @@
             <div class="T-search-area">
                 <div class="form-group">
                     <label>项目名称：</label>
-                    <input type="text" name="itemName" value="{{searchParam.name}}" class="T-item-name">
+                    <input type="text" name="itemName" value="{{searchParam.name}}" class="T-item-name mar-r-10">
                     
                     <label >账期：</label>
-                    <input class="datepicker T-startTime T-time mar-r-10" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
+                    <input class="datepicker T-startTime T-time" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>
-                    <input class="datepicker T-endTime mar-r-10 T-time" name="joinTime" placeholder="结束日期" type="text" value="{{searchParam.endAccountTime}}" style="width:100px;"/> <label >团信息：</label>
+                    <input class="datepicker T-endTime mar-r-10 T-time" name="joinTime" placeholder="结束日期" type="text" value="{{searchParam.endAccountTime}}" style="width:100px;"/>
+                    <label>团信息：</label>
                     <input name="tripInfo" placeholder="团信息" type="text" class="T-creatorUserChoose mar-r-10 ui-autocomplete-input" name="creator" value="{{searchParam.info}}" style="width:200px;" />
                     <input type="hidden" name="creatorId" value="">
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if searchParam.isConfirmAccount === 0}}
+                                    未对账
+                                {{else if searchParam.isConfirmAccount === 1}}
+                                    已对账
+                                {{else}}
+                                    全部
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
                     <button class="btn-height btn-sm search-btn T-search">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
@@ -114,8 +135,12 @@
                 <td class="F-float F-count">{{Checking.memberCount}}</td>
                 <td class="F-float F-money">{{Checking.reduceMoney}}</td>
                 <td class="F-float F-money">{{Checking.needPayMoney}}</td>
-                <td><a class="T-action T-lookPay">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span>
-                {{if Checking.isGuidePay != 1}}{{";导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span>{{/if}}</a></td>
+                <td class="align-left">
+                    <a class="T-action T-lookPay">
+                        <span class="in-block">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span></span>
+                        {{if Checking.isGuidePay != 1}}<span class="in-block">{{"导付："}}<span class="F-float F-money">{{Checking.guidePayedMoney}}</span></span>{{/if}}
+                    </a>
+                </td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td class="F-float F-money">
                     {{Checking.settlementMoney}}

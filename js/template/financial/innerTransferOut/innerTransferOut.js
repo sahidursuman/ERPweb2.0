@@ -150,6 +150,7 @@ define(function(require,exports) {
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
 			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
+			args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
@@ -298,6 +299,19 @@ define(function(require,exports) {
 		//页面时间控件格式化
 		Tools.setDatePicker($tab.find(".date-picker"), true);
 		FinancialService.initPayEvent($tab);
+		//搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+			if(typeFlag !=2){
+				InnerTransferOut.chenking(args,$tab);
+			}else{
+				InnerTransferOut.settlement(args,$tab);
+			}
+        });
 		//搜索事件
 		$tab.find(".T-checking-search").off().on('click',function(event){
 			event.preventDefault();
@@ -318,7 +332,8 @@ define(function(require,exports) {
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
-                    orderNumber : $tab.find('input[name=orderNumber]').val()
+                    orderNumber : $tab.find('input[name=orderNumber]').val(),
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             FinancialService.exportReport(argsData,"exportArrangeInnerTransferOutFinancial");
@@ -360,7 +375,9 @@ define(function(require,exports) {
 				var startDate = $tab.find('input[name=startDate]').val();
 				var endDate = $tab.find('input[name=endDate]').val();
 				var message = false;
-				if(payMoney<=0 || payMoney == ""){
+				if(parseFloat(unPayMoney) < 0){
+					message = "已对账未付总额为负，不能进行自动下账！";
+				}else if(payMoney<=0 || payMoney == ""){
 					message = "付款金额需大于0！";
 				}else if(parseFloat(payMoney)>parseFloat(unPayMoney)){
 					message = "本次付款金额合计大于未付金额合计（已对账），请先进行对账";
@@ -541,6 +558,7 @@ define(function(require,exports) {
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
 			args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
+			args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
 		}
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","financialInnerTransferOutSumStaticsByToBusinessGroupId"),
