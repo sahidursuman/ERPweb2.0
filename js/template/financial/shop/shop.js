@@ -339,8 +339,8 @@ define(function(require, exports) {
             args.pageNo = 0;
             FinShop.initOperationList(args, type, $tab);
         });
-        var $datepicker = $searchArea.find('.datepicker');
-        Tools.setDatePicker($datepicker, true);
+        Tools.setDatePicker($searchArea.find(".T-time"), true);
+        Tools.setDatePicker($searchArea.find(".T-checkTime"), true);
         var operationMenuKey = settMenuKey,
             saveData = type ? FinShop.saveSettlement : FinShop.saveChecking;
 

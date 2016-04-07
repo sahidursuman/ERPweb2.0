@@ -304,7 +304,9 @@ define(function(require, exports) {
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
-        var $datePicker = Tools.setDatePicker($searchArea.find('.datepicker'), true);
+        var $datePicker = $searchArea.find('.datepicker');
+        Tools.setDatePicker($searchArea.find(".T-time"), true);
+        Tools.setDatePicker($searchArea.find(".T-checkTime"), true);
 
         //搜索下拉事件
         $tab.find('.T-check-status').on('click', 'a', function(event) {

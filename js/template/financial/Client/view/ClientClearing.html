@@ -6,9 +6,9 @@
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" class="form-control date-picker T-time  T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" class="form-control date-picker T-time T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">收客单号：</label>
@@ -33,7 +33,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">游客：</label>
             <input type="text" class="form-control T-search-contactInfo" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo"> 
-        </div>
+        </div> 
         <label class="form-group">对账状态：</label>
         <div class="form-group btn-group T-check-status mar-r-10">
             <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
@@ -56,9 +56,9 @@
         </div>
         <div class="form-group mar-r-10">
             <label>对账时间：</label>
-            <input class="date-picker T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+            <input class="date-picker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
             <label>&nbsp;至&nbsp;</label>
-            <input class="date-picker T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+            <input class="date-picker T-checkTime T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
         </div>
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
