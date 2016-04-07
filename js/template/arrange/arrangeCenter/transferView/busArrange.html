@@ -5,7 +5,7 @@
             <th class="th-border">中转信息及计划要求</th>
             <th class="th-border">操作</th>
         </thead>
-        <tbody class="T-task-list">
+        <tbody>
             {{each outRemarkList as Busplan}}
             <tr><td style="text-align: left;">
                     <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
@@ -21,7 +21,7 @@
                     </a>
                 </td>
             </tr>
-            <tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：{{Busplan.require}}</td></tr>
+            <tr class="T-task-list"><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：{{Busplan.require}}</td></tr>
             {{/each}}
         </tbody>
     </table>

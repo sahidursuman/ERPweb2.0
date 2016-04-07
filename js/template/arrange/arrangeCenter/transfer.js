@@ -1254,7 +1254,7 @@ define(function(require, exports) {
                             '<td rowspan="2"><a class="cursor T-del-hotel " title="删除">删除</a>'+
                             '</td></tr>'+
                             '<tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：'+(hotelPlan.require||"")+'</td></tr>'
-                        $hotelplanId.find('.T-transfersId-hotel').after(htmlData);
+                        $hotelplanId.find('.T-task-list').after(htmlData);
                     };
                     
                     // 关闭对话框
