@@ -351,6 +351,7 @@ define(function(require, exports) {
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
                     orderNumber : $tab.find('.T-search-orderNumber').val(),
+                    contactInfo : $tab.find('.T-search-contactInfo').val(),
                     otaOrderNumber : $tab.find('.T-search-number').val(),
                     accountStatus : args.accountStatus,
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
@@ -1067,6 +1068,7 @@ define(function(require, exports) {
         args = {
             orderNumber : $tab.find('.T-search-orderNumber').val(),
             otaOrderNumber : $tab.find('.T-search-number').val(),
+            contactInfo : $tab.find('.T-search-contactInfo').val(),
             creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
