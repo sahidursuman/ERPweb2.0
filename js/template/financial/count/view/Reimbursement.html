@@ -2,10 +2,10 @@
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
         <tbody>
             <tr>
-                <td style="text-align:left"><label  style="font-weight: bold;">线路：{{tripPlan.lineProduct.name}}</label></td>
-                <td style="text-align:left"><label  style="font-weight: bold;">类别：{{tripPlan.lineProduct.type}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">线路：{{tripPlan.lineProductName}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">类别：{{tripPlan.lineProductType}}</label></td>
                 <td style="text-align:left"><label  style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
-                <td style="text-align:left"><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.lineProduct.days}}</span></label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.days}}</span></label></td>
             </tr>
             <tr>
                 <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
@@ -14,15 +14,15 @@
                 <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
             </tr>
             <tr>
-                <td style="text-align:left"> <label  style="font-weight: bold;">导游：{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</label></td>
+                <td style="text-align:left"> <label  style="font-weight: bold;">导游：{{if tripPlan.guideName != null}}{{tripPlan.guideName}}{{/if}}</label></td>
                 <td style="text-align:left"><label  style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
                 <td style="text-align:left"></td>
                 <td style="text-align:left"></td>
             </tr>
         </tbody>
     </table>
-    <input type="hidden" name="totalPersonCount" value="{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}"/>
-    <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArrange.length}}">
+    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount+tripPlan.childCount}}"/>
+    <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArranges.listMap.length}}">
     <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
     <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
@@ -31,11 +31,9 @@
             <td colspan="8">
             <div style="float: left;margin-left:10px;">
                 <input type="hidden" class="financial-tripPlanId" value="{{tripPlan.id}}" />
-                <input type="hidden" class="tripPlanAdultCount" value="{{tripPlan.touristAdultCount}}" />
-                <input type="hidden" class="tripPlanChildCount" value="{{tripPlan.touristChildCount}}" />
-                <input type="hidden" class="totalPersonCount" value="{{tripPlan.touristChildCount}}+{{tripPlan.touristAdultCount}}" />
+                <input type="hidden" class="tripPlanAdultCount" value="{{tripPlan.adultCount}}" />
+                <input type="hidden" class="tripPlanChildCount" value="{{tripPlan.childCount}}" />
                 <input type="hidden" class="tripPlanStartTime" value="{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}" />
-                
                 <label style="margin-left:50px;font-weight: bold;">毛利：<span class="F-float F-money grossProfitMoney">0</span></label>
                 <label style="margin-left:50px;font-weight: bold;">人均毛利：<span class="F-float F-money perGrossProfitMoney">0</span></label>
                 <label style="margin-left:50px;font-weight: bold;">导游预支金额：<span class="F-float F-money guideAllPreMoney">{{tripPlan.guideAllPreMoney}}</span></label>
@@ -164,68 +162,61 @@
                         </tr>
                     </thead>
                     <tbody class="T-tripDetail">
-                   {{each touristGroups as touristGroup index}}
-                        <tr id="{{touristGroup.id}}">
-                            <td>{{index+1}}</td>
-                            <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-                            <td>{{touristGroup.orderNumber}}</td>
-                            <td>
-                                <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
-                                <br/>
-                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.name}}{{/if}}</span>
-                                <br/>
-                                <span>{{if touristGroup.touristGroupMember != null}}{{touristGroup.touristGroupMember.mobileNumber}}{{/if}}</span>
-                                <br/>
-                            </td>
-                             <td>
-                                {{if tripCost.includeSelfPay == null}}
-                                    -
-                                {{else}}
-                                    {{tripCost.includeSelfPay}}
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{if tripCost.remark == null || tripCost.remark == ""}}
-                                    -
-                                {{else}}
-                                    {{tripCost.remark}}
-                                {{/if}}
-                            </td>
-                            <td>
-                                {{if touristGroup.isInnerTransferConfirm == 1}}
+                    {{if touristGroup.touristGroups.length}}
+                        {{each touristGroup.touristGroups as touristGroup index}}
+                            <tr id="{{touristGroup.id}}">
+                                <td>{{index+1}}</td>
+                                <td>{{touristGroup.partnerAgencyName}}</td>
+                                <td>{{touristGroup.orderNumber}}</td>
+                                <td>
+                                    <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
+                                    <br/>
+                                    <span>{{touristGroup.contactName}}</span>
+                                    <br/>
+                                    <span>{{touristGroup.mobileNumber}}</span>
+                                    <br/>
+                                </td>
+                                <td>
+                                    {{touristGroup.includeSelfPay}}
+                                </td>
+                                <td>
+                                    {{touristGroup.remark}}
+                                </td>
+                                <td>
                                     <span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
-                                {{else}}
-                                    <span class="F-float F-money">{{touristGroup.tempSettlementMoney}}</span>
-                                {{/if}}
-                            </td>
-                            <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><input class="F-float F-money" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12"></td>
-                            <td>
-                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
-                                <a href="#" class="T-viewCostDetail">
-                                    {{each touristGroup.touristGroupFeeList as touristGroupFee}}
-                                        {{touristGroupFee.name}} ：
-                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                    {{/each}}
+                                </td>
+                                <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
+                                <td>
+                                    <div class="inline-flex">
+                                        <span>{{touristGroup.guideName}}</span>
+                                        <input class="F-float F-money w-80" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        &nbsp;&nbsp;
+                                        <select name="receiveStatus" {{if touristGroup.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
+                                            <option value="0" {{if touristGroup.isReceived == 0}}selected="selected"{{/if}}>未收到</option>
+                                            <option value="1" {{if touristGroup.isReceived == 1}}selected="selected"{{/if}}>已收到</option>
+                                        </select>
+                                    </div>
+                                <td>
+                                    {{if touristGroup.feeList.length}}
+                                    <a href="#" class="T-viewCostDetail">
+                                        {{each touristGroup.feeList as touristGroupFee}}
+                                            {{touristGroupFee.name}} ：
+                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                        {{/each}}
+                                    </a>
+                                    {{/if}}<a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
+                                </td>
+                                <td>
+                                    {{if touristGroup.isConfirmAccount == 0}}
+                                        未对账
                                     {{else}}
-                                    {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
-                                        {{touristGroupFee.name}} ：
-                                        <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                        <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                    {{/each}}
-                                </a>
-                                {{/if}}<a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
-                            </td>
-                            <td>
-                                {{if touristGroup.isInnerTransferConfirm == 0}}
-                                    未对账
-                                {{else}}
-                                    已对账
-                                {{/if}}
-                            </td>
-                        </tr>
-                    {{/each}}
+                                        已对账
+                                    {{/if}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                    {{/if}}
                     </tbody>
                 </table>
             </div>
@@ -275,41 +266,10 @@
                 
             </div>
 
-            {{if touristGroup != null}}
             <!-- 中转 -->
             <div id="financial-count-reimbursement-outarrangepay" class="tab-pane fade T-transit">
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                        <th class="th-border">序号</th>
-                        <th class="th-border">客户</th>
-                        <th class="th-border">中转单号</th>
-                        <th class="th-border">小组联系人</th>
-                        <th class="th-border">联系电话</th>
-                        <th class="th-border">人数</th>
-                        <th class="th-border">接团</th>
-                        <th class="th-border">送团</th>
-                        <th class="th-border">明细</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {{each touristGroup.touristGroupList as touristGroup index}}
-                     <tr>
-                        <td>{{index+1}}</td>
-                        <td>{{touristGroup.partnerAgencyName}}</td>
-                        <td>{{touristGroup.orderNumber}}</td>
-                        <td>{{touristGroup.name}}</td>
-                        <td>{{touristGroup.mobileNumber}}</td>
-                        <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
-                        <td>{{touristGroup.arriveService}}</td>
-                        <td>{{touristGroup.leaveService}}</td>
-                        <td><a href="javascript:void(0);" data-entity-id="{{touristGroup.id}}" class="T-viewTripTransit">查看</a></td>
-                     </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
+                
             </div>
-            {{/if}}
              <!-- 保险 -->
             <div id="financial-count-reimbursement-other-insurance" class="tab-pane fade T-insurance">
             </div>

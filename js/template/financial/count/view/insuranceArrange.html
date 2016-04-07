@@ -1,27 +1,35 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
-    <tr>
-        <th class="th-border">保险公司</th>
-        <th class="th-border">险种</th>
-        <th class="th-border">单价</th>
-        <th class="th-border">数量</th>
-        <th class="th-border">应付</th>
-        <th class="th-border">已付</th>
-        <th class="th-border">导游报账备注</th>
-    </tr>
+        <tr>
+            <th class="th-border">保险公司</th>
+            <th class="th-border">险种</th>
+            <th class="th-border">单价</th>
+            <th class="th-border">数量</th>
+            <th class="th-border">应付</th>
+            <th class="th-border">已付</th>
+            <th class="th-border">导游报账备注</th>
+            <th class="th-border">对账状态</th>
+        </tr>
     </thead>
     <tbody class="T-count-insurance">
-    {{each insuranceArrangeList as insuranceArrange}}
-    <tr>
-    <td>{{insuranceArrange.insurance.name}}</td>
-    <td>{{if insuranceArrange.type == null}}{{if insuranceArrange.insuranceItem != null}}{{insuranceArrange.insuranceItem.name}}{{/if}}{{else}}{{insuranceArrange.type}}{{/if}}</td>
-    <td><span class="F-float F-money">{{insuranceArrange.price}}</span></td>
-    <td><span class="F-float F-count">{{insuranceArrange.memberCount}}</span></td>
-    <td><span class="F-float F-money">{{insuranceArrange.needPayMoney}}</span></td>
-    <td><span class="F-float F-money">{{insuranceArrange.payedMoney}}</span></td>
-    <td></td>
-    </tr>
-    {{/each}}
+        {{each insuranceArrange as arrange}}
+            <tr>
+                <td>{{arrange.name}}</td>
+                <td>{{arrange.type}}</td>
+                <td><span class="F-float F-money">{{arrange.realPrice}}</span></td>
+                <td><span class="F-float F-count">{{arrange.realCount}}</span></td>
+                <td><span class="F-float F-money">{{arrange.realNeedPayMoney}}</span></td>
+                <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
+                <td>{{arrange.payedMoney}}</td>
+                <td>
+                    {{if arrange.isConfirmAccount == 0}}
+                        未对账
+                    {{else}}
+                        已对账
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
     </tbody>
 </table>
 
