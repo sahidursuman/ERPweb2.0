@@ -15,6 +15,14 @@
             <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
+            <label>客户类型</label>
+            <select name="partnerAgencyType">
+                <option value="" {{if searchParam.partnerAgencyType == ''}}selected{{/if}}>全部</option>
+                <option value="0" {{if searchParam.partnerAgencyType == 0 && searchParam.partnerAgencyType.length > 0}}selected{{/if}}>地接社</option>
+                <option value="1" {{if searchParam.partnerAgencyType == 1}}selected{{/if}}>组团社</option>
+            </select>
+        </div>
+        <div class="form-group T-finance-status btn-group mar-r-10">
             <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
                 <span>
                     {{if searchParam.accountStatus == 0}}
@@ -58,7 +66,14 @@
                 <li><a data-value="1" href="javascript:void(0)">未收小于零</a></li>
             </ul>
         </div>
-        <div class="form-group ">
+
+        <div class="form-group mar-r-10">
+            <select name="orderBy">
+                <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+            </select>
+        </div>
+        <div class="form-group">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
