@@ -253,6 +253,7 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
+                    Transfer.setDate($container)
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数

@@ -118,7 +118,7 @@
                 <td>
                     <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" />
                 </td>
-                <td>{{if isConfirmAccount == 1}}已对账{{else if isConfirmAccount == 0}}未对账{{/if}}</td>
+               <td>{{if outBus.isConfirmAccount == 1}}已对账{{else if outBus.isConfirmAccount == 0}}未对账{{/if}}</td>
                 <td>
                     <a class="cursor T-action T-arrange-delete" data-catename="bus" title="删除">
                         删除

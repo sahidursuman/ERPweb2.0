@@ -111,7 +111,7 @@
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" />
                 </td>
                 <td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" /></td>
-                 <td>{{if isConfirmAccount == 1}}已对账{{else if isConfirmAccount == 0}}未对账{{/if}}</td>
+                 <td>{{if outHotel.isConfirmAccount == 1}}已对账{{else if outHotel.isConfirmAccount == 0}}未对账{{/if}}</td>
                 <td>
                     <a class="cursor T-arrange-delete" data-catename="hotel">
                         删除
