@@ -211,17 +211,14 @@
                         </td><!-- 备注 -->
 
 
-
-                        <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-
                         <td>
-                            {{if busCompany.isConfirmAccount == 0 }}
+                            {{if arrange.isConfirmAccount == 0 }}
                                 未对账
                             {{else}}
                                 已对账
                             {{/if}}
                             &nbsp;&nbsp;
-                            {{if busCompany.payedMoney == 0 && busCompany.isConfirmAccount == 0}}
+                            {{if arrange.payedMoney == 0 && arrange.isConfirmAccount == 0}}
                                 <a href="javascript:void(0)" class="T-busArrDel">删除</a>
                             {{else}}
                                 <span style="color:#bbb;">删除</span>

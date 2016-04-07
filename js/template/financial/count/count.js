@@ -2466,84 +2466,105 @@ define(function(require, exports){
 	};
 	//自费--计算导佣社佣
 	Count.sumRateMoney = function($obj,$parentObj){
-		//导游佣金= (现收-应收数量*低价)*导佣比例
-		var $tr = $obj.closest('tr'),
-			needInCount = $tr.find('[name=needCount]').val(),
-			realGetMoney = $tr.find('[name=realGetMoney]').val(),
-			guideRate = $tr.find('[name=guideRate]').val(),
-			travelAgencyRate = $tr.find('[name=travelAgencyRate]').val(),
-			price = $tr.find('[name=price]').val();
-		var publiSum = realGetMoney-(needInCount*price);
-			var guideRebateMoney = 0,
-				travelAgencyRebateMoney = 0;
+		var $tr = $obj.closest('tr');
+		var thisDiv = $obj.closest('div'),
+			thisIndex = thisDiv.attr('index'),
+			$incomeCount = $tr.find('td[name=incomeCount]'),
+			$cashMoney = $tr.find('td[name=cashMoney]'),
+			$travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
+			$travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
+			$guideRate = $tr.find('td[name=guideRate]'),
+			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
 
-			if(publiSum>0){
-				guideRebateMoney = publiSum * parseFloat(guideRate)/100;
-				travelAgencyRebateMoney = publiSum * parseFloat(travelAgencyRate)/100;
+		var price = $tr.find('input[name=price]').val();//协议价
+		if(!!$tr.find('.realPrice').text()){
+			price = Count.changeTwoDecimal($tr.find('.realPrice').text());
+		};
+		var cashMoney = 0,inCount = 0,tRate = 0,gRate = 0,tMoney = 0,gMoney = 0,sum = 0;
+
+		$cashMoney.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				cashMoney = Count.changeTwoDecimal($(this).find('input[name=cashMoney]').val());
 			};
-			guideRebateMoney = Count.changeTwoDecimal(guideRebateMoney);
-			travelAgencyRebateMoney = Count.changeTwoDecimal(travelAgencyRebateMoney);
+		});//现收
+
+		$incomeCount.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				inCount =Count.changeTwoDecimal($(this).find('input[name=incomeCount]').val());
+			};
+		});//应收数量
+
+		$travelAgencyRate.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				tRate = Count.changeTwoDecimal($(this).find('input[name=travelAgencyRate]').val()/100);
+			};
+		});//社佣比例
+
+		$guideRate.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				gRate =Count.changeTwoDecimal($(this).find('input[name=guideRate]').val()/100);
+			};
+		});//导游比例
+
+		sum = Count.changeTwoDecimal((cashMoney-(inCount*price)));
+			//导游佣金= (现收-应收数量*低价)*导佣比例
 			var selfId = $tr.attr('selfPayId'),
 				editFeildTagName = $obj.attr('name');
 			if(!!selfId){
 				switch(editFeildTagName) {
 					case 'travelAgencyRate':
-						$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
+						travelMoney();
 						break;
 					case 'guideRate':
-						$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
+						guideMoney();
 						break;
 					case 'realGetMoney':
-						$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
-						$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
+						guideMoney();
+						travelMoney();
 						break;
 					case 'price':
-						$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
-						$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
+						guideMoney();
+						travelMoney();
 						break;
 					case 'needCount':
-						$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
-						$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
+						guideMoney();
+						travelMoney();
 						break;
 					default: break;
 				};
 			}else{
 				if(editFeildTagName != "travelAgencyRebateMoney" && editFeildTagName != "guideRebateMoney"){
-					$tr.find('input[name=travelAgencyRebateMoney]').val(travelAgencyRebateMoney);
-					$tr.find('input[name=guideRebateMoney]').val(guideRebateMoney);
+					guideMoney();
+					travelMoney();
 				}
 			};
-			
+			function guideMoney (){
+				$guideRebateMoney.find('div').each(function(){
+					var index = $(this).attr('index');
+					if(index == thisIndex){
+						gMoney = sum*gRate
+						$(this).find('input[name=guideRebateMoney]').val(gMoney);
+					};
+				});//导佣
+			};
+			function travelMoney (){
+				$travelAgencyRebateMoney.find('div').each(function(){
+					var index = $(this).attr('index');
+					if(index == thisIndex){
+						tMoney = sum*tRate
+						$(this).find('input[name=travelAgencyRebateMoney]').val(tMoney);
+					};
+				});//社佣
+			}
 			Count.autoSelfSum($obj,$parentObj);
 	};
 	//自费金额计算
 	Count.autoSelfSum = function($obj,$parentObj){
-			
-			
-
-            //计算应付
-            var needPayMoney = $tr.find(".needPayMoney");
-            var realReduceMoney = $tr.find('input[name="realReduceMoney"]').val();
-            //规范数据
-            
-            //报账/审核--应收优惠、应收;
-            //明细--应收优惠
-            var needCount = $parent.find('.needIncomeCount');
-            if(needCount.length>0){
-            };
-			//计算应付                      
-			/*var needReduce = $parent.find('[name=realReduceMoney]').val();
-			//var selfRealCount = $parent.find('[name=realCount]').val();
-			//规范数据
-			needReduce = Count.changeTwoDecimal(needReduce);
-			selfRealCount = Count.changeTwoDecimal(selfRealCount);
-			var needSum = parseFloat(selfRealCount) * parseFloat(price)-parseFloat(needReduce);
-            if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || badStatus == undefined))
-            	{needPayMoney.text(needSum);}
-            //计算自费费用
-            $parent.find('.selfMoney').val(needSum);*/
-			
-			
+			Count.computeSelfCost($obj,$parentObj);
 			//计算团收入--自费收入
 			var $bodyObj = $parentObj.find('.T-main-table');
 			var shopRebateMoney = 0;
@@ -2554,11 +2575,11 @@ define(function(require, exports){
 				var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
 				selfMoney += totalSum;
 			});
-			$mainTr.find('.needIncome').each(function() {
-				var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
+			$mainTr.find('input[name=needIncome]').each(function() {
+				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
 				shopRebateMoney += totalSum;
 			});
-			$mainTr.find('[name=guideRebateMoney]').each(function() {
+			$mainTr.find('input[name=guideRebateMoney]').each(function() {
 				var t = Count.changeTwoDecimal(parseFloat($(this).val()));
 				guideRebateMoney += t;
 			});
@@ -2574,67 +2595,97 @@ define(function(require, exports){
 			$parentObj.find('.tripCost-selfArrangeNeedPayMoney').text(selfMoney);
 	};
 	Count.computeSelfCost = function($obj,$parentObj){
+		/*
+		应付=（应付数量*底价）-应付优惠。
+		应收优惠 = （应收数量*单价）-现收。
+		导佣\社佣 = （现收-应收数量*底价）*比例
+		自费收入=应收列之和
+		导游自费返佣=自费导佣之和
+		 */
 		var $tr = $obj.closest('tr');
 		var thisDiv = $obj.closest('div'),
 			thisIndex = thisDiv.attr('index'),
-			incomeCount = $tr.find('td[name=incomeCount]'),
-			needInReduceMoney = $tr.find('td[name=needInReduceMoney]'),
-			needInReduceMoney = $tr.find('td[name=needInReduceMoney]'),
-			needIncome = $tr.find('td[name=needIncome]'),
-			cashMoney = $tr.find('td[name=cashMoney]'),
-			realCount = $tr.find('td[name=realCount]'),
-			realReduceMoney = $tr.find('td[name=realReduceMoney]'),
-			realNeedPayMoney = $tr.find('td[name=realNeedPayMoney]'),
-			travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
-			travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
-			guideRate = $tr.find('td[name=guideRate]'),
-			guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
+			$incomeCount = $tr.find('td[name=incomeCount]'),
+			$needInReduceMoney = $tr.find('td[name=needInReduceMoney]'),
+			$needIncome = $tr.find('td[name=needIncome]'),
+			$cashMoney = $tr.find('td[name=cashMoney]'),
+			$realCount = $tr.find('td[name=realCount]'),
+			$realReduceMoney = $tr.find('td[name=realReduceMoney]'),
+			$realNeedPayMoney = $tr.find('td[name=realNeedPayMoney]'),
+			$travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
+			$travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
+			$guideRate = $tr.find('td[name=guideRate]'),
+			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
 
 		var marketPrice = $tr.find('input[name=marketPrice]').val();	//市场价
-		if(!!tr.find('.realMarketPrice').text()){
-			marketPrice = Count.changeTwoDecimal(tr.find('.realMarketPrice').text());
+		if(!!$tr.find('.realMarketPrice').text()){
+			marketPrice = Count.changeTwoDecimal($tr.find('.realMarketPrice').text());
 		};
+
 		var price = $tr.find('input[name=price]').val();//协议价
+		if(!!$tr.find('.realPrice').text()){
+			price = Count.changeTwoDecimal($tr.find('.realPrice').text());
+		};
 		var badStatus = $tr.attr('badStatus');
-		var isConfirmAccount = $parent.attr('isConfirmAccount');
-		var cashMoney = 0,inCount = 0,inReduce = 0;
-		cashMoney.find('div').each(function(){
+		var isConfirmAccount = $tr.attr('isConfirmAccount');
+		var cashMoney = 0,inCount = 0,inReduce = 0,
+			outReduce = 0,outMoney = 0,outCount = 0;
+
+		$cashMoney.find('div').each(function(){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
-				cashMoney =Count.changeTwoDecimal($(this).find('input[name=cashMoney]').val());
-				break;
+				cashMoney = Count.changeTwoDecimal($(this).find('input[name=cashMoney]').val());
 			};
 		});//现收
 
-		needIncome.find('div').each(function(){
+		$needIncome.find('div').each(function(){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
 				$(this).find('input[name=needIncome]').val(cashMoney);
-				break;
 			};
 		});//应收
 
-		incomeCount.find('div').each(function(){
+		$incomeCount.find('div').each(function(){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
 				inCount =Count.changeTwoDecimal($(this).find('input[name=incomeCount]').val());
-				break;
 			};
 		});//应收数量
 
-		incomeCount.find('div').each(function(){
+		$needInReduceMoney.find('div').each(function(){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
-
-				inCount = $(this).find('input[name=incomeCount]').val();
-				break;
+				inReduce =Count.changeTwoDecimal(((inCount*marketPrice)-cashMoney));
+				$(this).find('input[name=needInReduceMoney]').val(inReduce);
 			};
 		});//应收优惠
+
+		$realCount.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				outCount = $(this).find('input[name=realCount]').val();
+			};
+		});//应付数量
+
+		$realReduceMoney.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				outReduce = $(this).find('input[name=realReduceMoney]').val();
+			};
+		});//应付优惠
+
+		$realNeedPayMoney.find('div').each(function(){
+			var index = $(this).attr('index');
+			if(index == thisIndex){
+				outMoney =Count.changeTwoDecimal(((outCount*price)-outReduce));
+				$(this).find('input[name=realNeedPayMoney]').val(outMoney);
+			};
+		});//应付
 	};
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
 		
-		var html = '<tr>'+
+		var html = '<tr arrangeType="selfArrange">'+
 			'<td class="countWhichDaysContainer"></td>'+
 			'<td><input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
 			'<td><input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
@@ -2900,22 +2951,22 @@ define(function(require, exports){
 			}
 
 		function removeGuide (){
-			Count.delDiv(thisTd,index);
+			Count.delDiv(thisTd,index,$parentObj);
 			Count.delDiv(incomeCount,index);
-			Count.delDiv(needInReduceMoney,index);
-			Count.delDiv(needIncome,index);
-			Count.delDiv(cashMoney,index);
-			Count.delDiv(realCount,index);
-			Count.delDiv(realReduceMoney,index);
-			Count.delDiv(realNeedPayMoney,index);
-			Count.delDiv(guidePayedMoney,index);
-			Count.delDiv(payType,index);
-			Count.delDiv(billImage,index);
-			Count.delDiv(travelAgencyRate,index);
-			Count.delDiv(travelAgencyRebateMoney,index);
-			Count.delDiv(guideRate,index);
-			Count.delDiv(guideRebateMoney,index);
-			Count.delDiv(billRemark,index);
+			Count.delDiv(needInReduceMoney,index,$parentObj);
+			Count.delDiv(needIncome,index,$parentObj);
+			Count.delDiv(cashMoney,index,$parentObj);
+			Count.delDiv(realCount,index,$parentObj);
+			Count.delDiv(realReduceMoney,index,$parentObj);
+			Count.delDiv(realNeedPayMoney,index,$parentObj);
+			Count.delDiv(guidePayedMoney,index,$parentObj);
+			Count.delDiv(payType,index,$parentObj);
+			Count.delDiv(billImage,index,$parentObj);
+			Count.delDiv(travelAgencyRate,index,$parentObj);
+			Count.delDiv(travelAgencyRebateMoney,index,$parentObj);
+			Count.delDiv(guideRate,index,$parentObj);
+			Count.delDiv(guideRebateMoney,index,$parentObj);
+			Count.delDiv(billRemark,index,$parentObj);
 		}
 	};
 	//删除自费安排
@@ -3577,6 +3628,8 @@ define(function(require, exports){
 					$parentObj.find('.tripCost-restaurantArrangeNeedPayMoney').text(sum);
 					//计算整个团成本
 					Count.tripCost($parentObj);
+			case 'selfArrange'
+					Count.autoSelfSum($obj,$parentObj)
 				break;
 		}
 	};
