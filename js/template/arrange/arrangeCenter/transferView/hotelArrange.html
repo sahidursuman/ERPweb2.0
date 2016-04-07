@@ -10,7 +10,7 @@
         {{each outRemarkList as item}}
         <tr>
             <td style="text-align: left;">
-                <input type="hidden" name="outRemarkId" value="{{item.outRemarkId}}">
+                <input type="hidden" name="outRemarkId" value="{{item.id}}">
                 <label class="control-label mar-r-20">中转单号：{{item.orderNumber}}</label>
                 <label class="control-label mar-r-20">线路产品：{{item.lineProductName}}</label>
                 <label class="control-label mar-r-20">用车时间：{{item.arriveTime}}</label>
@@ -29,7 +29,7 @@
         {{/each}}
     </tbody>        
 </table>
-
+<input type="hidden" name="unifyId" value="{{unifyId}}">
 <input type="hidden" name="shuttleType" value="{{shuttleType}}">
     <div class="form-group form-inline">
         <span class="mar-r-10 title-size">房</span>
@@ -51,6 +51,7 @@
                 <th class="th-border">应付款</th>
                 <th class="th-border">预付款</th>
                 <th class="th-border">备注</th>
+                <th class="th-border">对账状态</th>
                 <th class="th-border" style="width: 100px">操作</th>
             </tr>
         </thead>
@@ -110,6 +111,7 @@
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" />
                 </td>
                 <td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" /></td>
+                 <td>{{if isConfirmAccount == 1}}已对账{{else if isConfirmAccount == 0}}未对账{{/if}}</td>
                 <td>
                     <a class="cursor T-arrange-delete" data-catename="hotel">
                         删除
@@ -125,7 +127,7 @@
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
                 <input name="status" type="checkbox" class="ace T-hotel-status" {{if status == 3}}checked{{/if}}>
-                <span class="lbl font-w"> 房安排完成完成</span>
+                <span class="lbl font-w"> 安排完成</span>
             </label>
         </span>
     </div>

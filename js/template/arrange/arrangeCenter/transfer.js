@@ -519,10 +519,11 @@ define(function(require, exports) {
             });
             //删除中转数据
             $busplanId.off('click').on('click','.T-del-bus',function() {
-                var $that = $(this),$div = $that.closest('div'),
+                var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    $div.fadeOut(function(){
-                        $div.remove();
+                    console.log(outRemarkId)
+                    $tr.fadeOut(function(){
+                        $that.parents('tr').remove()
                     })
                     var delBusTransferData = {
                         outRemarkId : outRemarkId
@@ -583,21 +584,18 @@ define(function(require, exports) {
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var busPlan = checkData[i];
-                        htmlData = '<div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
-                        '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
-                        '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
-                        '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：'+
-                            '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>小'+
-                        '</label>'+
-                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
-                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'+
-                        '</div> '
+                        var htmlData = '<tr><td style="text-align: left;">'+
+                            '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
+                            '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
+                            '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
+                            '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
+                            '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>小</label>'+
+                            '<label class="control-label ">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label></td>'+
+                            '<td rowspan="2"><a class="cursor T-del-bus " title="删除">删除</a>'+
+                            '</td></tr>'+
+                            '<tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：'+(busPlan.require||"")+'</td></tr>'
 
-                        $busplanId.find('.T-transfersId-box').after(htmlData);
+                        $busplanId.find('.T-task-list').after(htmlData);
                     };
                     
                     // 关闭对话框
@@ -1700,7 +1698,7 @@ define(function(require, exports) {
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>' +
             '</tr>';
-        var $tbody = $obj.find('tbody');
+        var $tbody = $obj.find('.T-bus-plan');
         $tbody.append(html);
         Transfer.addResource($busplanId); //车安排弹窗
         Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
@@ -1735,7 +1733,7 @@ define(function(require, exports) {
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>' +
             '</tr>';
-        var $tbody = $obj.find('tbody');
+        var $tbody = $obj.find('<div class="T-hotel-plan"></div>');
         $tbody.append(html);
         Transfer.addResource($obj); //房安排弹窗
         Transfer.bindHotelChoose($obj); //房安排autocomplete列表
