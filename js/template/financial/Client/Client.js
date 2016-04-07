@@ -321,7 +321,8 @@ define(function(require, exports) {
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
         Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'),args);
 
-        Tools.setDatePicker(Client.$checkSearchArea.find(".date-picker"), true);
+        Tools.setDatePicker(Client.$checkSearchArea.find(".T-time"), true);
+        Tools.setDatePicker(Client.$checkSearchArea.find(".T-checkTime"), true);
 
         //搜索下拉事件
         Client.$checkSearchArea.find('.T-check-status').on('click', 'a', function(event) {
@@ -351,11 +352,13 @@ define(function(require, exports) {
                     creatorName: Client.$checkSearchArea.find('.T-search-enter').val(),
                     creatorId: Client.$checkSearchArea.find('.T-search-enter').data('id'),
                     orderNumber : $tab.find('.T-search-orderNumber').val(),
+                    contactInfo : $tab.find('.T-search-contactInfo').val(),
                     otaOrderNumber : $tab.find('.T-search-number').val(),
                     accountStatus : args.accountStatus,
-                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                    startCheck : $tab.find('.T-checkStartTime').val(),
+                    endCheck : $tab.find('.T-checkEndTime').val()
                 };
-            console.log(argsData);
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
             FinancialService.exportReport(argsData,"exportPartnerAgencyFinancial");
@@ -613,7 +616,8 @@ define(function(require, exports) {
                 Client.clearDataArray = false;
             });
 
-        Tools.setDatePicker(Client.$clearSearchArea.find(".date-picker"), true);
+        Tools.setDatePicker(Client.$clearSearchArea.find(".T-time"), true);
+        Tools.setDatePicker(Client.$clearSearchArea.find(".T-checkTime"), true);
         FinancialService.initPayEvent(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
@@ -1067,6 +1071,7 @@ define(function(require, exports) {
         args = {
             orderNumber : $tab.find('.T-search-orderNumber').val(),
             otaOrderNumber : $tab.find('.T-search-number').val(),
+            contactInfo : $tab.find('.T-search-contactInfo').val(),
             creatorId : id,
             lineProductId : $tab.find('.T-search-line').data('id'),
             lineProductName : $tab.find('.T-search-line').val(),
@@ -1077,7 +1082,9 @@ define(function(require, exports) {
             fromPartnerAgencyContactId : $tab.find('.T-search-contact').data('id'),
             partnerAgencyName : $tab.find(".T-partnerAgencyName").val(),
             contactRealname : $tab.find('.T-search-contact').val(),
-            isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+            isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+            startCheck : $tab.find('.T-checkStartTime').val(),
+            endCheck : $tab.find('.T-checkEndTime').val()
         }
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
@@ -1108,7 +1115,7 @@ define(function(require, exports) {
                     partnerAgencyName : ui.item.value,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : $tab.find('input[name=accountStatus]').val() 
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
                 };
                 if(type){
                     if($tab.find('.T-btn-autofill').length == 0){

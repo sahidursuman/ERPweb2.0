@@ -17,14 +17,14 @@
         <div class="col-xs-2 pull-left">
             <label class="pull-left text-right control-label no-padding-right mar-r-10">排序</label>
             <select name="sortType">
-                <option value="all"    {{if searchParam.sortType=='all'}}selected{{/if}} >购物总额</option>
-                <option value="trip"   {{if searchParam.sortType=='trip'}}selected{{/if}} >团均购物</option>
-                <option value="person" {{if searchParam.sortType=='person'}}selected{{/if}}>人均购物</option>
+                <option value="all"    {{if searchParam.order=='all'}}selected{{/if}} >购物总额</option>
+                <option value="trip"   {{if searchParam.order=='trip'}}selected{{/if}} >团均购物</option>
+                <option value="person" {{if searchParam.order=='person'}}selected{{/if}}>人均购物</option>
             </select>
             
             <select name="orderBy">
-                <option value="asc" {{if searchParam.order=='asc'}}selected{{/if}}>升序</option> 
-                <option value="desc" {{if searchParam.order=='desc'}}selected{{/if}}>降序</option> 
+                <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
             </select>
             
         </div>
