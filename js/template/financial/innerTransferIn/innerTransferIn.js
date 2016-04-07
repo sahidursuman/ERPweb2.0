@@ -174,6 +174,7 @@ define(function(require, exports) {
         	args.receiveUserId = $tab.find('input[name=receiveUserId]').val();
         	args.receiveUserName = $tab.find('input[name=receiveUserName]').val();
         	args.orderNumber = $tab.find('input[name=orderNumber]').val();
+            args.contactInfo = $tab.find('input[name=contactInfo]').val();
         	args.startAccountTime = $tab.find('input[name=startDate]').val();
         	args.endAccountTime = $tab.find('input[name=endDate]').val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
@@ -263,6 +264,7 @@ define(function(require, exports) {
             args.receiveUserId = $tab.find('input[name=receiveUserId]').val();
             args.receiveUserName = $tab.find('input[name=receiveUserName]').val();
             args.orderNumber = $tab.find('input[name=orderNumber]').val();
+            args.contactInfo = $tab.find('input[name=contactInfo]').val();
             args.startAccountTime = $tab.find('input[name=startDate]').val();
             args.endAccountTime = $tab.find('input[name=endDate]').val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
@@ -345,6 +347,7 @@ define(function(require, exports) {
                         lineProductId : $tab.find('input[name=lineProductId]').val(),
                         lineProductName : $tab.find('input[name=lineProductName]').val(),
                         orderNumber : $tab.find('input[name=orderNumber]').val(),
+                        contactInfo : $tab.find('input[name=contactInfo]').val(),
                         receiveUserId : $tab.find('input[name=receiveUserId]').val(),
                         receiveUserName : $tab.find('input[name=receiveUserName]').val(),
                         startAccountTime : $tab.find('input[name=startDate]').val(),
