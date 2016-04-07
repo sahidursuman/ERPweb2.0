@@ -1,0 +1,42 @@
+<div class="overflow-x min-w-1050">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+            <th class="th-border">序号</th>
+            <th class="th-border">客户</th>
+            <th class="th-border">中转单号</th>
+            <th class="th-border">小组联系人</th>
+            <th class="th-border">联系电话</th>
+            <th class="th-border">人数</th>
+            <th class="th-border">接团</th>
+            <th class="th-border">送团</th>
+            <th class="th-border">明细</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{if transfer != null}}
+            {{each transfer.transferList as transfer index}}
+             <tr>
+                <td>{{index+1}}</td>
+                <td>{{transfer.partnerAgencyName}}</td>
+                <td>{{transfer.orderNumber}}</td>
+                <td>{{transfer.contactNme}}</td>
+                <td>{{transfer.mobileNumber}}</td>
+                <td>{{transfer.adultCount}}大{{touristGroup.childCount}}小</td>
+                <td>{{transfer.arriveService}}</td>
+                <td>{{transfer.leaveService}}</td>
+                <td><a href="javascript:void(0);" data-entity-id="{{transfer.id}}" class="T-viewTripTransit">查看</a></td>
+             </tr>
+            {{/each}}
+        {{/if}}
+        </tbody>
+    </table>
+</div>
+{{if tripPlan.billStatus > -1}}
+    <div style="width:60%;">
+        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+        <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].opCheckRemark}}{{/if}}" />
+        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].financeCheckRemark}}{{/if}}" />
+    </div>
+{{/if}}

@@ -37,7 +37,7 @@
             {{if scenicArrange != null}} 
                 {{if scenicArrange.listMap.length}} 
                     {{each scenicArrange.listMap as arrange index}}
-                        <tr badStatus="{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}">
+                        <tr badStatus="{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="scenicArrange">
                             
                             <td>
                                 <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
@@ -69,30 +69,24 @@
                             <td>
                                 {{if arrange.badStatus == 1}}
                                     <span class="F-float F-count">{{arrange.realCount}}</span>
+                                    <input type="hidden" name="realCount" value="{{arrange.realCount}}">
                                 {{else}}
-                                    <input  class="F-float F-count w-50" type="text" name="realCount" value="{{arrange.realCount}}" maxlength="5" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                    <input class="F-float F-count w-50" name="realCount" type="text" value="{{arrange.realCount}}" readOnly="readOnly"
                                 {{/if}}
                             </td><!-- 数量 -->
 
                             <td>
                                 {{if arrange.badStatus == 1}}
                                     <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
+                                    <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}">
                                 {{else}}
                                     <input type="text" class="F-float F-money w-80" name="realReduceMoney" value="{{arrange.realReduceMoney}}"  {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
                                 {{/if}}
                             </td><!-- 优惠 -->
 
                             <td>
-                                {{if arrange.badStatus == 1}}
-                                    <span class="scenicneedPayMoney F-float F-money">{{arrange.realNeedPayMoney}}</span>
-                                {{else}}
-                                    {{if arrange.isConfirmAccount == 1}}
-                                        <span class="scenicneedPayMoney F-float F-money" >{{arrange.realNeedPayMoney}}</span>
-                                    {{else}}
-                                        <span class="scenicneedPayMoney F-float F-money"></span>
-                                    {{/if}}
-                                {{/if}}
-                                <input type="hidden" name="needPayMoney" value="{{arrange.realNeedPayMoney}}">
+                                <span class="realNeedPayMoney F-float F-money">{{arrange.realNeedPayMoney}}</span>
+                                <input type="hidden" name="realNeedPayMoney" value="{{arrange.realNeedPayMoney}}">
                             </td><!-- 应付 -->
 
                             <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td><!-- 已付 -->
@@ -119,8 +113,8 @@
                                 {{/each}}
                                 {{else}}
                                     <div class="div-h-30 mar-t-5" index="1">
-                                        <input name="guideId" type="hidden" />
-                                        <input name="guideName"  type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}{{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                        <input name="guideArrangeId" type="hidden" />
+                                        <input name="guideName"  type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
                                         <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
                                             <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                         </button>
@@ -153,9 +147,9 @@
                                 {{each arrange.guideDetails as rs index}}
                                     <div class="div-h-30 mar-t-5" index="{{index+1}}">
                                         <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
-                                            <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
-                                            <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
-                                            <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
+                                            <option value="0" {{if rs.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+                                            <option value="1" {{if rs.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+                                            <option value="2" {{if rs.realPayType == 2}}selected="selected"{{/if}}>签单</option>
                                         </select>
                                     </div>
                                 {{/each}}

@@ -1,23 +1,23 @@
 <div class="col-sm-12 countUpdate">
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 30px;">
-        <tbody>
+         <tbody>
             <tr>
-                <td style="text-align:left"><label style="font-weight: bold;">线路：{{tripPlan.lineProductName}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">类别：{{tripPlan.lineProductType}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.days}}</span></label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">线路：{{tripPlan.lineProductName}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">类别：{{tripPlan.lineProductType}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">针对客源：{{if tripPlan.tripPlanType == 1}}团体{{else if tripPlan.tripPlanType == 0}}散客{{/if}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.days}}</span></label></td>
             </tr>
             <tr>
                 <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
                 <td style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
             </tr>
             <tr>
-                <td style="text-align:left"> <label style="font-weight: bold;">导游：{{if tripPlan.guideName != null}}{{tripPlan.guideName}}{{/if}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
-                <td></td>
-                <td></td>
+                <td style="text-align:left"> <label  style="font-weight: bold;">导游：{{if tripPlan.guideName != null}}{{tripPlan.guideName}}{{/if}}</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">全陪：{{tripPlan.accompanyGuideName}}</label></td>
+                <td style="text-align:left"></td>
+                <td style="text-align:left"></td>
             </tr>
         </tbody>
     </table>
@@ -342,50 +342,9 @@
                 
             </div>
 
-            {{if touristGroup != null}}
             <!-- 中转 --> 
             <div id="financial-count-update-outarrangepay" class="tab-pane fade T-transit">
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th class="th-border">序号</th>
-                        <th class="th-border">客户</th>
-                        <th class="th-border">中转单号</th>
-                        <th class="th-border">小组联系人</th>
-                        <th class="th-border">联系电话</th>
-                        <th class="th-border">人数</th>
-                        <th class="th-border">接团</th>
-                        <th class="th-border">送团</th>
-                        <th class="th-border">明细</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{each touristGroup.touristGroupList as touristGroup index}}
-                     <tr>
-                        <td>{{index+1}}</td>
-                        <td>{{touristGroup.partnerAgencyName}}</td>
-                        <td>{{touristGroup.orderNumber}}</td>
-                        <td>{{touristGroup.name}}</td>
-                        <td>{{touristGroup.mobileNumber}}</td>
-                        <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</td>
-                        <td>{{touristGroup.arriveService}}</td>
-                        <td>{{touristGroup.leaveService}}</td>
-                        <td><a href="javascript:void(0);" data-entity-id="{{touristGroup.id}}" class="T-viewTripTransit">查看</a></td>
-                     </tr>
-                     {{/each}}
-                    </tbody>
-                </table>
-  
-                {{if tripPlan.billStatus > -1}}
-                <div style="width:60%;"><div> 
-                    <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-                    <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].opCheckRemark}}{{/if}}" />
-                    <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-                    <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.transferRemark.length>0}}{{remarkArrangeList.transferRemark[0].financeCheckRemark}}{{/if}}" />
-                </div>
-                </div>{{/if}}
             </div>
-            {{/if}}
 
             <!-- 保险 -->
             <div id="financial-count-update-other-insurance" class="tab-pane fade T-insurance">

@@ -23,12 +23,11 @@
             <th class="th-border" rowspan="2">优惠</th>
             <th class="th-border" rowspan="2">应付</th>
             <th class="th-border" rowspan="2">已付</th>
-            <th class="th-border" colspan="6">导游实销</th>
+            <th class="th-border" colspan="5">导游实销</th>
             <th class="th-border" rowspan="2">操作</th>
         </tr>
         <tr>
             <th class="th-border">导游</th>
-            <th class="th-border">数量</th>
             <th class="th-border">付款方式</th>
             <th class="th-border">金额</th>
             <th class="th-border">单据</th>
@@ -124,8 +123,8 @@
                                 {{/each}}
                                 {{else}}
                                     <div class="div-h-30 mar-t-5" index="1">
-                                        <input name="guideId" type="hidden" />
-                                        <input name="guideName"  type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}{{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                        <input name="guideArrangeId" type="hidden" />
+                                        <input name="guideName"  type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
                                         <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
                                             <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                         </button>
@@ -135,22 +134,6 @@
                             {{/if}}
                             
                         </td><!-- 导游 -->
-
-                        <td name="guideRealCount">
-                            <div class="div-h-30"></div>
-                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
-                                {{each arrange.guideDetails as rs index}}
-                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
-                                        <input name="guideRealCount" value="{{rs.realCount}}" class="w-50" 
-                                        {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                                    </div>
-                                {{/each}}
-                                {{else}}
-                                <div class="div-h-30 mar-t-5" index="1">
-                                    <input name="guideRealCount" class="w-50" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                                </div>
-                            {{/if}}
-                        </td><!-- 数量 -->
                         
                         <td name="payType">
                             <div class="div-h-30"></div>
@@ -158,9 +141,9 @@
                                 {{each arrange.guideDetails as rs index}}
                                     <div class="div-h-30 mar-t-5" index="{{index+1}}">
                                         <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
-                                            <option value="0" {{if arrange.realPayType == 0}}selected="selected"{{/if}}>现金</option>
-                                            <option value="1" {{if arrange.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
-                                            <option value="2" {{if arrange.realPayType == 2}}selected="selected"{{/if}}>签单</option>
+                                            <option value="0" {{if rs.realPayType == 0}}selected="selected"{{/if}}>现金</option>
+                                            <option value="1" {{if rs.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
+                                            <option value="2" {{if rs.realPayType == 2}}selected="selected"{{/if}}>签单</option>
                                         </select>
                                     </div>
                                 {{/each}}
