@@ -437,7 +437,9 @@ define(function(require, exports) {
 						tripPlan.dayWhich = data.dayWhich;
 
 						for (var i = data.guideList.length - 1; i >= 0; i--) {
-							data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
+							if (data.guideList[i].taskJson) {
+								data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
+							}
 						}
 						console.log(data.guideList)
 
