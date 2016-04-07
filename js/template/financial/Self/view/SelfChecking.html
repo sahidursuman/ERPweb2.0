@@ -34,6 +34,11 @@
                             <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
                         </ul>
                     </div>
+                    <label>对账时间：</label>
+                    <input class="date-picker T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="date-picker mar-r-10 T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+
                     <button class="btn-sm search-btn T-search mar-r-10">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
