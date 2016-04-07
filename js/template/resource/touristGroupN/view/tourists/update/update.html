@@ -44,11 +44,11 @@
 						<td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName" value="{{baseInfo.outOPUserName}}" data-id="{{baseInfo.outOPUserId}}"></td>
 						<td>
 							<label class="radio-inline">
-								<input type="radio" class="ace T-single-group" name="singlePlanDefine" {{if baseInfo.customerType == 0}}checked{{/if}}>
+								<input type="radio" class="ace T-single-group" name="singlePlanDefine" {{if baseInfo.customerType == 0}}checked{{/if}} {{if baseInfo.joinFlag == "1"}}disabled{{/if}}>
 								<span class="lbl">散客拼团</span>
 							</label>
 							<label class="radio-inline">
-								<input type="radio" class="ace T-indep-group" name="singlePlanDefine" {{if baseInfo.customerType == 1}}checked{{/if}}>
+								<input type="radio" class="ace T-indep-group" name="singlePlanDefine" {{if baseInfo.customerType == 1}}checked{{/if}} {{if baseInfo.joinFlag == "1"}}disabled{{/if}}>
 								<span class="lbl">独立成团</span>
 							</label>
 						</td>
