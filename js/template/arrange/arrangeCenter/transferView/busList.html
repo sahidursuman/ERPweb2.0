@@ -1,6 +1,6 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
     <thead>
-        <tr class="bg-blur T-tr-fixed">
+        <tr class="bg-blur">
             <th>选择</th>
             <th>中转信息</th>
             <th>类型</th>
@@ -15,9 +15,10 @@
     </thead>
     <tbody class="T-bus-list">
         {{each outRemarkArrangeList as bus}}
-        <tr data-id="{{bus.outRemarkId}}" {{if bus.checked}} class="success" {{/if}}>
+        <tr data-id="{{bus.id}}" {{if bus.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
+                    <input type="hidden" name="outRemarkId" value="{{bus.id}}">
                     <input type="checkbox" class="ace T-cheked" {{if bus.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
                 </label>
             </td>
