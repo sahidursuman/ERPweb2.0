@@ -343,7 +343,7 @@ define(function(require,exports) {
 		//全选事件
 		FinancialService.initCheckBoxs($tab.find(".T-selectAll"),$tab.find('.T-checkList .T-checkbox'));
 		//展开事件
-		$tab.on('click', '.T-seeGroup' ,function(event){
+		$tab.off('click.seeGroup').on('click.seeGroup', '.T-seeGroup' ,function(event){
 			InnerTransferOut.viewGroup($(this));
         });
         //监听扣款输入框的改变
