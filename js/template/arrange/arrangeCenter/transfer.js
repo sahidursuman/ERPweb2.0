@@ -253,6 +253,7 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
+                    Transfer.setDate($container)
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -326,15 +327,15 @@ define(function(require, exports) {
      * @param  {int} page        页面
      * @return {[type]}             [description]
      */
-    Transfer._getAddHotelList = function($searchFrom, page) {
+    Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
-
+        args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList);
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: args,
+                data: args
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -509,10 +510,11 @@ define(function(require, exports) {
             });
             //删除中转数据
             $busplanId.off('click').on('click','.T-del-bus',function() {
-                var $that = $(this),$div = $that.closest('div'),
+                var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    $div.fadeOut(function(){
-                        $div.remove();
+                    console.log(outRemarkId)
+                    $tr.fadeOut(function(){
+                        $that.parents('tr').remove()
                     })
                     var delBusTransferData = {
                         outRemarkId : outRemarkId
@@ -528,6 +530,16 @@ define(function(require, exports) {
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
     Transfer.addBusTransfer = function(shuttleType,$busplanId) {
+        var outRemarkId = $busplanId.find('[name=outRemarkId]');
+        var selectedOutRemarkList = [];
+        outRemarkId.each(function(){
+            if($(this).val().trim()){
+            var outRemarkIdData = {
+                outRemarkId:$(this).val()
+            };
+            selectedOutRemarkList.push(outRemarkIdData);
+        }
+        });
         shuttleType = shuttleType || 0;
         status = 0;
         var layerFrame = layer.open({
@@ -551,7 +563,7 @@ define(function(require, exports) {
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
-                    Transfer._getAddBusList($(this).closest('form'));
+                    Transfer._getAddBusList($(this).closest('form'),0,selectedOutRemarkList);
                 }).trigger('click');
                 
                 // 添加
@@ -563,21 +575,18 @@ define(function(require, exports) {
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var busPlan = checkData[i];
-                        htmlData = '<div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
-                        '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
-                        '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
-                        '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：'+
-                            '<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>小'+
-                        '</label>'+
-                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label>'+
-                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-bus">删除 </button></label>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(busPlan.require||"")+'</div>'+
-                        '</div> '
+                        var htmlData = '<tr><td style="text-align: left;">'+
+                            '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
+                            '<label class="control-label mar-r-20">中转单号：'+(busPlan.orderNumber||"")+'</label>'+
+                            '<label class="control-label mar-r-20">线路产品：'+(busPlan.lineProductName||"")+'</label>'+
+                            '<label class="control-label mar-r-20">用车时间：'+(busPlan.arriveTime||"")+'</label>'+
+                            '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(busPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(busPlan.childCount||0)+'</span>小</label>'+
+                            '<label class="control-label ">外联销售：<span class="F-float F-money">'+(busPlan.outOPUserName||"")+'</span></label></td>'+
+                            '<td rowspan="2"><a class="cursor T-del-bus " title="删除">删除</a>'+
+                            '</td></tr>'+
+                            '<tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：'+(busPlan.require||"")+'</td></tr>'
 
-                        $busplanId.find('.T-transfersId-box').after(htmlData);
+                        $busplanId.find('.T-task-list').after(htmlData);
                     };
                     
                     // 关闭对话框
@@ -634,14 +643,15 @@ define(function(require, exports) {
      * @param  {int} page        页面
      * @return {[type]}             [description]
      */
-    Transfer._getAddBusList = function($searchFrom, page) {
+    Transfer._getAddBusList = function($searchFrom, page,selectedOutRemarkList) {
         var args = $searchFrom.serializeJson();
+        args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList)
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
                 type: 'post',
                 dataType: 'json',
-                data: args,
+                data: args
             })
             .done(function(data) {
                 if (showDialog(data)) {
@@ -683,6 +693,7 @@ define(function(require, exports) {
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
         var unifyId = $tab.find('[name=unifyId]').val();
+        console.log(unifyId)
         var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
         outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
@@ -1169,10 +1180,10 @@ define(function(require, exports) {
             
             //删除中转数据
             $hotelplanId.off('click').on('click','.T-del-hotel',function() {
-                var $that = $(this),$div = $that.closest('div'),
+                var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    $div.fadeOut(function(){
-                        $div.remove();
+                    $tr.fadeOut(function(){
+                        $that.parents('tr').remove()
                     })
                     var delHotelTransferData = {
                         outRemarkId : outRemarkId
@@ -1187,6 +1198,16 @@ define(function(require, exports) {
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
     Transfer.addHotelTransfer = function(shuttleType,$hotelplanId) {
+         var outRemarkId = $hotelplanId.find('[name=outRemarkId]');
+        var selectedOutRemarkList = [];
+        outRemarkId.each(function(){
+            if($(this).val().trim()){
+            var outRemarkIdData = {
+                outRemarkId:$(this).val()
+            };
+            selectedOutRemarkList.push(outRemarkIdData);
+        }
+        });
         shuttleType = shuttleType || 0;
         status = 0;
         var layerFrame = layer.open({
@@ -1211,7 +1232,7 @@ define(function(require, exports) {
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
-                    Transfer._getAddHotelList($(this).closest('form'));
+                    Transfer._getAddHotelList($(this).closest('form'),0,selectedOutRemarkList);
                 }).trigger('click');
                 
                 // 添加
@@ -1223,21 +1244,17 @@ define(function(require, exports) {
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var hotelPlan = checkData[i];
-                        htmlData = '<div class="form-group">'+
-                        '<input type="hidden" name="outRemarkId" value="'+(hotelPlan.id||"")+'">'+
-                        '<label class="control-label mar-r-20">中转单号：'+(hotelPlan.orderNumber||"")+'</label>'+
-                        '<label class="control-label mar-r-20">线路产品：'+(hotelPlan.lineProductName||"")+'</label>'+
-                        '<label class="control-label mar-r-20">用车时间：'+(hotelPlan.arriveTime||"")+'</label>'+
-                        '<label class="control-label mar-r-20">客人信息：'+
-                            '<span class="F-float F-count">'+(hotelPlan.adultCount||0)+'</span>大'+
-                            '<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>小'+
-                        '</label>'+
-                        '<label class="control-label mar-r-20">外联销售：<span class="F-float F-money">'+(hotelPlan.outOPUserName||"")+'</span></label>'+
-                        '<label class="control-label "><button class="btn btn-sm btn-success T-del-hotel">删除 </button></label>'+
-                        '<div class="bg-gray form-group">现车辆计划要求：'+(hotelPlan.require||"")+'</div>'+
-                        '</div> '
-
-                        $hotelplanId.find('.T-transfersId-hotel').after(htmlData);
+                       var htmlData = '<tr><td style="text-align: left;">'+
+                            '<input type="hidden" name="outRemarkId" value="'+(hotelPlan.id||"")+'">'+
+                            '<label class="control-label mar-r-20">中转单号：'+(hotelPlan.orderNumber||"")+'</label>'+
+                            '<label class="control-label mar-r-20">线路产品：'+(hotelPlan.lineProductName||"")+'</label>'+
+                            '<label class="control-label mar-r-20">抵达时间：'+(hotelPlan.startTime||"")+'</label>'+
+                            '<label class="control-label mar-r-20">客人信息：<span class="F-float F-count">'+(hotelPlan.adultCount||0)+'</span>大<span class="F-float F-count">'+(hotelPlan.childCount||0)+'</span>小</label>'+
+                            '<label class="control-label ">外联销售：<span class="F-float F-money">'+(hotelPlan.outOPUserName||"")+'</span></label></td>'+
+                            '<td rowspan="2"><a class="cursor T-del-hotel " title="删除">删除</a>'+
+                            '</td></tr>'+
+                            '<tr><td class="bg-gray form-group" style="text-align: left;">现车辆计划要求：'+(hotelPlan.require||"")+'</td></tr>'
+                        $hotelplanId.find('.T-task-list').after(htmlData);
                     };
                     
                     // 关闭对话框
@@ -1656,7 +1673,7 @@ define(function(require, exports) {
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>' +
             '</tr>';
-        var $tbody = $obj.find('tbody');
+        var $tbody = $obj.find('.T-bus-plan');
         $tbody.append(html);
         Transfer.addResource($busplanId); //车安排弹窗
         Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
@@ -1691,7 +1708,7 @@ define(function(require, exports) {
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>' +
             '</tr>';
-        var $tbody = $obj.find('tbody');
+        var $tbody = $obj.find('.T-hotel-plan');
         $tbody.append(html);
         Transfer.addResource($obj); //房安排弹窗
         Transfer.bindHotelChoose($obj); //房安排autocomplete列表
@@ -1717,6 +1734,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9"  type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="restaurant" title="删除">删除</a></td>' +
             '</tr>',
             $line = filterUnAuth(html);
@@ -1740,6 +1758,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value=""  maxlength="9"  type="text" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="ticket" title="删除">删除</a></td>' +
             '</tr>';
 
@@ -1759,6 +1778,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="" /></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>' +
+            '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="other" title="删除">删除</a></td>' +
             '</tr>';
 

@@ -8,6 +8,7 @@
             <th>分类</th>
             <th>要求</th>
             <th>安排结果</th>
+            <th>安排人</th>
             <th>状态</th>
             <th>操作</th>
         </tr>
@@ -19,19 +20,19 @@
             <td class="h-touristGroupInfo" rowspan="{{item.size}}">
                 <p>中转单号：{{item.orderNumber}}</p>
                 <p><span>&lt;{{item.lineProductName}}&gt;</span></p>
-                <p><span>{{item.startTime}}</span><span>{{item.partnerAgencyName}}</span><span>外链销售：{{item.outOPUserName}}</span></p>
+                <p><span>{{item.startTime}}</span><span>{{item.partnerAgencyName}}</span><span>外连销售：{{item.outOPUserName}}</span></p>
                 <p>收客单号：{{item.tgOrderNumber}}</p>
             </td>
             <td  rowspan="{{item.size}}">
                 {{if item.shuttleType == 1 }}接
-                {{else if shuttleType == 2}}送{{/if}}            
+                {{else if item.shuttleType == 2}}送{{/if}}            
             </td>
             <td  rowspan="{{item.size}}">
                 <p>{{item.contactMemberName}}</p>
                 <p>{{item.adultCount}}大{{item.childCount}}小</p>
             </td>
             <td rowspan="{{item.size}}">
-                {{item.startTime}}
+                {{item.consumeTime}}
             </td>
 
             {{if item.arrangeItems.length > 0}}
@@ -56,6 +57,7 @@
                 {{/each}}
             {{/if}}
             </td>
+            <td rowspan="{{item.size}}">{{item.arrangeUserName}}</td>
             <td>
                 {{if item.arrangeItems[0].status == 1}}
                     <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
@@ -92,7 +94,7 @@
                          {{else if arrange.arrangeType == 'other' }}它
                     {{/if}}
                 </td>
-                <td>{{item.require}}</td>
+                <td>{{arrange.require}}</td>
 
                 <!-- 具体安排 -->
                 <td>
@@ -105,6 +107,7 @@
                     </label>
                 {{/each}}
                 </td>
+
                 <td>
                     {{if arrange.status == 1}}
                         <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
