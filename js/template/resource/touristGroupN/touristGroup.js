@@ -1,5 +1,5 @@
 /**
- * 计调操作--客户订单
+ * 计调操作--游客订单
  * 
  * by David Bear 2016-03-12
  */
@@ -51,7 +51,10 @@ define(function(require, exports) {
 	 * @return {[type]}      [description]
 	 */
     touristGroup.initModule = function(args){
-        touristGroup.listTouristGroup(0, args);
+        if(Tools.addTab(K.menu, '游客管理', T.list())){
+            var $tab = $("#tab-" + K.menu + "-content");
+            touristGroup.listTouristGroup(0, args, $tab);
+        }
     };
     /**
      * 游客管理列表页
@@ -65,9 +68,8 @@ define(function(require, exports) {
     	args = args || {};
     	args.pageNo = page || 0;
     	args.type = args.type || 0;
-        if(Tools.addTab(K.menu, '游客管理', T.list())){
-            $tab = $tab || $("#tab-" + K.menu + "-content");
-            //业务事件
+        if(!!$tab){
+            $tab.html(T.list());
             touristGroup.init_events($tab);
             touristGroup.getList(args, $tab);
         }
@@ -550,6 +552,8 @@ define(function(require, exports) {
     			touristGroup.updateJionGroupOther(0, $that, type);
     		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
+            }else if($that.hasClass('T-clear')){
+                clearItem($that);
             }
     	});
     	//参团表内操作
@@ -574,6 +578,8 @@ define(function(require, exports) {
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
+            }else if($that.hasClass('T-clear')){
+                clearItem($that);
             }
     	});
         $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
@@ -599,6 +605,8 @@ define(function(require, exports) {
     			touristGroup.updateJionGroupOther(2, $that, type);
     		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
+            }else if($that.hasClass('T-clear')){
+                clearItem($that);
             }
     	});
     	//其它信息收缩事件
@@ -626,6 +634,39 @@ define(function(require, exports) {
                 $tr.remove();
             }else{
                 $tr.remove();
+            }
+        }
+        function clearItem($that){
+            var status = $that.data('status'), tps = "确定清空该条数据？";
+            switch(status){
+                case "joinBus":
+                    tps = "确定清空该条接团车辆数据？";
+                    break;
+                case "joinHotel":
+                    tps = "确定清空该条接团住宿数据？";
+                    break;
+                case "joinOther":
+                    tps = "确定清空该条接团其它数据？";
+                    break;
+                case "partHotel":
+                    tps = "确定清空该条返程住宿数据？";
+                    break;
+                case "sendBus":
+                    tps = "确定清空该条送团车辆数据？";
+                    break;
+                case "sendHotel":
+                    tps = "确定清空该条送团住宿数据？";
+                    break;
+                case "sendOther":
+                    tps = "确定清空该条送团其它数据？";
+                    break;
+            }
+            if($that.prevAll('input[type="text"]').val() !== ""){
+                showConfirmDialog($("#confirm-dialog-message"), tps, function() {
+                    $that.prevAll('input[type="text"]').val('').data('json', '').data('clear', '1');
+                });
+            }else{
+                showMessageDialog($("#confirm-dialog-message"), "数据已经清空！");
             }
         }
     };
@@ -726,9 +767,9 @@ define(function(require, exports) {
     touristGroup.addJoinGroup = function($tab, validate){
     	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime"></td>'+
                     '<td><input type="text" class="col-xs-12" name="arriveShift"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" placeholder="点击填写车"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
-                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" placeholder="点击填写它"></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" placeholder="点击填写车"><a class="cursor T-action T-clear">清空</a></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" placeholder="点击填写房"><a class="cursor T-action T-clear">清空</a></td>'+
+                    '<td><input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" placeholder="点击填写它"><a class="cursor T-action T-clear">清空</a></td>'+
                     '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-join-group-list').append(html);
@@ -750,11 +791,11 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="w-110 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>'+
                         '<td>-</td>'+
-                        '<td><a class="cursor T-action T-inner-turn">内转</a> | <a class="cursor T-action T-outer-turn">外转</a> | <a class="cursor T-action T-delete">删除</a></td></tr>';
+                        '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
@@ -768,9 +809,9 @@ define(function(require, exports) {
     touristGroup.addSendGroup = function($tab, validate){
     	var html =  '<tr><td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime"></td>'+
                     '<td><input type="text" class="col-xs-12" name="leaveShift"></td>'+
-                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" placeholder="点击填写车"></td>'+
-                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" placeholder="点击填写房"></td>'+
-                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" placeholder="点击填写它"></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" placeholder="点击填写车"><a class="cursor T-action T-clear">清空</a></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" placeholder="点击填写房"><a class="cursor T-action T-clear">清空</a></td>'+
+                    '<td><input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" placeholder="点击填写它"><a class="cursor T-action T-clear">清空</a></td>'+
                     '<td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
                     '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-send-group-list').append(html);
@@ -921,7 +962,7 @@ define(function(require, exports) {
             }
             data.lineData = lineData;
             data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
-            data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
+            data.needPayMoney = receivable.needPayMoney || 0;
         }
         $.extend(data, moneyData);
         if(optionType===1){
@@ -941,6 +982,15 @@ define(function(require, exports) {
 		    success:function(obj, index){
 		    	var $layer = $(obj);
                 var validate = touristGroup.bindLayerCommonFeeEvents($layer, index, optionType);
+                
+                $layer.find('[name="isNowIncome"]').on('change', function(){
+                    if($(this).is(":checked")){
+                        $layer.find('.T-now-money').removeClass('hidden');
+                    }else{
+                        $layer.find('.T-now-money').addClass('hidden');
+                    }
+                });
+                
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
@@ -950,6 +1000,25 @@ define(function(require, exports) {
                         return false;
                     }
                     if(!!type){
+                        if($layer.find('.T-abversion').val() == "1"){
+                            moneyData.isTransfer = 1;
+                            moneyData.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
+                            moneyData.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
+                        }else{
+                            moneyData.isTransfer = 0;
+                            moneyData.dutyDepartmentName = $layer.find('[name="dutyDepartmentName"]').val();
+                            moneyData.dutyDepartmentId = $layer.find('[name="dutyDepartmentName"]').data('id');
+                            moneyData.dutyUserName = $layer.find('[name="dutyUserName"]').val();
+                            moneyData.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
+                        }
+                        moneyData.remark = $layer.find('[name="remark"]').val();
+                        moneyData.isCurrent = $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0;
+                        if(moneyData.isCurrent === 1){
+                            moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
+                        }else{
+                            moneyData.currentNeedPayMoney = 0;
+                        }
+                        
                         moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
                         moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
@@ -1019,8 +1088,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
-                    $that.val(moneyData.needPayAllMoney);
-                    $that.data('json', JSON.stringify(baseInfo));
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     layer.close(index);
                     F.subtotal($that.closest('tr'), 0);
                 });
@@ -1096,8 +1164,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
-                    $that.val(moneyData.needPayAllMoney);
-                    $that.data('json', JSON.stringify(baseInfo));
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     layer.close(index);
                     F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
                 });
@@ -1199,8 +1266,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
-                    $that.val(moneyData.needPayAllMoney);
-                    $that.data('json', JSON.stringify(baseInfo));
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     layer.close(index);
                     F.subtotal($that.closest('tr'), 0);
                 });
@@ -2053,6 +2119,11 @@ define(function(require, exports) {
                         receiveHotel : receiveHotel,
                         receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
                     };
+
+                receiveTripData.receiveBusClear = $that.find('[name="receiveBus"]').data('clear') == "1" ? 1 : 0;
+                receiveTripData.receiveHotelClear = $that.find('[name="receiveHotel"]').data('clear') == "1" ? 1 : 0;
+                receiveTripData.receiveOtherClear = $that.find('[name="receiveOther"]').data('clear') == "1" ? 1 : 0;
+
                 if(!!$that.data('id')){
                     receiveTripData.id = $that.data('id');
                 }
@@ -2077,23 +2148,24 @@ define(function(require, exports) {
                 tripStartTime : $that.find('[name="tripStartTime"]').val(),
                 tripEndTime : $that.find('[name="tripEndTime"]').val(),
                 lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo
-            },
-            $innerTurn = $that.find('.T-inner-turn'),
-            $outerTurn = $that.find('.T-outer-turn');
+            };
+            //$innerTurn = $that.find('.T-inner-turn'),
+            //$outerTurn = $that.find('.T-outer-turn');
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
                 joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+                joinTripData.hotelInfoClear = $that.find('[name="hotelNeedPayMoney"]').data('clear') == "1" ? 1 : 0;
             }
             if(typeof joinTripData.lineInfo !== "object"){
                 joinTripData.lineInfo = JSON.parse(joinTripData.lineInfo || "{}");
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
-            if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
+            /*if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
                 joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
             }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
                 joinTripData.outTransferInfo = JSON.parse($outerTurn.data('json'));
-            }
+            }*/
 
             if(!!$that.data('id')){
                 joinTripData.id = $that.data('id');
@@ -2128,6 +2200,9 @@ define(function(require, exports) {
                         sendOther : typeof sendOther !== "object" ? JSON.parse(sendOther || "{}") : sendOther
                     };
 
+                sendTripData.sendBusClear = $that.find('[name="receiveBus"]').data('clear') == "1" ? 1 : 0;
+                sendTripData.sendHotelClear = $that.find('[name="receiveHotel"]').data('clear') == "1" ? 1 : 0;
+                sendTripData.sendOtherClear = $that.find('[name="receiveOther"]').data('clear') == "1" ? 1 : 0;
                 if(!!$that.data('id')){
                     sendTripData.id = $that.data('id');
                 }
@@ -2361,7 +2436,7 @@ define(function(require, exports) {
                 receiveHotel = $tr.find('[name="receiveHotel"]').val() || 0,
                 receiveOther = $tr.find('[name="receiveOther"]').val() || 0,
                 sumNum = 0;
-                console.log(type)
+
             if(type === 1){
                 sumNum = lineNeedPayMoney * 1 + hotelNeedPayMoney * 1;
             }else{
@@ -2371,4 +2446,5 @@ define(function(require, exports) {
         }
     };
     exports.init = touristGroup.initModule;
+    return touristGroup;
 });
