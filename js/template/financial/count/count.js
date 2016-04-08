@@ -3628,7 +3628,7 @@ define(function(require, exports){
 					$parentObj.find('.tripCost-restaurantArrangeNeedPayMoney').text(sum);
 					//计算整个团成本
 					Count.tripCost($parentObj);
-			case 'selfArrange'
+			case 'selfArrange' :
 					Count.autoSelfSum($obj,$parentObj)
 				break;
 		}
