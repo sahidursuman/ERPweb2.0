@@ -3,11 +3,11 @@
 		{{if type == 1}}
 		<div class="col-xs-12">
 			<div class="col-xs-1 text-right no-padding-right control-label">线路名称</div>
-			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.lineProductName}}{{/if}}</div>
+			<div class="col-xs-5 control-label">{{if !!lineData}}{{lineData.lineProductName}}{{/if}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">天数</div>
 			<div class="col-xs-1 control-label">{{if !!lineData}}{{lineData.days}}{{/if}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">出团日期</div>
-			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</div>
+			<div class="col-xs-2 control-label">{{if !!lineData}}{{lineData.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</div>
 		</div>
 		{{if isTransfer == 1}}
 		<div class="col-xs-12 mar-t-20">
@@ -30,14 +30,16 @@
 			<div class="col-xs-1 text-right no-padding-right control-label">应付</div>
 			<div class="col-xs-3 control-label F-float F-money">{{needPayAllMoney}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label F-float F-money">计划现收</div>
-			<div class="col-xs-2 control-label F-float F-money">{{currentNeedPayMoney}}</div>
+			<div class="col-xs-2 control-label F-float F-money">{{needPayMoney}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label F-float F-money">对方现收</div>
 			<div class="col-xs-1">
-				<input type="checkbox" disabled class="ace"{{if isNowIncome == 1}} checked{{/if}}>
+				<input type="checkbox" disabled class="ace"{{if isCurrent == 1}} checked{{/if}}>
 				<label class="lbl"></label>
 			</div>
+			{{if isCurrent == 1}}
 			<div class="col-xs-1 text-right no-padding-right control-label">现收金额</div>
-			<div class="col-xs-2 control-label F-float F-money">{{preIncomeMoney}}</div>
+			<div class="col-xs-2 control-label F-float F-money">{{currentNeedPayMoney}}</div>
+			{{/if}}
 		</div>
 		{{else}}
 		<div class="col-xs-12 mar-t-20">
