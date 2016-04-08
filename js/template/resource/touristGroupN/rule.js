@@ -297,6 +297,41 @@ define(function(require, exports) {
                 ]
             }];
 
+            if($obj.find('.T-inner-turn').length > 0){
+                settings.push({
+                    //责任部门
+                    $ele: $obj.find('input[name="dutyDepartmentName"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '责任部门不能为空'
+                        }
+                    ]
+                });
+                settings.push({
+                    //责任计调
+                    $ele: $obj.find('input[name="dutyUserName"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '责任计调不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('.T-outer-turn') > 0){
+                settings.push({
+                    //计划现收
+                    $ele: $obj.find('input[name="transferPartnerAgency"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '同行不能为空'
+                        }
+                    ]
+                });
+            }
+
 	        return settings;
 	    },
 	    checkNeed : function($container){

@@ -200,7 +200,7 @@ define(function(require, exports) {
             if(showDialog(data)){
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
-                data.searchParam.lineProductName = args.lineProductName || '全部';
+                //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
 
                 //费用明细处理
@@ -297,7 +297,7 @@ define(function(require, exports) {
         Client.$checksumUnReceivedMoney = Client.$checkSumArea.find('.T-sumUnReceivedMoney');
 
         // 初始化下拉选项
-        Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
+        //Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
         Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'),args);
 
@@ -507,7 +507,7 @@ define(function(require, exports) {
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
 
-                data.searchParam.lineProductName = args.lineProductName || '全部';
+                //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 
                 if(Client.clearDataArray){
@@ -585,7 +585,7 @@ define(function(require, exports) {
         FinancialService.initPayEvent(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
-        Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
+        //Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
         Client.getRecorderList(Client.$clearSearchArea.find('.T-search-enter'),  id);
         Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件

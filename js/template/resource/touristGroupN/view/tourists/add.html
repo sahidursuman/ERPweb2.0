@@ -34,7 +34,7 @@
 						</td>
 						<td>
 							<div class="hct-input-group col-xs-12">
-								<input type="text" class="col-xs-12" name="lineProductName">
+								<input type="text" class="col-xs-12" name="lineProductName" placeholder="请输入或搜索行程">
 								<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>
 							</div>
 						</td>
@@ -103,7 +103,7 @@
 						<th>线路应付</th>
 						<th class="T-is-hidden">返程住宿</th>
 						<th class="T-is-hidden">参团小计</th>
-						<th class="T-is-hidden" width="95">本段现收团款</th>
+						<th width="95">本段现收团款</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -119,13 +119,11 @@
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>
 						<td><input type="text" class="w-110 T-action T-line-cope hct-cursor" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>
-						<td class="T-is-hidden"><input type="text" class="w-110 T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>
+						<td class="T-is-hidden"><input type="text" class="w-110 F-float F-money T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>
 						<td class="T-is-hidden"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>
-						<td class="T-is-hidden"><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>
+						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>
 						<td>-</td>
 						<td>
-							<a class="cursor T-action T-inner-turn">内转</a> | 
-							<a class="cursor T-action T-outer-turn">外转</a> | 
 							<a class="cursor T-action T-delete">删除</a>
 						</td>
 					</tr>

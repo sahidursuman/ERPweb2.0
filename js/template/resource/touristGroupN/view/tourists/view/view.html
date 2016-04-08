@@ -31,8 +31,8 @@
 					<tr>
 						<td>{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）</td>
 						<td>{{baseInfo.lineProductName}}</td>
-						<td>{{baseInfo.startTime}}</td>
-						<td>{{baseInfo.endTime}}</td>
+						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a></td>
 						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
 						<td>{{baseInfo.mobileNumber}}</td>
@@ -63,7 +63,7 @@
 				<tbody class="T-join-group-list">
 				{{each receiveTrip as rs}}
 					<tr>
-						<td>{{rs.arriveTime}}</td>
+						<td>{{rs.arriveTime | dateFormat: 'yyyy-MM-dd'}}</td>
 	                    <td>{{rs.arriveShift}}</td>
 	                    <td><a class="hct-cursor T-action T-bus F-float F-money" data-json="{{rs.receiveBus}}">{{rs.busNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-hotel F-float F-money" data-json="{{rs.receiveHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
@@ -94,7 +94,6 @@
 						<th class="T-is-hidden" width="95">本段现收团款</th>
 						{{/if}}
 						<th>状态</th>
-						<th>查看</th>
 					</tr>
 				</thead>
 				<tbody class="T-part-group-list">
@@ -103,8 +102,8 @@
 						<td>
 							<span name="lineProductName" data-json="{{rs.lineJson}}">{{rs.lineProductName}}</span>
 						</td>
-						<td>{{rs.tripStartTime}}</td>
-						<td>{{rs.tripEndTime}}</td>
+						<td name="tripStartTime">{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
+						<td>{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
 						{{if baseInfo.customerType == 0}}
 						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelNeedPayAllMoney}}</a></td>
@@ -112,10 +111,6 @@
 						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
 						{{/if}}
 						<td>{{rs.status | getPartGroupStatusText}}</td>
-						<td>
-							<a class="cursor T-inner-turn{{if rs.outTransferInfo == "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.innerTransferInfo}}">内转</a> | 
-							<a class="cursor T-outer-turn{{if rs.innerTransferInfo == "{}"}} hct-color-BBB{{else}} T-action{{/if}}" data-json="{{rs.outTransferInfo}}">外转</a>
-						</td>
 					</tr>
 				{{/each}}
 				</tbody>
@@ -142,7 +137,7 @@
 				<tbody class="T-send-group-list">
 				{{each sendTrip as rs}}
 					<tr data-id="{{rs.id}}">
-						<td>{{rs.leaveTime}}</td>
+						<td>{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}</td>
 	                    <td>{{rs.leaveShift}}</td>
 	                    <td><a class="hct-cursor T-action T-bus" data-json="{{rs.sendBus}}">{{rs.busNeedPayAllMoney}}</a></td>
 	                    <td><a class="hct-cursor T-action T-hotel" data-json="{{rs.sendHotel}}">{{rs.hotelNeedPayAllMoney}}</a></td>
