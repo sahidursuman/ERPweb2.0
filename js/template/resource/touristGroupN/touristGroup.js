@@ -1365,8 +1365,8 @@ define(function(require, exports) {
                     $tr.remove();
                 }else{
                     $tr.remove();
-                    F.calcMoney($(this), $layer);
                 }
+                F.calcMoney($(this), $layer);
             }
         });
         $tbody.on('change', '.T-option', function(event){
