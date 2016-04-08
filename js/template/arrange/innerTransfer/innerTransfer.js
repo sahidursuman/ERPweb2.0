@@ -718,7 +718,8 @@ define(function(require, exports) {
                                 var touristGroupId = data.touristGroupId,
                                     isTransferIn = 'inner';
                                 //查看内转
-                                KingServices.viewTouristGroup(touristGroupId, isTransferIn);
+                                //美华版先不做跳转
+                                //KingServices.viewTouristGroup(touristGroupId, isTransferIn);
                                 innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
                             }
                         })
