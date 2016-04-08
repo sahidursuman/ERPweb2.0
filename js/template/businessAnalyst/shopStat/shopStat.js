@@ -85,7 +85,7 @@ define(function(require, exports) {
 				if(result){
 					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
-		       		shopStat.$tab.find('.T-shopStatPager-list').html(html);
+		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//绑定页面事件
 		       		shopStat.initEvent();
 		       		//设置记录条数

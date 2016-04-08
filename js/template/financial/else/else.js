@@ -22,7 +22,7 @@ define(function(require, exports) {
                         ticketList = JSON.parse(ticketList);
                         data.ticketList = ticketList;
                         var html = listTemplate(data);
-                        addTab(menuKey,"其它支出",html);
+                        Tools.addTab(menuKey,"其它支出",html);
 
                         $("#tab-"+menuKey+"-content  .date-picker").datepicker({
                             autoclose: true,
@@ -74,14 +74,14 @@ define(function(require, exports) {
                         //////给对账按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-divide").click(function(){
                             var Checking = elseChecking();
-                            addTab(menuKey+"-elseChecking","其它对账",Checking);
+                            Tools.addTab(menuKey+"-elseChecking","其它对账",Checking);
 
                         });
 
                         //给结算按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-transfter").click(function(){
                             var Clearing = elseClearing();
-                            addTab(menuKey+"-elseClearing","其它结算",Clearing);
+                            Tools.addTab(menuKey+"-elseClearing","其它结算",Clearing);
 
                         });
 

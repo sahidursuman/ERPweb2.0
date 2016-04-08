@@ -23,7 +23,7 @@ define(function(require, exports) {
 						ticketList = JSON.parse(ticketList);
 						data.ticketList = ticketList;
 						var html = listTemplate(data);
-						addTab(menuKey,"报价模块",html);
+						Tools.addTab(menuKey,"报价模块",html);
 
 						$("#"+tabId+".date-picker").datepicker({
 							autoclose: true,
@@ -76,7 +76,7 @@ define(function(require, exports) {
 						//给对账按钮绑定事件
 						$("#"+tabId+" .offer  .offer-look").click(function(){
 							var Clear = offerLook();
-							addTab(menuKey+"-offerLook","查看报价",Clear);
+							Tools.addTab(menuKey+"-offerLook","查看报价",Clear);
 
 						});
 					}

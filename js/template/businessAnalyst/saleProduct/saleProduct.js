@@ -50,7 +50,7 @@ define(function(require, exports) {
 				},
 				success:function(data){
 					 var html=listTemplate(data);
-				       addTab(menuKey,"产品销量",html);
+				       Tools.addTab(menuKey,"产品销量",html);
 
 				       //初始化JQuery对象
 				       SaleProductObj.$tab=$("#" + tabId);//最大区域模块
