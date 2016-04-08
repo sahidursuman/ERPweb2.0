@@ -2447,5 +2447,5 @@ define(function(require, exports) {
         }
     };
     exports.init = touristGroup.initModule;
-    return touristGroup;
+    //return touristGroup;
 });
