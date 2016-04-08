@@ -29,7 +29,8 @@ define(function(require, exports) {
             transitIds: [],
             installCheckData : [],
             delBusTransferId : [],
-            delHotelTransferId : []
+            delHotelTransferId : [],
+            deleteOutBusIds : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
@@ -723,6 +724,7 @@ define(function(require, exports) {
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType,
                 deleteOutRemarkList : JSON.stringify(Transfer.delBusTransferId),
+                deleteOutBusIds :  Transfer.deleteOutBusIds.join(','),
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1843,31 +1845,11 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Transfer.deleteArrange = function($obj) {
-        alert();
-        var $tr = $obj.closest('tr');
-        var id = $tr.data('entity-id');
-
-        if (!!id) {
-            showConfirmDialog($("#confirm-dialog-message"), '确定要删车安排？', function() {
-                $.ajax({
-                    url: KingServices.build_url(service_name, 'deleteTransferArrange'),
-                    type: "POST",
-                    data: {
-                        cateName: $obj.data('catename'),
-                        id: id
-                    },
-                    success: function(data) {
-                        if (showDialog(data)) {
-                            showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                $tr.remove();
-                            });
-                        }
-                    }
-                });
-            })
-        } else {
-            $tr.remove();
-        }
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove()
+        })
+        Transfer.deleteOutBusIds.push(id);
     };
     Transfer.setDate = function($container) {
         // 绑定日期
