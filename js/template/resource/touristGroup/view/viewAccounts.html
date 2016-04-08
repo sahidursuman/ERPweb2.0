@@ -118,7 +118,7 @@
 				</tr>
 			</table>
 			<p style="text-align: right;margin-top: 10px;"><span>外联销售：</span> <span>{{touristGroup.outOPUserName}}</span> <span>{{touristGroup.outOPUserMobileNumberr}}</span></p>
-			<!-- <p style="text-align: right;margin-top: -8px;">传真：028-32435465</p> -->
+			<p style="text-align: right;margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">传真：{{touristGroup.faxNumber}}</p>
 			<p style="text-align: right;margin-top: -8px;"><span>{{touristGroup.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
 		</div>
 	</form>
