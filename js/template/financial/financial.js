@@ -43,7 +43,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };
-        if(val !=1){
+        if(val !=1 && val!=5){
             $container.find('input[name=card-id]').val('');
             $card.val('');
         };
