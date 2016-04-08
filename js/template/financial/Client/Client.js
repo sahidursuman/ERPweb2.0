@@ -183,7 +183,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find('.T-sumCount').text(data.sumCount);
+                $tab.find('.T-sumCount').text(data.sumAdultCount + '大' + data.sumChildCount + '小');
                 $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
                 $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
                 $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);

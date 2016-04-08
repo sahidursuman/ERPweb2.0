@@ -244,8 +244,9 @@ define(function(require, exports) {
 					data.ticketList = JSON.parse(data.arrangeItems.ticketList);
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
+					data.touristGroupList = JSON.parse(data.touristGroupList);
 					
-					addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
+					Tools.addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
 					$tab.find('.T-restaurant-name').each(function() {
 						var $name = $(this);

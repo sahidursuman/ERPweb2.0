@@ -48,7 +48,7 @@ define(function(require,exports){
 					data.partnerAgencyList = JSON.parse(data.partnerAgencyList);
 					PartnerAgency.searcData = data.searchParam;
 					var html = listTempLate(data);
-					addTab(menuKey,'客户管理',html);
+					Tools.addTab(menuKey,'客户管理',html);
 					//初始化客户管理资源对象
 					PartnerAgency.$tab = $("#"+tabId);
 					PartnerAgency.$searchArea = PartnerAgency.$tab.find(".search-area");

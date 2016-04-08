@@ -211,6 +211,7 @@ template.helper("getPayTypeOptions", function(payType,isBalance) {
     if (isBalance==1) {
         options += '<option value="6" '+ (6 == payType?'selected':'') +'>冲抵</option>';
     }
+    
     return options;
 });
 

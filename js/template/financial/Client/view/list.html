@@ -18,8 +18,8 @@
             <label>客户类型</label>
             <select name="partnerAgencyType">
                 <option value="" {{if searchParam.partnerAgencyType == ''}}selected{{/if}}>全部</option>
-                <option value="0" {{if searchParam.partnerAgencyType == 0 && searchParam.partnerAgencyType.length > 0}}selected{{/if}}>地接社</option>
-                <option value="1" {{if searchParam.partnerAgencyType == 1}}selected{{/if}}>组团社</option>
+                <option value="0" {{if searchParam.partnerAgencyType == 0 && searchParam.partnerAgencyType.length > 0}}selected{{/if}}>组团社</option>
+                <option value="1" {{if searchParam.partnerAgencyType == 1}}selected{{/if}}>组团社和地接社</option>
             </select>
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
@@ -82,7 +82,7 @@
     <div class="form-inline T-sum-area">
         <div class="form-group mar-r-20">
             <label class="control-label">总人数合计：</label>
-            <label class="control-label F-float F-count T-sumCount"></label>
+            <label class="control-label T-sumCount"></label>
         </div>
         <div class="form-group mar-r-20">
             <label class="control-label">合同金额合计：</label>
