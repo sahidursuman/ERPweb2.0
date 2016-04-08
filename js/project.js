@@ -1805,7 +1805,7 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		num = Tools.toFixed(num, length);
 	}
-	num = (num + '');
+	num = (num + '').replace(/ /g, '');
 	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
 		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
 	

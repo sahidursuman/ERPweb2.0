@@ -20,7 +20,7 @@ define(function(require, exports) {
                         ticketList = JSON.parse(ticketList);
                         data.ticketList = ticketList;
                         var html = listTemplate(data);
-                        addTab(menuKey,"总利润表",html);
+                        Tools.addTab(menuKey,"总利润表",html);
 
                         //搜索按钮事件
                         $(".main-content .page-content .btn-ticket-search").click(function(){

@@ -241,7 +241,6 @@ define(function(require, exports) {
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
 				data:"id=" + id,
-				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -323,7 +322,6 @@ define(function(require, exports) {
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
-				showLoading: false,
 				data:"id=" + id,
 				success:function(data){
 					var result = showDialog(data);

@@ -66,6 +66,57 @@
     </tbody>
 </table>
 
+<h5 class="base-title">游客名单 <a role="button" href="#arrange-view-touristgroup-list" aria-expanded="false" aria-controls="arrange-view-touristgroup-list" class="pull-right" data-toggle="collapse" style="padding-right: 15px;">[收起]</a></h5>
+<div id="arrange-view-touristgroup-list" class="collapse in">
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th class="th-border">收客单号</th>
+                <th class="th-border">客户</th>
+                <th class="th-border">人数</th>
+                <th class="th-border">姓名</th>
+                <th class="th-border">手机号码</th>
+                <th class="th-border">证件类型</th>
+                <th class="th-border">证件号码</th>
+                <th class="th-border">性别</th>
+                <th class="th-border">年龄</th>
+                <th class="th-border">省份</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each touristGroupList as item}}
+                <tr>
+                    <td rowspan="{{item.length=item.touristGroupMemberList.length}}">{{item.orderNumber}}</td>
+                    <td rowspan="{{item.length}}">{{item.partnerAgency.travelAgencyName}}</td>
+                    <td rowspan="{{item.length}}">{{item.adultCount}}大{{item.childCount}}小</td>
+                    {{if item.length > 0}}
+                    <td>{{item.touristGroupMemberList[0].name}}</td>
+                    <td>{{item.touristGroupMemberList[0].mobileNumber}}</td>
+                    <td>{{item.touristGroupMemberList[0].idCardType | getCardText}}</td>
+                    <td>{{item.touristGroupMemberList[0].idCardNumber}}</td>
+                    <td>{{if item.touristGroupMemberList[0].gender == 1}} 男 {{else if item.touristGroupMemberList[0].gender == 2}} 女 {{/if}}</td>
+                    <td>{{item.touristGroupMemberList[0].age}}</td>
+                    <td>{{item.touristGroupMemberList[0].area}}</td>
+                    {{/if}}
+                </tr>
+                {{each item.touristGroupMemberList as member index}}
+                {{if index > 0}}
+                <tr>
+                    <td>{{member.name}}</td>
+                    <td>{{member.mobileNumber}}</td>
+                    <td>{{member.idCardType | getCardText}}</td>
+                    <td>{{member.idCardNumber}}</td>
+                    <td>{{if member.gender == 1}} 男 {{else if member.gender == 2}} 女 {{/if}}</td>
+                    <td>{{member.age}}</td>
+                    <td>{{member.area}}</td>
+                </tr>
+                {{/if}}
+                {{/each}}
+            {{/each}}
+        </tbody>
+    </table> 
+</div>
+
 <div class="trip-arrange">
     <h5 class="base-title">行程安排</h5>
     <table class="table table-bordered">

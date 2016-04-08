@@ -22,33 +22,50 @@
 	   		    <td class="text-bold">{{deptL.childName}}</td>
 	   		    {{/if}}
 	   			<td>{{deptL.getAdultCount}}大{{deptL.getChildCount}}小</td>
+	   			<span class="hidden">
+                    {{getAdultCount+= deptL.getAdultCount}}
+                    {{getChildCount+= deptL.getChildCount}}
+                </span>
 	   			<td>{{deptL.getNotDirectAdultCount}}大{{deptL.getNotDirectChildCount}}小</td>
+	   			<span class="hidden">
+                    {{getNotDirectAdultCount += deptL.getNotDirectAdultCount}}
+                    {{getNotDirectChildCount += deptL.getNotDirectChildCount}}
+                </span>
 	   			<td>{{deptL.tripCount}}</td>
+	   			<span class="hidden">
+                    {{tripCount += deptL.tripCount}}
+                </span>
 	   			<td>{{deptL.adultCount}}大{{deptL.childCount}}小</td>
+	   			<span class="hidden">
+                    {{adultCount += deptL.adultCount}}
+                    {{childCount += deptL.childCount}}
+                </span>
 	   			<td>{{deptL.transAdultCount}}大{{deptL.transChildCount}}小</td>
+	   			<span class="hidden">
+                    {{transAdultCount += deptL.transAdultCount}}
+                    {{transChildCount += deptL.transChildCount}}
+                </span>
 	   			<td>{{deptL.innerAdultCount}}大{{deptL.innerChildCount}}小</td>
+	   			<span class="hidden">
+                    {{innerAdultCount += deptL.innerAdultCount}}
+                    {{innerChildCount += deptL.innerChildCount}}
+                </span>
 	   			<td>{{deptL.orderCount}}</td>
+	   			<span class="hidden">
+                    {{orderCount += deptL.orderCount}}
+                </span>
 		   	</tr>
 		{{/each}}
 
 		<tr style="background-color:#effef4">
 			<td class="text-bold" {{if isChildGroup}}colspan="2" {{/if}}>合计</td>
-			<td class="T-sumAdultCount">0</td>
-			<td class="T-tripNotDirectAdChildCount">0</td>
-			<td class="T-tripTotalCount">0</td>
-			<td class="T-tripAdChildCount">0</td>
-			<td class="T-transAdChilTotalCount">0</td>
-			<td class="T-innerAdChilTotalCount">0</td>
-			<td class="T-orderTotalCount">0</td>
+			<td>{{getAdultCount+getChildCount}}</td>
+			<td>{{getNotDirectAdultCount+getNotDirectChildCount}}</td>
+			<td>{{tripCount}}</td>
+			<td>{{adultCount+childCount}}</td>
+			<td>{{transAdultCount+transChildCount}}</td>
+			<td>{{innerAdultCount+innerChildCount}}</td>
+			<td>{{orderCount}}</td>
 		</tr>
 	</tbody>
 </table>
-<div class="row pageMode">
-	<div class="col-xs-6">
-		<small>共计 {{searchParam.totalCount}} 条记录</small>
-	</div>
-	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-		</div>
-	</div>
-</div>
