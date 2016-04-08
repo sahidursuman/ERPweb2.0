@@ -251,8 +251,8 @@ define(function(require, exports) {
             args.selfPayName = $tab.find('input[name="selfPayName"]').val();
             args.selfPayId = $tab.find('input[name="selfPayId"]').val();
             args.tripInfo = $tab.find("input[name=tripInfo]").val();
-            args.startDate = $tab.find("input[name=startDate]").val();
-            args.endDate = $tab.find("input[name=endDate]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
             args.startCheck = $tab.find('.T-checkStartTime').val();
