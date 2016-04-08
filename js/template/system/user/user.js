@@ -234,22 +234,8 @@ define(function(require, exports) {
 					data.listUserFunctionShip = JSON.parse(data.listUserFunctionShip),
 					data.user = JSON.parse(data.user);
 					var html = authTemplate(data);
-						addTab(tabId,"编辑授权",html);
-					    user.initAuth(data,isNew);		 
-					
-					
-					// user.$updateAuth = layer.open({
-					//     type: 1,
-					//     title:"编辑权限",
-					//     skin: 'layui-layer-rim',
-					//     area: '1080px', 
-					//     zIndex:1028,
-					//     content: html,
-					//     scrollbar: false,
-					    // success:function(){
-					    // 	user.initAuth(data,isNew);					    	
-					    // }
-					// });
+						Tools.addTab(tabId,"编辑授权",html);
+					    user.initAuth(data,isNew);
 				}
 			}
 		});
