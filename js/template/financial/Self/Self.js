@@ -382,7 +382,7 @@ define(function(require, exports) {
                         payRemark : $tab.find('input[name=sumPayRemark]').val(),
                         accountTimeStart :startDate,
                         accountTimeEnd : endDate,
-                        tripInfo : $tab.find('select[name=tripInfo]').val(),
+                        tripInfo : $tab.find('input[name=tripInfo]').val(),
                         accountStatus : args.accountStatus,
                         startCheck : $tab.find('.T-checkStartTime').val(),
                         endCheck : $tab.find('.T-checkEndTime').val()
