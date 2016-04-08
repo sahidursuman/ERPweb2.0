@@ -187,15 +187,6 @@ define(function(require, exports) {
                             errMsg: '请输入正确的身份证号码'
                         }]
                     });
-                }else if($that.find('[name="idCardType"]').val() == 1){
-                	settings.push({//校验护照号码
-                        $ele: $that.find('input[name="idCardNumber"]'),
-                        rules: [
-                        {
-                            type: 'passport-id',
-                            errMsg: '请输入正确的护照号码'
-                        }]
-                    });
                 }
             });
 	        return settings;

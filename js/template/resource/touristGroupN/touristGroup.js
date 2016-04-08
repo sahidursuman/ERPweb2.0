@@ -891,6 +891,7 @@ define(function(require, exports) {
                                     id : id
                                 });
                                 $this.closest('.T-addTouristTbody').data('del-json', delJson);
+                                $this.closest('tr').remove();
                             }else{
                                 $this.closest('tr').remove();
                                 touristGroup.memberNumber($tbody);
@@ -1364,8 +1365,8 @@ define(function(require, exports) {
                     $tr.remove();
                 }else{
                     $tr.remove();
-                    F.calcMoney($(this), $layer);
                 }
+                F.calcMoney($(this), $layer);
             }
         });
         $tbody.on('change', '.T-option', function(event){
@@ -2446,5 +2447,5 @@ define(function(require, exports) {
         }
     };
     exports.init = touristGroup.initModule;
-    return touristGroup;
+    //return touristGroup;
 });
