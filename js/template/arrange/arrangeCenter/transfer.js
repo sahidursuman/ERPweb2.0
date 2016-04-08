@@ -253,7 +253,6 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
-                    Transfer.setDate($container)
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -436,7 +435,6 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         data.taskSize = data.outRemarkList.length;
-                        console.log(data);
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -463,7 +461,6 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if (result) {
                         data.taskSize = data.outRemarkList.length;
-                        console.log(data)
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -1846,11 +1843,12 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Transfer.deleteArrange = function($obj) {
+        alert();
         var $tr = $obj.closest('tr');
         var id = $tr.data('entity-id');
 
         if (!!id) {
-            showConfirmDialog($("#confirm-dialog-message"), '确定要删除该安排？', function() {
+            showConfirmDialog($("#confirm-dialog-message"), '确定要删车安排？', function() {
                 $.ajax({
                     url: KingServices.build_url(service_name, 'deleteTransferArrange'),
                     type: "POST",

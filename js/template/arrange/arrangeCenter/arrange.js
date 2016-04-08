@@ -29,13 +29,12 @@ define(function(require, exports) {
 	 */
 	FrameFun.initMainEvent = function() {
 		var $tab = $('#tab-'+ tabKey + '-content');
-
 		// 公共事件
 		$tab.children().on('click', '.T-more', function(event) {  // 高级搜
 			event.preventDefault();
 			$(this).closest('.form-inline').next().toggleClass('hidden');
 		});		
-
+		Tools.setDatePicker($tab.find('.T-datePicker'));
 		// 初始化中转页面的事件
 		FrameFun.initTransferEvent($tab.find('#transfer-arrange'));
 	};

@@ -54,7 +54,7 @@
         </thead>
         <tbody class="T-bus-plan" id="busplan_body">
             {{each outBusList as outBus}}
-            <tr entity-id="{{outBus.outRemarkId}}" >
+            <tr data-entity-id="{{outBus.outBusId}}" >
                 <td>
                     <div class="col-sm-12">
                         <input type="hidden" value="{{outBus.outBusId}}" name="outBusId">
