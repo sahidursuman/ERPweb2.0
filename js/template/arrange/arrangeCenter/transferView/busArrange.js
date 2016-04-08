@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":233,"md5":"b1be69f5eecdcb0875929d36aab83a65"}*/
+/*TMODJS:{"debug":true,"version":272,"md5":"b1be69f5eecdcb0875929d36aab83a65"}*/
 define(function(require) {
     return require("/js/template/template")("arrange/arrangeCenter/transferView/busArrange", function($data, $filename) {
         try {
