@@ -891,6 +891,7 @@ define(function(require, exports) {
                                     id : id
                                 });
                                 $this.closest('.T-addTouristTbody').data('del-json', delJson);
+                                $this.closest('tr').remove();
                             }else{
                                 $this.closest('tr').remove();
                                 touristGroup.memberNumber($tbody);
