@@ -142,7 +142,13 @@ define(function(require, exports) {
                 start = Tools.addDay(tmp.endTime, 1);
             }
 
-            tdStr.push((new Array(Tools.getDateDiff(tmp.endTime, end, true) + 1)).join('<td></td>'));
+            j = 2;
+            if (jLen) {  // 存在安排时
+                start = tmp.endTime;
+                j = 1;
+            } // 无安排，使用start、end填充
+
+            tdStr.push((new Array(Tools.getDateDiff(start, end, true) + j)).join('<td></td>'));
 
             tdStr.push('</tr>');
         }
