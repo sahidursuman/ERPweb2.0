@@ -436,7 +436,7 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         data.taskSize = data.outRemarkList.length;
-                        
+                        console.log(data)
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -604,7 +604,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addBusTransferArray[i].id)  {
+                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
                             }
                         }
@@ -620,8 +620,11 @@ define(function(require, exports) {
         $tr.each(function(i){
             var $that = $(this),id = $that.attr('data-id');
             var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
+            var shuttleType= $that.find("input[name=shuttleType]").val();
+            console.log(shuttleType)
             if(selectFlag){
                 var checkData = {
+                    shuttleType : shuttleType,
                     id : id,
                     orderNumber : $that.find('.orderNumber').text(),
                     lineProductName : $that.find('.lineProductName').text(),
@@ -644,7 +647,9 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     Transfer._getAddBusList = function($searchFrom, page,selectedOutRemarkList) {
+        var shuttleType = $searchFrom.find('name[shuttleType]').text()
         var args = $searchFrom.serializeJson();
+        console.log(shuttleType)
         args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList)
         args.pageNo = page || 0;
         $.ajax({
@@ -1272,7 +1277,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addHotelTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addHotelTransferArray[i].id)  {
+                            if (item.outRemarkId === Transfer.addHotelTransferArray[i].outRemarkId)  {
                                 Transfer.addHotelTransferArray.splice(i, 1);
                             }
                         }

@@ -15,9 +15,10 @@
     </thead>
     <tbody class="T-bus-list">
         {{each outRemarkArrangeList as bus}}
-        <tr data-id="{{bus.outRemarkId}}" {{if bus.checked}} class="success" {{/if}}>
+        <tr data-id="{{bus.id}}" {{if bus.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
+                    <input type="hidden" name="outRemarkId" value="{{bus.id}}">
                     <input type="checkbox" class="ace T-cheked" {{if bus.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
                 </label>
             </td>
