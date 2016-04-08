@@ -167,8 +167,8 @@ define(function(require, exports) {
 			success:function(data){
 				data.selfpay = JSON.parse(data.selfpay);
 				if(data.selfpay.province != null){var provinceId = data.selfpay.province.id};
-				if(data.selfpay.province != null){var cityId = data.selfpay.city.id};
-				if(data.selfpay.province != null){var districtId = data.selfpay.district.id};
+				if(data.selfpay.city != null){var cityId = data.selfpay.city.id};
+				if(data.selfpay.district != null){var districtId = data.selfpay.district.id};
 				var result = showDialog(data);
 				if(result){
 					var html = updateTemplate(data);
