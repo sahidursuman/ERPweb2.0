@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":93,"md5":"738ff900efb8afc5cc8db7f49c0c95d5"}*/
+/*TMODJS:{"debug":true,"version":113,"md5":"6124259660eac9d0a517d7c9fefc1c82"}*/
 define(function(require) {
     return require("/js/template/template")("arrange/arrangeCenter/transferView/busArrangedList", function($data, $filename) {
         try {
@@ -14,29 +14,34 @@ define(function(require) {
                     $each(bus.busList, function(businfo) {
                         $out += "<p> <span>", $line = 23, $out += $escape(businfo.busCompanyName), $out += "</span> &nbsp;<span>", 
                         $line = 23, $out += $escape(businfo.licenseNumber), $out += "</span> </p>", $line = 24;
-                    }), $out += " </td> ", $line = 26), $out += " <td > <span >", $line = 28, 1 == bus.shuttleType ? ($out += " 接团 ", 
-                    $line = 28) : 2 == bus.shuttleType && ($out += " 送团", $line = 28), $out += '</span> <input type="hidden" name="shuttleType" value="', 
-                    $line = 29, 1 == buslist.shuttleType ? ($out += " 1 ", $line = 29) : 2 == buslist.shuttleType && ($out += " 2", 
-                    $line = 29), $out += '" > </td> <td class="h-touristGroupInfo"> <p>中转单号：', $line = 32, 
-                    $out += $escape(buslist.orderNumber), $out += "</p> <p><span>&lt;", $line = 33, 
-                    $out += $escape(buslist.lineProductName), $out += "&gt;</span></p> <p><span>", $line = 34, 
-                    $out += $escape(buslist.startTime), $out += "</span><span>", $line = 34, $out += $escape(buslist.partnerAgencyName), 
-                    $out += "</span><span>外链销售：", $line = 34, $out += $escape(buslist.outOPUserName), 
-                    $out += "</span></p> <p>收客单号：", $line = 35, $out += $escape(buslist.tgOrderNumber), 
-                    $out += "</p> </td> <td> <p>", $line = 38, $out += $escape(buslist.contactMemberName), 
-                    $out += "</p> <p>", $line = 39, $out += $escape(buslist.adultCount), $out += "大", 
-                    $line = 39, $out += $escape(buslist.childCount), $out += "小</p> </td> <td>", $line = 41, 
-                    $out += $escape(buslist.arriveTime), $out += "</td> <td>", $line = 42, $out += $escape(buslist.shift), 
-                    $out += "</td> <td>", $line = 43, $out += $escape(buslist.require), $out += "</td> <td>", 
-                    $line = 44, $out += $escape(bus.arrangeUserName), $out += "</td> <td>", $line = 45, 
+                    }), $out += " </td> ", $line = 26), $out += " ", $line = 27, 0 == index && ($out += ' <td rowspan="', 
+                    $line = 28, $out += $escape(bus.outRemarkList.length), $out += '"> <span >', $line = 29, 
+                    1 == bus.shuttleType ? ($out += " 接团 ", $line = 29) : 2 == bus.shuttleType && ($out += " 送团", 
+                    $line = 29), $out += '</span> <input type="hidden" name="shuttleType" value="', 
+                    $line = 30, 1 == buslist.shuttleType ? ($out += " 1 ", $line = 30) : 2 == buslist.shuttleType && ($out += " 2", 
+                    $line = 30), $out += '" > </td> ', $line = 32), $out += ' <td class="h-touristGroupInfo"> <p>中转单号：', 
+                    $line = 34, $out += $escape(buslist.orderNumber), $out += "</p> <p><span>&lt;", 
+                    $line = 35, $out += $escape(buslist.lineProductName), $out += "&gt;</span></p> <p><span>", 
+                    $line = 36, $out += $escape(buslist.startTime), $out += "</span><span>", $line = 36, 
+                    $out += $escape(buslist.partnerAgencyName), $out += "</span><span>外链销售：", $line = 36, 
+                    $out += $escape(buslist.outOPUserName), $out += "</span></p> <p>收客单号：", $line = 37, 
+                    $out += $escape(buslist.tgOrderNumber), $out += "</p> </td> <td> <p>", $line = 40, 
+                    $out += $escape(buslist.contactMemberName), $out += "</p> <p>", $line = 41, $out += $escape(buslist.adultCount), 
+                    $out += "大", $line = 41, $out += $escape(buslist.childCount), $out += "小</p> </td> <td>", 
+                    $line = 43, $out += $escape(buslist.arriveTime), $out += "</td> <td>", $line = 44, 
+                    $out += $escape(buslist.shift), $out += "</td> <td>", $line = 45, $out += $escape(buslist.require), 
+                    $out += "</td> ", $line = 46, 0 == index && ($out += ' <td rowspan="', $line = 47, 
+                    $out += $escape(bus.outRemarkList.length), $out += '">', $line = 47, $out += $escape(bus.arrangeUserName), 
+                    $out += "</td> ", $line = 48), $out += " ", $line = 49, 0 == index && ($out += ' <td rowspan="', 
+                    $line = 50, $out += $escape(bus.outRemarkList.length), $out += '">', $line = 50, 
                     3 == buslist.status ? ($out += ' <i class="ace-icon fa fa-check green bigger-130"></i> 已完成', 
-                    $line = 47) : ($out += ' <i class="ace-icon fa fa-times red bigger-125"></i>未完成', 
-                    $line = 48), $out += "</td> ", $line = 49, 0 == index && ($out += ' <td rowspan="', 
-                    $line = 50, $out += $escape(bus.outRemarkList.length), $out += '">  <a class="cursor T-arrange-item T-action">  安排</a> <a class="cursor T-view T-action"> <label class="padding-right20">|</label>查看 </td> ', 
-                    $line = 58), $out += " </tr> ", $line = 60;
-                }), $out += " ", $line = 61;
+                    $line = 52) : ($out += ' <i class="ace-icon fa fa-times red bigger-125"></i>未完成', 
+                    $line = 53), $out += " </td> ", $line = 55), $out += " ", $line = 56, 0 == index && ($out += ' <td rowspan="', 
+                    $line = 57, $out += $escape(bus.outRemarkList.length), $out += '">  <a class="cursor T-arrange-item T-action">  安排</a> <a class="cursor T-view T-action"> <label class="padding-right20">|</label>查看 </td> ', 
+                    $line = 65), $out += " </tr> ", $line = 67;
+                }), $out += " ", $line = 68;
             }), $out += ' </tbody> </table> <div class="row pageMode"> <div class="col-xs-6"> <small>共计 ', 
-            $line = 66, $out += $escape(recordSize), $out += ' 条记录</small> </div> <div class="col-xs-6"> <div class="dataTables_paginate paging_simple_numbers T-pagenation"> </div> </div> </div>', 
+            $line = 73, $out += $escape(recordSize), $out += ' 条记录</small> </div> <div class="col-xs-6"> <div class="dataTables_paginate paging_simple_numbers T-pagenation"> </div> </div> </div>', 
             new String($out);
         } catch (e) {
             throw {
@@ -44,7 +49,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<table class="table table-striped table-bordered table-hover T-showHighLight">\r\n    <thead>\r\n        <tr class="bg-blur T-tr-fixed">\r\n            <th>车俩信息</th>\r\n            <th>类型</th>\r\n            <th>中转信息</th>\r\n            <th>客人信息</th>\r\n            <th>抵达时间</th>\r\n            <th>班次</th>\r\n            <th>要求</th>\r\n            <th>安排人</th>\r\n            <th>状态</th>\r\n            <th>操作</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody class="T-busCompleted-list">\r\n        {{each unifyList as bus}}\r\n        {{each bus.outRemarkList as buslist index}}\r\n            <tr data-id = "{{bus.unifyId}}">\r\n            {{if index == 0}}\r\n            <td class="h-touristGroupInfo" rowspan="{{bus.outRemarkList.length}}">\r\n            {{each bus.busList as businfo }}<p>\r\n            <span>{{businfo.busCompanyName}}</span> &nbsp;<span>{{businfo.licenseNumber}}</span>\r\n            </p>{{/each}}\r\n            </td>\r\n            {{/if}}\r\n             <td >\r\n                <span >{{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}</span>\r\n                 <input type="hidden" name="shuttleType" value="{{if buslist.shuttleType == 1}} 1 {{else if buslist.shuttleType == 2}} 2{{/if}}" >\r\n            </td>\r\n            <td class="h-touristGroupInfo">\r\n                <p>中转单号：{{buslist.orderNumber}}</p>\r\n                <p><span>&lt;{{buslist.lineProductName}}&gt;</span></p>\r\n                <p><span>{{buslist.startTime}}</span><span>{{buslist.partnerAgencyName}}</span><span>外链销售：{{buslist.outOPUserName}}</span></p>\r\n                <p>收客单号：{{buslist.tgOrderNumber}}</p>\r\n            </td>\r\n            <td>\r\n                <p>{{buslist.contactMemberName}}</p>\r\n                <p>{{buslist.adultCount}}大{{buslist.childCount}}小</p>\r\n            </td>\r\n            <td>{{buslist.arriveTime}}</td>\r\n            <td>{{buslist.shift}}</td>\r\n            <td>{{buslist.require}}</td>\r\n            <td>{{bus.arrangeUserName}}</td>\r\n            <td>{{if buslist.status == 3}}\r\n            <i class="ace-icon fa fa-check green bigger-130"></i>\r\n            已完成{{else}}\r\n            <i class="ace-icon fa fa-times red bigger-125"></i>未完成{{/if}}</td>\r\n            {{if index == 0}}\r\n            <td rowspan="{{bus.outRemarkList.length}}">\r\n                <!-- <a class="cursor T-action T-inform">通知</a> -->\r\n                <a class="cursor T-arrange-item T-action">\r\n                    <!-- <label class="padding-right20">|</label>  -->\r\n                    安排</a>\r\n                <a class="cursor T-view T-action">\r\n                    <label class="padding-right20">|</label>查看\r\n            </td>\r\n            {{/if}}\r\n        </tr>\r\n            {{/each}}\r\n        {{/each}}\r\n    </tbody>\r\n</table>\r\n<div class="row pageMode">\r\n    <div class="col-xs-6">\r\n        <small>共计 {{recordSize}} 条记录</small>\r\n    </div>\r\n    <div class="col-xs-6">\r\n        <div class="dataTables_paginate paging_simple_numbers T-pagenation">\r\n        </div>\r\n    </div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<table class="table table-striped table-bordered table-hover T-showHighLight">\r\n    <thead>\r\n        <tr class="bg-blur T-tr-fixed">\r\n            <th>车俩信息</th>\r\n            <th>类型</th>\r\n            <th>中转信息</th>\r\n            <th>客人信息</th>\r\n            <th>抵达时间</th>\r\n            <th>班次</th>\r\n            <th>要求</th>\r\n            <th>安排人</th>\r\n            <th>状态</th>\r\n            <th>操作</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody class="T-busCompleted-list">\r\n        {{each unifyList as bus}}\r\n        {{each bus.outRemarkList as buslist index}}\r\n            <tr data-id = "{{bus.unifyId}}">\r\n            {{if index == 0}}\r\n            <td class="h-touristGroupInfo" rowspan="{{bus.outRemarkList.length}}">\r\n            {{each bus.busList as businfo }}<p>\r\n            <span>{{businfo.busCompanyName}}</span> &nbsp;<span>{{businfo.licenseNumber}}</span>\r\n            </p>{{/each}}\r\n            </td>\r\n            {{/if}}\r\n            {{if index == 0}}\r\n             <td rowspan="{{bus.outRemarkList.length}}">\r\n                <span >{{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}</span>\r\n                 <input type="hidden" name="shuttleType" value="{{if buslist.shuttleType == 1}} 1 {{else if buslist.shuttleType == 2}} 2{{/if}}" >\r\n            </td>\r\n            {{/if}}\r\n            <td class="h-touristGroupInfo">\r\n                <p>中转单号：{{buslist.orderNumber}}</p>\r\n                <p><span>&lt;{{buslist.lineProductName}}&gt;</span></p>\r\n                <p><span>{{buslist.startTime}}</span><span>{{buslist.partnerAgencyName}}</span><span>外链销售：{{buslist.outOPUserName}}</span></p>\r\n                <p>收客单号：{{buslist.tgOrderNumber}}</p>\r\n            </td>\r\n            <td>\r\n                <p>{{buslist.contactMemberName}}</p>\r\n                <p>{{buslist.adultCount}}大{{buslist.childCount}}小</p>\r\n            </td>\r\n            <td>{{buslist.arriveTime}}</td>\r\n            <td>{{buslist.shift}}</td>\r\n            <td>{{buslist.require}}</td>\r\n            {{if index == 0}}\r\n            <td rowspan="{{bus.outRemarkList.length}}">{{bus.arrangeUserName}}</td>\r\n            {{/if}}\r\n            {{if index == 0}}\r\n            <td rowspan="{{bus.outRemarkList.length}}">{{if buslist.status == 3}}\r\n            <i class="ace-icon fa fa-check green bigger-130"></i>\r\n            已完成{{else}}\r\n            <i class="ace-icon fa fa-times red bigger-125"></i>未完成{{/if}}\r\n            </td>\r\n            {{/if}}\r\n            {{if index == 0}}\r\n            <td rowspan="{{bus.outRemarkList.length}}">\r\n                <!-- <a class="cursor T-action T-inform">通知</a> -->\r\n                <a class="cursor T-arrange-item T-action">\r\n                    <!-- <label class="padding-right20">|</label>  -->\r\n                    安排</a>\r\n                <a class="cursor T-view T-action">\r\n                    <label class="padding-right20">|</label>查看\r\n            </td>\r\n            {{/if}}\r\n        </tr>\r\n            {{/each}}\r\n        {{/each}}\r\n    </tbody>\r\n</table>\r\n<div class="row pageMode">\r\n    <div class="col-xs-6">\r\n        <small>共计 {{recordSize}} 条记录</small>\r\n    </div>\r\n    <div class="col-xs-6">\r\n        <div class="dataTables_paginate paging_simple_numbers T-pagenation">\r\n        </div>\r\n    </div>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
