@@ -82,7 +82,7 @@
 						<td>
 							<select class="col-xs-12" name="type">
 								<option value="3">中转结算价</option>
-								<option value="8" {{if type == "8"}}selected{{/if}}>酒店费用</option>
+								<option value="8" {{if rs.type == "8"}}selected{{/if}}>酒店费用</option>
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
