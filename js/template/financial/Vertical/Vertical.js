@@ -22,7 +22,7 @@ define(function(require, exports) {
                         ticketList = JSON.parse(ticketList);
                         data.ticketList = ticketList;
                         var html = listTemplate(data);
-                        addTab(menuKey,"地接账务",html);
+                        Tools.addTab(menuKey,"地接账务",html);
 
                         $(".date-picker").datepicker({
                             autoclose: true,
@@ -74,13 +74,13 @@ define(function(require, exports) {
                         //给对账按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-divide").click(function(){
                             var Checking = VerticalChecking();
-                            addTab(menuKey+"-VerticalChecking","地接对账",Checking);
+                            Tools.addTab(menuKey+"-VerticalChecking","地接对账",Checking);
                         
                         });
                         ////给结算按钮绑定事件
                         $("#tab-"+menuKey+"-content  .btn-transfter").click(function(){
                             var Clearing = VerticalClearing();
-                            addTab(menuKey+"-VerticalClearing","地接付款",Clearing);
+                            Tools.addTab(menuKey+"-VerticalClearing","地接付款",Clearing);
 
                         });
 

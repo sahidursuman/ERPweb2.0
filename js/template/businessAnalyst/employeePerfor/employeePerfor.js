@@ -28,7 +28,7 @@ define(function(require, exports) {
     //产品销量页面list
     PerformanceFun.listemployeePerfor = function() {
         var html = listMainTemplate();
-        addTab(menuKey, "员工业绩", html);
+        Tools.addTab(menuKey, "员工业绩", html);
         //初始化页面绑定事件
         PerformanceFun.init_event();
         PerformanceFun.first = true;
@@ -121,14 +121,12 @@ define(function(require, exports) {
                 }
 
                 template = listDeptTemplate;
-                totalFun = PerformanceFun.initFindBusinessGroupTotal;
                 index = 2;
                 break;
             case 3:
                 method = childGroupSearchMethod;
                 delete args.businessGroupId;
                 template = listDeptTemplate;
-                totalFun = PerformanceFun.initFindBusinessGroupTotal;
                 index = 2;
                 break;
             default:
@@ -149,10 +147,25 @@ define(function(require, exports) {
         .done(function(data) {
             if (showDialog(data)) {
                 data.isChildGroup = method === childGroupSearchMethod;
+                //累加数据初始化
+                data.getAdultCount=0;
+                data.getChildCount=0;
+                data.getNotDirectAdultCount=0;
+                data.getNotDirectChildCount=0;
+                data.tripCount=0;
+                data.adultCount=0;
+                data.childCount=0;
+                data.transAdultCount=0;
+                data.transChildCount=0;
+                data.innerAdultCount=0;
+                data.innerChildCount=0;
+                data.orderCount=0;
                 var $container = PerformanceFun.$tab.find('.table-area').children().addClass('hidden')
                 .eq(index).html(template(data)).removeClass('hidden').addClass('hasData');
 
-                totalFun(args);
+                if (!!totalFun) {
+                    totalFun(args);
+                }
                 laypage({
                     cont: $container.find('.T-pagenation'),
                     pages: data.searchParam.totalPage, //总页数
@@ -176,7 +189,7 @@ define(function(require, exports) {
                 data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
             })
             .done(function(data) {
-                var adultCount = data.adultCount || 0,
+                var adultCount = data.adultCount || 0, 
                     childCount = data.childCount || 0;
                 PerformanceFun.$tab.find('.T-totalCount').text(adultCount + "大" + childCount + "小");
             })
