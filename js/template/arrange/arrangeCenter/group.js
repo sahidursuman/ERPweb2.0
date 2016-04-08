@@ -5,31 +5,7 @@
  */
 
 define(function(require, exports) {
-    var ListTemplate = require('./groupView/list'),
-        // ArrangeTemplate = {
-        //     'guide': require('./groupView/arrangeGuide'),
-        //     'insurance': require('./groupView/arrangeInsurance'),
-        //     'bus': require('./groupView/arrangeBus'),
-        //     'hotel': require('./groupView/arrangeHotel'),
-        //     'restaurant': require('./groupView/arrangeRestaurant'),
-        //     'scence': require('./groupView/arrangeScence'),
-        //     'shop': require('./groupView/arrangeShop'),
-        //     'self': require('./groupView/arrangeSelf'),
-        //     'ticket': require('./groupView/arrangeTicket'),
-        //     'other': require('./groupView/arrangeOther'),
-        // },
-        ViewTemplate = {
-            'guide': require('./groupView/viewArrangeGuide'),
-            'insurance': require('./groupView/viewArrangeInsurance'),
-            'bus': require('./groupView/viewArrangeBus'),
-            'hotel': require('./groupView/viewArrangeHotel'),
-            'restaurant': require('./groupView/viewArrangeRestaurant'),
-            'scence': require('./groupView/viewArrangeScence'),
-            'shop': require('./groupView/viewArrangeShop'),
-            'self': require('./groupView/viewArrangeSelf'),
-            'ticket': require('./groupView/viewArrangeTicket'),
-            'other': require('./groupView/viewArrangeOther'),
-        };
+    var ListTemplate = require('./groupView/list');
 
     var GroupArrange = {},
         service = 'v2/singleItemArrange/tripPlanArrange';
@@ -43,7 +19,7 @@ define(function(require, exports) {
     GroupArrange.getList = function($form, page) {
         var args = $form.serializeJson();
 
-        args.item = $form.parent().data('target');
+        args.item = $form.parent().data('item');
         args.pageNo = page || 0;
 
         $.ajax({
