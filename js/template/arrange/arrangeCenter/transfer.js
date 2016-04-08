@@ -436,7 +436,7 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         data.taskSize = data.outRemarkList.length;
-                        console.log(data)
+                        console.log(data);
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -462,6 +462,8 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
+                        data.taskSize = data.outRemarkList.length;
+                        console.log(data)
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -512,7 +514,6 @@ define(function(require, exports) {
             $busplanId.off('click').on('click','.T-del-bus',function() {
                 var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
-                    console.log(outRemarkId)
                     $tr.fadeOut(function(){
                         $that.parents('tr').remove()
                     })
@@ -1752,7 +1753,7 @@ define(function(require, exports) {
             '<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><select class="" name="type"><option value="1">机票</option>' +
             '<option value="2">汽车票</option><option value="3">火车票</option><option value="4">轮船票</option></select></td>' +
-            '<td><input class="col-sm-12" name="startCity" value="" maxlength="20"  type="text" /></td>' +
+            '<td><input class="col-sm-12" name="startingCity" value="" maxlength="20"  type="text" /></td>' +
             '<td><input class="col-sm-12" name="arriveCity" value="" maxlength="20"  type="text" /></td>' +
             '<td><input class="col-sm-12 T-dateTimePicker" name="startTime" value="" type="text" /></td>' +
             '<td><input class="col-sm-12" name="shift" value=""  maxlength="20"  type="text" /></td>' +
