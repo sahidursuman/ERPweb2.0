@@ -731,7 +731,8 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         Transfer.busArrangeIdArray = [];
                         Transfer._refreshList('bus');
-                        Tools.closeTab(busplanId)
+                        Tools.closeTab(busplanId);
+                        Transfer.deleteOutBusIds = [];
                     });
                 }
 
