@@ -878,6 +878,7 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
+                    Count.guide = data.guideArranges;
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
@@ -5912,6 +5913,7 @@ define(function(require, exports){
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
+			console.log(Count.guide)
 		for(var i = 0;i<dataList.length;i++){
 			var guide = {
 				id:dataList[i].id,
