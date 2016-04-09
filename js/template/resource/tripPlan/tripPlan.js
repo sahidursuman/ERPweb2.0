@@ -1491,12 +1491,12 @@ define(function(require, exports) {
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
-		if ($tr.index() === 0) {  // 第一条时，默认选中
+		/*if ($tr.index() === 0) {  // 第一条时，默认选中
 			$tr.find('input[name="isAccountGuide"]')[0].checked = true;
 		} else {
 			// 其他条时，默认隐藏费用项
 			$tr.find('.price').addClass('hidden').text(0);
-		}
+		}*/
 
 		if ($tab.find('.T-status').text() != 0) {
 			$tr.find('[name="isAccountGuide"]').prop('disabled', true)
@@ -3836,7 +3836,7 @@ define(function(require, exports) {
 					});
 				}
 			}
-			for (var i = 1; i < 4; i++) {
+			for (var i = 0; i < 3; i++) {
 				sort($parent.find('td:eq(' + i + ')').find('.T-guideAddTask'))
 			}
 		}
