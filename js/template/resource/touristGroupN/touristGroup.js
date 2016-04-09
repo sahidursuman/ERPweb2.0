@@ -2447,5 +2447,6 @@ define(function(require, exports) {
         }
     };
     exports.init = touristGroup.initModule;
+    exports.viewTouristGroup = touristGroup.touristGroupView;
     //return touristGroup;
 });

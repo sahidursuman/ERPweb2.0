@@ -672,6 +672,7 @@ var modalScripts = {
     'resource_subsection': 'js/template/resource/subsection/subsection.js',
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
     'resource_touristGroup': 'js/template/resource/touristGroupN/touristGroup.js', //游客管理
+    //'resource_touristGroup' : 'js/template/resource/touristGroupN/main.js',//客户订单
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
     'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
@@ -2626,7 +2627,15 @@ KingServices.inlineTemplate = function(source, option) {
  */
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
-
+	$tabPane.on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+		$($(e.target).attr('href')).find('.T-tr-fixed').css({
+			'transform' : 'translateY(0px)',
+			'-webkit-transform' : 'translateY(0px)',
+			'-moz-transform' : 'translateY(0px)',
+			'msTransform' : 'translateY(0px)',
+			'-o-transform' : 'translateY(0px)'
+		});
+	});
 	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
 		var $that = $(this),
