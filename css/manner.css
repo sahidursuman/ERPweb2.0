@@ -2692,7 +2692,7 @@ p#back-top a span {
     text-align: right; 
 }
 
-a.gray span{
+a.gray span, .gray, .gray:hover, .gray:focus{
     color:#bbb;
 }
 
