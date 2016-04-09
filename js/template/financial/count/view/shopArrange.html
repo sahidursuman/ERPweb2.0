@@ -55,7 +55,7 @@
             {{if !!shopArrange.listMap &&shopArrange.listMap.length}}
                 {{each shopArrange.listMap as arrange index}}
                     {{if arrange != null}}
-                        <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" >
+                        <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange">
 
                             <td rowspan="{{arrange.itemList.length}}"><span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
                             
@@ -209,7 +209,8 @@
                             {{each arrange.itemList as itemSet index}}
                             {{if index > 0}}
                             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}"
-                                {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}>
+                                {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}
+                                arrangeType="shopArrange">
                                 <td>
                                     <span class="shopPolicy">
                                         {{itemSet.itemName}}
