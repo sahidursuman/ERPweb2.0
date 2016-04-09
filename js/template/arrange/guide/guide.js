@@ -147,8 +147,9 @@ define(function(require, exports) {
                 start = tmp.endTime;
                 j = 1;
             } // 无安排，使用start、end填充
-
-            tdStr.push((new Array(Tools.getDateDiff(start, end, true) + j)).join('<td></td>'));
+            if(!!tmp){
+                tdStr.push((new Array(Tools.getDateDiff(start, end, true) + j)).join('<td></td>'));
+            }
 
             tdStr.push('</tr>');
         }
