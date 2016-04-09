@@ -59,12 +59,12 @@
 
 		<tr style="background-color:#effef4">
 			<td class="text-bold" {{if isChildGroup}}colspan="2" {{/if}}>合计</td>
-			<td>{{getAdultCount+getChildCount}}</td>
-			<td>{{getNotDirectAdultCount+getNotDirectChildCount}}</td>
+			<td>{{getAdultCount}}大{{getChildCount}}小</td>
+			<td>{{getNotDirectAdultCount}}大{{getNotDirectChildCount}}小</td>
 			<td>{{tripCount}}</td>
-			<td>{{adultCount+childCount}}</td>
-			<td>{{transAdultCount+transChildCount}}</td>
-			<td>{{innerAdultCount+innerChildCount}}</td>
+			<td>{{adultCount}}大{{childCount}}小</td>
+			<td>{{transAdultCount}}大{{transChildCount}}小</td>
+			<td>{{innerAdultCount}}大{{innerChildCount}}小</td>
 			<td>{{orderCount}}</td>
 		</tr>
 	</tbody>
