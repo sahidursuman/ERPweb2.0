@@ -12,39 +12,40 @@
 <div class="overflow-x min-w-1050">
     <table class="table overflow-table table-striped table-bordered table-hover w-1400">
         <thead>
-        <tr>
-            <th class="th-border" colspan="17">消费</th>
-            <th class="th-border" rowspan="2">人数返佣</th>
-            <th class="th-border" colspan="2">社佣</th>
-            <th class="th-border" colspan="2">导佣</th>
-            <th class="th-border" rowspan="2">导游报账备注</th>
-            <th class="th-border" rowspan="2">是否对账</th>
-            
-        </tr>
-        <tr>
-          <th class="th-border"><span class="necessary">*</span>时间</th>
-          <th class="th-border"><span class="necessary">*</span>自费商家</th>
-          <th class="th-border"><span class="necessary">*</span>项目</th>
-          <th class="th-border"><span class="necessary">*</span>单价</th>
-          <th class="th-border"><span class="necessary">*</span>导游</th>
-          <th class="th-border"><span class="necessary">*</span>应收数量</th>
-          <th class="th-border">应收优惠</th>
-          <th class="th-border">应收</th>
-          <th class="th-border">现收</th>
-          <th class="th-border"><span class="necessary">*</span>底价</th>
-          <th class="th-border"><span class="necessary">*</span>应付数量</th>
-          <th class="th-border">优惠</th>
-          <th class="th-border">应付</th>
-          <th class="th-border">已付</th>
-          <th class="th-border">导付</th>
-          <th class="th-border">付款方式</th>
-          <th class="th-border">单据</th>
-          <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border">返佣</th>
-          <th class="th-border"><span class="necessary">*</span>比例%</th>
-          <th class="th-border">返佣</th>
-          
-        </tr></thead>
+            <tr>
+                <th class="th-border" colspan="17">消费</th>
+                <th class="th-border" rowspan="2">人数返佣</th>
+                <th class="th-border" colspan="2">社佣</th>
+                <th class="th-border" colspan="2">导佣</th>
+                <th class="th-border" rowspan="2">导游报账备注</th>
+                <th class="th-border" rowspan="2">是否对账</th>
+                
+            </tr>
+            <tr>
+              <th class="th-border"><span class="necessary">*</span>时间</th>
+              <th class="th-border"><span class="necessary">*</span>自费商家</th>
+              <th class="th-border"><span class="necessary">*</span>项目</th>
+              <th class="th-border"><span class="necessary">*</span>单价</th>
+              <th class="th-border"><span class="necessary">*</span>导游</th>
+              <th class="th-border"><span class="necessary">*</span>应收数量</th>
+              <th class="th-border">应收优惠</th>
+              <th class="th-border">应收</th>
+              <th class="th-border">现收</th>
+              <th class="th-border"><span class="necessary">*</span>底价</th>
+              <th class="th-border"><span class="necessary">*</span>应付数量</th>
+              <th class="th-border">优惠</th>
+              <th class="th-border">应付</th>
+              <th class="th-border">已付</th>
+              <th class="th-border">导付</th>
+              <th class="th-border">付款方式</th>
+              <th class="th-border">单据</th>
+              <th class="th-border"><span class="necessary">*</span>比例%</th>
+              <th class="th-border">返佣</th>
+              <th class="th-border"><span class="necessary">*</span>比例%</th>
+              <th class="th-border">返佣</th>
+              
+            </tr>
+        </thead>
         <tbody class="T-count-selfPay">
         {{if selfpayArrange != null}}
             {{if selfpayArrange.listMap.length}}
@@ -78,10 +79,14 @@
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">{{rs.guideName}}</span>
                                                     <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                                                    {{if itemSet.isConfirmAccount != 1}}
+                                                {{if itemSet.isConfirmAccount != 1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
+                                                {{else}}
+                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
                                                 {{/if}}
                                                 </div>
                                             {{/each}}
@@ -96,6 +101,10 @@
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
+                                                {{else}}
+                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
                                                 {{/if}}
                                             </div>
                                         {{/if}}
@@ -466,11 +475,15 @@
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">{{rs.guideName}}</span>
                                                     <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                                                    {{if itemSet.isConfirmAccount != 1}}
-                                                        <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
-                                                            <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                        </button><!-- 删除导游 -->
-                                                    {{/if}}
+                                                {{if itemSet.isConfirmAccount != 1}}
+                                                    <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button><!-- 删除导游 -->
+                                                {{else}}
+                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
+                                                {{/if}}
                                                 </div>
                                             {{/each}}
                                         {{else}}
@@ -485,6 +498,10 @@
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
+                                                {{else}}
+                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
                                                 {{/if}}
                                             </div>
                                         {{/if}}

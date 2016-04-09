@@ -40,15 +40,25 @@
                             <span>{{otherInCome.realPrice}}</span>
                             <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.realPrice}}" old="{{otherInCome.realPrice}}"/>
                         {{else}}
-                            <input  type="text" class="F-float F-money w-80" 
-                            name="price" value="{{otherInCome.realPrice}}"  maxlength="11"
-                            {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            {{if editStatus == 2}}
+                                <span>{{otherInCome.realPrice}}</span>
+                                <input type="hidden" name="price" value="{{otherInCome.realPrice}}"/>
+                            {{else}}
+                                <input  type="text" class="F-float F-money w-80" 
+                                name="price" value="{{otherInCome.realPrice}}"  maxlength="11"
+                                {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            {{/if}}
                         {{/if}}
                     </td><!-- 单价 -->
 
                     <td>
-                        <input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.realCount}}"
+                        {{if editStatus == 2}}
+                            <span>{{otherInCome.realCount}}</span>
+                            <input type="hidden" name="realCount" value="{{otherInCome.realCount}}"/>
+                        {{else}}
+                            <input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.realCount}}"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                        {{/if}}
                     </td><!-- 数量 -->
 
                     <td><input name="needIncomeMoney" value="{{otherInCome.needIncomeMoney}}" readonly="readonly" class="w-80 F-float F-money" /></td><!-- 金额 -->
@@ -67,7 +77,7 @@
                     </td>
 
                     <td><input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
-                    &nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>
+                    {{if editStatus !=2}}&nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>{{/if}}
                     </td>
                 </tr>
             {{/each}}
