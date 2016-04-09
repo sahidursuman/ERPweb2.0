@@ -3817,9 +3817,9 @@ define(function(require, exports) {
 				startTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="startTime" class="datepicker" value=""></div>',
 				endTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="endTime" class="datepicker" value=""></div>',
 				task = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"> <select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select> <label style="float:right; padding-top:0px;"> <button class="btn btn-danger btn-sm btn-white T-del T-guideBtn"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i> </button> </label> </div>';
-			$parent.find('td:eq(1)').append(startTime);
-			$parent.find('td:eq(2)').append(endTime);
-			$parent.find('td:eq(3)').append(task);
+			$parent.find('td:eq(0)').append(startTime);
+			$parent.find('td:eq(1)').append(endTime);
+			$parent.find('td:eq(2)').append(task);
 			Tools.setDatePicker($parent.find('.T-guideAddTask').filter(function() {
 				return $(this).data('index') == index;
 			}).find('.datepicker'), true);
