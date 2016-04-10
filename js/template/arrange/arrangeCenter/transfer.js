@@ -1518,6 +1518,7 @@ define(function(require, exports) {
                         var tab_key = tabKey + '_other';
                         if (Tools.addTab(tab_key, '其他安排', OtherArrangeTemplate(data))) {
                             Transfer._initOtherArrange($('#tab-' + tab_key + '-content'));
+                            //var $otherArrangeTab = 
                         }
                     }
                 }
@@ -1651,10 +1652,15 @@ define(function(require, exports) {
 
                     Transfer.calculation($(this).closest('tr'));
                 });
-
-            $tab.find('.T-submit').on('click', function(event) {
+            
+            $tab.on('click','.T-submit',function(event){
                 event.preventDefault();
                 Transfer.otherSubmit($tab);
+            }).
+            on('click','.T-cancel',function(){
+                var tab = tabKey + '_other';
+                //关闭其他安排
+                Tools.closeTab(tab);
             });
         }
         //添加车安排
