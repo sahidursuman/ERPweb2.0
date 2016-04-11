@@ -30,7 +30,10 @@ define(function(require, exports) {
             installCheckData : [],
             delBusTransferId : [],
             delHotelTransferId : [],
-            deleteOutBusIds : []
+            deleteOutBusIds : [],
+            deleteOutOtherIds : [],//删除其他缓存id
+            deleteOutRestaurantIds : [],//删除餐id
+            deleteOutTicketIds : []//删除票务
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
@@ -1649,10 +1652,20 @@ define(function(require, exports) {
 
                     $that.trigger('click');
                 })
-                .on('click', '.T-arrange-delete', function(event) {
+                .on('click', '.T-restaurant-del', function(event) {
                     event.preventDefault();
-                    // 删除
-                    Transfer.deleteArrange($(this));
+                    // 删除餐
+                    Transfer.deleteRestaurant($(this));
+                })
+                .on('click', '.T-ticket-del', function(event) {
+                    event.preventDefault();
+                    // 删除票
+                    Transfer.deleteTicket($(this));
+                })
+                .on('click', '.T-Other-del', function(event) {
+                    event.preventDefault();
+                    // 删除它
+                    Transfer.deleteOther($(this));
                 })
                 .on('change', '[name="price"], [name="memberCount"], [name="reduceMoney"], [name="reduceMoney"]', function(event) {
                     event.preventDefault();
@@ -1747,7 +1760,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>' +
             '<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>' +
-            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="restaurantStandardId" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />' +
+            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />' +
             '</td><td><input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
@@ -1835,11 +1848,17 @@ define(function(require, exports) {
 
         args.outRemarkId = $tab.find('input[name="outRemarkId"]').val();
 
+        args.deleteOutRestaurantIds = Transfer.deleteOutRestaurantIds.join(',');
+
+        args.deleteOutTicketIds = Transfer.deleteOutTicketIds.join(',');
+
+        args.deleteOutOtherIds = Transfer.deleteOutOtherIds.join(',');
+
         $.ajax({
                 url: KingServices.build_url(service_name, 'saveOutOtherArrange'),
                 type: 'post',
                 dataType: 'json',
-                data: args,
+                data:args
             })
             .done(function(res) {
                 if (showDialog(res)) {
@@ -1848,13 +1867,16 @@ define(function(require, exports) {
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                         Transfer._refreshList('other');
                     });
+                    Transfer.deleteOutRestaurantIds = [];
+                    Transfer.deleteOutTicketIds = [];
+                    Transfer.deleteOutOtherIds = [];
                 }
             });
 
     };
 
     /**
-     * 删除安排
+     * 删除车安排
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
@@ -1864,6 +1886,42 @@ define(function(require, exports) {
             $that.parents('tr').remove()
         })
         Transfer.deleteOutBusIds.push(id);
+    };
+    /**
+     * 删除餐安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteRestaurant = function($obj) {
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove()
+        })
+        Transfer.deleteOutRestaurantIds.push(id);
+    };
+    /**
+     * 删除票安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteTicket = function($obj) {
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove()
+        })
+        Transfer.deleteOutTicketIds.push(id);
+    };
+    /**
+     * 删除它安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteOther = function($obj) {
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove()
+        })
+        Transfer.deleteOutOtherIds.push(id);
     };
     Transfer.setDate = function($container) {
         // 绑定日期
