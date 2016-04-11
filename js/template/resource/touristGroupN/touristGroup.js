@@ -2154,6 +2154,9 @@ define(function(require, exports) {
                         receiveHotel : receiveHotel,
                         receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
                     };
+                if($.isEmptyObject(receiveTripData.receiveHotel.hotel)){
+                    delete receiveTripData.receiveHotel.hotel;
+                }
                 if($.isEmptyObject(receiveTripData.receiveBus)){
                     receiveTripData.receiveBus = null;
                 }
