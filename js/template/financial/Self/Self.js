@@ -33,10 +33,6 @@ define(function(require, exports) {
             endDate = Self.$searchArea.find("input[name=endDate]").val();
             accountStatus = Self.$searchArea.find(".T-finance-status").find("button").data("value");
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
         selfPayName = (selfPayName == "全部") ? "" : selfPayName;
 
         Self.searchData = {
@@ -46,7 +42,7 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: Self.$searchArea ? Self.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "listFinancialSummaryOfSelfPay"),
@@ -55,7 +51,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.searchParam.accountStatus = Self.searchData.accountStatus;
+                    data.searchParam = Self.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);
@@ -142,6 +138,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.pageNo = args.pageNo || 0;
         args.sortType = "auto";
@@ -229,8 +227,11 @@ define(function(require, exports) {
                     startTime: $tab.find('input[name=startDate]').val(),
                     endTime: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
-                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                    startCheck : $tab.find('.T-checkStartTime').val(),
+                    endCheck : $tab.find('.T-checkEndTime').val()
                 };
+            console.log(argsData);
             FinancialService.exportReport(argsData,"exportSelfPayFinancial");
         });
 
@@ -250,10 +251,12 @@ define(function(require, exports) {
             args.selfPayName = $tab.find('input[name="selfPayName"]').val();
             args.selfPayId = $tab.find('input[name="selfPayId"]').val();
             args.tripInfo = $tab.find("input[name=tripInfo]").val();
-            args.startDate = $tab.find("input[name=startDate]").val();
-            args.endDate = $tab.find("input[name=endDate]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.pageNo = args.pageNo || 0;
         args.sortType = "auto";
@@ -379,8 +382,10 @@ define(function(require, exports) {
                         payRemark : $tab.find('input[name=sumPayRemark]').val(),
                         accountTimeStart :startDate,
                         accountTimeEnd : endDate,
-                        tripInfo : $tab.find('select[name=tripInfo]').val(),
-                        accountStatus : args.accountStatus
+                        tripInfo : $tab.find('input[name=tripInfo]').val(),
+                        accountStatus : args.accountStatus,
+                        startCheck : $tab.find('.T-checkStartTime').val(),
+                        endCheck : $tab.find('.T-checkEndTime').val()
                     },
                     success:function(data){
                         if(showDialog(data)){
@@ -558,7 +563,8 @@ define(function(require, exports) {
 
     Self.init_event = function(args,$tab,option) {
         var validator = new FinRule(Self.showBtnFlag ? 3 : 1).check($tab);
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
         // 监听修改
         $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {

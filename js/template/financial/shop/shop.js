@@ -35,14 +35,16 @@ define(function(require, exports) {
      */
     FinShop.getList = function(page, $tab) {
         var args = FinancialService.getInitDate();
-            args.accountStatus = 2;
+        args.accountStatus = 2;
+        args.sortType = "desc";
         args.pageNo = page || 0;
         if (!!$tab) {
             args = {
                 pageNo: (page || 0),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
-                accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+                accountStatus : $tab.find(".T-finance-status").find("button").data("value"),
+                sortType : $tab.find("select[name=orderBy]").val()
             }
             var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;
@@ -216,6 +218,8 @@ define(function(require, exports) {
             args.tripMessage = $tab.find('.T-search-trip').val();
             args.accountStatus = $tab.find('[name=accountStatus]').val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = 'accountTime';
         args.order = 'asc';
@@ -335,8 +339,8 @@ define(function(require, exports) {
             args.pageNo = 0;
             FinShop.initOperationList(args, type, $tab);
         });
-        var $datepicker = $searchArea.find('.datepicker');
-        Tools.setDatePicker($datepicker, true);
+        Tools.setDatePicker($searchArea.find(".T-time"), true);
+        Tools.setDatePicker($searchArea.find(".T-checkTime"), true);
         var operationMenuKey = settMenuKey,
             saveData = type ? FinShop.saveSettlement : FinShop.saveChecking;
 
@@ -411,7 +415,9 @@ define(function(require, exports) {
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
                     accountStatus : args.accountStatus,
-                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                    startCheck : $tab.find('.T-checkStartTime').val(),
+                    endCheck : $tab.find('.T-checkEndTime').val()
                 };
                 FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });
@@ -570,6 +576,8 @@ define(function(require, exports) {
             args.sumTemporaryIncomeMoney = args.sumCurrentPayMoney
             args.tripMessage = $tab.find('.T-search-trip').val();
             args.accountStatus = $tab.find('input[name=accountStatus]').val();
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
             delete args.id;
             delete args.sumCurrentPayMoney;
 
@@ -626,7 +634,9 @@ define(function(require, exports) {
                 accountStatus : $tab.find('input[name=accountStatus]').val(),
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 sortType : "accountTime",
-                order : "asc"
+                order : "asc",
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
 
             $.ajax({
