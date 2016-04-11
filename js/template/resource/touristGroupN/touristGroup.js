@@ -1209,7 +1209,7 @@ define(function(require, exports) {
 		    success:function(obj, index){
 		    	var $layer = $(obj), $plan = $layer.find('.T-action-plan');
                 var validate = touristGroup.bindLayerCommonFeeEvents($layer, index, optionType);
-                $layer.find('.T-action-plan').on('change', 'input[type="checkbox"]', function(event){
+                $plan.on('change', 'input[type="checkbox"]', function(event){
                     event.preventDefault();
                     var $that = $(this), 
                         $label = $that.closest('label'),
@@ -1222,6 +1222,7 @@ define(function(require, exports) {
                     }else if(type === "other"){
                         $layer.find('.T-ask-other').toggleClass('hidden');
                     }
+                    rule.needUpdate(validate);
                 });
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
