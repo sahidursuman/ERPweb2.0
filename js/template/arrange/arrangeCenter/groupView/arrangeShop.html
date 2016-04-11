@@ -1,0 +1,85 @@
+<div class=" ui-sortable-handle">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-shopping-cart"></i> 购物安排
+        <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addShop">
+            <i class="ace-icon fa fa-plus"></i>
+            新增
+        </button>
+    </h5> {{if basicInfo.oldShopRequire}}
+    <p class="requirementsPlan">原购物计划要求：{{basicInfo.oldShopRequire}}</p>{{/if}} {{if basicInfo.nowShopRequire}}
+    <p class="requirementsPlan">现购物计划要求：{{basicInfo.nowShopRequire}}</p>{{/if}}
+    <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+        <colgroup>
+            <col style="width:110px">
+            <col style="width:150px;">
+            <col style="width:90px;">
+            <col style="width:110px;">
+            <col style="width:160px;">
+            <col>
+            <col style="width:60px;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                <th class="th-border"><span class="necessary">*</span>购物店</th>
+                <th class="th-border">联系人</th>
+                <th class="th-border">联系电话</th>
+                <th class="th-border">商品名</th>
+                <th class="th-border">备注</th>
+                <th class="th-border">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each shopList as shop}} {{if shop != "[]" || shop != null}}
+            <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}">
+                <td class="T-whichDaysContainer" value="{{shop.whichDay}}"></td>
+                <td>
+                    <div class="col-sm-12">
+                        <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}" />
+                        <input type="text" name="name" class="col-sm-12 T-chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" />
+                        <input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" />
+                        <span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店">
+                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                            </span>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.managerName}}{{/if}}" />
+                </td>
+                <td>
+                    <input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12" value="{{if shop.shop != null}}{{shop.shop.mobileNumber}}{{/if}}" />
+                </td>
+                <td>
+                    {{if !!shop.shopArrangeItemSet}} {{if shop.shopArrangeItemSet.length > 0}} {{each shop.shopArrangeItemSet as rs index}}
+                    <div data-entity-id="{{rs.id}}" {{if index> 0}}class="mar-t-10"{{/if}}>
+                        <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
+                        <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}" />
+                        <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
+                    </div>
+                    {{/each}} {{else}}
+                    <div data-entity-id="">
+                        <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                        <input type="hidden" name="shopPolicyId" value="" />
+                        <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                    </div>
+                    {{/if}} {{else}}
+                    <div data-entity-id="">
+                        <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                        <input type="hidden" name="shopPolicyId" value="" />
+                        <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                    </div>
+                    {{/if}}
+                </td>
+                <td>
+                    <input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" />
+                </td>
+                <td>
+                    <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" data-entity-ispayed="{{shop.financialMoney}}" title="删除">
+                            删除
+                        </a>
+                </td>
+            </tr>
+            {{/if}} {{/each}}
+        </tbody>
+    </table>
+</div>

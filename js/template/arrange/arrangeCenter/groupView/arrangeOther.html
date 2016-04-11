@@ -1,0 +1,90 @@
+<div class=" ui-sortable-handle">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-smile-o"></i> 其它安排
+        <a href="javascript:void(0)" class="">
+        <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addOther">
+            <i class="ace-icon fa fa-plus"></i>
+            新增
+        </button>
+        </a>
+    </h5> {{if basicInfo.oldOtherRequire}}
+    <p class="requirementsPlan">原其它计划要求：{{basicInfo.oldOtherRequire}}</p>{{/if}} {{if basicInfo.nowOtherRequire}}
+    <p class="requirementsPlan">现其它计划要求：{{basicInfo.nowOtherRequire}}</p>{{/if}}
+    <div class="overflow-x min-w-1050">
+        <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1400">
+            <colgroup>
+                <col style="width:110px">
+                <col style="width:120px;">
+                <col style="width:100px;">
+                <col style="width:110px;">
+                <col style="width:80px">
+                <col style="width:80px">
+                <col style="width:80px">
+                <col style="width:80px">
+                <col style="width:80px">
+                <col style="width:150px">
+                <col>
+                <col style="width:60px;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                    <th class="th-border"><span class="necessary">*</span>项目</th>
+                    <th class="th-border">联系人</th>
+                    <th class="th-border">联系电话</th>
+                    <th class="th-border" style="width: 77px;">单价</th>
+                    <th class="th-border" style="width: 77px;">数量</th>
+                    <th class="th-border" style="width: 77px;">优惠</th>
+                    <th class="th-border" style="width: 77px;">应付</th>
+                    <th class="th-border" style="width: 77px;">预付款</th>
+                    <th class="th-border" style="width: 77px;">计划导付</th>
+                    <th class="th-border">备注</th>
+                    <th class="th-border">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each otherList as other}} {{if other != "[]" || other != null}}
+                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}">
+                    <td class="T-whichDaysContainer" value="{{other.whichDay}}"></td>
+                    <td>
+                        <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}" />
+                        <input type="text" maxlength="32" name="name" class="col-sm-12  T-other-name" value="{{other.name}}" />
+                    </td>
+                    <td>
+                        <input type="text" name="managerName" maxlength="332" class="col-sm-12" value="{{other.managerName}}" />
+                    </td>
+                    <td>
+                        <input type="text" name="mobileNumber" class="col-sm-12" value="{{other.mobileNumber}}" maxlength="11" />
+                    </td>
+                    <td>
+                        <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="6" />
+                    </td>
+                    <td>
+                        <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{other.memberCount}}" maxlength="8" />
+                    </td>
+                    <td>
+                        <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{other.reduceMoney}}" maxlength="9" />
+                    </td>
+                    <td>
+                        <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{other.needPayMoney}}" maxlength="9" />
+                    </td>
+                    <td>
+                        <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" />
+                    </td>
+                    <td class="inline-flex">{{#other.payType | getPlanPayTypeOption}}
+                        <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" />
+                    </td>
+                    <td>
+                        <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" />
+                    </td>
+                    <td>
+                        <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{other.financialMoney}}" data-entity-name="other" title="删除">
+                                删除
+                            </a>
+                    </td>
+                </tr>
+                {{/if}} {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
