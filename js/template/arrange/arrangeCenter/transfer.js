@@ -469,7 +469,7 @@ define(function(require, exports) {
                         $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId, outRemarkList.outRemarkId, outRemarkList.shuttleType); //车安排事件
-                        Transfer.busArrangeIdArray = []
+                        
                     }
                 }
             })
