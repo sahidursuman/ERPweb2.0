@@ -139,6 +139,7 @@ define(function(require, exports) {
             args.operateId = $tab.find("input[name=operateId]").val();
             args.operateName = $tab.find("input[name=operateName]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.contactInfo = $tab.find("input[name=contactInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
@@ -265,6 +266,7 @@ define(function(require, exports) {
                     endDate: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
                     orderNumber : $tab.find("input[name=orderNumber]").val(),
+                    contactInfo : $tab.find("input[name=contactInfo]").val(),
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
@@ -302,6 +304,7 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.contactInfo = $tab.find("input[name=contactInfo]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }

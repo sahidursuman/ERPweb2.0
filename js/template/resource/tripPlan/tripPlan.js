@@ -1467,7 +1467,7 @@ define(function(require, exports) {
 	 */
 	tripPlan.addGuide = function($btn, validator, $tab) {
 		var $tbody = $btn.closest('.ui-sortable-handle').find('tbody'),
-			html = '<tr> <td><input type="radio" name="isAccountGuide"></td>'
+			html = '<tr>'
 			+'<td class="feild-relative"><div class="T-guideAddTask" data-index="0"><input type="text" name="startTime" class="datepicker"></div></td>'
 			+'<td><div class="T-guideAddTask" data-index="0"><input type="text" name="endTime" class="datepicker"></div></td>'
 			+'<td><div class="T-guideAddTask mar-t-5" data-index="0"><select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select>'
@@ -1477,7 +1477,6 @@ define(function(require, exports) {
 			+'<td><input type="text" name="mobileNumber" maxlength="32" readonly="readonly" class="col-sm-12"></td>'
 			+'<td><input type="text" name="price" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
 			+'<td><input type="text" name="manageFee" class="col-sm-12 input-success F-float F-money" maxlength="9"></td>'
-            +'<td><span class="price F-float F-money"></span></td>'
             +'<td><input type="text" name="guidePlanPreMoney" /></td>'
 			+'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"></td>'
 			+'<td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除"> 删除 </a> </td> </tr>  ',
@@ -1492,12 +1491,12 @@ define(function(require, exports) {
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
-		if ($tr.index() === 0) {  // 第一条时，默认选中
+		/*if ($tr.index() === 0) {  // 第一条时，默认选中
 			$tr.find('input[name="isAccountGuide"]')[0].checked = true;
 		} else {
 			// 其他条时，默认隐藏费用项
 			$tr.find('.price').addClass('hidden').text(0);
-		}
+		}*/
 
 		if ($tab.find('.T-status').text() != 0) {
 			$tr.find('[name="isAccountGuide"]').prop('disabled', true)
@@ -3817,9 +3816,9 @@ define(function(require, exports) {
 				startTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="startTime" class="datepicker" value=""></div>',
 				endTime = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"><input type="text" name="endTime" class="datepicker" value=""></div>',
 				task = '<div class="T-guideAddTask mar-t-10" data-index="'+index+'"> <select name="taskType"><option value="0" selected="">全程</option><option value="1">接机</option><option value="2">送机</option><option value="3">前段</option><option value="4">中段</option><option value="5">后段</option></select> <label style="float:right; padding-top:0px;"> <button class="btn btn-danger btn-sm btn-white T-del T-guideBtn"> <i class="ace-icon fa fa-minus bigger-110 icon-only"></i> </button> </label> </div>';
-			$parent.find('td:eq(1)').append(startTime);
-			$parent.find('td:eq(2)').append(endTime);
-			$parent.find('td:eq(3)').append(task);
+			$parent.find('td:eq(0)').append(startTime);
+			$parent.find('td:eq(1)').append(endTime);
+			$parent.find('td:eq(2)').append(task);
 			Tools.setDatePicker($parent.find('.T-guideAddTask').filter(function() {
 				return $(this).data('index') == index;
 			}).find('.datepicker'), true);
@@ -3837,7 +3836,7 @@ define(function(require, exports) {
 					});
 				}
 			}
-			for (var i = 1; i < 4; i++) {
+			for (var i = 0; i < 3; i++) {
 				sort($parent.find('td:eq(' + i + ')').find('.T-guideAddTask'))
 			}
 		}

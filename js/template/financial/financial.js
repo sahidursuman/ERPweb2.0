@@ -47,6 +47,7 @@ FinancialService.initPayEvent = function($container,rule)  {
             $container.find('input[name=card-id]').val('');
             $card.val('');
         };
+        $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
     }).trigger('change');
 };
 
