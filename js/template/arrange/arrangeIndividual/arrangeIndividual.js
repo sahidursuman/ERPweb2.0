@@ -205,6 +205,24 @@ define(function(require, exports) {
             };
 
         });
+        //全选功能
+        $visitorObj.find('.T-checkedAll').off('change').on('change', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that=$(this),$trList=arrangeIndividual.$tab.find('tbody').children('tr');
+            if ($that.is(':checked')) {
+                // statement
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", true); 
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            } else {
+                $trList.each(function(i) {
+                    $trList.eq(i).find('.T-cheked').prop("checked", false);
+                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
+                });
+            }
+        });
     };
 
     /**
@@ -226,25 +244,6 @@ define(function(require, exports) {
                 });
             }
         };
-
-        //全选功能
-        $visitorObj.find('.T-checkedAll').off('change').on('change', function(event) {
-            event.preventDefault();
-            /* Act on the event */
-            var $that=$(this),$trList=arrangeIndividual.$tab.find('tbody').children('tr');
-            if ($that.is(':checked')) {
-                // statement
-                $trList.each(function(i) {
-                    $trList.eq(i).find('.T-cheked').prop("checked", true); 
-                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
-                });
-            } else {
-                $trList.each(function(i) {
-                    $trList.eq(i).find('.T-cheked').prop("checked", false);
-                    arrangeIndividual.addTouristGroupMerge($trList.eq(i).find('.T-cheked'));
-                });
-            }
-        });
     };
 
     /**
@@ -473,7 +472,7 @@ define(function(require, exports) {
         });
     };
 
-    /**
+     /**
      * addTouristGroupMerge 散拼信息
      */
     arrangeIndividual.addTouristGroupMerge = function($that) {
@@ -481,9 +480,10 @@ define(function(require, exports) {
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
             //$that = $(this),
             $parents = $that.closest('tr'),
-            memberCount = $parents.attr("data-memberCount");
+            memberCount = $parents.attr("data-entity-memberCount");
         //计算已选人数
         arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab);
+
         if (memberCount == 0) {
             $(this).prop("checked", false);
             showMessageDialog($("#confirm-dialog-message"), "未分团人数为0，不能加入并团选择");
@@ -509,27 +509,17 @@ define(function(require, exports) {
                 };
             arrangeIndividual.touristGroupMergeData.touristGroupMergeList.push(touristGroupMerge);
             arrangeIndividual.touristGroupId.push(touristGroupIds);
+
         } else {
-<<<<<<< HEAD
-            var touristGroupMergeList = arrangeIndividual.touristGroupMergeData.touristGroupMergeList;
-            if (touristGroupMergeList.length > 0) {
-                for (var i = 0; i < touristGroupMergeList.length; i++) {
-                    if (touristGroupMergeList[i].lineProductId == lineProductId && touristGroupMergeList[i].startTime == startTime) {
-                        touristGroupMergeList.splice(i, 1);
-                        break;
-                    }
-=======
             console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
             //若取消选中状态---用于生成计划查询数组
             arrangeIndividual.removeTouristGroupMergeData(lineProductId, startTime);
             //移除取消分页选中效果
             arrangeIndividual.removeTouristGroupId(touristGroupId);
-
         }
-
     };
 
-    /**
+      /**
      * removeTouristGroupMergeData 删除散拼
      * @param  {[type]} $merge        [description]
      * @param  {[type]} lineProductId [description]
@@ -543,14 +533,21 @@ define(function(require, exports) {
                 if (touristGroupMergeList[i].lineProductId == lineProductId && touristGroupMergeList[i].startTime == startTime) {
                     touristGroupMergeList.splice(i, 1);
                     break;
->>>>>>> remotes/origin/master
                 }
             }
-            for (var i = 0; i < arrangeIndividual.touristGroupId.length; i++) {
-                if (arrangeIndividual.touristGroupId[i].touristGroupId == touristGroupId) {
-                    arrangeIndividual.touristGroupId.splice(i, 1);
-                    break;
-                }
+        }
+    };
+
+    /**
+     * removeTouristGroupId 移除选中的小组Id
+     * @param  {[type]} touristGroupId 
+     * @return {[type]}
+     */
+    arrangeIndividual.removeTouristGroupId = function(touristGroupId) {
+        for (var i = 0; i < arrangeIndividual.touristGroupId.length; i++) {
+            if (arrangeIndividual.touristGroupId[i].touristGroupId == touristGroupId) {
+                arrangeIndividual.touristGroupId.splice(i, 1);
+                break;
             }
         }
     };
