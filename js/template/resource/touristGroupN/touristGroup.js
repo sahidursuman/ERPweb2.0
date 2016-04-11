@@ -971,6 +971,8 @@ define(function(require, exports) {
         $.extend(data, moneyData);
         if(optionType===1){
             html = T.viewMoney(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateMoney(data);
@@ -1054,6 +1056,8 @@ define(function(require, exports) {
         }
         if(optionType === 1){
             html = T.viewBus(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateBus(data);
@@ -1119,6 +1123,8 @@ define(function(require, exports) {
         data.type = type;
         if(optionType === 1){
             html = T.viewHotel(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateHotel(data);
@@ -1194,6 +1200,8 @@ define(function(require, exports) {
         }
         if(optionType === 1){
             html = T.viewOther(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
         }else{
             html = T.updateOther(data);
