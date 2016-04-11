@@ -878,7 +878,6 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
-                    Count.guide = data.guideArranges;
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
                     Count.guide = data.guideArranges;
 					var html = updateTemplate(tmp);
@@ -3029,7 +3028,7 @@ define(function(require, exports){
 			var $bodyObj = $parentObj.find('.T-main-table');
 			var shopRebateMoney = 0;
 			var $mainTr = $parentObj.find('.T-count-otherIn');
-			$mainTr.find('input[name=needIncomeMoney]').each(function() {
+			$mainTr.find('input[name=realneedPayMoney]').each(function() {
 				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
 				shopRebateMoney += totalSum;
 			});
@@ -3050,7 +3049,7 @@ define(function(require, exports){
 			'<td><input type="text" name="title" class="w-80"/></td>'+
 			'<td><input type="text" name="price" class="w-80"/></td>'+
 			'<td><input type="text" name="count" class="w-50"/></td>'+
-			'<td><input name="needIncomeMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
 			'<td>'+
 				'<input name="guideArrangeId" type="hidden" />'+
 	            '<input name="guideName"  type="text" class="w-80"/>'+
@@ -3558,13 +3557,17 @@ define(function(require, exports){
 			reduceMoney = Count.changeTwoDecimal($tr.find('[name=realReduceMoney]').val()),
 			sumCount = 0,
 			arrangeType = $tr.attr('arrangeType'),
-			sumPay = 0;
+			sumPay = 0,
+			realCount = 0;
 		guideRealCount.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumCount += sum
 		});
-		$tr.find('input[name=realCount]').val(sumCount);
-		sumPay = parseFloat(sumCount*price-reduceMoney);
+		if(sumCount != 0){
+			$tr.find('input[name=realCount]').val(sumCount);
+		};
+		realCount = $tr.find('input[name=realCount]').val();
+		sumPay = parseFloat(realCount*price-reduceMoney);
 		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
 			$tr.find('.realNeedPayMoney').text(sumPay);
 			$tr.find('[name=realNeedPayMoney]').val(sumPay);
@@ -5242,7 +5245,8 @@ define(function(require, exports){
 		$tr = $otherInObj.find('tr');
 		$tr.each(function(){
 			var title = $(this).find('input[name="title"]').val(),
-				guideArrangeId = '';
+				guideArrangeId = '',
+				whichDay = $(this).find('[name="whichDay"]').val();
 			if(!!$(this).find('.title').text()){
 				title = $(this).find('.title').text();
 			};
@@ -5262,6 +5266,7 @@ define(function(require, exports){
             }else{
                 var otherIn = {
 	                id:'',
+	                whichDay:whichDay,
 	                title:title,
 	                price:$(this).find('input[name="price"]').val(),
 	                guideArrangeId:guideArrangeId,
@@ -5914,7 +5919,6 @@ define(function(require, exports){
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
-			console.log(Count.guide)
 		for(var i = 0;i<dataList.length;i++){
 			var guide = {
 				id:dataList[i].id,
