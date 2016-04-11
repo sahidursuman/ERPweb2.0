@@ -200,7 +200,6 @@
      </colgroup>
     <thead>
     <tr>
-        <th class="th-border">指定报账导游</th>
         <th class="th-border">开始日期</th>
         <th class="th-border">结束日期</th>
         <th class="th-border">任务</th>
@@ -215,7 +214,6 @@
         {{each guideList as guide}}
         {{if guide != "[]" || guide != null}}
             <tr data-entity-arrangeid={{guide.id}} >
-                <td><input type="radio" name='isAccountGuide' disabled="disabled"  {{if guide.isAccountGuide == 1}} checked="checked" {{/if}}></td>
                 <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.sTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
                 <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.eTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
                 <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{#task.tType | getTaskDesc}}{{/each}}</p></td>
