@@ -288,7 +288,7 @@ define(function(require, exports) {
                 ]
             }];
 
-            if($obj.find('.T-inner-turn').length > 0){
+            if($obj.find('.T-abversion').val() == "1"){
                 settings.push({
                     //责任部门
                     $ele: $obj.find('input[name="dutyDepartmentName"]'),
@@ -310,7 +310,7 @@ define(function(require, exports) {
                     ]
                 });
             }
-            if($obj.find('.T-outer-turn') > 0){
+            if($obj.find('.T-abversion').val() == "2"){
                 settings.push({
                     //计划现收
                     $ele: $obj.find('input[name="transferPartnerAgency"]'),
