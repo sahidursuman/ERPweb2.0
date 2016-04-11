@@ -3,7 +3,6 @@
         <input type="hidden" name="outRemarkId" value="{{outRemark.outRemarkId}}">
         <label class="control-label mar-r-20">中转单号：{{outRemark.orderNumber}}</label>  
         <label class="control-label mar-r-20">线路产品：{{outRemark.lineProductName}}</label> 
-        <label class="control-label mar-r-20">用车时间：{{outRemark.arriveTime}}</label> 
         <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{outRemark.adultCount}}</span>大<span class="F-float F-count">{{outRemark.childCount}}</span></label>
         <label class="control-label ">外联销售：<span class="F-float F-money">{{outRemark.outOPUserName}}</span></label>
      </div>
@@ -98,7 +97,7 @@
                                          <td><input type="hidden" name="isConfirmAccount" value="{{if outRestaurant.isConfirmAccount == 0}}0{{else if outRestaurant.isConfirmAccount == 1}}1{{/if}}">
                                          {{if outRestaurant.isConfirmAccount == 0}}未对账{{else if outRestaurant.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
-                                            <a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
+                                            <a class="cursor T-restaurant-del" title="删除" data-catename="restaurant">
                                                 删除
                                             </a>
                                         </td>
@@ -186,7 +185,7 @@
                                         <td><input type="hidden" name="isConfirmAccount" value="{{if outTicket.isConfirmAccount == 0}}0{{else if outTicket.isConfirmAccount == 1}}1{{/if}}">
                                          {{if outTicket.isConfirmAccount == 0}}未对账{{else if outTicket.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
-                                            <a class="cursor T-arrange-delete" data-catename="ticket">
+                                            <a class="cursor T-ticket-del" data-catename="ticket">
                                                 删除
                                             </a>
                                         </td>
@@ -252,7 +251,7 @@
                                         <td><input type="hidden" name="isConfirmAccount" value="{{if outOther.isConfirmAccount == 0}}0{{else if outOther.isConfirmAccount == 1}}1{{/if}}">
                                          {{if outOther.isConfirmAccount == 0}}未对账{{else if outOther.isConfirmAccount == 1}}已对账{{/if}}</td>
                                         <td>
-                                            <a class="cursor T-arrange-delete" title="删除" data-catename="other">
+                                            <a class="cursor T-Other-del" title="删除" data-catename="other">
                                                 删除
                                             </a>
                                         </td>

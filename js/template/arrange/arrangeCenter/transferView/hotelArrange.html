@@ -5,19 +5,18 @@
         <th class="th-border">中转信息及计划要求</th>
         <th class="th-border">操作</th>
     </thead>
-    <tbody>
+    <tbody class="T-hotelArrange">
         {{each outRemarkList as item}}
         <tr>
             <td style="text-align: left;">
                 <input type="hidden" name="outRemarkId" value="{{item.id}}">
                 <label class="control-label mar-r-20">中转单号：{{item.orderNumber}}</label>
                 <label class="control-label mar-r-20">线路产品：{{item.lineProductName}}</label>
-                <label class="control-label mar-r-20">用车时间：{{item.arriveTime}}</label>
                 <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{item.adultCount}}</span>大<span class="F-float F-count">{{item.childCount}}</span></label>
                 <label class="control-label ">外联销售：<span class="F-float F-money">{{item.outOPUserName}}</span></label>
             </td>
             <td rowspan="2">
-                <a class="cursor T-action {{if taskSize > 1}}T-del-hotel{{/if}}" {{if taskSize <= 1}} disabled="disabled" {{/if}}title="删除">
+                <a class="cursor T-del-hotel" title="删除">
                     删除
                 </a>
             </td>
