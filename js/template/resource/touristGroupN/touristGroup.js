@@ -966,6 +966,9 @@ define(function(require, exports) {
             data.lineData = lineData;
             data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
             data.needPayMoney = receivable.needPayMoney || 0;
+            moneyData.lineFeeDel = JSON.stringify(moneyData.lineFeeDel || []);
+        }else{
+            moneyData.touristGroupFeeJsonDel = JSON.stringify(moneyData.touristGroupFeeJsonDel || []);
         }
         data.groupType = groupType;
         $.extend(data, moneyData);
@@ -1054,6 +1057,7 @@ define(function(require, exports) {
         if(typeof data !== "object"){
             data = JSON.parse(data || "{}");
         }
+        data.busFeeDel = JSON.stringify(data.busFeeDel || []);
         if(optionType === 1){
             html = T.viewBus(data);
             html = Tools.filterMoney(html);
@@ -1121,6 +1125,7 @@ define(function(require, exports) {
             title = "送团住宿";
         }
         data.type = type;
+        data.hotelFeeDel = JSON.stringify(data.hotelFeeDel || []);
         if(optionType === 1){
             html = T.viewHotel(data);
             html = Tools.filterMoney(html);
@@ -1198,6 +1203,7 @@ define(function(require, exports) {
         if(typeof data !== "object"){
             data = JSON.parse(data || "{}");
         }
+        data.otherFeeDel = JSON.stringify(data.otherFeeDel || []);
         if(optionType === 1){
             html = T.viewOther(data);
             html = Tools.filterMoney(html);
@@ -1385,10 +1391,11 @@ define(function(require, exports) {
                     if(typeof delJson !== "object"){
                         delJson = JSON.parse(delJson || "[]");
                     };
+                    console.log(delJson)
                     delJson.push({
                         id : id
                     });
-                    $this.closest('.T-fee-list').data('del-json', delJson);
+                    $this.closest('.T-fee-list').data('del-json', JSON.stringify(delJson));
                     $tr.remove();
                 }else{
                     $tr.remove();
@@ -2429,7 +2436,7 @@ define(function(require, exports) {
                 }
             });
             
-            moneyData.touristGroupFeeJsonDel = $tab.find('.T-addTouristTbody').data('del-json');
+            moneyData.touristGroupFeeJsonDel = $tab.find('.T-fee-list').data('del-json');
             if(typeof moneyData.touristGroupFeeJsonDel !== "object"){
                 moneyData.touristGroupFeeJsonDel = JSON.parse(moneyData.touristGroupFeeJsonDel || "[]");
             }

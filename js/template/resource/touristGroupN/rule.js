@@ -322,6 +322,42 @@ define(function(require, exports) {
                     ]
                 });
             }
+            if($obj.find('[name="isRestaurantRequired"]').is(":checked")){
+                settings.push({
+                    //餐厅要求
+                    $ele: $obj.find('input[name="restaurantRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '餐厅要求不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('[name="isTicketRequired"]').is(":checked")){
+                settings.push({
+                    //票务要求
+                    $ele: $obj.find('input[name="ticketRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '票务要求不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('[name="isOtherRequired"]').is(":checked")){
+                settings.push({
+                    //其它要求
+                    $ele: $obj.find('input[name="otherRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '其它要求不能为空'
+                        }
+                    ]
+                });
+            }
 
 	        return settings;
 	    },
