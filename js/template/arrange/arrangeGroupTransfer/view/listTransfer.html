@@ -54,6 +54,9 @@
 				{{if !!group.contactMember}}
 				<td>{{group.contactMember.name}}</td>
 				<td>{{group.contactMember.mobileNumber}}</td>
+				{{else}}
+				<td>-</td>
+				<td>-</td>
 				{{/if}}
 				<td>{{group.adultCount}} 大 {{group.childCount}}小</td>
 				<td>{{group.areaData}}</td>

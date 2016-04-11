@@ -245,6 +245,12 @@ define(function(require, exports) {
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 					data.touristGroupList = JSON.parse(data.touristGroupList);
+
+					if (data.guideList.length) {
+						for (var i = data.guideList.length - 1; i >= 0; i--) {
+							data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson);
+						}
+					}
 					
 					Tools.addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
