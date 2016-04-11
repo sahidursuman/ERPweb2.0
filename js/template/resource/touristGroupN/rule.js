@@ -120,14 +120,7 @@ define(function(require, exports) {
                     type: 'float',
                     errMsg: '本段现收团款必须为数字'
                 }]
-			},{
-                //本段现收团款
-                $ele: $obj.find('[name="lineNeedPayMoney"]'),
-                rules : [{
-                    type: 'null',
-                    errMsg: '线路应付不能为空'
-                }]
-            }];
+			}];
 			return settings;
 		},
 		checktTourist : function($container){

@@ -775,6 +775,7 @@ define(function(require, exports) {
     	$tab.find('.T-join-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
         rule.update(validate);
+        $tab.find('.T-join-group').removeClass('hidden');
     };
 
     /**
@@ -817,6 +818,7 @@ define(function(require, exports) {
     	$tab.find('.T-send-group-list').append(html);
         F.setDateTimePicker($tab.find('.datetimepicker'));
         rule.update(validate);
+        $tab.find('.T-send-group').removeClass('hidden');
     };
 
     /**
