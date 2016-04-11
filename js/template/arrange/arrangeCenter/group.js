@@ -63,7 +63,7 @@ define(function(require, exports) {
             console.info('不支持'+ type + '的安排');
         }
         seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
-            module.updatePlanInfo(id,bs, type);
+            module.updatePlanInfo(id, (bs == '-1'?'-2':bs), type);
         });
         // $.ajax({
         //     url: KingServices.build_url(service, ''),

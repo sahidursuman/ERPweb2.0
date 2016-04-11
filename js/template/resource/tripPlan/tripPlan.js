@@ -397,13 +397,13 @@ define(function(require, exports) {
 	/**
 	 * 编辑发团安排
 	 * @param  {[type]} id         [description]
-	 * @param  {[type]} $billStatus [description]
+	 * @param  {string} bs  账务状态  1/2已审核，0已报账 其他是安排，-2是安排具体的内容
 	 * @return {[type]}             [description]
 	 */
-	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tabId) {
-		if($billStatus == '1' || $billStatus == '2'){
+	tripPlan.updateTripPlanArrange = function(id, bs, target, tabId) {
+		if(bs == '1' || bs == '2'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团已审核，无法编辑')
-		}else if($billStatus == '0'){
+		}else if(bs == '0'){
 			showMessageDialog($( "#confirm-dialog-message" ), '该团导游已报账，无法编辑')
 		}else{
 			$.ajax({
@@ -431,6 +431,22 @@ define(function(require, exports) {
 						data.tarId = tabId;
 						tripPlan.dayWhich = data.dayWhich;
 
+						if (bs === '-2' && !!target) {
+							// 来自安排中心的安排
+							var _type = target.split('_')[2];
+
+							if (!!data.arrangeItemsStauts[_type + 'Status'])  {
+								// 允许安排
+								for (var key in data.arrangeItemsStauts) {
+									data.arrangeItemsStauts[key] = 0;
+								};
+
+								data.arrangeItemsStauts[_type + 'Status'] = 1;
+							} else {
+								showMessageDialog($( "#confirm-dialog-message" ), '数据异常，请联系火柴头');
+								return;
+							}
+						}
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
 							tripPlan.init_event($tab,id,target);
