@@ -216,10 +216,11 @@ define(function(require, exports) {
 
 	/**
 	 * 查看发团安排
-	 * @param  {[type]} id [安排ID]
+	 * @param  {int} id [安排ID]
+	 * @param  {string} type 安排项  （来自团队安排）
 	 * @return {[type]}     [description]
 	 */
-	tripPlan.viewTripPlan = function(id) {
+	tripPlan.viewTripPlan = function(id, type) {
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTripPlanArrange'),
 			type: "GET",
@@ -232,16 +233,25 @@ define(function(require, exports) {
 					data.basicInfo = JSON.parse(data.basicInfo);
 					data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
 					data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
-					data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
-					data.hotelList = JSON.parse(data.arrangeItems.hotelList);
-					data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
-					data.guideList = JSON.parse(data.arrangeItems.guideList);
-					data.otherList = JSON.parse(data.arrangeItems.otherList);
-					data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
-					data.scenicList = JSON.parse(data.arrangeItems.scenicList);
-					data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
-					data.shopList = JSON.parse(data.arrangeItems.shopList);
-					data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+
+					if (!!type)  {
+						var _type = type.split('_')[2];
+						for (var key in data.arrangeItems) {
+							data[key] = [];
+						}
+						data[_type + 'List'] = JSON.parse(data.arrangeItems[_type + 'List']);
+					} else {
+						data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
+						data.hotelList = JSON.parse(data.arrangeItems.hotelList);
+						data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
+						data.guideList = JSON.parse(data.arrangeItems.guideList);
+						data.otherList = JSON.parse(data.arrangeItems.otherList);
+						data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
+						data.scenicList = JSON.parse(data.arrangeItems.scenicList);
+						data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
+						data.shopList = JSON.parse(data.arrangeItems.shopList);
+						data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+					}
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 					

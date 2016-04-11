@@ -62,26 +62,11 @@ define(function(require, exports) {
         if (!type || !template) {
             console.info('不支持'+ type + '的安排');
         }
+
+        // 调用发团安排的编辑界面，bs控制只显示某个安排
         seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
             module.updatePlanInfo(id, (bs == '-1'?'-2':bs), type);
-        });
-        // $.ajax({
-        //     url: KingServices.build_url(service, ''),
-        //     type: 'post',
-        //     dataType: 'json',
-        //     data: {
-        //         tripPlanId: id,
-        //         item: type
-        //     },
-        // })
-        // .done(function(data) {
-        //     if (showDialog(data)) {
-        //         var key = tabKey + '_' + type + 'arrange';
-        //         if (Tools.addTab(key, '编辑团队'+title + '安排', template(data))) {
-        //             GroupArrange.initArrangeEvent($('#tab-'+ key + '-content'), type);
-        //         }
-        //     }
-        // });        
+        });       
     };
 
     /**
@@ -91,33 +76,16 @@ define(function(require, exports) {
      */
     GroupArrange.view = function($btn) {
         var type = $btn.closest('.tab-pane').data('target'),
-            title = $btn.closest('.tabable').find('.nav').find('.active').text(),
-            template = ViewTemplate[type],
             id = $btn.closest('tr').data('id');
 
         if (!type || !template) {
             console.info('不支持'+ type + '的安排');
         }
-        $.ajax({
-            url: KingServices.build_url(service, ''),
-            type: 'post',
-            dataType: 'json',
-            data: {
-                tripPlanId: id,
-                item: type
-            },
-        })
-        .done(function(data) {
-            if (showDialog(data)) {
-                var key = tabKey + '_' + type + 'arrange';
-                if (Tools.addTab(key, '查看团队'+title + '安排', template(data))) {
-                    $('#tab-'+ key + '-content').find('.T-close').on('click', function(event) {
-                        event.preventDefault();
-                        Tools.closeTab(key);
-                    });
-                }
-            }
-        }); 
+
+        // 调用发团安排中的查看界面
+        seajs.use(ASSETS_ROOT + modalScripts.arrange_all,function(module){
+            module.viewTripPlan(id, type);
+        });
     }
     /**
      * 绑定安排页面的事件
