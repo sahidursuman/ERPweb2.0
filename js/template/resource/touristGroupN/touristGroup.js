@@ -794,7 +794,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="w-110 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>'+
-                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -1027,6 +1027,7 @@ define(function(require, exports) {
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
                     }
+                    $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                     $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                     layer.close(index);
                     if(!!type){
@@ -2161,6 +2162,9 @@ define(function(require, exports) {
             }
             if(typeof joinTripData.lineInfo !== "object"){
                 joinTripData.lineInfo = JSON.parse(joinTripData.lineInfo || "{}");
+            }
+            if($.isEmptyObject(joinTripData.lineInfo)){
+                joinTripData.lineInfo = null;
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
