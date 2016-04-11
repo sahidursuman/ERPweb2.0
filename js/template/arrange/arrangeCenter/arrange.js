@@ -63,6 +63,10 @@ define(function(require, exports) {
 			} else if ($that.hasClass('T-view'))  {
 				// 查看
 				TransferFun.view($that);
+			} else if ($that.hasClass('T-cancel')){
+				//取消
+				TransferFun.cancel($that);
+
 			}
 		})
 		.on('change', 'input[type="checkbox"]', function(event) {
@@ -115,6 +119,25 @@ define(function(require, exports) {
 		        }
 		    }
 		})
+	}
+	//取消
+	TransferFun.cancel = function ($that) {
+		var flge = false;
+		var id = $that.closest('tr').data('id');
+		id = JSON.stringify(id);			
+		$.ajax({
+		    url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutBusArrange"),     
+		    type: 'POST',
+		    data: 'id='+id,
+		    success: function(data) {
+		        if (showDialog(data)) {
+		            showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+		            	TransferFun._getBusList($that.closest('form'),0);
+		            })
+		        }
+		    }
+		})
+
 	}
 
 	exports.init = FrameFun.initMain;

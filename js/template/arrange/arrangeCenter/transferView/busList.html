@@ -31,7 +31,9 @@
                 <p>收客单号：<span class="tgOrderNumber">{{bus.tgOrderNumber}}</span></p>
             </td>
             <td>
-                <span>{{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}</span>
+                <span>
+                    {{if bus.shuttleType == 1}} 接团 {{else if bus.shuttleType == 2}} 送团{{/if}}
+                    </span>
                 <input type="hidden" name="shuttleType" value="{{if bus.shuttleType == 1}} 1 {{else if bus.shuttleType == 2}} 2{{/if}}">
             </td>
             <td>
@@ -46,9 +48,14 @@
             <td><span class="require">{{bus.require}}</span></td>
             {{if !isFrame}}
             <td>
+
                 <a class="cursor T-arrange-item T-action">安排</a>
                 <a class="cursor T-view T-action">
                     <label class="padding-right20">|</label>查看
+                </a>
+                <a class="cursor T-action T-cancel">
+                    <label class="padding-right20">|</label>取消
+                </a>
             </td>
             {{/if}}
         </tr>

@@ -365,7 +365,7 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                Transfer._getBusList($searchFrom, obj.curr - 1);
+                                Transfer._getAddHotelList($searchFrom, obj.curr - 1);
                             }
                         }
                     });
@@ -405,7 +405,7 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                Transfer._getBusList($searchFrom, obj.curr - 1);
+                                Transfer._getOtherList($searchFrom, obj.curr - 1);
                             }
                         }
                     });
@@ -1285,7 +1285,7 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addHotelTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addHotelTransferArray[i].id)  {
+                            if (item.id === Transfer.addHotelTransferArray[i].id)  {
                                 Transfer.addHotelTransferArray.splice(i, 1);
                             }
                         }
@@ -1673,7 +1673,7 @@ define(function(require, exports) {
         //添加车安排
     Transfer.addbus = function($obj) {
         var html = '<tr data-entity-id="">' +
-            '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="" />' +
+            '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="" /><input type="hidden" name="busId" value="{{}}" />' +
             '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />' +
             '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>' +
