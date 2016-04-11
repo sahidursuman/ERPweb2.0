@@ -97,14 +97,14 @@
                 <td>{{arrange.require}}</td>
 
                 <!-- 具体安排 -->
-                <td>
-                {{each arrange.arrangeResultList as list level3}}
-                    <label  class="inline-block {{if level3 > 0}} item-line {{/if}}">
+                <td class="h-touristGroupInfo">
+                {{each arrange.arrangeResultList as list}}
+                    <p  class="inline-block">
                     <!-- 项目名称 -->
                     {{list.name}}
                     <!-- 如果是票，显示班次 -->
                     {{list.shift}}
-                    </label>
+                    </p>
                 {{/each}}
                 </td>
 
