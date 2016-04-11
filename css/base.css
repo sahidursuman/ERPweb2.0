@@ -301,6 +301,9 @@ input.datepicker:not([class^="col-"]) {
 .table tr .btn{
 	position: initial;
 }
+.busCompanyAddSubtractBtn tr .btn{
+	position: absolute;
+}
 .hct-button-right{
 	margin-top: -4px;
     float: right;
