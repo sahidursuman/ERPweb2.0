@@ -41,7 +41,7 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: scenic.$searchArea ? scenic.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(scenic.searchData);
@@ -141,6 +141,8 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         // 修正页码
         args.pageNo = args.pageNo || 0;
@@ -230,8 +232,11 @@ define(function(require, exports) {
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
+            console.log(argsData);
             FinancialService.exportReport(argsData,"exportArrangeScenicFinancial");
         });
 
@@ -276,6 +281,8 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         if(args.autoPay == 1){
             args.isAutoPay = 0;
@@ -406,7 +413,7 @@ define(function(require, exports) {
                     billTime : $tab.find('input[name=tally-date]').val()
                 };
                 args.isAutoPay = 1;
-                scenic.scenicClear(args);
+                scenic.scenicClear(args,$tab);
             });
         });
 
@@ -575,7 +582,8 @@ define(function(require, exports) {
     scenic.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(option == "check" ? 0 : (scenic.isOuter ? 3 : 1))).check($tab);
-            Tools.setDatePicker($tab.find('.datepicker'), true);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
