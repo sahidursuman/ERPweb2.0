@@ -43,7 +43,7 @@
 			</table>
 		</div>
 	</div>
-	{{if baseInfo.customerType == 0}}
+	{{if baseInfo.customerType == 0 && receiveTrip.length > 0}}
 	<div class="row T-join-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">接团</h3>
@@ -117,7 +117,7 @@
 			</table>
 		</div>
 	</div>
-	{{if baseInfo.customerType == 0}}
+	{{if baseInfo.customerType == 0 && sendTrip.length > 0}}
 	<div class="row T-send-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">送团</h3>
