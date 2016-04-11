@@ -29,7 +29,8 @@ define(function(require, exports) {
             transitIds: [],
             installCheckData : [],
             delBusTransferId : [],
-            delHotelTransferId : []
+            delHotelTransferId : [],
+            deleteOutBusIds : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
@@ -253,7 +254,6 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
-                    Transfer.setDate($container)
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -436,7 +436,6 @@ define(function(require, exports) {
                 success: function(data) {
                     if (showDialog(data)) {
                         data.taskSize = data.outRemarkList.length;
-                        console.log(data);
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -463,7 +462,6 @@ define(function(require, exports) {
                     var result = showDialog(data);
                     if (result) {
                         data.taskSize = data.outRemarkList.length;
-                        console.log(data)
                         var html = BusArrangeTemplate(data);
                         addTab(busplanId, '车安排', html);
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
@@ -726,13 +724,15 @@ define(function(require, exports) {
                 outRemarkList: outRemarkList,
                 shuttleType: shuttleType,
                 deleteOutRemarkList : JSON.stringify(Transfer.delBusTransferId),
+                deleteOutBusIds :  Transfer.deleteOutBusIds.join(','),
             },
             success: function(data) {
                 if (showDialog(data)) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         Transfer.busArrangeIdArray = [];
                         Transfer._refreshList('bus');
-                        Tools.closeTab(busplanId)
+                        Tools.closeTab(busplanId);
+                        Transfer.deleteOutBusIds = [];
                     });
                 }
 
@@ -1846,30 +1846,11 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     Transfer.deleteArrange = function($obj) {
-        var $tr = $obj.closest('tr');
-        var id = $tr.data('entity-id');
-
-        if (!!id) {
-            showConfirmDialog($("#confirm-dialog-message"), '确定要删除该安排？', function() {
-                $.ajax({
-                    url: KingServices.build_url(service_name, 'deleteTransferArrange'),
-                    type: "POST",
-                    data: {
-                        cateName: $obj.data('catename'),
-                        id: id
-                    },
-                    success: function(data) {
-                        if (showDialog(data)) {
-                            showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                                $tr.remove();
-                            });
-                        }
-                    }
-                });
-            })
-        } else {
-            $tr.remove();
-        }
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove()
+        })
+        Transfer.deleteOutBusIds.push(id);
     };
     Transfer.setDate = function($container) {
         // 绑定日期
