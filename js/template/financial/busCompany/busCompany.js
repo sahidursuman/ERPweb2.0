@@ -47,7 +47,7 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: busCompany.$searchArea ? busCompany.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(busCompany.searchData);
@@ -148,6 +148,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "startTime";
         $.ajax({
@@ -239,8 +241,11 @@ define(function(require, exports) {
                 endTime: $tab.find("input[name=endDate]").val(),
                 accountStatus : args.accountStatus,
                 licenseNumber : $tab.find("input[name=licenseNumber]").val(),
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
+            console.log(argsData);
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });
 
@@ -264,6 +269,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "startTime";
         if(args.autoPay == 1){
@@ -579,7 +586,8 @@ define(function(require, exports) {
     busCompany.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(0)).check($tab);
-            Tools.setDatePicker($tab.find(".date-picker"), true);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change', "input", function(event) {

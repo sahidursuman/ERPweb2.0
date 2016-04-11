@@ -2636,7 +2636,15 @@ KingServices.inlineTemplate = function(source, option) {
  */
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
-
+	$tabPane.on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+		$($(e.target).attr('href')).find('.T-tr-fixed').css({
+			'transform' : 'translateY(0px)',
+			'-webkit-transform' : 'translateY(0px)',
+			'-moz-transform' : 'translateY(0px)',
+			'msTransform' : 'translateY(0px)',
+			'-o-transform' : 'translateY(0px)'
+		});
+	});
 	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
 		var $that = $(this),

@@ -878,6 +878,7 @@ define(function(require, exports){
                     if(isAuth("1190003")){
                         tmp.isFinance = true;
                     };
+                    Count.guide = data.guideArranges;
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
                     Count.guide = data.guideArranges;
 					var html = updateTemplate(tmp);
@@ -5913,6 +5914,7 @@ define(function(require, exports){
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
+			console.log(Count.guide)
 		for(var i = 0;i<dataList.length;i++){
 			var guide = {
 				id:dataList[i].id,

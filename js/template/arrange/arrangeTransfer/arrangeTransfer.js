@@ -25,7 +25,8 @@ define(function(require, exports) {
 				endTime	: "",
 				lineProductId : "",			
 				lineProductName	: "",	
-				contactUserName : "",					
+				contactUserName : "",	
+				orderNumber : "",				
 				partnerAgencyId	: "",	//地接社	
 				partnerAgencyName :"",					
 				status	: "",		
@@ -287,6 +288,7 @@ define(function(require, exports) {
 				partnerAgencyId : getValue("partnerAgencyId"),
 				partnerAgencyName : getValue("partnerAgencyName"),
 				contactUserName : getValue("contactUserName"),
+				orderNumber : getValue("orderNumber"),
 				userName:getValue("userName"),
 				startTime : getValue("startTime"),
 				endTime : getValue("endTime"),
