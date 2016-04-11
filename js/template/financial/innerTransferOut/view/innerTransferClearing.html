@@ -23,6 +23,9 @@
                 {{/each}}
             </select>
         </label>
+        <label class="control-label mar-r-10">游客：
+            <input type="text" name="contactInfo" value="{{searchParam.contactInfo}}" placeholder="联系人或联系电话" />
+        </label>
         <label>对账状态：</label>
         <div class="btn-group T-check-status mar-r-10">
             <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">

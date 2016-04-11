@@ -101,6 +101,7 @@ define(function(require, exports) {
 				lineProductId:subsection.$searchArea.find("input[name=lineProductId]").val(),
 				fromPartnerAgency:subsection.$searchArea.find("input[name=fromPartnerAgency]").val(),
 				fromPartnerAgencyId:subsection.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+				contactInfo:subsection.$searchArea.find("input[name=contactInfo]").val(),
 				creator:subsection.$searchArea.find("input[name=creator]").val(),
 				creatorId:subsection.$searchArea.find("input[name=creatorId]").val(),
 				travelDate:subsection.$searchArea.find("input[name=travelDate]").val(),

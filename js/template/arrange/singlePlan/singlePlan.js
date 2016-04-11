@@ -59,7 +59,6 @@ define(function(require, exports) {
                 singlePlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), data.businessGroups, 'name');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="realname"]'), data.guides, 'realname');
                 singlePlan.autocompleteSearch($searchArea.find('input[name="brand"]'), data.busCompanyArranges, 'licenseNumber');
-
                 singlePlan.listTripPlanSingle(0, singlePlan.$tab);
                 
             }
@@ -174,6 +173,8 @@ define(function(require, exports) {
                 businessGroupId : $searchArea.find('[name="businessGroupName"]').data('id'),
                 guideId : $searchArea.find('[name="realname"]').data('id'),
                 busId : $searchArea.find('[name="licenseNumber"]').data('id')
+                // busId : $searchArea.find('[name="licenseNumber"]').data('id'),
+                // busId : $searchArea.find('[name="licenseNumber"]').data('id'),
             };
 
         if (page == -1) {

@@ -28,6 +28,10 @@
                     <label class="control-label">收客单号：</label>
                     <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
                 </div>
+                <div class="form-group mar-r-10">
+                    <label class="control-label">游客：</label>
+                    <input type="text" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo">
+                </div>
                 <label class="form-group control-label">对账状态：</label>
                 <div class="form-group btn-group T-check-status mar-r-10">
                     <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
@@ -61,12 +65,12 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group T-count">
                 <label class=" control-label pull-left" style="margin-left: 15px">人数合计：<span class="T-sumTransCount F-float F-count"></span><label>
-                <label class=" control-label " style="margin-left:30px;">内转转入金额合计：<span class="T-sumTransNeedPayMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">已收金额合计：<span class="T-sumPayedMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">返款金额合计：<span class="T-sumBackMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">结算金额合计：<span class="T-sumSettlementMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">未收金额合计：<span class="T-sumUnReceivedMoney F-float F-money"></span></label>
-                <label class=" control-label " style="margin-left:30px;">未收金额合计(已对账)：<span class="T-sumUnPayedMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">内转转入金额合计：<span class="T-sumTransNeedPayMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">已收金额合计：<span class="T-sumPayedMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">返款金额合计：<span class="T-sumBackMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">结算金额合计：<span class="T-sumSettlementMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">未收金额合计：<span class="T-sumUnReceivedMoney F-float F-money"></span></label>
+                <label class=" control-label mar-r-20">未收金额合计(已对账)：<span class="T-sumUnPayedMoney F-float F-money"></span></label>
             </div>
         </form>
     </div>

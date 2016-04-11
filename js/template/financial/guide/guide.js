@@ -47,13 +47,15 @@ define(function(require, exports) {
 
         args.pageNo = page || 0;
         args.accountStatus = 2;
+        args.sortType = "desc";
         if (!!FinGuide.$tab) {
             args = {
                 pageNo: (page || 0),
                 guideId: FinGuide.$tab.find('.T-search-name').data('id'),
                 startDate: FinGuide.$tab.find('.T-search-start-date').val(),
                 endDate: FinGuide.$tab.find('.T-search-end-date').val(),
-                accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value")
+                accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value"),
+                sortType : FinGuide.$tab.find("select[name=orderBy]").val()
             }
 
             var guideName = FinGuide.$tab.find('.T-search-name').val();
@@ -74,6 +76,7 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 data.guideName = data.guideName || '全部';
                 data.accountStatus = args.accountStatus;
+                data.sortType = args.sortType;
                 Tools.addTab(menuKey, "导游账务", listTemplate(data));
                 FinGuide.$tab = $('#tab-' + menuKey + '-content');
                 // 绑定事件
@@ -220,6 +223,8 @@ define(function(require, exports) {
             args.lineProductId = $line.data('id');
             args.lineProductName = $line.val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
 
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
@@ -299,7 +304,9 @@ define(function(require, exports) {
 
         FinGuide.getLineProduct($searchArea.find('.T-lineProductName'), FinGuide.checkingTabLineProduct);
 
-        var $datePicker = Tools.setDatePicker($searchArea.find('.datepicker'), true);
+        var $datePicker = $searchArea.find('.datepicker');
+        Tools.setDatePicker($searchArea.find(".T-time"), true);
+        Tools.setDatePicker($searchArea.find(".T-checkTime"), true);
 
         //搜索下拉事件
         $tab.find('.T-check-status').on('click', 'a', function(event) {
@@ -399,8 +406,11 @@ define(function(require, exports) {
                         tripPlanNumber: $searchArea.find('.T-tripPlanNumber').val(),
                         lineProductName: $searchArea.find('.T-lineProductName').val(),
                         lineProductId: $searchArea.find('.T-lineProductName').data('id'),
-                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                        isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                        startCheck : $tab.find('.T-checkStartTime').val(),
+                        endCheck : $tab.find('.T-checkEndTime').val()
                     };
+                console.log(argsData);
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
                 FinancialService.exportReport(argsData,"exportArrangeGuideFinancial");
             });
@@ -592,7 +602,9 @@ define(function(require, exports) {
                 lineProductName: $line.val(),
                 autoPayMoney: $autoPayMoney.val(),
                 payType: $tab.find('select[name=sumPayType]').val(),
-                accountStatus : $tab.find('input[name=accountStatus]').val()
+                accountStatus : $tab.find('input[name=accountStatus]').val(),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
 
             if (args.lineProductName === '全部') {
@@ -649,7 +661,9 @@ define(function(require, exports) {
                 accountStatus : accountStatus,
                 borrow : $tab.find('.T-saveClear').data('borrow') == "borrow" ? true : false,
                 isOuter : FinGuide.isOuter,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
 
             if (args.lineProductName === '全部') {
