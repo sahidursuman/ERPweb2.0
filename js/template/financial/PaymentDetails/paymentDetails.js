@@ -57,10 +57,10 @@ define(function(require, exports){
 	};
 	//计算合计
 	Payment.allClac = function($tab,beginningBalance) {
-		var beginningBalance = beginningBalance * 1 || $tab.find('.T-beginningBalance').val()-0 || '',
+		var beginningBalance = beginningBalance * 1 || $tab.find('input[name=beginningBalance]').val()-0 || '',
 			incomeMoney = $tab.find('.T-incomeMoney').text()-0,
 			payMoney = $tab.find('.T-payMoney').text()-0;
-		if (($tab.find('.T-search-payment').val() == 1 || $tab.find('.T-search-payment').val() == 0) && beginningBalance != '') {
+		if (($tab.find('.T-search-payment').val() == 1 || $tab.find('.T-search-payment').val() == 0)) {
 			var all = ((beginningBalance + incomeMoney) - payMoney).toFixed(2),
 				html = ''
 				+'<div class="form-group mar-r-10">'

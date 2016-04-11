@@ -1539,7 +1539,7 @@ define(function(require, exports){
 		var html = '<tr class="oldData noSumRate">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
-		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
+		'<td>人数返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+

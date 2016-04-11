@@ -37,6 +37,12 @@
                     </li>
                 </ul>
             </div>
+            <div class="form-group mar-r-10">
+                <select name="orderBy">
+                    <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                    <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+                </select>
+            </div>
             <div class="form-group ">
                 <button class="btn-sm search-btn T-btn-search">
                     <i class="ace-icon fa fa-search"></i> 搜索
