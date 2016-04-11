@@ -879,6 +879,7 @@ define(function(require, exports){
                         tmp.isFinance = true;
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
+                    Count.guide = data.guideArranges;
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
@@ -1661,7 +1662,7 @@ define(function(require, exports){
 	//打印页面
 	Count.exportsOutDetail = function($obj){
 		$obj.print({
-			globalStyles:true
+			globalStyles:true,
 		});
 	};
 	//质量统计
@@ -3048,7 +3049,7 @@ define(function(require, exports){
 			'<td><input type="text" name="title" class="w-80"/></td>'+
 			'<td><input type="text" name="price" class="w-80"/></td>'+
 			'<td><input type="text" name="count" class="w-50"/></td>'+
-			'<td><input name="needIncomeMoney" value="{{otherInCome.needIncomeMoney}}" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><input name="needIncomeMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
 			'<td>'+
 				'<input name="guideArrangeId" type="hidden" />'+
 	            '<input name="guideName"  type="text" class="w-80"/>'+
