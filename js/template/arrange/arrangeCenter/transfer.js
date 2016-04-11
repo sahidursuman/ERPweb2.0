@@ -469,7 +469,7 @@ define(function(require, exports) {
                         $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId, outRemarkList.outRemarkId, outRemarkList.shuttleType); //车安排事件
-
+                        Transfer.busArrangeIdArray = []
                     }
                 }
             })
@@ -511,7 +511,7 @@ define(function(require, exports) {
             });
             //删除中转数据
             $busplanId.off('click').on('click','.T-del-bus',function() {
-                var $that = $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
+                var $that= $(this),$tr = $that.parents('tr').next(),$div = $that.closest('tr'),
                     outRemarkId = $div.find('[name=outRemarkId]').val();
                     var $taskListLen = $busplanId.find('.T-task-list').length;
                     if($taskListLen <=1){
@@ -526,7 +526,6 @@ define(function(require, exports) {
                     }
                     
             });
-
         }
     /**
      * 
@@ -576,7 +575,6 @@ define(function(require, exports) {
                     event.preventDefault();
                     //缓存选中的数据
                     var checkData = Transfer.installCheckDatas($frame);
-                    console.log(checkData);
                     // 添加游客列表
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
@@ -622,7 +620,6 @@ define(function(require, exports) {
     //缓存数据 
     Transfer.installCheckDatas = function($frame){
         var $tr = $frame.find('.T-bus-list').find('tr');//找到所有的tr
-        var installCheckData = [];
         $tr.each(function(i){
             var $that = $(this),id = $that.attr('data-id');
             var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
@@ -641,6 +638,7 @@ define(function(require, exports) {
                     require : $that.find('.require').text(),
                 };
                 installCheckData.push(checkData);
+                console.log(installCheckData)
             }
         });
         return installCheckData;
