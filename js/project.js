@@ -1001,7 +1001,6 @@ var _statusText = {
 				return;
 			})
 		}else {
-
 			if (opt.submitType == "json") {
 				opt.data = JSON.stringify(opt.data);
 				opt.contentType = "application/json";
@@ -1025,7 +1024,7 @@ var _statusText = {
 
 			//扩展增强处理
 			opt = $.extend({}, {
-				timeout: 60000,
+				timeout: (opt.url.indexOf('/financial/') >= 0) ? 3000000 : 60000,
 				cache: false,
 				showLoading: true,
 				removeLoading: true,
