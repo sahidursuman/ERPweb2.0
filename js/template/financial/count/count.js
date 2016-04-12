@@ -474,6 +474,7 @@ define(function(require, exports){
 						insuranceArrange:data.insuranceArrange,
 						hotelArrange:data.hotelArrange,
 						guideArrange:data.guideArranges,
+						guideCount:data.guideArranges.listMap.length,
 						otherIncome:data.otherIncome,
 						remarkArrangeList:data.remarkArrangeList,
 						restaurantArrange:data.restaurantArrange,
@@ -490,6 +491,7 @@ define(function(require, exports){
 	                };
 	                Count.guide = data.guideArranges;
 	                var html = Reimbursement(tmp);
+	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -515,6 +517,13 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			KingServices.viewTransit(id);
 		});
+
+		//团款tripDetail
+		var $tripCostObj = $listObj.find('.T-tripDetail');
+		//获取导游
+		$tripCostObj.find('input[name=guideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
 		$guideObj.find('input').off('change').on('change',function(){
@@ -525,6 +534,10 @@ define(function(require, exports){
 				//计算金额
 				Count.autoGuideSum($guideObj,$obj);
 			}
+		});
+		//获取导游
+		$guideObj.find('[name=guideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
 		});
 		//购物处理--计算、新增
 		var $shopObj = $listObj.find('.T-count-shopping');
@@ -2986,7 +2999,7 @@ define(function(require, exports){
 
 		function removeGuide (){
 			Count.delDiv(thisTd,index,$parentObj);
-			Count.delDiv(incomeCount,index);
+			Count.delDiv(incomeCount,index,$parentObj);
 			Count.delDiv(needInReduceMoney,index,$parentObj);
 			Count.delDiv(needIncome,index,$parentObj);
 			Count.delDiv(cashMoney,index,$parentObj);
@@ -4850,27 +4863,13 @@ define(function(require, exports){
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
 		console.log(saveJsonStr);
-		var shopList = saveJsonStr.shopArrangeList;
-		for(var i = 0;i<shopList.length;i++){
-			if(shopList[i].shopId == "" || shopList[i].shopPolicyId == ""){
-				var message="";
-				if(shopList[i].shopId == ""){
-					message = "请选择购物店"
-				}else{
-					if(shopList[i].shopPolicyId == ""){
-						message="请选择商品"
-					}
-				};
-				showMessageDialog($("#confirm-dialog-message"),message);
-				return;
-			}
-		}
+		
 		//校验同一天不能安排同一家购物店
-		var submitStatus =  Count.checkShopArrange(saveJsonStr.shopArrangeList);
-		if(submitStatus){
-			showMessageDialog($( "#confirm-dialog-message" ),"您在同一天，安排了同一家购物店，请检查");
+		var submitStatus =  Count.checkShopArrange(saveJsonStr);
+		if(submitStatus.submitStatus){
+			showMessageDialog($("#confirm-dialog-message"),submitStatus.submitMeaasge);
 			return;
-		};
+		}
 		var addSelfList = saveJsonStr.addSelfPayArrangeList;
 		for(var i = 0;i<addSelfList.length;i++){
 			if(addSelfList[i].selfPayId == "" || addSelfList[i].selfPayItemId == ""){
@@ -5141,10 +5140,17 @@ define(function(require, exports){
 		var $tripDetail = $obj.find('.T-tripDetail'),
 		$tr = $tripDetail.find('tr');
 		$tr.each(function(){
+			var guideArrangeId = $tr.find('input[name=guideArrangeId]').val(),
+				guideName = $tr.find('input[name=guideArrangeId]').val();
+			if(!!$tr.find('.guideName').text()){
+				guideName = $tr.find('.guideName').text();
+			};
 			var data = {
 				id:$(this).attr('id'),
 				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val(),
-				isReceived:$(this).find('[name=receiveStatus]').val()
+				isReceived:$(this).find('[name=receiveStatus]').val(),
+				guideArrangeId:guideArrangeId,
+				guideName:guideName
 			}
 			saveJson.touristGroupList.push(data);
 		});
@@ -5812,15 +5818,44 @@ define(function(require, exports){
 		return remarkList;
 	};
 	Count.checkShopArrange = function(dataArr){
-		var submitStatus = false;
-		for(var i = 0 ;i<dataArr.length;i++){
-			for(var j = i+1;j<dataArr.length;j++){
-				if(dataArr[i].shopId == dataArr[j].shopId && dataArr[i].whichDay == dataArr[j].whichDay){
-					submitStatus = true
+		var submitFlag = {},
+			shopArange = dataArr.shopArrangeList;
+			addShopArrange = dataArr.addShopArrangeList;
+		for(var i = 0 ;i<shopArange.length;i++){
+			for(var j = 0;j<addShopArrange.length;j++){
+				if(shopArange[i].shopId == addShopArrange[j].shopId && shopArange[i].whichDay == addShopArrange[j].whichDay){
+					submitFlag.submitStatus = true;
+					submitFlag.submitMeaasge = '您在同一天，安排了同一家购物店，请检查';
 				}
 			}
 		}
-		return submitStatus;
+		for(var i = 0;i<shopArange.length;i++){
+			var thisItem = shopArange[i].itemList;
+			for(var j = 0;j<thisItem.length;j++){
+				if(thisItem[j].shopPolicyId == ''){
+					submitFlag.submitStatus = true;
+					submitFlag.submitMeaasge = '请选择商品';
+				};
+				
+			}
+		};
+
+		for(var i = 0;i<addShopArrange.length;i++){
+			var thisItem = addShopArrange[i].itemList;
+			if(addShopArrange[i].shopId == ''){
+				submitFlag.submitStatus = true;
+				submitFlag.submitMeaasge = '请选择购物店';
+			}else{
+				for(var j = 0;j<thisItem.length;j++){
+					if(thisItem[j].shopPolicyId == ''){
+						submitFlag.submitStatus = true;
+						submitFlag.submitMeaasge = '请选择商品';
+					};
+				};
+			};
+		};
+
+		return submitFlag;
 	};
 	//删除安排
 	Count.delArrangeData = function(id,nameFlag,fn){
