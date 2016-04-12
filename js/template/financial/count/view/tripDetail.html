@@ -53,8 +53,8 @@
         <tr>
             <td style="text-align:left"><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.sumNeedPayAllMoney}}</span></label></td>
             <td style="text-align:left"><label>自费收入：<span class="F-float F-money tripIncome-selfIcomeMoney">0</span></label></td>
-            <td style="text-align:left"><label>导服费：<span class="F-float F-money tripCost-guideArrangePrice">{{guideArrange.price}}</span></label></td>
-            <td style="text-align:left"><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>
+            <td style="text-align:left"><label>导服费：<span class="F-float F-money tripCost-guideArrangePrice">0</span></label></td>
+            <td style="text-align:left"><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
             <td style="text-align:left"><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{transfer.transferBusMoney}}</span></label></td>
@@ -71,7 +71,7 @@
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{transfer.transferOtherMoney}}</span></label></td>
         </tr>
         <tr>
-            <td style="text-align:left"><label>导游管理费：<span class="F-float F-money tripIncome-guideManageMoney">{{guideArrange.manageFee}}</span></label></td>
+            <td style="text-align:left"><label>导游管理费：<span class="F-float F-money tripIncome-guideManageMoney">0</span></label></td>
             <td style="text-align:left"></td>
             <td style="text-align:left"><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
@@ -191,8 +191,8 @@
                                 </td>
                                 <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                                 <td>
-                                    <span>{{touristGroup.guideName}}</span>&nbsp;&nbsp;
-                                    <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>&nbsp;&nbsp;
+                                    <span>{{touristGroup.guideName}}</span>
+                                    <span class="F-float F-money mar-l-5">{{touristGroup.currentNeedPayMoney}}</span>&nbsp;&nbsp;
                                     {{if touristGroup.isReceived == 0}}
                                         未收到
                                     {{else if touristGroup.isReceived == 1}}
