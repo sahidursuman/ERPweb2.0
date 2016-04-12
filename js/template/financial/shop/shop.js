@@ -385,6 +385,7 @@ define(function(require, exports) {
             FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
             $tab.find(".T-btn-autofill").on('click', function(event) {
                 event.preventDefault();
+                var $datepicker = $tab.find('.T-time');
                 if ($(this).hasClass('btn-primary')) {
                     if (autoValidator.form()) {
                         var argsData = FinancialService.autoPayJson(args.shopId, $tab, new FinRule(2), 1);
