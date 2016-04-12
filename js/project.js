@@ -753,6 +753,9 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
+
+				//获取登陆后token
+				KingServices.token = $.cookie('token');
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -988,79 +991,90 @@ var _statusText = {
 		//     });
 		// }
 		//json提交要修改contentType和格式化json
+		
+		//判断当前token与登陆时token是否相同
+		var token = $.cookie('token');
+		if (KingServices.token != token && !!token && !!KingServices.token) {
+			showConfirmDialog($( "#confirm-dialog-message" ), '账号已更改，请刷新后操作。', function() {
+				window.location.reload();
+			},function() {
+				return;
+			})
+		}else {
 
-		if (opt.submitType == "json") {
-			opt.data = JSON.stringify(opt.data);
-			opt.contentType = "application/json";
-		}
-		//备份opt中error和success方法
-
-		var fn =
-		{
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-			},
-			success: function (data, textStatus) {
+			if (opt.submitType == "json") {
+				opt.data = JSON.stringify(opt.data);
+				opt.contentType = "application/json";
 			}
-		};
+			//备份opt中error和success方法
 
-		if (opt.error) {
-			fn.error = opt.error;
-		}
-		if (opt.success) {
-			fn.success = opt.success;
-		}
-
-		//扩展增强处理
-		opt = $.extend({}, {
-			timeout: 60000,
-			cache: false,
-			showLoading: true,
-			removeLoading: true,
-			showError: true,
-			dataType: 'json'
-		}, opt);
-		$.extend(opt, opt,
+			var fn =
 			{
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					//判断是否是当前页面的ajax请求错误
-
-					if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
-						if (opt.showError != false) {
-							var status;
-							try {
-								status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
-							} catch (e) {
-								// console.warn(e)
-								status = XMLHttpRequest.status;
-							}
-
-							showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
-
-						}
-						fn.error(XMLHttpRequest, textStatus, errorThrown);
-					}
-					else {
-						console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
-						showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
-					}
-				},
-				beforeSend:function(){
-					if (opt.showLoading)  {
-						globalLoadingLayer = openLoadingLayer();
-					}
 				},
 				success: function (data, textStatus) {
-					//若要移除loading,则移除
-
-					fn.success(data, textStatus);
-				},
-				complete: function()  {
-					if (opt.removeLoading) {
-						layer.close(globalLoadingLayer);
-					}
 				}
-			});
-		return _ajax(opt);
+			};
+
+			if (opt.error) {
+				fn.error = opt.error;
+			}
+			if (opt.success) {
+				fn.success = opt.success;
+			}
+
+			//扩展增强处理
+			opt = $.extend({}, {
+				timeout: 60000,
+				cache: false,
+				showLoading: true,
+				removeLoading: true,
+				showError: true,
+				dataType: 'json'
+			}, opt);
+			$.extend(opt, opt,
+				{
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						//判断是否是当前页面的ajax请求错误
+
+						if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
+							if (opt.showError != false) {
+								var status;
+								try {
+									status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
+								} catch (e) {
+									// console.warn(e)
+									status = XMLHttpRequest.status;
+								}
+
+								showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+
+							}
+							fn.error(XMLHttpRequest, textStatus, errorThrown);
+						}
+						else {
+							console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
+							showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+						}
+					},
+					beforeSend:function(){
+						if (opt.showLoading)  {
+							globalLoadingLayer = openLoadingLayer();
+						}
+					},
+					success: function (data, textStatus) {
+						//若要移除loading,则移除
+
+						fn.success(data, textStatus);
+					},
+					complete: function()  {
+						if (opt.removeLoading) {
+							layer.close(globalLoadingLayer);
+						}
+					}
+				});
+			return _ajax(opt);
+		}
 	};
 
 	jQuery.fn.extend({
