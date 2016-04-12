@@ -19,7 +19,7 @@
             <th class="th-border" rowspan="2"><span class="necessary">*</span>餐厅</th>
             <th class="th-border" rowspan="2"><span class="necessary">*</span>类型</th>
             <th class="th-border" rowspan="2"><span class="necessary">*</span>餐标</th>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>人数</th>
+            <th class="th-border" rowspan="2"><span class="necessary">*</span>人数合计</th>
             <th class="th-border" rowspan="2">优惠</th>
             <th class="th-border" rowspan="2">应付</th>
             <th class="th-border" rowspan="2">已付</th>
@@ -28,9 +28,9 @@
         </tr>
         <tr>
             <th class="th-border">导游</th>
-            <th class="th-border">数量</th>
-            <th class="th-border">付款方式</th>
+            <th class="th-border">人数</th>
             <th class="th-border">金额</th>
+            <th class="th-border">付款方式</th>
             <th class="th-border">单据</th>
             <th class="th-border">导游报账备注</th>
         </tr>
@@ -42,10 +42,14 @@
                 <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}"
                  whichDay="{{arrange.whichDay}}"
                 isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="restArrange">
-                    <td><span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td>
+                        <div class="div-h-30"></div>
+                        <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                    </td>
 
                     
                     <td>
+                        <div class="div-h-30"></div>
                         {{if tripPlan.billStatus == -1}}
                             {{if arrange.isChoose == 1}}
                                 <select name="chooseRest">
@@ -75,9 +79,10 @@
                         {{/if}}
                     </td><!-- 餐厅 -->
 
-                    <td>{{arrange.type}}</td> <!-- 类型 -->
+                    <td><div class="div-h-30"></div>{{arrange.type}}</td> <!-- 类型 -->
 
                     <td>
+                        <div class="div-h-30"></div>
                         {{if tripPlan.billStatus == -1}}
                             {{if arrange.isChoose == 1}}
                                 <input  value="{{arrange.realPrice}}" type="text" name="price" class="w-80" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
@@ -102,21 +107,23 @@
                     </td><!-- 餐标 -->
 
                     <td>
-                        {{if editStatus == 2}}
-                           <span class="F-float F-count">{{arrange.realCount}}</span>
-                                <input type="hidden" name="realCount" value="{{arrange.realCount}}">
+                        <div class="div-h-30"></div>
+                        {{if arrange.badStatus == 1}}
+                            <span class="F-float F-count">{{arrange.realCount}}</span>
+                            <input type="hidden" value="{{arrange.realCount}}" name="realCount">
                         {{else}}
-                            {{if arrange.badStatus == 1}}
+                            {{if editStatus == 2}}
                                 <span class="F-float F-count">{{arrange.realCount}}</span>
-                                <input type="hidden" name="realCount" value="{{arrange.realCount}}">
+                                <input type="hidden" value="{{arrange.realCount}}" name="realCount">
                             {{else}}
-                                <input class="F-float F-count w-50" name="realCount" type="text" value="{{arrange.realCount}}" readOnly="readOnly">
+                                <span class="F-float F-count realCount">{{arrange.realCount}}</span>
+                                <input  type="hidden" name="realCount" value="{{arrange.realCount}}"/>
                             {{/if}}
                         {{/if}}
-                        
-                    </td><!-- 人数 -->
+                    </td><!-- 数量 -->
 
                     <td>
+                        <div class="div-h-30"></div>
                         {{if editStatus == 2}}
                             <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
                             <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}">
@@ -133,15 +140,16 @@
                     </td><!-- 优惠 -->
 
                     <td>
+                        <div class="div-h-30"></div>
                         <span class="realNeedPayMoney F-float F-money">{{arrange.realNeedPayMoney}}</span>
                         <input type="hidden" name="realNeedPayMoney" value="{{arrange.realNeedPayMoney}}">
                     </td><!-- 应付 -->
 
-                    <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td><!-- 已付 -->
+                    <td><div class="div-h-30"></div><span class="F-float F-money">{{arrange.payedMoney}}</span></td><!-- 已付 -->
 
-                   <td name="guideName">
+                    <td name="guideName">
                             <div class="div-h-30">
-                                {{if editStatus != 2}}
+                                {{if editStatus != 2 && guideCount > 1}}
                                     <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                     </button>
@@ -158,9 +166,11 @@
                                             <input name="guideId" value="{{rs.id}}" type="hidden" />
                                             <input name="guideName" value="{{rs.guideName}}" type="hidden" />
                                             <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                            {{if guideCount > 1}}
                                             <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
                                                 <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                             </button>
+                                            {{/if}}
                                             <!-- 删除导游 -->
                                         {{/if}}
                                     </div>
@@ -210,6 +220,35 @@
                             {{/if}}
                         </td><!-- 数量 -->
                         
+                        
+                        
+                        <td name="guidePayedMoney">
+                            <div class="div-h-30"></div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
+                                        {{if editStatus == 2}}
+                                            <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
+                                            <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
+                                        {{else}}
+                                            <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
+                                            class="F-float F-money w-80" 
+                                            {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                
+                                <div class="div-h-30 mar-t-5" index="1">
+                                    {{if editStatus == 2}}
+                                       0
+                                    {{else}}
+                                        <input name="guidePayedMoney" type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                        </td><!-- 金额 -->
+
                         <td name="payType">
                             <div class="div-h-30"></div>
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
@@ -246,33 +285,6 @@
                                 </div>
                             {{/if}}
                         </td><!-- 付款方式 -->
-                        
-                        <td name="guidePayedMoney">
-                            <div class="div-h-30"></div>
-                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
-                                {{each arrange.guideDetails as rs index}}
-                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
-                                        {{if editStatus == 2}}
-                                            <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
-                                            <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
-                                        {{else}}
-                                            <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
-                                            class="F-float F-money w-80" 
-                                            {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                                        {{/if}}
-                                    </div>
-                                {{/each}}
-                            {{else}}
-                                {{if editStatus == 2}}
-                                   0
-                                {{else}}
-                                    <input name="guidePayedMoney" type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                                {{/if}}
-                                <div class="div-h-30 mar-t-5" index="1">
-                                    
-                                </div>
-                            {{/if}}
-                        </td><!-- 金额 -->
                         
                         <td name="billImage">
                             <div class="div-h-30"></div>
