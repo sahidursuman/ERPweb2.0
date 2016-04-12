@@ -11,7 +11,7 @@
                 <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
                 <td style="text-align:left"><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
                 <td style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
-                <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</label></td>
+                <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.adultCount}}大{{tripPlan.childCount}}小</label></td>
             </tr>
             <tr>
                 <td style="text-align:left"> <label  style="font-weight: bold;">导游：{{if tripPlan.guideName != null}}{{tripPlan.guideName}}{{/if}}</label></td>
@@ -36,7 +36,9 @@
                 <input type="hidden" class="tripPlanStartTime" value="{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}" />
                 <label style="margin-left:50px;font-weight: bold;">毛利：<span class="F-float F-money grossProfitMoney">0</span></label>
                 <label style="margin-left:50px;font-weight: bold;">人均毛利：<span class="F-float F-money perGrossProfitMoney">0</span></label>
-                <label style="margin-left:50px;font-weight: bold;">导游预支金额：<span class="F-float F-money guideAllPreMoney">{{tripPlan.guideAllPreMoney}}</span></label>
+                <label style="margin-left:50px;font-weight: bold;">导游预支金额：
+                    <span class="F-float F-money guideAllPreMoney">{{tripPlan.guidePlanAllPreMoney}}</span>
+                </label>
             </div></td> 
         </tr>
         <tr >
@@ -46,7 +48,7 @@
         </tr>
 
         <tr>
-            <td style="text-align:left"><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.needPayAllMoney}}</span></label></td>
+            <td style="text-align:left"><label>应收团款：<span class="F-float F-money tripIncome-getAllMoney">{{touristGroup.sumNeedPayAllMoney}}</span></label></td>
             <td style="text-align:left"><label>自费收入：<span class="F-float F-money tripIncome-selfIcomeMoney">0</span></label></td>
             <td style="text-align:left"><label>导服费：<span class="F-float F-money tripCost-guideArrangePrice">{{guideArrange.price}}</span></label></td>
             <td style="text-align:left"><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">{{insurancePrice}}</span></label></td>

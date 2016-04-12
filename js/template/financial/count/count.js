@@ -330,6 +330,15 @@ define(function(require, exports){
 		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
+		$guideObj.find('input').off('change').on('change',function(){
+			var $that = $(this),
+				tagName = $that.attr('name');
+			if (tagName !='remark') {
+				Count.calculateCost($that);
+				//计算金额
+				Count.autoGuideSum($guideObj,$obj);
+			}
+		});
 		//购物
 		var $shopObj = $listObj.find('.T-count-shopping');
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
@@ -401,6 +410,11 @@ define(function(require, exports){
 			Count.calculateCost($(this));
 			Count.autoOtherOutSum($(this),$obj);
 			Count.formatDays($(this),$obj);
+		});
+		//计算保险费用
+		$insureObj = $listObj.find('.T-count-insurance');
+		$insureObj.off('change').on('change','input',function(){
+			Count.autoInsureanceSum($(this),$obj);
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
@@ -503,13 +517,13 @@ define(function(require, exports){
 		});
 		//导游金额计算
 		var $guideObj = $listObj.find('.T-count-guide');
-		$guideObj.find('input[type=text]').off('change').on('change',function(){
+		$guideObj.find('input').off('change').on('change',function(){
 			var $that = $(this),
 				tagName = $that.attr('name');
 			if (tagName !='remark') {
 				Count.calculateCost($that);
 				//计算金额
-				Count.autoGuideSum($that,$obj);
+				Count.autoGuideSum($guideObj,$obj);
 			}
 		});
 		//购物处理--计算、新增
@@ -553,6 +567,14 @@ define(function(require, exports){
 			//清除小数点
 			Count.delValDecimal($(this),$shopObj,$obj);
 		});
+		//获取导游
+		$shopObj.find('td[name=shopGuideName]').find('input[name=shopGuideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
+		//获取导游
+		$shopObj.find('td[name=currGuide]').find('input[name=currGuideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
 		//新增购物安排
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
@@ -594,6 +616,10 @@ define(function(require, exports){
 				Count.getSelfItemData($(this).closest('tr'),$obj);
 			});
 		};
+		//获取导游
+		$selfObj.find('td[name=selfGuideName]').find('input[name=guideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
 		//新增自费安排
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
 			Count.addSelf($selfObj,$obj);
@@ -785,6 +811,11 @@ define(function(require, exports){
 
 			Count.addOtherOut($otherOutObj,$obj);
 		});
+		//计算保险费用
+		$insureObj = $listObj.find('.T-count-insurance');
+		$insureObj.off('change').on('change','input',function(){
+			Count.autoInsureanceSum($(this),$obj);
+		});
 		//计算中转成本
 		Count.tripTransferCost($obj);
 		//计算团收入
@@ -939,13 +970,13 @@ define(function(require, exports){
 		});
 		//导游数据处理
 		var $guideObj = $listObj.find('.T-count-guide');
-		$guideObj.find('input[type=text]').off('change').on('change',function(){
+		$guideObj.find('input').off('change').on('change',function(){
 			var $that = $(this);
 				tagName = $that.attr('name');
 			if (tagName !='remark') {
 				Count.calculateCost($that);
 				//计算金额
-				Count.autoGuideSum($that,$obj);
+				Count.autoGuideSum($guideObj,$obj);
 			}
 		});
 		//购物处理--计算、新增
@@ -992,7 +1023,14 @@ define(function(require, exports){
 			//清除小数点
 			Count.delValDecimal($(this),$shopObj,$obj);
 		});
-		
+		//获取导游
+		$shopObj.find('td[name=shopGuideName]').find('input[name=shopGuideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
+		//获取导游
+		$shopObj.find('td[name=currGuide]').find('input[name=currGuideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
+		});
 		//新增购物安排sumRateMoney
 		$listObj.find('.T-shop-add').find('.T-addShopping').on('click',function(){
 			Count.addShopping($shopObj,$obj);
@@ -1032,6 +1070,10 @@ define(function(require, exports){
 		//新增自费安排
 		$listObj.find('.T-self-add').find('.T-addSelf').off('click').on('click',function(){
 			Count.addSelf($selfObj,$obj);
+		});
+		//获取导游
+		$selfObj.find('td[name=selfGuideName]').find('input[name=guideName]').each(function(){
+			Count.getAccoutnGuide($(this),$obj);
 		});
 		if($selfObj.find('input[name=selfPayItemName]').length>0){
 			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
@@ -1222,6 +1264,11 @@ define(function(require, exports){
 		//新增其他支出
 		$listObj.find('.T-otherOut-add').off('click').on('click',function(){
 			Count.addOtherOut($otherOutObj,$obj);
+		});
+		//计算保险费用
+		$insureObj = $listObj.find('.T-count-insurance');
+		$insureObj.off('change').on('change','input',function(){
+			Count.autoInsureanceSum($(this),$obj);
 		});
 		//触发页面的change事件
 		$obj.find('input').trigger('change');
@@ -2431,17 +2478,21 @@ define(function(require, exports){
 	};
 	//导游金额计算
 	Count.autoGuideSum = function($obj,$parentObj){
-		var $tr = $obj.closest('tr');
-		var price = $tr.find('input[name=price]').val();
-		var manageFee = $tr.find('input[name=manageFee]').val();
-		//规范数据
-		price = Count.changeTwoDecimal(price);
-		manageFee = Count.changeTwoDecimal(manageFee);
-		if($tr.find('input[name=price]').length){
-			$parentObj.find('.tripCost-guideArrangePrice').text(price);
-			$parentObj.find('.tripIncome-guideManageMoney').text(manageFee);
-		}
+		var	$priceObj = $obj.find('input[name=price]'),
+			$manageFeeObj = $obj.find('input[name=manageFee]'),
+			sumPrice = 0,sumManageFee = 0;
+		$priceObj.each(function(){
+			var sum = Count.changeTwoDecimal($(this).val());
+			sumPrice += sum;
+		});
 		
+		$manageFeeObj.each(function(){
+			var sum = Count.changeTwoDecimal($(this).val());
+			sumManageFee += sum;
+		});
+
+		$parentObj.find('.tripCost-guideArrangePrice').text(sumPrice);
+		$parentObj.find('.tripIncome-guideManageMoney').text(sumManageFee);
 		//计算团收入
 		Count.tripIncome($parentObj);
 		//计算团成本
@@ -3545,6 +3596,20 @@ define(function(require, exports){
 			Count.tripCost($parentObj);
 			$tr.remove();
 		};
+	};
+	//计算保险费用
+	Count.autoInsureanceSum = function($obj,$parentObj){
+		var $tr = $obj.closest('tr'),
+			$payObj = $tr.find('input[name=realNeedPayMoney]'),
+			sumInsureCost = 0;
+		$payObj.each(function(){
+			var sum = Count.changeTwoDecimal($(this).val());
+			sumInsureCost += sum;
+		});
+		
+		$parentObj.find('.tripCost-insuranceArrangeNeedPayMoney').text(sumInsureCost);
+		//计算整个团成本
+		Count.tripCost($parentObj);
 	};
 	//修改金额数量响应事件
 	Count.changeCountAndMoney = function($obj,$parentObj){

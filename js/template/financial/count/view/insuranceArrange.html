@@ -18,7 +18,10 @@
                 <td>{{arrange.type}}</td>
                 <td><span class="F-float F-money">{{arrange.realPrice}}</span></td>
                 <td><span class="F-float F-count">{{arrange.realCount}}</span></td>
-                <td><span class="F-float F-money">{{arrange.realNeedPayMoney}}</span></td>
+                <td>
+                    <span class="F-float F-money realNeedPayMoney">{{arrange.realNeedPayMoney}}</span>
+                    <input name="realNeedPayMoney" value="{{arrange.realNeedPayMoney}}" type="hidden" />
+                </td>
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
                 <td>{{arrange.payedMoney}}</td>
                 <td>

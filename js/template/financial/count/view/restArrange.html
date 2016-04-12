@@ -102,22 +102,34 @@
                     </td><!-- 餐标 -->
 
                     <td>
-                        {{if arrange.badStatus == 1}}
-                            <span class="F-float F-count">{{arrange.realCount}}</span>
-                            <input type="hidden" name="realCount" value="{{arrange.realCount}}">
+                        {{if editStatus == 2}}
+                           <span class="F-float F-count">{{arrange.realCount}}</span>
+                                <input type="hidden" name="realCount" value="{{arrange.realCount}}">
                         {{else}}
-                            <input class="F-float F-count w-50" name="realCount" type="text" value="{{arrange.realCount}}" readOnly="readOnly"
+                            {{if arrange.badStatus == 1}}
+                                <span class="F-float F-count">{{arrange.realCount}}</span>
+                                <input type="hidden" name="realCount" value="{{arrange.realCount}}">
+                            {{else}}
+                                <input class="F-float F-count w-50" name="realCount" type="text" value="{{arrange.realCount}}" readOnly="readOnly">
+                            {{/if}}
                         {{/if}}
+                        
                     </td><!-- 人数 -->
 
                     <td>
-                        {{if arrange.badStatus == 1}}
-                            <span class="F-float F-money w-80">{{arrange.realReduceMoney}}</span>
+                        {{if editStatus == 2}}
+                            <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
                             <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}">
                         {{else}}
-                            <input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" 
-                            {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            {{if arrange.badStatus == 1}}
+                                <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
+                                <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}">
+                            {{else}}
+                                <input type="text" name="realReduceMoney" class="F-float F-money w-80" value="{{arrange.realReduceMoney}}" 
+                                {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                            {{/if}}
                         {{/if}}
+                        
                     </td><!-- 优惠 -->
 
                     <td>
