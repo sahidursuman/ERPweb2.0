@@ -541,7 +541,7 @@ define(function(require, exports){
 			Count.addShop($(this),$obj);
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
-		}).on('blur','input[name=consumeMoney]',function(){
+		}).on('blur','input[name=shopGuideMoney]',function(){
 			//填写金额带出社佣、导佣 T-del
 			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
@@ -3830,7 +3830,7 @@ define(function(require, exports){
 		}
 	};
 	Count.getDataByAutocomplete = function($shopPolicyObj,shopId,$parentObj){
-		if(!!shopId && !!shopId){
+		if(!!shopId){
 			$shopPolicyObj.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -4836,7 +4836,7 @@ define(function(require, exports){
 	                		var guideRate = parseFloat(shopCostRebate.guideRate)*100;
 	                		guideRate = Count.changeTwoDecimal(guideRate);
 	                		var $tr = $obj.closest('tr');
-	                		
+	                		var thisIndex = $
 	                		if(travelAgencyRate > 0) {
 	                			$tr.find("input[name=travelAgencyRate]").val(travelAgencyRate);
 	                			Count.autoShopSum($obj,$bodyObj);
