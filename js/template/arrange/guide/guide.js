@@ -127,31 +127,42 @@ define(function(require, exports) {
         }
 
         // 组织td
+        var start, end, newList, same,
+            blankLine = (new Array(Tools.getDateDiff(tbl_start, tbl_end, true) + 2)).join('<td></td>');
+
         for (i = 0; i < len; i++) {
-            var same = 0,
-                start = tbl_start,
-                end = tbl_end;
+            // 重新组织安排列表，处理日期重复的情况
+            newList = GuideArrange._mergeArrange(guides[i].guideArrangeList);
 
-            tdStr.push('<tr data-guide-id="' + guides[i].guideId + '"><td>' + guides[i].guideName + '</td>');
-            for (var j = 0, jLen = guides[i].guideArrangeList.length, tmp, days; j < jLen; j++) {
+            if (same = newList.length) {  // 存在安排时
+                for (var k = 0; k < same; k ++) {
+                    // 循环安排，可能存在日期重复
+                    start = tbl_start,
+                    end = tbl_end;
 
-                tmp = guides[i].guideArrangeList[j];
-                tdStr.push((new Array(Tools.getDateDiff(tmp.startTime, start, true) + 1)).join('<td></td>'));
+                    if (k === 0) {
+                        tdStr.push('<tr data-guide-id="' + guides[i].guideId + '"><td rowspan="'+same + '">' + guides[i].guideName + '</td>');
+                    } else {
+                        tdStr.push('<tr>');
+                    }
 
-                tdStr.push('<td colspan="' + (Tools.getDateDiff(tmp.startTime, tmp.endTime, true) + 1) + '" title="' + tmp.startTime + '-' + tmp.endTime + '" class="T-tranplan cursor" data-id="' + tmp.tripPlanId + '" data-type="' + tmp.tripPlanType + '" style="background-color:' + GuideArrange.getBackGroundColor(tmp.tripPlanId) + ';color:#fff;">' + tmp.lineProductName + '</td>');
-                start = Tools.addDay(tmp.endTime, 1);
+                    for (var j = 0, jLen = newList[k].length, tmp, days; j < jLen; j++) {
+
+                        tmp = newList[k][j];
+                        tdStr.push((new Array(Tools.getDateDiff(tmp.startTime, start, true) + 1)).join('<td></td>'));
+
+                        tdStr.push('<td colspan="' + (Tools.getDateDiff(tmp.startTime, tmp.endTime, true) + 1) + '" title="' + tmp.startTime + '-' + tmp.endTime + '" class="T-tranplan cursor" data-id="' + tmp.tripPlanId + '" data-type="' + tmp.tripPlanType + '" style="background-color:' + GuideArrange.getBackGroundColor(tmp.tripPlanId) + ';color:#fff;">' + tmp.lineProductName + '</td>');
+                        start = Tools.addDay(tmp.endTime, 1);
+                    }
+
+                    tdStr.push((new Array(Tools.getDateDiff(tmp.endTime, end, true) + 1)).join('<td></td>'));
+                    tdStr.push('</tr>');
+                }                
+            } else {
+                // 当没有安排时
+                tdStr.push('<tr data-guide-id="' + guides[i].guideId + '"><td>' + guides[i].guideName + '</td>' + blankLine + '<tr>');
             }
-
-            j = 2;
-            if (jLen) {  // 存在安排时
-                start = tmp.endTime;
-                j = 1;
-            } // 无安排，使用start、end填充
-            if(!!tmp){
-                tdStr.push((new Array(Tools.getDateDiff(start, end, true) + j)).join('<td></td>'));
-            }
-
-            tdStr.push('</tr>');
+                
         }
 
         return ListTemplate({
@@ -204,6 +215,55 @@ define(function(require, exports) {
         if (!tbl_end || tbl_end < item.endTime) {
             tbl_end = item.endTime;
         }
+    };
+
+    /**
+     * 将时间重合的部分分离：分成多行显示，优先填充前面的行
+     * @param  {array} list 安排列表
+     * @return {[type]}      [description]
+     */
+    GuideArrange._mergeArrange = function(list) {
+        var res = [], len = list.length, j = 0;
+
+        if (len === 0) {
+            res = list;
+        } else if (len === 1) {
+            res.push(list);
+        } else {
+            res[j] = [list[0]];
+            for (var i = 1, tmp, repeated; i < len ; i ++) {
+                tmp = list[i];
+                repeated = false;
+
+                for (var k = 0, end = j + 1; k < end; k ++) {
+                    for (var cur = 0, len = res[k].length, target; cur < len; cur ++) {
+                        target = res[k][cur];
+                        if ((target.startTime < tmp.startTime && target.endTime > tmp.startTime)  // 开始日期在中间
+                            || (target.startTime < tmp.endTime && target.endTime > tmp.endTime)   // 结束日期在中间
+                            || (target.startTime > tmp.start && target.endTime < tmp.endTime)     // 全部包含
+                            || tmp.startTime === target.startTime || tmp.startTime === target.endTime
+                            || tmp.endTime === target.startTime || tmp.endTime === target.endTime) {
+                            // 日期重叠，看下一组
+                            break;
+                        }
+                    }
+
+                    if (cur === len) {
+                        // 找到合适的位置，未重复
+                        res[k].push(tmp);
+                        break;
+                    }
+                }
+
+                if (k === end) {
+                    // 找完了，也没有合适的,新增一组
+                    res[end] = [tmp];
+                    j = end;
+                }
+            }
+        }
+
+        return res;
     };
 
     /**
