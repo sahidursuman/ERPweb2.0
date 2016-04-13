@@ -6307,7 +6307,7 @@ define(function(require, exports){
 			'</td>';
 		}else{
 			var guideName = Count.guide.listMap[0].guideName,
-				guideArrangeId = Count.guide.listMap[0].guideArrangeId;
+				guideArrangeId = Count.guide.listMap[0].id;
 			guideTd = '<td name="guideName">'+
 				'<div class="div-h-30">'+
 		        '</div>'+

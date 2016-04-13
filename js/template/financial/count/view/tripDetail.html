@@ -191,7 +191,12 @@
                                 </td>
                                 <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                                 <td>
-                                    <span>{{touristGroup.guideName}}</span>
+                                    {{if guideCount > 1}}
+                                        <span class="guideName">{{touristGroup.guideName}}</span>
+                                    {{else}}
+                                        <span>{{guideArrange.listMap[0].guideName}}</span>
+                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                    {{/if}}
                                     <span class="F-float F-money mar-l-5">{{touristGroup.currentNeedPayMoney}}</span>&nbsp;&nbsp;
                                     {{if touristGroup.isReceived == 0}}
                                         未收到
@@ -518,7 +523,7 @@
                                                                 {{if itemSet.guideDetails.length}}
                                                                     {{each itemSet.guideDetails as rs index}}
                                                                         <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                            <span>{{rd.guideRate*100}}</span>
+                                                                            <span>{{rs.guideRate*100}}</span>
                                                                             <input name="guideRate" value="{{rs.guideRate*100}}" type="hidden"/>
                                                                         </div>
                                                                     {{/each}}

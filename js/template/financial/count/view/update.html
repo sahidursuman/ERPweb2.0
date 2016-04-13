@@ -249,14 +249,19 @@
                                 <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
                                 <td>
                                     <div class="inline-flex">
-                                        {{if touristGroup.guideName == ''}}
-                                            <input name="guideArrangeId" type="hidden" />
-                                            <input name="guideName"  type="text" class="w-80" 
-                                            {{if touristGroup.isConfirmAccount==1 }}disabled="disabled" {{/if}}
-                                            />
+                                        {{if guideCount > 1}}
+                                            {{if touristGroup.guideName == ''}}
+                                                <input name="guideArrangeId" type="hidden" />
+                                                <input name="guideName"  type="text" class="w-80" 
+                                                {{if touristGroup.isConfirmAccount==1 }}disabled="disabled" {{/if}}
+                                                />
+                                            {{else}}
+                                                <span class="guideName">{{touristGroup.guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{touristGroup.guideArrangeId}}" />
+                                            {{/if}}
                                         {{else}}
-                                            <span class="guideName">{{touristGroup.guideName}}</span>
-                                            <input name="guideArrangeId" type="hidden" value="{{touristGroup.guideArrangeId}}" />
+                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
                                         {{/if}}
                                         <input class="F-float F-money w-80 mar-l-5" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                         &nbsp;&nbsp;
