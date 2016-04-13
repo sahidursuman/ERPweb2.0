@@ -120,7 +120,7 @@ define(function(require, exports) {
             date = Tools.addDay(tbl_start, i);
 
             if (date <= tbl_end) {
-                thStr.push('<th title="' + date + '">' + date.split('-')[2] + '</th>');
+                thStr.push('<th title="' + date + '">' + date.substr(5) + '</th>');
             } else {
                 break;
             }
