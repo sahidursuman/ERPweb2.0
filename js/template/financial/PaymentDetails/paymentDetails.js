@@ -422,7 +422,7 @@ define(function(require, exports){
      * @return {[type]}             [description]
      */
 	Payment.loadResTypeSelect =function(resTypeText, $container){
-		var resPayTypeList=[{id:'20',name:'酒店'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],
+		var resPayTypeList=[{id:'20',name:'酒店'},{id:'23',name:'车队'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],
 		    resTypeOption="<select name='resourceType' class='col-sm-12 T-selct-rsType'>";
 		if (resTypeText==="预付账款") {
 		   for(var i = 0; i < resPayTypeList.length; i++){

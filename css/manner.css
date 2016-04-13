@@ -513,6 +513,12 @@ table tr td {
 .line-h-2 {
     line-height: 1.9em;    
 }
+.text-a-l{
+    text-align: left !important;
+}
+.font-w-bold{
+    font-weight: bold;
+}
 
 .label-inline-60 {
     display: inline-block;
@@ -2734,6 +2740,17 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         font-weight: normal !important;
         color: #707070 !important;
     }
+    .AccountingTable-print td{
+        font-size: 10px !important;
+        font-weight:100 !important;
+    }
+    .outDetailPrint-group{
+        margin-top: -20px !important;
+    }
+    .outDetailPrint-group h5{
+        margin-bottom: 0px !important;
+    }
+    
 }
 
 /* 财务已收样式 */
