@@ -2517,7 +2517,8 @@ define(function(require, exports) {
                     data: "id=" + ui.item.id,
                     success: function(data) {
 						if(showDialog(data)){
-							$parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ data.hotel.mobileNumber);
+							var number = data.hotel.telNumber ? data.hotel.telNumber : data.hotel.mobileNumber;
+							$parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ number);
 							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
