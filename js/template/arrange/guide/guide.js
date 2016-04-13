@@ -128,7 +128,11 @@ define(function(require, exports) {
 
         // 组织td
         var start, end, newList, same,
+            blankLine = '';
+
+        if (tbl_end != 0 && tbl_start != 0) {
             blankLine = (new Array(Tools.getDateDiff(tbl_start, tbl_end, true) + 2)).join('<td></td>');
+        }
 
         for (i = 0; i < len; i++) {
             // 重新组织安排列表，处理日期重复的情况
