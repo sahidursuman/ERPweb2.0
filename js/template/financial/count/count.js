@@ -6264,6 +6264,7 @@ define(function(require, exports){
 				if(!!$that.attr('guideId')){
 					guideId = $that.attr('guideId');
 				};
+				if(!!index){
 					var guide = {
 						id:guideId,
 						guideArrangeId:guiddArrangeId,
@@ -6281,6 +6282,8 @@ define(function(require, exports){
 						billRemark:billRemark.eq(i).find('[name=billRemark]').val(),
 					}
 					guideDetails.push(guide);
+				}
+				
 			});
 		return guideDetails;
 	};
