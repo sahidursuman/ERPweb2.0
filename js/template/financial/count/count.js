@@ -3134,19 +3134,22 @@ define(function(require, exports){
 	//新增其他收入
 	Count.addOtherIn = function($obj,$parentObj){
 		var td = '<td>'+
-				'<input name="guideArrangeId" type="hidden" />'+
-	            '<input name="guideName"  type="text" class="w-80"/>'+
+				'<div class="div-h-30"></div>'+
+				'<div  class="div-h-30 mar-t-5">'+
+					'<input name="guideArrangeId" type="hidden" />'+
+	            	'<input name="guideName"  type="text" class="w-80"/>'+
+	            '</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td);
 		var html = '<tr>'+
 			'<td class="countWhichDaysContainer"></td>'+
-			'<td><input type="text" name="title" class="w-80"/></td>'+
-			'<td><input type="text" name="price" class="w-80"/></td>'+
-			'<td><input type="text" name="count" class="w-50"/></td>'+
-			'<td><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="title" class="w-80"/></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="count" class="w-50"/></td>'+
+			'<td><div class="div-h-30"></div><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
 			guideHtml+
-			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
+			'<td><div class="div-h-30"></div><span style="color:#bbb;">查看</span></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
 			'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -5743,10 +5746,7 @@ define(function(require, exports){
 						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
 						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
 					};
-					
-					if(guideArrangeId != "" && !!guideArrangeId){
-						guideDetail.push(guide);
-					};
+					guideDetail.push(guide);
 				};
 			});
 		return guideDetail;
@@ -6264,7 +6264,6 @@ define(function(require, exports){
 				if(!!$that.attr('guideId')){
 					guideId = $that.attr('guideId');
 				};
-				if(!!guiddArrangeId){
 					var guide = {
 						id:guideId,
 						guideArrangeId:guiddArrangeId,
@@ -6282,7 +6281,6 @@ define(function(require, exports){
 						billRemark:billRemark.eq(i).find('[name=billRemark]').val(),
 					}
 					guideDetails.push(guide);
-				};
 			});
 		return guideDetails;
 	};
