@@ -941,7 +941,7 @@ define(function(require, exports){
 		var tmp = {};
 		if(touristGroups.length>1){
 			for(var i =0;i<touristGroups.length;i++){
-				if(id = touristGroups[i].id){
+				if(id == touristGroups[i].id){
 					tmp.touristGroupFeeList = touristGroups[i].feeList;
 				}
 			}
