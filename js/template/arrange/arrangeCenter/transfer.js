@@ -428,6 +428,7 @@ define(function(require, exports) {
         var shuttleType = $arrange.closest('tr').attr('shuttleType')
         if ($arrange.closest('.tab-pane').find('select[name="status"]').val() === '0') {
             args.outRemarkId = id;
+            args.shuttleType = shuttleType;
         } else {
             args.unifyId = id;
         }
@@ -456,8 +457,9 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer._mergeArrangeBus = function() {
+
             var outRemarkList = JSON.stringify(Transfer.busArrangeIdArray);
-            console.log(Transfer.busArrangeIdArray);
+
             $.ajax({
                 url: KingServices.build_url(service_name, "outBusUnifyArrange"),
                 type: "POST",
@@ -470,7 +472,7 @@ define(function(require, exports) {
                         Transfer.$busplanId = $("#tab-" + busplanId + "-content");
                         var $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
-                        Transfer.busplanclick($busplanId, outRemarkList.outRemarkId, outRemarkList.shuttleType); //车安排事件
+                        Transfer.busplanclick($busplanId); //车安排事件
                         
                     };
                 }
@@ -509,6 +511,7 @@ define(function(require, exports) {
             });
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
+                var shuttleType = $busplanId.find('input[name=shuttleType]').val();
                 Transfer.addBusTransfer(shuttleType,$busplanId);
             });
             //删除中转数据
