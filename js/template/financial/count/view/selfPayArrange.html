@@ -52,41 +52,42 @@
                 {{each selfpayArrange.listMap as arrange index}}
                     <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange">
                         <td rowspan="{{arrange.selfPayItem.length}}">
-                        <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
+                            <div class="div-h-30"></div>
+                            <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
                         <td rowspan="{{arrange.selfPayItem.length}}">
+                            <div class="div-h-30"></div>
                             <span class="nameType">{{arrange.selfPayName}}</span>
                         </td><!-- 自费点 -->
-
                         {{if arrange.selfPayItem.length}}
                             {{each arrange.selfPayItem as itemSet index}}
                                 {{if index == 0}}
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
                                     </td>
 
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
                                     </td>
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
+                                        {{if guideCount>1}}
                                             <button class="btn btn-success btn-sm btn-white T-addSelfGuide pull-right "> 
                                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                             </button><!-- 增加导游 -->
+                                        {{/if}}
                                         </div>
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">{{rs.guideName}}</span>
                                                     <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                                                {{if itemSet.isConfirmAccount != 1}}
+                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
-                                                {{else}}
-                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
-                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                    </button>
                                                 {{/if}}
                                                 </div>
                                             {{/each}}
@@ -97,14 +98,10 @@
                                                         disabled="disabled" 
                                                     {{/if}}/>
                                                 <input name="guideArrangeId" type="hidden" />
-                                                {{if itemSet.isConfirmAccount != 1}}
+                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
-                                                {{else}}
-                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
-                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                    </button>
                                                 {{/if}}
                                             </div>
                                         {{/if}}
@@ -252,6 +249,7 @@
                                     </td>
 
                                     <td name="payedMoney">
+                                        <div class="div-h-30"></div>
                                         <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 已付 -->
                                     </td>
 
@@ -318,6 +316,7 @@
                                     </td>
                                     
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <input type="text" readonly="readonly" class="w-70 F-float F-money customerRebateMoney" 
                                         value="{{arrange.customerRebateMoney}}"><!-- 人数返佣 -->
                                     </td>
@@ -433,6 +432,7 @@
                                     </td>
 
                                     <td>
+                                        <div class="div-h-30"></div>
                                         {{if itemSet.isConfirmAccount == 0}}
                                             未对账
                                         {{else}}
@@ -448,9 +448,6 @@
                                 {{/if}}
                             {{/each}}
                         {{/if}} 
-
-                        
-
                     </tr>
                     {{if arrange.selfPayItem.length}}
                         {{each arrange.selfPayItem as itemSet index}}
@@ -458,31 +455,31 @@
                                 <tr  badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
                                     </td>
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
                                     </td>
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
-                                            <button class="btn btn-success btn-sm btn-white T-addSelfGuide pull-right "> 
-                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                            </button><!-- 增加导游 -->
+                                            {{if guideCount>1}}
+                                                <button class="btn btn-success btn-sm btn-white T-addSelfGuide pull-right "> 
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </button><!-- 增加导游 -->
+                                            {{/if}}
                                         </div>
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">{{rs.guideName}}</span>
                                                     <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                                                {{if itemSet.isConfirmAccount != 1}}
+                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
-                                                {{else}}
-                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
-                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                    </button>
                                                 {{/if}}
                                                 </div>
                                             {{/each}}
@@ -494,14 +491,10 @@
                                                     {{/if}}/>
                                                 <input name="guideArrangeId" type="hidden" />
 
-                                                {{if itemSet.isConfirmAccount != 1}}
+                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
-                                                {{else}}
-                                                    <button class="btn btn-danger btn-sm btn-white pull-right"> 
-                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                    </button>
                                                 {{/if}}
                                             </div>
                                         {{/if}}
@@ -581,6 +574,7 @@
                                     </td><!-- 现收 -->
 
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
                                     </td>
 
@@ -650,6 +644,7 @@
                                     </td>
 
                                     <td name="payedMoney">
+                                        <div class="div-h-30"></div>
                                         <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 已付 -->
                                     </td>
 
@@ -718,6 +713,7 @@
                                     </td>
                                     
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <input type="text" readonly="readonly" class="w-70 F-float F-money customerRebateMoney" 
                                         value="{{arrange.customerRebateMoney}}"><!-- 人数返佣 -->
                                     </td>
@@ -833,6 +829,7 @@
                                     </td>   
 
                                     <td>
+                                        <div class="div-h-30"></div>
                                         {{if itemSet.isConfirmAccount == 0}}
                                             未对账
                                         {{else}}

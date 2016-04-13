@@ -1,7 +1,6 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
     <tr>
-        <th class="th-border"><span class="necessary">*</span>指定导游报账</th>
         <th class="th-border"><span class="necessary">*</span>开始日期</th>
         <th class="th-border">结束日期</th>
         <th class="th-border">任务</th>
@@ -16,7 +15,6 @@
     <tbody class="T-count-guide">
     {{each guideArrange.listMap as arrange index}}
         <tr arrangeid = "{{arrange.id}}" isAccountGuide = "{{arrange.isAccountGuide}}">
-            <td><input disabled="disabled" type="radio" name="" {{if arrange.isAccountGuide == 1}}checked="checked"{{/if}}/></td>
             <td>
                 {{each arrange.taskJson as rs}}
                     <div class="mar-t-5">
@@ -52,23 +50,33 @@
             </td>
             <td>{{arrange.guideName}}</td>
             <td>
-                {{if arrange.isAccountGuide == 1}}
+                {{if editStatus == 2}}
+                    <span class="F-float F-money">{{arrange.price}}</span>
+                    <input name="price"  value="{{arrange.price}}" type="hidden">
+                {{else}}
                     <input name="price" class="F-float F-money w-80" value="{{arrange.price}}" type="text" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}>
-                {{else}}
-                    <span class="F-float F-money">{{arrange.price}}</span>
                 {{/if}}
+                
             </td>
             <td>
-                {{if arrange.isAccountGuide == 1}}
+                {{if editStatus == 2}}
+                    <span class="F-float F-money">{{arrange.manageFee}}</span>
+                    <input name="manageFee"  value="{{arrange.manageFee}}" type="hidden">
+                {{else}}
                     <input name="manageFee" class="F-float F-money w-80" value="{{arrange.manageFee}}" type="text" 
                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}>
-                {{else}}
-                    <span class="F-float F-money">{{arrange.manageFee}}</span>
                 {{/if}}
+                
             </td>
             <td><span class="F-float F-money">{{arrange.guidePreMoney}}</span></td>
-            <td><input type="text" name="remark" value="{{arrange.remark}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
+            <td>
+                {{if editStatus == 2}}
+                    <span>{{arrange.remark}}</span>
+                {{else}}
+                    <input type="text" name="remark" value="{{arrange.remark}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                {{/if}}
+            </td>
             <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
         </tr>
     {{/each}}

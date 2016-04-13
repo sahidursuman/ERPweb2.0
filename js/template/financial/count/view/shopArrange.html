@@ -196,6 +196,7 @@
                             </td><!-- 现收_备注 -->
 
                             <td rowspan="{{arrange.itemList.length}}">
+                                <div class="div-h-30"></div>
                                 {{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}
                                 &nbsp;&nbsp;
                                 {{if arrange.incomeStatus == 0 && arrange.isConfirmAccount == 0}}
@@ -212,6 +213,9 @@
                                 {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}
                                 arrangeType="shopArrange">
                                 <td>
+                                    {{if index>1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     <span class="shopPolicy">
                                         {{itemSet.itemName}}
                                         <input name="shopPolicyArrId" value="{{itemSet.id}}" type="hidden" />
@@ -224,7 +228,7 @@
                                     {{/if}}<!-- 增加商品按钮 -->
 
                                     {{if index > 1}}
-                                       
+                                        
                                         <button class="btn btn-danger btn-sm btn-white T-shopArrDelItem pull-right"> 
                                             <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                         </button><!-- 删除商品按钮 -->
@@ -232,6 +236,7 @@
                                 </td><!-- 商品 -->
                                 
                                 <td>
+                                    <div class="div-h-30"></div>
                                     <input class="F-float F-money w-80" name="sumConsumeMoney" readonly="readonly" type="text" />
                                 </td><!-- 金额小计 -->
 
