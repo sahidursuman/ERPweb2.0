@@ -414,6 +414,8 @@ template.helper('getLogTypeText', function(type) {
             return 'Web报账';
         case 7:
             return '导游提交报账';
+        case 8:
+            return '删除';
         default: 
             console.info('Other Type:' + 'type');
             return '其他类型';

@@ -1,18 +1,18 @@
-<div class="countUpdate">
+<div class="countUpdate countUpdate-print">
     <p style="display:none;" class="T-print">单团核算表</p>
-    <table class="table table-striped table-bordered table-hover all T-main-table">
+    <table class="table table-striped table-bordered table-hover AccountingTable-print all T-main-table">
         <tbody>
-            <tr>
-                <td  style="text-align:left"><label style="font-weight: bold;">线路：{{tripBaseInfo.lineProductName}}</label></td>
-                <td  style="text-align:left"><label style="font-weight: bold;">团队人数：{{tripBaseInfo.adultCount}}大{{tripBaseInfo.childCount}}小</label></td>
-                <td  style="text-align:left"><label style="font-weight: bold;">出团日期：{{tripBaseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</label></td>
-                <td  style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripBaseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}<span class="T-ProductDays" style="font-weight: bold;"></span></label></td>
-                <td class="T-noprint"><a href="javascript:void(0)" class="T-export" style="font-weight: bold;">打印</a></td>
+            <tr class="AccountingTable-print">
+                <td class="text-a-l" ><label>线路：{{tripBaseInfo.lineProductName}}</label></td>
+                <td class="text-a-l"><label>团队人数：{{tripBaseInfo.adultCount}}大{{tripBaseInfo.childCount}}小</label></td>
+                <td class="text-a-l"><label>出团日期：{{tripBaseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</label></td>
+                <td class="text-a-l"><label>完团日期：{{tripBaseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}<span class="T-ProductDays"></span></label></td>
+                <td class="T-noprint"><a href="javascript:void(0)" class="T-export">打印</a></td>
             </tr>
             <tr>
-                <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripBaseInfo.tripNumber}}</label></td>
-                <td style="text-align:left"><label style="font-weight: bold;">责任计调：{{tripBaseInfo.dutyOPUserName}}</label></td>
-                <td colspan="3" style="text-align:left"><label style="font-weight: bold;">
+                <td class="text-a-l"><label>团号：{{tripBaseInfo.tripNumber}}</label></td>
+                <td class="text-a-l"><label>责任计调：{{tripBaseInfo.dutyOPUserName}}</label></td>
+                <td colspan="3" class="text-a-l"><label>
                     {{each tripBaseInfo.guideList as guide}}
                         导游：{{guide.guideName}}&nbsp;&nbsp;{{guide.guideCardNumber}}&nbsp;&nbsp;&nbsp;
                     {{/each}}
@@ -20,16 +20,16 @@
             </tr>
             <tr>
                 <td colspan="5" style="text-align:left">
-                  <label style="font-weight: bold;">发团收入：{{tripBaseInfo.tripPlanIncome}}</label>
-                  <label style="font-weight: bold;margin-left:30px;">发团成本：
-                  <span class="F-float F-money">{{tripBaseInfo.tripPlanPaySMoney}}</span></label>
-                  <label style="font-weight: bold;margin-left:30px;">中转成本：
-                  <span class="F-float F-money">{{tripBaseInfo.transitPaySMoney}}</span></label>
-                  <label style="font-weight: bold;margin-left:30px;">毛利：
-                  <span class="F-float F-money">{{tripBaseInfo.grossProfit}}</span></label>
-                  <label style="font-weight: bold;margin-left:30px;">毛利率：
+                  <label>发团收入：{{tripBaseInfo.tripPlanIncome}}</label>
+                  <label style="margin-left:30px;">发团成本：
+                  <span  class="F-float F-money">{{tripBaseInfo.tripPlanPaySMoney}}</span></label>
+                  <label style="margin-left:30px;">中转成本：
+                  <span  class="F-float F-money">{{tripBaseInfo.transitPaySMoney}}</span></label>
+                  <label style="margin-left:30px;">毛利：
+                  <span  class="F-float F-money">{{tripBaseInfo.grossProfit}}</span></label>
+                  <label style="margin-left:30px;">毛利率：
                   <span class="F-float F-money">{{tripBaseInfo.grossProfitRate}}</span></label>
-                  <label style="font-weight: bold;margin-left:30px;">人均毛利：
+                  <label style="margin-left:30px;">人均毛利：
                   <span class="F-float F-money">{{tripBaseInfo.perGrossProfit}}</span></label>  
                 </td>
             </tr>
@@ -60,9 +60,9 @@
         <div class="tab-content" style="position:relative;top: -2px">
             <!-- 发团收入明细 -->
             <div id="financial-count-trip-income" class="tab-pane fade active in T-print">
-                {{if tripIncomeMap.groupIncomeMap.groupIncomeMapList.length != 0}}
+                {{if tripIncomeMap.groupIncomeMap.groupIncomeMapList.length != 0}} 
                     <!-- 团款-->
-                    <div class="form-group tripCost">
+                    <div class="form-group tripCost outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -72,7 +72,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr class="T-fontSize">
+                                                <tr class="T-fontSize view-accountsPrint">
                                                     <th class="th-border"   >收客信息</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">客户联系人</th>
@@ -130,7 +130,7 @@
 
                 {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList.length != 0}}
                     <!-- 购物-->
-                    <div class="form-group tripShop">
+                    <div class="form-group tripShop outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -140,14 +140,14 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border" colspan="5">打单</th>
                                                     <th class="th-border" colspan="2">社佣</th>
                                                     <th class="th-border" colspan="2">导佣</th>
                                                     <th class="th-border" rowspan="2">应收</th>
                                                     <th class="th-border" rowspan="2">结算</th>
                                                 </tr>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                   <th class="th-border">时间</th>
                                                   <th class="th-border">购物店</th>
                                                   <th class="th-border">商品</th>
@@ -254,7 +254,7 @@
 
                 {{if tripIncomeMap.selfPayIncomeMap.selfPayIncomeMapList.length != 0}}
                     <!-- 自费-->
-                    <div class="form-group tripSelf">
+                    <div class="form-group tripSelf outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -262,9 +262,9 @@
                                     </h5>
                                 <div class="widget-body">
                                     <div class="widget-main">
-                                        <table class="table table-striped table-bordered table-hover margin-top" >
+                                        <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">自费商家</th>
                                                     <th class="th-border">项目</th>
@@ -334,7 +334,7 @@
 
                 {{if tripIncomeMap.guideIncomeMap.guideIncomeMapList.length != 0}}
                     <!-- 导游管理费-->
-                    <div class="form-group tripCost">
+                    <div class="form-group tripCost outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -420,7 +420,7 @@
 
                 {{if tripIncomeMap.otherIncomeMap.otherIncomeMapList.length != 0}}
                     <!-- 其他收入-->
-                    <div class="form-group tripOtherIn">
+                    <div class="form-group tripOtherIn outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -504,7 +504,7 @@
             <div id="financial-count-trip-cost" class="tab-pane fade T-print">
                 {{if tripPayMap.insurancePayMap.insurancePayMapList.length != 0}}
                     <!-- 保险-->
-                    <div class="form-group insurance">
+                    <div class="form-group insurance outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -575,7 +575,7 @@
 
                 {{if tripPayMap.busPayMap.busPayMapList.length != 0}}
                     <!-- 车费-->
-                    <div class="form-group busFee">
+                    <div class="form-group busFee outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -677,7 +677,7 @@
 
                 {{if tripPayMap.restaurantPayMap.restaurantPayMapList.length != 0}}
                     <!-- 餐厅-->
-                    <div class="form-group restaurant">
+                    <div class="form-group restaurant outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -687,7 +687,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">餐厅</th>
                                                     <th class="th-border">类型</th>
@@ -763,7 +763,7 @@
 
                 {{if tripPayMap.hotelPayMap.hotelPayMapList.length != 0}}
                     <!-- 房费-->
-                    <div class="form-group hotel">
+                    <div class="form-group hotel outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -773,7 +773,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">酒店</th>
                                                     <th class="th-border">房型</th>
@@ -849,7 +849,7 @@
                 
                 {{if tripPayMap.scenicPayMap.scenicPayMapList.length != 0}}
                     <!-- 景区-->
-                    <div class="form-group scenic">
+                    <div class="form-group scenic outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -859,7 +859,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">景区</th>
                                                     <th class="th-border">收费项目</th>
@@ -935,7 +935,7 @@
                 
                 {{if tripPayMap.ticketPayMap.ticketPayMapList.length != 0}}
                     <!-- 票务-->
-                    <div class="form-group ticket">
+                    <div class="form-group ticket outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -945,7 +945,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">票务商家</th>
                                                     <th class="th-border">类型</th>
@@ -1041,7 +1041,7 @@
 
                 {{if tripPayMap.selfPayPayMap.selfpPayPayMapList.length != 0}}
                     <!-- 自费-->
-                    <div class="form-group self">
+                    <div class="form-group self outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1051,7 +1051,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">自费商家</th>
                                                     <th class="th-border">项目</th>
@@ -1127,7 +1127,7 @@
 
                 {{if tripPayMap.otherPayMap.otherPayMapList.length != 0}}
                     <!-- 其他支出-->
-                    <div class="form-group otherOut">
+                    <div class="form-group otherOut outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1137,7 +1137,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">项目</th>
                                                     <th class="th-border">单价</th>
@@ -1210,7 +1210,7 @@
 
                 {{if tripPayMap.guidePayMap.guidePayMapList.length != 0}}
                     <!-- 导游支出-->
-                    <div class="form-group scenic">
+                    <div class="form-group scenic outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1220,7 +1220,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">开始日期</th>
                                                     <th class="th-border">结束日期</th>
                                                     <th class="th-border">任务</th>
@@ -1308,7 +1308,7 @@
             <div id="financial-count-transit-cost" class="tab-pane fade T-print">
                 {{if tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length != 0}}
                     <!-- 车费-->
-                    <div class="form-group transitBus">
+                    <div class="form-group transitBus outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1318,7 +1318,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">中转单号</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">游客联系人</th>
@@ -1402,7 +1402,7 @@
     
                 {{if tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length != 0}}
                     <!-- 房费-->
-                    <div class="form-group transitHotel">
+                    <div class="form-group transitHotel outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1412,7 +1412,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">中转单号</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">游客联系人</th>
@@ -1496,7 +1496,7 @@
 
                 {{if tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList.length != 0}}
                     <!-- 餐费-->
-                    <div class="form-group transitRest">
+                    <div class="form-group transitRest outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1506,7 +1506,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">中转单号</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">游客联系人</th>
@@ -1590,7 +1590,7 @@
 
                 {{if tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList.length != 0}}
                     <!-- 票务-->
-                    <div class="form-group transitTicket">
+                    <div class="form-group transitTicket outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1600,7 +1600,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">中转单号</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">游客联系人</th>
@@ -1704,7 +1704,7 @@
 
                 {{if tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList.length != 0}}
                     <!-- 其他-->
-                    <div class="form-group transitOther">
+                    <div class="form-group transitOther outDetailPrint-group">
                         <div class=" widget-container-col">
                             <div class=" ui-sortable-handle">
                                     <h5>
@@ -1714,7 +1714,7 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover margin-top" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
                                                     <th class="th-border">中转单号</th>
                                                     <th class="th-border">客户</th>
                                                     <th class="th-border">游客联系人</th>
