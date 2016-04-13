@@ -4,14 +4,17 @@
 			<div class="col-xs-2 col-xs-offset-1">
 				<select class="col-xs-12 T-abversion">
 					<option value="0">本部操作</option>
-					<option value="1" {{if isTransfer == 1}}selected{{/if}}>内部操作</option>
-					<!-- <option value="2" {{if isTransfer == 2}}selected{{/if}}>外转操作</option> -->
+					<option value="1" {{if isTransfer == 1}}selected{{/if}}>他部操作</option>
 				</select> 
 			</div>
-			<div class="col-xs-8{{if isTransfer != 1}} hidden{{/if}} T-internal">
-				<div class="col-xs-2 text-right no-padding-right control-label no-padding-left">责任部门</div>
-				<div class="col-xs-4">
-					<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
+			<div class="col-xs-9{{if isTransfer != 1}} hidden{{/if}} T-internal">
+				<div class="col-xs-1 text-right no-padding-right control-label no-padding-left">部门</div>
+				<div class="col-xs-2">
+					<input type="text" class="col-xs-12" name="businessName" value="{{businessName}}" data-id="{{dutyDepartmentId}}">
+				</div>
+				<div class="col-xs-1 text-right no-padding-right control-label no-padding-left">子部门</div>
+				<div class="col-xs-2">
+					<input type="text" class="col-xs-12" name="groupName" value="{{groupName}}" data-id="{{dutyDepartmentId}}">
 				</div>
 				<div class="col-xs-2 text-right no-padding-right control-label">责任计调</div>
 				<div class="col-xs-4">
@@ -58,8 +61,7 @@
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select class="col-xs-12" name="type">
-								<option value="3">中转结算价</option>
-								<option value="4" {{if rs.type == "4"}}selected{{/if}}>车辆费用</option>
+								<option value="4">车辆费用</option>
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
