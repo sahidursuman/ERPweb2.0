@@ -2586,15 +2586,15 @@ define(function(require, exports){
 					case 'guideRate':
 						guideMoney();
 						break;
-					case 'realGetMoney':
+					case 'cashMoney':
 						guideMoney();
 						travelMoney();
 						break;
-					case 'price':
+					case 'incomeCount':
 						guideMoney();
 						travelMoney();
 						break;
-					case 'needCount':
+					case 'realCount':
 						guideMoney();
 						travelMoney();
 						break;
