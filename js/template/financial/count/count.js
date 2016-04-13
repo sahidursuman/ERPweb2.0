@@ -2055,7 +2055,7 @@ define(function(require, exports){
 		};
 		if(!!guideId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,cateName,removeGuide);
+				Count.delArrangeData(guideId,cateName,removeGuide);
 			});
 		}else{
 			removeGuide();
