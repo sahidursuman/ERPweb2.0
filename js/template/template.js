@@ -390,6 +390,9 @@
           case 7:
             return "导游提交报账";
 
+          case 8:
+            return "删除";
+
           default:
             return console.info("Other Type:type"), "其他类型";
         }
