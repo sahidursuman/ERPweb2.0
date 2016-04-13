@@ -2046,8 +2046,16 @@ define(function(require, exports){
 			guideId = $thisDiv.attr('guideId'),
 			tdName = $thisTd.attr('name'),
 			index = $thisDiv.attr('index');
+		var cateName = '';
+		if(tdName == 'shopGuideName'){
+			cateName = 'shopGuideDetail'
+		}else if(tdName =='currGuide'){
+			cateName = 'shopGuideCashDetail'
+		};
 		if(!!guideId){
-
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				Count.delArrangeData(shopArrangeId,cateName,removeGuide);
+			});
 		}else{
 			removeGuide();
 		}
@@ -3011,7 +3019,9 @@ define(function(require, exports){
 			index = $thisDiv.attr('index'),
 			guideId = $thisDiv.attr('guideId');
 			if(!!guideId){
-
+				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+					Count.delArrangeData(guideId,'selfpayGuideDetail',removeGuide);
+				});
 			}else{
 				removeGuide();
 			}
@@ -3033,7 +3043,7 @@ define(function(require, exports){
 			Count.delDiv(guideRate,index,$parentObj);
 			Count.delDiv(guideRebateMoney,index,$parentObj);
 			Count.delDiv(billRemark,index,$parentObj);
-		}
+		};
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
@@ -3220,7 +3230,7 @@ define(function(require, exports){
 		        '</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"guideName");
-		var html = '<tr>'+
+		var html = '<tr arrangeType="busArrange">'+
 			'<td><div class="div-h-30"></div><input name="startTime" type="text" class="datepicker"></td>'+
 			'<td><div class="div-h-30"></div><input name="endTime" type="text" class="datepicker"></td>'+
 			'<td><div class="div-h-30"></div>'+
@@ -3645,31 +3655,33 @@ define(function(require, exports){
 	};
 	//修改金额数量响应事件
 	Count.changeCountAndMoney = function($obj,$parentObj){
-		var $tr = $obj.closest('tr');
-		var countTd = $tr.find('td[name=guideRealCount]'),
-			badStatus = $tr.attr('badStatus'),
-			isConfirmAccount = $tr.attr('isConfirmAccount'),
-			guideRealCount = countTd.find('input[name=guideRealCount]'),
-			price = Count.changeTwoDecimal($tr.find('[name=price]').val()),
-			reduceMoney = Count.changeTwoDecimal($tr.find('[name=realReduceMoney]').val()),
-			sumCount = 0,
-			arrangeType = $tr.attr('arrangeType'),
-			sumPay = 0,
-			realCount = 0;
-		guideRealCount.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
-			sumCount += sum
-		});
-		if(sumCount != 0){
-			$tr.find('input[name=realCount]').val(sumCount);
-			$tr.find('.realCount').text(sumCount);
+		var $tr = $obj.closest('tr'),arrangeType = $tr.attr('arrangeType');
+		if(arrangeType != 'selfArrange'){
+			var countTd = $tr.find('td[name=guideRealCount]'),
+				badStatus = $tr.attr('badStatus'),
+				isConfirmAccount = $tr.attr('isConfirmAccount'),
+				guideRealCount = countTd.find('input[name=guideRealCount]'),
+				price = Count.changeTwoDecimal($tr.find('[name=price]').val()),
+				reduceMoney = Count.changeTwoDecimal($tr.find('[name=realReduceMoney]').val()),
+				sumCount = 0,
+				sumPay = 0,
+				realCount = 0;
+			guideRealCount.each(function(){
+				var sum = Count.changeTwoDecimal($(this).val());
+				sumCount += sum
+			});
+			if(sumCount != 0){
+				$tr.find('input[name=realCount]').val(sumCount);
+				$tr.find('.realCount').text(sumCount);
+			};
+			realCount = $tr.find('input[name=realCount]').val();
+			sumPay = parseFloat(realCount*price-reduceMoney);
+			if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
+				$tr.find('.realNeedPayMoney').text(sumPay);
+				$tr.find('[name=realNeedPayMoney]').val(sumPay);
+			};																
 		};
-		realCount = $tr.find('input[name=realCount]').val();
-		sumPay = parseFloat(realCount*price-reduceMoney);
-		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
-			$tr.find('.realNeedPayMoney').text(sumPay);
-			$tr.find('[name=realNeedPayMoney]').val(sumPay);
-		};
+		
 		switch(arrangeType){
 			case 'otherArrange' :
 					var $mainTr = $parentObj.find('.T-count-otherOut');
@@ -6058,12 +6070,35 @@ define(function(require, exports){
 			$billImageTd = $tr.find('td[name=billImage]'),
 			$billRemarkTd = $tr.find('td[name=billRemark]');
 		var index = $thisDiv.attr('index'),
-			guideId = $thisDiv.attr('guideId');
+			guideId = $thisDiv.attr('guideId'),
+			arrangeType = $tr.attr('arrangeType'),
+			cateName = '';
+		switch(arrangeType){
+			case 'otherArrange' :
+				cateName = 'otherGuideDetail';
+			break;
+			case 'hotelArrange' :
+				cateName = 'hotelGuideDetail';
+			break;
+			case 'ticketArrange' :
+				cateName = 'ticketGuideDetail';
+			break;
+			case 'scenicArrange' :
+				cateName = 'scenicGuideDetail';
+			break;
+			case 'restArrange' :
+				cateName = 'restaurantGuideDetail';
+			break;
+			case 'busArrange' :
+				cateName = 'companyGuideDetail';
+			break;
+		};
 		if(!!guideId){
-
+			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				Count.delArrangeData(guideId,cateName,removeGuide);
+			});
 		}else{
 			removeGuide();
-
 		}
 		function removeGuide (){
 			Count.delDiv($thisTd,index,$parentObj);
@@ -6386,7 +6421,7 @@ define(function(require, exports){
 			};
 		});
 		return isReceived;
-	}
+	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

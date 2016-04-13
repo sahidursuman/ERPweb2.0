@@ -73,7 +73,7 @@
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
-                                        {{if guideCount>1}}
+                                        {{if guideCount>1 && itemSet.isConfirmAccount != 1}}
                                             <button class="btn btn-success btn-sm btn-white T-addSelfGuide pull-right "> 
                                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                             </button><!-- 增加导游 -->
@@ -196,6 +196,7 @@
                                     </td><!-- 现收 -->
 
                                     <td>
+                                        <div class="div-h-30"></div>
                                         <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
                                     </td>
 
