@@ -15,7 +15,7 @@
     </thead>
     <tbody class="T-bus-list">
         {{each outRemarkArrangeList as bus}}
-        <tr data-id="{{bus.id}}" {{if bus.checked}} class="success" {{/if}}>
+        <tr data-id="{{bus.id}}" shuttleType = "{{bus.shuttleType}}" {{if bus.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
                     <input type="hidden" name="outRemarkId" value="{{bus.id}}">
@@ -42,9 +42,10 @@
                     <span class="adultCount">{{bus.adultCount}}</span>大
                     <span class="childCount">{{bus.childCount}}</span>小
                 </p>
+                <p><span class="contactMemberPhoneNumber">{{bus.contactMemberPhoneNumber}}</span></p>
             </td>
-            <td>{{bus.arriveTime}}</td>
-            <td>{{bus.shift}}</td>
+            <td><span class="arriveTime">{{bus.arriveTime}}</span></td>
+            <td><span class="arriveTime">{{bus.shift}}</span></td>
             <td><span class="require">{{bus.require}}</span></td>
             {{if !isFrame}}
             <td>

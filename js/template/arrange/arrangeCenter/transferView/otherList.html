@@ -24,12 +24,13 @@
                 <p>收客单号：{{item.tgOrderNumber}}</p>
             </td>
             <td  rowspan="{{item.size}}">
-                {{if item.shuttleType == 1 }}接
-                {{else if item.shuttleType == 2}}送{{/if}}            
+                {{if item.shuttleType == 1 }}接团
+                {{else if item.shuttleType == 2}}送团{{/if}}            
             </td>
             <td  rowspan="{{item.size}}">
                 <p>{{item.contactMemberName}}</p>
                 <p>{{item.adultCount}}大{{item.childCount}}小</p>
+                <p>{{item.contactMemberPhoneNumber}}</p>
             </td>
             <td rowspan="{{item.size}}">
                 {{item.consumeTime}}
@@ -45,15 +46,15 @@
             <td>{{item.arrangeItems[0].require}}</td>
 
             <!-- 具体安排 -->
-            <td>
+            <td class="h-touristGroupInfo">
             {{if item.arrangeItems[0].arrangeResultList.length}}
                 {{each item.arrangeItems[0].arrangeResultList as list}}
-                <label class="inline-block">
+                <p class="inline-block">
                 <!-- 项目名称 -->
                 {{list.name}}
                 <!-- 如果是票，显示班次 -->
                 {{list.shift}}
-                </label>
+                </p>
                 {{/each}}
             {{/if}}
             </td>

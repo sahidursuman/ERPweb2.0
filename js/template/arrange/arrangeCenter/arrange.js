@@ -76,8 +76,8 @@ define(function(require, exports) {
     FrameFun.initTransferEvent = function($tab) {
         $tab.on('click', '.T-search', function(event) {
                 event.preventDefault();
-                TransferFun.busArrangeIdArray = [];
-                TransferFun.hotelArrangeIdArray = [];
+                // TransferFun.busArrangeIdArray = [];
+                // TransferFun.hotelArrangeIdArray = [];
                 TransferFun.getList($(this).closest('form'));
             })
             // table内操作
@@ -112,6 +112,9 @@ define(function(require, exports) {
             .on('click', '.T-merge-arrange', function(event) {
                 event.preventDefault();
                 TransferFun.mergeArrange($(this));
+            }).on('change','select[name=shuttleType]',function(){
+                TransferFun.busArrangeIdArray = [];
+                TransferFun.hotelArrangeIdArray = [];
             });
     };
 
