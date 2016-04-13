@@ -82,8 +82,14 @@
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
-                                                    <span class="guideName">{{rs.guideName}}</span>
-                                                    <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                    {{if guideCount>1}}
+                                                        {{rs.guideName}}
+                                                        <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                    {{else}}
+                                                        {{guideArrange.listMap[0].guideName}}
+                                                        <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                    {{/if}}
+                                                    
                                                 {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -93,15 +99,19 @@
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="guideName" type="text" class="w-70" 
-                                                    {{if itemSet.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                        disabled="disabled" 
-                                                    {{/if}}/>
-                                                <input name="guideArrangeId" type="hidden" />
-                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
+                                                {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                                     </button><!-- 删除导游 -->
+                                                
+                                                    <input name="guideName" type="text" class="w-70" 
+                                                        {{if itemSet.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                            disabled="disabled"
+                                                        {{/if}}/>
+                                                    <input name="guideArrangeId" type="hidden" />
+                                                {{else}}
+                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
                                                 {{/if}}
                                             </div>
                                         {{/if}}
@@ -474,8 +484,16 @@
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
-                                                    <span class="guideName">{{rs.guideName}}</span>
-                                                    <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                    <span class="guideName">
+                                                        {{if guideCount>1}}
+                                                            {{rs.guideName}}
+                                                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                        {{else}}
+                                                            {{guideArrange.listMap[0].guideName}}
+                                                            <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                        {{/if}}
+                                                    </span>
+                                                    
                                                 {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -485,17 +503,20 @@
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
+                                            {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
+                                                <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
+                                                    <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                </button><!-- 删除导游 -->
+                                            
                                                 <input name="guideName" type="text" class="w-70" 
                                                     {{if itemSet.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                                         disabled="disabled"
                                                     {{/if}}/>
                                                 <input name="guideArrangeId" type="hidden" />
-
-                                                {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
-                                                    <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
-                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                    </button><!-- 删除导游 -->
-                                                {{/if}}
+                                            {{else}}
+                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                            {{/if}}
                                             </div>
                                         {{/if}}
                                     </td><!-- 导游 -->

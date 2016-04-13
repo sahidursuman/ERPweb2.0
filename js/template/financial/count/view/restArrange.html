@@ -170,6 +170,7 @@
                                             <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
                                                 <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
                                             </button>
+
                                             {{/if}}
                                             <!-- 删除导游 -->
                                         {{/if}}
@@ -180,13 +181,18 @@
                                         {{if editStatus == 2}}
                                             -
                                         {{else}}
-                                            <input name="guideArrangeId" type="hidden" />
-                                            <input name="guideName"  type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                                            <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
-                                                <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                            </button>
-                                            <!-- <a href="#" class="T-delGuide pull-right">删除</a> -->
-                                            <!-- 删除导游 -->
+                                            {{if guideCount > 1}}
+                                                <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
+                                                    <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                </button>
+                                            
+                                                <input name="guideArrangeId" type="hidden" />
+                                                <input name="guideName"  type="text" class="w-80" 
+                                                {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                            {{else}}
+                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                            {{/if}}
                                         {{/if}}
                                     </div>
                             {{/if}}
