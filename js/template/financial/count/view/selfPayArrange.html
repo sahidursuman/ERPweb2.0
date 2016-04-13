@@ -83,8 +83,13 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     {{if guideCount>1}}
-                                                        {{rs.guideName}}
-                                                        <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                        {{if rs.guideName == "" || rs.guideName == null}}
+                                                            <input type="text" name="guideName" class="w-70">
+                                                            <input type="hidden" name="guideArrangeId">
+                                                        {{else}}
+                                                            {{rs.guideName}}
+                                                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                        {{/if}}
                                                     {{else}}
                                                         {{guideArrange.listMap[0].guideName}}
                                                         <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
@@ -486,8 +491,14 @@
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">
                                                         {{if guideCount>1}}
-                                                            {{rs.guideName}}
-                                                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                            {{if rs.guideName == "" || rs.guideName == null}}
+                                                                <input type="text" name="guideName" class="w-70">
+                                                                <input type="hidden" name="guideArrangeId">
+                                                            {{else}}
+                                                                {{rs.guideName}}
+                                                                <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                            {{/if}}
+                                                            
                                                         {{else}}
                                                             {{guideArrange.listMap[0].guideName}}
                                                             <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
