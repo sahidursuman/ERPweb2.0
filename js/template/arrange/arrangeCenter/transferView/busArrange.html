@@ -5,7 +5,7 @@
             <th class="th-border">中转信息及计划要求</th>
             <th class="th-border">操作</th>
         </thead>
-        <tbody>
+        <tbody class="T-busArrange">
             {{each outRemarkList as Busplan}}
             <tr><td style="text-align: left;">
                     <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
@@ -16,7 +16,7 @@
                     <label class="control-label ">外联销售：<span class="F-float F-money">{{Busplan.outOPUserName}}</span></label>
                 </td>
                 <td rowspan="2">
-                    <a class="cursor {{if taskSize > 1}} T-del-bus {{/if}}" {{if taskSize <=1 }} disabled="disabled" {{/if}} title="删除">
+                    <a class="cursor T-del-bus" title="删除">
                         删除
                     </a>
                 </td>
@@ -76,7 +76,7 @@
                 <td>
                     <div class="col-sm-12">
                         <input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="licenseNumber" {{ if outBus.isConfirmAccount == 1 }}disabled="disabled" {{else}} type="text"{{/if}}value="{{outBus.licenseNumber}}" />
-                        <input type="hidden" name="busId" value="{{if outBus.bus != null}}{{outBus.bus.busId}}{{/if}}" />
+                        <input type="hidden" name="busId" value="{{outBus.busId}}" />
                         <span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                         </span>

@@ -76,6 +76,8 @@ define(function(require, exports) {
     FrameFun.initTransferEvent = function($tab) {
         $tab.on('click', '.T-search', function(event) {
                 event.preventDefault();
+                TransferFun.busArrangeIdArray = [];
+                TransferFun.hotelArrangeIdArray = [];
                 TransferFun.getList($(this).closest('form'));
             })
             // table内操作
@@ -92,6 +94,14 @@ define(function(require, exports) {
                 } else if ($that.hasClass('T-view')) {
                     // 查看
                     TransferFun.view($that);
+                } else if ($that.hasClass('T-bus-cancel')){
+                    //取消
+                    TransferFun.cancelBus($that);
+
+                } else if ($that.hasClass('T-hotel-cancel')){
+                    //取消
+                    TransferFun.cancelHotel($that);
+
                 }
             })
             .on('change', 'input[type="checkbox"]', function(event) {
@@ -186,7 +196,46 @@ define(function(require, exports) {
                 }
             }
         })
+    };
+    //取消车
+    TransferFun.cancelBus = function ($that) {
+        // data-catename
+        var id = $that.closest('tr').data('id');
+        id = JSON.stringify(id);   
+        showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该中转安排信息？",function(){         
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutBusArrange"),     
+            type: 'POST',
+            data: 'id='+id,
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                        TransferFun._refreshList('bus');
+                    })
+                }
+            }
+        })
+        },function(){},"取消","确定");
     }
-
+    //取消房
+    TransferFun.cancelHotel = function ($that) {
+        // data-catename
+        var id = $that.closest('tr').data('id');
+        id = JSON.stringify(id);   
+        showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该中转安排信息？",function(){         
+        $.ajax({
+            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutHotelArrange"),     
+            type: 'POST',
+            data: 'id='+id,
+            success: function(data) {
+                if (showDialog(data)) {
+                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                       TransferFun._refreshList('hotel');
+                    })
+                }
+            }
+        })
+        },function(){},"取消","确定");
+    }
     exports.init = FrameFun.initMain;
 });

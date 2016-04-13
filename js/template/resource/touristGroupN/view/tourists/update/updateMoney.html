@@ -12,11 +12,12 @@
 		<div class="col-xs-12 mar-t-10" style="padding-left: 35px;">
 			<div class="col-xs-2">
 				<select class="col-xs-12 T-abversion">
-					<option value="0">内部操作</option>
-					<option value="1" {{if isTransfer == 1}}selected{{/if}}>外转操作</option>
+					<option value="0">本部操作</option>
+					<option value="1" {{if isTransfer == 1}}selected{{/if}}>他部操作</option>
+					<option value="2" {{if isTransfer == 2}}selected{{/if}}>外转操作</option>
 				</select> 
 			</div>
-			<div class="col-xs-8{{if isTransfer == 1}} hidden{{/if}} T-internal">
+			<div class="col-xs-8{{if isTransfer != 1}} hidden{{/if}} T-internal">
 				<div class="col-xs-2 text-right no-padding-right control-label no-padding-left">责任部门</div>
 				<div class="col-xs-4">
 					<input type="text" class="col-xs-12" name="dutyDepartmentName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
@@ -26,7 +27,7 @@
 					<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
 				</div>
 			</div>
-			<div class="col-xs-8{{if isTransfer != 1}} hidden{{/if}} T-peer">
+			<div class="col-xs-8{{if isTransfer != 2}} hidden{{/if}} T-peer">
 				<div class="col-xs-2 text-right no-padding-right control-label">同行</div>
 				<div class="col-xs-4">
 					<input type="text" class="col-xs-12" name="transferPartnerAgency" value="{{transferPartnerAgency}}" data-id="{{transferPartnerAgencyId}}">
@@ -87,7 +88,11 @@
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select name="type" class="col-xs-12">
+							{{if groupType == "group"}}
+								{{#rs.type | getFeeItemType}}
+							{{else}}
 								{{#rs.type | getFeeItemType:true}}
+							{{/if}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
@@ -102,7 +107,11 @@
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select name="type" class="col-xs-12">
+							{{if groupType == "group"}}
+								{{#rs.type | getFeeItemType}}
+							{{else}}
 								{{#rs.type | getFeeItemType:true}}
+							{{/if}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
@@ -116,7 +125,11 @@
 					<tr>
 						<td>
 							<select name="type" class="col-xs-12">
+							{{if groupType == "group"}}
 								{{#0 | getFeeItemType}}
+							{{else}}
+								{{#0 | getFeeItemType:true}}
+							{{/if}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>

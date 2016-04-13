@@ -120,14 +120,7 @@ define(function(require, exports) {
                     type: 'float',
                     errMsg: '本段现收团款必须为数字'
                 }]
-			},{
-                //本段现收团款
-                $ele: $obj.find('[name="lineNeedPayMoney"]'),
-                rules : [{
-                    type: 'null',
-                    errMsg: '线路应付不能为空'
-                }]
-            }];
+			}];
 			return settings;
 		},
 		checktTourist : function($container){
@@ -295,7 +288,7 @@ define(function(require, exports) {
                 ]
             }];
 
-            if($obj.find('.T-inner-turn').length > 0){
+            if($obj.find('.T-abversion').val() == "1"){
                 settings.push({
                     //责任部门
                     $ele: $obj.find('input[name="dutyDepartmentName"]'),
@@ -317,7 +310,7 @@ define(function(require, exports) {
                     ]
                 });
             }
-            if($obj.find('.T-outer-turn') > 0){
+            if($obj.find('.T-abversion').val() == "2"){
                 settings.push({
                     //计划现收
                     $ele: $obj.find('input[name="transferPartnerAgency"]'),
@@ -325,6 +318,42 @@ define(function(require, exports) {
                         {
                             type: 'null',
                             errMsg: '同行不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('[name="isRestaurantRequired"]').is(":checked")){
+                settings.push({
+                    //餐厅要求
+                    $ele: $obj.find('input[name="restaurantRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '餐厅要求不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('[name="isTicketRequired"]').is(":checked")){
+                settings.push({
+                    //票务要求
+                    $ele: $obj.find('input[name="ticketRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '票务要求不能为空'
+                        }
+                    ]
+                });
+            }
+            if($obj.find('[name="isOtherRequired"]').is(":checked")){
+                settings.push({
+                    //其它要求
+                    $ele: $obj.find('input[name="otherRequired"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '其它要求不能为空'
                         }
                     ]
                 });
