@@ -2,6 +2,7 @@
 <thead>
 	<tr class="bg-blur">
 		<th>同行地接</th>
+		<th>出游日期</th>
 		<th>游客</th>
 		<th>联系电话</th>
 		<th>人数</th>           
@@ -18,6 +19,7 @@
  		{{if result!=null}}        
 			<tr data-value="{{result.id}}" data-status="{{result.status}}">
 				<td>{{result.partnerAgency.travelAgencyName}}</td>
+				<td>{{if !!result.touristGroup}}{{result.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				{{if result.touristGroup != null}}
 				<td>
 				    {{if result.touristGroup.contactMember!=null}}
