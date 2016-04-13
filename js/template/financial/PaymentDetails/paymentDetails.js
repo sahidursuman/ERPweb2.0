@@ -197,7 +197,8 @@ define(function(require, exports){
 			startTime : Payment.$tab.find('.T-search-start-time').val(),
 			payType : Payment.$tab.find('.T-search-payment').val(),
 			subjectId : Payment.$tab.find('.T-search-subject').val(),
-			voucher : Payment.$tab.find('.T-search-voucher').val()
+			voucher : Payment.$tab.find('.T-search-voucher').val(),
+			price : Payment.$tab.find('.T-searchPrice').val()
 		}
 		if(args.payType == ""){
 			args.bankId = Payment.$tab.find('input[name=cash-id]').val() || Payment.$tab.find('input[name=card-id]').val();
