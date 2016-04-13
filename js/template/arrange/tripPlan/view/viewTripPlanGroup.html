@@ -138,6 +138,7 @@
 												<th class="th-border">联系电话</th>
 												<th class="th-border">导服费</th>
 												<th class="th-border">管理费</th>
+												<th class="th-border">计划预支</th>
 												<th class="th-border">备注</th>
 											</tr>
 										</thead>
@@ -145,14 +146,15 @@
 											{{if guideArrange}}
 											{{each guideArrange as guideList}}
 											<tr>
-												<td>{{guideList.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-												<td>{{guideList.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-												<td>{{guideList.taskType | getTaskDesc}}</td>
-												<td>{{if guideList.guide}}{{guideList.guide.realname}}{{/if}}</td>
-												<td>{{if guideList.guide}}{{guideList.guide.mobileNumber}}{{/if}}</td>
-												<td class="F-float F-money">{{guideList.price}}</td>
-												<td class="F-float F-money">{{guideList.manageFee}}</td>
-												<td>{{guideList.remark}}</td>
+								                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.sTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+								                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.eTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+								                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{#task.tType | getTaskDesc}}{{/each}}</p></td>
+								                <td>{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}</td>
+								                <td>{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}</td>
+								                <td class="F-float F-money">{{guide.price}}</td>
+								                <td class="F-float F-money">{{guide.manageFee}}</td>
+								                <td class="F-float F-money">{{guide.guidePlanPreMoney}}</td>
+								                <td>{{guide.remark}}</td>
 											</tr>
 											{{/each}}
 											{{/if}}
