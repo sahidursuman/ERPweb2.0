@@ -578,7 +578,7 @@ define(function(require, exports) {
                                 content: html,
                                 scrollbar: false
                             });
-                        //打印单团核算页面
+                        //打印结算单页面
                         var $outAccountsTab = $("#T-touristGroupViewAccount");
                             $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
                             touristGroup.exportsOutAccounts($outAccountsTab);
